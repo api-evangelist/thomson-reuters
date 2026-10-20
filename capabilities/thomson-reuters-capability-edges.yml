@@ -1,0 +1,1103 @@
+slug: thomson-reuters
+provider: Thomson Reuters
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Professional Services
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 106
+edges:
+- tag: tax-service
+  spec_file: thomson-reuters-tax-service-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.93
+  evidence: POST /v1/calculate  Determines and calculates indirect taxes; POST /v1/commit  ... commits
+    to audit entity; POST /v1/reverse  Reverse or void an existing the tax audit entry
+  reason: Indirect tax determination engine — calculation, commit and reversal of VAT/sales tax on transaction
+    documents. Unambiguously Indirect Tax Management.
+- tag: E-file IRS Lifecycle
+  spec_file: thomson-reuters-e-file-irs-lifecycle-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.92
+  evidence: '''Use to trigger multiple E-file Submissions for a given collection of binders''; ''Retrieve
+    a list of E-file acknowledgement details'''
+  reason: Submission of tax returns to the IRS plus status and acknowledgement tracking — core tax return
+    filing and compliance.
+- tag: E-file IRS Lifecycle V1
+  spec_file: thomson-reuters-e-file-irs-lifecycle-v1-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.92
+  evidence: POST /v1/e-file-submissions 'Submit e-file'; 'Get rejection messages'; schemas TaxReturn,
+    EFileRejectedMessage
+  reason: GoSystem tax e-file submission, status tracking and rejection handling against tax authorities
+    — tax return filing and compliance.
+- tag: E-file IRS Lifecycle V2
+  spec_file: thomson-reuters-e-file-irs-lifecycle-v2-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.92
+  evidence: POST /v2/e-file-submissions 'Submit e-file'; 'RetrievesTheRejectedMessageV2  Get rejection
+    messages'
+  reason: Same tax-return e-file submission and rejection-message surface at v2; electronic filing of
+    tax returns to jurisdictions.
+- tag: E-file Document Lifecycle
+  spec_file: thomson-reuters-e-file-document-lifecycle-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.9
+  evidence: '''Use to create an E-file document for a given binder id''; ''Use to create an E-file validation
+    for a given binder id'' (ONESOURCE Income Tax E-file API)'
+  reason: Creation and validation of electronic tax-return filing documents in ONESOURCE Income Tax —
+    squarely tax return preparation and compliance filing.
+- tag: E-file Document Lifecycle V1
+  spec_file: thomson-reuters-e-file-document-lifecycle-v1-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.9
+  evidence: POST /v1/e-files 'Create e-file'; POST /v1/e-file-validations 'Validate e-file' — 'access
+    to the GoSystem E-file functionality'
+  reason: GoSystem Tax e-file creation and validation operations realise electronic tax return filing
+    and compliance.
+- tag: E-file Document Lifecycle V2
+  spec_file: thomson-reuters-e-file-document-lifecycle-v2-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.9
+  evidence: POST /v2/e-files 'Create e-file'; POST /v2/e-file-validations 'Validate e-file'
+  reason: Same GoSystem tax e-file creation/validation surface at v2; electronic tax return production
+    and compliance validation.
+- tag: Submissions
+  spec_file: thomson-reuters-submissions-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.9
+  evidence: POST /submissions/{id}/e-filings  Submit Tax Return for E-Filing; GET /submissions/{id}/e-filing-status  Check
+    E-Filing Status
+  reason: Operations submit tax returns electronically to jurisdictions and track filing status and receipts
+    — squarely tax return filing and compliance.
+- tag: Workpapers
+  spec_file: thomson-reuters-workpapers-api-openapi.yml
+  capability_id: BC-4310.40
+  capability_id_l1: BC-4310
+  capability_name: Engagement Working Paper Management
+  confidence: 0.9
+  evidence: GET /external/v1/workpapers/tree-data/{engagementId}  Retrieve all binder items (workpapers
+    and folders) for an engagement; POST /external/v1/SignOff/save-workpaper-signoffs
+  reason: Operations create, organise, store and sign off audit engagement workpapers within an engagement
+    binder — exactly engagement working paper capture, organisation and retention.
+- tag: E-file Document V1
+  spec_file: thomson-reuters-e-file-document-v1-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.88
+  evidence: GET /v1/years/{year}/tax-return-types/{taxReturnType}/tax-returns/{taxReturnId}/jurisdictions/{jurisdiction}/e-files
+    'Download generated e-file'
+  reason: Retrieval of generated tax-return e-file documents by tax year, return type and jurisdiction
+    — part of the tax return filing/compliance process.
+- tag: Calculations
+  spec_file: thomson-reuters-calculations-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.85
+  evidence: ONESOURCE Indirect Tax Compliance - Process Calculations; 'This endpoint is used to update
+    return status', 'Gets the form codes associated with a specific return id'
+  reason: Operations manage indirect tax return form codes, printing and return statuses — tax return
+    preparation and compliance.
+- tag: E-file Document V2
+  spec_file: thomson-reuters-e-file-document-v2-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.85
+  evidence: '''ReturnsGeneratedE-fileInPDFV2  Download generated e-file in PDF'' on /tax-returns/{taxReturnId}/jurisdictions/{jurisdiction}'
+  reason: Download of generated tax-return e-file output per jurisdiction; tax return filing artefact
+    retrieval within tax compliance.
+- tag: E-file Documents
+  spec_file: thomson-reuters-e-file-documents-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.85
+  evidence: '''Use to retrieve a list of E-file for a given binder''; schema EFileDocumentMetadataList'
+  reason: Listing and retrieval of income-tax e-file documents within ONESOURCE Income Tax binders — tax
+    return filing documentation.
+- tag: IndirectTaxImports
+  spec_file: thomson-reuters-indirecttaximports-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.85
+  evidence: POST / IndirectTaxImports_ImportData 'Import tax data'; 'import data via API into Returns';
+    schema TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus
+  reason: ONESOURCE Indirect Tax Compliance imports feed tax data into indirect tax returns, directly
+    serving VAT/GST indirect tax compliance. The import mechanics are the data path for indirect tax return
+    preparation, so BC-220.20 is the honest fit.
+- tag: Matters
+  spec_file: thomson-reuters-matters-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.85
+  evidence: GET /Matters('{MatterId}')/PracticeGroup, GET /Matters('{MatterId}')/SubstantiveLaw; schemas
+    LegalTracker.Datawarehouse.Invoice, LegalTracker.Datawarehouse.Timekeeper
+  reason: Core legal matter records with practice group, substantive law, firms, timekeepers and invoices
+    — Legal Tracker matter management and legal e-billing, i.e. Legal Operations Management.
+- tag: TaxCodeMappings
+  spec_file: thomson-reuters-taxcodemappings-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.85
+  evidence: openapi title 'ONESOURCE Indirect Tax Compliance - Configuration'; 'TaxCodeMappings_AddTaxCodeMapping
+    ... creates a new Taxcode Mapping' with jurisdictions and transaction-types
+  reason: Jurisdiction- and transaction-type-scoped tax code mapping within an indirect tax compliance
+    product realises VAT/GST indirect tax determination and compliance configuration.
+- tag: UserGroupAdministration
+  spec_file: thomson-reuters-usergroupadministration-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: '''Get available groups''; ''Create a user V1''; schemas SetUserPermissionResponse, GroupPermission,
+    SetPasswordPolicyResponse, UserDocumentSecurity'
+  reason: Administration of users, groups, permissions, password policy and document-level security —
+    squarely identity and access management.
+- tag: vat-service
+  spec_file: thomson-reuters-vat-service-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.85
+  evidence: POST /v1/validations  Creates the registration number validation request; operationIds vatvalidator_1..3;
+    schemas ValidationRequestEntry, CompanyAddress
+  reason: VAT registration-number validation within the Indirect Tax Determination product — a core indirect
+    tax compliance control over counterparty VAT IDs.
+- tag: Certificate Service
+  spec_file: thomson-reuters-certificate-service-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.82
+  evidence: GET /certificates 'Finds the list of Certificates'; schemas UiExemptReason, UiCertificateExemptionRate,
+    UiCertificateCommodityCode
+  reason: In a cloud tax determination API, 'Certificate' means sales/VAT exemption certificates — exemption
+    reasons, exemption rates and commodity codes are indirect-tax determination artefacts, not PKI certificates.
+- tag: MatterIntakes
+  spec_file: thomson-reuters-matterintakes-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.82
+  evidence: POST /intake-requests  MatterIntake_PostMatterIntake  Create a new matterIntake record; schemas
+    MatterIntakeStatus, MatterAllocationModel, CompanyBudgetCurrency
+  reason: Legal matter intake request creation and retrieval with budget and participant models — the
+    demand-intake front door of a corporate legal department's matter management process.
+- tag: Accounts
+  spec_file: thomson-reuters-accounts-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.8
+  evidence: GET /{chart_of_accounts_id}/accounts  getAccountsByChartOfAccountsID  Get All Accounts By
+    chart id; PATCH /{chart_of_accounts_id}/accounts/unmap-hierarchy  Unmap financial hierarchy from accounts
+  reason: CRUD and hierarchy mapping over GL accounts within a chart of accounts, used for statutory reporting
+    period setup — this is chart-of-accounts / general ledger structure management.
+- tag: CorporateTaxImports
+  spec_file: thomson-reuters-corporatetaximports-api-openapi.yml
+  capability_id: BC-220
+  capability_id_l1: BC-220
+  capability_name: Tax Management
+  confidence: 0.8
+  evidence: '''Retrieve Supported Import Types'', ''Create Import Task'', ''Retrieve Dataset Journals''
+    under CorporateTaxImports in ONESOURCE trusts imports'
+  reason: Operations load corporate tax dataset journals and import types into ONESOURCE tax software
+    — clearly tax management data preparation. Ambiguous whether it belongs to Direct Tax Management or
+    Tax Reporting & Compliance, so only L1 asserted.
+- tag: Efile Attachments
+  spec_file: thomson-reuters-efile-attachments-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.8
+  evidence: '''Attach a new or existing file to the return''; ''Get a list of metadata for all attachments
+    for the opened tax return''; ''Get a list of Jurisdiction attachment codes'''
+  reason: Manages attachments required for electronic filing of tax returns in GoSystem Tax — directly
+    part of tax return preparation and filing.
+- tag: Efiling
+  spec_file: thomson-reuters-efiling-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.8
+  evidence: '''ONESOURCE Indirect Tax Compliance - Process Efiling''; Efiling_ProcessEfilingOperations
+    ''Initiate efiling operations'' on /tax-returns/{taxReturnId}'
+  reason: Executes and tracks electronic filing of tax returns; this is tax return filing/compliance (indirect
+    tax context, so BC-220.20 is an alternative reading).
+- tag: FCOA Cross Reference
+  spec_file: thomson-reuters-fcoa-cross-reference-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.8
+  evidence: '''Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts
+    and adjustments''; ''Maps or unmaps accounts between prior year and current year FCOA'''
+  reason: ONESOURCE Income Tax chart account cross-referencing across tax years supports corporate income
+    tax return preparation/compliance.
+- tag: Federal Chart of Accounts (FCOA)
+  spec_file: thomson-reuters-federal-chart-of-accounts-fcoa-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.8
+  evidence: '''Creates a new Federal Chart of Accounts (FCOA)''; ''Charts are used to identify Tax Return
+    Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders'''
+  reason: Tax-specific chart of accounts within ONESOURCE Income Tax; serves tax return preparation and
+    compliance rather than statutory GL accounting.
+- tag: Federal Chart of Adjustments
+  spec_file: thomson-reuters-federal-chart-of-adjustments-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.8
+  evidence: '''Returns the adjustments in an Adjustment Chart for a Federal Chart of Accounts''; schema
+    ''FederalTaxAdjustmentDetailRepresentation'', ''TaxReturnPresentationItem'''
+  reason: Federal tax adjustment charts feeding income tax return computation — direct/corporate tax compliance
+    and reporting.
+- tag: Groups Management
+  spec_file: thomson-reuters-groups-management-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: POST /v1/users/{center}/{loginId}/groups  TriggerCreateGroup  Assign or update group memberships
+    for a user
+  reason: GoSystem User Management surface that assigns, removes and reads a user's group memberships
+    (PostUserGroupsRequest, DeleteGroupResponse, UserID). Group membership administration is access-rights
+    provisioning, i.e. Identity & Access Management, rather than any tax or legal business process.
+- tag: MatterDocuments
+  spec_file: thomson-reuters-matterdocuments-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.8
+  evidence: GET /matter-documents/{matterId}  Retrieve all documents associated with a specific matter
+  reason: Retrieval of documents attached to a legal matter in Thomson Reuters' legal document management;
+    this is matter-centric legal department operations rather than general content management.
+- tag: MatterIntakes
+  spec_file: thomson-reuters-matterintakes-api-openapi.yml
+  capability_id: BC-4300
+  capability_id_l1: BC-4300
+  capability_name: Client Engagement Management
+  confidence: 0.8
+  evidence: POST /intake-requests  MatterIntake_PostMatterIntake  Create a new matterIntake record
+  reason: Creation and retrieval of matter intake requests with MatterIntakeStatus, MatterAllocationModel
+    and budget schemas is engagement/matter intake — the front end of the engagement lifecycle. L1 is
+    clear; whether it is acceptance decisioning or scoping is not resolvable, so L2 is left null.
+- tag: Tax Return Import Export
+  spec_file: thomson-reuters-tax-return-import-export-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.8
+  evidence: GET /v1/binders/{binderId}/processes/{processId}/tax-return 'Use to retrieve the Tax Return
+    as JSON or CSV file for a given binder'
+  reason: Operations move tax return data into and out of ONESOURCE Income Tax binders and report import/export
+    status for tax return events, squarely tax return preparation and compliance data handling.
+- tag: Tax Returns
+  spec_file: thomson-reuters-tax-returns-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.8
+  evidence: PUT /v2/bulk/tax-returns/completed-date 'Update tax returns completed date'; GET .../tax-returns/{taxReturnId}/status
+    'Get tax return status'
+  reason: GoSystem Locator operations track completion and status of tax returns, which is tax return
+    compliance workflow management rather than any generic technical status surface.
+- tag: Tax Returns (Import/Export)
+  spec_file: thomson-reuters-tax-returns-import-export-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.8
+  evidence: POST /v1/years/{year}/tax-return-types/{taxReturnType}/tax-returns/{taxReturnId}/tax-returns-events/{eventType}
+    'Triggers import or export for a tax return'
+  reason: Import, validation and export of tax return data plus preparer/reviewer assignment on returns
+    is tax return preparation and compliance processing.
+- tag: TaxProvision
+  spec_file: thomson-reuters-taxprovision-api-openapi.yml
+  capability_id: BC-220
+  capability_id_l1: BC-220
+  capability_name: Tax Management
+  confidence: 0.8
+  evidence: GET /odata/v1/TaxProvision 'Gets all tax provisions'; schema TaxProvisionDetail
+  reason: ONESOURCE Tax Provision data retrieval is plainly tax management; the evidence does not distinguish
+    between direct tax management and tax reporting sub-capabilities, so only the L1 is asserted.
+- tag: User Management
+  spec_file: thomson-reuters-user-management-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: '''Create a new user account in the system''; ''Retrieve all users assigned to a specific
+    permission group''; ''Retrieve all available GoFileRoom (GFR) security groups'''
+  reason: Full lifecycle of user accounts plus permission/security group assignment and license counts
+    — identity and access administration for the application estate.
+- tag: Deferredbalances
+  spec_file: thomson-reuters-deferredbalances-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.78
+  evidence: GET /odata/v1/deferred-balances-federal  Gets all deferred balances federal; GET /odata/v1/deferred-balances-state;
+    schema DeferredBalancesState
+  reason: Operations expose deferred tax balances (pretax, federal, state, tax-effected) from ONESOURCE
+    Tax Provision — the computation and disclosure of tax provision balances, i.e. tax reporting and compliance
+    data.
+- tag: InvoiceLines
+  spec_file: thomson-reuters-invoicelines-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.78
+  evidence: GET /InvoiceLines(...)/Matter  Get related Matter; schema LegalTracker.Datawarehouse.InvoiceLine,
+    LegalTracker.Datawarehouse.Firm, LegalTracker.Datawarehouse.Timekeeper
+  reason: Legal Tracker datawarehouse exposes law-firm invoice line items linked to matters, firms and
+    timekeepers — this is legal e-billing / matter financial data, which maps to Legal Operations Management
+    (legal department operations, e-billing, matter management) rather than generic AP.
+- tag: MatterFirms
+  spec_file: thomson-reuters-matterfirms-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.78
+  evidence: GET /MatterFirms(FirmId='{FirmId}',MatterId='{MatterId}')/Firm  Get related Firm; LegalTracker.Datawarehouse.TimekeeperRateSheet
+  reason: Associations between outside law firms and matters, alongside timekeeper rate sheets and invoices
+    — outside-counsel/matter administration, i.e. legal operations management.
+- tag: TaxReturn (V1)
+  spec_file: thomson-reuters-taxreturn-v1-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.78
+  evidence: POST /v1/save-fields 'Save one or more field values in an open tax return'; POST /v1/jurisdiction-details
+    'Generate the list of active jurisdictions and their e-file data'
+  reason: Reading and writing fields of a tax return and producing e-file jurisdiction data is direct
+    tax return preparation and filing support.
+- tag: TaxReturn (beta)
+  spec_file: thomson-reuters-taxreturn-beta-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.78
+  evidence: POST /beta/open 'Open a tax return for editing'; POST /beta/fullcompute 'Trigger a full compute
+    for an already opened tax return'
+  reason: Opening, editing, computing and closing tax returns with diagnostics and overrides is tax return
+    preparation and compliance work, not generic record editing.
+- tag: TimekeeperRateSheets
+  spec_file: thomson-reuters-timekeeperratesheets-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.78
+  evidence: GET /TimekeeperRateSheets(MatterId='{MatterId}',RateSheetId='{RateSheetId}',TimekeeperId='{TimekeeperId}')/Firm;
+    LegalTracker.Datawarehouse.InvoiceLine
+  reason: Outside-counsel rate sheets per matter/firm/timekeeper in Legal Tracker — core legal e-billing
+    and matter cost management data.
+- tag: TimekeeperRateSheets
+  spec_file: thomson-reuters-timekeeperratesheets-api-openapi.yml
+  capability_id: BC-4330.40
+  capability_id_l1: BC-4330
+  capability_name: Fee Arrangement Management
+  confidence: 0.78
+  evidence: GET /TimekeeperRateSheets(MatterId='{MatterId}',RateSheetId='{RateSheetId}',TimekeeperId='{TimekeeperId}')/Matter  Get
+    related Matter
+  reason: Rate sheets keyed by matter, firm and timekeeper are engagement-level hourly rate cards — Fee
+    Arrangement Management within time and engagement billing (Legal Tracker matter/e-billing warehouse).
+- tag: Journal Entry
+  spec_file: thomson-reuters-journal-entry-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.76
+  evidence: POST /external/v1/journalentry/save  Create a new journal entry in a trial balance
+  reason: Operations create, update and delete journal entries within a trial balance for an engagement
+    — journal and ledger posting, i.e. General Ledger Management (in an accounting-engagement context).
+- tag: submit-document
+  spec_file: thomson-reuters-submit-document-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.76
+  evidence: This API will receive various supported documents( Invoice, Debit Note, Credit Note, Prepayment
+    Invoice) from ERP and will submit the same to tax authority.
+  reason: 'E-invoicing clearance: submission of invoices/credit notes to the tax authority, with ApplicationResponse/ClassifiedTaxCategory/PartyTaxScheme
+    schemas. That is statutory tax filing/compliance for indirect tax, not AR invoicing per se.'
+- tag: Charts of Accounts
+  spec_file: thomson-reuters-charts-of-accounts-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.75
+  evidence: POST / 'Create Chart of Account'; GET /{chart_of_accounts_id}/versions 'Get Chart of Account
+    Versions'
+  reason: CRUD and versioning over chart-of-accounts structures is the definitional artefact of general
+    ledger management. Some chance it is only accounting master data for tax feeds, so not maximal confidence.
+- tag: EffectiveTaxRate
+  spec_file: thomson-reuters-effectivetaxrate-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.75
+  evidence: GET /odata/v1/EffectiveTaxRate 'Gets profit and adjustments for the period total' (onesource-tax-provision-odata-apis)
+  reason: Effective tax rate and period adjustments from the ONESOURCE Tax Provision product — tax provision/reporting
+    data. Sub-capability choice carries some ambiguity with financial reporting.
+- tag: Events
+  spec_file: thomson-reuters-events-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.75
+  evidence: GET /matters/{id}/events — "Find events by matter ID"; schema MatterEventsModel
+  reason: Events are attached to legal matters in the Matters API (Legal Tracker matter management), which
+    is legal operations / matter management rather than any generic calendaring capability.
+- tag: External
+  spec_file: thomson-reuters-external-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.75
+  evidence: 'PATCH /applications/{applicationName} — "Patch application: generate new consumer key and
+    secret with supplied name and…"; schemas ApiApplicationCredentials, FlowType'
+  reason: ONESOURCE API administration surface for registering API consumer applications and rotating
+    consumer key/secret credentials — developer identity and credential management for the platform's
+    public APIs.
+- tag: Firms
+  spec_file: thomson-reuters-firms-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.75
+  evidence: '''Get entities from related Invoices'', ''Get entities from related Timekeepers'', ''LegalTracker.Datawarehouse.MatterFirms'',
+    ''LegalTracker.Datawarehouse.InvoiceReduction'''
+  reason: Legal Tracker data warehouse exposing law-firm invoices, timekeeper rate sheets, budgets and
+    accruals against matters — legal department operations (e-billing and matter management).
+- tag: InvoiceAllocations
+  spec_file: thomson-reuters-invoiceallocations-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.75
+  evidence: GET /InvoiceAllocations('{InvoiceId}')/Matter  'Get related Matter'; schemas LegalTracker.Datawarehouse.Invoice,
+    LegalTracker.Datawarehouse.Timekeeper, LegalTracker.Datawarehouse.InvoiceReduction
+  reason: Legal Tracker data warehouse exposing law-firm invoice allocations linked to matters, firms
+    and timekeepers — this is legal e-billing and matter spend data, which BC-150.50 explicitly covers
+    ('legal department operations, e-billing, matter management'). Some chance the intended fit is accounts
+    payable, hence 0.75.
+- tag: InvoiceReductions
+  spec_file: thomson-reuters-invoicereductions-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.75
+  evidence: GET /InvoiceReductions(InvoiceId='{InvoiceId}',ReductionTypeId='{ReductionTypeId}')/Matter  Get
+    related Matter; schema LegalTracker.Datawarehouse.InvoiceReduction
+  reason: Reductions applied to outside-counsel invoices within Legal Tracker, joined to Matter and Firm
+    — classic legal e-billing invoice review, i.e. Legal Operations Management.
+- tag: LeadOutsideCounsels
+  spec_file: thomson-reuters-leadoutsidecounsels-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.75
+  evidence: GET /LeadOutsideCounsels('{LeadOutsideCounselId}')/Matters — 'Get entities from related Matters';
+    schemas LegalTracker.Datawarehouse.Firm, LegalTracker.Datawarehouse.Invoice, LegalTracker.Datawarehouse.Timekeeper
+  reason: Legal Tracker data warehouse exposing lead outside counsel records linked to matters, firms,
+    invoices and timekeepers — this is corporate legal department matter/e-billing operations, i.e. Legal
+    Operations Management.
+- tag: Master Trial Balance
+  spec_file: thomson-reuters-master-trial-balance-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.75
+  evidence: GET /collections 'Get a paginated list of Master Trial Balance'; POST /collections/{id}/publish
+    'Publish a Master Trial Balance by ID'; spec thomson-reuters-general-ledger-manager
+  reason: Creation, versioning and publication of master trial balances within a General Ledger Manager
+    product — core general ledger / trial balance maintenance.
+- tag: MatterCreators
+  spec_file: thomson-reuters-mattercreators-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.75
+  evidence: GET /MatterCreators('{CreatedByUserObjectId}')/Matters  Get entities from related Matters;
+    schemas LegalTracker.Datawarehouse.MatterCreator, LegalTracker.Datawarehouse.Invoice
+  reason: Legal Tracker datawarehouse entity exposing who created legal matters, with related Matters,
+    Firms, Invoices and Timekeepers — the corporate legal matter-management/e-billing estate, i.e. legal
+    operations.
+- tag: MatterParticipants
+  spec_file: thomson-reuters-matterparticipants-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.75
+  evidence: GET /MatterParticipants(MatterId='{MatterId}',UserId='{UserId}')/Matter  Get related Matter;
+    schemas LegalTracker.Datawarehouse.Firm, LegalTracker.Datawarehouse.Timekeeper
+  reason: Legal Tracker data warehouse entity linking users/firms to legal matters — matter management
+    data, which sits in Legal Operations Management (matter management, e-billing).
+- tag: Schedule M3 Line Code
+  spec_file: thomson-reuters-schedule-m3-line-code-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.75
+  evidence: '"Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts
+    and adjustments"; GET ".../tax-return-types/{taxReturnType}/charts/schedule-m3-chart/lines" — "Returns
+    line codes for a Schedule M3 Chart."'
+  reason: ONESOURCE Income Tax chart configuration mapping accounts/adjustments to tax-return line codes
+    (Schedule M3 is a US corporate income tax return schedule). This is tax return preparation/compliance
+    tooling, so Tax Management → Tax Reporting & Compliance; some ambiguity versus Direct Tax Management.
+- tag: Schedule M3 Line Mapping
+  spec_file: thomson-reuters-schedule-m3-line-mapping-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.75
+  evidence: '"MapsAndUnmapsAccounts  Maps or unmaps the accounts for Schedule M3 Chart"; "Returns a list
+    of unmapped accounts for the Schedule M3 Chart."'
+  reason: Mapping of ledger accounts to Schedule M3 tax return lines within ONESOURCE Income Tax — tax
+    return preparation and compliance. L2 chosen as Tax Reporting & Compliance given the explicit tax-return-type/tax
+    return code context.
+- tag: ScheduleK1
+  spec_file: thomson-reuters-schedulek1-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.75
+  evidence: '"SubmitPartnershipSchedule-K1ForImport  Import Partnership K1 amounts for each participant
+    account"; schemas "TaxCode", "Scorp.ForeignTaxK3"'
+  reason: ONESOURCE Trust Tax ingestion of Schedule K-1 amounts for tax return preparation; clearly tax
+    compliance/reporting rather than general ledger accounting.
+- tag: State AA Logic Charts
+  spec_file: thomson-reuters-state-aa-logic-charts-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.75
+  evidence: Returns the list of state AA Logic chart's apportionment types ... Enables or disables the
+    throwback option for the State AA Logic Charts
+  reason: Apportionment types and throwback rules are state corporate income tax apportionment logic;
+    creating/copying/renaming these charts configures income tax return computation. Clearly tax management,
+    direct (income) tax.
+- tag: State Ti Forms Mapping Charts
+  spec_file: thomson-reuters-state-ti-forms-mapping-charts-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.75
+  evidence: Maps or unmaps tax form lines to state TI chart ... Returns the matching Tax Return Lines
+    of corresponding Forms Mapping Charts
+  reason: Mapping tax return form lines to state taxable-income charts is squarely corporate income tax
+    return preparation configuration in ONESOURCE Income Tax.
+- tag: Tax Documents(Print)
+  spec_file: thomson-reuters-tax-documents-print-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.75
+  evidence: POST /v1/binders/{binderId}/tax-documents 'Use to create a tax return document for a given
+    binder id and tax document type'
+  reason: ONESOURCE Income Tax print API creates and retrieves tax return documents by binder, which is
+    part of producing tax returns and statutory tax disclosures.
+- tag: Timekeepers
+  spec_file: thomson-reuters-timekeepers-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.75
+  evidence: GET /Timekeepers(...FirmId,InvoiceId,TimekeeperClassificationId...)/Invoice 'Get related Invoice'
+  reason: Law-firm timekeepers linked to matters, firms and invoices in the Legal Tracker warehouse —
+    legal operations / e-billing data, not HR employee records.
+- tag: Trial Balance
+  spec_file: thomson-reuters-trial-balance-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.75
+  evidence: POST /external/v1/trialbalance/account/add 'Create a new trial balance account'; 'Retrieve
+    account groupings schedule for a specific engagement'
+  reason: Trial balance accounts, periods and account groupings from Engagement/General Ledger Manager
+    — general ledger chart-of-accounts and period balance management.
+- tag: user-controller
+  spec_file: thomson-reuters-user-controller-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.74
+  evidence: PUT /user-service/users/{username}/password  Update password; PUT /user-service/users/recover-password;
+    GET /user-service/users/password/composition-rules  Get password composition rules; linkPartner /
+    unlinkGroups
+  reason: User account CRUD, credential/password lifecycle and group/partner entitlement linking — identity
+    and access administration for the platform. Not an HR employee record surface.
+- tag: AP Batches
+  spec_file: thomson-reuters-ap-batches-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.72
+  evidence: GET /routes/{routeId}/batches  APBatch_Index  Returns collection of AP route batches; schemas
+    APBatchPaymentModel, TAPExtractAllowedBatchPaymentStatuses
+  reason: Batches of accounts-payable invoice/payment records with payment-status enumerations, exported
+    for payment processing — this is accounts payable invoice/payment batch handling rather than generic
+    job batching.
+- tag: Account
+  spec_file: thomson-reuters-account-api-openapi.yml
+  capability_id: BC-220
+  capability_id_l1: BC-220
+  capability_name: Tax Management
+  confidence: 0.72
+  evidence: PATCH /v2/pans/{pan}/accounts/{accountId}  Update an existing account for a designated PAN/Trust
+    Account; schemas Form706GSD1, Ten99ServiceLevel
+  reason: 'ONESOURCE Trust Tax Services: management of trust tax account entities keyed by PAN, carrying
+    tax-form and 1099 service attributes. Clearly tax management; the operations manage account master
+    data rather than naming a specific sub-capability, so no L2 asserted.'
+- tag: DataSets
+  spec_file: thomson-reuters-datasets-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.72
+  evidence: GET /returns/e-file-return-search  DataSets_getCalculationandefiledData  Get e-filing information
+    for calculations; schemas TRTA.Athena.Models.Api.V4.Datasets.ReturnDetails, ...Jurisdictions.Jurisdiction
+  reason: Although the tag reads like a generic data container, the operations and schemas are tax return
+    datasets, calculation sheets, jurisdictions and e-filing status within ONESOURCE tax compliance —
+    i.e. preparation and filing of tax returns. Mapped to Tax Reporting & Compliance, with moderate confidence
+    because the CRUD surface itself is dataset-generic.
+- tag: Journal Entry
+  spec_file: thomson-reuters-journal-entry-api-openapi.yml
+  capability_id: BC-4310
+  capability_id_l1: BC-4310
+  capability_name: Professional Services Delivery Management
+  confidence: 0.72
+  evidence: Retrieve all journal entries for a specific engagement; Create a new journal entry in a trial
+    balance; schema ...ExternalJEWorkpaperExternal
+  reason: Engagement Manager API for adjusting journal entries against an engagement's trial balance with
+    workpaper references — audit engagement delivery work. L1 engagement delivery is clear; evidence straddles
+    execution and working papers, so no L2 asserted.
+- tag: Recipients
+  spec_file: thomson-reuters-recipients-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.72
+  evidence: POST /v1/pans/{pan}/accounts/{acctNo}/recipients 'add new recipient for designated PAN/Trust
+    Account'; schemas A1099RecipientType, TypeOf1042sPrintedForm, RecipientDistribution
+  reason: ONESOURCE Trust Tax recipients with 1099/1042-S form types and distribution details are tax
+    information-reporting records, so this realises tax reporting & compliance rather than any customer/party
+    master capability.
+- tag: Tax Documents V1 (Print)
+  spec_file: thomson-reuters-tax-documents-v1-print-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.72
+  evidence: POST /v1/tax-documents TriggerV1Print 'Generate a V1 print job for a tax return'
+  reason: Although the operations are a print/job pipeline, the artefacts produced are tax return documents
+    in GoSystem Tax, which realises tax return preparation and reporting. Some technical-plumbing character
+    reduces confidence.
+- tag: Tax Documents V2 (Print)
+  spec_file: thomson-reuters-tax-documents-v2-print-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.72
+  evidence: POST /v2/tax-documents TriggerV2Print 'Generate a V2 print job for a tax return'; GET /v2/print-options
+    'Get V2 print options for a tax return'
+  reason: Same GoSystem tax return document generation surface; produces tax return outputs, mapping to
+    tax reporting and compliance, with some allowance that the surface is document rendering plumbing.
+- tag: TimekeeperClassifications
+  spec_file: thomson-reuters-timekeeperclassifications-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.72
+  evidence: GET /TimekeeperClassifications; schemas LegalTracker.Datawarehouse.Invoice, LegalTracker.Datawarehouse.Matter*,
+    LegalTracker.Datawarehouse.TimekeeperRateSheet
+  reason: Legal Tracker data warehouse entity describing law-firm timekeeper classifications tied to matters
+    and invoices — legal department operations / e-billing reporting.
+- tag: Adhoc Benefit
+  spec_file: thomson-reuters-adhoc-benefit-api-openapi.yml
+  capability_id: BC-220
+  capability_id_l1: BC-220
+  capability_name: Tax Management
+  confidence: 0.7
+  evidence: GET /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/adhoc-benefits
+    — 'Get all adHoc benefits in a reporting entity'; schema Fbt.Models.CustomerApi.Benefits.AdhocModelForCustomerApi
+  reason: The 'Fbt' namespace plus period/reporting-entity path structure indicates Fringe Benefits Tax
+    compliance data, i.e. tax management rather than HR benefits administration. L1 only, as the evidence
+    does not distinguish direct tax vs tax reporting sub-capability.
+- tag: Allocations
+  spec_file: thomson-reuters-allocations-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.7
+  evidence: openapi title 'ONESOURCE Indirect Tax Compliance - Configuration…'; 'Allocations_CreateAllocationSpecification  Create
+    an allocation specification' under /master-data/allocations
+  reason: CRUD over allocation specifications held as master data within an indirect tax compliance product;
+    the surface configures how amounts are allocated for VAT/GST compliance. Confidence tempered because
+    the operations themselves are generic configuration CRUD.
+- tag: BilledToEntities
+  spec_file: thomson-reuters-billedtoentities-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.7
+  evidence: GET /BilledToEntities('{BilledToEntityId}')/Matters; schemas LegalTracker.Datawarehouse.Invoice,
+    LegalTracker.Datawarehouse.Firm, LegalTracker.Datawarehouse.Timekeeper
+  reason: Legal Tracker datawarehouse exposing billed-to entities linked to matters and law-firm invoices
+    — legal department operations / e-billing and matter management.
+- tag: Board Benefit
+  spec_file: thomson-reuters-board-benefit-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.7
+  evidence: GET /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/board-benefits  BoardBenefit_GetBenefits;
+    schema Fbt.Models.CustomerApi.Benefits.BoardBenefitModelForCustomerApi
+  reason: FBT (Fringe Benefits Tax) customer API retrieving benefits per reporting entity and period —
+    tax compliance data, an indirect/fringe benefits tax surface, not employee benefits administration.
+- tag: Budgets
+  spec_file: thomson-reuters-budgets-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.7
+  evidence: POST /matters/{id}/budgets  Budgets_PostBudgets  Creates or updates budget records for a matter
+    by the matter ID
+  reason: Legal Tracker matter budgets tied to firms and matters — legal department operations (matter
+    budgeting/e-billing), rather than enterprise budgeting.
+- tag: Car Parking Benefit
+  spec_file: thomson-reuters-car-parking-benefit-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.7
+  evidence: GET /periods/.../car-park-benefits  CarParkingBenefit_GetBenefits  Get all car parking benefits
+    in a reporting entity
+  reason: Part of the FBT (fringe benefits tax) customer API; benefits are captured per reporting entity
+    and period for tax reporting purposes.
+- tag: Deferredworkpaper
+  spec_file: thomson-reuters-deferredworkpaper-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.7
+  evidence: GET /odata/v1/deferred-workpaper  getOdataV1DeferredWorkpaper  Gets all deferred workpaper
+    details; schema DeferredWP
+  reason: Single read of deferred tax workpaper details from the tax provision product; supports tax provision/reporting
+    workpapers. Confidence limited by the thin single-operation surface.
+- tag: E-file Reference
+  spec_file: thomson-reuters-e-file-reference-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.7
+  evidence: GET /v1/e-file-jurisdictions 'Use to retrieve a list of E-file jurisdictions'; schemas EFileTypesRepresentation,
+    EFileJurisdictionRepresentation (ONESOURCE Income Tax E-file API)
+  reason: Reference data supporting electronic filing of income tax returns — tax return filing/compliance.
+    Reference-list-only operations make it supporting rather than core, hence moderate confidence.
+- tag: E-file Reference V1
+  spec_file: thomson-reuters-e-file-reference-v1-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.7
+  evidence: '''A RESTful API to provide access to the GoSystem E-file functionality''; GET /v1/e-file-jurisdictions
+    ''Get e-file jurisdictions'''
+  reason: Jurisdiction reference data for tax return e-filing in GoSystem Tax; supports tax return filing
+    and compliance.
+- tag: E-file Reference V2
+  spec_file: thomson-reuters-e-file-reference-v2-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.7
+  evidence: '''GoSystem E-file functionality''; GET /v2/e-file-jurisdictions ''Get e-file jurisdictions'''
+  reason: Same e-file jurisdiction reference surface at v2; supports tax return filing/compliance.
+- tag: Engagements
+  spec_file: thomson-reuters-engagements-api-openapi.yml
+  capability_id: BC-4300
+  capability_id_l1: BC-4300
+  capability_name: Client Engagement Management
+  confidence: 0.7
+  evidence: GET /external/v1/engagements/{clientId} — 'Retrieve all engagements for a specific client';
+    schema EngagementBinderExternalDto, TrialBalancePeriod
+  reason: Engagement Manager API exposing client engagements and engagement binder detail — this is accounting-firm
+    engagement records keyed by client. Maps at L1 to Client Engagement Management; the read-only operations
+    do not identify a specific lifecycle sub-capability, so no L2.
+- tag: Get Locator and Binder ID
+  spec_file: thomson-reuters-get-locator-and-binder-id-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: GET /v1/trialbalance/locators/{account}/{year} ... 'Valid tax return types are 1120C, 1120S'
+  reason: GoSystem TBB is the trial-balance bridge feeding corporate income tax returns; the locator/binder
+    identifiers index a tax return year for forms 1120C/1120S and Schedule M-3 imports. This grounds corporate
+    income tax compliance (Direct Tax Management), though this particular operation is only the identifier
+    lookup step, hence moderate confidence.
+- tag: Get Template
+  spec_file: thomson-reuters-get-template-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: GET /v1/trialBalance/{binderid}/importTemplates/{importtype}  Retrieve the list of templates
+    for import type ... 3007 - Schedule M-3
+  reason: Retrieves import templates for Preliminary Balances, Adjustments, TCC and Schedule M-3 within
+    GoSystem trial-balance-to-tax-return preparation; Schedule M-3 and 1120 return types are US corporate
+    income tax artefacts, supporting Direct Tax Management. Confidence moderate because the operation
+    itself is a template listing helper.
+- tag: International 5471 Schedule C (2018+)
+  spec_file: thomson-reuters-international-5471-schedule-c-2018-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: GET /v1/fcoa/{chartId}/form5471-schedule-c/mapped-accounts  'Returns the list of accounts
+    mapped to Form 5471 Schedule C OCI lines'
+  reason: ONESOURCE Income Tax chart mapping of ledger accounts to US Form 5471 (corporate income tax
+    information return) lines. Clearly corporate income/direct tax; some ambiguity between direct tax
+    management and tax reporting & compliance, hence 0.7.
+- tag: International 5471 Schedule M (2018+)
+  spec_file: thomson-reuters-international-5471-schedule-m-2018-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: PATCH /v1/fcoa/{chartId}/form5471-schedule-m/mapped-accounts  'Adds and removes accounts mapped
+    to Form 5471 Schedule M lines'
+  reason: Same ONESOURCE Income Tax chart-of-accounts-to-Form-5471 mapping surface; corporate income tax
+    (direct tax) compliance. L2 choice between direct tax and tax reporting keeps confidence moderate.
+- tag: International Chart of Accounts Cross Reference (2018+)
+  spec_file: thomson-reuters-international-chart-of-accounts-cross-reference-2018-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: '''Returns the list of accounts mapped to the International Summary Chart''; schema InternationalXrefFederalAccount;
+    doc: ''Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and
+    adjustments'''
+  reason: Cross-referencing financial accounts to tax return codes within ONESOURCE Income Tax — corporate
+    income tax provision/return preparation. Direct tax is the best-supported L2 though tax reporting
+    is a near neighbour.
+- tag: International Sourcing Charts (2018+)
+  spec_file: thomson-reuters-international-sourcing-charts-2018-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: POST /v1/international-sourcing-charts  'Creates a new International Sourcing Chart'; 'Adds
+    or removes source codes for the given International Sourcing Chart'
+  reason: Configuration of income-sourcing charts used for US international corporate income tax computation
+    in ONESOURCE Income Tax. Direct tax management is the closest capability; residual ambiguity with
+    tax reporting & compliance.
+- tag: International Summary Chart (2018+)
+  spec_file: thomson-reuters-international-summary-chart-2018-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: '''Returns the list of International Summary Charts available for 2018 forward''; ''Returns
+    a list of International Summary Chart account types''; doc: ''identify Tax Return Code (TRC) and Tax
+    Combination Code (TCC) accounts and adjustments'''
+  reason: Maintenance of income tax summary charts and their accounts in ONESOURCE Income Tax — corporate
+    income (direct) tax computation and return preparation. L2 between direct tax and tax reporting keeps
+    confidence at 0.7.
+- tag: Jurisdictions
+  spec_file: thomson-reuters-jurisdictions-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.7
+  evidence: GET /master-data/jurisdictions  Jurisdictions_GetJurisdictions  This endpoint fetches the
+    details of all Jurisdictions supported in the system (ONESOURCE indirect tax compliance configuration
+    API)
+  reason: Jurisdiction master data maintained for ONESOURCE indirect tax compliance configuration; supports
+    indirect tax determination/compliance. Some chance it belongs under tax reporting instead, hence 0.7.
+- tag: Locator
+  spec_file: thomson-reuters-locator-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.7
+  evidence: POST /locator/v2/assignment 'Assign groups and users to tax returns'; POST /v1/createnewlocator
+    'Create locator'; schemas taxPayer, CreateLocatorRequest
+  reason: A GoSystem 'locator' is the container for a tax return; operations create, copy, validate, deactivate
+    and assign preparers/reviewers to tax returns — tax return preparation and compliance workflow.
+- tag: Mappings
+  spec_file: thomson-reuters-mappings-api-openapi.yml
+  capability_id: BC-220
+  capability_id_l1: BC-220
+  capability_name: Tax Management
+  confidence: 0.7
+  evidence: '''This API provides endpoints to manage tax account mappings''; Mappings_Create ''Create
+    Tax Account Mapping'''
+  reason: Maintains mappings of accounts to tax accounts, a tax provision/compliance configuration activity.
+    The evidence names tax but not which sub-capability (reporting vs direct tax), so only L1 is asserted.
+- tag: MatterAllocations
+  spec_file: thomson-reuters-matterallocations-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.7
+  evidence: GET /MatterAllocations('{AllocationTemplateId}')/Matters 'Get entities from related Matters';
+    schemas LegalTracker.Datawarehouse.Accrual, LegalTracker.Datawarehouse.Invoice
+  reason: Legal Tracker data warehouse exposing matter allocation templates joined to matters, invoices
+    and accruals — legal department matter and e-billing operations reporting.
+- tag: MatterTypes
+  spec_file: thomson-reuters-mattertypes-api-openapi.yml
+  capability_id: BC-150.50
+  capability_id_l1: BC-150
+  capability_name: Legal Operations Management
+  confidence: 0.7
+  evidence: GET /MatterTypes('{MatterTypeId}')/Matters  Get entities from related Matters; schema LegalTracker.Datawarehouse.MatterType
+  reason: Classification reference data for legal matters within Legal Tracker matter management; supports
+    legal operations/matter management, though it is reference data only.
+- tag: Numerator Denominator Data
+  spec_file: thomson-reuters-numerator-denominator-data-api-openapi.yml
+  capability_id: BC-220
+  capability_id_l1: BC-220
+  capability_name: Tax Management
+  confidence: 0.7
+  evidence: OData API for querying OSA collections including effective rates, reconciliation data, numerator/denominator
+    data
+  reason: ONESOURCE tax provision analytics data (effective tax rate numerator/denominator and reconciliation),
+    clearly corporate tax management, but the single query operation does not pin the sub-capability.
+- tag: Payroll Tax Figure
+  spec_file: thomson-reuters-payroll-tax-figure-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.7
+  evidence: GET .../reporting-entities/{reporting-entity-id}/payroll-tax  PayrollTaxFigure_GetPayrollTaxDetails
+    "Get payroll tax details"; "Get payroll tax summary"
+  reason: Returns payroll-tax details and summaries per reporting entity and tax period in a fringe-benefits-tax
+    compliance product — tax figures for return preparation, not payroll administration. Mapped to Tax
+    Reporting & Compliance.
+- tag: Reporting Entity
+  spec_file: thomson-reuters-reporting-entity-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.7
+  evidence: ReportingEntity_GetReportingEntities 'Get all reporting entities in an organisation'; schemas
+    TaxAgentModelForCustomerApi, ReporingEntityBenefitModelForCustomerApi (FBT Customer API)
+  reason: Fringe Benefits Tax reporting entities with tax agent and benefit models are the filing units
+    of an FBT return, placing this in tax reporting and compliance.
+- tag: Sales
+  spec_file: thomson-reuters-sales-api-openapi.yml
+  capability_id: BC-220.40
+  capability_id_l1: BC-220
+  capability_name: Tax Reporting & Compliance
+  confidence: 0.7
+  evidence: GET /v1/tax-years/{tax-year}/sale-tax-codes 'get applicable tax codes for sale'; schemas SaleTaxLot,
+    WashSaleIndicator, NoncoveredIndicator
+  reason: Despite the 'Sales' tag, operations record asset disposals with tax lots and wash-sale indicators
+    for trust tax years — capital-gains tax reporting, not commercial sales management.
+- tag: State AA Categories
+  spec_file: thomson-reuters-state-aa-categories-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: Returns the list of state AA Categories based on the year. ... Charts are used to identify
+    Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities
+    and binders
+  reason: 'ONESOURCE Income Tax chart configuration: state apportionment/adjustment categories used to
+    drive corporate income tax return codes. This is corporate direct tax compliance tooling. Some ambiguity
+    between Direct Tax Management and Tax Reporting & Compliance, hence 0.7.'
+- tag: State AA Forms Cross Reference Charts
+  spec_file: thomson-reuters-state-aa-forms-cross-reference-charts-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: Returns the list of State AA Forms Cross Reference Charts based on year ... Renames a State
+    AA Forms Cross Reference Chart
+  reason: Maintains cross-reference charts linking state tax forms to Tax Return Codes within ONESOURCE
+    Income Tax — corporate income tax compliance configuration. L2 choice between direct tax and tax reporting
+    is somewhat ambiguous.
+- tag: State Ti Category Groups
+  spec_file: thomson-reuters-state-ti-category-groups-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: Returns the list of State Ti Category Groups based on year ... StateTiFormsLineMappingRepresentation
+  reason: State taxable-income category groups within ONESOURCE Income Tax charts, mapped to tax form
+    lines — corporate income tax compliance configuration.
+- tag: StateProvision
+  spec_file: thomson-reuters-stateprovision-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: GET /odata/v1/StateProvision  Gets all state provisions ... thomson-reuters-onesource-tax-provision-odata-apis
+  reason: Exposes state income tax provision records and detail from ONESOURCE Tax Provision — computation
+    and reporting of corporate income tax provision. L1 Tax Management is certain; the split between direct
+    tax and tax reporting leaves some ambiguity.
+- tag: System Groups
+  spec_file: thomson-reuters-system-groups-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: POST /{version}/groups/{groupid}/users  addUserInSystemGroup  Add user to a system group;
+    DELETE ... removeUserFromSystemGroup
+  reason: CRUD on system groups and their user membership is access group administration within identity
+    and access management for the HighQ collaboration platform.
+- tag: WorkbookImports
+  spec_file: thomson-reuters-workbookimports-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.7
+  evidence: openapi title 'ONESOURCE Indirect Tax Compliance - Process Workbook…'; PATCH /v2/datasets/returns/{returnId}/{importType}
+    'This endpoint is used to import data into calculations.'
+  reason: Imports transactional data into indirect tax return calculations (datasets/returns, import types,
+    import status). Operations concern feeding VAT/GST return computation, i.e. indirect tax compliance,
+    though the surface is import mechanics.
+- tag: chart-imports
+  spec_file: thomson-reuters-chart-imports-api-openapi.yml
+  capability_id: BC-220.10
+  capability_id_l1: BC-220
+  capability_name: Direct Tax Management
+  confidence: 0.7
+  evidence: POST /federal-account-charts/{fcoaChartId}/adjustment-charts/{adjustmentchartId}/chart-import-processes
+    — "Use to add and update adjustments in the specified chart of adjustments"; schemas federalAdjustmentRepresentation,
+    taxRepresentation (onesource-income-tax-api)
+  reason: Operations import federal tax chart-of-accounts adjustments into ONESOURCE Income Tax, i.e.
+    corporate income tax compliance data preparation. Direct tax is the best fit; some residual ambiguity
+    between direct tax management and tax reporting/compliance, hence 0.7.
