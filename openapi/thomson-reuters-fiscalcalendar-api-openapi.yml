@@ -1,0 +1,264 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Fiscal Calendar API
+  version: '1.2'
+  description: 'Operations tagged FiscalCalendar across 3 of this provider''s published API definitions: thomson-reuters-datawarehouse-api-odata-1-2-openapi.json, thomson-reuters-datawarehouse-api-odata-1-2-openapi.yml, thomson-reuters-datawarehouse-api-odata-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+tags:
+- name: FiscalCalendar
+paths:
+  /FiscalCalendar:
+    get:
+      summary: Get entities from FiscalCalendar
+      tags:
+      - FiscalCalendar
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - FiscalCalendarId
+            - FiscalCalendarId desc
+            - CalendarDate
+            - CalendarDate desc
+            - FYDay
+            - FYDay desc
+            - FYMonthNumber
+            - FYMonthNumber desc
+            - FYQuarter
+            - FYQuarter desc
+            - FYQuarterNumber
+            - FYQuarterNumber desc
+            - FYYearNumber
+            - FYYearNumber desc
+            - FiscalDate
+            - FiscalDate desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - FiscalCalendarId
+            - CalendarDate
+            - FYDay
+            - FYMonthNumber
+            - FYQuarter
+            - FYQuarterNumber
+            - FYYearNumber
+            - FiscalDate
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of FiscalCalendar
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.FiscalCalendar'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFiscalCalendar
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /FiscalCalendar('{FiscalCalendarId}'):
+    get:
+      summary: Get entity from FiscalCalendar by key
+      tags:
+      - FiscalCalendar
+      parameters:
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - FiscalCalendarId
+            - CalendarDate
+            - FYDay
+            - FYMonthNumber
+            - FYQuarter
+            - FYQuarterNumber
+            - FYYearNumber
+            - FiscalDate
+      responses:
+        '200':
+          description: Retrieved entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalTracker.Datawarehouse.FiscalCalendar'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFiscalCalendar('{FiscalCalendarId}')
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+components:
+  schemas:
+    LegalTracker.Datawarehouse.FiscalCalendar:
+      type: object
+      properties:
+        FiscalCalendarId:
+          type: string
+        CalendarDate:
+          type: string
+          format: date
+          example: '2017-04-13'
+        FYDay:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        FYMonthNumber:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        FYQuarter:
+          type:
+          - string
+          - 'null'
+        FYQuarterNumber:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        FYYearNumber:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        FiscalDate:
+          type: string
+          format: date
+          example: '2017-04-13'
+      title: FiscalCalendar
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific
+  parameters:
+    count:
+      name: $count
+      in: query
+      description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+      schema:
+        type: boolean
+    top:
+      name: $top
+      in: query
+      description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+      schema:
+        type: integer
+        minimum: 0
+      example: 50
+    skip:
+      name: $skip
+      in: query
+      description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+      schema:
+        type: integer
+        minimum: 0
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-datawarehouse-api-odata-1-2-openapi.json
+- thomson-reuters-datawarehouse-api-odata-1-2-openapi.yml
+- thomson-reuters-datawarehouse-api-odata-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

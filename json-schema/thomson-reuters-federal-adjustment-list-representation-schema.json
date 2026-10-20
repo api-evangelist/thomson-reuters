@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-federal-adjustment-list-representation-schema.json",
+  "title": "federalAdjustmentListRepresentation",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-onesource-income-tax-api-openapi.yml#/components/schemas/federalAdjustmentListRepresentation",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/federalAdjustmentRepresentation"
+      }
+    }
+  },
+  "$defs": {
+    "federalAdjustmentAccount": {
+      "type": "object",
+      "properties": {
+        "accountCode": {
+          "type": "string",
+          "description": "Account code"
+        },
+        "defaultProvision": {
+          "type": "boolean",
+          "description": "Default provision"
+        }
+      }
+    },
+    "federalAdjustmentRepresentation": {
+      "type": "object",
+      "properties": {
+        "adjustmentNumber": {
+          "type": "string"
+        },
+        "adjustmentDescription": {
+          "type": "string"
+        },
+        "debitTaxRepresentation": {
+          "type": "object",
+          "$ref": "#/$defs/taxRepresentation"
+        },
+        "creditTaxRepresentation": {
+          "type": "object",
+          "$ref": "#/$defs/taxRepresentation"
+        },
+        "internationalDebitTaxReturnPresentation": {
+          "type": "object",
+          "$ref": "#/$defs/taxRepresentation"
+        },
+        "internationalCreditTaxReturnPresentation": {
+          "type": "object",
+          "$ref": "#/$defs/taxRepresentation"
+        },
+        "permanentTemporary": {
+          "type": "boolean"
+        },
+        "federalAdjustmentAccounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/federalAdjustmentAccount"
+          }
+        }
+      }
+    },
+    "taxRepresentation": {
+      "type": "object",
+      "properties": {
+        "trcCategoryId": {
+          "type": "integer"
+        },
+        "trcNumber": {
+          "type": "integer"
+        },
+        "tccNumber": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

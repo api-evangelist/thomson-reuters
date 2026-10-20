@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-parameters-response-schema.json",
+  "title": "ParametersResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-next-generation-reporting-rest-apis-openapi.yml#/components/schemas/ParametersResponse",
+  "type": "object",
+  "properties": {
+    "companies": {
+      "type": "array",
+      "description": "List of companies the user is authorized to access.",
+      "items": {
+        "$ref": "#/$defs/Company"
+      }
+    },
+    "companyRoles": {
+      "type": "array",
+      "description": "List of companies roles the user is authorized for.",
+      "items": {
+        "type": "string",
+        "description": "List of companies roles the user is authorized for."
+      }
+    },
+    "fieldGroupInfos": {
+      "type": "array",
+      "description": "Mapping of field/column group name and associated fields",
+      "items": {
+        "$ref": "#/$defs/FieldGroupInfo"
+      }
+    }
+  },
+  "$defs": {
+    "Company": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "description": "Name of the company used is authorized"
+        },
+        "countries": {
+          "type": "array",
+          "description": "List of countries with transaction for the company ",
+          "items": {
+            "$ref": "#/$defs/Country"
+          }
+        },
+        "taxTypes": {
+          "type": "array",
+          "description": "List of tax types with transaction for the company",
+          "items": {
+            "type": "string",
+            "description": "List of tax types with transaction for the company"
+          }
+        },
+        "transactionTypes": {
+          "type": "array",
+          "description": "List of transaction types with transaction for the company",
+          "items": {
+            "type": "string",
+            "description": "List of transaction types with transaction for the company"
+          }
+        },
+        "authorityTypes": {
+          "type": "array",
+          "description": "List of authority types with transaction for the company",
+          "items": {
+            "type": "string",
+            "description": "List of authority types with transaction for the company"
+          }
+        }
+      },
+      "description": "List of companies the user is authorized to access."
+    },
+    "Country": {
+      "type": "object",
+      "properties": {
+        "taxableCountry": {
+          "type": "string"
+        },
+        "taxableStates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "taxableProvinces": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "List of countries with transaction for the company "
+    },
+    "FieldGroupInfo": {
+      "type": "object",
+      "properties": {
+        "fieldGroup": {
+          "type": "string"
+        },
+        "fieldInfos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldInfo"
+          }
+        }
+      },
+      "description": "Mapping of field/column group name and associated fields"
+    },
+    "FieldInfo": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,388 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts State AA Forms Cross Reference…
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: State AA Forms Cross Reference Charts
+paths:
+  /v1/years/{year}/state-aa-form-cross-reference-charts:
+    get:
+      tags:
+      - State AA Forms Cross Reference Charts
+      summary: Returns the list of State AA Forms Cross Reference Charts based on year.
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: Tax year.
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAAFormsCrossReferenceChartRepresentations'
+              examples:
+                state-aa-form-cross-reference-charts:
+                  $ref: '#/components/examples/state-aa-form-cross-reference-charts-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      operationId: getV1YearsByYearStateAaFormCrossReferenceCharts
+      x-operation-id-source: derived
+  /v1/state-aa-form-cross-reference-charts/{chartId}/copies:
+    post:
+      tags:
+      - State AA Forms Cross Reference Charts
+      summary: Creates a copy of an existing State AA Forms Cross Reference Chart.
+      operationId: CreatesACopyOfAnExistingStateAAFormsCrossReferenceChart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartRenameRepresentation'
+            examples:
+              create-state-aa-form-cross-reference-chart:
+                $ref: '#/components/examples/international-summary-chart-rename-request'
+      responses:
+        '200':
+          description: StateAAFormsCrossReferenceChart created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicChartCreateResponseRepresentation'
+              examples:
+                create-state-aa-form-cross-reference-chart-response:
+                  $ref: '#/components/examples/create-state-aa-logic-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates a copy of an existing State AA Forms Cross Reference Chart.
+  /v1/state-aa-form-cross-reference-charts/{chartId}:
+    put:
+      tags:
+      - State AA Forms Cross Reference Charts
+      summary: Renames a State AA Forms Cross Reference Chart. Enter the chartId in the URL
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartRenameRepresentation'
+            examples:
+              rename-state-aa-form-cross-reference-chart:
+                $ref: '#/components/examples/international-summary-chart-rename-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAAFormsCrossReferenceChartRepresentation'
+              examples:
+                rename-state-aa-form-cross-reference-chart-response:
+                  $ref: '#/components/examples/state-aa-form-cross-reference-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1StateAaFormCrossReferenceChartsByChartId
+      x-operation-id-source: derived
+  /v1/state-aa-form-cross-reference-charts/{chartId}/read-only-status:
+    put:
+      tags:
+      - State AA Forms Cross Reference Charts
+      summary: Updates the read-only status for a State AA Forms Cross Reference Chart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartReadOnlyStatusRepresentation'
+            examples:
+              read-only-status-state-aa-form-cross-reference-chart:
+                $ref: '#/components/examples/international-summary-chart-read-only-status-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAAFormsCrossReferenceChartRepresentation'
+              examples:
+                read-only-status-state-aa-form-cross-reference-chart-response:
+                  $ref: '#/components/examples/state-aa-form-cross-reference-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1StateAaFormCrossReferenceChartsByChartIdReadOnlyStatus
+      x-operation-id-source: derived
+components:
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    StateAAFormsCrossReferenceChartRepresentation:
+      type: object
+      properties:
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+        jurisdictionName:
+          type: string
+          description: Jurisdiction name.
+        isDefault:
+          type: boolean
+    InternationalSummaryChartReadOnlyStatusRepresentation:
+      type: object
+      properties:
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+    InternationalSummaryChartRenameRepresentation:
+      type: object
+      properties:
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+    StateAALogicChartCreateResponseRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+    StateAAFormsCrossReferenceChartRepresentations:
+      type: array
+      items:
+        $ref: '#/components/schemas/StateAAFormsCrossReferenceChartRepresentation'
+  examples:
+    state-aa-form-cross-reference-chart-response:
+      value:
+        chartId: E45V010100003AWR
+        chartName: TestChart
+        year: 2022
+        isReadOnly: false
+        jurisdictionName: Alabama
+        isDefault: true
+    state-aa-form-cross-reference-charts-response:
+      value:
+      - chartId: E45V010100003AWR
+        chartName: Alabama2022
+        year: 2022
+        isReadOnly: true
+        jurisdictionName: Alabama
+        isDefault: true
+      - chartId: E45V010100003CYB
+        chartName: JP State A&A Forms Cross-References
+        year: 2022
+        isReadOnly: false
+        jurisdictionName: Alabama
+        isDefault: false
+      - chartId: E45V010100003MSH
+        chartName: KW AL Chart Test21
+        year: 2022
+        isReadOnly: false
+        jurisdictionName: Alabama
+        isDefault: false
+      - chartId: E45V010100003N65
+        chartName: test2022
+        year: 2022
+        isReadOnly: false
+        jurisdictionName: Alabama
+        isDefault: false
+    international-summary-chart-read-only-status-request:
+      value:
+        isReadOnly: false
+    international-summary-chart-rename-request:
+      value:
+        chartName: TestChart
+    create-state-aa-logic-chart-response:
+      value:
+        year: 2022
+        chartId: E45V010100003L6F
+        chartName: TestChart
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

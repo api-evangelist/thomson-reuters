@@ -1,119 +1,51 @@
-specification: API Commons Rate Limits
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
-provider: Thomson Reuters
-providerId: thomson-reuters
-created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags:
-  - Legal
-  - Tax
-  - Finance
-  - Risk
-  - Fraud
-  - Compliance
-  - Data
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the Thomson Reuters API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
-headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
-responseCodes:
-  throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
+name: Thomson Reuters rate limits
+generated: '2026-10-20'
+method: searched
+source: https://developers.thomsonreuters.com/pages/api-catalog
+note: Limits are published per API inside the Thomson Reuters Developer Portal (a JavaScript app); each row cites the portal page and the public content-API document the page renders from. No portal-wide limit is published; several ONESOURCE APIs say only "There may be transaction rate limits set for
+  the API". The portal pages are JavaScript-rendered, so a plain fetch of the top-level source returns an empty shell; every limit_text is verbatim in the per-row `source` (the public content-API JSON the page renders), verified 2026-10-20.
+limit_count: 5
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Thomson Reuters Westlaw API
-      - Thomson Reuters Checkpoint API
-      - Thomson Reuters ONESOURCE API
-      - Thomson Reuters HighQ API
-      - Thomson Reuters Legal Tracker API
-      - Thomson Reuters Risk and Fraud API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Thomson Reuters Westlaw API
-      - Thomson Reuters Checkpoint API
-      - Thomson Reuters ONESOURCE API
-      - Thomson Reuters HighQ API
-      - Thomson Reuters Legal Tracker API
-      - Thomson Reuters Risk and Fraud API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Thomson Reuters Westlaw API
-      - Thomson Reuters Checkpoint API
-      - Thomson Reuters ONESOURCE API
-      - Thomson Reuters HighQ API
-      - Thomson Reuters Legal Tracker API
-      - Thomson Reuters Risk and Fraud API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Thomson Reuters Westlaw API
-      - Thomson Reuters Checkpoint API
-      - Thomson Reuters ONESOURCE API
-      - Thomson Reuters HighQ API
-      - Thomson Reuters Legal Tracker API
-      - Thomson Reuters Risk and Fraud API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Thomson Reuters Westlaw API
-      - Thomson Reuters Checkpoint API
-      - Thomson Reuters ONESOURCE API
-      - Thomson Reuters HighQ API
-      - Thomson Reuters Legal Tracker API
-      - Thomson Reuters Risk and Fraud API
-policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- name: ONESOURCE Global Trade LatAm IAM API
+  limit_text: 300 requests per minute
+  max: 300
+  window: 1 minute
+  scope: all endpoints
+  exhaustion_status: 429
+  endpoint: IAM API (ONESOURCE Global Trade Latam)
+  source: https://api.thomsonreuters.com/developer-experience/content/v1/strapi/apis/1f108418-f6cb-6a86-b152-41caea6fc703?status=published
+  docs: https://developers.thomsonreuters.com/pages/api-catalog/1f108418-f6cb-6a86-b152-41caea6fc703
+- name: ONESOURCE Indirect Compliance Reports API
+  limit_text: The default API rate limit for an integration is set to 100 requests per minute.
+  max: 100
+  window: 1 minute
+  scope: per integration
+  exhaustion_status: 429
+  source: https://api.thomsonreuters.com/developer-experience/content/v1/strapi/apis/5f8df477-2ccc-5df7-b2fb-1d8178dfe590?status=published
+  docs: https://developers.thomsonreuters.com/pages/api-catalog/5f8df477-2ccc-5df7-b2fb-1d8178dfe590
+- name: Regulatory Intelligence API
+  limit_text: Rate limits are at the client level and are set at a base rate of 240 requests per minute.
+  max: 240
+  window: 1 minute
+  scope: per client
+  exhaustion_status: 429
+  source: https://api.thomsonreuters.com/developer-experience/content/v1/strapi/apis/789eb138-f254-4ce2-b777-01e3e99c2fd9?status=published
+  docs: https://developers.thomsonreuters.com/pages/api-catalog/789eb138-f254-4ce2-b777-01e3e99c2fd9
+- name: SurePrep client activity (Webhooks) API
+  limit_text: Our API will only allow a consumer to make up to 400 requests per minute.
+  max: 400
+  window: 1 minute
+  scope: per consumer
+  exhaustion_status: 429
+  source: https://api.thomsonreuters.com/developer-experience/content/v1/strapi/apis/78f906e2-d54f-530f-b3cf-99ee71043113?status=published
+  docs: https://developers.thomsonreuters.com/pages/api-catalog/78f906e2-d54f-530f-b3cf-99ee71043113
+- name: Exemption Certificates / Certificate Manager / VAT Registration Validation APIs
+  limit_text: Exemption Certificate API has rate limits in place
+  scope: unstated
+  note: The Best Practices pages state limits exist and recommend retries with exponential backoff, without a number.
+  source: https://api.thomsonreuters.com/developer-experience/content/v1/strapi/apis/31e1b889-f210-4d5b-9bcf-635010703dc9?status=published
+  docs: https://developers.thomsonreuters.com/pages/api-catalog/31e1b889-f210-4d5b-9bcf-635010703dc9
+signaling:
+  status_code: 429
+  headers: []
+  note: No rate-limit response headers are documented.

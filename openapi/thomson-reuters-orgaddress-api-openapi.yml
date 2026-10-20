@@ -1,0 +1,521 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Orgaddress API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Orgaddress across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Orgaddress
+paths:
+  /{version}/orgaddresses/{addressid}:
+    get:
+      tags:
+      - Orgaddress
+      summary: Get org address
+      description: 'This API call is used to get an address to an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The given address ID is invalid
+
+
+        308
+
+
+        N/A
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-63740'
+      operationId: getOrgAddress
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: addressid
+        in: path
+        description: The ID of the address
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/address'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/address'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/address'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Orgaddress
+      summary: Update org address
+      description: 'This API call is used to change an address within an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref code (before V4)
+
+
+        The given address ID is invalid
+
+
+        308
+
+
+        You do not have access to the given organisation ID
+
+
+        318
+
+
+        The address countryname is required.
+
+
+        319
+
+
+        The address countryname is invalid.
+
+
+        309
+
+
+        The defaultaddress attribute is invalid. It must be 1 or 0
+
+
+        313
+
+
+        A city name is required
+
+
+        301
+
+
+        A city name can have a maximum of 50 characters
+
+
+        302
+
+
+        A postal code can have a maximum of 50 characters
+
+
+        303
+
+
+        The entered address'' external ID already exists in the system
+
+
+        413
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-63738'
+      operationId: updateOrgAddress
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: addressid
+        in: path
+        description: The address ID to be updated
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/address'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/address'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/address'
+    delete:
+      tags:
+      - Orgaddress
+      summary: Delete org address
+      description: 'This API call is used to delete an address to an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The given address ID is invalid
+
+
+        308
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-63739'
+      operationId: deleteAddress
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: addressid
+        in: path
+        description: The ID of the address to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/orgaddresses:
+    get:
+      tags:
+      - Orgaddress
+      summary: Org address list
+      description: 'This API call is used to get list of a addresses in an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The Organisation ID is invalid
+
+
+        260
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-64267'
+      operationId: getOrgAddressList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: orgid
+        in: query
+        description: The ID of the organisation
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/address'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/address'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/address'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Orgaddress
+      summary: Add org address
+      description: 'This API call is used to add a new address to an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The entered address'' external ID already exists in the system
+
+
+        413
+
+        N/A
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-63737'
+      operationId: addOrgAddress
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: orgid
+        in: query
+        description: The ID of the organisation
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/address'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/address'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/address'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/address'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/address'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/address'
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    address:
+      type: object
+      properties:
+        addressid:
+          type: string
+        orgid:
+          type: string
+        street1:
+          type: string
+        additional:
+          type: string
+        state:
+          type: string
+        postcode:
+          type: string
+        countryname:
+          type: string
+        city:
+          type: string
+        status:
+          type: string
+        order:
+          type: string
+        defaultaddress:
+          type: string
+        externalid:
+          type: string
+        phone:
+          type: string
+        knownas:
+          type: string
+        link:
+          type: string
+      xml:
+        name: address
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

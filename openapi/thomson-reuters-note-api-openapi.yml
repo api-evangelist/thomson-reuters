@@ -1,0 +1,159 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Note API
+  version: v1
+  description: 'Operations tagged Note across 3 of this provider''s published API definitions: thomson-reuters-firmflow-web-api-services-v1-openapi.json, thomson-reuters-firmflow-web-api-services-openapi.yml, thomson-reuters-firmflow-web-api-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: Note
+paths:
+  /firmflow/api/V1/Workflow/GetNotes:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Note
+      summary: Get notes for a workflow
+      description: Retrieves the notes associated with a specific workflow.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: filingId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetNoteResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNoteResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetNoteResponse'
+      operationId: getFirmflowApiV1WorkflowGetNotes
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    NotesDTO:
+      type: object
+      properties:
+        note_id:
+          type: integer
+          format: int32
+        note_type:
+          type: string
+          nullable: true
+        ref_no:
+          type: integer
+          format: int64
+        sub_ref_no:
+          type: integer
+          format: int64
+        notes:
+          type: string
+          nullable: true
+        notes_author:
+          type: string
+          nullable: true
+        notes_updated_date:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        status_author:
+          type: string
+          nullable: true
+        status_updated_date:
+          type: string
+          nullable: true
+      additionalProperties: false
+    GetNoteResponse:
+      type: object
+      properties:
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotesDTO'
+          nullable: true
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NotesDTO_2:
+      type: object
+      properties:
+        note_id:
+          type: integer
+          format: int32
+        note_type:
+          type:
+          - string
+          - 'null'
+        ref_no:
+          type: integer
+          format: int64
+        sub_ref_no:
+          type: integer
+          format: int64
+        notes:
+          type:
+          - string
+          - 'null'
+        notes_author:
+          type:
+          - string
+          - 'null'
+        notes_updated_date:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        status_author:
+          type:
+          - string
+          - 'null'
+        status_updated_date:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    GetNoteResponse_2:
+      type: object
+      properties:
+        notes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotesDTO_2'
+        responseMessage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+x-refined-from:
+- thomson-reuters-firmflow-web-api-services-v1-openapi.json
+- thomson-reuters-firmflow-web-api-services-openapi.yml
+- thomson-reuters-firmflow-web-api-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,205 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Zones API Controller API
+  version: '1.0'
+  contact:
+    name: Team Spartans
+    email: IDT_Spartans@thomsonreuters.com
+  description: 'Operations tagged zones-api-controller across 2 of this provider''s published API definitions: thomson-reuters-authorities-rest-apis-openapi.json, thomson-reuters-authorities-rest-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-cloud-qa.onesourcetax.com/indirect-tax-determination/authority-services/beta
+- url: https://api-cloud-uat.onesourcetax.com/indirect-tax-determination/authority-services/beta
+  description: UAT test environment
+- url: https://api.onesourcetax.com/indirect-tax-determination/authority-services/beta
+  description: AMER region Production environment
+- url: https://api-emea.onesourcetax.com/indirect-tax-determination/authority-services/beta
+  description: EMEA region Production environment
+security:
+- ApiKeyAuth: []
+tags:
+- name: zones-api-controller
+  description: Operations related to zones API controller
+paths:
+  /zones/countries:
+    get:
+      tags:
+      - zones-api-controller
+      summary: Retrieve Countries
+      description: Fetches Countries that support Pagination and Filter.
+      operationId: getCountryList
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      responses:
+        '200':
+          description: Success
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionCountriesResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized access
+        '403':
+          description: Forbidden access
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error. For more details check the logs
+    servers:
+    - url: https://api-cloud-qa.onesourcetax.com/indirect-tax-determination/authority-services/beta
+    - url: https://api-cloud-uat.onesourcetax.com/indirect-tax-determination/authority-services/beta
+      description: UAT test environment
+    - url: https://api.onesourcetax.com/indirect-tax-determination/authority-services/beta
+      description: AMER region Production environment
+    - url: https://api-emea.onesourcetax.com/indirect-tax-determination/authority-services/beta
+      description: EMEA region Production environment
+  /zones/authorities/countries/{countryCode}/regions:
+    get:
+      tags:
+      - zones-api-controller
+      summary: Retrieve Regions/States
+      description: Fetches Regions/States that support Pagination and Filter.
+      operationId: getRegionsList
+      parameters:
+      - name: countryCode
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      responses:
+        '200':
+          description: Success
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionRegionsResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized access
+        '403':
+          description: Forbidden access
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error. For more details check the logs
+    servers:
+    - url: https://api-cloud-qa.onesourcetax.com/indirect-tax-determination/authority-services/beta
+    - url: https://api-cloud-uat.onesourcetax.com/indirect-tax-determination/authority-services/beta
+      description: UAT test environment
+    - url: https://api.onesourcetax.com/indirect-tax-determination/authority-services/beta
+      description: AMER region Production environment
+    - url: https://api-emea.onesourcetax.com/indirect-tax-determination/authority-services/beta
+      description: EMEA region Production environment
+components:
+  schemas:
+    ApiCollectionCountriesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountriesResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ApiCollectionRegionsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegionsResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    RegionsResponse:
+      type: object
+      properties:
+        regionName:
+          type: string
+        code:
+          type: string
+    CountriesResponse:
+      type: object
+      properties:
+        countryName:
+          type: string
+        code:
+          type: string
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+x-refined-from:
+- thomson-reuters-authorities-rest-apis-openapi.json
+- thomson-reuters-authorities-rest-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

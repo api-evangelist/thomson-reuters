@@ -1,0 +1,91 @@
+openapi: 3.2.0
+info:
+  version: v1
+  title: FBT CUSTOMER Standard Category API
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/administration
+tags:
+- name: Standard Category
+paths:
+  /periods/{period-id}/organizations/{organization-id}/standard-categories:
+    get:
+      tags:
+      - Standard Category
+      summary: Get all standard categories in an organisation
+      operationId: StandardCategories_GetStandardCategories
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: offset
+        in: query
+        description: Offset
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Limit
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get all standard categories in an organisation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.StandardCategory.StandardCategoryModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.StandardCategory.StandardCategoryModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.StandardCategory.StandardCategoryModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.StandardCategory.StandardCategoryModelForCustomerApi'
+        '404':
+          description: Invalid input id
+components:
+  schemas:
+    Fbt.Models.CustomerApi.StandardCategory.StandardCategoryModelForCustomerApi:
+      description: Standard Category Model
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Standard category id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        code:
+          format: int32
+          description: Standard category code
+          type: integer
+        description:
+          description: Standard category description
+          type: string
+        benefits:
+          description: Standard category associated workpapers
+          type: array
+          items:
+            type: string

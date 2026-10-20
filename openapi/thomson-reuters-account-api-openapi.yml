@@ -1,0 +1,933 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Account API
+  version: '2.0'
+  description: 'Operations tagged Account across 4 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-services-v1-openapi.json, thomson-reuters-onesource-trust-tax-services-v2-openapi.json, thomson-reuters-onesource-trust-tax-services-v1-openapi.yml, thomson-reuters-onesource-trust-tax-services-v2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax
+security:
+- bearerAuth: []
+tags:
+- name: Account
+paths:
+  /v1/pans:
+    get:
+      tags:
+      - Account
+      summary: Allows an authenticated user to retrieve list of allowed PANs
+      description: Allows an authenticated user to retrieve list of allowed PANs.
+      operationId: RetrieveAPANList
+      parameters:
+      - name: all-pans
+        in: query
+        description: A value of true returns a list of all PANs. A value of false or blank returns only the list of PANs the user is granted access to.
+        schema:
+          type: boolean
+          description: A value of true returns a list of all PANs. A value of false or blank returns only the list of PANs the user is granted access to.
+      - name: top
+        in: query
+        description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+        schema:
+          type: integer
+          description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+          format: int32
+      - name: skip
+        in: query
+        description: The number of items to skip. The value must be a positive number.
+        schema:
+          type: integer
+          description: The number of items to skip. The value must be a positive number.
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PanResponseModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve a PAN List
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v1/pans/{pan}/accounts:
+    get:
+      tags:
+      - Account
+      summary: Allows an authenticated user to retrieve a paginated list of accounts for a…
+      description: Allows an authenticated user to retrieve a paginated list of accounts for a specific PAN, in the current tax year and up to four prior tax years.
+      operationId: RetrieveAnAccountListForAPAN
+      parameters:
+      - name: pan
+        in: path
+        description: Filters the response based on Product Access Number.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Filters the response based on Product Access Number.
+      - name: tax-year
+        in: query
+        description: Filters the response based on the tax year. The value can be the current tax year or any of the four prior tax years.
+        schema:
+          type: integer
+          description: Filters the response based on the tax year. The value can be the current tax year or any of the four prior tax years.
+          format: int32
+      - name: top
+        in: query
+        description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+        schema:
+          type: integer
+          description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+          format: int32
+      - name: skip
+        in: query
+        description: The number of items to skip. The value must be a positive number.
+        schema:
+          type: integer
+          description: The number of items to skip. The value must be a positive number.
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve an Account List for a PAN
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v2/pans/{pan}/accounts/{accountId}:
+    patch:
+      tags:
+      - Account
+      summary: Update an existing account for a designated PAN/Trust Account
+      description: Updates existing Account Entity data.
+      operationId: UpdatesExistingAccountEntityData
+      parameters:
+      - name: pan
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/AccountModel_2'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountModel_2'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AccountModel_2'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AccountModel_2'
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates existing Account Entity data
+    get:
+      tags:
+      - Account
+      summary: Retrieve an account for a specific PAN and AccountId
+      description: Allows an authenticated user to retrieve an account for a specific PAN and AccountId.
+      operationId: RetrieveAnAccountForAPANAndAccountId
+      parameters:
+      - name: accountId
+        in: path
+        description: Filters the response based on AccountId. Account Id is formed {accountNo}-{YearSeq}.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Filters the response based on AccountId. Account Id is formed {accountNo}-{YearSeq}.
+      - name: pan
+        in: path
+        description: Filters the response based on Product Access Number.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Filters the response based on Product Access Number.
+      - name: tax-year
+        in: query
+        description: Filters the response based on the tax year. The value can be the current tax year or any of the four prior tax years.
+        schema:
+          type: integer
+          description: Filters the response based on the tax year. The value can be the current tax year or any of the four prior tax years.
+          format: int32
+      - name: top
+        in: query
+        description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+        schema:
+          type: integer
+          description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+          format: int32
+      - name: skip
+        in: query
+        description: The number of items to skip. The value must be a positive number.
+        schema:
+          type: integer
+          description: The number of items to skip. The value must be a positive number.
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountModel_2'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve an Account for a PAN and AccountId
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v2/pans/{pan}/accounts:
+    get:
+      tags:
+      - Account
+      summary: Retrieve a paginated list of accounts for a specific PAN
+      description: Allows an authenticated user to retrieve a paginated list of accounts for a specific PAN, in the current tax year and up to four prior tax years.
+      operationId: getV2PansByPanAccounts
+      parameters:
+      - name: pan
+        in: path
+        description: Filters the response based on Product Access Number.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Filters the response based on Product Access Number.
+      - name: tax-year
+        in: query
+        description: Filters the response based on the tax year. The value can be the current tax year or any of the four prior tax years.
+        schema:
+          type: integer
+          description: Filters the response based on the tax year. The value can be the current tax year or any of the four prior tax years.
+          format: int32
+      - name: top
+        in: query
+        description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+        schema:
+          type: integer
+          description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+          format: int32
+      - name: skip
+        in: query
+        description: The number of items to skip. The value must be a positive number.
+        schema:
+          type: integer
+          description: The number of items to skip. The value must be a positive number.
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseModel_2'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve an Account List for a PAN
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v2/accounts/operations/{id}:
+    get:
+      tags:
+      - Account
+      summary: Retrieve the account operation status
+      description: Retrieves the Account Entity status.
+      operationId: RetrievesTheAccountEntityStatus
+      parameters:
+      - name: id
+        in: path
+        description: Operation request identifier.
+        required: true
+        schema:
+          type: string
+          description: Operation request identifier.
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves the Account Entity status
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+components:
+  schemas:
+    AccountModel:
+      type: object
+      properties:
+        accountNo:
+          type:
+          - string
+          - 'null'
+          description: Account No
+        accountName:
+          type:
+          - string
+          - 'null'
+          description: Account Name
+        yrSeq:
+          type: integer
+          description: Year Sequence of Account
+          format: int32
+        status:
+          type:
+          - string
+          - 'null'
+          description: "Account status \nvalues:\n- 'Active'\n- 'Deleted'"
+      additionalProperties: false
+      description: Account information
+    AccountResponseModel:
+      type: object
+      properties:
+        totalItems:
+          type:
+          - integer
+          - 'null'
+          description: Total Count
+          format: int32
+        value:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountModel'
+          description: List of Accounts information
+        '@nextLink':
+          type:
+          - string
+          - 'null'
+          description: Next Link for the accounts
+        '@prevLink':
+          type:
+          - string
+          - 'null'
+          description: Prev Link for the accounts
+      additionalProperties: false
+      description: Account Response Model
+    PanModel:
+      type: object
+      properties:
+        pan:
+          type:
+          - string
+          - 'null'
+          description: Product Access Number
+        clientId:
+          type:
+          - string
+          - 'null'
+          description: Client Id
+      additionalProperties: false
+      description: Pan model
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+    PanResponseModel:
+      type: object
+      properties:
+        totalItems:
+          type:
+          - integer
+          - 'null'
+          description: Total Count
+          format: int32
+        value:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PanModel'
+          description: Values
+        '@nextLink':
+          type:
+          - string
+          - 'null'
+          description: Next Link for the accounts
+        '@prevLink':
+          type:
+          - string
+          - 'null'
+          description: Prev Link for the accounts
+      additionalProperties: false
+      description: Pan Response Model
+    OperationsStatus:
+      enum:
+      - NotStarted
+      - Running
+      - Succeeded
+      - Failed
+      - Cancelled
+      - Rejected
+      type: string
+    AccountModel_2:
+      type: object
+      properties:
+        tax_year_begin:
+          type:
+          - string
+          - 'null'
+          description: Tax year begin date.
+          format: date
+          example: 6/4/2025
+        tax_year_end:
+          type:
+          - string
+          - 'null'
+          description: Tax year end date.
+          format: date
+          example: 6/4/2025
+        related_processing_type:
+          $ref: '#/components/schemas/RelatedType'
+        sub_account_of:
+          type:
+          - string
+          - 'null'
+          description: Sub Account Of.
+        receives_share_from:
+          type:
+          - string
+          - 'null'
+          description: Receives Share From.
+        share_percentage:
+          type:
+          - number
+          - 'null'
+          description: Share Percentage.
+          format: double
+        ten99_revised_date:
+          type:
+          - string
+          - 'null'
+          description: 1099 Revised Date.
+          format: date-time
+          default: '1900-01-01T00:00:00.0000000'
+        short_yr_reason:
+          $ref: '#/components/schemas/ShortYearReason'
+        admin_controls:
+          $ref: '#/components/schemas/AdminControls'
+        recipients:
+          $ref: '#/components/schemas/RecipientModel'
+        ten991098_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten995498_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99diob_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99_misc_rr_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99_misc_sp_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99r_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99q_fl:
+          $ref: '#/components/schemas/YesNo'
+        entity_type:
+          $ref: '#/components/schemas/EntityType'
+        ten99_nec_flag:
+          $ref: '#/components/schemas/YesNo'
+        ten99_service_level:
+          $ref: '#/components/schemas/Ten99ServiceLevel'
+        bnc:
+          type:
+          - string
+          - 'null'
+          description: BNC.
+        upia_code:
+          $ref: '#/components/schemas/UPIAType'
+        form706_gsd:
+          $ref: '#/components/schemas/Form706GSD1'
+      additionalProperties: false
+      description: Account Model.
+    EntityType:
+      enum:
+      - Unknown
+      - Decedents_Estate
+      - Simple_Trust
+      - Complex_Dollar_100
+      - Complex_Dollar_300
+      - Pooled_Income_Fund
+      - Grantor
+      - Bankruptcy_Estate
+      - Agent_Or_Custodian
+      - Tax_Deferred_Account
+      - _990
+      - NA
+      - Tracking_Only
+      - _1041_QFT
+      - Form_2439
+      type: integer
+      format: int32
+    OperationModel:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/OperationsStatus'
+        location:
+          type:
+          - string
+          - 'null'
+        created_date_time:
+          type: string
+          format: date-time
+        last_action_date_time:
+          type: string
+          format: date-time
+      additionalProperties: false
+    AdminControls:
+      type: object
+      properties:
+        tax_category:
+          maxLength: 2
+          type:
+          - string
+          - 'null'
+          description: Tax category.
+        priority:
+          maximum: 255
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Priority.
+          format: int32
+        tax_info_stmt_fl:
+          $ref: '#/components/schemas/YesNo'
+      additionalProperties: false
+      description: Admin Controls.
+    RecipientModel:
+      type: object
+      properties:
+        power_amt:
+          type:
+          - number
+          - 'null'
+          description: Dollar amount for 5x5 power.
+          format: double
+        power_pct:
+          type:
+          - number
+          - 'null'
+          description: Decimal fraction for 5x5 power percentage.
+          format: double
+        year_end_mkt_value_for_5x5:
+          type:
+          - number
+          - 'null'
+          description: 5x5 YEMktVal (year end mkt value for 5x5).
+          format: double
+      additionalProperties: false
+      description: Recipient Model.
+    AccountResponseModel_2:
+      type: object
+      properties:
+        Items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountModel_2'
+          description: List of Accounts information.
+        _links:
+          $ref: '#/components/schemas/Links'
+        _meta:
+          $ref: '#/components/schemas/Metadata'
+      additionalProperties: false
+      description: Account Response Model.
+    Links:
+      type: object
+      properties:
+        '@nextLink':
+          type:
+          - string
+          - 'null'
+          description: Next Link for the accounts.
+        '@prevLink':
+          type:
+          - string
+          - 'null'
+          description: Prev Link for the accounts.
+      additionalProperties: false
+    RelatedType:
+      enum:
+      - NA
+      - Combined Main Account
+      - Combined Sub Account
+      - Holds Shared Assets For Others
+      - Gets Share Of Other Account
+      type: integer
+      format: int32
+    Ten99ServiceLevel:
+      enum:
+      - NA
+      - Premium_1099_with_full_detail
+      - _1099_with_reported_detail_only
+      - _1099_with_no_detail
+      type: integer
+      format: int32
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+    YesNo:
+      enum:
+      - 'No'
+      - 'Yes'
+      type: integer
+      format: int32
+    ShortYearReason:
+      enum:
+      - N/A
+      - Final return
+      - Initial return
+      - Split-year return
+      - Year-end change
+      - New return that closed
+      type: integer
+      format: int32
+    Metadata:
+      type: object
+      properties:
+        totalItems:
+          type:
+          - integer
+          - 'null'
+          description: Total Count.
+          format: int32
+      additionalProperties: false
+    Form706GSD1:
+      type: object
+      properties:
+        inclusion_ratio:
+          type:
+          - number
+          - 'null'
+          description: Inclusion Ratio.
+          format: double
+      additionalProperties: false
+      description: ''
+    UPIAType:
+      enum:
+      - Non_Participant
+      - Power_To_Adjust
+      - Unitrust
+      type: integer
+      format: int32
+    AccountModel_3:
+      type: object
+      properties:
+        tax_year_begin:
+          type:
+          - string
+          - 'null'
+          description: Tax year begin date.
+          format: date
+          example: 6/4/2025
+        tax_year_end:
+          type:
+          - string
+          - 'null'
+          description: Tax year end date.
+          format: date
+          example: 6/4/2025
+        related_processing_type:
+          $ref: '#/components/schemas/RelatedType'
+        sub_account_of:
+          type:
+          - string
+          - 'null'
+          description: Sub Account Of.
+        receives_share_from:
+          type:
+          - string
+          - 'null'
+          description: Receives Share From.
+        share_percentage:
+          type:
+          - number
+          - 'null'
+          description: Share Percentage.
+          format: double
+        ten99_revised_date:
+          type:
+          - string
+          - 'null'
+          description: 1099 Revised Date.
+          format: date-time
+          default: '1900-01-01T00:00:00.0000000'
+        short_yr_reason:
+          $ref: '#/components/schemas/ShortYearReason'
+        admin_controls:
+          $ref: '#/components/schemas/AdminControls'
+        recipients:
+          $ref: '#/components/schemas/RecipientModel'
+        ten991098_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten995498_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99diob_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99_misc_rr_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99_misc_sp_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99r_fl:
+          $ref: '#/components/schemas/YesNo'
+        ten99q_fl:
+          $ref: '#/components/schemas/YesNo'
+        entity_type:
+          $ref: '#/components/schemas/EntityType'
+        ten99_nec_flag:
+          $ref: '#/components/schemas/YesNo'
+        ten99_service_level:
+          $ref: '#/components/schemas/Ten99ServiceLevel'
+        bnc:
+          type:
+          - string
+          - 'null'
+          description: BNC.
+        upia_code:
+          $ref: '#/components/schemas/UPIAType'
+        form706_gsd:
+          $ref: '#/components/schemas/Form706GSD1'
+      additionalProperties: false
+      description: Account Model.
+    AccountResponseModel_3:
+      type: object
+      properties:
+        Items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountModel_3'
+          description: List of Accounts information.
+        _links:
+          $ref: '#/components/schemas/Links'
+        _meta:
+          $ref: '#/components/schemas/Metadata'
+      additionalProperties: false
+      description: Account Response Model.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer { token }"'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.json
+- thomson-reuters-onesource-trust-tax-services-v2-openapi.json
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.yml
+- thomson-reuters-onesource-trust-tax-services-v2-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

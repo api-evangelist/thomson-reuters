@@ -1,0 +1,1135 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Tasks APIs API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Tasks APIs across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Tasks APIs
+paths:
+  /{version}/tasks/{taskid}:
+    get:
+      tags:
+      - Tasks APIs
+      summary: Get Single Task
+      description: 'Method to Get Single Task
+
+        This method is supported in version 3 of the API and above'
+      operationId: getTask
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: taskid
+        in: path
+        description: task_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task Fetch successfully
+        '201':
+          description: Task Fetch successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Task'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Problem with parameters in get task
+        '401':
+          description: Unauthorised in get task
+        '403':
+          description: Validation failed | Forbidden in get task
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while Fetching Task
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Tasks APIs
+      summary: Edit Task
+      description: 'Method to Edit Task
+
+        This method is supported in version 3 of the API and above'
+      operationId: editTask
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: taskid
+        in: path
+        description: task_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task Edited successfully
+        '400':
+          description: Problem with parameters in edit task
+        '401':
+          description: Unauthorised in edit task
+        '403':
+          description: Validation failed | Forbidden in edit task
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting Task Edit
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Task'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Task'
+    delete:
+      tags:
+      - Tasks APIs
+      summary: Delete Task
+      description: 'Method to Delete Task
+
+        This method is supported in version 3 of the API and above'
+      operationId: deleteTask
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: taskid
+        in: path
+        description: task_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task Deleted successfully
+        '400':
+          description: Problem with parameters in delete task
+        '401':
+          description: Unauthorised in delete task
+        '403':
+          description: Validation failed | Forbidden in delete task
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting Task Delete
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/tasks:
+    get:
+      tags:
+      - Tasks APIs
+      summary: Get All Tasks
+      description: 'Method to Get All Tasks
+
+        This method is supported in version 3 of the API and above'
+      operationId: getAllTask
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: site_id
+        required: true
+        schema:
+          type: string
+      - name: listid
+        in: query
+        description: list_id
+        required: false
+        schema:
+          type: string
+      - name: assigneeid
+        in: query
+        description: assignee_id
+        required: false
+        schema:
+          type: string
+      - name: priority
+        in: query
+        description: priority
+        required: false
+        schema:
+          type: string
+      - name: statusid
+        in: query
+        description: status_id
+        required: false
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: order_by
+        required: false
+        schema:
+          type: string
+      - name: ordertype
+        in: query
+        description: order_type
+        required: false
+        schema:
+          type: string
+      - name: groupby
+        in: query
+        description: group_by
+        required: false
+        schema:
+          type: string
+      - name: assigneetypeid
+        in: query
+        description: assignee_type_id
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: offset
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: limit
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task List Fetched successfully
+        '201':
+          description: Task List Fetched successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        '400':
+          description: Problem with parameters in get all task
+        '401':
+          description: Unauthorised in get all task
+        '403':
+          description: Validation failed | Forbidden in get all task
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while fetching task list
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Tasks APIs
+      summary: Add Task
+      description: 'Method to Add Task
+
+        This method is supported in version 3 of the API and above'
+      operationId: addTask
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: tasklistid
+        in: query
+        description: task_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task Added successfully
+        '201':
+          description: Task Added successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Task'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Problem with parameters in add task
+        '401':
+          description: Unauthorised in add task
+        '403':
+          description: Validation failed | Forbidden in add task
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting Task Add
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Task'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Task'
+    servers:
+    - url: /monumentuat/api
+  /{version}/tasks/lists:
+    get:
+      tags:
+      - Tasks APIs
+      summary: Get All task List
+      description: 'Method to get All task List
+
+        This method is supported in version 3 of the API and above'
+      operationId: getAllTaskList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: site id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task List fetched successfully
+        '201':
+          description: Task List fetched successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TaskLists'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskLists'
+        '400':
+          description: Problem with parameters in get all task list
+        '401':
+          description: Unauthorised in get all task list
+        '403':
+          description: Validation failed | Forbidden in get all task list
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while fetching task list
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Tasks APIs
+      summary: Add Task List
+      description: 'Method to Add Task List
+
+        This method is supported in version 3 of the API and above'
+      operationId: addTaskList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: site_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task List Added successfully
+        '201':
+          description: Task List Added successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TaskList'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskList'
+        '400':
+          description: Problem with parameters in add task list
+        '401':
+          description: Unauthorised in add task list
+        '403':
+          description: Validation failed | Forbidden in add task list
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while adding Task list
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TaskList'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskList'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaskList'
+    servers:
+    - url: /monumentuat/api
+  /{version}/tasks/lists/{tasklistid}:
+    put:
+      tags:
+      - Tasks APIs
+      summary: Edit Tasks List
+      description: 'Method to Edit Tasks List
+
+        This method is supported in version 3 of the API and above'
+      operationId: editTaskList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: tasklistid
+        in: path
+        description: task list id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task List Edited successfully
+        '400':
+          description: Problem with parameters in edit task list
+        '401':
+          description: Unauthorised in edit task list
+        '403':
+          description: Validation failed | Forbidden in edit task list
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while Editting task list
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TaskList'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskList'
+    delete:
+      tags:
+      - Tasks APIs
+      summary: Delete Task List
+      description: 'Method to Delete Task List
+
+        This method is supported in version 3 of the API and above'
+      operationId: removeTaskList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: tasklistid
+        in: path
+        description: task_list_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task List Deleted successfully
+        '201':
+          description: Task List Deleted successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Task'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Problem with parameters in remove task list
+        '401':
+          description: Unauthorised in remove task list
+        '403':
+          description: Validation failed | Forbidden in remove task list
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while Deleting Task List
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/tasks/status/{statusid}:
+    put:
+      tags:
+      - Tasks APIs
+      summary: Edit Tasks status
+      description: 'Method to edit Tasks status
+
+        This method is supported in version 3 of the API and above'
+      operationId: editTaskStatus
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: statusid
+        in: path
+        description: status id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task Status edited successfully
+        '400':
+          description: Problem with parameters in edit task status
+        '401':
+          description: Unauthorised in edit task status
+        '403':
+          description: Validation failed | Forbidden in edit task status
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while editing task status
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TaskStatus'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskStatus'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaskStatus'
+    delete:
+      tags:
+      - Tasks APIs
+      summary: Delete Tasks status
+      description: 'Method to delete Tasks status
+
+        This method is supported in version 3 of the API and above'
+      operationId: deleteTaskStatus
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: statusid
+        in: path
+        description: status id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task Status deleted successfully
+        '400':
+          description: Problem with parameters in delete task status
+        '401':
+          description: Unauthorised in delete task status
+        '403':
+          description: Validation failed | Forbidden in delete task status
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while deleting task status
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/tasks/status:
+    get:
+      tags:
+      - Tasks APIs
+      summary: Get All Tasks Status
+      description: 'Method to Get All Tasks Status
+
+        This method is supported in version 3 of the API and above'
+      operationId: getTaskStatusList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: site_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task status List Fetched successfully
+        '201':
+          description: Task status List Fetched successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TaskStatuses'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStatuses'
+        '400':
+          description: Problem with parameters in get task status list
+        '401':
+          description: Unauthorised in get task status list
+        '403':
+          description: Validation failed | Forbidden in get task status list
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while fetching task status list
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Tasks APIs
+      summary: Add Tasks Status
+      description: 'Method to Add Tasks Status
+
+        This method is supported in version 3 of the API and above'
+      operationId: addTaskStatus
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: site id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task status Added successfully
+        '201':
+          description: Task status Added successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TaskStatus'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStatus'
+        '400':
+          description: Problem with parameters in add task status
+        '401':
+          description: Unauthorised in add task status
+        '403':
+          description: Validation failed | Forbidden in add task status
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while Adding task status
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TaskStatus'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskStatus'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaskStatus'
+    servers:
+    - url: /monumentuat/api
+  /{version}/tasks/{taskid}/reminders/{reminderid}:
+    delete:
+      tags:
+      - Tasks APIs
+      summary: Delete Task Reminder
+      description: 'Method to Delete Task reminder
+
+        This method is supported in version 3 of the API and above'
+      operationId: deleteTaskReminder
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: taskid
+        in: path
+        description: task_id
+        required: true
+        schema:
+          type: string
+      - name: reminderid
+        in: path
+        description: reminder_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task Reminder Deleted successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised in delete task reminder
+        '403':
+          description: Validation failed | Forbidden in delete task reminder
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while deleting task reminder in delete task reminder
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/tasks/{taskid}/attachments/{attachmentid}:
+    delete:
+      tags:
+      - Tasks APIs
+      summary: Remove Task Attachments
+      description: 'Method to Remove Task Attachments
+
+        This method is supported in version 3 of the API and above'
+      operationId: removeTaskAttachment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: taskid
+        in: path
+        description: task_id
+        required: true
+        schema:
+          type: string
+      - name: attachmentid
+        in: path
+        description: attachment_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task Attachment removed successfully
+        '400':
+          description: Problem with parameters in remove task attachment
+        '401':
+          description: Unauthorised in remove task attachment
+        '403':
+          description: Validation failed | Forbidden in remove task attachment
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while removing Task attachments
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/tasks/specifiedfields/{taskid}:
+    put:
+      tags:
+      - Tasks APIs
+      summary: Edit Task specific field
+      description: 'Method to edit task specific field
+
+        This method is supported in version 3 of the API and above'
+      operationId: editTaskSpecifiedFields
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: taskid
+        in: path
+        description: task id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task edit with specific successfully
+        '400':
+          description: Problem with parameters in edit task specific fields
+        '401':
+          description: Unauthorised in edit task specific fields
+        '403':
+          description: Validation failed | Forbidden in edit task specific fields
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while editing task with specific field
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Task'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Task'
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    TaskTag:
+      type: object
+      properties:
+        tagname:
+          type: string
+      xml:
+        name: tag
+    TaskReminder:
+      type: object
+      properties:
+        daysbefore:
+          type: string
+        reminderid:
+          type: string
+        remindertype:
+          type: string
+      xml:
+        name: reminder
+    TaskPriority:
+      type: object
+      properties:
+        priorityid:
+          type: string
+        priorityname:
+          type: string
+      xml:
+        name: priority
+    TaskAssignees:
+      type: object
+      properties:
+        assignee:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskAssignee'
+      xml:
+        name: assignees
+    TaskReminders:
+      type: object
+      properties:
+        reminder:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskReminder'
+      xml:
+        name: reminders
+    TaskAssignee:
+      type: object
+      properties:
+        assigneeid:
+          type: string
+        assigneetypeid:
+          type: string
+      xml:
+        name: assignee
+    TaskStatuses:
+      type: object
+      properties:
+        status:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskStatus'
+      xml:
+        name: statuses
+    Tasks:
+      type: object
+      properties:
+        task:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+      xml:
+        name: tasks
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    TaskTags:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskTag'
+      xml:
+        name: tags
+    TaskLists:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskList'
+      xml:
+        name: lists
+    TaskAttachment:
+      type: object
+      properties:
+        attachmentname:
+          type: string
+        attachmenturl:
+          type: string
+        fileid:
+          type: string
+      xml:
+        name: attachment
+    TaskStatus:
+      type: object
+      properties:
+        statusid:
+          type: string
+        statusname:
+          type: string
+        statuscolour:
+          type: string
+        textstatuscolour:
+          type: string
+        statustype:
+          type: string
+      xml:
+        name: status
+    Task:
+      type: object
+      properties:
+        taskid:
+          type: string
+        siteid:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        duedate:
+          type: string
+        startdate:
+          type: string
+        list:
+          $ref: '#/components/schemas/TaskList'
+        assignees:
+          $ref: '#/components/schemas/TaskAssignees'
+        priority:
+          $ref: '#/components/schemas/TaskPriority'
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        tags:
+          $ref: '#/components/schemas/TaskTags'
+        reminders:
+          $ref: '#/components/schemas/TaskReminders'
+        attachments:
+          $ref: '#/components/schemas/TaskAttachments'
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+      xml:
+        name: task
+    TaskAttachments:
+      type: object
+      properties:
+        attachment:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskAttachment'
+      xml:
+        name: attachments
+    TaskList:
+      type: object
+      properties:
+        listid:
+          type: string
+        listname:
+          type: string
+        listtype:
+          type: string
+        viewid:
+          type: string
+      xml:
+        name: list
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

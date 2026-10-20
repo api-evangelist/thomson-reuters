@@ -1,0 +1,604 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ONESOURCE Income Tax - Tax Return Import Export APIs",
+    "description": "Tax Return Import/ Export is a new feature that has been added to ONESOURCE Income Tax to provide users with an option to import/ export Tax Return Information in the Organizer, Tax Forms, and Workpapers. It allows users to import data into and export data from the Organizer (tax return information) for 1120 and 1065 Return Types using Data Connection MAP files.<br/><br/> <b>Direct K-1 (DK-1)</b> Import/ Export is only available for 1065 Return Types. This tool will export Schedule K-1 information and provide a mechanism for bypassing the system’s calculations and allocations on Schedule K-1. It imports federal and state K-1 partner information directly to the respective Tax Forms and the related workpaper screens when the data is formatted as specified in the DK-1 workbook.<br/><br/> <u><b>Summary of Flags:</b></u> Users can view the import flag utilized from Binder Properties </b></u> <ul><li>M Flag – Imports only. No deletion takes place. Group field/data is correctly aligned even with blanks</li> <li>R Flag – Deletes every field <b><u>mapped</b></u> in data connection (reference Specification Workbook), then imports fields in import file</li> <li>U Flag – Deletes only form names mentioned in the import file, then imports</li> <li>H Flag – Deletes only form names mentioned in the import file, then imports like an M flag.</li> </ul>",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://api.onesourcetax.com/income-tax/binders"
+    }
+  ],
+  "security": [
+    {
+      "Authorization": []
+    }
+  ],
+  "paths": {
+    "/v1/binderId/{binderId}/tax-returns-events/{eventName}": {
+      "post": {
+        "tags": [
+          "Tax Return Import Export"
+        ],
+        "summary": "Create an Import Export in either json or CSV (octet-stream).",
+        "operationId": "taxReturnEventsV1",
+        "description": "<br/> <u><b>Best Practice</b></u>: Start with Export to retrieve the template for Import. <br/><br/> <u><b>Export</b></u>: Requires no body. It will be {}. <br/><br/> <u><b>Import</b></u>:  Requires no body with content type as octet-stream. Select and upload the file.  <br/> <br/><u><b>Import</b></u>: Requires a body with content type as json with requirements below. ",
+        "parameters": [
+          {
+            "name": "binderId",
+            "in": "path",
+            "description": "16 digit unique system defined tax return identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eventName",
+            "in": "path",
+            "description": "Use Values \"Import\" or \"Export\" (case sensitive)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Indicate the media type response that can be accepted - application/json is currently the only option.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "application/json",
+              "enum": [
+                "application/json"
+              ]
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Indicate the response content media type to return",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "application/json"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Tax Return Info",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+              }
+            },
+            "application/json+DK1": {
+              "schema": {
+                "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+              }
+            },
+            "application/octet-stream": {
+              "schema": {
+                "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+              }
+            },
+            "application/octet-stream+DK1": {
+              "schema": {
+                "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+              }
+            },
+            "application/octet-stream+DK2": {
+              "schema": {
+                "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          },
+          "401": {
+            "description": "Indicates a lack of authorization to perform this action on this resource. Check credentials and rights",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected Error Occurred. Contact ONESOURCE Technical Support.",
+            "content": {}
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/v2/binders/{binderId}/tax-returns-events/{eventName}": {
+      "post": {
+        "tags": [
+          "Tax Return Import Export"
+        ],
+        "summary": "Create an Import Export in either json or CSV (octet-stream).",
+        "operationId": "taxReturnEventsV2",
+        "description": "<br/> <u><b>Best Practice</b></u>: Start with Export to retrieve the template for Import. <br/><br/> <u><b>Export</b></u>: Requires no body. It will be {}. <br/><br/> <u><b>Import</b></u>:  Requires no body with content type as octet-stream. Select and upload the file.  <br/> <br/><u><b>Import</b></u>: Requires a body with content type as json with requirements below. ",
+        "parameters": [
+          {
+            "name": "binderId",
+            "in": "path",
+            "description": "16 digit unique system defined tax return identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eventName",
+            "in": "path",
+            "description": "Use Values \"Import\" or \"Export\" (case sensitive)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "<u><b>Summary of Import/Export Types: </b></u>Users can perform different types of import and export operations. These operations are handled using various request bodies, and the Content-Type header is automatically set based on the type of request body.</br></u></br><ul><li><b><u>application/json</b></u> - Indicates a data connection import with json data.</li><li><b><u>applicationa/json+DK1</b></u> - Indicates a DK1 import with json data.</li><li><b><u>application/json+taxreturn</b></u> - Indicates a tax return import with json data.</li><li><b><u>application/octet-stream</b></u> - Indicates a data connection import with csv data.</li><li><b><u>application/octet-stream+DK1</b></u> - Indicates a DK1 import with csv data.</li><li><b><u>application/octet-stream+taxreturn</b></u> - Indicates a tax return import with csv data.</li></ul><b>Export: </b> For all types of export, you need to select a type with empty body {}.</br></br><b>Note: </b>The data connection type is valid only for 2023 and prior years. For <b> 2024 </b> and later, you should use the tax return type instead of data connection.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+              }
+            },
+            "application/json+DK1": {
+              "schema": {
+                "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+              }
+            },
+            "application/json+taxreturn": {
+              "schema": {
+                "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+              }
+            },
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "application/octet-stream+DK1": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "application/octet-stream+taxreturn": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          },
+          "401": {
+            "description": "Indicates a lack of authorization to perform this action on this resource. Check credentials and rights",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected Error Occurred. Contact ONESOURCE Technical Support.",
+            "content": {}
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/years/{year}/tax-return-statuses": {
+      "get": {
+        "tags": [
+          "Tax Return Import Export"
+        ],
+        "summary": "Use to retrieve the Import or Export Status of Tax Return events triggered.",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "Identify the tax year for status retrieval (2018 and forward)",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "processId",
+            "in": "query",
+            "description": "This is the guid that is returned when import or export is triggered.",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Indicate the response content media type to return - application/json is currently the only option.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "application/json",
+              "enum": [
+                "application/json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ImportExportStatusLogRepresentations"
+                  }
+                },
+                "examples": {
+                  "tax-return-import-export-statuses": {
+                    "$ref": "#/components/examples/tax-return-import-export-statuses"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No data found for given inputs",
+            "content": {}
+          },
+          "400": {
+            "description": "Request failed. This is usually due to validation errors"
+          },
+          "401": {
+            "description": "Indicates a lack of authorization to perform this action on this resource. Check credentials and rights",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected Error Occurred. Contact ONESOURCE Technical Support.",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/v1/binders/{binderId}/processes/{processId}/tax-return": {
+      "get": {
+        "tags": [
+          "Tax Return Import Export"
+        ],
+        "summary": "Use to retrieve the Tax Return as JSON or CSV file for a given binder and processsId generated by the \"Export\" process.",
+        "description": "<b>Note:</b> Please select the Accept header Media type below prior to retrieval. Either application/json+taxreturn or text/csv+taxreturn must be used for 2024 and later.<br/> The \"Import\" process will not generate a file to retrieve.",
+        "parameters": [
+          {
+            "name": "binderId",
+            "in": "path",
+            "required": true,
+            "description": "16 digit unique system defined tax return identifier",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "processId",
+            "in": "path",
+            "description": "This is the guid that is returned when import or export is triggered.",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+                  }
+                },
+                "examples": {
+                  "tax-return-process-data": {
+                    "$ref": "#/components/examples/tax-return-process-data"
+                  }
+                }
+              },
+              "application/json+taxreturn": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaxReturnInfoRepresentation"
+                  }
+                },
+                "examples": {
+                  "tax-return-process-data": {
+                    "$ref": "#/components/examples/tax-return-process-data"
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "text/csv+taxreturn": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No data found for given inputs",
+            "content": {}
+          },
+          "400": {
+            "description": "Request failed. This is usually due to validation errors"
+          },
+          "401": {
+            "description": "Indicates a lack of authorization to perform this action on this resource. Check credentials and rights",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected Error Occurred. Contact ONESOURCE Technical Support.",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProblemRepresentation": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "object",
+            "format": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          },
+          "fieldErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldError"
+            }
+          }
+        }
+      },
+      "FieldError": {
+        "type": "object",
+        "properties": {
+          "fieldName": {
+            "type": "string"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "errorCode": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ImportExportStatusLogRepresentations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ImportExportStatusLogRepresentation"
+        }
+      },
+      "ImportExportStatusLogRepresentation": {
+        "type": "object",
+        "properties": {
+          "ProcessId": {
+            "type": "string",
+            "description": "Guid"
+          },
+          "ActionType": {
+            "type": "string"
+          },
+          "EntityNumber": {
+            "type": "string"
+          },
+          "EntityName": {
+            "type": "string"
+          },
+          "BinderName": {
+            "type": "string"
+          },
+          "LocatorName": {
+            "type": "string"
+          },
+          "TaxReturnType": {
+            "type": "string"
+          },
+          "StatusMessage": {
+            "type": "string"
+          },
+          "BinderId": {
+            "type": "string"
+          },
+          "StatusCode": {
+            "type": "string"
+          },
+          "SubmitTime": {
+            "type": "string"
+          },
+          "UserId": {
+            "type": "string"
+          },
+          "UserName": {
+            "type": "string"
+          },
+          "DataFileName": {
+            "type": "string"
+          },
+          "Source": {
+            "type": "string"
+          }
+        }
+      },
+      "TaxReturnInfoRepresentation": {
+        "type": "object",
+        "properties": {
+          "NameLine1": {
+            "type": "string",
+            "example": "6-digit unique system defined tax return identifier (locator number)"
+          },
+          "NameLine2": {
+            "type": "string",
+            "example": "Entity Name, Not Required"
+          },
+          "ClientCode": {
+            "type": "string",
+            "example": "NA, leave blank"
+          },
+          "ImportFlag": {
+            "type": "string",
+            "example": "U, S, H, M"
+          },
+          "TaxReturnData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaxReturnRepresentation"
+            }
+          }
+        }
+      },
+      "TaxReturnRepresentation": {
+        "type": "object",
+        "properties": {
+          "FormName": {
+            "type": "string",
+            "example": "GENERAL INFORMATION"
+          },
+          "FieldName": {
+            "type": "string",
+            "example": "DOMESTIC ADDRESS LN 1"
+          },
+          "FieldType": {
+            "type": "string",
+            "example": "O, T, W"
+          },
+          "Group1": {
+            "type": "integer"
+          },
+          "Group2": {
+            "type": "integer"
+          },
+          "Group3": {
+            "type": "integer"
+          },
+          "Group4": {
+            "type": "integer"
+          },
+          "Group5": {
+            "type": "integer"
+          },
+          "Data": {
+            "type": "string",
+            "example": "123 Hope Ln"
+          }
+        }
+      }
+    },
+    "examples": {
+      "tax-return-import-export-statuses": {
+        "value": {
+          "resourceList": [
+            {
+              "processId": "ABCDEF-ABCDEF-ABCDEF-ABCDEF-ABCDEF",
+              "actionType": "DCExport",
+              "entityNumber": "EN11",
+              "entityName": "Entity 11",
+              "binderName": "Binder1",
+              "locatorName": "Locator1",
+              "taxReturnType": "1120C",
+              "statusMessage": "Submitted",
+              "binderId": "ACCT000001234",
+              "statusCode": "0",
+              "submitTime": "1/7/2021 09:32:32.613",
+              "userId": "user1234",
+              "userName": "username1234",
+              "dataFileName": "OIT_Export",
+              "source": "",
+              "_links": [],
+              "_embedded": null
+            }
+          ]
+        }
+      },
+      "tax-return-process-data": {
+        "value": {
+          "nameLine1": "0022NL",
+          "nameLine2": "Parent",
+          "clientCode": "TA_EXPORT",
+          "importFlag": "M",
+          "taxReturnData": [
+            {
+              "formName": "SCHEDULE K-1",
+              "fieldName": "CORPORATION ADDRESS",
+              "fieldType": "O",
+              "group1": 0,
+              "group2": 0,
+              "group3": 0,
+              "group4": 0,
+              "group5": 0,
+              "data": "4567 Main Street"
+            }
+          ]
+        }
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

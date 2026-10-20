@@ -1,0 +1,224 @@
+openapi: 3.2.0
+info:
+  version: v1/v2
+  title: GoSystem E-file E-file Document V2 API
+  description: A RESTful API to provide access to the GoSystem E-file functionality.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/e-files
+security:
+- Authorization: []
+tags:
+- name: E-file Document V2
+paths:
+  ? /v2/years/{year}/tax-return-types/{taxReturnType}/tax-returns/{taxReturnId}/jurisdictions/{jurisdiction}/e-file-request-types/{eFileRequestType}/e-files
+  : get:
+      tags:
+      - E-file Document V2
+      summary: Download generated e-file in PDF
+      description: This endpoint downloads the generated e-file in PDF format for a tax return, jurisdiction, and efileRequestType.
+      operationId: ReturnsGeneratedE-fileInPDFV2
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: The tax year for which the e-file is being processed. Must be a valid 4-digit year (e.g., 2024).
+        schema:
+          type: integer
+          format: int32
+      - name: taxReturnType
+        in: path
+        required: true
+        description: Specifies the type of tax return being filed. 1040, 1041, 1065, 1120, 990, 5500, 709.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnId
+        in: path
+        required: true
+        description: A 6-digit unique alphanumeric identifier for the specific tax return. This is also referred to as the Locator ID.
+        schema:
+          type: string
+      - name: jurisdiction
+        in: path
+        required: true
+        description: 'The state or local jurisdiction code where the tax is being filed. Example: AL for Alabama. Use the /v1/e-file-jurisdictions endpoint to retrieve valid codes.'
+        schema:
+          type: string
+      - name: eFileRequestType
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - REG
+          - REG2
+          - REG3
+          - REG4
+          - REG5
+          - REG6
+          - REG7
+          - REG8
+          - REG9
+          - REG10
+          - REG11
+          - REG12
+          - REG13
+          - REG14
+          - REG15
+          - REG16
+          - REG17
+          - REG18
+          - REG19
+          - REG20
+          - REG21
+          - REG22
+          - REG23
+          - REG24
+          - REG25
+          - REG26
+          - REG27
+          - REG28
+          - REG29
+          - REG30
+          - REG31
+          - REG32
+          - REG33
+          - REG34
+          - REG35
+          - REG36
+          - REG37
+          - REG38
+          - REG39
+          - REG40
+          - REG41
+          - REG42
+          - REG43
+          - REG44
+          - REG45
+          - REG46
+          - REG47
+          - REG48
+          - REG49
+          - REG50
+          - REG51
+          - REG52
+          - REG53
+          - REG54
+          - REG55
+          - REG56
+          - REG57
+          - REG58
+          - REG59
+          - REG60
+          - REG61
+          - REG62
+          - REG63
+          - REG64
+          - REG65
+          - REG66
+          - REG67
+          - REG68
+          - REG69
+          - REG70
+          - REG71
+          - REG72
+          - REG73
+          - REG74
+          - REG75
+          - REG76
+          - REG77
+          - REG78
+          - REG79
+          - REG80
+          - REG81
+          - REG82
+          - REG83
+          - REG84
+          - REG85
+          - REG86
+          - REG87
+          - REG88
+          - REG89
+          - REG90
+          - REG91
+          - REG92
+          - REG93
+          - REG94
+          - REG95
+          - REG96
+          - REG97
+          - REG98
+          - REG99
+          - REG100
+          - REG101
+          - REG102
+          - REG103
+          - REG104
+          - EXT
+          - EXT2
+          - EXT3
+          - EXT4
+          - EXT5
+          - EXT6
+          - EST
+          - EST2
+          - EST3
+          - EST4
+          - EST5
+          - EST6
+          - EST7
+          - EST8
+          - EST9
+          - EST10
+          - EST11
+          - EST12
+          - EST13
+          - EST14
+          - EST15
+          - EST16
+          - EST17
+      - name: Account
+        in: header
+        required: true
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success. The e-file is downloaded in PDF format.
+          content:
+            application/pdf:
+              schema:
+                type: object
+        '400':
+          description: 'Types of error in message:
+
+            - Missing account header: Message: "Please specify account information in header."
+
+            - Invalid tax type: Message: "Invalid Tax Return Type."
+
+            - Locator doesn''t exist: Message: "Locator not found."
+
+            - Invalid jurisdiction: Message: "Invalid Jurisdiction(s) {wrongjurisdictions}."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - Invalid tax return ID: Message: "Please provide valid TaxReturnId."
+
+            - Missing Accept header: Message: "Request should have Accept header as application/pdf."
+
+            - Exception during processing: Message: "Invalid Input {exp message}."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: Returns generated e-file in PDF V2
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

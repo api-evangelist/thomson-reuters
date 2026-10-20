@@ -1,0 +1,131 @@
+openapi: 3.2.0
+info:
+  version: v1
+  title: GoSystem TBB Get Locator and Binder ID API
+  description: 'A RESTful API to provide access to the GoSystem TBB functionality.
+
+
+    Get Locator API (/v1/trialbalance/locators/{account}/{year}) - Retrieves the list of locators along with the binder ID.
+
+
+    GET Template API (/v1/trialBalance/{binderid}/importTemplates/{importtype}) - Retrieves the list of templates available for the particular import type. The import types are 3000 - Preliminary Balances, 3001 - Adjustments, 3 - TCC, 3007 - Schedule M-3. You can pass the binder IDs you get from the Get Locator API.
+
+
+    TBB Import (/v1/trialBalance/{binderid}/import/{importtype}/template/{templateid}) - Imports the data from Excel in Preliminary Balance, Adjustment, Schedule M-3, and TCC screens. Import type IDs for different imports are 3000 - Preliminary Balances, 3001 - Adjustments, 3 - TCC, 3007 - Schedule M-3. You''ll get the template ID from the GET Template API.
+
+
+    Valid tax return types are 1120C, 1120S, and 1065 for TBB Import.
+
+
+    Trial Balance Computation API (/v1/trialBalance/{binderId}/computations) - Submits a batch job to the compute queue. Once the batch job is completed successfully, the data from the Trial Balance bridge is updated in the organizer.
+
+
+    Note: Make sure the locator is closed while performing this operation.
+
+
+    Compute Transfer Options API (/v1/trialBalance/{binderId}/compute-transfer-config) - This endpoint allows you to update the computed date within the organizer. To ensure that the organizer is updated, the parameter UpdateFederalTAS must be set to true. If UpdateFederalTAS is set to false, the data is updated only within the TBB and isn''t transferred to the organizer.
+
+
+    Compute Status API (/v1/trialBalance/{binderId}/compute-status) - Retrieves combined compute information for a binder. This includes Compute Status, Compute Options, and Compute Process Options.'
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: Get Locator and Binder ID
+paths:
+  /v1/trialbalance/locators/{account}/{year}:
+    get:
+      tags:
+      - Get Locator and Binder ID
+      summary: Retrieve the list of locators along with binder ID
+      operationId: ListOfLocatorsAlongWithBinderID
+      parameters:
+      - name: account
+        in: path
+        required: true
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        schema:
+          type: integer
+          format: int32
+      - name: year
+        in: path
+        required: true
+        description: The tax year for which the e-file is being created. Must be a valid 4-digit year (for example, 2024).
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success. The locator list is retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocatorListWrapper'
+              examples:
+                locator-list-example:
+                  $ref: '#/components/examples/locator-Example'
+        '404':
+          description: Not Found
+        '500':
+          description: An error has occurred.
+      x-operation-id-source: normalized
+      x-operation-id-original: List of locators along with Binder ID
+components:
+  examples:
+    locator-Example:
+      value:
+        EFileJurisdictions:
+        - firm: FT
+          account: '3777'
+          Locator: 0002JK
+          TaxType: E
+          TaxPayerName: SMI_SchA_Church
+          Year: '2022'
+          ClientCode: B5BNSA1
+          AssignedGroups: null
+          BinderID: 00FT3777220933IS
+        - firm: FT
+          account: 2MKN
+          Locator: 0585JG
+          TaxType: E
+          TaxPayerName: Koppu, Ramya_Test
+          Year: '2022'
+          ClientCode: B5BNSA1
+          AssignedGroups: null
+          BinderID: 00FT3777220933IS
+  schemas:
+    LocatorListWrapper:
+      type: object
+      properties:
+        EFileJurisdictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocatorList'
+    LocatorList:
+      type: object
+      properties:
+        firm:
+          type: string
+        account:
+          type: string
+        Locator:
+          type: string
+        TaxType:
+          type: string
+        TaxPayerName:
+          type: string
+        Year:
+          type: string
+        ClientCode:
+          type: string
+        AssignedGroups:
+          type:
+          - string
+          - 'null'
+        BinderID:
+          type: string
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

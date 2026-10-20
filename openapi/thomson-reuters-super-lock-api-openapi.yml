@@ -1,0 +1,194 @@
+openapi: 3.2.0
+info:
+  version: ''
+  title: GoSystem Locator Super lock API
+  description: A RESTful API that provides access to GoSystem Locator functionalities.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: Super lock
+paths:
+  /v2/bulk/tax-returns/super-lock:
+    put:
+      summary: Super lock locator
+      description: Applies or removes super lock on one or more locators. Provide the locator ID, account details, tax year, tax type, and super lock status in the request. If the locator is password-protected, you must also provide the password.
+      tags:
+      - Super lock
+      operationId: TriggerSuperLockLocatorPutApi
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuperLockLocatorRequestWrapper'
+            examples:
+              Create Locator - Example:
+                $ref: '#/components/examples/SuperLockLocator-Example'
+        required: true
+      externalDocs:
+        url: https://confluence.thomsonreuters.com/pages/viewpage.action?pageId=123275084
+      responses:
+        '200':
+          description: Success. Super lock is applied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuperlockResponseList'
+              examples:
+                SuperLockSuccessResponse - Example:
+                  $ref: '#/components/examples/SuperLockLocatorSuccess'
+                SuperLockErrorResponse - Example:
+                  $ref: '#/components/examples/SuperLockLocatorFailure'
+        '403':
+          description: Add user permission required.
+        '404':
+          description: Account doesn't belong to the firm.
+      x-operation-id-source: normalized
+      x-operation-id-original: Trigger Super lock locator put api
+  /v2/accounts/{account}/years/{year}/tax-return-types/{taxReturnType}/tax-returns/{taxReturnId}/super-lock:
+    get:
+      summary: Get super lock status
+      description: Retrieves the super lock status of a specific tax return using the account, year, tax return type, and tax return ID.
+      tags:
+      - Super lock
+      operationId: TriggerGetSuperlockStatus
+      parameters:
+      - name: account
+        in: path
+        required: true
+        schema:
+          type: string
+        description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The tax year for which the super lock status is required. Must be a valid 4-digit year (for example, 2024).
+      - name: taxReturnType
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The type of tax return.
+      - name: taxReturnId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the locator ID.
+      externalDocs:
+        url: https://confluence.thomsonreuters.com/pages/viewpage.action?pageId=123275084
+      responses:
+        '200':
+          description: Success. Super lock status is retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuperLockStatusResponseList'
+              examples:
+                CreateLocatorSuccessResponse - Example:
+                  $ref: '#/components/examples/SuperLockStatusSuccess'
+                CreateLocatorErrorResponse - Example:
+                  $ref: '#/components/examples/SuperLockStatusFailure'
+        '403':
+          description: Add user permission required.
+        '404':
+          description: Account doesn't belong to the firm.
+      x-operation-id-source: normalized
+      x-operation-id-original: Trigger Get Superlock status
+components:
+  schemas:
+    SuperLockLocatorRequestWrapper:
+      type: array
+      items:
+        $ref: '#/components/schemas/SuperLockLocatorRequest'
+    SuperLockStatusResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        code:
+          type: integer
+        isSuperLocked:
+          type: boolean
+        info:
+          type: string
+    SuperLockStatusResponseList:
+      type: array
+      items:
+        $ref: '#/components/schemas/SuperLockStatusResponse'
+    SuperlockResponseList:
+      type: array
+      items:
+        $ref: '#/components/schemas/SuperLockResponse'
+    SuperLockLocatorRequest:
+      type: object
+      properties:
+        LocatorId:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the locator ID.
+        Account:
+          type: string
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        TaxYear:
+          type: string
+          description: The tax year for which the e-file is required. Must be a valid 4-digit year (for example, 2024).
+        TaxType:
+          type: string
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+        SuperLock:
+          type: boolean
+          description: Indicates whether super lock is applied. Set to true to apply super lock, or false to remove it.
+        LocatorPassword:
+          type: string
+          description: The password for the locator, if one is required.
+    SuperLockResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        code:
+          type: integer
+        description:
+          type: string
+        info:
+          type: string
+  examples:
+    SuperLockStatusFailure:
+      value:
+      - error: true
+        code: 0
+        isSuperLocked: false
+        description: Invalid Locator info(Account/ Locator)
+    SuperLockStatusSuccess:
+      value:
+      - error: false
+        code: 0
+        isSuperLocked: true
+        info: LocatorId :2355MK
+    SuperLockLocatorFailure:
+      value:
+      - error: true
+        code: 0
+        description: LocatorId Parameter Out Of Range
+        info: General.Validation
+    SuperLockLocator-Example:
+      value:
+      - LocatorId: 5452MJ
+        Account: '3777'
+        TaxYear: '2022'
+        TaxType: '1120'
+        SuperLock: true
+        LocatorPassword: QA@123
+    SuperLockLocatorSuccess:
+      value:
+      - error: false
+        code: 0
+        description: SuperLock applied successfully
+        info: LocatorId :2355MK
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

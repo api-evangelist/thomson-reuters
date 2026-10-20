@@ -1,0 +1,402 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Recordsets API
+  version: '1.0'
+  description: 'Operations tagged Recordsets across 3 of this provider''s published API definitions: thomson-reuters-collection-service-1-0-openapi.json, thomson-reuters-collection-service-1-0-openapi.yml, thomson-reuters-collection-service-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+tags:
+- name: Recordsets
+paths:
+  /collections/{id}/recordsets:
+    get:
+      tags:
+      - Recordsets
+      summary: Get a paginated list of Recordsets by Collection ID
+      description: 'Returns a list of Recordset IDs for the specified Collection ID.
+
+
+        Potential values for item status:
+
+
+        id name
+
+
+        1 Pending
+
+
+        2 Processing
+
+
+        3 Complete
+
+
+        4 Removing
+
+
+        5 Error'
+      operationId: getRecordsetsInCollection
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsetsResponseDTO'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Recordsets
+      summary: Initiate adding a Recordset by Collection ID
+      description: Creates an asynchronous task to add a Recordset for the specified Collection ID.
+      operationId: addRecordsetToCollection
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordsetRequest'
+      responses:
+        '201':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsetIdResponseDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/{id}/recordsets/{recordsetId}:
+    patch:
+      tags:
+      - Recordsets
+      summary: Update a collection item
+      description: 'Updates a collection item name.
+
+
+        Potential values for item status:
+
+
+        id name
+
+
+        1 Pending
+
+
+        2 Processing
+
+
+        3 Complete
+
+
+        4 Removing
+
+
+        5 Error'
+      operationId: updateCollectionRecordset
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: recordsetId
+        in: path
+        description: Item Recordset ID in the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordsetsItemRequest'
+      responses:
+        '200':
+          description: default response
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/{id}/recordsets/{recordset_id}:
+    delete:
+      tags:
+      - Recordsets
+      summary: Remove a Recordset by Collection ID
+      description: Remove a Recordset ID for the specified Collection ID.
+      operationId: deleteRecordset
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: recordset_id
+        in: path
+        description: Unique identifier of the Recordset.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deleted Successfully
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+components:
+  schemas:
+    RecordsetRequest:
+      required:
+      - name
+      - topic_id
+      type: object
+      properties:
+        topic_id:
+          maxLength: 24
+          minLength: 24
+          pattern: ^[0-9a-fA-F]+$
+          type: string
+          description: Unique identifier of the Topic.
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Topic.
+          example: My Topic Name
+    RecordsetsResponseDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordsetDTO'
+        _meta:
+          $ref: '#/components/schemas/Meta'
+    UpdateRecordsetsItemRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+    RecordsetDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Recordset.
+          format: int32
+          example: 123
+        status:
+          type: integer
+          description: Current state of the background job that copies the records into the Collection.
+          format: int32
+          example: 3
+        topic_id:
+          type: string
+          description: Unique identifier of the Topic.
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Topic.
+          example: My Topic Name
+        qualifying_records:
+          type: integer
+          description: Total number of records that are ready.
+          format: int64
+          example: 988
+        ingested_records:
+          type: integer
+          description: Current number of qualifying records that have been ingested.
+          format: int64
+          example: 988
+        created_by:
+          type: string
+          description: Recordset created by.
+          example: testuser.dep
+        created_at:
+          type: string
+          description: Recordset created at time.
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    RecordsetIdResponseDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Recordset.
+          example: 5ec590d8d5b6082eb48e6a78
+    Meta:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+          example: 0
+        limit:
+          type: integer
+          format: int32
+          example: 200
+    RecordsetRequest_2:
+      required:
+      - name
+      - topic_id
+      type: object
+      properties:
+        topic_id:
+          maxLength: 24
+          minLength: 24
+          pattern: ^[0-9a-fA-F]+$
+          type: string
+          description: Unique identifier of the Topic
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Topic
+          example: My Topic Name
+    RecordsetDTO_2:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Recordset
+          format: int32
+          example: 123
+        status:
+          type: integer
+          description: Current state of the background job that copies the records into the Collection
+          format: int32
+          example: 3
+        topic_id:
+          type: string
+          description: Unique identifier of the Topic
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Topic
+          example: My Topic Name
+        qualifying_records:
+          type: integer
+          description: Total number of records that are ready
+          format: int64
+          example: 988
+        ingested_records:
+          type: integer
+          description: Current number of qualifying records that have been ingested
+          format: int64
+          example: 988
+        created_by:
+          type: string
+          description: Recordset created by
+          example: testuser.dep
+        created_at:
+          type: string
+          description: Recordset created at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    RecordsetIdResponseDTO_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Recordset
+          example: 5ec590d8d5b6082eb48e6a78
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-collection-service-1-0-openapi.json
+- thomson-reuters-collection-service-1-0-openapi.yml
+- thomson-reuters-collection-service-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

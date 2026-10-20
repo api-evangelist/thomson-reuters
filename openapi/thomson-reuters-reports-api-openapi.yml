@@ -1,0 +1,1465 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Reports API
+  version: '1.0'
+  description: 'Operations tagged Reports across 6 of this provider''s published API definitions: thomson-reuters-onesource-indirect-tax-compliance-reports-api-openapi.json, thomson-reuters-reports-api-2-0-openapi.json, thomson-reuters-reports-api-2-0-openapi.yml, thomson-reuters-reports-api-2-openapi.yml, thomson-reuters-reports-api-v1-openapi.yml, thomson-reuters-reports-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/reports
+- url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+- url: https://api-uat.onesourcetax.com/corporate-tax/v1/reports
+  description: UAT server for corporate tax datasets
+- url: https://api-emea.onesourcetax.com/corporate-tax/v1/reports
+  description: EMEA server for corporate tax datasets
+- url: https://api-apac.onesourcetax.com/corporate-tax/v1/reports
+  description: APAC server for corporate tax datasets
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v1/reports
+tags:
+- name: Reports
+paths:
+  /definitions:
+    get:
+      tags:
+      - Reports
+      summary: Reports
+      description: This endpoint is used to retrieve the list of all Reports available in the system (Both Standard and Custom).
+      operationId: Reports_GetReports
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportListResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportListResponse'
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/reports
+  /definitions/{id}:
+    get:
+      tags:
+      - Reports
+      summary: Report Metadata
+      description: This endpoint fetches the parameters required to run a specific Report along with the list of fields in the report output. Report output fields are the output columns which this particular report will fetch and display.
+      operationId: Reports_GetReportMetdata
+      parameters:
+      - name: id
+        in: path
+        description: Report-definition-header id
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportMetadata'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportMetadata'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportMetadata'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportMetadata'
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/reports
+  /:
+    post:
+      tags:
+      - Reports
+      summary: Run Report
+      description: This endpoint is used to Queue reports for execution, based on the input parameters. The input parameters required are retrieved by calling the 'Report MetaData' endpoint first. Once obtained, these values are passed as input to execute 'Run Report'.
+      operationId: Reports_GetData
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportInput'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportInput'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportInput'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportInput'
+        required: true
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+              example:
+                id: 7421
+                name: Transaction details - transactional information with returns
+                runId: 8f62c4cd-03aa-482c-a971-fa54e23c19f6
+                parameters:
+                - name: Entity
+                  value: 296172cf-182d-4d31-b74c-ce10f1b7346a
+                status: InProgress
+                items: []
+                count: 0
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+              example:
+                id: 12345
+                name: TaxClassificationBoxMapping
+                runId: 00000000-0000-0000-0000-000000000000
+                parameters:
+                - name: Jurisdiction Id
+                  value: PL
+                status: Failed
+                items: []
+                count: 0
+                reason: Error queueing request. Try again after some time.
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+      x-codegen-request-body-name: input
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/reports
+  /operations/{id}:
+    get:
+      tags:
+      - Reports
+      summary: Get Report Status
+      description: This endpoint is used to get the latest status of a report that has been queued using the 'Run Report' endpoint. When you queue a report using 'Run Report', you receive a 'run-id' in the response. Pass that 'run-id' as the id parameter in this endpoint's URL to retrieve the report status.
+      operationId: Reports_GetOperationStatusFromCache
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+              example:
+                status: Ready
+                resourceLocation: https://api-emea.onesourcetax.com/indirect-tax-compliance/beta/reports/8f62c4cd-03aa-482c-a971-fa54e23c19f6
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.Results.NotFoundResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.Results.NotFoundResult'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.Results.NotFoundResult'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.Results.NotFoundResult'
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/reports
+  /{id}:
+    get:
+      tags:
+      - Reports
+      summary: Get Report Data
+      description: This endpoint is used to fetch the data in Json array format which was requested or queued from 'Run Report' endpoint. 'run-id' generated from the 'Run Report' should be passed as the 'id' parameter in the URL in order to retrive the data.
+      operationId: Reports_GetDataFromCache
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: offset
+        description: Specifies the starting position in the result set. With offset=1, you're skipping the first record and starting from the second one.
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        description: Specifies the maximum number of records to return in a single response. With limit=20, you're requesting up to 20 records in this call
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+              example:
+                id: 7421
+                name: Transaction details - transactional information with returns
+                runId: 8f62c4cd-03aa-482c-a971-fa54e23c19f6
+                parameters:
+                - name: Entity
+                  value: 296172cf-182d-4d31-b74c-ce10f1b7346a
+                - name: Start date
+                  value: '2020-04-01'
+                - name: End date
+                  value: '2020-04-30'
+                status: Ready
+                items:
+                - EntityReportingID: 296172cf-182d-4d31-b74c-ce10f1b7346a
+                  ReportingDate: 4/13/2020 12:00:00 AM
+                  TransactionType: AP
+                  InvoiceType: '1'
+                  AmountNet: '5431430'
+                  AmountTax: '0'
+                  AmountGross: '5431430'
+                  TaxClassificationCode: APEUSUPSRVIS
+                  TaxClassification: AP_EUSUPSRV_I_S
+                  InvoiceDate: 7/15/2021 12:00:00 AM
+                  InvoiceID: '12345671'
+                  FileName: distinctInvoice -Dummy123.csv
+                  Dataset: Sample Dataset 1
+                  Return: Sample Return Q1 2023
+                  SupplierName: CFC Ltd
+                  SupplierVATNumber: GB987654321
+                  SupplierAddress: Stamford Bridge, Fulham
+                  CustomerName: ABC Ltd
+                  CustomerVATNumber: GB123456789
+                  CustomerAddress: 5 Canada Square, London
+                count: 1
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportOutput'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.Results.NotFoundResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.Results.NotFoundResult'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.Results.NotFoundResult'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.Results.NotFoundResult'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Reports.ReportConflictResponse'
+              example:
+                Message: Unable to download report.
+                ErrorCode: OIC-API-4009
+                MessageDetail: Report cannot be downloaded as it is currently being generated. Please wait for the report to reach 'Ready' status before downloading it.
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Reports.ReportConflictResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Reports.ReportConflictResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Reports.ReportConflictResponse'
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/reports
+  /reports:
+    post:
+      tags:
+      - Reports
+      summary: Generate a report by ID with option to modify the report filters on the fly
+      description: Generate a report by ID with option to modify the report filters on the fly.
+      operationId: Report_Post
+      requestBody:
+        x-name: reportOptions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportOptionsWithFiltersModel'
+        x-position: 1
+      responses:
+        '200':
+          description: Expected format of report file
+          content:
+            text/csv:
+              schema:
+                type: string
+                description: Report in CSV format
+                format: binary
+            application/xml:
+              schema:
+                type: string
+                description: Report in XML format
+                format: binary
+            application/pdf:
+              schema:
+                type: string
+                description: Report in PDF format
+                format: binary
+            application/vnd.ms-excel:
+              schema:
+                type: string
+                description: Report in Excel format
+                format: binary
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                description: Report in Excelx format
+                format: binary
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '415':
+          description: Report cannot be returned in any of the specified formats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+      security:
+      - OAuth2: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+  /reports/{id}/exports:
+    post:
+      tags:
+      - Reports
+      summary: Create a request to generate a report in asynchronous mode.
+      operationId: Report_ExportTo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      requestBody:
+        x-name: exportOptions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportOptionsExportModel'
+        x-position: 2
+      responses:
+        '200':
+          description: Request to export the report was created.
+          headers:
+            Location:
+              description: The value of the header is a URL that can be used to retrieve or update the resource.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedExport'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+      security:
+      - OAuth2: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+  /reports/{reportId}/exports/{exportId}:
+    get:
+      tags:
+      - Reports
+      summary: Returns the status of the Export to file job
+      operationId: Report_GetExport
+      parameters:
+      - name: reportId
+        in: path
+        required: true
+        description: Id of the report.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: exportId
+        in: path
+        required: true
+        description: Id of the export.
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        '200':
+          description: The actual status of report export.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Export'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+      security:
+      - OAuth2: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.Reports.ReportMetadata:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Report Id
+          format: int32
+          example: 7421
+        name:
+          type: string
+          description: Report name
+          example: Transaction details - transactional information with returns
+        parameters:
+          type: array
+          description: Input Parameters
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportParameter'
+        resultFields:
+          type: array
+          description: Result columns
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportField'
+    TRTA.Athena.Models.Api.V4.Reports.ReportOutput:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Report Id
+          format: int32
+        name:
+          type: string
+          description: Report Name
+        runId:
+          type: string
+          description: Runid of report.
+          format: uuid
+        parameters:
+          type: array
+          description: Parameter supplied as input for the report
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportParameterInput'
+        status:
+          type: string
+          description: Status of report (In-Progress/Ready/Invalid)
+        items:
+          type: array
+          description: Report data, It will only have data when status is Ready.
+          items:
+            type: object
+        count:
+          type: integer
+          format: int32
+    System.Web.Http.Results.NotFoundResult:
+      type: object
+    TRTA.Athena.Models.Api.V4.Reports.Report:
+      type: object
+      title: Report
+      description: Report object containing report details
+      properties:
+        id:
+          type: integer
+          description: Report id value
+          format: int32
+          example: 7421
+        name:
+          type: string
+          description: Name of the Report
+          example: Transaction details – transactional information with returns
+        description:
+          type: string
+          description: Detailed description of report
+          example: Transaction details transactional information with returns
+    TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        resourceLocation:
+          type: string
+    TRTA.Athena.Api.Models.V4.Reports.ReportConflictResponse:
+      type: object
+      properties:
+        Message:
+          type: string
+        ErrorCode:
+          type: string
+        MessageDetail:
+          type: string
+    TRTA.Athena.Models.Api.V4.Reports.ReportField:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Name of the column
+          example: EntityReportingID
+        Caption:
+          type: string
+          description: Display property of the column
+          example: Entity
+        DataType:
+          type: string
+          description: Datatype of the column
+          example: string
+    TRTA.Athena.Models.Api.V4.Reports.ReportListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: Reports
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.Report'
+    TRTA.Athena.Models.Api.V4.Reports.ReportParameter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of parameter
+          example: Start date
+        description:
+          type: string
+          description: Detailed description of parameter
+          example: Start date
+        dataType:
+          type: string
+          description: 'Datatype of parameter(ex: string, date)'
+          example: date
+        format:
+          type: string
+          description: 'Format of value (ex: for date it is yyyy-mm-dd)'
+          example: yyyy-mm-dd
+        acceptMultiple:
+          type: boolean
+          description: Indicate that value of parameter accepts multiple values to be passed together.
+          example: false
+    TRTA.Athena.Models.Api.V4.Reports.ReportParameterInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of parameter
+        value:
+          type: string
+          description: Value of parameter
+      example:
+        items:
+          name: Entity
+          value: 296172cf-182d-4d31-b74c-ce10f1b7346a
+    TRTA.Athena.Models.Api.V4.Reports.ReportInput:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Report-definition id
+          format: int32
+          example: 7421
+        parameters:
+          type: array
+          description: Report parameter
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportParameterInput'
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    Export:
+      type: object
+      additionalProperties: false
+      properties:
+        createdDateTime:
+          type: string
+          description: The start time of the Export to file job.
+          format: date-time
+        expirationTime:
+          type: string
+          description: The expiration time of the URL. Empty when the result is not available.
+          format: date-time
+        exportState:
+          $ref: '#/components/schemas/ExportState'
+        id:
+          type: integer
+          description: The Export to file job ID.
+          format: int32
+        fileInfo:
+          $ref: '#/components/schemas/FileInfoModel'
+    PageOrientation:
+      type: string
+      description: ''
+      x-enumNames:
+      - Landscape
+      - Portrait
+      enum:
+      - Landscape
+      - Portrait
+    CustomLabelAlignment:
+      type: string
+      description: ''
+      x-enumNames:
+      - Default
+      - Left
+      - Center
+      - Right
+      enum:
+      - Default
+      - Left
+      - Center
+      - Right
+    ReportOptionsWithFiltersModel:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: The ID of the saved report to run.
+          format: int32
+        pdfFontSize:
+          type: integer
+          description: The font size to use when the output format is PDF.
+          format: int32
+        pdfHeaderIncludeName:
+          type: boolean
+          description: Indicates whether to include report name into PDF header.
+        pdfHeaderIncludeDate:
+          type: boolean
+          description: Indicates whether to include date into PDF header.
+        pdfHeaderIncludePageNumber:
+          type: boolean
+          description: Indicates whether to include page numbering into PDF header.
+        pdfFooterIncludeName:
+          type: boolean
+          description: Indicates whether to include report name into PDF footer.
+        pdfFooterIncludeDate:
+          type: boolean
+          description: Indicates whether to include date into PDF footer.
+        pdfFooterIncludePageNumber:
+          type: boolean
+          description: Indicates whether to include page numbering into PDF footer.
+        excelApplyRounding:
+          type: boolean
+          description: Indicates whether applied rounding currency values into Excel or not.
+        pdfCustomHeader:
+          type:
+          - string
+          - 'null'
+          description: Text of the custom header for PDF. Can override report name, date or page number in headers.
+        pdfCustomHeaderAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfCustomFooter:
+          type:
+          - string
+          - 'null'
+          description: Text of the custom footer for PDF. Can override report name, date or page number in footers.
+        pdfCustomFooterAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfPageOrientation:
+          description: Page orientation for exported file
+          $ref: '#/components/schemas/PageOrientation'
+        pdfCommonCustomMargin:
+          type:
+          - integer
+          - 'null'
+          description: 'The margin that set to all sides of pages
+
+            If some of the custom margins have been set, a common margin is set for all others sides'
+          format: int32
+        pdfCustomLeftMargin:
+          type:
+          - integer
+          - 'null'
+          description: The margins that can be set to the left of the page
+          format: int32
+        pdfCustomTopMargin:
+          type:
+          - integer
+          - 'null'
+          description: The margins that can be set to the top of the page
+          format: int32
+        pdfCustomRightMargin:
+          type:
+          - integer
+          - 'null'
+          description: The margins that can be set to the right of the page
+          format: int32
+        pdfCustomBottomMargin:
+          type:
+          - integer
+          - 'null'
+          description: The margins that can be set to the bottom of the page
+          format: int32
+        pdfCustomCellAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfHeaderFormat:
+          description: Header/footer format
+          $ref: '#/components/schemas/HeaderFooterFormat'
+        pdfFooterFormat:
+          description: Header/footer format
+          $ref: '#/components/schemas/HeaderFooterFormat'
+        csvDelimiter:
+          $ref: '#/components/schemas/CSVDelimiter'
+        filters:
+          type:
+          - array
+          - 'null'
+          description: "The list of filters that should be updated\n            "
+          items:
+            $ref: '#/components/schemas/FilterModel'
+        advancedFilter:
+          type:
+          - string
+          - 'null'
+          description: Updated advanced filter that should be applied to the report
+    ExportState:
+      type: string
+      description: ''
+      x-enumNames:
+      - Undefined
+      - InProgress
+      - Completed
+      - Error
+      enum:
+      - Undefined
+      - InProgress
+      - Completed
+      - Error
+    CSVDelimiter:
+      type: string
+      description: ''
+      x-enumNames:
+      - 'Null'
+      - Comma
+      - Asterisk
+      - Pipe
+      - Tilde
+      - Semicolon
+      enum:
+      - 'Null'
+      - Comma
+      - Asterisk
+      - Pipe
+      - Tilde
+      - Semicolon
+    HeaderFooterFormat:
+      type: string
+      description: ''
+      x-enumNames:
+      - Standard
+      - Branded
+      enum:
+      - Standard
+      - Branded
+    FilterModel:
+      type: object
+      additionalProperties: false
+      required:
+      - filterId
+      - params
+      properties:
+        filterId:
+          type: string
+          description: Filter unique id
+          minLength: 1
+          example: fe044d73d549438fa6017e151f718e0f
+        params:
+          type: array
+          description: "List of updated parameters for filter. \nUse filter-definitions/{id} endpoint in order to find description of each parameter. "
+          example:
+          - 1/6/2010 12:00:00 AM
+          - 12/31/2020 11:59:59 PM
+          - 1
+          - BillingPeriodEndDate
+          - null
+          items:
+            type: string
+    ReportOptionsExportModel:
+      type: object
+      additionalProperties: false
+      required:
+      - reportFormat
+      properties:
+        pdfFontSize:
+          type: integer
+          description: The font size to use when the output format is PDF.
+          format: int32
+        pdfHeaderIncludeName:
+          type: boolean
+          description: Indicates whether to include report name into PDF header.
+        pdfHeaderIncludeDate:
+          type: boolean
+          description: Indicates whether to include date into PDF header.
+        pdfHeaderIncludePageNumber:
+          type: boolean
+          description: Indicates whether to include page numbering into PDF header.
+        pdfFooterIncludeName:
+          type: boolean
+          description: Indicates whether to include report name into PDF footer.
+        pdfFooterIncludeDate:
+          type: boolean
+          description: Indicates whether to include date into PDF footer.
+        pdfFooterIncludePageNumber:
+          type: boolean
+          description: Indicates whether to include page numbering into PDF footer.
+        excelApplyRounding:
+          type: boolean
+          description: Indicates whether applied rounding currency values into Excel or not.
+        pdfCustomHeader:
+          type:
+          - string
+          - 'null'
+          description: Text of the custom header for PDF. Can override report name, date or page number in headers.
+        pdfCustomHeaderAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfCustomFooter:
+          type:
+          - string
+          - 'null'
+          description: Text of the custom footer for PDF. Can override report name, date or page number in footers.
+        pdfCustomFooterAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfPageOrientation:
+          description: Page orientation for exported file
+          $ref: '#/components/schemas/PageOrientation'
+        pdfCommonCustomMargin:
+          type:
+          - integer
+          - 'null'
+          description: 'The margin that set to all sides of pages
+
+            If some of the custom margins have been set, a common margin is set for all others sides'
+          format: int32
+        pdfCustomLeftMargin:
+          type:
+          - integer
+          - 'null'
+          description: The margins that can be set to the left of the page
+          format: int32
+        pdfCustomTopMargin:
+          type:
+          - integer
+          - 'null'
+          description: The margins that can be set to the top of the page
+          format: int32
+        pdfCustomRightMargin:
+          type:
+          - integer
+          - 'null'
+          description: The margins that can be set to the right of the page
+          format: int32
+        pdfCustomBottomMargin:
+          type:
+          - integer
+          - 'null'
+          description: The margins that can be set to the bottom of the page
+          format: int32
+        pdfCustomCellAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfHeaderFormat:
+          description: Header/footer format
+          $ref: '#/components/schemas/HeaderFooterFormat'
+        pdfFooterFormat:
+          description: Header/footer format
+          $ref: '#/components/schemas/HeaderFooterFormat'
+        csvDelimiter:
+          $ref: '#/components/schemas/CSVDelimiter'
+        filters:
+          type:
+          - array
+          - 'null'
+          description: "The list of filters that should be updated\n            "
+          items:
+            $ref: '#/components/schemas/FilterModel'
+        advancedFilter:
+          type:
+          - string
+          - 'null'
+          description: Updated advanced filter that should be applied to the report
+        reportFormat:
+          description: File format for exported report
+          $ref: '#/components/schemas/ReportFormat'
+    ReportFormat:
+      type: string
+      description: ''
+      x-enumNames:
+      - Csv
+      - Pdf
+      - Xml
+      - Excel
+      - Excelx
+      enum:
+      - Csv
+      - Pdf
+      - Xml
+      - Excel
+      - Excelx
+    CreatedExport:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          description: The Export to file job ID.
+          format: int32
+    FileInfoModel:
+      type: object
+      additionalProperties: false
+      properties:
+        fileName:
+          type:
+          - string
+          - 'null'
+          description: Name of the original file.
+        size:
+          type: integer
+          description: Size of the file (in bytes).
+          format: int32
+        uploadedDateTime:
+          type: string
+          description: The date and time at which the file was uploaded.
+          format: date-time
+        md5Hash:
+          type:
+          - string
+          - 'null'
+          description: The MD5 Hash string of the file.
+        downloadLink:
+          type:
+          - string
+          - 'null'
+          description: The temporary link to download the file.
+    TRTA.Athena.Models.Api.V4.Reports.ReportMetadata_2:
+      type: object
+      description: Represents the metadata associated with a specific report, including its identifier, name, and the input parameters required to generate the report.
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the report. This ID is used to uniquely reference the report within the system.
+          format: int32
+        name:
+          type: string
+          description: The name of the report. This provides a clear identification of the report and is commonly used for display purposes.
+        parameters:
+          type: array
+          description: A list of input parameters required for running the report. Each parameter defines a specific piece of data needed to generate the report accurately.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportParameter_2'
+        resultFields:
+          type: array
+          description: An array of result columns that specifies the fields included in the report output. Each item represents a specific field detailing its characteristics and data type.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportField_2'
+    TRTA.Athena.Models.Api.V4.Reports.ReportOutput_2:
+      type: object
+      description: Represents the output data of a generated report, detailing the report's unique identifiers, name, and the parameters used to generate it.
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the report. This ID is used to uniquely reference the report within the system.
+          format: int32
+        name:
+          type: string
+          description: The name of the report as specified during its creation. This is used for easy identification and reference.
+        runId:
+          type: string
+          description: A unique identifier for the specific execution or run of the report. This helps in tracking and referencing specific instances of report generation.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        parameters:
+          type: array
+          description: A list of parameters that were supplied as input for generating the report. This helps in understanding the context and configuration under which the report was generated.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportParameterInput_2'
+        status:
+          type: string
+          description: Status of report (In-Progress/Ready/Invalid)
+        items:
+          type: array
+          description: Report data, It will only have data when status is Ready.
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        count:
+          type: integer
+          format: int32
+    System.Web.Http.Results.NotFoundResult_2:
+      type: object
+      description: Represents a standard HTTP 404 Not Found result, indicating that the requested resource was not found on the server.
+      properties:
+        Request:
+          type: object
+          description: Contains details about the HTTP request that resulted in a Not Found response. This object is read-only.
+          properties: {}
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.Reports.Report_2:
+      type: object
+      description: Represents the structure of a report, detailing its unique identifier, name, and a comprehensive description.
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the report. This is used to reference the report uniquely across the system.
+          format: int32
+        name:
+          type: string
+          description: The name of the report. This provides a brief label by which the report is commonly known.
+        description:
+          type: string
+          description: Provides a detailed description of the report. This elaborates on what the report entails, its purpose, and how it should be interpreted.
+    TRTA.Athena.Models.Api.V4.Reports.ReportField_2:
+      type: object
+      description: Describes an individual field (column) in the report output, including its name, display caption, and data type.
+      properties:
+        Name:
+          type: string
+          description: The identifier name of the field as used in the report's data structure.
+        Caption:
+          type: string
+          description: The human-readable label for the field, used as the column header in report displays.
+        DataType:
+          type: string
+          description: Specifies the type of data the field holds, such as 'string', 'integer', 'date'
+    TRTA.Athena.Models.Api.V4.Reports.ReportListResponse_2:
+      type: object
+      description: A response schema representing a list of reports. It encapsulates the details of each report in an array format.
+      properties:
+        items:
+          type: array
+          description: An array of reports. Each item in the array represents a single report with its full details.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.Report_2'
+    TRTA.Athena.Models.Api.V4.Reports.ReportParameter_2:
+      type: object
+      description: Represents a single input parameter required for generating a report. This schema details the parameter's name, description, data type, format, and whether it can accept multiple values.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter. This is used as an identifier in the report configuration and user interface.
+        description:
+          type: string
+          description: Provides a detailed description of the parameter, explaining its purpose and how it affects the report generation.
+        dataType:
+          type: string
+          description: Specifies the type of data that the parameter accepts, such as 'string', 'date', etc.
+        format:
+          type: string
+          description: Defines the expected format of the parameter value, especially important for data types like date (e.g., 'yyyy-mm-dd').
+        acceptMultiple:
+          type: boolean
+          description: Indicates whether the parameter can accept multiple values. If true, multiple values can be passed together for this parameter.
+    TRTA.Athena.Models.Api.V4.Reports.ReportParameterInput_2:
+      type: object
+      description: Represents a single input parameter for a report, detailing the parameter's name and the value it should take for the report generation.
+      properties:
+        name:
+          type: string
+          description: The identifier name of the parameter. This name is used to match the parameter with its corresponding definition in the report configuration.
+        value:
+          type: string
+          description: The value assigned to the parameter for the report generation. This value influences the output or behavior of the report based on the parameter's role.
+    TRTA.Athena.Models.Api.V4.Reports.ReportStatusResponse:
+      type: object
+      description: Represents the status response of a report request, including the current status, resource location if available, and the count of reports processed.
+      properties:
+        status:
+          type: string
+          description: The current status of the report processing. Typical values might include 'Pending', 'Processing', 'Completed', or 'Failed'.
+        resourceLocation:
+          type: string
+          description: The URL or URI location where the generated report or further details can be accessed, if applicable.
+        count:
+          type: integer
+          format: int32
+          description: The number of items or reports processed or affected by the request.
+    TRTA.Athena.Models.Api.V4.Reports.ReportInput_2:
+      type: object
+      description: Represents the input data structure required to initiate a report generation, including the report definition ID and any necessary parameters.
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the report definition. This ID is used to specify which report configuration to use for generating the report.
+          format: int32
+        parameters:
+          type: array
+          description: A list of parameters required for generating the report. Each item represents a specific input needed to customize and execute the report.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportParameterInput_2'
+    ReportField:
+      type: object
+      properties:
+        name:
+          description: Name of the column
+          type: string
+        caption:
+          description: Display property of the column
+          type: string
+        data-type:
+          description: Datatype of the column
+          type: string
+    ReportListResponse:
+      type: object
+      properties:
+        items:
+          description: Reports
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+    ReportInput:
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Report-definition id
+          type: integer
+        parameters:
+          description: Report parameter
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterInput'
+    OpertaionsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        resource-location:
+          type: string
+    ReportMetadata:
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Report Id
+          type: integer
+        name:
+          description: Report name
+          type: string
+        parameters:
+          description: Input Parameters
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameter'
+        result-fields:
+          description: Result columns
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportField'
+    Report:
+      type: object
+      properties:
+        Id:
+          format: int32
+          description: Report id value
+          type: integer
+        name:
+          description: Name of report
+          type: string
+        description:
+          description: Detailed description of report
+          type: string
+    NotFoundResult:
+      type: object
+      properties:
+        Request:
+          type: object
+          readOnly: true
+    ReportParameterInput:
+      type: object
+      properties:
+        name:
+          description: Name of parameter
+          type: string
+        value:
+          description: Value of parameter
+          type: string
+    ReportOutput:
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Report Id
+          type: integer
+        name:
+          description: Report Name
+          type: string
+        run-id:
+          format: uuid
+          description: Runid of report.
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        parameters:
+          description: Parameter supplied as input for the report
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterInput'
+        status:
+          description: Status of report (In-Progress/Ready/Invalid)
+          type: string
+        items:
+          description: Report data, It will only have data when status is Ready.
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        count:
+          format: int32
+          type: integer
+    ReportParameter:
+      type: object
+      properties:
+        name:
+          description: Name of parameter
+          type: string
+        description:
+          description: Detailed description of parameter
+          type: string
+        data-type:
+          description: 'Datatype of parameter(ex: string, date)'
+          type: string
+        format:
+          description: 'Format of value (ex: for date it is yyyy-mm-dd)'
+          type: string
+        accept-multiple:
+          description: Indicate that value of parameter accepts multiple values to be passed together.
+          type: boolean
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-onesource-indirect-tax-compliance-reports-api-openapi.json
+- thomson-reuters-reports-api-2-0-openapi.json
+- thomson-reuters-reports-api-2-0-openapi.yml
+- thomson-reuters-reports-api-2-openapi.yml
+- thomson-reuters-reports-api-v1-openapi.yml
+- thomson-reuters-reports-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

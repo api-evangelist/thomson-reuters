@@ -1,0 +1,384 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Vehicle Detail API
+  version: v1
+  description: 'Operations tagged Vehicle Detail across 2 of this provider''s published API definitions: thomson-reuters-fbt-customer-api-2-openapi.json, thomson-reuters-fbt-customer-api-2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/benefits
+tags:
+- name: Vehicle Detail
+paths:
+  /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/vehicle-detail-benefits:
+    get:
+      tags:
+      - Vehicle Detail
+      summary: Get all vehicle details in a reporting entity
+      operationId: VehicleDetails_GetBenefits
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: offset
+        in: query
+        description: Offset
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Limit
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get all vehicle details in a reporting entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.VehicleDetailModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.VehicleDetailModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.VehicleDetailModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.VehicleDetailModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/benefits
+components:
+  schemas:
+    Fbt.Models.CustomerApi.Benefits.VehicleDetailModelForCustomerApi:
+      description: VehicleDetail Model For Api
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Benefit value id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        code:
+          description: Benefit id
+          type: string
+        costCenterId:
+          format: uuid
+          description: Cost center id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        standardCategoryId:
+          format: int32
+          description: Standard category id
+          type: integer
+        employeeId:
+          format: uuid
+          description: Person id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        groupType:
+          description: Group type Code
+          type: string
+        region:
+          description: Region
+          type: string
+        acquisitionDate:
+          description: Acquisition date
+          type: string
+        actualCalculationMethodCode:
+          description: Actual calculation method code
+          type: string
+        adjustedBaseValue:
+          format: double
+          description: Adjusted base value
+          type: number
+        annualisedKm:
+          format: double
+          description: Annualised Kilometers
+          type: number
+        baseValue:
+          format: double
+          description: Base value
+          type: number
+        baseValueWithGst:
+          format: double
+          description: Base value with GST
+          type: number
+        businessPercentage:
+          format: double
+          description: Business percentage
+          type: number
+        centsPerKm:
+          format: double
+          description: Cents per Kilometers
+          type: number
+        centsPerKmTaxableValue:
+          format: double
+          description: Cents per kilometers taxable value
+          type: number
+        closingKm:
+          format: double
+          description: Closing kilometers
+          type: number
+        commitmentDate:
+          description: Commitment date
+          type: string
+        dateFirstHeld:
+          description: Date first held
+          type: string
+        daysAvailable:
+          format: int32
+          description: Days available
+          type: integer
+        daysHeldForUseByProvider:
+          format: int32
+          description: Days held for use by provider
+          type: integer
+        daysUnavailable:
+          format: int32
+          description: Days unavailable
+          type: integer
+        deemedDepreciation:
+          format: double
+          description: Deemed depreciation
+          type: number
+        deemedInterest:
+          format: double
+          description: Deemed interest
+          type: number
+        description:
+          description: Description
+          type: string
+        disposalDate:
+          description: Disposal date
+          type: string
+        employeeContribution:
+          format: double
+          description: Employee contribution
+          type: number
+        employeeContributionApplied:
+          format: double
+          description: Employee contribution applied
+          type: number
+        excessEmployeeContribution:
+          format: double
+          description: Excess contribution applied
+          type: number
+        exemptGUTA17000Applied:
+          format: double
+          description: Exempt GUTA 17000 applied
+          type: number
+        exemptGUTA30000Applied:
+          format: double
+          description: Exempt GUTA 30000 applied
+          type: number
+        fbtYear:
+          format: int32
+          description: Fbt year
+          type: integer
+        fringeBenefitType:
+          description: Fringe benefit type
+          type: string
+        grossedUpTaxableAmount:
+          format: double
+          description: Grossed up taxable amount
+          type: number
+        grossedUpTaxableAmt17000:
+          format: double
+          description: Grossed up taxable amount 17000
+          type: number
+        grossedUpTaxableAmt30000:
+          format: double
+          description: Grossed up taxable amount 30000
+          type: number
+        grossTaxableAmount:
+          format: double
+          description: Gross taxable amount
+          type: number
+        gstPercent:
+          format: double
+          description: GST percent
+          type: number
+        isAddGSTRequired:
+          description: Is add GST required
+          type: boolean
+        isExcludePayment:
+          description: Is exclude payment
+          type: boolean
+        isExemptBenefit:
+          description: Is exempt benefit
+          type: boolean
+        isShared:
+          description: Is shared
+          type: boolean
+        logbookYear:
+          format: double
+          description: Logbook year
+          type: number
+        nonBusinessAccessories:
+          format: double
+          description: Non business accessories
+          type: number
+        operatingCostFuel:
+          format: double
+          description: Operating cost fuel
+          type: number
+        operatingCostInsurance:
+          format: double
+          description: Operating cost insurance
+          type: number
+        operatingCostLeaseCharges:
+          format: double
+          description: Operating cost lease charges
+          type: number
+        operatingCostOther:
+          format: double
+          description: Operating cost other
+          type: number
+        operatingCostRegistration:
+          format: double
+          description: Operating cost registration
+          type: number
+        operatingCostRepairs:
+          format: double
+          description: Operating cost repairs
+          type: number
+        operatingCostTotal:
+          format: double
+          description: Operating cost total
+          type: number
+        operatingCostTransaction:
+          format: double
+          description: Operating cost transaction
+          type: number
+        openingKm:
+          format: double
+          description: Opening kilometer
+          type: number
+        operatingCostTaxableValue:
+          format: double
+          description: Operating cost taxable value
+          type: number
+        privateKm:
+          format: double
+          description: Private kilometer
+          type: number
+        purchaseType:
+          description: Purchase type
+          type: string
+        rebateApplied:
+          format: double
+          description: Rebate applied
+          type: number
+        registrationNumber:
+          description: Registration number
+          type: string
+        reportableAmount:
+          format: double
+          description: Reportable amount
+          type: number
+        statutoryFormulaRuleCode:
+          description: Statutory formula rule code
+          type: string
+        statutoryFormulaTaxableValue:
+          format: double
+          description: Statutory formula raxable value
+          type: number
+        statutoryRate:
+          format: double
+          description: Statutory rate
+          type: number
+        taxableAmount:
+          format: double
+          description: Taxable amount
+          type: number
+        taxPayable:
+          format: double
+          description: Tax payable
+          type: number
+        taxPayable17000:
+          format: double
+          description: Tax payable 17000
+          type: number
+        taxPayable30000:
+          format: double
+          description: Tax payable 30000
+          type: number
+        taxPayableRebate:
+          format: double
+          description: Tax payable rebate
+          type: number
+        unallocatedPercentage:
+          format: double
+          description: Unallocated percentage
+          type: number
+        unCappedRFBA:
+          format: double
+          description: Un capped RFBA
+          type: number
+        vehicleAllocationMethodCode:
+          description: Vehicle allocation method code
+          type: string
+        vehicleCalculationMethodCode:
+          description: Vehicle calculation method code
+          type: string
+        vehicleEngineCapacityCode:
+          description: Vehicle engine capacity code
+          type: string
+        wdv:
+          format: double
+          description: WDV
+          type: number
+x-refined-from:
+- thomson-reuters-fbt-customer-api-2-openapi.json
+- thomson-reuters-fbt-customer-api-2-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

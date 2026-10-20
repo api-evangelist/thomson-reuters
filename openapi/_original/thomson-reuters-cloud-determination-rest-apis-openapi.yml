@@ -1,0 +1,365 @@
+# x-archived-from: thomson-reuters-cloud-determination-rest-apis-openapi.yml
+# x-archived-on: 2026-10-20
+swagger: '2.0'
+info:
+  description: Cloud Determination REST APIs End points.
+  version: 1.0.0
+  title: Cloud Determination REST APIs
+  contact:
+    name: Team ONESOURCE
+  license:
+    name: ''
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: api-uat.onesourcetax.com
+basePath: /indirect-tax-determination/beta
+tags:
+- name: Certificate Service
+paths:
+  /certificates:
+    get:
+      tags:
+      - Certificate Service
+      summary: Finds the list of Certificates
+      description: Fetches the list of certificates for which the logged In User has access.
+      operationId: findCertificates_1
+      consumes:
+      - application/vnd.tri.onesource.idt+json
+      produces:
+      - application/vnd.tri.onesource.idt+json
+      parameters:
+      - name: pageSize
+        in: query
+        description: The Page Size
+        required: false
+        type: integer
+        format: int32
+      - name: pageIndex
+        in: query
+        description: The Page Index
+        required: false
+        type: integer
+        format: int32
+      - name: sortBy
+        in: query
+        description: The Sort By Criteria
+        required: false
+        type: string
+      - name: sortDescending
+        in: query
+        description: The Sort Descending Flag
+        required: false
+        type: boolean
+      - name: contains
+        in: query
+        description: The contains flag for the filter
+        required: false
+        type: boolean
+      - name: companyName
+        in: query
+        description: The Certificate Company Name
+        required: false
+        type: string
+      - name: customerNumber
+        in: query
+        description: The Certificate Customer Number
+        required: false
+        type: string
+      - name: certificateNumber
+        in: query
+        description: The Certificate Number
+        required: false
+        type: string
+      - name: effectiveDate
+        in: query
+        description: The Certificate Effective Date
+        required: false
+        type: string
+      - name: expirationDate
+        in: query
+        description: The Certificate Expiration Date
+        required: false
+        type: string
+      - name: state
+        in: query
+        description: The Certificate State
+        required: false
+        type: string
+      - name: customerName
+        in: query
+        description: The Certificate Customer Name
+        required: false
+        type: string
+      - name: createdDate
+        in: query
+        description: The Certificate Create Date
+        required: false
+        type: string
+      - name: modifiedDate
+        in: query
+        description: The Certificate Modified Date
+        required: false
+        type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/UiCertificates'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not available
+        '500':
+          description: Server error. For more details check the logs.
+securityDefinitions:
+  token:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  UiBasicCertificate:
+    type: object
+    required:
+    - active
+    - certificateNumber
+    - status
+    - taxDataType
+    - useCriteria
+    properties:
+      status:
+        type: string
+        minLength: 1
+        maxLength: 1
+      active:
+        type: boolean
+      certificateNote:
+        type: string
+        minLength: 1
+        maxLength: 2000
+      optionalCertificate:
+        $ref: '#/definitions/UiCertificateOptional'
+      exemptReason:
+        $ref: '#/definitions/UiExemptReason'
+      certificateNumber:
+        type: string
+        minLength: 1
+        maxLength: 100
+      useCriteria:
+        type: string
+        minLength: 1
+        maxLength: 1
+      effectiveDate:
+        type: string
+        minLength: 1
+        maxLength: 20
+      certificateId:
+        type: integer
+        format: int64
+        minimum: 1
+      taxDataType:
+        type: string
+      stateCountry:
+        type: integer
+        format: int64
+      expirationDate:
+        type: string
+  UiCertificateAuthority:
+    type: object
+    properties:
+      certificateAuthorityId:
+        type: integer
+        format: int64
+      authorityExempt:
+        type: boolean
+      authorityId:
+        type: integer
+        format: int64
+  UiCertificateAuthorityType:
+    type: object
+    properties:
+      certificateAuthorityTypeId:
+        type: integer
+        format: int64
+      authorityTypeExempt:
+        type: boolean
+      authorityTypeId:
+        type: integer
+        format: int64
+      certificateAuthorities:
+        type: array
+        items:
+          $ref: '#/definitions/UiCertificateAuthority'
+  UiCertificateCommodityCode:
+    type: object
+    required:
+    - commodityCode
+    properties:
+      certificateCommodityId:
+        type: integer
+        format: int64
+      commodityCode:
+        type: string
+        minLength: 1
+        maxLength: 100
+      delete:
+        type: boolean
+  UiCertificateCriteriaElement:
+    type: object
+    required:
+    - value
+    properties:
+      value:
+        type: string
+        minLength: 1
+        maxLength: 200
+      element:
+        type: string
+      delete:
+        type: boolean
+      useCriteriaId:
+        type: integer
+        format: int64
+  UiCertificateExemptionRate:
+    type: object
+    properties:
+      basisPercentage:
+        type: number
+      fullyExempt:
+        type: boolean
+      exemptAmount:
+        type: number
+      currencyId:
+        type: integer
+        format: int64
+  UiCertificateOptional:
+    type: object
+    required:
+    - hasDelete
+    properties:
+      certificateExemptionRate:
+        $ref: '#/definitions/UiCertificateExemptionRate'
+      certificateZones:
+        type: array
+        items:
+          $ref: '#/definitions/UiCertificateZone'
+      criteriaElements:
+        type: array
+        items:
+          $ref: '#/definitions/UiCertificateCriteriaElement'
+      hasDelete:
+        type: boolean
+      productCodes:
+        type: array
+        items:
+          $ref: '#/definitions/UiCertificateProductCode'
+      commodityCodes:
+        type: array
+        items:
+          $ref: '#/definitions/UiCertificateCommodityCode'
+  UiCertificateProductCode:
+    type: object
+    required:
+    - productCode
+    properties:
+      certificateProductId:
+        type: integer
+        format: int64
+      productCode:
+        type: string
+        minLength: 1
+        maxLength: 100
+      delete:
+        type: boolean
+  UiCertificateZone:
+    type: object
+    required:
+    - delete
+    properties:
+      certificateZoneId:
+        type: integer
+        format: int64
+      delete:
+        type: boolean
+      zoneExempt:
+        type: boolean
+      certificateAuthorityTypes:
+        type: array
+        items:
+          $ref: '#/definitions/UiCertificateAuthorityType'
+      zoneId:
+        type: integer
+        format: int64
+  UiCertificates:
+    type: object
+    properties:
+      basicCertificate:
+        $ref: '#/definitions/UiBasicCertificate'
+      customerName:
+        type: string
+      fullyExempt:
+        type: string
+      customerId:
+        type: integer
+        format: int64
+      inherited:
+        type: boolean
+      merchantId:
+        type: integer
+        format: int64
+      customerGroupId:
+        type: integer
+        format: int64
+      entityAudit:
+        $ref: '#/definitions/UiEntityAudit'
+      customerNumber:
+        type: string
+      companyName:
+        type: string
+      stateCountry:
+        type: string
+  UiEntityAudit:
+    type: object
+    properties:
+      createdBy:
+        type: string
+      createdByEmail:
+        type: string
+      modifiedByEmail:
+        type: string
+      createdByPhone:
+        type: string
+      modifiedByPhone:
+        type: string
+      createdDate:
+        type: string
+      modifiedBy:
+        type: string
+      modifiedDate:
+        type: string
+  UiExemptReason:
+    type: object
+    required:
+    - longCode
+    - shortCode
+    properties:
+      exemptReasonId:
+        type: integer
+        format: int64
+        minimum: 1
+      shortCode:
+        type: string
+        minLength: 1
+        maxLength: 2
+      longCode:
+        type: string
+        minLength: 1
+        maxLength: 20
+      description:
+        type: string
+        minLength: 0
+        maxLength: 200
+      defaultExemptReasonUS:
+        type: boolean
+      defaultExemptReasonINTL:
+        type: boolean

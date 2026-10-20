@@ -1,0 +1,510 @@
+openapi: 3.2.0
+info:
+  version: v1/v2
+  title: GoSystem E-file E-file Document V1 API
+  description: A RESTful API to provide access to the GoSystem E-file functionality.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/e-files
+security:
+- Authorization: []
+tags:
+- name: E-file Document V1
+paths:
+  /v1/e-files:
+    get:
+      tags:
+      - E-file Document V1
+      summary: Download e-file or validation file
+      description: This endpoint downloads the generated e-file or validation file for a tax return by Job ID.
+      operationId: RetrieveTheXmlFile
+      parameters:
+      - name: jobId
+        in: query
+        description: The jobId is passed from the returned jobId when e-file is triggered.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success. The file is downloaded.
+          content:
+            application/zip:
+              schema:
+                type: object
+        '400':
+          description: 'Invalid input. Can''t proceed with file download. Exception: Files aren''t ready to download yet.'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve the xml file
+  /v1/years/{year}/tax-return-types/{taxReturnType}/tax-returns/{taxReturnId}/jurisdictions/{jurisdiction}/e-files:
+    get:
+      tags:
+      - E-file Document V1
+      summary: Download generated e-file
+      description: This endpoint downloads the generated e-file for a tax return. Prerequisite is e-file creation should be triggered using /v1/e-files or /v1/e-file-validations or via GoSystem.
+      operationId: RetrieveTheXmlE-files
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: The tax year for which the e-file is being processed. Must be a valid 4-digit year (e.g., 2024).
+        schema:
+          type: integer
+          format: int32
+      - name: taxReturnType
+        in: path
+        required: true
+        description: Specifies the type of tax return being filed. 1040, 1041, 1065, 1120, 990, 5500, 709.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnId
+        in: path
+        required: true
+        description: A 6-digit unique alphanumeric identifier for the specific tax return. This is also referred to as the Locator ID.
+        schema:
+          type: string
+      - name: jurisdiction
+        in: path
+        required: true
+        description: 'The state or local jurisdiction code where the tax is being filed. Example: AL for Alabama. Use the /v1/e-file-jurisdictions endpoint to retrieve valid codes.'
+        schema:
+          type: string
+      - name: Account
+        in: header
+        required: true
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success. The e-file is downloaded.
+          content:
+            application/zip:
+              schema:
+                type: object
+        '400':
+          description: 'Types of error in message:
+
+            - Invalid input: Message: "Can''t proceed with file download. Exception: Files aren''t ready to download yet."
+
+            - Missing account header: Message: "Please specify account information in header."
+
+            - Invalid tax type: Message: "Invalid Tax Return Type."
+
+            - Locator doesn''t exist: Message: "Locator not found."
+
+            - Invalid jurisdiction: Message: "Invalid Jurisdiction(s) {wrongjurisdictions}."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - Exception during processing: Message: "Invalid Input {exp message}."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve the xml e-files
+  ? /v1/years/{year}/tax-return-types/{taxReturnType}/tax-returns/{taxReturnId}/jurisdictions/{jurisdiction}/e-file-request-types/{eFileRequestType}/e-files
+  : get:
+      tags:
+      - E-file Document V1
+      summary: Download generated e-file in PDF
+      description: This endpoint downloads the generated e-file in PDF format for a tax return, jurisdiction, and efileRequestType.
+      operationId: ReturnsGeneratedE-fileInPDF
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: The tax year for which the e-file is being processed. Must be a valid 4-digit year (e.g., 2024).
+        schema:
+          type: integer
+          format: int32
+      - name: taxReturnType
+        in: path
+        required: true
+        description: Specifies the type of tax return being filed. 1040, 1041, 1065, 1120, 990, 5500, 709.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnId
+        in: path
+        required: true
+        description: A 6-digit unique alphanumeric identifier for the specific tax return. This is also referred to as the Locator ID.
+        schema:
+          type: string
+      - name: jurisdiction
+        in: path
+        required: true
+        description: 'The state or local jurisdiction code where the tax is being filed. Example: AL for Alabama. Use the /v1/e-file-jurisdictions endpoint to retrieve valid codes.'
+        schema:
+          type: string
+      - name: eFileRequestType
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - Return
+          - Return2
+          - Return3
+          - Return4
+          - Return5
+          - Return6
+          - Return7
+          - Return8
+          - Return9
+          - Return10
+          - Return11
+          - Return12
+          - Return13
+          - Return14
+          - Return15
+          - Return16
+          - Return17
+          - Return18
+          - Return19
+          - Return20
+          - Return21
+          - Return22
+          - Return23
+          - Return24
+          - Return25
+          - Return26
+          - Return27
+          - Return28
+          - Return29
+          - Return30
+          - Return31
+          - Return32
+          - Return33
+          - Return34
+          - Return35
+          - Return36
+          - Return37
+          - Return38
+          - Return39
+          - Return40
+          - Return41
+          - Return42
+          - Return43
+          - Return44
+          - Return45
+          - Return46
+          - Return47
+          - Return48
+          - Return49
+          - Return50
+          - Return51
+          - Return52
+          - Return53
+          - Return54
+          - Return55
+          - Return56
+          - Return57
+          - Return58
+          - Return59
+          - Return60
+          - Return61
+          - Return62
+          - Return63
+          - Return64
+          - Return65
+          - Return66
+          - Return67
+          - Return68
+          - Return69
+          - Return70
+          - Return71
+          - Return72
+          - Return73
+          - Return74
+          - Return75
+          - Return76
+          - Return77
+          - Return78
+          - Return79
+          - Return80
+          - Return81
+          - Return82
+          - Return83
+          - Return84
+          - Return85
+          - Return86
+          - Return87
+          - Return88
+          - Return89
+          - Return90
+          - Return91
+          - Return92
+          - Return93
+          - Return94
+          - Return95
+          - Return96
+          - Return97
+          - Return98
+          - Return99
+          - Return100
+          - Return101
+          - Return102
+          - Return103
+          - Return104
+          - Extension1
+          - Extension2
+          - Extension3
+          - Extension4
+          - Extension5
+          - Extension6
+          - Estimate
+          - Estimate2
+          - Estimate3
+          - Estimate4
+          - Estimate5
+          - Estimate6
+          - Estimate7
+          - Estimate8
+          - Estimate9
+          - Estimate10
+          - Estimate11
+          - Estimate12
+          - Estimate13
+          - Estimate14
+          - Estimate15
+          - Estimate16
+          - Estimate17
+          - EXT_NY_IT204LL
+          - RET_NY_IT204LL
+          - Composite
+          - Other
+          - OtherExt
+          - Withholding
+      - name: Account
+        in: header
+        required: true
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success. The e-file is downloaded in PDF format.
+          content:
+            application/pdf:
+              schema:
+                type: object
+        '400':
+          description: 'Types of error in message:
+
+            - Missing account header: Message: "Please specify account information in header."
+
+            - Invalid tax type: Message: "Invalid Tax Return Type."
+
+            - Locator doesn''t exist: Message: "Locator not found."
+
+            - Invalid jurisdiction: Message: "Invalid Jurisdiction(s) {wrongjurisdictions}."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - Invalid tax return ID: Message: "Please provide valid TaxReturnId."
+
+            - Missing Accept header: Message: "Request should have Accept header as application/pdf."
+
+            - Exception during processing: Message: "Invalid Input {exp message}."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: Returns generated e-file in PDF
+  /v1/years/{year}/tax-returns/{taxReturnId}/e-files:
+    get:
+      tags:
+      - E-file Document V1
+      summary: Get e-file list
+      description: This endpoint retrieves the e-file list for a given year and tax return ID.
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: Must be a valid 4-digit year (e.g., 2024).
+        schema:
+          type: number
+      - name: taxReturnId
+        in: path
+        required: true
+        description: A 6-digit unique alphanumeric identifier for the specific tax return. This is also referred to as the Locator ID.
+        schema:
+          type: string
+      - name: Account
+        in: header
+        required: true
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success. The e-file list is retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfileRepresentationList'
+              examples:
+                efile-representation-list-example:
+                  $ref: '#/components/examples/efile-representation-list-example'
+        '400':
+          description: 'Types of error in message:
+
+            - Invalid input values: Message: "Invalid input values."
+
+            - Invalid tax year: Message: "Please provide valid TaxYear."
+
+            - Invalid tax return ID: Message: "Please provide valid TaxReturnId."
+
+            - Missing account header: Message: "Please specify account information in header."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - No e-file found: Message: "Invalid Input, No E-file for given details."
+
+            - Exception during processing: Message: "Error occurred while fetching E-files, {exception.Message}."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      operationId: getV1YearsByYearTaxReturnsByTaxReturnIdEFiles
+      x-operation-id-source: derived
+  /v1/years/{year}/tax-returns/{taxReturnId}/e-files/{EfileDocumentId}:
+    get:
+      tags:
+      - E-file Document V1
+      summary: Download e-file
+      description: This endpoint downloads e-file in XML and PDF format.
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: Must be a valid 4-digit year (e.g., 2024).
+        schema:
+          type: number
+      - name: taxReturnId
+        in: path
+        required: true
+        description: A 6-digit unique alphanumeric identifier for the specific tax return. This is also referred to as the Locator ID.
+        schema:
+          type: string
+      - name: EfileDocumentId
+        in: path
+        required: true
+        description: The EfileDocumentId.
+        schema:
+          type: string
+      - name: Account
+        in: header
+        required: true
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success. The e-file is downloaded.
+          content:
+            text/xml: {}
+            application/pdf: {}
+        '400':
+          description: 'Types of error in message:
+
+            - Invalid input values: Message: "Invalid input values."
+
+            - Invalid tax year: Message: "Please provide valid TaxYear."
+
+            - Missing EfileDocumentId: Message: "Please provide EfileDocumentId."
+
+            - Invalid EfileDocumentId format: Message: "Invalid EfileDocumentId, provide in ''YYYYYYYY.YYY'' format."
+
+            - Missing Authorization header: Message: "Please provide Authorization header value."
+
+            - Missing Accept header: Message: "Please provide ''Accept'' header to download E-file."
+
+            - Missing account header: Message: "Please specify account information in header."
+
+            - Invalid tax type: Message: "Invalid Tax Return Type."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - No PDF found: Message: "Invalid Input, No pdf found for EfileDocumentId:''{eFileDocumentId}''."
+
+            - Unsupported Accept header: Message: "Unsupported Accept header: ''{acceptHeader}'' Please provide either ''text/xml'' or ''application/pdf'' to download."
+
+            - Exception during processing: Message: "Error occurred while downloading the E-file, {ex.Message}."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      operationId: getV1YearsByYearTaxReturnsByTaxReturnIdEFilesByEfileDocumentId
+      x-operation-id-source: derived
+components:
+  schemas:
+    EfileRepresentationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/EfileRepresentation'
+    EfileRepresentation:
+      type: object
+      properties:
+        Jurisdiction:
+          type: string
+        JurisdictionDescription:
+          type: string
+        EfileDocumentId:
+          type: string
+        EfileType:
+          type: string
+        EfileStatus:
+          type: string
+        EfileCreatedOn:
+          type: string
+        EfileSize:
+          type: integer
+        PDFGeneratedOn:
+          type: string
+        PDFSize:
+          type: integer
+  examples:
+    efile-representation-list-example:
+      value:
+      - Jurisdiction: FED
+        JurisdictionDescription: Federal
+        EfileDocumentId: A0044JH1.XML
+        EfileType: REG
+        EfileStatus: DiagnosticsExist
+        EfileCreatedOn: '2022-12-02T08:20:16.867'
+        EfileSize: 9407
+        PDFGeneratedOn: '2022-12-02T08:20:32.43'
+        PDFSize: 24198
+      - Jurisdiction: PA
+        JurisdictionDescription: Pennsylvania
+        EfileDocumentId: A0044JH1.XPA
+        EfileType: REG
+        EfileStatus: DiagnosticsExist
+        EfileCreatedOn: '2022-12-02T08:20:19.507'
+        EfileSize: 7687
+        PDFGeneratedOn: '2022-12-02T08:20:32.433'
+        PDFSize: 18715
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-business-response-schema.json",
+  "title": "BusinessResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-onesource-einvoice-openapi.yml#/components/schemas/BusinessResponse",
+  "type": "object",
+  "required": [
+    "responseCode"
+  ],
+  "properties": {
+    "responseCode": {
+      "type": "string",
+      "description": "response code\n  * `BUA` - Business accepted\n  * `BUR` - Business rejected",
+      "enum": [
+        "BUA",
+        "BUR"
+      ]
+    },
+    "businessStatus": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/BusinessStatus"
+      }
+    }
+  },
+  "$defs": {
+    "BusinessReason": {
+      "title": "Reason",
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "listId": {
+          "type": "string",
+          "enum": [
+            "OPStatusAction",
+            "OPStatusReason"
+          ]
+        }
+      }
+    },
+    "BusinessStatus": {
+      "type": "object",
+      "required": [
+        "reasonCode"
+      ],
+      "properties": {
+        "reasonCode": {
+          "pattern": "^(?!\\s*$).+",
+          "type": "string"
+        },
+        "reason": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BusinessReason"
+          }
+        }
+      }
+    }
+  }
+}

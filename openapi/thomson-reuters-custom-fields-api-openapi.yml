@@ -1,0 +1,277 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Custom fields API
+  version: '1.0'
+  description: 'Operations tagged Custom fields across 2 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-administration-openapi.json, thomson-reuters-onesource-trust-tax-administration-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax/administration
+security:
+- bearerAuth: []
+tags:
+- name: Custom Fields
+paths:
+  /v1/pans/{pan}/fields:
+    get:
+      tags:
+      - Custom Fields
+      summary: Returns customfields data for the particular PAN Allows users to access data…
+      description: Allows authenticated users to access the Custom fields data by specific PAN for a Client
+      operationId: AllowsAuthenticatedUsersToAccessTheCustomFieldsDataBySpecificPANForAClient
+      parameters:
+      - name: pan
+        in: path
+        description: ''
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: ''
+      - name: $select
+        in: query
+        description: Limits the properties returned in the result.
+        schema:
+          type: string
+      - name: $expand
+        in: query
+        description: Indicates the related entities to be represented inline. The maximum depth is 2.
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: 'Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.'
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Specifies the order in which items are returned. The maximum number of expressions is 5.
+        schema:
+          type: string
+      - name: $top
+        in: query
+        description: Limits the number of items returned from a collection.
+        schema:
+          type: integer
+          format: int32
+      - name: $skip
+        in: query
+        description: Excludes the specified number of items of the queried collection from the result.
+        schema:
+          type: integer
+          format: int32
+      - name: $count
+        in: query
+        description: Indicates whether the total count of items within a collection are returned in the result.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Field'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Allows authenticated users to access the Custom fields data by specific PAN for a Client
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax/administration
+components:
+  schemas:
+    ListItem:
+      type: object
+      properties:
+        value:
+          type:
+          - integer
+          - 'null'
+          description: List value
+          format: int32
+        text:
+          type:
+          - string
+          - 'null'
+          description: List text
+        order:
+          type:
+          - integer
+          - 'null'
+          description: Display order
+          format: int32
+        added_ini:
+          type:
+          - string
+          - 'null'
+          description: Initials of person added
+        added_date:
+          type:
+          - string
+          - 'null'
+          description: Date list item was added
+          format: date-time
+        changed_date:
+          type:
+          - string
+          - 'null'
+          description: Change date for list item
+          format: date-time
+        change_ini:
+          type:
+          - string
+          - 'null'
+          description: Who changed list item
+        change_type:
+          $ref: '#/components/schemas/ChangeType'
+      additionalProperties: false
+    ChangeType:
+      enum:
+      - No_Change
+      - Add
+      - Change
+      - Delete
+      type: integer
+      format: int32
+    Field:
+      type: object
+      properties:
+        is_active:
+          type: boolean
+          description: Field State (Active/Inactive)
+        category:
+          type:
+          - string
+          - 'null'
+          description: Category
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name
+        permanent_or_year_dependent:
+          type:
+          - string
+          - 'null'
+          description: Permanent or year dependent
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description
+        title:
+          type:
+          - string
+          - 'null'
+          description: Title
+        characters_allowed:
+          type: integer
+          description: Characters allowed
+          format: int32
+        characters_available:
+          type: integer
+          description: Characters available
+          format: int32
+        precision:
+          type:
+          - integer
+          - 'null'
+          description: Precision
+          format: int32
+        type:
+          type:
+          - string
+          - 'null'
+          description: Field Type
+        list_items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListItem'
+          description: List item details
+        added_ini:
+          type:
+          - string
+          - 'null'
+          description: Initials of person added
+        added_date:
+          type:
+          - string
+          - 'null'
+          description: Date field was added
+          format: date-time
+        changed_date:
+          type:
+          - string
+          - 'null'
+          description: Change date for fields
+          format: date-time
+        change_ini:
+          type:
+          - string
+          - 'null'
+          description: Who changed fields
+        change_type:
+          $ref: '#/components/schemas/ChangeType'
+      additionalProperties: false
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-administration-openapi.json
+- thomson-reuters-onesource-trust-tax-administration-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

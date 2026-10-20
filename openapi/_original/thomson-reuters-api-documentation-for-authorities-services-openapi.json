@@ -1,0 +1,456 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0",
+    "title": "API documentation for Authorities services"
+  },
+  "servers": [
+    {
+      "url": "https://api.onesourcetax.com/administration/v1"
+    }
+  ],
+  "paths": {
+    "/authorities": {
+      "get": {
+        "tags": ["Authorities"],
+        "summary": "Retrieve a list of Authorities",
+        "description": "Use this operation to fetch a standard list of authorities in ONESOURCE. Enter the jurisdiction and domain type to further filter the list of authorities. Authority name can also be entered to retrieve a particular authority",
+        "operationId": "Retrieve a list of Authorities",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept Language",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-LoneStar-AccountId",
+            "in": "header",
+            "description": "AccountId you want to access if you are a support user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "clientId",
+            "in": "header",
+            "description": "Client Id of the tenant",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "jurisdiction_type",
+            "in": "query",
+            "description": "The Jurisdiction type that will be searched.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domain_type",
+            "in": "query",
+            "description": "The domain type that will be searched.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "The authorityName that will be searched.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthoritySearchResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "data_type": {
+            "type": "string",
+            "description": "data_type"
+          },
+          "total_results": {
+            "type": "integer",
+            "format": "int32",
+            "description": "total_results"
+          },
+          "items_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "items_count"
+          }
+        }
+      },
+      "AuthorityGridDataV1": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The id of the Authority instance."
+          },
+          "jurisdiction_id": {
+            "type": "string",
+            "description": "The Id of the Authority Data."
+          },
+          "domains": {
+            "type": "array",
+            "description": "The list of domains of Authority Data.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "departments": {
+            "type": "array",
+            "description": "The list of department of Authority Data.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "english_name": {
+            "type": "string",
+            "description": "The english name of the Authority Data."
+          },
+          "local_name": {
+            "type": "string",
+            "description": "The local name of the Authority Data."
+          },
+          "authority_type": {
+            "type": "string",
+            "description": "The type of the Authority Data."
+          },
+          "jurisdiction_name": {
+            "type": "string",
+            "description": "The jurisdiction name  of the Authority Data."
+          },
+          "jurisdiction_type": {
+            "type": "string",
+            "description": "The jurisdiction type  of the Authority Data."
+          },
+          "jurisdiction_location": {
+            "type": "string",
+            "description": "The jurisdiction location of the Authority Data."
+          },
+          "jurisdiction_country": {
+            "type": "string",
+            "description": "The jurisdiction country of the Authority Data."
+          }
+        },
+        "description": "The details about a Authority Grid."
+      },
+      "FailureV1_object": {
+        "type": "object",
+        "properties": {
+          "detail_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The number of failures that were encountered."
+          },
+          "details": {
+            "type": "array",
+            "description": "The collection of failures that were encountered.",
+            "items": {
+              "$ref": "#/components/schemas/FailureDetailV1"
+            }
+          },
+          "item": {
+            "type": "object",
+            "description": "The item associated with a failure. Typically this will be the POJO that encountered a failure such as a validation error."
+          }
+        },
+        "description": "Contains information about a failure."
+      },
+      "ErrorV1_Authority": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "code"
+          },
+          "message": {
+            "type": "string",
+            "description": "message"
+          },
+          "error_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "error_count"
+          },
+          "failures": {
+            "type": "array",
+            "description": "failures",
+            "items": {
+              "$ref": "#/components/schemas/FailureV1_Authority"
+            }
+          }
+        }
+      },
+      "Authority": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The id of the Authority instance."
+          },
+          "jurisdiction": {
+            "type": "string",
+            "description": "The jurisdiction of the Authority instance."
+          },
+          "domains": {
+            "type": "array",
+            "description": "The domain type of the Authority instance.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "departments": {
+            "type": "array",
+            "description": "The department of the Authority instance.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": "The english name of the Authority instance."
+          },
+          "local_name": {
+            "type": "string",
+            "description": "The local name of the Authority instance."
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the Authority instance."
+          }
+        },
+        "description": "The details about a Authority."
+      },
+      "ErrorV1": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "code"
+          },
+          "message": {
+            "type": "string",
+            "description": "message"
+          },
+          "error_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "error_count"
+          },
+          "failures": {
+            "type": "array",
+            "description": "failures",
+            "items": {
+              "$ref": "#/components/schemas/FailureV1_object"
+            }
+          }
+        }
+      },
+      "QueryResponseV1DTO_Authority": {
+        "type": "object",
+        "properties": {
+          "_meta": {
+            "description": "_meta",
+            "$ref": "#/components/schemas/Meta"
+          },
+          "items": {
+            "type": "array",
+            "description": "items",
+            "items": {
+              "$ref": "#/components/schemas/Authority"
+            }
+          },
+          "error": {
+            "description": "error",
+            "$ref": "#/components/schemas/ErrorV1_Authority"
+          }
+        }
+      },
+      "FailureDetailV1": {
+        "type": "object",
+        "properties": {
+          "cause": {
+            "type": "string",
+            "description": "The cause of a failure. This is used to identify what POJO field may be in error or what DB could not be reached."
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of the failure. This is used to provide some meaningful description of the failure. The message should be considered internal and not customer facing."
+          },
+          "error_id": {
+            "type": "string",
+            "description": "The error identifier"
+          },
+          "error_parameters": {
+            "type": "object",
+            "description": "The error parameter keys and values",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "failure_type": {
+            "type": "string",
+            "description": "The general category of the type of failure.",
+            "enum": ["ERROR", "WARNING", "VALIDATION"]
+          },
+          "message": {
+            "type": "string",
+            "description": "The default message category"
+          }
+        },
+        "description": "Provides detail information about a failure."
+      },
+      "AuthoritySearchResponse": {
+        "type": "object",
+        "properties": {
+          "_meta": {
+            "description": "_meta",
+            "$ref": "#/components/schemas/Meta"
+          },
+          "items": {
+            "type": "array",
+            "description": "items",
+            "items": {
+              "$ref": "#/components/schemas/AuthorityGridDataV1"
+            }
+          },
+          "error": {
+            "description": "error",
+            "$ref": "#/components/schemas/ErrorV1_AuthorityGridDataV1"
+          }
+        }
+      },
+      "ErrorV1_AuthorityGridDataV1": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "code"
+          },
+          "message": {
+            "type": "string",
+            "description": "message"
+          },
+          "error_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "error_count"
+          },
+          "failures": {
+            "type": "array",
+            "description": "failures",
+            "items": {
+              "$ref": "#/components/schemas/FailureV1_AuthorityGridDataV1"
+            }
+          }
+        }
+      },
+      "FailureV1_Authority": {
+        "type": "object",
+        "properties": {
+          "detail_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The number of failures that were encountered."
+          },
+          "details": {
+            "type": "array",
+            "description": "The collection of failures that were encountered.",
+            "items": {
+              "$ref": "#/components/schemas/FailureDetailV1"
+            }
+          },
+          "item": {
+            "description": "The item associated with a failure. Typically this will be the POJO that encountered a failure such as a validation error.",
+            "$ref": "#/components/schemas/Authority"
+          }
+        },
+        "description": "Contains information about a failure."
+      },
+      "FailureV1_AuthorityGridDataV1": {
+        "type": "object",
+        "properties": {
+          "detail_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The number of failures that were encountered."
+          },
+          "details": {
+            "type": "array",
+            "description": "The collection of failures that were encountered.",
+            "items": {
+              "$ref": "#/components/schemas/FailureDetailV1"
+            }
+          },
+          "item": {
+            "description": "The item associated with a failure. Typically this will be the POJO that encountered a failure such as a validation error.",
+            "$ref": "#/components/schemas/AuthorityGridDataV1"
+          }
+        },
+        "description": "Contains information about a failure."
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
+    }
+  }
+}

@@ -1,0 +1,4710 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Trial Balance API
+  version: '1.0'
+  description: 'Operations tagged Trial Balance across 4 of this provider''s published API definitions: thomson-reuters-engagement-manager-openapi.json, thomson-reuters-general-ledger-manager-openapi.json, thomson-reuters-engagement-manager-openapi.yml, thomson-reuters-general-ledger-manager-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/us/engagementmanager
+  description: US Production
+- url: https://api.thomsonreuters.com/uk/engagementmanager
+  description: UK Production
+- url: https://api.onesourcetax.com/general-ledger-manager/v1
+tags:
+- name: Trial Balance
+  description: Get/Add/Edit/Delete Trial Balance accounts
+paths:
+  /external/v1/trialbalance/tax-entity-definitions:
+    get:
+      tags:
+      - Trial Balance
+      summary: Retrieve available tax entity definitions
+      description: '## Purpose
+
+        Retrieves a complete list of supported tax entity type definitions used for trial balance tax code configurations. This endpoint provides the available combinations of tax vendors and entity types that can be applied to engagement accounts.
+
+
+        ## Why Use This Endpoint
+
+        - Get all available tax entity definitions for system configuration
+
+        - Understand which tax entity types are supported
+
+        - Reference valid entity type combinations for tax code setup
+
+        - Populate dropdown lists or configuration UIs with valid tax entity options
+
+        - Validate tax entity selections before creating or updating tax codes
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - **No parameters required** - Returns all available tax entity definitions
+
+
+        ## Common Use Cases
+
+        1. **Tax Code Setup:** Load available entity types when configuring tax codes for an engagement
+
+        2. **Validation:** Verify that selected entity types are valid before saving tax configurations
+
+        3. **UI Population:** Populate dropdown lists with valid entity type options
+
+        4. **Documentation:** Reference available tax entity types for user guides and documentation
+
+        5. **Integration Setup:** Understand supported tax entity types when integrating with external systems
+
+
+        ## Important Notes
+
+        - This is a reference data endpoint that returns system-wide configuration
+
+        - The response is not engagement-specific - it returns all available definitions
+
+        - Entity types are typically configured at the system level and change infrequently
+
+        - Only active entity type definitions should be used for new configurations
+
+        - This endpoint is often called once during initialization and cached'
+      operationId: EmMainEndPointsExternalTaxCodeGetTaxEntityDefinitionsExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved tax entity definitions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBTaxVendorEntityTypeCombinationExternalResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: ec0559d5-9b9c-4389-9db0-f78034dc9401
+                    dateTime: '2026-04-21T05:50:03.4340281Z'
+                    traceId: c9c148ae12f447569208402c46c8b272
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: c0320375-d455-46a3-a86d-4c19b68ca37c
+                    dateTime: '2026-04-21T05:50:03.4340127Z'
+                    traceId: 225ca3357e9048d8814858996a345857
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: ab836ba5-e55a-46a6-88f6-0529c5b2a06a
+                    dateTime: '2026-04-21T05:50:03.4340261Z'
+                    traceId: 51450d5265e34f0a82b0dd84ae055ebe
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 291e482a-aa85-4099-8915-e84fe94bde6d
+                    dateTime: '2026-04-21T05:50:03.4340296Z'
+                    traceId: 5947afa1086d45709f9c0418f08f7186
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/periods/{engagementId}:
+    get:
+      tags:
+      - Trial Balance
+      summary: Retrieve trial balance periods for a specific engagement
+      description: '## Purpose
+
+        Retrieves all configured trial balance periods for a specific engagement, including the current period and any prior comparative periods. This endpoint provides the temporal structure used to organize account balances across different time periods within the engagement.
+
+
+        ## Why Use This Endpoint
+
+        - Get all available time periods configured for an engagement''s trial balance
+
+        - Understand the fiscal year structure and comparative periods
+
+        - Access period identifiers needed for other trial balance operations
+
+        - Display period selection options in user interfaces
+
+        - Validate period references before querying trial balance data
+
+        - Set up period-specific reporting and analysis
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get Trial Balance Periods
+
+        - **Endpoint:** `GET /trialbalance/periods/{engagementId}` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2 in the URL path
+
+        - **Returns:** All trial balance periods configured for that engagement
+
+
+        ## Request Details
+
+        - **Route Parameter:** `engagementId` (required integer in URL path)
+
+        - **Format:** `/trialbalance/periods/{engagementId}`
+
+        - This is a URL route parameter, not a query string or request body parameter
+
+
+        ## Common Use Cases
+
+        1. **Period Selection:** Populate dropdown lists for period selection in trial balance views
+
+        2. **Comparative Analysis:** Identify current and prior periods for side-by-side comparisons
+
+        3. **Data Validation:** Verify period references before saving or updating trial balance data
+
+        4. **Report Configuration:** Configure which periods to include in financial reports
+
+        5. **Date Range Queries:** Use period start/end dates for filtering transactions
+
+        6. **Fiscal Year Navigation:** Navigate between different fiscal years and periods
+
+
+        ## Important Notes
+
+        - Returns all periods (current and prior) configured for the engagement
+
+        - The engagement must have at least one period configured
+
+        - Empty list is returned if no periods are configured
+
+        - Period keys are required for most other trial balance operations
+
+        - Periods are typically ordered by fiscal year and display order
+
+        - The `engagementId` must correspond to a valid engagement that the authenticated user has access to'
+      operationId: EmMainEndPointsExternalTBPeriodGetTBPriorPeriodExternalEndpoint
+      parameters:
+      - name: engagementId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved trial balance prior periods.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsTrialBalancePeriod'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: c2788175-03aa-4c39-986f-bba88b0330fc
+                    dateTime: '2026-04-21T05:50:03.4217980Z'
+                    traceId: 136ad404f10b44918d20b6810769aad7
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 76b6ed0f-a92a-4da0-ab7f-dc7499725bf3
+                    dateTime: '2026-04-21T05:50:03.4217727Z'
+                    traceId: 8c69f6bb415547c09af49c212da89617
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 5614ae67-61bd-4df5-b4ee-1855ae4e960a
+                    dateTime: '2026-04-21T05:50:03.4217951Z'
+                    traceId: 7606de79203e4c2e9110ab579013169a
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: cccdfa6f-1421-44fa-bf81-568af0c7ec3d
+                    dateTime: '2026-04-21T05:50:03.4218002Z'
+                    traceId: a3688a322f3d4021b4d128d48e337e02
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/views/{engagementId}:
+    get:
+      tags:
+      - Trial Balance
+      summary: Retrieve trial balance view configurations for a specific engagement
+      description: '## Purpose
+
+        Retrieves all configured trial balance view definitions for a specific engagement. Views define different perspectives and layouts for displaying trial balance data, including column configurations, filters, and display settings. Each view represents a distinct way to organize and present account information.
+
+
+        ## Why Use This Endpoint
+
+        - Get all available trial balance view configurations for an engagement
+
+        - Access view configuration keys needed for retrieving trial balance grid data
+
+        - Understand available view layouts and their configurations
+
+        - Populate view selection dropdowns in user interfaces
+
+        - Validate view references before querying trial balance data
+
+        - Configure data export options based on available views
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get Trial Balance Views
+
+        - **Endpoint:** `GET /trialbalance/views/{engagementId}` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2 in the URL path
+
+        - **Returns:** All trial balance view configurations for that engagement
+
+
+        ## Common Use Cases
+
+        1. **View Selection:** Populate dropdown lists for view selection before loading trial balance data
+
+        2. **Data Retrieval:** Get ViewConfigKey values required for the `/trialbalance/grid-data` endpoint
+
+        3. **UI Configuration:** Configure grid layouts based on view column settings
+
+        4. **Export Configuration:** Select appropriate views for data export operations
+
+        5. **Default View Loading:** Identify the default view to load when opening trial balance
+
+        6. **Custom View Management:** Understand available custom views configured for the engagement
+
+
+        ## Important Notes
+
+        - ViewConfigKey is required as a parameter for the `/trialbalance/grid-data` endpoint
+
+        - Each engagement can have multiple view configurations
+
+        - At least one view must be configured for the engagement
+
+        - The default view (IsDefault = true) is typically loaded initially
+
+        - View configurations control which columns and data are visible in the trial balance grid
+
+        - The `engagementId` must correspond to a valid engagement that the authenticated user has access to
+
+        - Returns empty list if no views are configured (though this is uncommon)'
+      operationId: EmMainEndPointsExternalTbGridGetTbGridConfigByBinderExternalEndpoint
+      parameters:
+      - name: engagementId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved trial balance view data.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBTbTabConfigExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 369aeda5-cc07-4147-aa1e-7c48b1408e19
+                    dateTime: '2026-04-21T05:50:03.4294358Z'
+                    traceId: f3c16568eb844191b3c01a3e9383472e
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 7eedd3b9-cc54-47e7-81fc-3bbfe49587a8
+                    dateTime: '2026-04-21T05:50:03.4294060Z'
+                    traceId: 894267894b0c42c082e2c2ba9443b4c6
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 5c7a3888-4ab6-414b-ad93-d744a5904ac9
+                    dateTime: '2026-04-21T05:50:03.4294324Z'
+                    traceId: d9996b93c21843ca9ca579aecec9f36e
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 50170dc4-5d2a-4078-a152-15058f7a23d1
+                    dateTime: '2026-04-21T05:50:03.4294375Z'
+                    traceId: 6f881c3d7e594484a34cb1b8307e2deb
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/grid-data:
+    post:
+      tags:
+      - Trial Balance
+      summary: Retrieve paginated trial balance account data for a specific view
+      description: '## Purpose
+
+        Retrieves paginated trial balance account data for a specific engagement and view configuration. This is the primary endpoint for accessing actual account balances, details, and associated financial data in the trial balance. Supports pagination, filtering, and sorting based on the specified view configuration.
+
+
+        ## Why Use This Endpoint
+
+        - Retrieve actual trial balance account data with balances and details
+
+        - Access account information formatted according to a specific view configuration
+
+        - Implement paginated data loading for large trial balances
+
+        - Apply filters and sorting to trial balance data
+
+        - Export trial balance data for analysis or reporting
+
+        - Display account details in custom user interfaces
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `viewConfigKey`
+
+        - **Endpoint:** `GET /trialbalance/views/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of available views with their ViewConfigKey values
+
+        - **Example:** `viewConfigKey: 123`
+
+
+        **Step 4:** Retrieve Trial Balance Grid Data
+
+        - **Endpoint:** `POST /trialbalance/grid-data` (this endpoint)
+
+        - **Use:** The `engagementId` and `viewConfigKey` from previous steps in the request body
+
+        - **Returns:** Paginated trial balance account data
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Request Body Parameters:**
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `ViewConfigKey` (int, required) - The view configuration identifier from `/trialbalance/views/{engagementId}`
+
+        - `PageIndex` (int, optional) - Zero-based page index for pagination (default: 0)
+
+        - `PageSize` (int, optional) - Number of records per page (default: 1000, max recommended: 1000)
+
+        - `Filters` (object, optional) - Additional filter criteria to apply
+
+        - `SortColumn` (string, optional) - Column name to sort by
+
+        - `SortDirection` (string, optional) - Sort direction ("asc" or "desc")
+
+
+        ## Common Use Cases
+
+        1. **Data Grid Display:** Load account data for display in data grids with pagination
+
+        2. **Financial Analysis:** Retrieve balance data for analysis and calculations
+
+        3. **Report Generation:** Extract account data for financial report generation
+
+        4. **Data Export:** Retrieve account information for export to Excel or other formats
+
+        5. **Balance Verification:** Access account balances for verification and reconciliation
+
+        6. **Account Searching:** Use filters to search for specific accounts
+
+        7. **Custom Dashboards:** Build custom dashboards with trial balance data
+
+
+        ## Important Notes
+
+        - Both `engagementId` and `viewConfigKey` are required parameters
+
+        - The `viewConfigKey` determines which columns and data are returned
+
+        - Use pagination (PageIndex, PageSize) for large trial balances to improve performance
+
+        - Default page size is 1000; adjust based on your needs
+
+        - Filters are applied based on the view configuration settings
+
+        - Account keys returned can be used in update and delete operations
+
+        - The view configuration controls data formatting and available columns'
+      operationId: EmMainEndPointsExternalTbGridGetFilteredPagedTrialBalanceDataExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: TrialBalanceExternalRequest
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBTrialBalanceExternalRequest'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully retrieved trial balance filter page data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBTrialBalanceResponseExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 57424aaa-e952-4202-a758-63c2aaef5c40
+                    dateTime: '2026-04-21T05:50:03.4265022Z'
+                    traceId: 816e581f1224412fabc498326235cd6f
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 05907d63-8b5e-45f8-8aea-c2b697609f02
+                    dateTime: '2026-04-21T05:50:03.4264737Z'
+                    traceId: 2dcf4bf54180415bb5b368d7a78ca4d3
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 4bf372ae-d3db-4344-b1fd-b4e19666d9a6
+                    dateTime: '2026-04-21T05:50:03.4264992Z'
+                    traceId: 05b1df949ab54ae08fbef4e4ba3b259b
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: b01f3be4-f99a-4095-8c33-3f8ebd5f47ce
+                    dateTime: '2026-04-21T05:50:03.4265043Z'
+                    traceId: a0181c653ac84f8ba2fa1fa1a9665b95
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/grouping-schedule/{engagementId}:
+    get:
+      tags:
+      - Trial Balance
+      summary: Retrieve account groupings schedule for a specific engagement
+      description: '## Purpose
+
+        Retrieves a complete list of account grouping schedules configured for a specific engagement (binder). Account grouping schedules define how trial balance accounts are organized and classified for financial statement presentation and reporting purposes.
+
+
+        ## Why Use This Endpoint
+
+        - Retrieve all configured account grouping schedules for an engagement
+
+        - Understand how accounts are organized for financial reporting
+
+        - Get grouping schedule keys needed for other operations
+
+        - View account classification and grouping structures
+
+        - Prepare data for financial statement generation
+
+        - Audit account grouping configurations
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get Account Grouping Schedules
+
+        - **Endpoint:** `GET /trialbalance/grouping-schedule/{engagementId}` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2 in the URL path
+
+        - **Returns:** All account grouping schedules for that engagement
+
+
+        ## Request Details
+
+        - **Route Parameter:** `engagementId` (required integer in URL path)
+
+        - **Format:** `/trialbalance/grouping-schedule/{engagementId}`
+
+        - This is a URL route parameter, not a query string or request body parameter
+
+
+        ## Common Use Cases
+
+        1. **Financial Statement Prep:** Load grouping schedules to prepare financial statements
+
+        2. **Account Organization:** View how accounts are classified and organized
+
+        3. **Report Generation:** Use grouping schedules for custom report generation
+
+        4. **Data Export:** Export account grouping structures for external analysis
+
+        5. **Audit Documentation:** Document account classification for audit trails
+
+        6. **Configuration Review:** Review and verify account grouping configurations
+
+
+        ## Important Notes
+
+        - Each engagement can have multiple account grouping schedules
+
+        - GroupingScheduleKey values are used in other endpoints to load specific grouping details
+
+        - Empty list is returned if no grouping schedules are configured for the engagement
+
+        - The engagementId must correspond to a valid engagement that the authenticated user has access to'
+      operationId: EmMainEndPointsExternalAfGroupingScheduleGetBinderLevelExternalEndPoint
+      parameters:
+      - name: engagementId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved account groupings schedule engagement level data.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBGroupingScheduleExternal'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: cab13389-c0e3-4a66-b38f-c519f118ebe1
+                    dateTime: '2026-04-21T05:50:04.7853026Z'
+                    traceId: 63b02edf8d904b2e949710613508f061
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 9d48fbda-873d-482a-b0ea-a49491855d55
+                    dateTime: '2026-04-21T05:50:04.7852922Z'
+                    traceId: 63db2bbab76741198c3002732403005c
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 6dd6dc35-517e-43b6-9bbb-bc7356e22f6b
+                    dateTime: '2026-04-21T05:50:04.7853006Z'
+                    traceId: baab1c96171e41ddb623692e057b5708
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: bfc45ae2-9093-45e7-aeab-93dac00b823a
+                    dateTime: '2026-04-21T05:50:04.7853043Z'
+                    traceId: 848744763cec405295cca16a4ebde200
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/get-taxcode-with-binder/{engagementId}:
+    get:
+      tags:
+      - Trial Balance
+      summary: Retrieve tax code configurations for a specific engagement
+      description: '## Purpose
+
+        Retrieves all configured tax codes and subcodes for a specific engagement. Tax codes are used to classify accounts according to tax reporting requirements, enabling proper categorization for tax return preparation, tax schedules, and regulatory compliance. This endpoint provides the tax code structure needed for account classification and tax-related reporting.
+
+
+        ## Why Use This Endpoint
+
+        - Get all available tax codes configured for an engagement
+
+        - Access tax code and subcode combinations for account assignments
+
+        - Validate tax code references before creating or updating accounts
+
+        - Populate tax code dropdown lists in user interfaces
+
+        - Understand the tax classification structure for the engagement
+
+        - Reference M3 codes and subcodes for tax reporting
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get Tax Codes
+
+        - **Endpoint:** `GET /trialbalance/get-taxcode-with-binder/{engagementId}` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2 in the URL path
+
+        - **Returns:** All tax codes and subcodes configured for that engagement
+
+
+        ## Request Details
+
+        - **Route Parameter:** `engagementId` (required integer in URL path)
+
+        - **Format:** `/trialbalance/get-taxcode-with-binder/{engagementId}`
+
+        - This is a URL route parameter, not a query string or request body parameter
+
+
+        ## Common Use Cases
+
+        1. **Account Creation:** Select valid tax codes when creating new trial balance accounts
+
+        2. **Account Updates:** Assign or change tax codes on existing accounts
+
+        3. **Tax Code Validation:** Verify tax code references are valid before saving
+
+        4. **Dropdown Population:** Fill tax code selection dropdowns in user interfaces
+
+        5. **Tax Reporting:** Understand tax classification structure for generating tax reports
+
+        6. **M3 Mapping:** Map accounts to M3 codes for specific tax form requirements
+
+        7. **Compliance Verification:** Ensure all accounts have appropriate tax code assignments
+
+
+        ## Important Notes
+
+        - Tax codes are engagement-specific and may vary between engagements
+
+        - Some tax codes may have subcodes for more granular classification
+
+        - M3 codes are used for specific tax return schedules and forms
+
+        - Only active tax codes should be used for new account assignments
+
+        - Tax code structure depends on the engagement''s entity type and tax jurisdiction
+
+        - The `engagementId` must correspond to a valid engagement that the authenticated user has access to
+
+        - Returns empty list if no tax codes are configured for the engagement
+
+        - Tax codes and subcodes returned by this endpoint are used in `/trialbalance/account/add` and `/trialbalance/account/update` operations'
+      operationId: EmMainEndPointsExternalTaxCodeGetTaxCodeWithBinderExternalEndpoint
+      parameters:
+      - name: engagementId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieves the taxCodes for a specific engagement.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsTaxCodeResponseExternal'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 947846b8-7fe6-451c-982b-2a725ea40468
+                    dateTime: '2026-04-21T05:50:03.4319653Z'
+                    traceId: 6e9168d3c2554308aef8b42be7781529
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 486398ba-6045-409f-b92a-1da7db008586
+                    dateTime: '2026-04-21T05:50:03.4319485Z'
+                    traceId: e184404720334972901562378f9ad7fd
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: a0fbdb2c-08b3-4275-8150-f3a056d51475
+                    dateTime: '2026-04-21T05:50:03.4319633Z'
+                    traceId: fc753517bb3e48189e6a518347d68f00
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: a4c264ad-d852-482e-98af-59e28b91dfe2
+                    dateTime: '2026-04-21T05:50:03.4319669Z'
+                    traceId: 86972d192adc4ec68767241b672ac2b7
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/accountgrouping/load-codesubcode/{groupingschedulekey}:
+    get:
+      tags:
+      - Trial Balance
+      summary: Retrieve detailed grouping codes and subcodes for a specific grouping schedule
+      description: '## Purpose
+
+        Retrieves the complete hierarchical structure of grouping codes and subcodes for a specific grouping schedule. This endpoint provides the detailed classification framework used to organize trial balance accounts into financial statement categories and reporting structures. Each grouping schedule contains multiple codes, and each code may contain multiple subcodes for granular account classification.
+
+
+        ## Why Use This Endpoint
+
+        - Get the detailed code and subcode structure for a specific grouping schedule
+
+        - Access code and subcode identifiers needed for account creation and updates
+
+        - Understand the hierarchical account classification structure
+
+        - Populate dropdown lists for grouping code and subcode selection
+
+        - Validate grouping code/subcode references before saving accounts
+
+        - Display the complete grouping structure in user interfaces
+
+        - Prepare data for updating grouping code structures
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `groupingScheduleKey`
+
+        - **Endpoint:** `GET /trialbalance/grouping-schedule/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of grouping schedules with their GroupingScheduleKey values
+
+        - **Example:** `groupingScheduleKey: 6016689`
+
+
+        **Step 4:** Get Grouping Codes and Subcodes
+
+        - **Endpoint:** `GET /trialbalance/accountgrouping/load-codesubcode/{groupingschedulekey}` (this endpoint)
+
+        - **Use:** The `groupingScheduleKey` from Step 3 in the URL path
+
+        - **Returns:** Detailed grouping codes and subcodes for that schedule
+
+
+        ## Request Details
+
+        - **Route Parameter:** `groupingschedulekey` (required integer in URL path)
+
+        - **Format:** `/trialbalance/accountgrouping/load-codesubcode/{groupingschedulekey}`
+
+        - This is a URL route parameter, not a query string or request body parameter
+
+        - The parameter value must be greater than zero
+
+
+        ## Common Use Cases
+
+        1. **Account Creation:** Select valid grouping codes and subcodes when creating new accounts
+
+        2. **Account Updates:** Assign or change grouping classifications on existing accounts
+
+        3. **Dropdown Population:** Populate cascading dropdowns (Code → Subcode) in user interfaces
+
+        4. **Data Validation:** Verify grouping code/subcode references before saving
+
+        5. **Structure Management:** View and modify the grouping code structure using `/trialbalance/create-or-update-groupingcodes-or-subcodes`
+
+        6. **Financial Statement Mapping:** Understand how accounts map to financial statement line items
+
+        7. **Reporting Configuration:** Configure custom reports based on grouping structure
+
+
+        ## Important Notes
+
+        - The groupingScheduleKey parameter must be obtained from `/trialbalance/grouping-schedule/{engagementId}`
+
+        - Returns the complete hierarchical structure with codes and their nested subcodes
+
+        - Grouping codes and subcodes are used in `/trialbalance/account/add` and `/trialbalance/account/update` operations
+
+        - The response from this endpoint can be modified and sent to `/trialbalance/create-or-update-groupingcodes-or-subcodes` to update the structure
+
+        - Some codes may not have subcodes (Subcodes array will be empty)
+
+        - DisplayIndex determines the order codes and subcodes appear in user interfaces
+
+        - Editable flag indicates whether the code structure can be modified'
+      operationId: EmMainEndPointsExternalAfGroupingScheduleLoadCodeSubcodeByGroupingScheduleKeyEndpoint
+      parameters:
+      - name: groupingschedulekey
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved  account grouping codes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalGroupingScheduleExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 62a94b2f-b24f-4849-b129-b7d37e250eab
+                    dateTime: '2026-04-21T05:50:04.7870406Z'
+                    traceId: 951667b7b89642bf9028558ccf7a782b
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 53c49e67-94aa-4e7a-bc9d-6c60baf5f893
+                    dateTime: '2026-04-21T05:50:04.7870311Z'
+                    traceId: eaca1e07670745b885717e7a54d97180
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 5e8c33d0-f2f8-457a-9916-8e1d7d648e45
+                    dateTime: '2026-04-21T05:50:04.7870387Z'
+                    traceId: c53eca1c94ec41f39d2b5650d2096a38
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 858af477-19a2-4358-9fb5-ae1fbc5f15e5
+                    dateTime: '2026-04-21T05:50:04.7870422Z'
+                    traceId: db935d8e47ac4986b68eaf1fbcd29e1d
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/account/add:
+    post:
+      tags:
+      - Trial Balance
+      summary: Create a new trial balance account
+      description: '## Purpose
+
+        Creates a new account in the trial balance for a specific engagement. This endpoint allows you to add accounts with complete classification information including account numbers, descriptions, grouping codes, and tax codes. The new account will be available immediately for balance entry and reporting. ## Why Use This Endpoint
+
+        - Add new accounts to an engagement''s trial balance
+
+        - Create accounts with proper grouping and tax code classifications
+
+        - Programmatically build trial balance structures
+
+        - Import accounts from external systems
+
+        - Set up accounts for new engagements or additional account requirements
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `groupingScheduleKey`
+
+        - **Endpoint:** `GET /trialbalance/grouping-schedule/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of grouping schedules with their keys
+
+        - **Example:** `groupingScheduleKey: 6016689`
+
+
+        **Step 4:** Get grouping codes and subcodes
+
+        - **Endpoint:** `GET /trialbalance/accountgrouping/load-codesubcode/{groupingschedulekey}`
+
+        - **Use:** The `groupingScheduleKey` from Step 3
+
+        - **Returns:** Available grouping codes and subcodes
+
+        - **Example:** `code: "A"`, `subcode: "CA"`
+
+
+        **Step 5:** Get tax codes (optional)
+
+        - **Endpoint:** `GET /trialbalance/get-taxcode-with-binder/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** Available tax codes, subcodes, M3 codes
+
+        - **Example:** `taxCode: "1040"`, `m3Code: "M3-1"`
+
+
+        **Step 6:** Create the Account
+
+        - **Endpoint:** `POST /trialbalance/account/add` (this endpoint)
+
+        - **Use:** All the values collected from previous steps in the request body
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Request Body Parameters:**
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `AccountNumber` (string, required) - Unique account number within the engagement
+
+        - `Description` (string, required) - Account description/name
+
+        - `GroupingScheduleKey` (int, optional) - Grouping schedule identifier
+
+        - `GroupingScheduleCode` (string, optional) - Grouping code from the schedule
+
+        - `GroupingScheduleSubcode` (string, optional) - Grouping subcode for finer classification
+
+        - `TaxCode` (string, optional) - Tax code assignment
+
+        - `TaxSubCode` (string, optional) - Tax subcode
+
+        - `M3Code` (string, optional) - M3 classification code
+
+        - `M3Subcode` (string, optional) - M3 subcode
+
+        - `WPRef` (string, optional) - Workpaper reference
+
+        - `PropertyCode` (string, optional) - Property code for multi-property engagements
+
+        - `TickMark` (string, optional) - Tick mark description for audit trails
+
+
+        ## Common Use Cases
+
+        1. **Manual Account Creation:** Add individual accounts as needed
+
+        2. **Bulk Account Import:** Create multiple accounts from external data sources
+
+        3. **Template Application:** Apply account templates to new engagements
+
+        4. **Chart of Accounts Setup:** Build complete chart of accounts programmatically
+
+        5.'
+      operationId: EmMainEndPointsExternalAccountSaveAccountExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: AccountBaseExternalDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBAccountBaseExternalDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully created account. Returns the new account ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsAccountSaveAccountResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 3c415f36-ab7f-4054-8321-6665b7d5ce25
+                    dateTime: '2026-04-21T05:50:04.7940466Z'
+                    traceId: 2e866ed0451a418cbdb07d32b789fc38
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 5d5e4bc2-1d02-4feb-a57d-ba842b6dc80b
+                    dateTime: '2026-04-21T05:50:04.7940371Z'
+                    traceId: 1837efac4c854b579dae5de60cb84251
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 11159c37-bfd9-4b93-b770-15c5396dbcfa
+                    dateTime: '2026-04-21T05:50:04.7940445Z'
+                    traceId: 17392a375a3b436bb4e7290b1937d288
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 6c5e21a2-9b1f-44bc-877e-6f4bf00bf4c2
+                    dateTime: '2026-04-21T05:50:04.7940488Z'
+                    traceId: 858d2bd8552340698c0ff34ab280e7cb
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/account/update:
+    put:
+      tags:
+      - Trial Balance
+      summary: Update an existing trial balance account
+      description: '## Purpose
+
+        Updates an existing account in the trial balance with new values for any account properties including description, classification codes, balances, and metadata. This endpoint allows modification of all account attributes while preserving the account''s identity and history. ## Why Use This Endpoint
+
+        - Modify account descriptions, numbers, or classifications
+
+        - Update grouping code or tax code assignments
+
+        - Change account metadata (workpaper refs, property codes, tick marks)
+
+        - Update account balances for specific periods
+
+        - Reclassify accounts within the trial balance structure
+
+        - Correct account information errors
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `viewConfigKey`
+
+        - **Endpoint:** `GET /trialbalance/views/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of available views
+
+        - **Example:** `viewConfigKey: 123`
+
+
+        **Step 4:** Get the `accountKey`
+
+        - **Endpoint:** `POST /trialbalance/grid-data`
+
+        - **Use:** The `engagementId` and `viewConfigKey` from previous steps
+
+        - **Returns:** Account data including AccountKey values
+
+        - **Example:** `accountKey: 456`
+
+
+        **Step 5:** Get reference data (if updating classifications)
+
+        - **Grouping Schedule:** `GET /trialbalance/grouping-schedule/{engagementId}`
+
+        - **Grouping Codes:** `GET /trialbalance/accountgrouping/load-codesubcode/{groupingschedulekey}`
+
+        - **Tax Codes:** `GET /trialbalance/get-taxcode-with-binder/{engagementId}`
+
+
+        **Step 6:** Update the Account
+
+        - **Endpoint:** `PUT /trialbalance/account/update` (this endpoint)
+
+        - **Use:** All values in the request body including the AccountKey
+
+
+        ## Request Details
+
+        - **Method:** PUT
+
+        - **Content-Type:** application/json
+
+        - **Request Body Parameters:**
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `AccountKey` (int, required) - The unique account identifier from grid-data
+
+        - `ViewConfigKey` (int, required) - The view configuration identifier
+
+        - `AccountNumber` (string, required) - Account number
+
+        - `Description` (string, required) - Account description
+
+        - `AccountType` (string, optional) - Type of account
+
+        - `Balances` (array, optional) - Account balance information for periods
+
+        - `GroupingScheduleKey` (int, optional) - Grouping schedule identifier
+
+        - `GroupingScheduleCode` (string, optional) - Grouping code
+
+        - `GroupingScheduleSubcode` (string, optional) - Grouping subcode
+
+        - `TaxCode` (string, optional) - Tax code assignment
+
+        - `TaxCodeSubcode` (string, optional) - Tax subcode
+
+        - `M3Code` (string, optional) - M3 classification code
+
+        - `M3Subcode` (string, optional) - M3 subcode
+
+        - `WPRef` (string, optional) - Workpaper reference
+
+        - `PropertyCode` (string, optional) - Property code
+
+        - `TickMark` (string, optional) - Tick mark description
+
+
+        ## Common Use Cases
+
+        1. **Reclassification:** Change grouping codes to reclassify accounts
+
+        2. **Description Updates:** Correct or clarify account descriptions
+
+        3. **Tax Code Changes:** Update tax code assignments
+
+        4. **Balance Adjustments:** Modify account balances
+
+        5. **Metadata Updates:** Update workpaper references, property codes, or tick marks
+
+        6.'
+      operationId: EmMainEndPointsExternalAccountUpdateAccountExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: UpdateAccountBaseExternalDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBUpdateAccountBaseExternalDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully Updated Accounts Data.
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 42f9b96b-a88f-46fa-9f4c-caefbe34bdaf
+                    dateTime: '2026-04-21T05:50:04.7966725Z'
+                    traceId: 06be1f5b79f64d60a8bc7d8e6c237695
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 3bdcebeb-fe13-412b-99e7-a8d3ae8353d1
+                    dateTime: '2026-04-21T05:50:04.7966292Z'
+                    traceId: b23a2f0c8d514be0bcc7d013fd111ba6
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 4f4bfb67-c1f6-4b2c-8e85-931ccbe7daea
+                    dateTime: '2026-04-21T05:50:04.7966658Z'
+                    traceId: 9cfd2175482642ada1a7692fee8c8c2c
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 76a8a32e-e268-4a63-85c7-c5f3afe60601
+                    dateTime: '2026-04-21T05:50:04.7966749Z'
+                    traceId: e3ac187a73b642dbac00949ee035338a
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/create-or-update-groupingcodes-or-subcodes:
+    post:
+      tags:
+      - Trial Balance
+      summary: Create or update grouping code structures for account classification
+      description: '## Purpose
+
+        Creates new or updates existing grouping codes and subcodes within grouping schedules. This endpoint allows modification of the hierarchical account classification structure used for financial statement preparation and reporting. Use this to customize or maintain the account grouping framework for specific engagements. ## Why Use This Endpoint
+
+        - Add new grouping codes or subcodes to existing schedules
+
+        - Modify descriptions or display order of existing codes
+
+        - Reorganize the account classification hierarchy
+
+        - Customize grouping structures for specific engagement needs
+
+        - Maintain and update financial statement mapping structures
+
+        - Bulk update multiple codes and subcodes simultaneously
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required Data
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `groupingScheduleKey`
+
+        - **Endpoint:** `GET /trialbalance/grouping-schedule/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of grouping schedules
+
+        - **Example:** `groupingScheduleKey: 6016689`
+
+
+        **Step 4:** Get current structure
+
+        - **Endpoint:** `GET /trialbalance/accountgrouping/load-codesubcode/{groupingschedulekey}`
+
+        - **Use:** The `groupingScheduleKey` from Step 3
+
+        - **Returns:** Complete current code/subcode structure
+
+        - **Action:** Copy this response as a starting point for modifications
+
+
+        **Step 5:** Modify and Submit
+
+        - **Action:** Modify the structure (add/edit codes or subcodes)
+
+        - **Endpoint:** `POST /trialbalance/create-or-update-groupingcodes-or-subcodes` (this endpoint)
+
+        - **Use:** Submit the modified structure from Step 4
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Request Body:** Array of GroupingScheduleExternalDto objects
+
+
+        Each GroupingScheduleExternalDto contains:
+
+        - `GroupingScheduleKey` (int, required) - The grouping schedule identifier
+
+        - `Description` (string, required) - Schedule description
+
+        - `Codes` (array, required) - Array of grouping code objects
+
+
+        Each Code object contains:
+
+        - `GroupingCodeKey` (int, optional) - Existing code key (omit for new codes)
+
+        - `Code` (string, required) - Short code identifier (e.g., "A", "L")
+
+        - `Description` (string, required) - Code description (e.g., "Assets")
+
+        - `DisplayIndex` (int, optional) - Display order
+
+        - `Editable` (bool, optional) - Whether code is editable
+
+        - `Subcodes` (array, optional) - Array of subcode objects
+
+
+        Each Subcode object contains:
+
+        - `GroupingSubcodeKey` (int, optional) - Existing subcode key (omit for new)
+
+        - `Subcode` (string, required) - Short subcode identifier
+
+        - `Description` (string, required) - Subcode description
+
+        - `DisplayIndex` (int, optional) - Display order within parent code
+
+
+        ## Common Use Cases
+
+        1. **Add New Codes:** Introduce new top-level classification categories
+
+        2. **Add Subcodes:** Add finer classification under existing codes
+
+        3. **Rename Codes:** Update descriptions for clarity
+
+        4. **Reorder Structure:** Change display order for better organization
+
+        5. **Customize for Client:** Tailor grouping structure to client-specific needs
+
+        6.'
+      operationId: EmMainEndPointsExternalAfGroupingScheduleCreateUpdateCodeSubCodeExternal
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: List`1
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalGroupingScheduleExternalDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully created or updated grouping codes or subcodes for the specified engagement.
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 75bcc9b5-ad59-4e5a-a80a-7281f5600033
+                    dateTime: '2026-04-21T05:50:04.7835307Z'
+                    traceId: 4eb0b1c836c54005a803550ca208cdea
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: a965491a-0f97-4dff-b7c3-6cdf46f43e4a
+                    dateTime: '2026-04-21T05:50:04.7835202Z'
+                    traceId: d2569f065839410b85ca0d53cf6a55ce
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 55fd4128-0d87-42d7-ad85-dea98c61c400
+                    dateTime: '2026-04-21T05:50:04.7835288Z'
+                    traceId: 7ac2995ae0434017bb3e8be780fac8ec
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: a4a917e5-0e2a-4797-91af-ec5fce0ff77f
+                    dateTime: '2026-04-21T05:50:04.7835322Z'
+                    traceId: 283ccd694fb8477183b672f840df0b69
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/account/delete:
+    post:
+      tags:
+      - Trial Balance
+      summary: Delete one or more trial balance accounts
+      description: '## Purpose
+
+        Permanently deletes one or more accounts from the trial balance for a specific engagement. This operation removes the accounts and all associated data including balances, history, and classifications. Use with caution as deletions cannot be undone.
+
+
+        ## Why Use This Endpoint
+
+        - Remove duplicate or incorrect accounts from the trial balance
+
+        - Clean up accounts that are no longer needed
+
+        - Delete test or placeholder accounts
+
+        - Bulk delete multiple accounts programmatically
+
+        - Maintain a clean trial balance structure
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `accountIds`
+
+        - **Endpoint:** `POST /trialbalance/grid-data`
+
+        - **Use:** The `engagementId` and a valid `viewConfigKey`
+
+        - **Returns:** Account data including AccountKey values
+
+        - **Select:** The AccountKey values of accounts you want to delete
+
+        - **Example:** `accountIds: [456, 789, 1012]`
+
+
+        **Step 4:** Delete the Accounts
+
+        - **Endpoint:** `POST /trialbalance/account/delete` (this endpoint)
+
+        - **Use:** The `engagementId` and list of `accountIds` in the request body
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Request Body Parameters:**
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `AccountIds` (array of int, required) - List of account identifiers to delete
+
+        - Must contain at least one account ID
+
+        - All IDs must exist in the specified engagement
+
+        - Duplicates are handled gracefully (each account deleted once)
+
+
+        ## Common Use Cases
+
+        1. **Single Account Deletion:** Remove one incorrect or duplicate account
+
+        2. **Bulk Cleanup:** Delete multiple test or temporary accounts at once
+
+        3. **Data Migration:** Clean up old accounts during system migrations
+
+        4. **Error Correction:** Remove accounts created by mistake
+
+        5. **Structure Simplification:** Eliminate unused accounts to simplify trial balance
+
+
+        ## Important Notes
+
+        - **This operation is permanent and cannot be undone**
+
+        - All account data including balances and history will be deleted
+
+        - Account IDs must be obtained from `/trialbalance/grid-data` endpoint
+
+        - Cannot delete accounts referenced by journal entries (typically will fail)
+
+        - Cannot delete accounts used in financial statements or reports
+
+        - Deletion affects trial balance totals and financial statement calculations
+
+        - Consider archiving or marking accounts inactive instead of deleting when possible
+
+        - Request fails if any specified account ID does not exist
+
+        - Successfully deletes all valid accounts even if some IDs are invalid (partial success not supported)'
+      operationId: EmMainEndPointsExternalAccountDeleteAccountExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: AccountDeleteExternalDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsAccountAccountDeleteExternalDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully deleted the accounts.
+          content:
+            application/json:
+              schema:
+                type: string
+              example: Account deleted successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: d22b785f-0878-41db-8e93-62957454b9d6
+                    dateTime: '2026-04-21T05:50:04.7912013Z'
+                    traceId: afa3540e1c9742209df63621a2bb367a
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 45e9ad98-b860-4668-a6d0-5c27ce5aa994
+                    dateTime: '2026-04-21T05:50:04.7911921Z'
+                    traceId: 6d7dc0e511384c1eacdb76ef8d6b8375
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 35eef72a-f033-4c82-9613-f895d8783a74
+                    dateTime: '2026-04-21T05:50:04.7911995Z'
+                    traceId: 9ae2ccd2eac348c8a631a72a4034313b
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 66b49166-b9c5-475a-8823-d5e875503c18
+                    dateTime: '2026-04-21T05:50:04.7912028Z'
+                    traceId: 3b8db42c65314aaa8f48385d867e9a54
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/trialbalance/account/export:
+    post:
+      tags:
+      - Trial Balance
+      summary: Export trial balance account data
+      description: '## Purpose
+
+        Exports trial balance account data for a specific engagement and view configuration to Excel (XLSX) format. This endpoint generates downloadable files containing account information, balances, and classifications formatted according to the specified view configuration.
+
+
+        ## Why Use This Endpoint
+
+        - Export trial balance data for external analysis
+
+        - Generate Excel spreadsheets for offline review
+
+        - Archive trial balance data at specific points in time
+
+        - Share account information with clients or team members
+
+        - Import trial balance data into other accounting systems
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `viewName`
+
+        - **Endpoint:** `GET /trialbalance/views/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of views with their ViewName values
+
+        - **Example:** `viewName: "Standard View"`
+
+
+        **Step 4:** Export the Data
+
+        - **Endpoint:** `POST /trialbalance/account/export` (this endpoint)
+
+        - **Use:** The `engagementId` and `viewName` in the request body
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Request Body Parameters:**
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `ViewName` (string, required) - The view name from `/trialbalance/views/{engagementId}`
+
+
+        ## Common Use Cases
+
+        1. **Data Analysis:** Export to Excel for pivot tables and analysis
+
+        2. **Client Deliverables:** Share trial balance with clients
+
+        3. **Backup and Archive:** Create point-in-time snapshots of trial balance
+
+        4. **Reporting:** Use exported data for custom report generation
+
+        5. **Audit Documentation:** Archive trial balance for audit trails
+
+
+        ## Important Notes
+
+        - Export format is determined by the view configuration columns
+
+        - Excel exports preserve formatting and column widths from the view
+
+        - Large trial balances may take longer to export
+
+        - Exported files include all accounts visible in the specified view
+
+        - Filters applied in the view configuration are respected in the export
+
+        - File names are automatically generated with engagement and date information
+
+        - Exported data reflects the current state at the time of export
+
+        - Balance values are formatted according to engagement currency settings'
+      operationId: EmMainEndPointsExternalAccountAccountsExportExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: AccountExportExternal
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBAccountExportExternal'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully exports the trial balance view data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExportResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 88361505-2b99-4825-b714-626af3812d79
+                    dateTime: '2026-04-21T05:50:04.7890834Z'
+                    traceId: 31e5f87655b64437bff3e0821a27a096
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 4156e66b-11f3-4445-a3f2-2f87f620c98c
+                    dateTime: '2026-04-21T05:50:04.7890731Z'
+                    traceId: 2ec8bd00db9a4ccfa4558ee4a092c9b3
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 89e3c6dc-eb56-46a7-bb7c-f046e9eaefa7
+                    dateTime: '2026-04-21T05:50:04.7890813Z'
+                    traceId: 85ed6f3b7ac245d1a60a039698dc8f32
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: afa9ea3a-fdfe-4ca4-997f-698094788c8a
+                    dateTime: '2026-04-21T05:50:04.7890849Z'
+                    traceId: d2440a332dae42da8f04aa3163737339
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /topics:
+    get:
+      tags:
+      - Trial Balance
+      summary: Get a paginated list of Trial Balance
+      description: Returns a list of Trial Balance with their metadata
+      operationId: getTopics
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a Trial Balance to skip before starting the downloaded response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionTopicDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /topics/{id}:
+    get:
+      tags:
+      - Trial Balance
+      summary: Get a Trial Balance by ID
+      description: Returns Trial Balance metadata for the specified Trial Balance ID
+      operationId: getTopic
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Trial Balance
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TopicDTO'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Trial Balance
+      summary: Update Trial Balance by ID
+      description: Updates Trial Balance metadata for the specified Trial Balance ID
+      operationId: updateTopic
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Trial Balance
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicPatchRequestDTO'
+      responses:
+        '204':
+          description: default response
+      security:
+      - bearerAuth: []
+      x-tr-jtp-reference:
+        name: default
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /topics/{id}/columns:
+    get:
+      tags:
+      - Trial Balance
+      summary: Get a list of record columns by Trial Balance ID
+      description: 'Returns a list of record columns for the specified Trial Balance ID
+
+
+        Potential values for ontology:
+
+
+        idname
+
+
+        1Financial Hierarchy Code
+
+
+        3Entity Code
+
+
+        4Account Code
+
+
+        5Ending Balance
+
+
+        13Entity Rollup
+
+
+        14Account Rollup
+
+
+        17Chart Of Account Rollup'
+      operationId: getColumns
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicColumnsDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /topics/{id}/records:
+    get:
+      tags:
+      - Trial Balance
+      summary: Get a paginated list of records by Trial Balance ID
+      description: Returns a list of records for the specified Trial Balance ID
+      operationId: getRecordsFromType
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a Trial Balance to skip before starting the downloaded response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCollectionTopicRecordDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /topics/{id}/records/unavailable-values:
+    get:
+      tags:
+      - Trial Balance
+      summary: Get a paginated list of summaries of unavailable records by Trial Balance ID
+      description: 'Returns a list of summaries of records with unavailable information for the specified Trial Balance ID
+
+
+        Potential values for ontology:
+
+
+        idname
+
+
+        1Financial Hierarchy Code
+
+
+        3Entity Code
+
+
+        4Account Code
+
+
+        5Ending Balance
+
+
+        13Entity Rollup
+
+
+        14Account Rollup
+
+
+        17Chart Of Account Rollup'
+      operationId: getUnavailableValues
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Trial Balance
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a Trial Balance to skip before starting the downloaded response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicRecordValuesDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /topics/{id}/reprocess:
+    post:
+      tags:
+      - Trial Balance
+      summary: Initiate a reprocess of certain records by Trial Balance ID
+      description: Creates an asynchronous task to reprocess particular records for the specified Trial Balance ID
+      operationId: reprocess
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Trial Balance
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReprocessRequestDTO'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdDTO'
+      security:
+      - bearerAuth: []
+      x-tr-jtp-reference:
+        name: default
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /topics/{id}/tasks/download:
+    get:
+      tags:
+      - Trial Balance
+      summary: Get a paginated list of download tasks by Trial Balance ID
+      description: Returns a list of download tasks for the specified Trial Balance ID
+      operationId: getTopicDownload
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a Trial Balance to skip before starting the downloaded response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicDownloadListDTO'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Trial Balance
+      summary: Initiate a download of the Trial Balance by ID
+      description: Creates an asynchronous task to prepare a download for the specified Trial Balance ID
+      operationId: createDownloadTask
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Trial Balance
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        description: A request payload for download task for specified Trial Balance id includes 'in' operator with supported field name [status] and list of supported fields values [READY,UNAVAILABLE,INVALID IGNORED]
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DownloadRequestDTO'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdDTO'
+      security:
+      - bearerAuth: []
+      x-tr-jtp-reference:
+        name: default
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /topics/{id}/tasks/download/{task_id}:
+    get:
+      tags:
+      - Trial Balance
+      summary: Get a download task by Trial Balance ID and task ID
+      description: Returns a download task with the task ID for the specified Trial Balance ID
+      operationId: getTopicDownload_1
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Trial Balance
+        required: true
+        schema:
+          type: string
+      - name: task_id
+        in: path
+        description: Unique identifier of the download task
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicDownloadDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+components:
+  schemas:
+    EMMainDataTransferObjectsModelsExternalTBTaxCodeGroupingExternal:
+      type: object
+      description: Represents a tax code grouping category within a tax vendor and entity type combination. Groupings organize tax codes into logical categories (e.g., Income, Deductions, Credits).
+      additionalProperties: false
+      properties:
+        taxCodeGroupingKey:
+          type: integer
+          description: The unique identifier for this tax code grouping.
+          format: int32
+          example: 12345
+        description:
+          type: string
+          description: The description of the tax code grouping category (e.g., "Income", "Deductions", "Adjustments").
+          example: Income
+        entityType:
+          type: integer
+          description: The entity type identifier associated with this grouping (e.g., individual, partnership, corporation).
+          format: int32
+          example: 1
+        m3Grouping:
+          type: boolean
+          description: Indicates whether this is an M3 grouping. M3 groupings are used for Schedule M-3 tax reconciliation reporting.
+          example: false
+        displayIndex:
+          type:
+          - integer
+          - 'null'
+          description: Optional display order index for sorting groupings in UI elements. Lower numbers appear first.
+          format: int32
+          example: 10
+    EMMainDataTransferObjectsModelsExportResponse:
+      type: object
+      description: Response model containing binary file data for trial balance exports in Excel or XML format.
+      additionalProperties: false
+      properties:
+        fileName:
+          type: string
+          description: The suggested filename for the exported file, including extension (e.g., "TrialBalance_2024_01_15.xlsx").
+          example: TrialBalance_Engagement94_2024.xlsx
+        format:
+          type: string
+          description: 'The export format type. Supported values: "EXCELXLSX" for Excel files, "XML" for XML files.'
+          example: EXCELXLSX
+        bytes:
+          type:
+          - string
+          - 'null'
+          description: The binary content of the exported file. This data should be written to a file or sent as a download response.
+          format: byte
+    EMMainDataTransferObjectsModelsTaxSubcodeExternal:
+      type: object
+      description: Represents a tax subcode providing finer classification within a parent tax code. Subcodes allow for more granular categorization of account tax treatments.
+      additionalProperties: false
+      properties:
+        taxCodeKey:
+          type: integer
+          description: The unique identifier of the parent tax code that this subcode belongs to.
+          format: int32
+          example: 67890
+        taxCodeSubcodeKey:
+          type: integer
+          description: The unique identifier for this tax subcode.
+          format: int32
+          example: 11223
+        code:
+          type: string
+          description: The short code representing this tax subcode (e.g., "a", "b", "1").
+          example: a
+        description:
+          type: string
+          description: The description of what this tax subcode represents, providing additional detail beyond the parent tax code.
+          example: Cash method
+    EMMainDataTransferObjectsModelsTaxCodeResponseExternal:
+      type: object
+      description: Response model containing tax code information including codes, subcodes, vendor details, and entity type associations. Used for assigning tax classifications to trial balance accounts.
+      additionalProperties: false
+      properties:
+        taxCodeGroupingKey:
+          type: integer
+          description: The unique identifier for the tax code grouping that this tax code belongs to.
+          format: int32
+          example: 12345
+        taxCodeKey:
+          type: integer
+          description: The unique identifier for this tax code.
+          format: int32
+          example: 67890
+        code:
+          type: string
+          description: The short code representing this tax code (e.g., "1", "2a", "10").
+          example: '1'
+        m3Type:
+          type: boolean
+          description: Indicates whether this is an M3 type tax code. M3 codes are used for Schedule M-3 tax reconciliation.
+          example: false
+        description:
+          type: string
+          description: The description of what this tax code represents (e.g., "Gross receipts or sales", "Cost of goods sold").
+          example: Gross receipts or sales
+        vendorId:
+          type: integer
+          description: The vendor identifier (e.g., 1040, 1065, 1120) indicating which tax form this code applies to.
+          format: int32
+          example: 1040
+        entityTypeId:
+          type: integer
+          description: The entity type identifier (e.g., 1 for Individual, 2 for Partnership, 3 for Corporation).
+          format: int32
+          example: 1
+        taxYear:
+          type: string
+          description: The tax year that this code configuration applies to.
+          format: date-time
+          example: '2024-01-01T00:00:00Z'
+        subCodes:
+          type: array
+          description: List of subcodes available under this tax code. Subcodes provide finer classification within a tax code.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsTaxSubcodeExternal'
+    EMMainDataTransferObjectsModelsAccountAccountDeleteExternalDto:
+      type: object
+      description: Request model for deleting one or more trial balance accounts from an engagement.
+      additionalProperties: false
+      required:
+      - accountIds
+      properties:
+        engagementId:
+          type: integer
+          description: The unique identifier for the engagement containing the accounts to delete. Obtain from GET /external/v1/engagements/{clientId}.
+          format: int32
+          example: 94
+        accountIds:
+          type: array
+          description: List of account identifiers (AccountKey values) to permanently delete. Obtain AccountKey values from the POST /external/v1/trialbalance/grid-data endpoint. All deletions are permanent and cannot be undone.
+          minLength: 1
+          items:
+            type: integer
+            format: int32
+    EMMainDataTransferObjectsModelsExternalTBTbTabColumnExternalDto:
+      type: object
+      description: Defines a single column in a trial balance view configuration, including its binding name, display name, type, and associated grouping schedule.
+      additionalProperties: false
+      properties:
+        bindingName:
+          type: string
+          description: The internal binding name used to map this column to data properties (e.g., "AccountNumber", "Description", "Balance1").
+          example: AccountNumber
+        columnType:
+          description: The type of data this column contains (e.g., Text, Number, Date, Balance, GroupingCode).
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsEnumerationsTbFieldType'
+        columnName:
+          type: string
+          description: The display name for this column as shown to users (e.g., "Account Number", "Description", "Current Year Balance").
+          example: Account Number
+        groupingScheduleKey:
+          type: integer
+          description: The grouping schedule key associated with this column if the column represents grouping codes. Zero if not applicable.
+          format: int32
+          example: 6016689
+    EMMainDataTransferObjectsModelsExternalGroupingCodeExternal:
+      type: object
+      description: Represents a top-level grouping code within a classification schedule. Codes organize accounts into major categories (e.g., Assets, Liabilities, Equity) and can contain subcodes for finer classification.
+      additionalProperties: false
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+          description: The short code identifier (e.g., "A" for Assets, "L" for Liabilities, "E" for Equity). Maximum 15 characters.
+          example: A
+        groupingCodeKey:
+          type:
+          - integer
+          - 'null'
+          description: The unique identifier for this grouping code. Omit when creating new codes; include when updating existing codes.
+          format: int32
+          example: 12345
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of this grouping code (e.g., "Assets", "Liabilities", "Equity", "Revenue", "Expenses").
+          example: Assets
+        displayIndex:
+          type: integer
+          description: Display order index for sorting codes in UI elements and reports. Lower numbers appear first.
+          format: int32
+          example: 10
+        subcodes:
+          type:
+          - array
+          - 'null'
+          description: List of subcodes under this code providing finer classification categories (e.g., "Current Assets", "Non-Current Assets" under "Assets").
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalGroupingSubcodeExternal'
+    EmMainExtensionsUtilityErrorExtensions:
+      type: object
+      description: 'Provides extended metadata and diagnostic information for error responses.
+
+        Includes status codes, error codes, timestamps, and distributed tracing identifiers.'
+      additionalProperties: false
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code (e.g., 400, 401, 403, 500)
+          format: int32
+          example: 401
+        code:
+          type: string
+          description: Application-specific error code for programmatic handling
+          example: ERR_AUTH_4010
+        errorId:
+          type: string
+          description: Unique identifier (GUID) for this error occurrence. Use this when reporting issues to support.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        dateTime:
+          type: string
+          description: ISO 8601 timestamp (UTC) when the error occurred
+          example: '2024-03-15T14:30:00Z'
+        traceId:
+          type: string
+          description: Distributed trace ID for correlating requests across microservices (W3C Trace Context format)
+          example: a1b2c3d4e5f67890abcdef1234567890
+        spanId:
+          type: string
+          description: Span ID for this specific operation within the distributed trace (W3C Trace Context format)
+          example: 358611c48f91f940
+    EmMainExtensionsEnumerationsTaxCodeVendor:
+      type: integer
+      description: ''
+      x-enumNames:
+      - None
+      - GoSystem
+      - ProSystem
+      - UltraTax
+      - Lacerte
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+    EMMainDataTransferObjectsModelsGroupingSubcode:
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - description
+      properties:
+        groupingCodeKey:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        groupingSubcodeKey:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        code:
+          title: Subcode
+          type: string
+          maxLength: 15
+          minLength: 1
+        description:
+          title: Description
+          type: string
+          maxLength: 50
+          minLength: 1
+        displayIndex:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        editable:
+          type:
+          - boolean
+          - 'null'
+        groupingScheduleSubcodeguid:
+          type:
+          - string
+          - 'null'
+        accountType:
+          type:
+          - string
+          - 'null'
+    EmMainExtensionsUtilityErrorDetail:
+      type: object
+      description: Represents detailed information about a specific error that occurred during API request processing.
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          description: Gets or sets the human-readable error message describing what went wrong.
+          example: '"Unauthorized access."
+
+            "Bad request due to invalid input."
+
+            "Resource not found."
+
+            "An unexpected error occurred."'
+        extensions:
+          description: Gets or sets the extended error metadata containing additional diagnostic information.
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsUtilityErrorExtensions'
+    EMMainDataTransferObjectsModelsExternalTBTbTabConfigExternalDto:
+      type: object
+      description: Response model representing a trial balance view configuration with its column definitions. Views define which columns appear when retrieving trial balance data.
+      additionalProperties: false
+      properties:
+        viewName:
+          type: string
+          description: The name of the view configuration (e.g., "Standard View", "Tax View", "Custom View 1").
+          example: Standard View
+        columnInfo:
+          type: array
+          description: List of column definitions that specify which columns are included in this view and their configuration details.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBTbTabColumnExternalDto'
+        viewConfigKey:
+          type: integer
+          description: The unique identifier for this view configuration. Use this value when requesting trial balance grid data.
+          format: int32
+          example: 123
+    EMMainDataTransferObjectsModelsExternalTBGroupingCodeSubcodesExternalDto:
+      type: object
+      description: Represents a grouping code and subcode assignment for classifying an account within a specific grouping schedule. Used when creating or updating accounts to specify their financial statement classification.
+      additionalProperties: false
+      properties:
+        groupingScheduleKey:
+          type: integer
+          description: The grouping schedule key that this code/subcode belongs to. Obtain from GET /external/v1/trialbalance/grouping-schedule/{engagementId}.
+          format: int32
+          example: 6016689
+        codeText:
+          type: string
+          description: The grouping code text (e.g., "A" for Assets, "L" for Liabilities, "E" for Equity).
+          example: A
+        subcodeText:
+          type: string
+          description: The grouping subcode text for finer classification within the code (e.g., "CA" for Current Assets, "NCA" for Non-Current Assets).
+          example: CA
+    EMMainDataTransferObjectsModelsExternalTBFilteredJeDetailResultExternalDto:
+      type: object
+      description: Represents a journal entry (JE) distribution detail associated with trial balance accounts. Contains complete information about a single JE line item including debits, credits, account details, and tax classifications.
+      additionalProperties: false
+      properties:
+        jeDistributionKey:
+          type: integer
+          description: The unique identifier for this journal entry distribution line.
+          format: int32
+          example: 11111
+        accountKey:
+          type: integer
+          description: The account key that this JE distribution affects.
+          format: int32
+          example: 456
+        debit:
+          type: number
+          description: The debit amount for this distribution line. Zero if this is a credit entry.
+          format: decimal
+          example: 5000
+        credit:
+          type: number
+          description: The credit amount for this distribution line. Zero if this is a debit entry.
+          format: decimal
+          example: 0
+        accountType:
+          type: string
+          description: The type of account this distribution affects (e.g., "Asset", "Liability", "Expense").
+          example: Expense
+        jeKey:
+          type: integer
+          description: The unique identifier for the parent journal entry.
+          format: int32
+          example: 22222
+        trialBalanceKey:
+          type: integer
+          description: The trial balance key this JE belongs to.
+          format: int32
+          example: 33333
+        tbPeriodKey:
+          type: integer
+          description: The trial balance period key for the period this JE is recorded in.
+          format: int32
+          example: 789
+        jeType:
+          type: string
+          description: The type of journal entry (e.g., "Adjusting", "Reclassifying", "Standard").
+          example: Adjusting
+        description:
+          type: string
+          description: Description or explanation of this journal entry line.
+          example: Accrued expenses adjustment
+        reference:
+          type: string
+          description: Reference number or code for this journal entry.
+          example: JE-2024-001
+        account:
+          type: string
+          description: The account number this distribution affects.
+          example: '5100'
+        accountDescription:
+          type: string
+          description: The description of the account this distribution affects.
+          example: Office Supplies Expense
+        wpReference:
+          type: string
+          description: Workpaper reference associated with this JE distribution.
+          example: A-5
+        workpaperKey:
+          type:
+          - integer
+          - 'null'
+          description: The workpaper key if this JE is linked to a workpaper.
+          format: int32
+          example: 44444
+        diffType:
+          type: string
+          description: The type of difference or adjustment this JE represents.
+          example: Timing
+        propertyCode:
+          type: string
+          description: Property code for multi-property engagements.
+          example: PROP001
+        taxCode:
+          type: string
+          description: Tax code assignment for this JE distribution.
+          example: '1'
+        taxSubCode:
+          type: string
+          description: Tax subcode for finer tax classification.
+          example: a
+        m3Code:
+          type: string
+          description: M3 code assignment for Schedule M-3 reconciliation.
+          example: '1'
+        m3Subcode:
+          type: string
+          description: M3 subcode for finer M3 classification.
+          example: a
+        misstatementType:
+          type: string
+          description: Type of misstatement this JE corrects (if applicable).
+          example: Immaterial
+    EMMainDataTransferObjectsModelsExternalTBAccountBalanceExDto:
+      type: object
+      description: Represents account balance information for a specific trial balance period, including the amount, balance type, and period details.
+      additionalProperties: false
+      properties:
+        amount:
+          type: number
+          description: The balance amount for this period. Can be positive (debit) or negative (credit) depending on account type and balance nature.
+          format: decimal
+          example: 125000.5
+        bindingName:
+          type: string
+          description: The binding name used to map this balance to a specific column in the view (e.g., "Balance1", "Balance2", "PriorBalance").
+          example: Balance1
+        balanceType:
+          type: string
+          description: The type of balance (e.g., "Current", "Prior", "Adjusted", "Unadjusted").
+          example: Current
+        periodEndDate:
+          type:
+          - string
+          - 'null'
+          description: The end date of the period this balance applies to.
+          format: date-time
+          example: '2024-12-31T00:00:00Z'
+    EMMainDataTransferObjectsModelsExternalTBPageQueryResultsCollectionExternalDtoOfAccountExternalDto:
+      type: object
+      description: Generic paginated collection wrapper for trial balance data queries. Contains the paginated items plus additional trial balance-specific information including balance totals, net income totals, and associated journal entries.
+      additionalProperties: false
+      properties:
+        pageSize:
+          type: integer
+          description: The number of records per page. Matches the PageSize from the request.
+          format: int32
+          example: 1000
+        pageIndex:
+          type: integer
+          description: Zero-based page index. Matches the PageIndex from the request.
+          format: int32
+          example: 0
+        totalRecords:
+          type: integer
+          description: The total number of records available across all pages. Use this with PageSize to calculate total pages.
+          format: int32
+          example: 2500
+        items:
+          type: array
+          description: The collection of items for this page. For trial balance queries, this is typically a list of AccountExternalDto objects.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBAccountExternalDto'
+        unfilteredRecordsExist:
+          type: boolean
+          description: Indicates whether there are records that were filtered out from the result set. True if filters are hiding some records.
+          example: false
+        balanceTotals:
+          type: array
+          description: List of balance totals across all accounts for each period/balance column. Used to show total debits, credits, or net balances.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBAccountBalanceExDto'
+        netIncomeTotals:
+          type: array
+          description: List of net income totals calculated from revenue and expense accounts for each period. Shows the calculated profit/loss.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBAccountBalanceExDto'
+        jes:
+          type: array
+          description: List of journal entry distributions associated with the accounts in this result set. Provides detail on adjusting entries affecting these accounts.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBFilteredJeDetailResultExternalDto'
+        trialBalanceKey:
+          type: integer
+          description: The trial balance key for the engagement. Identifies the specific trial balance these results belong to.
+          format: int32
+          example: 33333
+    EMMainDataTransferObjectsModelsExternalTBTaxVendorEntityTypeCombinationExternalResponse:
+      type: object
+      description: Response model containing tax vendor and entity type definitions with their associated tax code groupings. Used to understand available tax classifications for different tax vendors (1040, 1065, 1120, etc.) and entity types.
+      additionalProperties: false
+      properties:
+        taxVendorKey:
+          description: The tax code vendor enumeration value (e.g., 1040 for Individual, 1065 for Partnership, 1120 for Corporation).
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsEnumerationsTaxCodeVendor'
+        taxVendorName:
+          type: string
+          description: The human-readable name of the tax vendor (e.g., "Individual 1040", "Partnership 1065", "Corporation 1120").
+          example: Individual 1040
+        taxGroupings:
+          type: array
+          description: List of tax code groupings available for this vendor and entity type combination. Each grouping represents a category of tax codes.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBTaxCodeGroupingExternal'
+    EMMainDataTransferObjectsModelsExternalTBGroupingCodeSubcodeExDto:
+      type: object
+      description: Represents an account's grouping code and subcode classification assignment, including the schedule, code, and subcode descriptions. Used in account retrieval responses to show how accounts are classified.
+      additionalProperties: false
+      properties:
+        groupingDescription:
+          type: string
+          description: The description of the grouping schedule this classification belongs to (e.g., "Standard Balance Sheet", "Cash Flow Statement").
+          example: Standard Balance Sheet
+        codeKey:
+          type: integer
+          description: The unique identifier for the grouping code.
+          format: int32
+          example: 12345
+        subcodeKey:
+          type: integer
+          description: The unique identifier for the grouping subcode.
+          format: int32
+          example: 67890
+        codeDescription:
+          type: string
+          description: The description of the grouping code (e.g., "Assets", "Liabilities", "Equity").
+          example: Assets
+        subcodeDescription:
+          type: string
+          description: The description of the grouping subcode (e.g., "Current Assets", "Non-Current Assets").
+          example: Current Assets
+        bindingName:
+          type: string
+          description: The binding name used to map this grouping to a specific column in the view.
+          example: gsch_63946_GroupingSubcode
+        value:
+          type: string
+          description: The combined value representing the code and subcode assignment (e.g., "A-CA" for Assets - Current Assets).
+          example: '1936552'
+    EMMainDataTransferObjectsModelsTrialBalancePeriod:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the trial balance period.
+          format: int32
+          example: 1
+        startDate:
+          type:
+          - string
+          - 'null'
+          description: The start date of the engagement period. Null if not set.
+          format: date-time
+          example: '2024-01-01T00:00:00Z'
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: The end date of the engagement period. Null if not set.
+          format: date-time
+          example: '2024-12-31T00:00:00Z'
+        yearEndDate:
+          type:
+          - string
+          - 'null'
+          description: The fiscal year-end date for the engagement. Null if not set.
+          format: date-time
+          example: '2024-12-31T00:00:00Z'
+    EmMainExtensionsEnumerationsTbFieldType:
+      type: string
+      description: ''
+      x-enumNames:
+      - None
+      - AccountNumber
+      - AccountDescription
+      - TaxCode
+      - TaxSubcode
+      - M3TaxCode
+      - GroupingCode
+      - GroupingSubcode
+      - AccountType
+      - Balance
+      - Tickmark
+      - WorkpaperReference
+      - PropertyCode
+      - M3TaxSubcode
+      - BalanceDebit
+      - BalanceCredit
+      - RowType
+      - AccountKey
+      - GroupingCodeKey
+      - GroupingSubcodeKey
+      - Variance
+      - Code
+      - CodeDescription
+      - Subcode
+      - SubcodeDescription
+      - UserDefined
+      - WorkpaperKey
+      - DivisionKey
+      - TaxCodeKey
+      - TaxSubcodeKey
+      - NetIncomeEffect
+      - FundCategoryKey
+      - FundTypeKey
+      - FundCodeKey
+      - FundSubCodeKey
+      - DivisionTotals
+      - DivisionTypeBalance
+      - FundCategoryDescription
+      - FundTypeDescription
+      - FundCodeDescription
+      - FundSubCodeDescription
+      - FundCodeValue
+      - FundSubCodeValue
+      - AccountGroupFundSetTypeBalance
+      - AccountGroupFundSetTotals
+      - TbTaxSubcodeKey
+      enum:
+      - None
+      - AccountNumber
+      - AccountDescription
+      - TaxCode
+      - TaxSubcode
+      - M3TaxCode
+      - GroupingCode
+      - GroupingSubcode
+      - AccountType
+      - Balance
+      - Tickmark
+      - WorkpaperReference
+      - PropertyCode
+      - M3TaxSubcode
+      - BalanceDebit
+      - BalanceCredit
+      - RowType
+      - AccountKey
+      - GroupingCodeKey
+      - GroupingSubcodeKey
+      - Variance
+      - Code
+      - CodeDescription
+      - Subcode
+      - SubcodeDescription
+      - UserDefined
+      - WorkpaperKey
+      - DivisionKey
+      - TaxCodeKey
+      - TaxSubcodeKey
+      - NetIncomeEffect
+      - FundCategoryKey
+      - FundTypeKey
+      - FundCodeKey
+      - FundSubCodeKey
+      - DivisionTotals
+      - DivisionTypeBalance
+      - FundCategoryDescription
+      - FundTypeDescription
+      - FundCodeDescription
+      - FundSubCodeDescription
+      - FundCodeValue
+      - FundSubCodeValue
+      - AccountGroupFundSetTypeBalance
+      - AccountGroupFundSetTotals
+      - TbTaxSubcodeKey
+    EmMainExtensionsUtilityErrorResponse:
+      type: object
+      description: 'Represents a standardized error response structure for API errors.
+
+        Contains a collection of detailed error information.'
+      example:
+        errors:
+        - message: Unauthorized access.
+          extensions:
+            statusCode: 401
+            code: ERR_AUTH_4010
+            errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+            dateTime: '2024-03-15T14:30:00Z'
+            traceId: a1b2c3d4e5f67890abcdef1234567890
+            spanId: 358611c48f91f940
+      additionalProperties: false
+      properties:
+        errors:
+          type: array
+          description: Collection of detailed error information
+          items:
+            $ref: '#/components/schemas/EmMainExtensionsUtilityErrorDetail'
+    EMMainDataTransferObjectsModelsExternalTBUpdateAccountBaseExternalDto:
+      required:
+      - accountKey
+      allOf:
+      - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBAccountBaseExternalDto'
+      - type: object
+        description: Request model for updating an existing trial balance account, including all account properties, classifications, and balances. Inherits base account properties from AccountBaseExternalDto.
+        additionalProperties: false
+        properties:
+          viewConfigId:
+            type: integer
+            description: The view configuration key used for this update operation. Obtain from GET /external/v1/trialbalance/views/{engagementId}.
+            format: int32
+            example: 123
+            exclusiveMinimum: 0
+          accountKey:
+            type: integer
+            description: The unique identifier (AccountKey) of the account to update. Obtain from POST /external/v1/trialbalance/grid-data.
+            format: int32
+            example: 456
+          accountType:
+            type:
+            - string
+            - 'null'
+            description: The account type classification (e.g., "Asset", "Liability", "Equity", "Revenue", "Expense").
+            example: Asset
+          balances:
+            type:
+            - array
+            - 'null'
+            description: List of balance updates for different periods. Each entry specifies a period and the new balance amount.
+            items:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBUpdateAccountBalanceExDto'
+    EMMainDataTransferObjectsModelsExternalTBTrialBalanceResponseExternalDto:
+      type: object
+      description: Response model containing paginated trial balance account data for a specific view configuration.
+      additionalProperties: false
+      properties:
+        pagedAccountItems:
+          description: Paginated collection of trial balance accounts with complete account details, balances, and classifications.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBPageQueryResultsCollectionExternalDtoOfAccountExternalDto'
+        viewKey:
+          type: integer
+          description: The view configuration key that was used to retrieve this data. Matches the ViewConfigKey from the request.
+          format: int32
+          example: 123
+    EMMainDataTransferObjectsModelsExternalGroupingSubcodeExternal:
+      type: object
+      description: Represents a subcode within a parent grouping code, providing finer classification within a major category. Subcodes allow for detailed account organization (e.g., "Current Assets" and "Non-Current Assets" within "Assets").
+      additionalProperties: false
+      properties:
+        groupingCodeKey:
+          type:
+          - integer
+          - 'null'
+          description: The unique identifier of the parent grouping code that this subcode belongs to.
+          format: int32
+          example: 12345
+        groupingSubcodeKey:
+          type:
+          - integer
+          - 'null'
+          description: The unique identifier for this subcode. Omit when creating new subcodes; include when updating existing subcodes.
+          format: int32
+          example: 67890
+        code:
+          type:
+          - string
+          - 'null'
+          description: The short subcode identifier (e.g., "CA" for Current Assets, "NCA" for Non-Current Assets).
+          example: CA
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of this subcode (e.g., "Current Assets", "Non-Current Assets", "Current Liabilities").
+          example: Current Assets
+        accountType:
+          type:
+          - string
+          - 'null'
+          description: Optional account type filter for this subcode (e.g., "Asset", "Liability"). Restricts which account types can be assigned to this subcode.
+          example: Asset
+        displayIndex:
+          type: integer
+          description: Display order index for sorting subcodes within the parent code. Lower numbers appear first.
+          format: int32
+          example: 20
+    EMMainDataTransferObjectsModelsExternalTBAccountExternalDto:
+      type: object
+      description: Comprehensive trial balance account model containing all account properties, balances, classifications, tax codes, and fund information. This is the primary response model when retrieving trial balance account data.
+      additionalProperties: false
+      properties:
+        accountDbKey:
+          type: integer
+          description: The unique database identifier for this account (AccountKey). Use this value for update and delete operations.
+          format: int32
+          example: 456
+        accountNumber:
+          type: string
+          description: The account number, which is unique within the engagement. This is the primary identifier users see for the account.
+          example: '1000'
+        description:
+          type: string
+          description: The account description or name (e.g., "Cash - Operating Account", "Accounts Receivable").
+          example: Cash - Operating Account
+        propertyCode:
+          type: string
+          description: Property code for multi-property engagements. Identifies which property this account belongs to.
+          example: PROP001
+        tickMark:
+          type: integer
+          description: Tick mark identifier for audit trail. Links to a tick mark definition indicating review or verification performed.
+          format: int32
+          example: 1
+        tickMarkImage:
+          type: array
+          description: Tick mark image data as an array of integers. Contains the visual representation of the tick mark.
+          items:
+            type: integer
+            format: int32
+        taxCode:
+          type: string
+          description: The tax code assigned to this account for tax reporting.
+          example: '1'
+        taxSubCode:
+          type: string
+          description: The tax subcode for finer tax classification.
+          example: a
+        m3Code:
+          type: string
+          description: The M3 code assignment for Schedule M-3 tax reconciliation.
+          example: '1'
+        m3Subcode:
+          type: string
+          description: The M3 subcode for finer M3 classification.
+          example: a
+        accountType:
+          type: string
+          description: The account type classification (e.g., "Asset", "Liability", "Equity", "Revenue", "Expense").
+          example: Asset
+        tbPerKey:
+          type: integer
+          description: The trial balance period key this account data is associated with.
+          format: int32
+          example: 789
+        tickMarkUserId:
+          type: integer
+          description: The user ID of the user who last updated the tick mark for this account.
+          format: int32
+          example: 12345
+        tickMarkUserName:
+          type: string
+          description: The name of the user who last updated the tick mark for this account.
+          example: John Doe
+        taxCodeKey:
+          type: integer
+          description: The unique identifier for the tax code assigned to this account.
+          format: int32
+          example: 67890
+        taxSubcodeKey:
+          type: integer
+          description: The unique identifier for the tax subcode assigned to this account.
+          format: int32
+          example: 11223
+        m3CodeKey:
+          type: integer
+          description: The unique identifier for the M3 code assigned to this account.
+          format: int32
+          example: 22334
+        m3SubcodeKey:
+          type: integer
+          description: The unique identifier for the M3 subcode assigned to this account.
+          format: int32
+          example: 33445
+        wPRef:
+          type: string
+          description: Workpaper reference linking this account to supporting workpapers or documentation. JSON property name is "wPRef".
+          example: A-1
+        wpKey:
+          type: integer
+          description: The workpaper key if this account is linked to a specific workpaper.
+          format: int32
+          example: 44556
+        wpFileSystemDocumentId:
+          type: string
+          description: The file system document identifier for the linked workpaper.
+          example: doc_12345
+        balances:
+          type: array
+          description: List of balance amounts for this account across different periods and balance types. Each entry contains an amount, binding name, balance type, and period information.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBAccountBalanceExDto'
+        grpCodeSubcodes:
+          type: array
+          description: List of grouping code and subcode assignments for this account. Shows how this account is classified for financial statement preparation.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBGroupingCodeSubcodeExDto'
+        priorBalanceChanged:
+          type: boolean
+          description: Indicates whether the prior period balance for this account has been modified. True if prior balance was changed.
+          example: false
+        accountDivisionKey:
+          type: integer
+          description: The division key for this account in divisional accounting structures.
+          format: int32
+          example: 55667
+        fundGroupCategoryKey:
+          type: integer
+          description: The fund group category key for fund accounting. Used in governmental and nonprofit fund structures.
+          format: int32
+          example: 66778
+        fundGroupTypeKey:
+          type: integer
+          description: The fund group type key for fund accounting.
+          format: int32
+          example: 77889
+        fundGroupCodeKey:
+          type: integer
+          description: The fund group code key for fund accounting.
+          format: int32
+          example: 88990
+        fundGroupSubcodeKey:
+          type: integer
+          description: The fund group subcode key for finer fund classification.
+          format: int32
+          example: 99001
+        fundCategoryDescription:
+          type: string
+          description: Description of the fund category this account belongs to (e.g., "General Fund", "Special Revenue Fund").
+          example: General Fund
+        fundTypeDescription:
+          type: string
+          description: Description of the fund type (e.g., "Governmental", "Proprietary", "Fiduciary").
+          example: Governmental
+        fundCodeDescription:
+          type: string
+          description: Description of the specific fund code.
+          example: General Operating
+        fundSubCodeDescription:
+          type: string
+          description: Description of the fund subcode for finer fund classification.
+          example: Unrestricted
+        fundCode:
+          type: string
+          description: The short fund code identifier.
+          example: GF
+        fundSubCode:
+          type: string
+          description: The short fund subcode identifier.
+          example: UR
+    EMMainDataTransferObjectsModelsGroupingCode:
+      type: object
+      description: Represents a grouping code within an account grouping schedule, defining a classification category for trial balance accounts (e.g., "Assets", "Liabilities", "Revenue").
+      additionalProperties: false
+      required:
+      - code
+      - description
+      properties:
+        groupingScheduleKey:
+          type:
+          - integer
+          - 'null'
+          description: Reference to the parent grouping schedule that contains this code.
+          format: int32
+          example: 6016689
+        groupingCodeKey:
+          type:
+          - integer
+          - 'null'
+          description: Unique identifier for this specific grouping code within the schedule.
+          format: int32
+          example: 123456
+        code:
+          title: Code
+          type: string
+          description: Short alphanumeric code identifying this grouping category (e.g., "A" for Assets, "L" for Liabilities). Maximum 15 characters.
+          maxLength: 15
+          minLength: 1
+          example: A
+        description:
+          title: Description
+          type: string
+          description: Human-readable description of this grouping code's purpose and meaning. Maximum 50 characters.
+          maxLength: 50
+          minLength: 1
+          example: Assets
+        displayIndex:
+          type:
+          - integer
+          - 'null'
+          description: Display order for presenting this grouping code in user interfaces. Lower numbers appear first.
+          format: int32
+          example: 1
+        editable:
+          type:
+          - boolean
+          - 'null'
+          description: Flag indicating whether users can edit or modify this grouping code and its subcodes.
+          example: true
+        subcodes:
+          type:
+          - array
+          - 'null'
+          description: 'Collection of subcodes that provide further classification within this grouping code (e.g., under "Assets": "Current Assets", "Fixed Assets").'
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsGroupingSubcode'
+        bindingName:
+          type: string
+          description: Internal binding name used for UI data binding and display purposes.
+          example: Assets
+        groupingScheduleCodeguid:
+          type:
+          - string
+          - 'null'
+          description: Globally unique identifier (GUID) for this grouping schedule code, used for tracking and synchronization across systems.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+    EMMainDataTransferObjectsModelsAccountSaveAccountResponse:
+      type: object
+      description: Response model returned after successfully creating a new trial balance account.
+      additionalProperties: false
+      properties:
+        accountId:
+          type: integer
+          description: The unique identifier (AccountKey) assigned to the newly created account. Use this value for subsequent update or delete operations.
+          format: int32
+          example: 456
+    EMMainDataTransferObjectsModelsExternalTBGroupingScheduleExternal:
+      type: object
+      description: Represents an account grouping schedule configuration for organizing trial balance accounts into financial statement categories and reporting structures.
+      additionalProperties: false
+      properties:
+        groupingScheduleKey:
+          type: integer
+          description: Unique identifier for the grouping schedule. Use this key to load specific grouping codes and subcodes via other endpoints.
+          format: int32
+          example: 6016689
+        displayIndex:
+          type:
+          - integer
+          - 'null'
+          description: Display order for presenting this grouping schedule in user interfaces. Lower numbers appear first.
+          format: int32
+          example: 1
+        firmLevel:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether this is a firm-level schedule (true) shared across all engagements, or engagement-specific (false).
+          example: false
+        description:
+          type: string
+          description: Human-readable description explaining the purpose of this grouping schedule (e.g., "Balance Sheet", "Income Statement", "Tax Return").
+          example: Balance Sheet
+        disabled:
+          type: boolean
+          description: Flag indicating whether this grouping schedule is currently disabled and should not be used.
+          example: false
+        editable:
+          type: boolean
+          description: Flag indicating whether users can edit the grouping codes and structure within this schedule.
+          example: true
+        accountGroupingIndex:
+          type:
+          - integer
+          - 'null'
+          description: Optional index for account grouping display order within the schedule structure.
+          format: int32
+          example: 1
+        codes:
+          type: array
+          description: Collection of grouping codes that define the classification structure for accounts within this schedule.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsGroupingCode'
+    EMMainDataTransferObjectsModelsExternalTBUpdateAccountBalanceExDto:
+      type: object
+      description: Represents a balance update for a specific trial balance period. Used when updating account balances to specify the period, amount, and balance type.
+      additionalProperties: false
+      properties:
+        tbPerKey:
+          type:
+          - integer
+          - 'null'
+          description: The trial balance period key identifying which period this balance applies to. Obtain from GET /external/v1/trialbalance/periods/{engagementId}.
+          format: int32
+          example: 789
+        amount:
+          type: number
+          description: The balance amount. Positive values typically represent debits for asset and expense accounts, credits for liability, equity, and revenue accounts.
+          format: decimal
+          example: 125000.5
+        balanceType:
+          type: string
+          description: The type of balance (e.g., "Current", "Prior", "Adjusted", "Unadjusted").
+          example: Current
+    EMMainDataTransferObjectsModelsExternalTBTrialBalanceExternalRequest:
+      type: object
+      description: Request model for retrieving paginated trial balance account data for a specific engagement and view configuration.
+      additionalProperties: false
+      properties:
+        engagementId:
+          type: integer
+          description: The Id of the Engagement. Must be greater than zero.
+          format: int32
+          example: 94
+          exclusiveMinimum: 0
+        viewConfigKey:
+          type: integer
+          description: The Id of the viewConfig. Must be greater than zero.
+          format: int32
+          example: 123
+          exclusiveMinimum: 0
+        pageIndex:
+          type: integer
+          description: Zero-based page index for pagination. Use 0 for the first page, 1 for the second page, etc.
+          format: int32
+          example: 0
+        pageSize:
+          type: integer
+          description: Number of records to return per page. Maximum recommended value is 1000. Default is 1000.
+          format: int32
+          example: 1000
+    EMMainDataTransferObjectsModelsExternalGroupingScheduleExternalDto:
+      type: object
+      description: Request model for creating or updating grouping code structures within a grouping schedule. Contains the complete hierarchical structure of codes and subcodes used for account classification.
+      additionalProperties: false
+      properties:
+        groupingScheduleKey:
+          type: integer
+          description: The unique identifier for the grouping schedule. Obtain from GET /external/v1/trialbalance/grouping-schedule/{engagementId}.
+          format: int32
+          example: 6016689
+        description:
+          type: string
+          description: The description of the grouping schedule (e.g., "Standard Balance Sheet", "Cash Basis Classification").
+          example: Standard Balance Sheet
+        codes:
+          type: array
+          description: List of grouping codes in this schedule. Each code can contain multiple subcodes forming a hierarchical classification structure.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalGroupingCodeExternal'
+    EMMainDataTransferObjectsModelsExternalTBAccountExportExternal:
+      type: object
+      description: Request model for exporting trial balance account data to Excel or XML format.
+      additionalProperties: false
+      required:
+      - viewName
+      properties:
+        engagementId:
+          type: integer
+          description: The unique identifier for the engagement whose trial balance data should be exported. Obtain from GET /external/v1/engagements/{clientId}.
+          format: int32
+          example: 94
+          exclusiveMinimum: 0
+        viewName:
+          type: string
+          description: The name of the view configuration to use for the export. Obtain from GET /external/v1/trialbalance/views/{engagementId}. The view determines which columns appear in the export.
+          minLength: 1
+          example: Standard View
+    EMMainDataTransferObjectsModelsExternalTBAccountBaseExternalDto:
+      type: object
+      description: Base request model for creating a new trial balance account with classification codes, tax codes, and metadata.
+      additionalProperties: false
+      properties:
+        engagementId:
+          type: integer
+          description: The Id of the Engagement. Must be greater than zero.
+          format: int32
+          example: 94
+          exclusiveMinimum: 0
+        accountNumber:
+          type:
+          - string
+          - 'null'
+          description: The account Number. Must be provided.
+          maxLength: 65
+          minLength: 0
+          example: '1000'
+        description:
+          type:
+          - string
+          - 'null'
+          description: The account description. Must be provided.
+          maxLength: 120
+          minLength: 0
+          example: Cash - Operating Account
+        grpCodeSubcodes:
+          type:
+          - array
+          - 'null'
+          description: List of grouping code and subcode assignments for this account. Grouping codes classify accounts for financial statement preparation.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTBGroupingCodeSubcodesExternalDto'
+        m3Code:
+          type:
+          - string
+          - 'null'
+          description: The key for the M3 code.
+          example: '1'
+        m3Subcode:
+          type:
+          - string
+          - 'null'
+          description: The key for the M3 subcode.
+          example: a
+        propertyCode:
+          type:
+          - string
+          - 'null'
+          description: Property code for multi-property engagements. Identifies which property this account belongs to.
+          maxLength: 3
+          minLength: 0
+          example: '800'
+        taxCode:
+          type:
+          - string
+          - 'null'
+          description: The key for the tax code.
+          example: '1'
+        taxSubCode:
+          type:
+          - string
+          - 'null'
+          description: The key for the tax code subcode.
+          example: a
+        tickMarkDescription:
+          type:
+          - string
+          - 'null'
+          description: Tick mark description for audit trail documentation. Describes review or verification steps performed on this account.
+          example: Verified with bank statement
+        wpRef:
+          type:
+          - string
+          - 'null'
+          description: Workpaper reference linking this account to supporting workpapers or documentation.
+          example: A-1
+    DownloadRequestDTO:
+      type: object
+      properties:
+        query:
+          $ref: '#/components/schemas/DownloadQuery'
+    TopicRecordFieldDTO:
+      type: object
+      properties:
+        value:
+          type: object
+          description: Value of the field
+          example: a234
+        errors:
+          type: array
+          items:
+            type: string
+    TopicDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Trial Balance
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Trial Balance
+          example: My Trial Balance Name
+        records:
+          $ref: '#/components/schemas/TopicRecordCountDTO'
+        blueprint:
+          $ref: '#/components/schemas/TopicBlueprintDTO'
+        status:
+          type: string
+          description: Current state of the Trial Balance
+          enum:
+          - PUBLISHING
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - REPROCESSING
+          - STAGED
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        template_id:
+          type: string
+          description: Unique identifier of the Processing Instructions
+          example: 5ec57f677456242950884996
+        is_hidden:
+          type: boolean
+          description: Visibility of the Trial Balance
+          example: false
+        created_by:
+          type: string
+          description: Trial Balance created at by
+          example: UserA
+        created_at:
+          type: string
+          description: Trial Balance created at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    ReprocessRequestDTO:
+      type: object
+      properties:
+        records:
+          type: string
+          description: Comma-separated list of record numbers or ranges
+          example: 4,6,24,25-30
+    TopicRecordValue:
+      type: object
+      properties:
+        value:
+          type: string
+          description: Value of the field(s)
+          example: a234
+        count:
+          type: integer
+          description: Number of fields affected
+          format: int64
+          example: 5
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents
+          format: int32
+          example: 1
+    TopicBlueprintDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 123
+        version:
+          type: integer
+          format: int32
+          example: 1
+        type_id:
+          type: integer
+          format: int32
+          example: 2
+    ApiCollectionTopicDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicDTO'
+        _meta:
+          $ref: '#/components/schemas/TopicApiMeta'
+    TopicColumnDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the column
+          example: My Column Name
+        type:
+          type: string
+          description: Expected data type of the column values
+          example: number
+          enum:
+          - currency
+          - date
+          - number
+          - string
+        format:
+          type: string
+          description: Representation of numeric column values
+          example: -###,###.##
+        parameters:
+          type: array
+          example:
+          - chart_of_accounts_id: 7b624759-9e17-4c7b-b17c-4fd9a926c777
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              example:
+              - chart_of_accounts_id: 7b624759-9e17-4c7b-b17c-4fd9a926c777
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents
+          format: int32
+          example: 1
+    TopicRecordDTO:
+      type: object
+      properties:
+        number:
+          type: integer
+          description: Record's position in the published sequence of records
+          format: int64
+          example: 2
+        status:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicRecordFieldDTO'
+        errors:
+          type: array
+          items:
+            type: string
+    TopicDownloadShortDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the created task
+          example: 5ef0b23a4671a35b735922e1
+        status:
+          type: string
+          description: Current state of the download task
+          enum:
+          - CREATED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+        time_created:
+          type: string
+          description: Time in which this task was initialized
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    TopicDownloadListDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicDownloadShortDTO'
+        _meta:
+          $ref: '#/components/schemas/TopicMeta'
+    TopicRecordValuesDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicRecordValue'
+        _meta:
+          $ref: '#/components/schemas/TopicMeta'
+    DownloadQuery:
+      type: object
+      properties:
+        in:
+          type: array
+          description: Comma-separated list which contain field name and list of field values
+          example:
+          - status
+          - - READY
+            - UNAVAILABLE
+            - INVALID
+            - IGNORED
+          items:
+            type: object
+            description: Comma-separated list which contain field name and list of field values
+            example:
+            - status
+            - - READY
+              - UNAVAILABLE
+              - INVALID
+              - IGNORED
+    TopicPatchRequestDTO:
+      type: object
+      properties:
+        is_hidden:
+          type: boolean
+          description: Visibility of the Topic
+          example: false
+    TopicRecordCountDTO:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: "Number of records published to the stream. Sum of \n`ready`, `unavailable`, 'invalid 'and `ignored` records equals `total`"
+          format: int64
+          example: 1000
+        ready:
+          type: integer
+          description: Number of records with no errors and ready for consumption
+          format: int64
+          example: 988
+        unavailable:
+          type: integer
+          description: "Number of records that contain values that failed an \nexternal validation check. These records can be recovered by\nreprocessing once the external system is Updated"
+          format: int64
+          example: 10
+        invalid:
+          type: integer
+          description: "Number of records that contain unrecoverable errors. any\nexplicitly filtered rows also end up here. For example, rows \nremoved by the offset operator"
+          format: int64
+          example: 2
+        ignored:
+          type: integer
+          description: Number of records that are ignored during file import
+          format: int64
+          example: 5
+    TopicDownloadDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the created task
+          example: 5ef0b23a4671a35b735922e1
+        status:
+          type: string
+          description: Current state of the download task
+          enum:
+          - CREATED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+        time_created:
+          type: string
+          description: Time in which this task was initialized
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        download_url:
+          type: string
+          description: URL to download the Topic
+          example: https://example.thomsonreuters.com/example.csv
+    TopicMeta:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+          example: 0
+        limit:
+          type: integer
+          format: int32
+          example: 200
+        count:
+          type: integer
+          format: int64
+          example: 1000
+    IdDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: 5eed28cee5d5882c0bbefe5c
+    TopicColumnsDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicColumnDTO'
+    ApiCollectionTopicRecordDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicRecordDTO'
+        _meta:
+          $ref: '#/components/schemas/TopicApiMeta'
+    TopicApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: Please enter a valid token(M2M or GFR)
+      name: Authorization
+      in: header
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-engagement-manager-openapi.json
+- thomson-reuters-general-ledger-manager-openapi.json
+- thomson-reuters-engagement-manager-openapi.yml
+- thomson-reuters-general-ledger-manager-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

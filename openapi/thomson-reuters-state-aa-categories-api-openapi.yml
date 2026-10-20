@@ -1,0 +1,546 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts State AA Categories API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: State AA Categories
+paths:
+  /v1/state-aa-categories/{year}:
+    get:
+      tags:
+      - State AA Categories
+      summary: Returns the list of state AA Categories based on the year.
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: Tax Year
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAACategoriesGroupsRepresentation'
+              examples:
+                state-aa-categories-groups-representation:
+                  $ref: '#/components/examples/state-aa-categories-groups-representation'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      operationId: getV1StateAaCategoriesByYear
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - State AA Categories
+      summary: Adds, replaces, or deletes multiple State AA Categories for a year.
+      parameters:
+      - name: year
+        in: path
+        description: Tax Year
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocumentStateAACategoryRepresentation'
+            examples:
+              state-aa-category-add-operation:
+                $ref: '#/components/examples/state-aa-category-add-operation'
+              state-aa-category-replace-operation:
+                $ref: '#/components/examples/state-aa-category-replace-operation'
+              state-aa-category-remove-operation:
+                $ref: '#/components/examples/state-aa-category-remove-operation'
+              state-aa-category-multiple-operations:
+                $ref: '#/components/examples/state-aa-category-multiple-operations'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAACategoryMultipleResponseRepresentations'
+              examples:
+                state-aa-category-success-responses:
+                  $ref: '#/components/examples/state-aa-category-success-responses'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAACategoryMultipleResponseRepresentations'
+              examples:
+                state-aa-category-multiple-responses:
+                  $ref: '#/components/examples/state-aa-category-multiple-responses'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: stateAACategoriesPatchDocument
+      operationId: patchV1StateAaCategoriesByYear
+      x-operation-id-source: derived
+components:
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    StateAACategoriesGroupsRepresentation:
+      type: object
+      properties:
+        year:
+          type: string
+          description: Tax year.
+        chartId:
+          type: string
+          description: Logic chart ID.
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateAACategoriesRepresentation'
+    StateAACategoryMultipleResponseRepresentations:
+      type: array
+      items:
+        $ref: '#/components/schemas/StateAACategoryMultipleResponseRepresentation'
+    JsonPatchDocumentStateAACategoryRepresentation:
+      type: array
+      items:
+        $ref: '#/components/schemas/OperationStateAACategoryRepresentation'
+    StateAACategoriesRepresentation:
+      type: object
+      properties:
+        name:
+          description: Category name.
+          type: string
+          format: string
+        ParentId:
+          type: integer
+          format: int32
+          description: Parent category ID.
+        ParentName:
+          description: Parent category name.
+          type: string
+          format: string
+        Id:
+          type: integer
+          format: int32
+          description: Category ID.
+        sequence:
+          type: integer
+          format: int32
+        Impliedsign:
+          type: integer
+          format: int32
+          description: +1 is for positive and -1 is for negative.
+        IsSelected:
+          type: boolean
+        CategoryType:
+          type: string
+          format: string
+          description: Subcategory type.
+        HasBalance:
+          type: boolean
+        HasBalanceSubcategory:
+          type: boolean
+        IsIncomeTax:
+          type: boolean
+        IsFranchiseTax:
+          type: boolean
+        IsEveryWhere:
+          type: boolean
+        IsWithIn:
+          type: boolean
+        SubCategory:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateAACategoriesRepresentation'
+    StateAACategoryMultipleResponseRepresentation:
+      type: object
+      properties:
+        op:
+          type: string
+        path:
+          type: string
+        value:
+          $ref: '#/components/schemas/StateAACategoriesRepresentation'
+        statuCode:
+          type: integer
+        detail:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    OperationStateAACategoryRepresentation:
+      type: object
+      properties:
+        path:
+          type: string
+        op:
+          type: string
+          description: Specifies a CRUD operation.
+        value:
+          $ref: '#/components/schemas/StateAACategoriesRepresentation'
+  examples:
+    state-aa-category-multiple-responses:
+      value:
+      - op: Add
+        path: /stateaacategory
+        value:
+          name: null
+          parentId: 63
+          parentName: null
+          rootName: null
+          groupName: null
+          parentImpliedSign: 0
+          id: 0
+          sequence: 0
+          impliedSign: 1
+          displayImpliedSign: null
+          systemInd: 0
+          isSelected: true
+          displayIsSelect: null
+          categoryType: null
+          hasBalance: false
+          hasBalanceSubcategory: false
+          isIncomeTax: false
+          isFranchiseTax: false
+          displayInYearCheckbox: true
+          isEveryWhere: false
+          isWithIn: false
+          subCategory: []
+          _links: []
+          _embedded: null
+        statusCode: 400
+        detail: null
+        fieldErrors:
+        - fieldName: Name
+          messages:
+          - Name cannot be blank.
+          errorCode: 2001
+      - op: Add
+        path: /stateaacategory
+        value:
+          name: Div-11
+          parentId: 6354
+          parentName: null
+          rootName: null
+          groupName: null
+          parentImpliedSign: 0
+          id: 0
+          sequence: 0
+          impliedSign: 1
+          displayImpliedSign: null
+          systemInd: 0
+          isSelected: true
+          displayIsSelect: null
+          categoryType: null
+          hasBalance: false
+          hasBalanceSubcategory: false
+          isIncomeTax: false
+          isFranchiseTax: false
+          displayInYearCheckbox: true
+          isEveryWhere: false
+          isWithIn: false
+          subCategory: []
+          _links: []
+          _embedded: null
+        statusCode: 400
+        detail: Exception of type 'TRTA.OIT.Infrastructure.ExceptionHandling.OitDataException' was thrown.
+        fieldErrors:
+        - fieldName: ParentCategoryId
+          messages:
+          - Parent Category [6354] does not exist.
+          errorCode: 0
+    state-aa-category-add-operation:
+      value:
+      - op: add
+        path: /stateaacategory
+        value:
+          ParentId: 63
+          name: Div4
+          impliedsign: 1
+          isselected: true
+    state-aa-category-success-responses:
+      value:
+      - op: Add
+        path: /stateaacategory
+        value:
+          name: Div_52
+          parentId: 63
+          parentName: null
+          rootName: null
+          groupName: null
+          parentImpliedSign: 0
+          id: 2290
+          sequence: 0
+          impliedSign: 1
+          displayImpliedSign: null
+          systemInd: 0
+          isSelected: true
+          displayIsSelect: null
+          categoryType: null
+          hasBalance: false
+          hasBalanceSubcategory: false
+          isIncomeTax: false
+          isFranchiseTax: false
+          displayInYearCheckbox: true
+          isEveryWhere: false
+          isWithIn: false
+          subCategory: []
+          _links: []
+          _embedded: null
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+      - op: Add
+        path: /stateaacategory
+        value:
+          name: Div-11
+          parentId: 63
+          parentName: null
+          rootName: null
+          groupName: null
+          parentImpliedSign: 0
+          id: 2291
+          sequence: 0
+          impliedSign: 1
+          displayImpliedSign: null
+          systemInd: 0
+          isSelected: true
+          displayIsSelect: null
+          categoryType: null
+          hasBalance: false
+          hasBalanceSubcategory: false
+          isIncomeTax: false
+          isFranchiseTax: false
+          displayInYearCheckbox: true
+          isEveryWhere: false
+          isWithIn: false
+          subCategory: []
+          _links: []
+          _embedded: null
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    state-aa-category-multiple-operations:
+      value:
+      - op: remove
+        path: /stateaacategory
+        value:
+          Id: 2177
+      - op: replace
+        path: /stateaacategory
+        value:
+          Id: 2177
+          name: Div4
+          impliedsign: 1
+          sequence: 5
+          isselected: false
+      - op: add
+        path: /stateaacategory
+        value:
+          ParentId: 63
+          name: Div4
+          impliedsign: 1
+          isselected: true
+    state-aa-category-remove-operation:
+      value:
+      - op: remove
+        path: /stateaacategory
+        value:
+          Id: 2177
+    state-aa-category-replace-operation:
+      value:
+      - op: replace
+        path: /stateaacategory
+        value:
+          Id: 2177
+          name: Div4
+          impliedsign: 1
+          sequence: 5
+          isselected: false
+    state-aa-categories-groups-representation:
+      value:
+        year: 2004
+        chartId: null
+        resourceList:
+        - name: Property
+          parentId: 0
+          parentName: null
+          rootName: null
+          groupName: null
+          parentImpliedSign: 0
+          id: -1
+          sequence: 1
+          impliedSign: 1
+          displayImpliedSign: null
+          systemInd: 1
+          isSelected: true
+          displayIsSelect: null
+          categoryType: Type
+          hasBalance: true
+          hasBalanceSubcategory: true
+          isIncomeTax: false
+          isFranchiseTax: false
+          displayInYearCheckbox: true
+          isEveryWhere: false
+          isWithIn: false
+          subCategory:
+          - name: Assets
+            parentId: -1
+            parentName: Property
+            rootName: Property
+            groupName: null
+            parentImpliedSign: 1
+            id: 1
+            sequence: 1
+            impliedSign: 1
+            displayImpliedSign: null
+            systemInd: 1
+            isSelected: true
+            displayIsSelect: null
+            categoryType: Group
+            hasBalance: false
+            hasBalanceSubcategory: false
+            isIncomeTax: false
+            isFranchiseTax: false
+            displayInYearCheckbox: true
+            isEveryWhere: false
+            isWithIn: false
+            subCategory:
+            - name: Inventories
+              parentId: 1
+              parentName: Assets
+              rootName: Property
+              groupName: Assets
+              parentImpliedSign: 1
+              id: 3
+              sequence: 1
+              impliedSign: 1
+              displayImpliedSign: null
+              systemInd: 1
+              isSelected: true
+              displayIsSelect: null
+              categoryType: Category
+              hasBalance: false
+              hasBalanceSubcategory: false
+              isIncomeTax: false
+              isFranchiseTax: false
+              displayInYearCheckbox: true
+              isEveryWhere: false
+              isWithIn: false
+              subCategory:
+              - name: Inventories
+                parentId: 3
+                parentName: Inventories
+                rootName: Property
+                groupName: Assets
+                parentImpliedSign: 1
+                id: 96
+                sequence: 0
+                impliedSign: 1
+                displayImpliedSign: null
+                systemInd: 1
+                isSelected: true
+                displayIsSelect: null
+                categoryType: Sub Category
+                hasBalance: false
+                hasBalanceSubcategory: false
+                isIncomeTax: false
+                isFranchiseTax: false
+                displayInYearCheckbox: true
+                isEveryWhere: false
+                isWithIn: false
+                subCategory: []
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

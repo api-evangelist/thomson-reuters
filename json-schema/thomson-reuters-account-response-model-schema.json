@@ -1,0 +1,320 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-account-response-model-schema.json",
+  "title": "AccountResponseModel",
+  "description": "Account Response Model.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-onesource-trust-tax-services-v2-openapi.yml#/components/schemas/AccountResponseModel",
+  "type": "object",
+  "properties": {
+    "Items": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/AccountModel"
+      },
+      "description": "List of Accounts information."
+    },
+    "_links": {
+      "$ref": "#/$defs/Links"
+    },
+    "_meta": {
+      "$ref": "#/$defs/Metadata"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "AccountModel": {
+      "type": "object",
+      "properties": {
+        "tax_year_begin": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Tax year begin date.",
+          "format": "date"
+        },
+        "tax_year_end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Tax year end date.",
+          "format": "date"
+        },
+        "related_processing_type": {
+          "$ref": "#/$defs/RelatedType"
+        },
+        "sub_account_of": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Sub Account Of."
+        },
+        "receives_share_from": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Receives Share From."
+        },
+        "share_percentage": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Share Percentage.",
+          "format": "double"
+        },
+        "ten99_revised_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "1099 Revised Date.",
+          "format": "date-time",
+          "default": "1900-01-01T00:00:00.0000000"
+        },
+        "short_yr_reason": {
+          "$ref": "#/$defs/ShortYearReason"
+        },
+        "admin_controls": {
+          "$ref": "#/$defs/AdminControls"
+        },
+        "recipients": {
+          "$ref": "#/$defs/RecipientModel"
+        },
+        "ten991098_fl": {
+          "$ref": "#/$defs/YesNo"
+        },
+        "ten995498_fl": {
+          "$ref": "#/$defs/YesNo"
+        },
+        "ten99diob_fl": {
+          "$ref": "#/$defs/YesNo"
+        },
+        "ten99_misc_rr_fl": {
+          "$ref": "#/$defs/YesNo"
+        },
+        "ten99_misc_sp_fl": {
+          "$ref": "#/$defs/YesNo"
+        },
+        "ten99r_fl": {
+          "$ref": "#/$defs/YesNo"
+        },
+        "ten99q_fl": {
+          "$ref": "#/$defs/YesNo"
+        },
+        "entity_type": {
+          "$ref": "#/$defs/EntityType"
+        },
+        "ten99_nec_flag": {
+          "$ref": "#/$defs/YesNo"
+        },
+        "ten99_service_level": {
+          "$ref": "#/$defs/Ten99ServiceLevel"
+        },
+        "bnc": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "BNC."
+        },
+        "upia_code": {
+          "$ref": "#/$defs/UPIAType"
+        },
+        "form706_gsd": {
+          "$ref": "#/$defs/Form706GSD1"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Account Model."
+    },
+    "AdminControls": {
+      "type": "object",
+      "properties": {
+        "tax_category": {
+          "maxLength": 2,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Tax category."
+        },
+        "priority": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Priority.",
+          "format": "int32"
+        },
+        "tax_info_stmt_fl": {
+          "$ref": "#/$defs/YesNo"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Admin Controls."
+    },
+    "EntityType": {
+      "enum": [
+        "Unknown",
+        "Decedents_Estate",
+        "Simple_Trust",
+        "Complex_Dollar_100",
+        "Complex_Dollar_300",
+        "Pooled_Income_Fund",
+        "Grantor",
+        "Bankruptcy_Estate",
+        "Agent_Or_Custodian",
+        "Tax_Deferred_Account",
+        "_990",
+        "NA",
+        "Tracking_Only",
+        "_1041_QFT",
+        "Form_2439"
+      ],
+      "type": "integer",
+      "format": "int32"
+    },
+    "Form706GSD1": {
+      "type": "object",
+      "properties": {
+        "inclusion_ratio": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Inclusion Ratio.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": ""
+    },
+    "Links": {
+      "type": "object",
+      "properties": {
+        "@nextLink": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Next Link for the accounts."
+        },
+        "@prevLink": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Prev Link for the accounts."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Metadata": {
+      "type": "object",
+      "properties": {
+        "totalItems": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Total Count.",
+          "format": "int32"
+        }
+      },
+      "additionalProperties": false
+    },
+    "RecipientModel": {
+      "type": "object",
+      "properties": {
+        "power_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Dollar amount for 5x5 power.",
+          "format": "double"
+        },
+        "power_pct": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Decimal fraction for 5x5 power percentage.",
+          "format": "double"
+        },
+        "year_end_mkt_value_for_5x5": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "5x5 YEMktVal (year end mkt value for 5x5).",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Recipient Model."
+    },
+    "RelatedType": {
+      "enum": [
+        "NA",
+        "Combined Main Account",
+        "Combined Sub Account",
+        "Holds Shared Assets For Others",
+        "Gets Share Of Other Account"
+      ],
+      "type": "integer",
+      "format": "int32"
+    },
+    "ShortYearReason": {
+      "enum": [
+        "N/A",
+        "Final return",
+        "Initial return",
+        "Split-year return",
+        "Year-end change",
+        "New return that closed"
+      ],
+      "type": "integer",
+      "format": "int32"
+    },
+    "Ten99ServiceLevel": {
+      "enum": [
+        "NA",
+        "Premium_1099_with_full_detail",
+        "_1099_with_reported_detail_only",
+        "_1099_with_no_detail"
+      ],
+      "type": "integer",
+      "format": "int32"
+    },
+    "UPIAType": {
+      "enum": [
+        "Non_Participant",
+        "Power_To_Adjust",
+        "Unitrust"
+      ],
+      "type": "integer",
+      "format": "int32"
+    },
+    "YesNo": {
+      "enum": [
+        "No",
+        "Yes"
+      ],
+      "type": "integer",
+      "format": "int32"
+    }
+  }
+}

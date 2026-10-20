@@ -1,0 +1,217 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters E-file Documents API
+  version: v1
+  termsOfService: None
+  description: 'Operations tagged E-file Documents across 2 of this provider''s published API definitions: thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.json, thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/income-tax/e-file
+security:
+- Authorization: []
+tags:
+- name: E-file Documents
+paths:
+  /v1/binders/{binderId}/e-files:
+    get:
+      tags:
+      - E-file Documents
+      summary: Use to retrieve a list of E-file for a given binder
+      operationId: RetrieveAListOfE-file
+      parameters:
+      - name: binderId
+        in: path
+        description: 16 Character Binder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eFileDocumentCategories'
+              examples:
+                E-Files List:
+                  $ref: '#/components/examples/Efile_List'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve a list of E-file
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+  /v1/binders/{binderId}/e-files/{eFileId}:
+    get:
+      tags:
+      - E-file Documents
+      summary: Use to retrieve an E-file document for a given binder
+      operationId: RetrieveAnE-fileDocument
+      parameters:
+      - name: binderId
+        in: path
+        description: Binder Id
+        required: true
+        schema:
+          type: string
+      - name: eFileId
+        in: path
+        description: eFileId in format of C000AU92.XML
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/xml: {}
+            application/pdf: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve an E-file document
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+components:
+  schemas:
+    eFileDocumentTypeList:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        eFileDocumentMetadataList:
+          type: array
+          example:
+          - description: PDF
+            pdfGeneratedOn: '2016-05-09T02:09:46.833'
+            eFileDocumentId: C000V7B5.ISS
+            pdfSize: '1700'
+            eFileStatus: ErrorNotSubmitted
+          - description: Full XML
+            eFileCreatedOn: '2016-05-09T02:09:38.133'
+            eFileDocumentId: C000V7B5.ISS
+            eFileSize: '1162'
+            eFileStatus: ErrorNotSubmitted
+          items:
+            $ref: '#/components/schemas/EFileDocumentMetadataList'
+    resourceList:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        eFileDocumentTypeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/eFileDocumentTypeList'
+    eFileDocumentCategories:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/resourceList'
+    EFileDocumentMetadataList:
+      type: array
+      items: {}
+  examples:
+    Efile_List:
+      value:
+        resourceList:
+        - id: ID_Federal
+          description: Federal
+          eFileDocumentTypeList:
+          - id: FED
+            description: Extension
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:09:46.833'
+              eFileDocumentId: C1234AB5.ISS
+              pdfSize: 1700
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T02:09:38.133'
+              eFileDocumentId: C1234AB5.ISS
+              eFileSize: 1162
+              eFileStatus: Qualified
+          - id: FED
+            description: Return
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:08:43.613'
+              eFileDocumentId: C1234AB5.XML
+              pdfSize: 103948
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T02:08:22.553'
+              eFileDocumentId: C1234AB5.XML
+              eFileSize: 37009
+              eFileStatus: Qualified
+          _links: []
+          _embedded: null
+        - id: ID_States
+          description: States
+          eFileDocumentTypeList:
+          - id: AL
+            description: AL Return
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:09:46.82'
+              eFileDocumentId: C1234AB5.XAL
+              pdfSize: 35958
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T01:53:15.523'
+              eFileDocumentId: C1234AB5.XAL
+              eFileSize: 4837
+              eFileStatus: Qualified
+          - id: AR
+            description: AR 1100CT
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:09:46.833'
+              eFileDocumentId: C1234AB5.XAR
+              pdfSize: 14497
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T01:56:54.313'
+              eFileDocumentId: C1234AB5.XAR
+              eFileSize: 8262
+              eFileStatus: Qualified
+          - id: DE
+            description: DE Return
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:09:46.833'
+              eFileDocumentId: C1234AB5.XDE
+              pdfSize: 11165
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T01:58:15.693'
+              eFileDocumentId: C1234AB5.XDE
+              eFileSize: 5653
+              eFileStatus: Qualified
+          _links: []
+          _embedded: null
+        _links: []
+        _embedded: null
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.json
+- thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

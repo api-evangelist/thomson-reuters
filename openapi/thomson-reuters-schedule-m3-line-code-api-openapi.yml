@@ -1,0 +1,347 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts Schedule M3 Line Code API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: Schedule M3 Line Code
+paths:
+  /v1/years/{year}/tax-return-types/{taxReturnType}/charts/schedule-m3-chart/lines:
+    get:
+      tags:
+      - Schedule M3 Line Code
+      summary: Returns line codes for a Schedule M3 Chart.
+      operationId: RetrievesLineCodesForAScheduleM3Chart
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: taxReturnType
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinesCodeRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Line Codes for a Schedule M3 Chart
+    patch:
+      tags:
+      - Schedule M3 Line Code
+      summary: Updates Schedule M3 lines. Enter a year and taxReturnType in the URL
+      operationId: UpdatesScheduleM3Lines
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: taxReturnType
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocumentScheduleM3LineCodesRepresentation'
+            examples:
+              M3Lines-Add_Detail_Line:
+                $ref: '#/components/examples/M3Lines-Add_Detail_Line'
+              M3Lines-Remove_Detail_Line:
+                $ref: '#/components/examples/M3Lines-Remove_Detail_Line'
+              M3Lines-Replace_System_Line_Code:
+                $ref: '#/components/examples/M3Lines-Replace_System_Line_Code'
+              M3Lines-Replace_Detail_Line_Code:
+                $ref: '#/components/examples/M3Lines-Replace_Detail_Line_Code'
+        required: true
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: lineCodeItemsPatchDocument
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates Schedule M3 lines
+components:
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    ResponseRepresentation:
+      type: object
+      properties:
+        httpStatusCode:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    JsonPatchDocumentScheduleM3LineCodesRepresentation:
+      type: object
+      properties:
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperationScheduleM3LineCodesRepresentation'
+    LineCodeRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        taxReturnType:
+          type: string
+          description: IRS-defined type of tax return.
+        id:
+          type: integer
+          format: int32
+        formPartId:
+          type: integer
+          format: int32
+        parentId:
+          type: integer
+          format: int32
+        description:
+          type: string
+        code:
+          type: string
+        lineNumber:
+          type: string
+        detailLineId:
+          type: integer
+          format: int32
+        detailType:
+          type: string
+        isCodeAssigned:
+          type: boolean
+        subLineCodeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineCodeRepresentation'
+        detailLineList:
+          type: array
+          description: User-defined Schedule M3 detail.
+          items:
+            $ref: '#/components/schemas/LineCodeRepresentation'
+        mappedAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduleM3LineMappingMappedAccountRepresentaion'
+        response:
+          $ref: '#/components/schemas/ResponseRepresentation'
+        rowNumber:
+          type: integer
+          format: int32
+    OperationScheduleM3LineCodesRepresentation:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/LinesCodeRepresentation'
+        path:
+          type: string
+        op:
+          type: string
+        from:
+          type: string
+    ScheduleM3LineMappingMappedAccountRepresentaion:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        parentId:
+          type: integer
+          format: int32
+        detailLineId:
+          type: integer
+          format: int32
+        hasBalance:
+          type: boolean
+        accountId:
+          type: integer
+          description: System-generated ID for an account number in the chart of accounts.
+          format: int32
+        accountCode:
+          type: string
+          description: Account number in the chart of accounts.
+        accountDescription:
+          type: string
+          description: Account description in the chart of accounts.
+        accountType:
+          type: string
+          description: Account code associated with either income or balance sheet (mutually exclusive).
+        tccId:
+          type: integer
+          description: System-generated ID code used to combine accounts into subcategories within a single TRC (Tax Return Code).
+          format: int32
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        trcDescription:
+          type: string
+          description: System-defined description for a TRC.
+        tccNumber:
+          type: string
+          description: User-defined code used to combine accounts into subcategories within a single TRC.
+        tccDescription:
+          type: string
+          description: System-defined description for a TRC.
+        trcFormattedNumber:
+          type: string
+          description: System-defined number for a TRC.
+    LinesCodeRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        taxReturnType:
+          type: string
+          description: IRS-defined type of tax return.
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineCodeRepresentation'
+  examples:
+    M3Lines-Replace_Detail_Line_Code:
+      value:
+      - op: replace
+        path: /schm3chartline
+        value:
+          SystemLineId: '19'
+          detailLineId: 54321
+          DetailLineCode: replaceDetailLC
+          DetailLineDescription: Other Interest Income-replace
+    M3Lines-Remove_Detail_Line:
+      value:
+      - op: remove
+        path: /schm3chartline
+        value:
+          SystemLineId: '19'
+          DetailLineCode: intincome
+          DetailLineDescription: Other Interest Income
+    M3Lines-Replace_System_Line_Code:
+      value:
+      - op: replace
+        path: /schm3chartline
+        value:
+          SystemLineId: '1'
+          LineCode: 1120LineCode
+    M3Lines-Add_Detail_Line:
+      value:
+      - op: add
+        path: /schm3chartline
+        value:
+          SystemLineId: '19'
+          DetailLineCode: intincome
+          DetailLineDescription: Other Interest Income
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

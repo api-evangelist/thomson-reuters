@@ -1,0 +1,651 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Statuses API
+  version: '1.0'
+  description: 'Operations tagged Statuses across 3 of this provider''s published API definitions: thomson-reuters-calendar-due-dates-management-api-openapi.json, thomson-reuters-matters-api-1-9-openapi.json, thomson-reuters-matters-api-1-9-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com
+- url: https://api-apac.onesourcetax.com
+- url: https://api-emea.onesourcetax.com
+- url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+tags:
+- name: Statuses
+paths:
+  /calendar/due-date-statuses/v1:
+    get:
+      tags:
+      - Statuses
+      summary: Get all statuses available to the user
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DueDateStatusResponse'
+        '401':
+          description: Unauthorized
+      security:
+      - Bearer: []
+      operationId: getCalendarDueDateStatusesV1
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com
+    - url: https://api-apac.onesourcetax.com
+    - url: https://api-emea.onesourcetax.com
+  /matters/{id}/statuses:
+    get:
+      tags:
+      - Statuses
+      summary: Find statuses by matter ID
+      description: Retrieves all the existing statuses for matter by the matter ID.
+      operationId: MatterStatuses_GetStatusesForMatter
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of matter.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '200':
+          description: MatterStatusesModel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatterStatusesModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    post:
+      tags:
+      - Statuses
+      summary: Creates a new matter status or note
+      operationId: MatterStatuses_CreateMatterStatusOrNote
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of Matter
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      requestBody:
+        x-name: matterStatus
+        description: Matter status or note details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusAndNoteCreationModel'
+        x-position: 2
+      responses:
+        '201':
+          description: StatusAndNoteObjectModel
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusAndNoteObjectModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+  /matters/statuses/{id}:
+    get:
+      tags:
+      - Statuses
+      summary: Find a status by ID
+      description: Retrieves information about status by ID.
+      operationId: MatterStatuses_GetStatus
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of status.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '200':
+          description: StatusAndNoteObjectModel
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusAndNoteObjectModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    delete:
+      tags:
+      - Statuses
+      summary: Delete status by ID
+      description: Delete information about status by ID.
+      operationId: MatterStatuses_DeleteStatus
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of status.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: If-Match
+        in: header
+        required: true
+        description: The ETag for the record to perform a concurrency check
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Record was delete successfully
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '412':
+          description: ETag provided in the If-Match header is out of date
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '428':
+          description: Missing the "If-Match" header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    patch:
+      tags:
+      - Statuses
+      summary: Update a status by ID
+      description: Update field values for a status identified by the status ID.
+      operationId: MatterStatuses_PatchStatus
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of status.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: If-Match
+        in: header
+        required: true
+        description: The ETag for the record to perform a concurrency check
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.
+
+          '
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        x-name: patchModel
+        description: upload model
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/StatusAndNoteUploadModel'
+        x-position: 2
+      responses:
+        '200':
+          description: StatusAndNoteObjectModel
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusAndNoteObjectModel'
+        '204':
+          description: Record was patched successfully
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '412':
+          description: ETag provided in the If-Match header is out of date
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '415':
+          description: Unsupported format type is included in "Content-Type" header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '428':
+          description: Missing the "If-Match" header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+components:
+  schemas:
+    DueDateStatusResponse:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/SearchResponseMetadata'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DueDateStatus'
+      additionalProperties: false
+    DueDateStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the status.
+          format: uuid
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the status.
+        displayColor:
+          type:
+          - string
+          - 'null'
+          description: Display color for the status.
+        isDefaultState:
+          type: boolean
+          description: true if this is the default status - new due dates will automatically assume this status.
+        isCompleteState:
+          type: boolean
+          description: true if the status is considered as complete.
+        displayOrder:
+          type: integer
+          format: int32
+        created:
+          type: string
+          description: Date at which the status was created.
+          format: date-time
+        modified:
+          type:
+          - string
+          - 'null'
+          description: Date at which the status was last modified.
+          format: date-time
+        completedDate:
+          type:
+          - string
+          - 'null'
+          description: Date at which the status was marked as completed.
+          format: date-time
+      additionalProperties: false
+    SearchResponseMetadata:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          format: int32
+      additionalProperties: false
+    MatterStatusesModel:
+      type: object
+      additionalProperties: false
+      properties:
+        statuses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/StatusAndNoteObjectModel'
+    StatusAndNoteUploadModel:
+      type: object
+      additionalProperties: false
+      properties:
+        subject:
+          type:
+          - string
+          - 'null'
+          maxLength: 5000
+          minLength: 0
+        isNoChange:
+          type: boolean
+        developmentDescription:
+          type:
+          - string
+          - 'null'
+        access:
+          $ref: '#/components/schemas/AccessType'
+    StatusTypes:
+      type: string
+      description: ''
+      x-enumNames:
+      - Status
+      - Note
+      enum:
+      - STATUS
+      - NOTE
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    AccessType:
+      type: string
+      description: ''
+      x-enumNames:
+      - 'Null'
+      - Public
+      - RestrictedFirm
+      - RestrictedLead
+      - Private
+      enum:
+      - 'Null'
+      - AllMatterParticipants
+      - CompanyAndSubmittingFirmMatterParticipants
+      - CompanyAndLeadFirmMatterParticipants
+      - CompanyMatterParticipantsOnly
+    StatusAndNoteCreationModel:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - subject
+      - isNoChange
+      - access
+      properties:
+        type:
+          $ref: '#/components/schemas/StatusTypes'
+        subject:
+          type: string
+          maxLength: 5000
+          minLength: 0
+        isNoChange:
+          type: boolean
+        developmentDescription:
+          type:
+          - string
+          - 'null'
+        access:
+          $ref: '#/components/schemas/AccessType'
+    StatusAndNoteObjectModel:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        attachmentUrl:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/StatusTypes'
+        url:
+          type:
+          - string
+          - 'null'
+        submittedDate:
+          type: string
+          format: date-time
+        author:
+          type:
+          - string
+          - 'null'
+        access:
+          $ref: '#/components/schemas/AccessType'
+        subject:
+          type:
+          - string
+          - 'null'
+        developmentDescription:
+          type:
+          - string
+          - 'null'
+        isNoChange:
+          type:
+          - boolean
+          - 'null'
+        isLocked:
+          type: boolean
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: 'Enter the authorization token here. Example: Bearer ABC'
+      name: Authorization
+      in: header
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-calendar-due-dates-management-api-openapi.json
+- thomson-reuters-matters-api-1-9-openapi.json
+- thomson-reuters-matters-api-1-9-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

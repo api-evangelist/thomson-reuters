@@ -1,0 +1,242 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Configuration Entity…
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: EntityHierarchy
+paths:
+  /master-data/entity-hierarchy:
+    post:
+      tags:
+      - EntityHierarchy
+      summary: Create entity group structure
+      operationId: EntityHierarchy_CreateEntityHierarchy
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+        required: true
+    delete:
+      tags:
+      - EntityHierarchy
+      summary: Delete entity group members
+      operationId: EntityHierarchy_DeleteEntityHierarchy
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+        required: true
+    patch:
+      tags:
+      - EntityHierarchy
+      summary: Update entity group structure
+      operationId: EntityHierarchy_UpdateEntityHierarchy
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest'
+        required: true
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModel:
+      description: Entity Hierarchy
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Parent entity unique identifier
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          description: Parent entity name
+          type: string
+        isGroup:
+          description: Group
+          type: boolean
+        displayOrder:
+          format: int32
+          description: Display order
+          type: integer
+        entryDate:
+          format: date-time
+          description: Entry Date
+          type: string
+        exitDate:
+          format: date-time
+          description: Exit Date
+          type: string
+        ownership:
+          format: double
+          description: Ownership
+          type: number
+        entities:
+          description: Child entities
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModel'
+    TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest:
+      type: object
+      properties:
+        items:
+          description: Groups
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModel'

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-jurisdiction-attachment-code-detail-schema.json",
+  "title": "JurisdictionAttachmentCodeDetail",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-gosystem-tax-return-api-openapi.yml#/components/schemas/JurisdictionAttachmentCodeDetail",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Jurisdiction name"
+    },
+    "code": {
+      "type": "string",
+      "description": "Jurisdiction attachment code"
+    },
+    "fileTypes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Valid file type extension that's allowed for this jurisdiction attachment code, other file types will result in validation failure. Only PDF attachment is allowed if no files types specified."
+      }
+    },
+    "predefinedDescriptions": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/PredefinedDescription"
+      }
+    },
+    "hasAdditionalInfo": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Is set to true when a specific Jurisdiction has additional info 1 or 1 & 2"
+    },
+    "canAttachMultiple": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Is set to true when a specific Jurisdiction allows multiple e-file PDF or XML attachment"
+    },
+    "mustCheckFormName": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Is set to true when a specific Jurisdiction to valid it has Form Names"
+    },
+    "hasFormInfo": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Is set to true when a specific Jurisdiction has Form and Form element details however form and element section becomes available when all tax return field conditions are satisfied."
+    },
+    "hasStateRequiredFormNames": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Is set to true when a specific Jurisdiction to valid it has state required Form Names"
+    },
+    "additionalInfos": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/InfoLabel"
+      }
+    },
+    "formInfos": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/InfoLabel"
+      }
+    },
+    "forms": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Form"
+      }
+    },
+    "stateRequiredFormTitle": {
+      "type": "array",
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "Form": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Efile attachment form name, this section is available based on jurisdiction and tax return field values and condition."
+        },
+        "formElements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FormElement"
+          }
+        },
+        "hasCurrency": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "FormElement": {
+      "type": "object",
+      "properties": {
+        "titleText": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Form element title/description, these forms are available based on tax return field values and condition."
+          }
+        },
+        "elementUsed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "hasCurrency": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "InfoLabel": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Label text for the addition info 1, 2 and Form Name"
+        },
+        "maxLength": {
+          "type": "integer",
+          "description": "Maximum length for additional info 1, 2 and Form Name"
+        }
+      }
+    },
+    "PredefinedDescription": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Predefined description provided by IRS"
+        },
+        "isReusable": {
+          "type": "boolean",
+          "description": "This specific description can be used in multiple attachments."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,102 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: Charts
+paths:
+  /v1/charts/{chartId}:
+    delete:
+      tags:
+      - Charts
+      summary: Deletes a chart. Enter the chartId in the URL
+      operationId: DeletesAChart
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChartProblemRepresentation'
+              examples:
+                ChartProblemRepresentation:
+                  $ref: '#/components/examples/chart-problem-representation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Deletes a Chart
+components:
+  examples:
+    chart-problem-representation:
+      value:
+        chartError:
+        - fieldName: error field name
+          messageNumber: error message number
+          messageDetail: validation message
+        type: Validation Type
+        title: validation title
+        detail: validation message detail
+        instance: chartId
+  schemas:
+    ChartProblemRepresentation:
+      type: object
+      properties:
+        chartError:
+          type: array
+          items:
+            type: object
+            properties:
+              fieldName:
+                type: string
+              messageNumber:
+                type: string
+              messageDetail:
+                type: string
+        type:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

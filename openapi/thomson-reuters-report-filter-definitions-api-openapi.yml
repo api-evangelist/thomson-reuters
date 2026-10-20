@@ -1,0 +1,201 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Report filter definitions API
+  version: '2.0'
+  description: 'Operations tagged Report filter definitions across 3 of this provider''s published API definitions: thomson-reuters-reports-api-2-0-openapi.json, thomson-reuters-reports-api-2-0-openapi.yml, thomson-reuters-reports-api-2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+tags:
+- name: Report filter definitions
+paths:
+  /filter-definitions/{id}:
+    get:
+      tags:
+      - Report filter definitions
+      summary: Retrieve the list of parameters with possible values that can be used for the…
+      description: Each filter has it's own list of parameters. This endpoint allows to retrieve the list of parameters with possible values that can be used for the particular filter.
+      operationId: Report_GetFilter
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Full path to the filter
+        examples:
+          Path for filter Matter -> Short Name:
+            summary: Path for filter Matter -> Short Name
+            value: Matter.Name
+          'Path for filter Matter -> Org. Unit: Select from list':
+            summary: 'Path for filter Matter -> Org. Unit: Select from list'
+            value: Matter.OrgUnit.TreePicklist
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        '200':
+          description: The list of parameters that can be used for the filter with possible values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportFilterDefinition'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+      security:
+      - OAuth2: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+components:
+  schemas:
+    FilterParameterType:
+      type: string
+      description: ''
+      x-enumNames:
+      - BooleanValue
+      - NumericValue
+      - StringValue
+      - DateTimeValue
+      - PeriodValue
+      - EnumerationValue
+      - Operator
+      - Field
+      enum:
+      - BooleanValue
+      - NumericValue
+      - StringValue
+      - DateTimeValue
+      - PeriodValue
+      - EnumerationValue
+      - Operator
+      - Field
+    FilterParameter:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+        options:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+        multiselect:
+          type: boolean
+        parameterType:
+          $ref: '#/components/schemas/FilterParameterType'
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    ReportFilterDefinition:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Filter unique identifier (actual full path to a filter)
+        name:
+          type:
+          - string
+          - 'null'
+          description: Displayed name of the filter.
+        type:
+          type:
+          - string
+          - 'null'
+          description: Filter type.
+        params:
+          type:
+          - object
+          - 'null'
+          description: Parameters that are used in filter with accepted values.
+          additionalProperties:
+            $ref: '#/components/schemas/FilterParameter'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-reports-api-2-0-openapi.json
+- thomson-reuters-reports-api-2-0-openapi.yml
+- thomson-reuters-reports-api-2-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

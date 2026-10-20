@@ -1,0 +1,605 @@
+# x-archived-from: thomson-reuters-datahub-query-comparisons-service-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Datahub Query Comparisons Service
+  description: Manage all available comparisons
+  version: '1.0'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+paths:
+  /query/v2/comparisons:
+    get:
+      tags:
+      - Query Comparisons Service
+      summary: Get a paginated list of available Comparisons
+      description: Returns a list of all the Comparisons for a particular client based on filter conditions with their metadata
+      operationId: getQueryComparisonsService
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionComparisonsResponse'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Query Comparisons Service
+      summary: Create new Comparisons Metadata
+      description: Adds Metadata with required details of selected and compared data set values and column indexes.
+      operationId: createQueryComparison
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateComparisonsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+      security:
+      - bearerAuth: []
+  /query/v2/comparisons/{id}:
+    get:
+      tags:
+      - Query Comparisons Service
+      summary: Get a Query Comparison by ID
+      description: Retrieves details of a Query Comparison identified by a unique id from Comparisons Metadata
+      operationId: getQueryComparison
+      parameters:
+      - name: id
+        in: path
+        description: Unique Identifier of a comparison
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ComparisonsResponse'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Query Comparisons Service
+      summary: Updates an existing Comparison
+      description: Updates status of a comparison
+      operationId: updateMetadata
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of a comparison
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchComparisonsRequest'
+        required: true
+      responses:
+        '204':
+          description: Patch successful
+      security:
+      - bearerAuth: []
+  /query/v2/comparisons/{id}/results:
+    get:
+      tags:
+      - Query Comparisons Service
+      summary: Get Comparison Results by ID
+      description: Retrieves results of a Query Comparison identified by a unique id from Comparisons Metadata
+      operationId: getQueryComparisonResults
+      parameters:
+      - name: id
+        in: path
+        description: Unique Identifier of a comparison
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records to skip before starting the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        description: Filter by status value
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultsResponse'
+      security:
+      - bearerAuth: []
+  /query/v2/comparisons/{id}/download:
+    get:
+      tags:
+      - Query Comparisons Service
+      summary: Get a Query Comparison Download by ID
+      description: Retrieves a download url for a Query Comparison.
+      operationId: getQueryComparisonDownload
+      parameters:
+      - name: id
+        in: path
+        description: Unique Identifier of a comparison
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ComparisonDownloadResponse'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    CreateComparisonsRequest:
+      required:
+      - compared
+      - selected
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the comparison process
+          enum:
+          - STAGED
+          - STARTED
+          - PROCESSING
+          - COMPLETE
+        selected:
+          $ref: '#/components/schemas/DatasetDTO'
+        compared:
+          $ref: '#/components/schemas/DatasetDTO'
+    DatasetDTO:
+      required:
+      - key
+      - name
+      - source
+      type: object
+      properties:
+        source:
+          type: string
+          description: Source of the details of this dataset
+          example: DATAHUB_TOPIC/DATAHUB_COLLECTION_VERSION
+          enum:
+          - DATAHUB_TOPIC
+          - DATAHUB_COLLECTION_VERSION
+        name:
+          type: string
+          description: Name of the dataset
+          example: ABC dataset
+        key:
+          type: string
+          description: Unique identifier of the dataset from SOURCE
+          example: 5eed28cee5d5882c0bbefe5c
+        index_columns:
+          type: array
+          description: Array of column indexes that match selected and compared dataset
+          example:
+          - 0
+          - 1
+          items:
+            type: integer
+            description: Array of column indexes that match selected and compared dataset
+            format: int32
+        compare_columns:
+          type: array
+          description: Array of column indexes on which comparison is performed
+          example:
+          - 2
+          - 3
+          items:
+            type: integer
+            description: Array of column indexes on which comparison is performed
+            format: int32
+        context_columns:
+          type: array
+          description: Array of column indexes which provides additional information to the comparison data
+          example:
+          - 4
+          - 5
+          items:
+            type: integer
+            description: Array of column indexes which provides additional information to the comparison data
+            format: int32
+    IdResponseString:
+      type: object
+      properties:
+        id:
+          type: string
+    PatchComparisonsRequest:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Update Status value of the comparison process (ex- STARTED)
+          enum:
+          - STAGED
+          - STARTED
+          - PROCESSING
+          - COMPLETE
+    ApiCollectionComparisonsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComparisonsResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    ComparisonsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Comparison
+          example: 603d4f1c1b37c8414fd82652
+        status:
+          type: string
+          description: Status of the comparison process
+          enum:
+          - STAGED
+          - STARTED
+          - PROCESSING
+          - COMPLETE
+        selected:
+          $ref: '#/components/schemas/DatasetDTO'
+        compared:
+          $ref: '#/components/schemas/DatasetDTO'
+        records:
+          $ref: '#/components/schemas/Records'
+        created_by:
+          type: string
+          example: UserA
+        created_at:
+          type: string
+          description: Time when comparison status is set to STAGED or STARTED
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        started_at:
+          type: string
+          description: Time when comparison status is set to PROCESSING
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        completed_at:
+          type: string
+          description: Time when comparison process got COMPLETED status
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+    Records:
+      type: object
+      properties:
+        exact:
+          type: integer
+          format: int32
+        modified:
+          type: integer
+          format: int32
+        added:
+          type: integer
+          format: int32
+        removed:
+          type: integer
+          format: int32
+    Meta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        filter:
+          type: string
+    ResultsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          example:
+          - status: EXACT
+            context:
+              compared:
+                extra:
+                - mysimilarbutdifferentcompanydescription
+                record_number: 2
+              selected:
+                extra:
+                - mycompanydescription
+                record_number: 1
+            occurrence: 1
+            index_values:
+            - A001
+            - E001
+            compared_values:
+            - compared: 110
+              selected: 100
+              difference: -10
+          - status: ADDED
+            context:
+              compared:
+                extra:
+                - mysimilarbutdifferentcompanydescription
+                record_number: 3
+            occurrence: 2
+            index_values:
+            - A001
+            - E001
+            compared_values:
+            - compared: 120
+          - status: MODIFIED
+            context:
+              compared:
+                extra:
+                - mysimilarbutdifferentcompanydescription
+                record_number: 2
+              selected:
+                extra:
+                - mycompanydescription
+                record_number: 1
+            occurrence: 1
+            index_values:
+            - A001
+            - E001
+            compared_values:
+            - compared: 110
+              selected: 100
+              difference: -10
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              example:
+              - status: EXACT
+                context:
+                  compared:
+                    extra:
+                    - mysimilarbutdifferentcompanydescription
+                    record_number: 2
+                  selected:
+                    extra:
+                    - mycompanydescription
+                    record_number: 1
+                occurrence: 1
+                index_values:
+                - A001
+                - E001
+                compared_values:
+                - compared: 110
+                  selected: 100
+                  difference: -10
+              - status: ADDED
+                context:
+                  compared:
+                    extra:
+                    - mysimilarbutdifferentcompanydescription
+                    record_number: 3
+                occurrence: 2
+                index_values:
+                - A001
+                - E001
+                compared_values:
+                - compared: 120
+              - status: MODIFIED
+                context:
+                  compared:
+                    extra:
+                    - mysimilarbutdifferentcompanydescription
+                    record_number: 2
+                  selected:
+                    extra:
+                    - mycompanydescription
+                    record_number: 1
+                occurrence: 1
+                index_values:
+                - A001
+                - E001
+                compared_values:
+                - compared: 110
+                  selected: 100
+                  difference: -10
+            example:
+            - status: EXACT
+              context:
+                compared:
+                  extra:
+                  - mysimilarbutdifferentcompanydescription
+                  record_number: 2
+                selected:
+                  extra:
+                  - mycompanydescription
+                  record_number: 1
+              occurrence: 1
+              index_values:
+              - A001
+              - E001
+              compared_values:
+              - compared: 110
+                selected: 100
+                difference: -10
+            - status: ADDED
+              context:
+                compared:
+                  extra:
+                  - mysimilarbutdifferentcompanydescription
+                  record_number: 3
+              occurrence: 2
+              index_values:
+              - A001
+              - E001
+              compared_values:
+              - compared: 120
+            - status: MODIFIED
+              context:
+                compared:
+                  extra:
+                  - mysimilarbutdifferentcompanydescription
+                  record_number: 2
+                selected:
+                  extra:
+                  - mycompanydescription
+                  record_number: 1
+              occurrence: 1
+              index_values:
+              - A001
+              - E001
+              compared_values:
+              - compared: 110
+                selected: 100
+                difference: -10
+        _meta:
+          $ref: '#/components/schemas/Meta'
+    ComparisonDownloadResponse:
+      type: object
+      properties:
+        download_url:
+          type: string
+          description: URL to download the Comparison
+          example: https://example.thomsonreuters.com/example.csv
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

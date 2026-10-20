@@ -1,0 +1,314 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Property Benefit API
+  version: v1
+  description: 'Operations tagged Property Benefit across 2 of this provider''s published API definitions: thomson-reuters-fbt-customer-api-2-openapi.json, thomson-reuters-fbt-customer-api-2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/benefits
+tags:
+- name: Property Benefit
+paths:
+  /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/property-benefits:
+    get:
+      tags:
+      - Property Benefit
+      summary: Get all property benefits in a reporting entity
+      operationId: PropertyBenefit_GetBenefits
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: offset
+        in: query
+        description: Offset
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Limit
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get all property benefits in a reporting entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.PropertyModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.PropertyModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.PropertyModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.PropertyModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/benefits
+components:
+  schemas:
+    Fbt.Models.CustomerApi.Benefits.PropertyModelForCustomerApi:
+      description: Property model
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Benefit value id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        code:
+          description: Benefit id
+          type: string
+        costCenterId:
+          format: uuid
+          description: Cost center id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        standardCategoryId:
+          format: int32
+          description: Standard category id
+          type: integer
+        employeeId:
+          format: uuid
+          description: Person id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        groupType:
+          description: Group type Code
+          type: string
+        region:
+          description: Region
+          type: string
+        adjustments:
+          format: double
+          description: Adjustments
+          type: number
+        amountGSTIncluded:
+          format: double
+          description: Amount GST included
+          type: number
+        benefitAmount:
+          format: double
+          description: Benefit amount
+          type: number
+        businessAmount:
+          format: double
+          description: Business amount
+          type: number
+        businessPercent:
+          format: double
+          description: Business percent
+          type: number
+        concessionAmount:
+          format: double
+          description: Concession amount
+          type: number
+        customerAmt:
+          format: double
+          description: Customer amount
+          type: number
+        dateProvided:
+          description: Date provided
+          type: string
+        description:
+          description: Description
+          type: string
+        employeeContribution:
+          format: double
+          description: Employee contribution
+          type: number
+        employeeContributionEntered:
+          format: double
+          description: Employee contribution entered
+          type: number
+        excessEmployeeContribution:
+          format: double
+          description: Excess employee contribution
+          type: number
+        exemptGUTA17000Applied:
+          format: double
+          description: Exempt GUTA 17000 applied
+          type: number
+        exemptGUTA30000Applied:
+          format: double
+          description: Exempt GUTA 30000 applied
+          type: number
+        grossedUpTaxableAmount:
+          format: double
+          description: Grossed up taxable amount
+          type: number
+        grossedUpTaxableAmt17000:
+          format: double
+          description: Grossed up taxable amount 17000
+          type: number
+        grossedUpTaxableAmt30000:
+          format: double
+          description: Grossed up taxable amount 30000
+          type: number
+        grossedUpTaxableValue:
+          format: double
+          description: Grossed up taxable value
+          type: number
+        grossTaxableAmount:
+          format: double
+          description: Grossed taxable amount
+          type: number
+        gstPercent:
+          format: double
+          description: GST percent
+          type: number
+        ignoreEmpContriAndInHouseFlag:
+          description: Ignore empContribution and in house flag
+          type: boolean
+        inHouse:
+          description: In house
+          type: boolean
+        inHouseAmtApplied:
+          format: double
+          description: In house amount applied
+          type: number
+        inHouseCalcMethodCode:
+          format: int32
+          description: In house calculation method code
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          type: integer
+        isAddGSTRequired:
+          description: Is add GST required
+          type: boolean
+        isExcluded:
+          description: Is excluded
+          type: boolean
+        isExempt:
+          description: Is exempt
+          type: boolean
+        mealOrEFLE:
+          description: Meal or EFLE
+          type: boolean
+        rebateApplied:
+          format: double
+          description: Rebate applied
+          type: number
+        reductionAmount:
+          format: double
+          description: Reduction amount
+          type: number
+        reductionAmountApplied:
+          format: double
+          description: Reduction amount applied
+          type: number
+        remoteAreaBenefitType:
+          format: int32
+          description: Remote area benefit type
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          type: integer
+        reportable:
+          description: Reportable
+          type: boolean
+        reportableAmount:
+          format: double
+          description: Reportable amount
+          type: number
+        reportableValue:
+          description: Reportable value
+          type: string
+        rfbaExcludedComponent:
+          format: double
+          description: RFBA excluded component
+          type: number
+        state:
+          description: State
+          type: string
+        taxableAmount:
+          format: double
+          description: Taxable amount
+          type: number
+        taxPayable:
+          format: double
+          description: Tax payable
+          type: number
+        taxPayable17000:
+          format: double
+          description: Tax payable 17000
+          type: number
+        taxPayable30000:
+          format: double
+          description: Tax payable 30000
+          type: number
+        taxPayableRebate:
+          format: double
+          description: Tax payable rebate
+          type: number
+        unCappedRFBA:
+          format: double
+          description: Un capped RFBA
+          type: number
+        valueOfReductions:
+          format: double
+          description: Value of reductions
+          type: number
+x-refined-from:
+- thomson-reuters-fbt-customer-api-2-openapi.json
+- thomson-reuters-fbt-customer-api-2-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

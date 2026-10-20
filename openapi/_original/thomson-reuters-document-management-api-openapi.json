@@ -1,0 +1,1441 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Document Management API",
+    "description": "The Document Management API provides access to Matter-related Document metadata in the Tracker Company database",
+    "contact": {
+      "name": "devportal"
+    },
+    "version": "1.4"
+  },
+  "servers": [
+    {
+      "url": "https://api.thomsonreuters.com/legal-tracker/documents-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.co.uk/legal-tracker/documents-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.ca/legal-tracker/documents-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.com.au/legal-tracker/documents-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.de/legal-tracker/documents-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.ae/legal-tracker/documents-api/v1"
+    }
+  ],
+  "paths": {
+    "/documents": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Retrieve all company documents.",
+        "operationId": "Documents_GetAll",
+        "parameters": [
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)",
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "default": 50
+            },
+            "example": 50
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)",
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, documentType, accessType, userId, createdAtDateTime, modifiedAtDateTime, description, url, folderId, relatedEntityType, relatedEntityId, author",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "example": "id eq 111222"
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "documentType",
+                  "accessType",
+                  "userId",
+                  "createdAtDateTime",
+                  "modifiedAtDateTime",
+                  "description",
+                  "url",
+                  "folderId",
+                  "relatedEntityType",
+                  "relatedEntityId",
+                  "author"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "documentType",
+                  "accessType",
+                  "userId",
+                  "createdAtDateTime",
+                  "modifiedAtDateTime",
+                  "description",
+                  "url",
+                  "folderId",
+                  "relatedEntityType",
+                  "relatedEntityId",
+                  "author",
+                  "id desc",
+                  "name desc",
+                  "documentType desc",
+                  "accessType desc",
+                  "userId desc",
+                  "createdAtDateTime desc",
+                  "modifiedAtDateTime desc",
+                  "description desc",
+                  "url desc",
+                  "folderId desc",
+                  "relatedEntityType desc",
+                  "relatedEntityId desc",
+                  "author desc"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all company documents.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If the OData filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the current user is not authorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a server error has occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Create a document with the provided parameters. A document can be created using either an eFile upload key, or a network location URL.",
+        "operationId": "Documents_Create",
+        "parameters": [
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.\n* return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "return=representation"
+          }
+        ],
+        "requestBody": {
+          "description": "The model containing the document to be created.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDocumentModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the document that was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentModel"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Document was created but will not be provided in response."
+          },
+          "400": {
+            "description": "If the request parameters were invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the current user is not authorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a server error has occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents/{id}": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Look up and retrieve a document by the provided identifier.",
+        "operationId": "Documents_GetOne",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Represents an identifier of a document.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "description": "Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a document with the specified identifier.",
+            "headers": {
+              "ETag": {
+                "description": "Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.",
+                "schema": {
+                  "type": "string",
+                  "description": "Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control."
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentModel"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Returns a not modified response with empty body."
+          },
+          "400": {
+            "description": "If an identifier is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the current user is not authorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If a document is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a server error has occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Update the document with the provided identifier.",
+        "operationId": "Documents_Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the document to be updated.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 200 would be returned.\n* return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "return=representation"
+          }
+        ],
+        "requestBody": {
+          "description": "The model containing the document to be updated.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the document that was updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentModel"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Document was updated but will not be provided in response."
+          },
+          "400": {
+            "description": "If the request parameters were invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the current user is not authorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a server error has occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Delete the document with the provided identifier.",
+        "operationId": "Documents_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the document to be deleted.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "If the document was deleted."
+          },
+          "400": {
+            "description": "If an identifier is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the document does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the current user is not authorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a server error has occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/download-links": {
+      "post": {
+        "tags": [
+          "DownloadLinks"
+        ],
+        "summary": "Post a model with a Document Id to retrieve a link to download the Document's content.",
+        "requestBody": {
+          "description": "The model containing the Document Id",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadLinkPostModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a link to download document content with the specified identifier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadLinkModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If an identifier is not an allowed value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the current user is not authorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If a document is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a server error has occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/folders": {
+      "get": {
+        "tags": [
+          "Folders"
+        ],
+        "summary": "Retrieve all folder information for the current company.",
+        "operationId": "Folders_GetAll",
+        "parameters": [
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)",
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "default": 50
+            },
+            "example": 50
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)",
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, active",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "example": "id eq 111222"
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "active"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "active",
+                  "id desc",
+                  "name desc",
+                  "active desc"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all folders.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FolderCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If the OData filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the current user is not authorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a server error has occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/folders/{id}": {
+      "get": {
+        "tags": [
+          "Folders"
+        ],
+        "summary": "Look up and retrieve a folder by the provided identifier.",
+        "operationId": "Folders_GetOne",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Represents an identifier of a folder.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a folder with the specified identifier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FolderModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If an identifier is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If current user is not authorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If a folder is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a server error has occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matter-documents/{matterId}": {
+      "get": {
+        "tags": [
+          "MatterDocuments"
+        ],
+        "summary": "Retrieve all documents associated with a specific matter.",
+        "operationId": "MatterDocuments_GetAll",
+        "parameters": [
+          {
+            "name": "matterId",
+            "in": "path",
+            "description": "Represents an identifier of a matter.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)",
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "default": 50
+            },
+            "example": 50
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)",
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, documentType, accessType, userId, createdAtDateTime, modifiedAtDateTime, description, url, folderId, relatedEntityType, relatedEntityId, author",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "example": "id eq 111222"
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "documentType",
+                  "accessType",
+                  "userId",
+                  "createdAtDateTime",
+                  "modifiedAtDateTime",
+                  "description",
+                  "url",
+                  "folderId",
+                  "relatedEntityType",
+                  "relatedEntityId",
+                  "author"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "documentType",
+                  "accessType",
+                  "userId",
+                  "createdAtDateTime",
+                  "modifiedAtDateTime",
+                  "description",
+                  "url",
+                  "folderId",
+                  "relatedEntityType",
+                  "relatedEntityId",
+                  "author",
+                  "id desc",
+                  "name desc",
+                  "documentType desc",
+                  "accessType desc",
+                  "userId desc",
+                  "createdAtDateTime desc",
+                  "modifiedAtDateTime desc",
+                  "description desc",
+                  "url desc",
+                  "folderId desc",
+                  "relatedEntityType desc",
+                  "relatedEntityId desc",
+                  "author desc"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all documents associated with the matter.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If the OData filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the current user is not authorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a server error has occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccessType": {
+        "enum": [
+          "Null",
+          "Public",
+          "RestrictedFirm",
+          "RestrictedLead",
+          "Private"
+        ],
+        "type": "string",
+        "description": "The level of access that determines how other users can interact with this document."
+      },
+      "CreateDocumentModel": {
+        "required": [
+          "accessModifier",
+          "documentType",
+          "folderId",
+          "name",
+          "relatedEntityId",
+          "relatedEntityType",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 200,
+            "type": "string",
+            "description": "The name of the Document record."
+          },
+          "documentType": {
+            "$ref": "#/components/schemas/DocumentType"
+          },
+          "accessModifier": {
+            "$ref": "#/components/schemas/AccessType"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "The user identifier for the owner of the Document record.",
+            "format": "int32"
+          },
+          "description": {
+            "maxLength": 4000,
+            "type": "string",
+            "description": "The description of the Document record.",
+            "nullable": true
+          },
+          "eFileKey": {
+            "type": "string",
+            "description": "The eFile upload key (if applicable) for the Document record.",
+            "nullable": true
+          },
+          "url": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "The network location (if applicable) for the Document record.",
+            "nullable": true
+          },
+          "folderId": {
+            "type": "integer",
+            "description": "The folder identifier of the Document record.",
+            "format": "int32"
+          },
+          "relatedEntityType": {
+            "$ref": "#/components/schemas/RelatedEntityType"
+          },
+          "relatedEntityId": {
+            "type": "integer",
+            "description": "The identifier for the related entity of the Document record (e.g. Matter ID.",
+            "format": "int32"
+          },
+          "author": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "The name of the author of the document.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DocumentCollection": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DocumentModel": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The identifier for the Document record.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the Document record.",
+            "nullable": true
+          },
+          "documentType": {
+            "$ref": "#/components/schemas/DocumentType"
+          },
+          "accessType": {
+            "$ref": "#/components/schemas/AccessType"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "The user identifier for the owner of the Document record.",
+            "format": "int32"
+          },
+          "createdAtDateTime": {
+            "type": "string",
+            "description": "The date when the Document record was created.",
+            "format": "date-time"
+          },
+          "modifiedAtDateTime": {
+            "type": "string",
+            "description": "The date when the Document record was modified.",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the Document record.",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "description": "The network location for file retrieval of the Document record.",
+            "nullable": true
+          },
+          "folderId": {
+            "type": "integer",
+            "description": "The folder identifier (if any) of the Document record.",
+            "format": "int32",
+            "nullable": true
+          },
+          "relatedEntityType": {
+            "$ref": "#/components/schemas/RelatedEntityType"
+          },
+          "relatedEntityId": {
+            "type": "integer",
+            "description": "The identifier for the related entity of the Document record.",
+            "format": "int32",
+            "nullable": true
+          },
+          "author": {
+            "type": "string",
+            "description": "The name of the author of the document.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DocumentType": {
+        "enum": [
+          "Null",
+          "Document",
+          "Contract",
+          "Secondary",
+          "Sop",
+          "Email"
+        ],
+        "type": "string",
+        "description": "The type of the Document record."
+      },
+      "DownloadLinkModel": {
+        "required": [
+          "link"
+        ],
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string",
+            "description": "The URL to the document."
+          },
+          "fileSizeInBytes": {
+            "type": "integer",
+            "description": "The size of the document in bytes.",
+            "format": "int32"
+          },
+          "mD5Hash": {
+            "type": "string",
+            "description": "The MD5 Hash of the document.",
+            "nullable": true
+          },
+          "documentModel": {
+            "$ref": "#/components/schemas/DocumentModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DownloadLinkPostModel": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The identifier for the Document record.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Error": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "required": [
+                "code",
+                "message"
+              ],
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "innerError": {
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "required": [
+          "error"
+        ],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FolderCollection": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FolderModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FolderModel": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The identifier for the Folder record.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the Folder.",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean",
+            "description": "The current active state of the Folder."
+          }
+        },
+        "additionalProperties": false
+      },
+      "RelatedEntityType": {
+        "enum": [
+          "Matter"
+        ],
+        "type": "string",
+        "description": "The type of entity that the Document record is related to (e.g. Matter)."
+      },
+      "UpdateDocumentModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The id of the document",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 200,
+            "type": "string",
+            "description": "The name of the Document record.",
+            "nullable": true
+          },
+          "accessModifier": {
+            "$ref": "#/components/schemas/AccessType"
+          },
+          "description": {
+            "maxLength": 4000,
+            "type": "string",
+            "description": "The description of the Document record.",
+            "nullable": true
+          },
+          "folderId": {
+            "type": "integer",
+            "description": "The folder identifier of the Document record.",
+            "format": "int32",
+            "nullable": true
+          },
+          "author": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "The name of the author of the document.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "OAuth2": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Documents",
+      "description": "Use the Documents endpoint to get and manage document details."
+    },
+    {
+      "name": "DownloadLinks",
+      "description": "Use the DownloadLinks endpoint to get a link to download an existing document."
+    },
+    {
+      "name": "Folders",
+      "description": "Use the Folders endpoint to get information about folders that are used to organize documents."
+    },
+    {
+      "name": "MatterDocuments",
+      "description": "Use the MatterDocuments endpoint to get a list of documents associated with a matter."
+    }
+  ]
+}

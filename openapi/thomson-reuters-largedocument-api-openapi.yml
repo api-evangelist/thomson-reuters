@@ -1,0 +1,946 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Large Document API
+  version: v1
+  description: 'Operations tagged LargeDocument across 3 of this provider''s published API definitions: thomson-reuters-firmflow-web-api-services-v1-openapi.json, thomson-reuters-firmflow-web-api-services-openapi.yml, thomson-reuters-firmflow-web-api-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: LargeDocument
+paths:
+  /firmflow/api/LargeDocument/GetDocumentInfo:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Get document details
+      description: Retrieves the details of a document based on the provided criteria.
+      operationId: Get_DocumentInfo
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: Version
+        in: query
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+      - name: DocumentId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DocumentInfoDetailedProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentInfoDetailedProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DocumentInfoDetailedProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/LargeDocument/Hash:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Get document hash
+      description: Retrieves the hash of a document based on the provided criteria.
+      operationId: Get_Hash
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: DrawerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: CabinetId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentName
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: Version
+        in: query
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+      - name: Extension
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/LargeDocument/Upload/Part:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Upload a part of a large document
+      description: Uploads a part of a large document based on the provided criteria.
+      operationId: Upload_Part
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                File:
+                  type: string
+                  format: binary
+                  nullable: true
+                DrawerId:
+                  type: string
+                  nullable: true
+                CabinetId:
+                  type: string
+                  nullable: true
+                DocumentName:
+                  type: string
+                  nullable: true
+                Part:
+                  type: integer
+                  format: int32
+            encoding:
+              File:
+                style: form
+              DrawerId:
+                style: form
+              CabinetId:
+                style: form
+              DocumentName:
+                style: form
+              Part:
+                style: form
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/LargeDocument/Upload/Part/Hash:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Get the hash of an uploaded part of a large document
+      description: Retrieves the hash of an uploaded part of a large document based on the provided criteria.
+      operationId: Get_Part_Hash
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: DrawerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: CabinetId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentName
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: Part
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/LargeDocument/Upload/Complete:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Complete the upload of a large document
+      description: Completes the upload of a large document based on the provided criteria.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLargeDocumentUploadRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLargeDocumentUploadRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateLargeDocumentUploadRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+      operationId: postFirmflowApiLargeDocumentUploadComplete
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/LargeDocument/Upload/Abort:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Abort the upload of a large document
+      description: Aborts the upload of a large document based on the provided criteria.
+      operationId: Delete_Upload_Abort
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/LargeDocument/Download/Start:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Start the download of a large document
+      description: Starts the download process of a large document based on the provided criteria.
+      operationId: Post_Download_Start
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartDownloadProcessRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/StartDownloadProcessRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/StartDownloadProcessRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StartDownloadProcessResponseProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartDownloadProcessResponseProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StartDownloadProcessResponseProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/LargeDocument/Download/Part:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Download a part of a large document
+      description: Downloads a part of a large document based on the provided criteria.
+      operationId: Get_Download_Part
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: DrawerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: CabinetId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentName
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: Part
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/LargeDocument/Download/Part/Hash:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Get the hash of a downloaded part of a large document
+      description: Retrieves the hash of a downloaded part of a large document based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: DrawerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: CabinetId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentName
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: Part
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+      operationId: getFirmflowApiLargeDocumentDownloadPartHash
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/LargeDocument/Download/Finish:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Finish the download of a large document
+      description: Finishes the download process of a large document based on the provided criteria.
+      operationId: Delete_Document_Finish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            applicat"ion/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    DocumentPartInfoDetailed:
+      type: object
+      properties:
+        drawerId:
+          type: string
+          nullable: true
+        cabinetId:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProcessResult:
+      type: object
+      properties:
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+        warningMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+      additionalProperties: false
+    StringProcessResult:
+      type: object
+      properties:
+        data:
+          type: string
+          nullable: true
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+        warningMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+      additionalProperties: false
+    StartDownloadProcessResponse:
+      type: object
+      properties:
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResouceInfo'
+          nullable: true
+        drawerId:
+          type: string
+          nullable: true
+        cabinetId:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+        version:
+          type: integer
+          format: int32
+          nullable: true
+        extension:
+          type: string
+          nullable: true
+        documentId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DocumentInfoDetailed:
+      type: object
+      properties:
+        drawerId:
+          type: string
+          nullable: true
+        cabinetId:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+        version:
+          type: integer
+          format: int32
+          nullable: true
+        extension:
+          type: string
+          nullable: true
+        documentId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DocumentInfoDetailedProcessResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DocumentInfoDetailed'
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+        warningMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+      additionalProperties: false
+    UpdateLargeDocumentUploadRequest:
+      type: object
+      properties:
+        saveAsNewVersion:
+          type: boolean
+          nullable: true
+        drawerId:
+          type: string
+          nullable: true
+        cabinetId:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+        version:
+          type: integer
+          format: int32
+          nullable: true
+        extension:
+          type: string
+          nullable: true
+        documentId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StartDownloadProcessResponseProcessResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/StartDownloadProcessResponse'
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+        warningMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+      additionalProperties: false
+    StartDownloadProcessRequest:
+      type: object
+      properties:
+        filePartSizeInMB:
+          type: integer
+          format: int32
+        version:
+          type: integer
+          format: int32
+          nullable: true
+        documentId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DocumentResouceInfo:
+      type: object
+      properties:
+        resourceLocation:
+          type: string
+          nullable: true
+        checkSum:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DocumentPartInfoDetailed_2:
+      type: object
+      properties:
+        drawerId:
+          type:
+          - string
+          - 'null'
+        cabinetId:
+          type:
+          - string
+          - 'null'
+        documentName:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ProcessResult_2:
+      type: object
+      properties:
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        warningMessages:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    StringProcessResult_2:
+      type: object
+      properties:
+        data:
+          type:
+          - string
+          - 'null'
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        warningMessages:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    StartDownloadProcessResponse_2:
+      type: object
+      properties:
+        parts:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DocumentResouceInfo_2'
+        drawerId:
+          type:
+          - string
+          - 'null'
+        cabinetId:
+          type:
+          - string
+          - 'null'
+        documentName:
+          type:
+          - string
+          - 'null'
+        version:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        extension:
+          type:
+          - string
+          - 'null'
+        documentId:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DocumentInfoDetailed_2:
+      type: object
+      properties:
+        drawerId:
+          type:
+          - string
+          - 'null'
+        cabinetId:
+          type:
+          - string
+          - 'null'
+        documentName:
+          type:
+          - string
+          - 'null'
+        version:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        extension:
+          type:
+          - string
+          - 'null'
+        documentId:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DocumentInfoDetailedProcessResult_2:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DocumentInfoDetailed_2'
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        warningMessages:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    UpdateLargeDocumentUploadRequest_2:
+      type: object
+      properties:
+        saveAsNewVersion:
+          type:
+          - boolean
+          - 'null'
+        drawerId:
+          type:
+          - string
+          - 'null'
+        cabinetId:
+          type:
+          - string
+          - 'null'
+        documentName:
+          type:
+          - string
+          - 'null'
+        version:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        extension:
+          type:
+          - string
+          - 'null'
+        documentId:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    StartDownloadProcessResponseProcessResult_2:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/StartDownloadProcessResponse_2'
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        warningMessages:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    StartDownloadProcessRequest_2:
+      type: object
+      properties:
+        filePartSizeInMB:
+          type: integer
+          format: int32
+        version:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        documentId:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DocumentResouceInfo_2:
+      type: object
+      properties:
+        resourceLocation:
+          type:
+          - string
+          - 'null'
+        checkSum:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+x-refined-from:
+- thomson-reuters-firmflow-web-api-services-v1-openapi.json
+- thomson-reuters-firmflow-web-api-services-openapi.yml
+- thomson-reuters-firmflow-web-api-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,139 @@
+openapi: 3.2.0
+info:
+  version: ''
+  title: GoSystem Locator Platform API
+  description: A RESTful API that provides access to GoSystem Locator functionalities.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: Platform
+paths:
+  /platform/v2/status:
+    get:
+      summary: Get platform status
+      description: Retrieves the status of an e-file job using the system-generated job identifier.
+      tags:
+      - Platform
+      parameters:
+      - name: jobId
+        in: query
+        style: form
+        schema:
+          type: string
+          description: The system-generated identifier for the e-file job.
+        required: true
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformBatchStatusResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+      operationId: getPlatformV2Status
+      x-operation-id-source: derived
+  /platform/v2/run:
+    post:
+      summary: Run platform
+      description: Initiates an e-file job for a specific tax return. Provide the account details, tax year, tax type, and locator ID in the request.
+      tags:
+      - Platform
+      parameters:
+      - name: account
+        in: query
+        style: form
+        schema:
+          type: string
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        required: true
+      - name: taxYear
+        in: query
+        style: form
+        schema:
+          type: string
+          description: The tax year for which the e-file is being created. Must be a valid 4-digit year (for example, 2024).
+        required: true
+      - name: taxType
+        in: query
+        style: form
+        schema:
+          type: string
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+        required: true
+      - name: locatorID
+        in: query
+        style: form
+        schema:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the TaxReturnID.
+        required: true
+      - name: platformExtension
+        in: query
+        style: form
+        schema:
+          type: string
+      - name: password
+        in: query
+        style: form
+        schema:
+          type: string
+          description: The password for the locator, if one is required.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformBatchStatusResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+      operationId: postPlatformV2Run
+      x-operation-id-source: derived
+components:
+  schemas:
+    PlatformBatchStatusResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        code:
+          type: integer
+          format: int32
+          default: 0
+        description:
+          type: string
+        info:
+          type: string
+        ident:
+          type: string
+        jobId:
+          type: string
+          description: The job ID returned after a proforma rollover locator operation.
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          default: 0
+        message:
+          type: string
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

@@ -1,0 +1,3776 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters User Group Administration API
+  version: v1
+  description: 'Operations tagged UserGroupAdministration across 3 of this provider''s published API definitions: thomson-reuters-gofileroom-web-api-v1-v1-openapi.json, thomson-reuters-gofileroom-web-api-v1-openapi.yml, thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: UserGroupAdministration
+  description: UserGroupAdministration
+paths:
+  /api/v1/administration/groups:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get available groups
+      description: An endpoint that returns a list of groups available for user and group management.
+      operationId: UserGroupAdministration_GetAllGroups
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Groups'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Groups'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Groups'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Groups'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/delete:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Delete a ClientFlow or GoFileRoom User
+      description: An endpoint used to delete a ClientFlow or GoFileRoom user from the System.
+      operationId: UserGroupAdministration_DeleteClientFlowUser
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        description: UserType:- GFRUsers,ClientFlowUsers.
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteUserRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeleteUserRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/DeleteUserRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/DeleteUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteUserRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteUserResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeleteUserResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DeleteUserResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/DeleteUserResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: deleteUser
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/users:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get the logged in GoFileRoom or ClientFlow users
+      description: An endpoint used to return a list of GoFileRoom or ClientFlow users currently logged in.
+      operationId: UserGroupAdministration_GetUsers
+      parameters:
+      - name: userType
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - GFRUsers
+          - ClientFlowUsers
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDetailsResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDetailsResponse'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDetailsResponse'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDetailsResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/getuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Get the GoFileRoom or ClientFlow user
+      description: An endpoint used to retrieve the GoFileRoom or ClientFlow user.
+      operationId: UserGroupAdministration_GetUser
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - GFRUsers
+          - ClientFlowUsers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: userDetailRequest
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v2/administration/user/getuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Get the GoFileRoom or ClientFlow user V2
+      description: An endpoint used to retrieve the GoFileRoom or ClientFlow user.
+      operationId: UserGroupAdministration_GetUserV2
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV2'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV2'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV2'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV2'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: userDetailRequest
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v3/administration/user/getuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Get the GoFileRoom or ClientFlow user V3
+      description: An endpoint used to retrieve the GoFileRoom or ClientFlow user.
+      operationId: UserGroupAdministration_GetUserV3
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - GFRUsers
+          - ClientFlowUsers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV3'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV3'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV3'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV3'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: userDetailRequest
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v4/administration/user/getuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Get the GoFileRoom or ClientFlow user V4
+      description: An endpoint used to retrieve the GoFileRoom or ClientFlow user.
+      operationId: UserGroupAdministration_GetUserV4
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - GFRUsers
+          - ClientFlowUsers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserDetailRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV4'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV4'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV4'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/UserDetailsV4'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: userDetailRequest
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/{drawerId}/clients:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get Client Name and Client Number
+      description: An endpoint that returns the GoFileRoom Client Name and Client Number.
+      operationId: UserGroupAdministration_GetClientNameNumber
+      parameters:
+      - name: drawerId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: sortOrder
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientDetailsResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientDetailsResponse'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientDetailsResponse'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientDetailsResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/createuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Create a user V1
+      description: An endpoint used to create GoFileRoom, ClientFlow, and Client Center Users.
+      operationId: UserGroupAdministration_CreateUser
+      parameters:
+      - name: userType
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+          text/json:
+            schema:
+              type: object
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: createUser
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v2/administration/user/createuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Create a user V2
+      description: An endpoint used to create GoFileRoom, ClientFlow, and Client Center Users.
+      operationId: UserGroupAdministration_CreateUserV2
+      parameters:
+      - name: userType
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+          text/json:
+            schema:
+              type: object
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: createUser
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v3/administration/user/createuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Create a user V3
+      description: An endpoint used to create GoFileRoom, ClientFlow, and Client Center Users.
+      operationId: UserGroupAdministration_CreateUserV3
+      parameters:
+      - name: userType
+        in: query
+        description: GFRUSERS,CLIENTFLOWUSERS,CLIENTCENTERUSERS.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+          text/json:
+            schema:
+              type: object
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponseV3'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponseV3'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponseV3'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponseV3'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: createUser
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/resendlink:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Resend Client Flow activation link
+      description: An endpoint used when the activation link needs to be resent in Client Flow.
+      operationId: UserGroupAdministration_ResentActivationLink
+      parameters:
+      - name: ClientFlowLoginId
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: userType
+        in: query
+        description: ClientFlowUsers.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SendEmailResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SendEmailResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/changelogin:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Change a login
+      description: An endpoint used to accomplish changing a user's login.
+      operationId: UserGroupAdministration_ChangeLogin
+      parameters:
+      - name: userType
+        in: query
+        description: GFRUSERS.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeLoginRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ChangeLoginRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ChangeLoginRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ChangeLoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeLoginRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeLoginResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ChangeLoginResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ChangeLoginResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ChangeLoginResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: changeLogin
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/modifyuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Modify a user V1
+      description: An endpoint used to modify an existing GoFileRoom, ClientCenter, or ClientFlow User.
+      operationId: UserGroupAdministration_ModifyUser
+      parameters:
+      - name: userType
+        in: query
+        description: GFRUSERS,CLIENTFLOWUSERS,CLIENTCENTERUSERS.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+          text/json:
+            schema:
+              type: object
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: modifyUser
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v2/administration/user/modifyuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Modify a user V2
+      description: An endpoint used to modify an existing GoFileRoom, ClientCenter, or ClientFlow User.
+      operationId: UserGroupAdministration_ModifyUserV2
+      parameters:
+      - name: userType
+        in: query
+        description: GFRUSERS,CLIENTFLOWUSERS,CLIENTCENTERUSERS.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+          text/json:
+            schema:
+              type: object
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: modifyUser
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v3/administration/user/modifyuser:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Modify a user V3
+      description: An endpoint used to modify an existing GoFileRoom, ClientCenter, or ClientFlow User.
+      operationId: UserGroupAdministration_ModifyUserV3
+      parameters:
+      - name: userType
+        in: query
+        description: GFRUSERS,CLIENTFLOWUSERS,CLIENTCENTERUSERS.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+          text/json:
+            schema:
+              type: object
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponseV3'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponseV3'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponseV3'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ModifyUserResponseV3'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: modifyUser
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/{userType}/importdocument:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Import Excel documents
+      description: An endpoint used to import Excel documents for Bulk import.
+      operationId: UserGroupAdministration_ImportDocument
+      parameters:
+      - name: userType
+        in: path
+        description: GFRUSERS,CLIENTFLOWUSERS,CLIENTCENTERUSERS.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportDocumentResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ImportDocumentResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ImportDocumentResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ImportDocumentResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/reports:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get a list of administrative reports
+      description: An endpoint used to provide the list of administrative reports available to the user.
+      operationId: UserGroupAdministration_GetAllReports
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReportsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ReportsResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ReportsResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/passwordpolicy:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get password policy
+      description: An endpoint used to return the password policy for the firm.
+      operationId: UserGroupAdministration_GetPasswordPolicy
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordPolicyResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PasswordPolicyResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PasswordPolicyResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PasswordPolicyResponse'
+      security:
+      - ApiKeyAuth: []
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Set the password policy
+      description: An endpoint used to set the Password policy for the firm.
+      operationId: UserGroupAdministration_SetPasswordPolicy
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordPolicyRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PasswordPolicyRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PasswordPolicyRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/PasswordPolicyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordPolicyRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPasswordPolicyResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SetPasswordPolicyResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SetPasswordPolicyResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SetPasswordPolicyResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: PasswordPolicy
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/uploadlocations:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get the upload location
+      description: An endpoint used to get the upload locations for the user.
+      operationId: UserGroupAdministration_Getuploadlocations
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadLocationsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UploadLocationsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UploadLocationsResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/UploadLocationsResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/permissions:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Assign user permissions
+      description: An endpoint used to assign permission to a user.
+      operationId: UserGroupAdministration_AssignUserPermissions
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPermission'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserPermission'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserPermission'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UserPermission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPermission'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetUserPermissionResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SetUserPermissionResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SetUserPermissionResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SetUserPermissionResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: permissions
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/{loginId}/permissions:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get drawer permissions
+      description: An endpoint used to get the drawer permissions of user.
+      operationId: UserGroupAdministration_GetUserPermissions
+      parameters:
+      - name: loginId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserPermissionResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetUserPermissionResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUserPermissionResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/GetUserPermissionResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/documentsecurity:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Set user document security
+      description: An endpoint used to set user document security permissions.
+      operationId: UserGroupAdministration_SetDocumentSecurity
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDocumentSecurity'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserDocumentSecurity'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserDocumentSecurity'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UserDocumentSecurity'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserDocumentSecurity'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetUserDocSecurityResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SetUserDocSecurityResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SetUserDocSecurityResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SetUserDocSecurityResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: docSecurity
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/{loginId}/{cabinetName}/{drawerName}/documentsecurity:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get document security information
+      description: An endpoint used to get document security information for a user.
+      operationId: UserGroupAdministration_GetDocumentSecurity
+      parameters:
+      - name: loginId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: cabinetName
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: drawerName
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserDocSecurityResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetUserDocSecurityResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUserDocSecurityResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/GetUserDocSecurityResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/licenses:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get license information
+      description: An endpoint used to get information about the number of licenses assigned and total.
+      operationId: UserGroupAdministration_GetLicenses
+      parameters:
+      - name: license
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLicensesResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetLicensesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetLicensesResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/GetLicensesResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/group/permissions:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get group drawer permissions
+      description: An endpoint used to get drawer permissions for a group.
+      operationId: UserGroupAdministration_GetgroupPermissions
+      parameters:
+      - name: groupName
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupPermissionResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GroupPermissionResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GroupPermissionResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/GroupPermissionResponse'
+      security:
+      - ApiKeyAuth: []
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Assign a group drawer permissions
+      description: An endpoint used to assign drawer permissions to group.
+      operationId: UserGroupAdministration_AssignGroupPermissions
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupPermission'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/GroupPermission'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GroupPermission'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/GroupPermission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GroupPermission'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: permissions
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/group/documentsecurity:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Set group document security
+      description: An endpoint used to set group document security.
+      operationId: UserGroupAdministration_SetGroupDocumentSecurity
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupDocumentSecurity'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/GroupDocumentSecurity'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GroupDocumentSecurity'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/GroupDocumentSecurity'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GroupDocumentSecurity'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetGroupDocSecurityResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SetGroupDocSecurityResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SetGroupDocSecurityResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SetGroupDocSecurityResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: docSecurity
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/group/{groupName}/{cabinetName}/{drawerName}/documentsecurity:
+    get:
+      tags:
+      - UserGroupAdministration
+      summary: Get group document security
+      description: An endpoint used to return group document security information.
+      operationId: UserGroupAdministration_GetGroupDocumentSecurity
+      parameters:
+      - name: groupName
+        in: path
+        description: For security reasons, special characters such as [,],<,>,& are required to be URL Encoded before executing the endpoint.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: cabinetName
+        in: path
+        description: For successful API execution, '.' can't be used at the end of the GroupName and/or CabinetName fields.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: drawerName
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGroupDocSecurityResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetGroupDocSecurityResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetGroupDocSecurityResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/GetGroupDocSecurityResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/group/creategroup:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Create a group
+      description: An endpoint used to create permissions group.
+      operationId: UserGroupAdministration_CreateGroup
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetGroupRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SetGroupRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SetGroupRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SetGroupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetGroupRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGroupResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CreateGroupResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGroupResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGroupResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: createGroup
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/group/modifygroup:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Modify a group
+      description: An endpoint used to modify a permissions group.
+      operationId: UserGroupAdministration_ModifyGroup
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetModifyGroupRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SetModifyGroupRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SetModifyGroupRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SetModifyGroupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetModifyGroupRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyGroupResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ModifyGroupResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ModifyGroupResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ModifyGroupResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: modifyGroup
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/user/groups:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Add single or multiple users to a group
+      description: An endpoint used to Add single or multiple users to a group.
+      operationId: UserGroupAdministration_Group
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddGroupUsersRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AddGroupUsersRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AddGroupUsersRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/AddGroupUsersRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddGroupUsersRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupUsersResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GroupUsersResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GroupUsersResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/GroupUsersResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: Group
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/administration/group/removeusers:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Remove single or multiple users from a group
+      description: An endpoint used to remove single or multiple users from a group.
+      operationId: UserGroupAdministration_RemoveGroupUsers
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/removeUsersRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/removeUsersRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/removeUsersRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/removeUsersRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/removeUsersRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveUsersResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RemoveUsersResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RemoveUsersResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/RemoveUsersResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: RemoveGroupUsers
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v4/administration/user/getUsers:
+    post:
+      tags:
+      - UserGroupAdministration
+      summary: Get a list of users
+      description: Fetches all users data (v4 supports dynamic filter with validation).
+      operationId: postApiV4AdministrationUserGetUsers
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                PageNumber:
+                  type: integer
+                  example: 0
+                PageSize:
+                  type: integer
+                  example: 0
+                SortColumnName:
+                  type: string
+                  example: string
+                SortOrderType:
+                  type: string
+                  example: string
+                Filter:
+                  type: object
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: Group
+      x-operation-id-source: normalized
+      x-operation-id-original: UserGroupAdministration_GetUsers
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    SetUserPermissionResponse:
+      type: object
+      properties:
+        LoginId:
+          type: string
+        IsSetUserPermission:
+          type: boolean
+        SetUserPermissionException:
+          type: string
+    GroupPermission:
+      type: object
+      properties:
+        GroupName:
+          type: string
+        Cabinet:
+          type: string
+        CabinetPermission:
+          $ref: '#/components/schemas/GrpPermission'
+        DrawerPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupDrawerPermission'
+    SetPasswordPolicyResponse:
+      type: object
+      properties:
+        PasswordPolicyApplied:
+          type: boolean
+        PasswordPolicyException:
+          type: string
+    UserDetailRequest:
+      type: object
+      properties:
+        LoginName:
+          type: string
+          description: The login name.
+        UserType:
+          type: string
+          description: The user type.
+      description: Data associated with a User Detail Request.
+    Groups:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Name of Group.
+        Id:
+          type: string
+          description: Identifier of Group.
+        MFA:
+          type: integer
+          format: int32
+        MFARequired:
+          type: integer
+          format: int32
+      description: Object storing group's data.
+    IndexSecurityData:
+      type: object
+      properties:
+        IndexName:
+          type: string
+        DocSecurityType:
+          type: string
+        Values:
+          type: array
+          items:
+            type: string
+        Operation:
+          type: string
+          enum:
+          - Add
+          - Remove
+          - Clear
+          - None
+    SendEmailResponse:
+      type: object
+      properties:
+        IsEmailSent:
+          type: boolean
+          description: True or False if the email is sent.
+        ClientFlowLoginId:
+          type: string
+          description: Email Address to send email to.
+        ResendLinkException:
+          type: string
+          description: Report if exception has occurred.
+      description: Response for an API that's sending an email.
+    SetGroupDocSecurityResponse:
+      type: object
+      properties:
+        GroupName:
+          type: string
+        IsSetGroupDocSecurity:
+          type: boolean
+        SetGroupDocSecurityException:
+          type: string
+    DeleteUserRequest:
+      type: object
+      properties:
+        LoginId:
+          type: string
+          description: Gets or sets the user identifier.
+        UserType:
+          type: string
+          description: Gets or sets the usertype.
+          enum:
+          - GFRUSERS
+          - CLIENTFLOWUSERS
+          - CLIENTCENTERUSERS
+      description: Request for deleting user.
+    GetLicensesResponse:
+      type: array
+      properties:
+        License:
+          type: string
+          description: Gets or sets the user identifier.
+        TotalLicenses:
+          type: string
+        AssignedLicenses:
+          type: string
+        Message:
+          type: string
+    SetModifyGroupRequest:
+      type: object
+      properties:
+        GroupName:
+          type: string
+          description: Name of group.
+        RenameGroup:
+          type: string
+        Comments:
+          type: string
+          description: comments.
+        UploadLocation:
+          type: string
+          description: UploadLocation.
+        FullAccessToDocTracking:
+          type: boolean
+          description: FullAccessToDocTracking.
+        FirmFlowRoutingNotification:
+          type: boolean
+          description: FirmFlowRoutingNotification.
+        PermissonToApproveDocs:
+          type: boolean
+          description: PermissionToApproveDocs.
+        AccessToApproveDocsOnly:
+          type: boolean
+          description: AccessToApproveDocsOnly.
+        EnableMfa:
+          type: boolean
+          description: usemfa.
+        MfaRequired:
+          type: boolean
+        EnforceMfaForUsers:
+          type: boolean
+        AllowAccessToReports:
+          type: boolean
+          description: IsAllowAccessToReports.
+        Reports:
+          type: array
+          description: List Of Reports.
+          items:
+            $ref: '#/components/schemas/RequestReportforgroup'
+        Users:
+          type: array
+          description: List Of users.
+          items:
+            type: string
+    GetUserDocSecurityResponse:
+      type: object
+      properties:
+        LoginId:
+          type: string
+        CabinetName:
+          type: string
+        DrawerName:
+          type: string
+        DocumentSecurity:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocSecurityData'
+        GetUserDocSecurityException:
+          type: string
+    DeleteUserResponse:
+      type: object
+      properties:
+        LoginId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsDeleted:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is deleted.
+        DeleteUserException:
+          type: string
+          description: Gets or sets the delete user exception.
+      description: Response for deleting user.
+    DocSecurityData:
+      type: object
+      properties:
+        IndexName:
+          type: string
+        DocSecurityType:
+          type: string
+        Values:
+          type: array
+          items:
+            type: string
+    GetUserPermissionResponse:
+      type: object
+      properties:
+        LoginId:
+          type: string
+        Cabinet:
+          type: string
+        CabinetPermission:
+          $ref: '#/components/schemas/Permission'
+        DrawerPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DrawerPermission'
+        GetUserPermissionException:
+          type: string
+    CreateUserResponse:
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsCreated:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is created.
+        MFAException:
+          type: string
+          description: Gets or sets the create user Message.
+        CreateUserException:
+          type: string
+          description: Gets or sets the create user exception.
+      description: Response of User Creation.
+    CreateUserResponseV3:
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsCreated:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is created.
+        CreateUserException:
+          type: string
+          description: Gets or sets the create user exception.
+      description: Response of User Creation.
+    UserDetailsV4:
+      type: object
+      properties:
+        UserID:
+          type: string
+        LoginID:
+          type: string
+        FullName:
+          type: string
+        CreateDate:
+          type: string
+          format: date-time
+        CreatedBy:
+          type: string
+        Description:
+          type: string
+        Disabled:
+          type: integer
+          format: int32
+        DisabledByAdmin:
+          type: boolean
+        LicenseType:
+          type: string
+          enum:
+          - Concurrent
+          - Dedicated
+          - External
+          - FirmFlow
+          - AdvanceFlow
+        Offline:
+          type: boolean
+        AllowAccessToReports:
+          type: boolean
+        Reports:
+          type: array
+          items:
+            type: string
+        SystemAdmin:
+          type: boolean
+        Signature:
+          type: string
+        locationID:
+          type: integer
+          format: int32
+        HasDrawerSetupRights:
+          type: string
+        TaxFlow:
+          type: boolean
+        EmailNotify:
+          type: boolean
+        EmailNotifyGroup:
+          type: boolean
+        EmailNotifyEventMgmtUsers:
+          type: boolean
+        EmailNotifyEventMgmtGroups:
+          type: boolean
+        PortalUserAdministration:
+          type: boolean
+        InternalUserAdministration:
+          type: boolean
+        WorkflowManagerUser:
+          type: boolean
+        ManagerId:
+          type: string
+        ManagerLoginId:
+          type: string
+        ManagerFullName:
+          type: string
+        IsManager:
+          type: integer
+          format: int32
+        IsAdvanceFlowUser:
+          type: integer
+          format: int32
+        IsAdmin:
+          type: integer
+          format: int32
+        LastLogin:
+          type: string
+          format: date-time
+        Groups:
+          type: array
+          items:
+            type: string
+      description: User Details.
+    UserDocumentSecurity:
+      type: object
+      properties:
+        LoginId:
+          type: string
+        CabinetName:
+          type: string
+        DrawerName:
+          type: string
+        DocumentSecurity:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndexSecurityData'
+    ModifyUserResponseV3:
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsModified:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is modified.
+        ModifyUserException:
+          type: string
+          description: Gets or sets the Modify user exception.
+      description: Response of Modify User.
+    RequestReportforgroup:
+      type: object
+      properties:
+        ReportType:
+          type: string
+        IsAllowAll:
+          type: boolean
+        IsDenyAll:
+          type: boolean
+        Allow:
+          type: array
+          items:
+            type: string
+        Deny:
+          type: array
+          items:
+            type: string
+    UserDetails:
+      type: object
+      properties:
+        UserID:
+          type: string
+        LoginID:
+          type: string
+        FullName:
+          type: string
+        CreateDate:
+          type: string
+          format: date-time
+        CreatedBy:
+          type: string
+        Description:
+          type: string
+        Disabled:
+          type: integer
+          format: int32
+        DisabledByAdmin:
+          type: boolean
+        PasswordExpireDate:
+          type: string
+          format: date-time
+        ForcePasswordChange:
+          type: boolean
+        PasswordChangeDate:
+          type: string
+          format: date-time
+        PasswordChangeInterval:
+          type: integer
+          format: int32
+        LicenseType:
+          type: string
+          enum:
+          - Concurrent
+          - Dedicated
+          - External
+          - FirmFlow
+          - AdvanceFlow
+        Offline:
+          type: boolean
+        Reports:
+          type: boolean
+        SystemAdmin:
+          type: boolean
+        Signature:
+          type: string
+        locationID:
+          type: integer
+          format: int32
+        HasDrawerSetupRights:
+          type: string
+        TaxFlow:
+          type: boolean
+        EmailNotify:
+          type: boolean
+        EmailNotifyGroup:
+          type: boolean
+        EmailNotifyEventMgmtUsers:
+          type: boolean
+        EmailNotifyEventMgmtGroups:
+          type: boolean
+        UserAdministration:
+          type: integer
+          format: int32
+        WorkflowManagerUser:
+          type: boolean
+        ManagerId:
+          type: string
+        ManagerLoginId:
+          type: string
+        ManagerFullName:
+          type: string
+        IsManager:
+          type: integer
+          format: int32
+        OberonUser:
+          type: integer
+          format: int32
+        IsAdmin:
+          type: integer
+          format: int32
+      description: User Details.
+    GetUploadLocationsResponse:
+      type: object
+      properties:
+        LocationPath:
+          type: string
+          description: Upload Location path.
+        LocationName:
+          type: string
+          description: Upload location name.
+      description: Fetches upload locations.
+    UserDetailsV2:
+      type: object
+      properties:
+        UserID:
+          type: string
+        LoginID:
+          type: string
+        FullName:
+          type: string
+        CreateDate:
+          type: string
+          format: date-time
+        CreatedBy:
+          type: string
+        Description:
+          type: string
+        Disabled:
+          type: integer
+          format: int32
+        DisabledByAdmin:
+          type: boolean
+        PasswordExpireDate:
+          type: string
+          format: date-time
+        ForcePasswordChange:
+          type: boolean
+        PasswordChangeDate:
+          type: string
+          format: date-time
+        PasswordChangeInterval:
+          type: integer
+          format: int32
+        LicenseType:
+          type: string
+          enum:
+          - Concurrent
+          - Dedicated
+          - External
+          - FirmFlow
+          - AdvanceFlow
+        Offline:
+          type: boolean
+        Reports:
+          type: boolean
+        SystemAdmin:
+          type: boolean
+        Signature:
+          type: string
+        locationID:
+          type: integer
+          format: int32
+        HasDrawerSetupRights:
+          type: string
+        TaxFlow:
+          type: boolean
+        EmailNotify:
+          type: boolean
+        EmailNotifyGroup:
+          type: boolean
+        EmailNotifyEventMgmtUsers:
+          type: boolean
+        EmailNotifyEventMgmtGroups:
+          type: boolean
+        PortalUserAdministration:
+          type: boolean
+        InternalUserAdministration:
+          type: boolean
+        WorkflowManagerUser:
+          type: boolean
+        ManagerId:
+          type: string
+        ManagerLoginId:
+          type: string
+        ManagerFullName:
+          type: string
+        IsManager:
+          type: integer
+          format: int32
+        OberonUser:
+          type: integer
+          format: int32
+        IsAdmin:
+          type: integer
+          format: int32
+        LastLogin:
+          type: string
+          format: date-time
+        Groups:
+          type: array
+          items:
+            type: string
+      description: User Details.
+    Permission:
+      type: object
+      properties:
+        Read:
+          type: boolean
+        Edit:
+          type: boolean
+        Add:
+          type: boolean
+        Delete:
+          type: boolean
+        LookUp:
+          type: boolean
+        Deny:
+          type: boolean
+    GetGroupDocSecurityResponse:
+      type: object
+      properties:
+        GroupName:
+          type: string
+        CabinetName:
+          type: string
+        DrawerName:
+          type: string
+        DocumentSecurity:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocSecurityData'
+        GetGroupDocSecurityException:
+          type: string
+    PasswordPolicyResponse:
+      type: object
+      properties:
+        PasswordPolicy:
+          $ref: '#/components/schemas/GetPasswordPolicy'
+        PasswordPolicyException:
+          type: string
+    UsersResponse:
+      type: object
+      properties:
+        TotalRecords:
+          type: integer
+        TotalPages:
+          type: integer
+        PageNumber:
+          type: integer
+        PageSize:
+          type: integer
+        Users:
+          type: array
+          items:
+            $ref: '#/components/schemas/Users'
+    GrpPermission:
+      type: object
+      properties:
+        Read:
+          type: boolean
+        Edit:
+          type: boolean
+        Add:
+          type: boolean
+        Delete:
+          type: boolean
+        LookUp:
+          type: boolean
+        Deny:
+          type: boolean
+    ImportDocumentResponse:
+      type: object
+      properties:
+        IsImported:
+          type: boolean
+        ImportDocumentException:
+          type: string
+          description: Gets or sets the import document exception.
+      description: Document import response.
+    GroupDrawerPermission:
+      type: object
+      properties:
+        Drawer:
+          type: string
+        Permission:
+          $ref: '#/components/schemas/GrpPermission'
+    ChangeLoginResponse:
+      type: object
+      properties:
+        IsLoginChanged:
+          type: boolean
+        OldLogin:
+          type: string
+          description: Old login.
+        NewLogin:
+          type: string
+          description: New login.
+        ChangeLoginException:
+          type: string
+          description: Change login Exception.
+      description: Change login Response.
+    Reports:
+      type: object
+      properties:
+        ReportType:
+          type: string
+          description: Type of Report.
+        ReportName:
+          type: array
+          description: Reports Names.
+          items:
+            type: string
+      description: Sets Reports details.
+    ReportsResponse:
+      type: object
+      properties:
+        Reports:
+          type: array
+          description: Fetches All reports.
+          items:
+            $ref: '#/components/schemas/Reports'
+        ReportsException:
+          type: string
+          description: Any exception details.
+      description: Response for Reports.
+    UserDetailsResponse:
+      type: object
+      properties:
+        LoginId:
+          type: string
+        isActive:
+          type: boolean
+      description: Fetches user details.
+    GroupResponse:
+      type: object
+      properties:
+        GroupId:
+          type: string
+        IsSet:
+          type: boolean
+        GroupPermissionException:
+          type: string
+    SetUserDocSecurityResponse:
+      type: object
+      properties:
+        LoginId:
+          type: string
+        IsSetUserDocSecurity:
+          type: boolean
+        SetUserDocSecurityException:
+          type: string
+    ModifyGroupResponse:
+      type: object
+      properties:
+        IsModified:
+          type: boolean
+        GroupId:
+          type: string
+        MFAException:
+          type: string
+        ModifyGroupException:
+          type: string
+      description: SetAllGroupResponse.
+    ModifyUserResponse:
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsModified:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is modified.
+        MFAException:
+          type: string
+          description: Gets or sets the modify user Message.
+        ModifyUserException:
+          type: string
+          description: Gets or sets the Modify user exception.
+      description: Response of Modify User.
+    ClientDetailsResponse:
+      type: object
+      properties:
+        ClientName:
+          type: string
+        ClientNumber:
+          type: string
+      description: Fetches Client Name and Number.
+    UserDetailsV3:
+      type: object
+      properties:
+        UserID:
+          type: string
+        LoginID:
+          type: string
+        FullName:
+          type: string
+        CreateDate:
+          type: string
+          format: date-time
+        CreatedBy:
+          type: string
+        Description:
+          type: string
+        Disabled:
+          type: integer
+          format: int32
+        DisabledByAdmin:
+          type: boolean
+        PasswordExpireDate:
+          type: string
+          format: date-time
+        ForcePasswordChange:
+          type: boolean
+        PasswordChangeDate:
+          type: string
+          format: date-time
+        PasswordChangeInterval:
+          type: integer
+          format: int32
+        LicenseType:
+          type: string
+          enum:
+          - Concurrent
+          - Dedicated
+          - External
+          - FirmFlow
+          - AdvanceFlow
+        Offline:
+          type: boolean
+        AllowAccessToReports:
+          type: boolean
+        Reports:
+          type: array
+          items:
+            type: string
+        SystemAdmin:
+          type: boolean
+        Signature:
+          type: string
+        locationID:
+          type: integer
+          format: int32
+        HasDrawerSetupRights:
+          type: string
+        TaxFlow:
+          type: boolean
+        EmailNotify:
+          type: boolean
+        EmailNotifyGroup:
+          type: boolean
+        EmailNotifyEventMgmtUsers:
+          type: boolean
+        EmailNotifyEventMgmtGroups:
+          type: boolean
+        PortalUserAdministration:
+          type: boolean
+        InternalUserAdministration:
+          type: boolean
+        WorkflowManagerUser:
+          type: boolean
+        ManagerId:
+          type: string
+        ManagerLoginId:
+          type: string
+        ManagerFullName:
+          type: string
+        IsManager:
+          type: integer
+          format: int32
+        OberonUser:
+          type: integer
+          format: int32
+        IsAdmin:
+          type: integer
+          format: int32
+        LastLogin:
+          type: string
+          format: date-time
+        Groups:
+          type: array
+          items:
+            type: string
+        Mfa:
+          type: boolean
+      description: User Details.
+    PasswordPolicyRequest:
+      type: object
+      properties:
+        min_length:
+          type: integer
+          description: Minimum Length of password.
+          format: int32
+        max_length:
+          type: integer
+          description: Max pwd Length.
+          format: int32
+        max_repeat_chars:
+          type: integer
+          description: Max Repeating characters.
+          format: int32
+        max_sequential_chars:
+          type: integer
+          description: Max Sequential characters.
+          format: int32
+        max_login_similarity:
+          type: integer
+          description: Max login similarity.
+          format: int32
+        forbidden_pwd_words:
+          type: array
+          description: forbidden words.
+          items:
+            type: string
+        max_pwd_age:
+          type: integer
+          description: Max age.
+          format: int32
+        lockout_threshold:
+          type: integer
+          description: Lockout threshold.
+          format: int32
+      description: Password Policy Data.
+    ChangeLoginRequest:
+      type: object
+      properties:
+        OldLogin:
+          type: string
+          description: Old login.
+        NewLogin:
+          type: string
+          description: New login.
+      description: Change login Request.
+    GroupDocumentSecurity:
+      type: object
+      properties:
+        GroupName:
+          type: string
+        CabinetName:
+          type: string
+        DrawerName:
+          type: string
+        DocumentSecurity:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndexSecurityData'
+    UploadLocationsResponse:
+      type: object
+      properties:
+        UploadLocationsException:
+          type: string
+        UploadLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetUploadLocationsResponse'
+      description: Response Data.
+    SetGroupRequest:
+      type: object
+      properties:
+        GroupName:
+          type: string
+          description: Name of group.
+        Comments:
+          type: string
+          description: comments.
+        UploadLocation:
+          type: string
+          description: UploadLocation.
+        FullAccessToDocTracking:
+          type: boolean
+          description: FullAccessToDocTracking.
+        FirmFlowRoutingNotification:
+          type: boolean
+          description: FirmFlowRoutingNotification.
+        PermissonToApproveDocs:
+          type: boolean
+          description: PermissionToApproveDocs.
+        AccessToApproveDocsOnly:
+          type: boolean
+          description: AccessToApproveDocsOnly.
+        EnableMfa:
+          type: boolean
+          description: usemfa.
+        MfaRequired:
+          type: boolean
+        EnforceMfaForUsers:
+          type: boolean
+        AllowAccessToReports:
+          type: boolean
+          description: IsAllowAccessToReports.
+        Reports:
+          type: array
+          description: List Of Reports.
+          items:
+            $ref: '#/components/schemas/RequestReportforgroup'
+        Users:
+          type: array
+          description: List Of users.
+          items:
+            type: string
+      description: SetAllGroupRequest.
+    GroupPermissionResponse:
+      type: object
+      properties:
+        GroupName:
+          type: string
+        Cabinet:
+          type: string
+        CabinetPermissions:
+          $ref: '#/components/schemas/GrpPermission'
+        DrawerPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupDrawerPermission'
+        GroupPermissionException:
+          type: string
+    UserReport:
+      type: object
+      properties:
+        ReportType:
+          type: string
+          description: Type of report.
+        ReportName:
+          type: array
+          items:
+            type: string
+          description: List of report names.
+    GetPasswordPolicy:
+      type: object
+      properties:
+        ClientId:
+          type: string
+          description: Client ID.
+        min_length:
+          type: integer
+          description: Minimum Length of password.
+          format: int32
+        max_length:
+          type: integer
+          description: Max pwd Length.
+          format: int32
+        max_repeat_chars:
+          type: string
+        max_sequential_chars:
+          type: string
+        max_login_similarity:
+          type: string
+        forbidden_pwd_words:
+          type: array
+          items:
+            type: string
+        max_pwd_age:
+          type: integer
+          format: int32
+        lockout_threshold:
+          type: integer
+          format: int32
+        pwd_req_alpha:
+          type: integer
+          format: int32
+        pwd_req_upper:
+          type: integer
+          format: int32
+        pwd_req_lower:
+          type: integer
+          format: int32
+        pwd_req_number:
+          type: integer
+          format: int32
+        pwd_req_symbol:
+          type: integer
+          format: int32
+        mfa:
+          type: integer
+          format: int32
+      description: Password Policy Data.
+    Users:
+      type: object
+      properties:
+        CreateDate:
+          type: string
+          format: date-time
+          description: Date the user was created.
+          example: '2024-07-17T12:34:56Z'
+        LastLogin:
+          type: string
+          format: date-time
+          description: Last login date.
+          example: '2024-07-17T12:34:56Z'
+        UserId:
+          type: string
+          description: Unique user identifier.
+        LoginId:
+          type: string
+          description: Login identifier.
+        FullName:
+          type: string
+          description: Full name of the user.
+        CreatedBy:
+          type: string
+          description: User who created this account.
+        Description:
+          type: string
+          description: Description of the user.
+        Disabled:
+          type: boolean
+          description: Is the user disabled.
+        DisabledByAdmin:
+          type: boolean
+          description: Is the user disabled by admin.
+        LicenseType:
+          type: string
+          enum:
+          - Concurrent
+          - Named
+          description: Type of license assigned.
+        AllowExportOfMultipleDocuments:
+          type: boolean
+          description: Can export multiple documents.
+        AllowAccessToReports:
+          type: boolean
+          description: Can access reports.
+        Reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserReport'
+        SystemAdmin:
+          type: boolean
+          description: Is system administrator.
+        LocationId:
+          type: integer
+          description: Location identifier.
+        LocationDescription:
+          type: string
+          description: Description of the location.
+        HasDrawerSetupRights:
+          type: string
+          description: Drawer setup rights.
+        FirmFlow:
+          type: boolean
+          description: Has FirmFlow rights.
+        EmailNotify:
+          type: boolean
+          description: Email notifications enabled.
+        EmailNotifyGroup:
+          type: boolean
+          description: Email notifications for group enabled.
+        EmailNotifyEventMgmtUsers:
+          type: boolean
+          description: Email notifications for event management users.
+        EmailNotifyEventMgmtGroups:
+          type: boolean
+          description: Email notifications for event management groups.
+        PortalAdmin:
+          type: boolean
+          description: Is portal administrator.
+        IsAdministrator:
+          type: boolean
+          description: Is administrator.
+        IsEngagementManagerUser:
+          type: boolean
+          description: Is engagement manager user.
+        IsInAdministrationGroup:
+          type: boolean
+          description: Is in administration group.
+        Groups:
+          type: array
+          items:
+            type: string
+          description: List of groups the user belongs to.
+    DrawerPermission:
+      type: object
+      properties:
+        Drawer:
+          type: string
+        Permission:
+          $ref: '#/components/schemas/Permission'
+    UserPermission:
+      type: object
+      properties:
+        LoginId:
+          type: string
+        Cabinet:
+          type: string
+        CabinetPermission:
+          $ref: '#/components/schemas/Permission'
+        DrawerPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DrawerPermission'
+    CreateGroupResponse:
+      type: object
+      properties:
+        IsCreated:
+          type: boolean
+        GroupId:
+          type: string
+        MFAException:
+          type: string
+        CreateGroupException:
+          type: string
+      description: SetAllGroupResponse.
+    UserDetailRequest_2:
+      type: object
+      properties:
+        LoginName:
+          type: string
+          description: The login name
+        UserType:
+          type: string
+          description: The user type
+      description: Data associated with a User Detail Request.
+    Groups_2:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Name of Group
+        Id:
+          type: string
+          description: Identifier of Group
+        MFA:
+          type: integer
+          format: int32
+        MFARequired:
+          type: integer
+          format: int32
+      description: Object storing group's data
+    RemoveUsersResponse:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    DeleteUserRequest_2:
+      type: object
+      properties:
+        LoginId:
+          type: string
+          description: Gets or sets the user identifier.
+        UserType:
+          type: string
+          description: Gets or sets the usertype
+          enum:
+          - GFRUSERS
+          - CLIENTFLOWUSERS
+          - CLIENTCENTERUSERS
+      description: Request for deleting user
+    SendEmailResponse_2:
+      type: object
+      properties:
+        IsEmailSent:
+          type: boolean
+          description: True or False if the email is sent
+        ClientFlowLoginId:
+          type: string
+          description: Email Address to send email to
+        ResendLinkException:
+          type: string
+          description: Report if exception has occurred
+      description: Response for an API that is sending an email
+    SetModifyGroupRequest_2:
+      type: object
+      properties:
+        GroupName:
+          type: string
+          description: Name of group
+        RenameGroup:
+          type: string
+        Comments:
+          type: string
+          description: comments
+        UploadLocation:
+          type: string
+          description: UploadLocation
+        FullAccessToDocTracking:
+          type: boolean
+          description: FullAccessToDocTracking
+        FirmFlowRoutingNotification:
+          type: boolean
+          description: FirmFlowRoutingNotification
+        PermissonToApproveDocs:
+          type: boolean
+          description: PermissonToApproveDocs
+        AccessToApproveDocsOnly:
+          type: boolean
+          description: AccessToApproveDocsOnly
+        EnableMfa:
+          type: boolean
+          description: usemfa
+        MfaRequired:
+          type: boolean
+        EnforceMfaForUsers:
+          type: boolean
+        AllowAccessToReports:
+          type: boolean
+          description: IsAllowAccessToReports
+        Reports:
+          type: array
+          description: List Of Reports
+          items:
+            $ref: '#/components/schemas/RequestReportforgroup'
+        Users:
+          type: array
+          description: List Of users
+          items:
+            type: string
+    DeleteUserResponse_2:
+      type: object
+      properties:
+        LoginId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsDeleted:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is deleted or not.
+        DeleteUserException:
+          type: string
+          description: Gets or sets the delete user exception.
+      description: Response for deleting user
+    CreateUserResponse_2:
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsCreated:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is created or not.
+        MFAException:
+          type: string
+          description: Gets or sets the create user Message.
+        CreateUserException:
+          type: string
+          description: Gets or sets the create user exception.
+      description: Response of User Creation
+    CreateUserResponseV3_2:
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsCreated:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is created or not.
+        CreateUserException:
+          type: string
+          description: Gets or sets the create user exception.
+      description: Response of User Creation
+    UserDetailsV4_2:
+      type: object
+      properties:
+        UserID:
+          type: string
+        LoginID:
+          type: string
+        FullName:
+          type: string
+        CreateDate:
+          type: string
+          format: date-time
+        CreatedBy:
+          type: string
+        Description:
+          type: string
+        Disabled:
+          type: integer
+          format: int32
+        DisabledByAdmin:
+          type: boolean
+        LicenseType:
+          type: string
+          enum:
+          - Concurrent
+          - Dedicated
+          - External
+          - FirmFlow
+          - AdvanceFlow
+        Offline:
+          type: boolean
+        AllowAccessToReports:
+          type: boolean
+        Reports:
+          type: array
+          items:
+            type: string
+        SystemAdmin:
+          type: boolean
+        Signature:
+          type: string
+        locationID:
+          type: integer
+          format: int32
+        HasDrawerSetupRights:
+          type: string
+        TaxFlow:
+          type: boolean
+        EmailNotify:
+          type: boolean
+        EmailNotifyGroup:
+          type: boolean
+        EmailNotifyEventMgmtUsers:
+          type: boolean
+        EmailNotifyEventMgmtGroups:
+          type: boolean
+        PortalUserAdministration:
+          type: boolean
+        InternalUserAdministration:
+          type: boolean
+        WorkflowManagerUser:
+          type: boolean
+        ManagerId:
+          type: string
+        ManagerLoginId:
+          type: string
+        ManagerFullName:
+          type: string
+        IsManager:
+          type: integer
+          format: int32
+        IsAdvanceFlowUser:
+          type: integer
+          format: int32
+        IsAdmin:
+          type: integer
+          format: int32
+        LastLogin:
+          type: string
+          format: date-time
+        Groups:
+          type: array
+          items:
+            type: string
+      description: User Details
+    ModifyUserResponseV3_2:
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsModified:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is modified or not.
+        ModifyUserException:
+          type: string
+          description: Gets or sets the Modify user exception.
+      description: Response of Modify User
+    UserDetails_2:
+      type: object
+      properties:
+        UserID:
+          type: string
+        LoginID:
+          type: string
+        FullName:
+          type: string
+        CreateDate:
+          type: string
+          format: date-time
+        CreatedBy:
+          type: string
+        Description:
+          type: string
+        Disabled:
+          type: integer
+          format: int32
+        DisabledByAdmin:
+          type: boolean
+        PasswordExpireDate:
+          type: string
+          format: date-time
+        ForcePasswordChange:
+          type: boolean
+        PasswordChangeDate:
+          type: string
+          format: date-time
+        PasswordChangeInterval:
+          type: integer
+          format: int32
+        LicenseType:
+          type: string
+          enum:
+          - Concurrent
+          - Dedicated
+          - External
+          - FirmFlow
+          - AdvanceFlow
+        Offline:
+          type: boolean
+        Reports:
+          type: boolean
+        SystemAdmin:
+          type: boolean
+        Signature:
+          type: string
+        locationID:
+          type: integer
+          format: int32
+        HasDrawerSetupRights:
+          type: string
+        TaxFlow:
+          type: boolean
+        EmailNotify:
+          type: boolean
+        EmailNotifyGroup:
+          type: boolean
+        EmailNotifyEventMgmtUsers:
+          type: boolean
+        EmailNotifyEventMgmtGroups:
+          type: boolean
+        UserAdministration:
+          type: integer
+          format: int32
+        WorkflowManagerUser:
+          type: boolean
+        ManagerId:
+          type: string
+        ManagerLoginId:
+          type: string
+        ManagerFullName:
+          type: string
+        IsManager:
+          type: integer
+          format: int32
+        OberonUser:
+          type: integer
+          format: int32
+        IsAdmin:
+          type: integer
+          format: int32
+      description: User Details
+    GetUploadLocationsResponse_2:
+      type: object
+      properties:
+        LocationPath:
+          type: string
+          description: Upload Location path
+        LocationName:
+          type: string
+          description: Upload location name
+      description: Fetches upload locations
+    UserDetailsV2_2:
+      type: object
+      properties:
+        UserID:
+          type: string
+        LoginID:
+          type: string
+        FullName:
+          type: string
+        CreateDate:
+          type: string
+          format: date-time
+        CreatedBy:
+          type: string
+        Description:
+          type: string
+        Disabled:
+          type: integer
+          format: int32
+        DisabledByAdmin:
+          type: boolean
+        PasswordExpireDate:
+          type: string
+          format: date-time
+        ForcePasswordChange:
+          type: boolean
+        PasswordChangeDate:
+          type: string
+          format: date-time
+        PasswordChangeInterval:
+          type: integer
+          format: int32
+        LicenseType:
+          type: string
+          enum:
+          - Concurrent
+          - Dedicated
+          - External
+          - FirmFlow
+          - AdvanceFlow
+        Offline:
+          type: boolean
+        Reports:
+          type: boolean
+        SystemAdmin:
+          type: boolean
+        Signature:
+          type: string
+        locationID:
+          type: integer
+          format: int32
+        HasDrawerSetupRights:
+          type: string
+        TaxFlow:
+          type: boolean
+        EmailNotify:
+          type: boolean
+        EmailNotifyGroup:
+          type: boolean
+        EmailNotifyEventMgmtUsers:
+          type: boolean
+        EmailNotifyEventMgmtGroups:
+          type: boolean
+        PortalUserAdministration:
+          type: boolean
+        InternalUserAdministration:
+          type: boolean
+        WorkflowManagerUser:
+          type: boolean
+        ManagerId:
+          type: string
+        ManagerLoginId:
+          type: string
+        ManagerFullName:
+          type: string
+        IsManager:
+          type: integer
+          format: int32
+        OberonUser:
+          type: integer
+          format: int32
+        IsAdmin:
+          type: integer
+          format: int32
+        LastLogin:
+          type: string
+          format: date-time
+        Groups:
+          type: array
+          items:
+            type: string
+      description: User Details
+    ImportDocumentResponse_2:
+      type: object
+      properties:
+        IsImported:
+          type: boolean
+        ImportDocumentException:
+          type: string
+          description: Gets or sets the import document exception.
+      description: Document import response
+    ChangeLoginResponse_2:
+      type: object
+      properties:
+        IsLoginChanged:
+          type: boolean
+        OldLogin:
+          type: string
+          description: Old login
+        NewLogin:
+          type: string
+          description: New login
+        ChangeLoginException:
+          type: string
+          description: Change login Exception
+      description: Change login Response
+    Reports_2:
+      type: object
+      properties:
+        ReportType:
+          type: string
+          description: Type of Report
+        ReportName:
+          type: array
+          description: Reports Names
+          items:
+            type: string
+      description: Sets Reports details
+    ReportsResponse_2:
+      type: object
+      properties:
+        Reports:
+          type: array
+          description: Fetches All reports
+          items:
+            $ref: '#/components/schemas/Reports_2'
+        ReportsException:
+          type: string
+          description: Any exception details
+      description: Response for Reports
+    UserDetailsResponse_2:
+      type: object
+      properties:
+        LoginId:
+          type: string
+        isActive:
+          type: boolean
+      description: Fetches user details
+    AddGroupUsersRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    ModifyGroupResponse_2:
+      type: object
+      properties:
+        IsModified:
+          type: boolean
+        GroupId:
+          type: string
+        MFAException:
+          type: string
+        ModifyGroupException:
+          type: string
+      description: SetAllGroupResponse
+    ModifyUserResponse_2:
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: Gets or sets the user identifier.
+        IsModified:
+          type: boolean
+          description: Gets or sets a value indicating whether the user is modified or not.
+        MFAException:
+          type: string
+          description: Gets or sets the modify user Message.
+        ModifyUserException:
+          type: string
+          description: Gets or sets the Modify user exception.
+      description: Response of Modify User
+    removeUsersRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    ClientDetailsResponse_2:
+      type: object
+      properties:
+        ClientName:
+          type: string
+        ClientNumber:
+          type: string
+      description: Fetches Client Name and Number
+    UserDetailsV3_2:
+      type: object
+      properties:
+        UserID:
+          type: string
+        LoginID:
+          type: string
+        FullName:
+          type: string
+        CreateDate:
+          type: string
+          format: date-time
+        CreatedBy:
+          type: string
+        Description:
+          type: string
+        Disabled:
+          type: integer
+          format: int32
+        DisabledByAdmin:
+          type: boolean
+        PasswordExpireDate:
+          type: string
+          format: date-time
+        ForcePasswordChange:
+          type: boolean
+        PasswordChangeDate:
+          type: string
+          format: date-time
+        PasswordChangeInterval:
+          type: integer
+          format: int32
+        LicenseType:
+          type: string
+          enum:
+          - Concurrent
+          - Dedicated
+          - External
+          - FirmFlow
+          - AdvanceFlow
+        Offline:
+          type: boolean
+        AllowAccessToReports:
+          type: boolean
+        Reports:
+          type: array
+          items:
+            type: string
+        SystemAdmin:
+          type: boolean
+        Signature:
+          type: string
+        locationID:
+          type: integer
+          format: int32
+        HasDrawerSetupRights:
+          type: string
+        TaxFlow:
+          type: boolean
+        EmailNotify:
+          type: boolean
+        EmailNotifyGroup:
+          type: boolean
+        EmailNotifyEventMgmtUsers:
+          type: boolean
+        EmailNotifyEventMgmtGroups:
+          type: boolean
+        PortalUserAdministration:
+          type: boolean
+        InternalUserAdministration:
+          type: boolean
+        WorkflowManagerUser:
+          type: boolean
+        ManagerId:
+          type: string
+        ManagerLoginId:
+          type: string
+        ManagerFullName:
+          type: string
+        IsManager:
+          type: integer
+          format: int32
+        OberonUser:
+          type: integer
+          format: int32
+        IsAdmin:
+          type: integer
+          format: int32
+        LastLogin:
+          type: string
+          format: date-time
+        Groups:
+          type: array
+          items:
+            type: string
+        Mfa:
+          type: boolean
+      description: User Details
+    PasswordPolicyRequest_2:
+      type: object
+      properties:
+        min_length:
+          type: integer
+          description: Minimum Length of password
+          format: int32
+        max_length:
+          type: integer
+          description: Max pwd Length
+          format: int32
+        max_repeat_chars:
+          type: integer
+          description: Max Repeating characters
+          format: int32
+        max_sequential_chars:
+          type: integer
+          description: Max Sequential characters
+          format: int32
+        max_login_similarity:
+          type: integer
+          description: Max login similarity
+          format: int32
+        forbidden_pwd_words:
+          type: array
+          description: forbidden words
+          items:
+            type: string
+        max_pwd_age:
+          type: integer
+          description: Max age
+          format: int32
+        lockout_threshold:
+          type: integer
+          description: Lockout threshold
+          format: int32
+      description: Paswword Policy Data
+    ChangeLoginRequest_2:
+      type: object
+      properties:
+        OldLogin:
+          type: string
+          description: Old login
+        NewLogin:
+          type: string
+          description: New login
+      description: Change login Request
+    GroupUsersResponse:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    UploadLocationsResponse_2:
+      type: object
+      properties:
+        UploadLocationsException:
+          type: string
+        UploadLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetUploadLocationsResponse_2'
+      description: Response Data
+    SetGroupRequest_2:
+      type: object
+      properties:
+        GroupName:
+          type: string
+          description: Name of group
+        Comments:
+          type: string
+          description: comments
+        UploadLocation:
+          type: string
+          description: UploadLocation
+        FullAccessToDocTracking:
+          type: boolean
+          description: FullAccessToDocTracking
+        FirmFlowRoutingNotification:
+          type: boolean
+          description: FirmFlowRoutingNotification
+        PermissonToApproveDocs:
+          type: boolean
+          description: PermissonToApproveDocs
+        AccessToApproveDocsOnly:
+          type: boolean
+          description: AccessToApproveDocsOnly
+        EnableMfa:
+          type: boolean
+          description: usemfa
+        MfaRequired:
+          type: boolean
+        EnforceMfaForUsers:
+          type: boolean
+        AllowAccessToReports:
+          type: boolean
+          description: IsAllowAccessToReports
+        Reports:
+          type: array
+          description: List Of Reports
+          items:
+            $ref: '#/components/schemas/RequestReportforgroup'
+        Users:
+          type: array
+          description: List Of users
+          items:
+            type: string
+      description: SetAllGroupRequest
+    GetPasswordPolicy_2:
+      type: object
+      properties:
+        ClientId:
+          type: string
+          description: Client Id
+        min_length:
+          type: integer
+          description: Minimum Length of password
+          format: int32
+        max_length:
+          type: integer
+          description: Max pwd Length
+          format: int32
+        max_repeat_chars:
+          type: string
+        max_sequential_chars:
+          type: string
+        max_login_similarity:
+          type: string
+        forbidden_pwd_words:
+          type: array
+          items:
+            type: string
+        max_pwd_age:
+          type: integer
+          format: int32
+        lockout_threshold:
+          type: integer
+          format: int32
+        pwd_req_alpha:
+          type: integer
+          format: int32
+        pwd_req_upper:
+          type: integer
+          format: int32
+        pwd_req_lower:
+          type: integer
+          format: int32
+        pwd_req_number:
+          type: integer
+          format: int32
+        pwd_req_symbol:
+          type: integer
+          format: int32
+        mfa:
+          type: integer
+          format: int32
+      description: Paswword Policy Data
+    CreateGroupResponse_2:
+      type: object
+      properties:
+        IsCreated:
+          type: boolean
+        GroupId:
+          type: string
+        MFAException:
+          type: string
+        CreateGroupException:
+          type: string
+      description: SetAllGroupResponse
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.json
+- thomson-reuters-gofileroom-web-api-v1-openapi.yml
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

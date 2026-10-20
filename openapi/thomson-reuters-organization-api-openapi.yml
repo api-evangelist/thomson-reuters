@@ -1,0 +1,82 @@
+openapi: 3.2.0
+info:
+  version: v1
+  title: FBT CUSTOMER Organization API
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/administration
+tags:
+- name: Organization
+paths:
+  /periods/{period-id}/organizations:
+    get:
+      tags:
+      - Organization
+      summary: Get all organizations by period
+      operationId: Client_GetClients
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get all clients by period
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Client.ClientsModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Client.ClientsModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Client.ClientsModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Client.ClientsModelForCustomerApi'
+        '404':
+          description: Invalid period id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+components:
+  schemas:
+    Fbt.Models.CustomerApi.Client.ClientsModelForCustomerApi:
+      description: Organization model
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Organization id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        description:
+          description: Organization description
+          type: string

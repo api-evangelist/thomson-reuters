@@ -1,0 +1,364 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Search Controller API
+  version: '1.0'
+  description: 'Operations tagged search-controller across 2 of this provider''s published API definitions: thomson-reuters-eap-uat-trri-api-research-openapi.json, thomson-reuters-eap-uat-trri-api-research-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/regulatory-intelligence
+tags:
+- name: Search Controller
+  description: Search Controller
+paths:
+  /v1/search:
+    post:
+      tags:
+      - Search Controller
+      summary: Performs search and returns its result
+      operationId: performSearchUsingPOST
+      parameters:
+      - name: limit
+        in: query
+        description: result limit
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      requestBody:
+        description: searchRequest
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequestDto'
+        required: true
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SearchResponseDto'
+        '201':
+          description: Created
+          content: {}
+        '400':
+          description: Supplied search request contains invalid data
+          content: {}
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: searchRequest
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+  /v1/search/{searchId}:
+    get:
+      tags:
+      - Search Controller
+      summary: Retrieve search result by Search Id
+      operationId: retrieveSearchUsingGET
+      parameters:
+      - name: classifications
+        in: query
+        description: classifications
+        schema:
+          type: boolean
+          default: false
+        example: true
+      - name: limit
+        in: query
+        description: limit
+        schema:
+          type: integer
+          format: int32
+        example: 10
+      - name: offset
+        in: query
+        description: offset
+        schema:
+          type: integer
+          format: int32
+        example: 5
+      - name: searchId
+        in: path
+        description: searchId
+        required: true
+        schema:
+          type: string
+        example: i0adc3e1b00000179793c9e3603bd2125
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SearchResponseDto'
+        '400':
+          description: INVALID_PARAMETER_MESSAGE
+          content: {}
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+components:
+  schemas:
+    SearchClassificationsDto:
+      title: SearchClassificationsDto
+      type: object
+      properties:
+        contentType:
+          type: array
+          items:
+            type: string
+        geography:
+          type: array
+          items:
+            type: string
+        organizations:
+          type: array
+          items:
+            type: string
+        sector:
+          type: array
+          items:
+            type: string
+        themes:
+          type: array
+          items:
+            type: string
+    SearchResponseDto:
+      title: SearchResponseDto
+      type: object
+      properties:
+        documentList:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResultDto'
+        filters:
+          $ref: '#/components/schemas/FiltersDto'
+        metadata:
+          $ref: '#/components/schemas/SearchMetadataDto'
+    SearchMetadataDto:
+      title: SearchMetadataDto
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+        executionDate:
+          type: string
+          format: date-time
+        searchId:
+          type: string
+        totalCount:
+          type: integer
+          format: int32
+    FiltersDto:
+      title: FiltersDto
+      type: object
+      properties:
+        classifications:
+          $ref: '#/components/schemas/SearchClassificationsDto'
+        endDate:
+          type: string
+          format: date-time
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        searchTerm:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+    DocumentSortedClassificationsDto:
+      title: DocumentSortedClassificationsDto
+      type: object
+      properties:
+        contentType:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationDto'
+        geography:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationDto'
+        organizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationDto'
+        sector:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationDto'
+        themes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationDto'
+    ClassificationDto:
+      title: ClassificationDto
+      type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationDto'
+        hasChildren:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+        parentId:
+          type: string
+    SearchRequestDto:
+      title: SearchRequestDto
+      type: object
+      properties:
+        classifications:
+          type: boolean
+        contentType:
+          type: array
+          items:
+            type: string
+        documentType:
+          type: string
+          enum:
+          - ALL
+          - LATEST_UPDATES
+          - REGULATORY_EVENTS
+          - SOURCE_DOCUMENTS
+        endDate:
+          type: string
+          format: date-time
+        geography:
+          type: array
+          items:
+            type: string
+        limit:
+          type: integer
+          format: int32
+        organizations:
+          type: array
+          items:
+            type: string
+        searchTerm:
+          type: string
+        sector:
+          type: array
+          items:
+            type: string
+        startDate:
+          type: string
+          format: date-time
+        themes:
+          type: array
+          items:
+            type: string
+    DocumentMetadataDatesDto:
+      title: DocumentMetadataDatesDto
+      type: object
+      properties:
+        adoptedDate:
+          type: string
+          format: date
+        approvalDate:
+          type: string
+          format: date
+        commentDates:
+          type: array
+          items:
+            type: string
+            format: date
+        complianceDates:
+          type: array
+          items:
+            type: string
+            format: date
+        documentDate:
+          type: string
+          format: date
+        effectiveDates:
+          type: array
+          items:
+            type: string
+            format: date
+        enactedDate:
+          type: string
+          format: date
+        expectedFutureDate:
+          type: string
+          format: date
+        expirationDate:
+          type: string
+          format: date
+        filingDate:
+          type: string
+          format: date
+        publicationDate:
+          type: string
+          format: date
+        sourcePublicationDate:
+          type: string
+          format: date
+    DocumentResultDto:
+      title: DocumentResultDto
+      type: object
+      properties:
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorRelationshipDto'
+        citation:
+          type: string
+        classifications:
+          $ref: '#/components/schemas/DocumentSortedClassificationsDto'
+        dates:
+          $ref: '#/components/schemas/DocumentMetadataDatesDto'
+        documentId:
+          type: string
+        externalUrl:
+          type: string
+        isEvent:
+          type: boolean
+        rootId:
+          type: string
+        sourceId:
+          type: string
+        title:
+          type: string
+    AuthorRelationshipDto:
+      title: AuthorRelationshipDto
+      type: object
+      properties:
+        author:
+          type: string
+        authorId:
+          type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: To generate Access Token, please use the steps described in <a href='/regulatory-intelligence/swagger_openapi_document/eap-trri-api-access-token/100?from=api&id=9296' rel='noopener noreferrer' target='_blank'>TRRI API Access Token</a> section, ex. 'Bearer {access_token}'.
+x-refined-from:
+- thomson-reuters-eap-uat-trri-api-research-openapi.json
+- thomson-reuters-eap-uat-trri-api-research-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

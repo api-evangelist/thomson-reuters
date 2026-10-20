@@ -1,0 +1,170 @@
+openapi: 3.2.0
+info:
+  title: OSA OData Query Service Effective Rate Data API
+  description: OData API for querying OSA collections including effective rates, reconciliation data, numerator/denominator data, state data, and everywhere data
+  version: 1.0.0
+  contact:
+    name: OSA Team
+    email: support@thomsonreuters.com
+servers:
+- url: https://api.onesourcetax.com/data-query-reporting/state-apportionment/odata/v1/
+  description: AMERS endpoints
+security:
+- basicAuth: []
+tags:
+- name: Effective Rate Data
+  description: Effective Rate – for every entity, group, and jurisdiction selected, this report provides an effective tax rate derived by multiplying the apportionment percentage and tax rate. You can select which tax year to use for purposes of applying the apportionment weights and tax rates.
+paths:
+  /odata/v1/effective-rate:
+    get:
+      summary: Query Effective Rate Data
+      description: Retrieve effective rate data with OData query options
+      operationId: getEffectiveRateData
+      parameters:
+      - $ref: '#/components/parameters/FilterParam'
+      - $ref: '#/components/parameters/SelectParam'
+      - $ref: '#/components/parameters/OrderByParam'
+      - $ref: '#/components/parameters/TopParam'
+      - $ref: '#/components/parameters/SkipParam'
+      - $ref: '#/components/parameters/CountParam'
+      responses:
+        '200':
+          description: Effective rate data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EffectiveRateDataCollection'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+      security:
+      - basicAuth: []
+      tags:
+      - Effective Rate Data
+components:
+  parameters:
+    OrderByParam:
+      name: $orderby
+      in: query
+      description: OData orderby expression
+      required: false
+      schema:
+        type: string
+      example: year desc,jurisdiction asc
+    TopParam:
+      name: $top
+      in: query
+      description: OData top expression - maximum number of records to return
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+      example: 100
+    FilterParam:
+      name: $filter
+      in: query
+      description: OData filter expression
+      required: false
+      schema:
+        type: string
+      example: year eq '2025' and jurisdiction eq 'CA'
+    CountParam:
+      name: $count
+      in: query
+      description: OData count expression - include total count in response
+      required: false
+      schema:
+        type: boolean
+      example: true
+    SkipParam:
+      name: $skip
+      in: query
+      description: OData skip expression - number of records to skip
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+      example: 50
+    SelectParam:
+      name: $select
+      in: query
+      description: OData select expression - comma-separated list of properties
+      required: false
+      schema:
+        type: string
+      example: ID,name,jurisdiction,year
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Authentication failed
+        message:
+          type: string
+          example: Username or password incorrect.
+    EffectiveRateDataCollection:
+      type: object
+      properties:
+        '@odata.context':
+          type: string
+          example: $metadata#effective-rate
+        '@odata.count':
+          type: integer
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/EffectiveRateData'
+    EffectiveRateData:
+      type: object
+      properties:
+        ID:
+          type: string
+          description: Entity ID
+        name:
+          type: string
+          description: Entity name
+        fein:
+          type: string
+          description: Federal Employer Identification Number
+        jurisdiction:
+          type: string
+          description: Tax jurisdiction
+        type:
+          type: string
+          description: Entity type
+        apportionment:
+          type: number
+          format: double
+          description: Apportionment percentage
+        taxRate:
+          type: number
+          format: double
+          description: Tax rate percentage
+        effectiveRate:
+          type: number
+          format: double
+          description: Effective tax rate percentage
+        entityOrGroup:
+          type: string
+          description: Entity or group classification
+        associatedGroupId:
+          type: string
+          description: Associated group identifier
+        year:
+          type: string
+          description: Tax year
+        scenarioName:
+          type: string
+          description: Scenario name
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication using username and password

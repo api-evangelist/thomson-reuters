@@ -1,0 +1,712 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters State Provision API
+  version: v1
+  description: 'Operations tagged StateProvision across 2 of this provider''s published API definitions: thomson-reuters-onesource-tax-provision-odata-apis-openapi.json, thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+  description: AMERS endpoints
+- url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+  description: EMEA endpoints
+security:
+- Basic: []
+tags:
+- name: StateProvision
+  description: Retrieves state tax provision broken out by states.
+paths:
+  /odata/v1/StateProvision:
+    get:
+      tags:
+      - StateProvision
+      description: Retrieves all state provisions based on the provided OData query options.
+      summary: Gets all state provisions
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of state provisions.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StateProvision'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching state provisions.
+      operationId: getOdataV1StateProvision
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+      description: AMERS endpoints
+    - url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+      description: EMEA endpoints
+  /odata/v1/StateProvisionDetail:
+    get:
+      tags:
+      - StateProvision
+      description: Retrieves state provision details based on the provided OData query options.
+      summary: Gets all state provision details
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of state provision details.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StateProvisionDetail'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching state provision details.
+      operationId: getOdataV1StateProvisionDetail
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+      description: AMERS endpoints
+    - url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+      description: EMEA endpoints
+components:
+  schemas:
+    StateProvisionDetail:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        jurisdictionname:
+          type: string
+          nullable: true
+        jurisdiction:
+          type: string
+          nullable: true
+        currencytype:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        classgroup:
+          type: string
+          nullable: true
+        pretaxbookincome:
+          type: number
+          format: double
+          nullable: true
+        rounding:
+          type: number
+          format: double
+          nullable: true
+        roundedptbi:
+          type: number
+          format: double
+          nullable: true
+        forecastrate:
+          type: number
+          format: double
+          nullable: true
+        trueupamount:
+          type: number
+          format: double
+          nullable: true
+        forecastptbi:
+          type: number
+          format: double
+          nullable: true
+        fedpermsi4s:
+          type: number
+          format: double
+          nullable: true
+        fedpermsni4s:
+          type: number
+          format: double
+          nullable: true
+        modifications:
+          type: number
+          format: double
+          nullable: true
+        fedtempsi4s:
+          type: number
+          format: double
+          nullable: true
+        fedtempsni4s:
+          type: number
+          format: double
+          nullable: true
+        statetemporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        allocableincome:
+          type: number
+          format: double
+          nullable: true
+        stateapprate:
+          type: number
+          format: double
+          nullable: true
+        appincomeprenols:
+          type: number
+          format: double
+          nullable: true
+        apportionableincome:
+          type: number
+          format: double
+          nullable: true
+        statetaxrate:
+          type: number
+          format: double
+          nullable: true
+        taxbeforecredits:
+          type: number
+          format: double
+          nullable: true
+        taxcredits:
+          type: number
+          format: double
+          nullable: true
+        stateaftertaxtempdifferences:
+          type: number
+          format: double
+          nullable: true
+        cashstateprovision:
+          type: number
+          format: double
+          nullable: true
+        trueup:
+          type: number
+          format: double
+          nullable: true
+        currentstatetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        beginapportionmentpct:
+          type: number
+          format: double
+          nullable: true
+        endapportionmentpct:
+          type: number
+          format: double
+          nullable: true
+        beginstatedeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        endstatedeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        statedeferredtaxprovision:
+          type: number
+          format: double
+          nullable: true
+        totalstatetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        nols:
+          type: number
+          format: double
+          nullable: true
+        federaltaxableincome:
+          type: number
+          format: double
+          nullable: true
+        noncashtaxcredits:
+          type: number
+          format: double
+          nullable: true
+        balsheetonlyadj:
+          type: number
+          format: double
+          nullable: true
+        ctataxbs:
+          type: number
+          format: double
+          nullable: true
+        equityadjustment:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        tempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        attempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        utilizationrate:
+          type: number
+          format: double
+          nullable: true
+        basenolallowance:
+          type: number
+          format: double
+          nullable: true
+        nolreclass:
+          type: number
+          format: double
+          nullable: true
+        nolbalanceavailable:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        noltempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        oci:
+          type: number
+          format: double
+          nullable: true
+        ctacurrentside:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    StateProvision:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        jurisdictionname:
+          type: string
+          nullable: true
+        jurisdiction:
+          type: string
+          nullable: true
+        currencytype:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        pretaxbookincome:
+          type: number
+          format: double
+          nullable: true
+        rounding:
+          type: number
+          format: double
+          nullable: true
+        roundedptbi:
+          type: number
+          format: double
+          nullable: true
+        forecastrate:
+          type: number
+          format: double
+          nullable: true
+        trueupamount:
+          type: number
+          format: double
+          nullable: true
+        forecastptbi:
+          type: number
+          format: double
+          nullable: true
+        fedpermsi4s:
+          type: number
+          format: double
+          nullable: true
+        fedpermsni4s:
+          type: number
+          format: double
+          nullable: true
+        modifications:
+          type: number
+          format: double
+          nullable: true
+        fedtempsi4s:
+          type: number
+          format: double
+          nullable: true
+        fedtempsni4s:
+          type: number
+          format: double
+          nullable: true
+        statetemporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        allocableincome:
+          type: number
+          format: double
+          nullable: true
+        stateapprate:
+          type: number
+          format: double
+          nullable: true
+        appincomeprenols:
+          type: number
+          format: double
+          nullable: true
+        apportionableincome:
+          type: number
+          format: double
+          nullable: true
+        statetaxrate:
+          type: number
+          format: double
+          nullable: true
+        taxbeforecredits:
+          type: number
+          format: double
+          nullable: true
+        taxcredits:
+          type: number
+          format: double
+          nullable: true
+        stateaftertaxtempdifferences:
+          type: number
+          format: double
+          nullable: true
+        cashstateprovision:
+          type: number
+          format: double
+          nullable: true
+        trueup:
+          type: number
+          format: double
+          nullable: true
+        currentstatetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        beginapportionmentpct:
+          type: number
+          format: double
+          nullable: true
+        endapportionmentpct:
+          type: number
+          format: double
+          nullable: true
+        beginstatedeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        endstatedeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        statedeferredtaxprovision:
+          type: number
+          format: double
+          nullable: true
+        totalstatetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        nols:
+          type: number
+          format: double
+          nullable: true
+        federaltaxableincome:
+          type: number
+          format: double
+          nullable: true
+        noncashtaxcredits:
+          type: number
+          format: double
+          nullable: true
+        balsheetonlyadj:
+          type: number
+          format: double
+          nullable: true
+        ctataxbs:
+          type: number
+          format: double
+          nullable: true
+        equityadjustment:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        tempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        attempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        utilizationrate:
+          type: number
+          format: double
+          nullable: true
+        basenolallowance:
+          type: number
+          format: double
+          nullable: true
+        nolreclass:
+          type: number
+          format: double
+          nullable: true
+        nolbalanceavailable:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        noltempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        oci:
+          type: number
+          format: double
+          nullable: true
+        ctacurrentside:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Basic:
+      type: http
+      scheme: basic
+x-refined-from:
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.json
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

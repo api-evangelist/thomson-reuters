@@ -1,0 +1,931 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts International Summary Chart…
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: International Summary Chart (2018+)
+paths:
+  /v1/international-summary-charts:
+    get:
+      tags:
+      - International Summary Chart (2018+)
+      summary: Returns the list of International Summary Charts available for 2018 forward
+      parameters:
+      - name: year
+        in: query
+        description: 4-digit year.
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSummaryChartRepresentations'
+              examples:
+                international-summary-charts:
+                  $ref: '#/components/examples/international-summary-charts'
+                international-summary-charts-year-specific:
+                  $ref: '#/components/examples/international-summary-charts-year-specific'
+        '204':
+          description: No data found for given inputs.
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1InternationalSummaryCharts
+      x-operation-id-source: derived
+    post:
+      tags:
+      - International Summary Chart (2018+)
+      summary: Creates a new International Summary Chart
+      operationId: createsNewInternationalSummaryChart.
+      parameters:
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: InternationalSummaryChart Representation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartCreateRepresentation'
+            examples:
+              create-international-summary-chart:
+                $ref: '#/components/examples/create-international-summary-chart'
+      responses:
+        '200':
+          description: InternationalSummaryChart created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSummaryChartCreateResponseRepresentation'
+              examples:
+                create-international-summary-chart-response:
+                  $ref: '#/components/examples/create-international-summary-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: creates new International Summary Chart.
+  /v1/international-summary-charts/{chartId}/copies:
+    post:
+      tags:
+      - International Summary Chart (2018+)
+      summary: Creates a copy of an existing International Summary Chart.
+      operationId: CreatesACopyOfAnExistingInternationalSummaryChart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: InternationalSummaryChart Representation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartCreateRepresentation'
+            examples:
+              create-international-summary-chart:
+                $ref: '#/components/examples/create-international-summary-chart'
+      responses:
+        '200':
+          description: InternationalSummaryChart created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSummaryChartCreateResponseRepresentation'
+              examples:
+                create-copy-international-summary-chart-response:
+                  $ref: '#/components/examples/create-copy-international-summary-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates a copy of an existing International Summary Chart.
+  /v1/account-types:
+    get:
+      tags:
+      - International Summary Chart (2018+)
+      summary: Returns a list of International Summary Chart account types
+      parameters:
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalAccountTypesRepresentations'
+              examples:
+                international-account-types:
+                  $ref: '#/components/examples/international-account-types'
+        '204':
+          description: No data found for given inputs.
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1AccountTypes
+      x-operation-id-source: derived
+  /v1/international-summary-charts/{chartId}/accounts:
+    patch:
+      tags:
+      - International Summary Chart (2018+)
+      summary: Adds, deletes, and updates International Summary Chart accounts for a given…
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: All operations executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSummaryChartMultipleResponses'
+              examples:
+                international-summary-chart-accounts:
+                  $ref: '#/components/examples/international-summary-chart-account-patch-success-response'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSummaryChartMultipleResponses'
+              examples:
+                multiple-responses:
+                  $ref: '#/components/examples/international-summary-chart-account-patch-multiple-responses'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartAccountRequests'
+            examples:
+              international-summary-chart-account-patch-request:
+                $ref: '#/components/examples/international-summary-chart-account-patch-request'
+      operationId: patchV1InternationalSummaryChartsByChartIdAccounts
+      x-operation-id-source: derived
+    get:
+      tags:
+      - International Summary Chart (2018+)
+      summary: Returns the list of International Summary Chart accounts for a given…
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSummaryAccounts'
+              examples:
+                success:
+                  $ref: '#/components/examples/international-summary-chart-accounts'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1InternationalSummaryChartsByChartIdAccounts
+      x-operation-id-source: derived
+  /v1/international-summary-charts/{chartId}:
+    delete:
+      tags:
+      - International Summary Chart (2018+)
+      summary: Deletes an International Summary Chart. Enter the chartId in the URL
+      operationId: DeletesAInternationalSummaryChart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: Deletes a International Summary Chart.
+    put:
+      tags:
+      - International Summary Chart (2018+)
+      summary: Renames an International Summary Chart. Enter the chartId in the URL
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartRenameRepresentation'
+            examples:
+              rename-international-summary-chart:
+                $ref: '#/components/examples/international-summary-chart-rename-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSummaryChartRepresentation'
+              examples:
+                rename-international-summary-chart-response:
+                  $ref: '#/components/examples/international-summary-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1InternationalSummaryChartsByChartId
+      x-operation-id-source: derived
+  /v1/international-summary-charts/{chartId}/read-only-status:
+    put:
+      tags:
+      - International Summary Chart (2018+)
+      summary: Updates the read-only status for an International Summary Chart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartReadOnlyStatusRepresentation'
+            examples:
+              read-only-status-international-summary-chart:
+                $ref: '#/components/examples/international-summary-chart-read-only-status-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSummaryChartRepresentation'
+              examples:
+                read-only-status-international-summary-chart-response:
+                  $ref: '#/components/examples/international-summary-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1InternationalSummaryChartsByChartIdReadOnlyStatus
+      x-operation-id-source: derived
+components:
+  examples:
+    international-account-types:
+      value:
+      - accountType: '0000'
+        accountTypeDescription: Caption Line
+      - accountType: '0050'
+        accountTypeDescription: Gross Sales - By SIC Code
+      - accountType: '0100'
+        accountTypeDescription: Returns and Allowances - By SIC Code
+      - accountType: '0150'
+        accountTypeDescription: Cost of Goods Sold - Non-Detail
+      - accountType: '0151'
+        accountTypeDescription: 'Cost of Goods Sold - Non-Detail: Fixed'
+      - accountType: '0152'
+        accountTypeDescription: 'Cost of Goods Sold - Non-Detail: Variable'
+      - accountType: 0990
+        accountTypeDescription: 'Sch K1: Ordinary Dividends'
+    international-summary-chart-rename-request:
+      value:
+        chartName: TestChart
+    international-summary-chart-accounts:
+      value:
+      - accountNumber: A1001008350
+        description: Current Assets Other Than Inventory
+        accountType: '8350'
+        accountTypeDescription: Current Assets Other Than Inventory
+        standardIndustrialClassificationCode: null
+      - accountNumber: A101001008350
+        description: Current Assets Other Than Inventory
+        accountType: '8350'
+        accountTypeDescription: Current Assets Other Than Inventory
+        standardIndustrialClassificationCode: null
+    international-summary-chart-response:
+      value:
+        year: 2022
+        chartId: E45V010100003L6N
+        chartName: TestChart
+        isReadOnly: false
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+    international-summary-chart-read-only-status-request:
+      value:
+        isReadOnly: false
+    create-international-summary-chart-response:
+      value:
+        year: 2022
+        chartId: E45V010100003LR3
+        chartName: TestChart
+        internationalAccounts: []
+    international-summary-charts-year-specific:
+      value:
+      - year: 2022
+        chartId: E45V010100003L6N
+        chartName: _AutoAPIICASumAccount1345
+        isReadOnly: true
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2022
+        chartId: E45V010100003KPB
+        chartName: _newICOA1464
+        isReadOnly: true
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+    international-summary-chart-account-patch-request:
+      value:
+      - op: add
+        path: /internationalAccount
+        value:
+          AccountNumber: '111'
+          Description: test-111
+          AccountType: '1500'
+          StandardIndustrialClassificationCode: ''
+      - op: replace
+        path: /internationalAccount
+        value:
+          AccountNumber: '111'
+          Description: test-111
+          AccountType: '1500'
+          StandardIndustrialClassificationCode: ''
+      - op: remove
+        path: /internationalAccount
+        value:
+          AccountNumber: '112'
+    create-copy-international-summary-chart-response:
+      value:
+        year: 2022
+        chartId: E45V010100003LR5
+        chartName: TestChart
+        internationalAccounts:
+        - accountNumber: A1001008350
+          description: Cash
+          accountType: '8350'
+          accountTypeDescription: Current Assets Other Than Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A101001008350
+          description: Cash
+          accountType: '8350'
+          accountTypeDescription: Current Assets Other Than Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A101001008351
+          description: Checking Account
+          accountType: '8350'
+          accountTypeDescription: Current Assets Other Than Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A102001028350
+          description: Economic Process Fees Receivable
+          accountType: '8350'
+          accountTypeDescription: Current Assets Other Than Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A102001038350
+          description: Dividend Receivable
+          accountType: '8350'
+          accountTypeDescription: Current Assets Other Than Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A102051008350
+          description: Allowance for Bad Debts
+          accountType: '8350'
+          accountTypeDescription: Current Assets Other Than Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A1021008350
+          description: Trade Notes and Accounts Receivable
+          accountType: '8350'
+          accountTypeDescription: Current Assets Other Than Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A1021018350
+          description: Commissions Receivable
+          accountType: '8350'
+          accountTypeDescription: Current Assets Other Than Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A1021028350
+          description: Economic Process Fees Receivable
+          accountType: '8350'
+          accountTypeDescription: Current Assets Other Than Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A103001018260
+          description: Inventories - Finished Goods
+          accountType: '8260'
+          accountTypeDescription: Ending Inventory
+          standardIndustrialClassificationCode: null
+        - accountNumber: A103001028252
+          description: Inventory Reserves
+          accountType: '8252'
+          accountTypeDescription: Inventory Reserve
+          standardIndustrialClassificationCode: null
+    international-summary-chart-account-patch-success-response:
+      value:
+      - op: Add
+        path: /internationalAccount
+        value:
+          AccountNumber: '131'
+          Description: test-111
+          AccountType: '1500'
+          StandardIndustrialClassificationCode: ''
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+      - op: remove
+        path: /internationalAccount
+        value:
+          AccountNumber: '131'
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    international-summary-chart-account-patch-multiple-responses:
+      value:
+      - op: Add
+        path: /internationalAccount
+        value:
+          AccountNumber: '131'
+          Description: test-111
+          AccountType: '1500'
+          StandardIndustrialClassificationCode: ''
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+      - op: Remove
+        path: /internationalAccount
+        value:
+          AccountNumber: '112234567'
+        statusCode: 400
+        detail: Validation Error
+        fieldErrors:
+        - fieldName: Code
+          messages:
+          - Account Number [112234567] does not exist in [E45V010100003LPM]
+          errorCode: 0
+    international-summary-charts:
+      value:
+      - year: 2022
+        chartId: E45V010100003L6N
+        chartName: _AutoAPIICASumAccount1345
+        isReadOnly: true
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2022
+        chartId: E45V010100003KPB
+        chartName: _newICOA1464
+        isReadOnly: true
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2021
+        chartId: E45V010100003LCL
+        chartName: AB2022
+        isReadOnly: true
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2020
+        chartId: E45V010100003FYO
+        chartName: fkjhdfjk
+        isReadOnly: true
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2020
+        chartId: E45V010100003FYN
+        chartName: jfdjf
+        isReadOnly: true
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2019
+        chartId: E45V010100003LJZ
+        chartName: KW 2022 Int'l Summary Chart
+        isReadOnly: false
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2019
+        chartId: E45V010100003LK1
+        chartName: KW 2022 Int'l Summary Chart!@#$%
+        isReadOnly: false
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2019
+        chartId: E45V010100003LK0
+        chartName: KW 2022 Int'l Summary Chart62
+        isReadOnly: false
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+    create-international-summary-chart:
+      value:
+        year: 2022
+        chartName: TestChart
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    InternationalAccountTypesRepresentation:
+      type: object
+      properties:
+        accountType:
+          type: string
+        accountTypeDescription:
+          type: string
+    InternationalSummaryChartMultipleResponses:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalSummaryChartMultipleResponse'
+    InternationalSummaryAccounts:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalSummaryAccount'
+    InternationalSummaryAccount:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        description:
+          type: string
+        accountType:
+          type: string
+        accountTypeDescription:
+          type: string
+        StandardIndustrialClassificationCode:
+          type: string
+    InternationalSummaryChartAccountRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalSummaryChartAccountRequest'
+    InternationalSummaryChartAccountRepresentation:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        description:
+          type: string
+        accountType:
+          type: string
+        StandardIndustrialClassificationCode:
+          type: string
+    InternationalSummaryChartMultipleResponse:
+      type: object
+      properties:
+        path:
+          type: string
+        op:
+          type: string
+        value:
+          type: object
+          $ref: '#/components/schemas/InternationalSummaryChartAccountRepresentation'
+        statusCode:
+          type: integer
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    InternationalSummaryChartRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+        isAvailableForRollover:
+          type: boolean
+          description: Indicates whether the chart is available for rollover.
+        priorYearChartId:
+          type: string
+          description: Chart ID that the existing chart was rolled from.
+        priorYearChartName:
+          type: string
+          description: Chart name from the prior year.
+    InternationalSummaryChartAccountRequest:
+      type: object
+      properties:
+        value:
+          type: object
+          $ref: '#/components/schemas/InternationalSummaryChartAccountRepresentation'
+        path:
+          type: string
+        op:
+          type: string
+    InternationalSummaryChartRenameRepresentation:
+      type: object
+      properties:
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+    InternationalSummaryChartCreateResponseRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        internationalAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InternationalSummaryAccounts'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    InternationalSummaryChartReadOnlyStatusRepresentation:
+      type: object
+      properties:
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+    InternationalSummaryChartCreateRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+    InternationalAccountTypesRepresentations:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalAccountTypesRepresentation'
+    InternationalSummaryChartRepresentations:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalSummaryChartRepresentation'
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

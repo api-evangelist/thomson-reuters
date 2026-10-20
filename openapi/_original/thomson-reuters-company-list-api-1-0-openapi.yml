@@ -1,0 +1,196 @@
+# x-archived-from: thomson-reuters-company-list-api-1-0-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Company List API
+  description: The Company List API provides read-only info of accessible companies in the TrackerMaster database
+  contact:
+    name: devportal
+  version: '1.0'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/companylist-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/companylist-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/companylist-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/companylist-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/companylist-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/companylist-api/v1
+paths:
+  /companies:
+    get:
+      tags:
+      - Companies
+      summary: Retrieve list of companies accessible to current user.
+      operationId: Companies_Get
+      parameters:
+      - name: $top
+        in: query
+        description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          default: 50
+        example: 50
+      - name: $skip
+        in: query
+        description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+        example: 0
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, webAppUrl, apiBaseUrl
+        schema:
+          type: string
+          nullable: true
+        example: id eq 111222
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - name
+            - webAppUrl
+            - apiBaseUrl
+            type: string
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - name
+            - webAppUrl
+            - apiBaseUrl
+            - id desc
+            - name desc
+            - webAppUrl desc
+            - apiBaseUrl desc
+            type: string
+      - name: $count
+        in: query
+        description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Returns list of companies accessible to current user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyInfoCollection'
+        '401':
+          description: If the user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: If the current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: If a server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    CompanyInfoCollection:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyInfoModel'
+          nullable: true
+      additionalProperties: false
+    CompanyInfoModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The identifier for the company.
+          format: int32
+        name:
+          type: string
+          description: The name of the company.
+          nullable: true
+        webAppUrl:
+          type: string
+          description: The URL of web application for the company.
+          nullable: true
+        apiBaseUrl:
+          type: string
+          description: The base URL for API services.
+          nullable: true
+      additionalProperties: false
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+        details:
+          type: array
+          items:
+            required:
+            - code
+            - message
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              target:
+                type: string
+        innerError:
+          required:
+          - code
+          - message
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      additionalProperties: false
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes: {}
+security:
+- OAuth2: []
+tags:
+- name: Companies
+  description: Use the Companies endpoint to get information about accessible companies.

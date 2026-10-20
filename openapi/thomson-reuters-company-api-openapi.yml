@@ -1,0 +1,351 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Company API
+  version: 1.8.0
+  description: 'Operations tagged Company across 2 of this provider''s published API definitions: thomson-reuters-onesource-e-invoicing-consolidated-apis-openapi.json, thomson-reuters-onesource-e-invoicing-consolidated-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-emea.onesourcetax.com/einvoicing/document/v1
+- url: https://api-emea.onesourcetax.com/einvoicing/company/v1
+tags:
+- name: Company
+  description: Get Companies.
+paths:
+  /companies:
+    get:
+      tags:
+      - Company
+      summary: Get companies
+      description: Get all companies the calling user has access to. The companies are sorted in alphabetic order by company name.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InternalServerErrorCompany'
+      operationId: getCompanies
+      x-operation-id-source: derived
+    servers:
+    - url: https://api-emea.onesourcetax.com/einvoicing/document/v1
+    - url: https://api-emea.onesourcetax.com/einvoicing/company/v1
+  /datalists:
+    get:
+      tags:
+      - Company
+      summary: Get all datalists
+      description: Get all datalists for all companies the user has access to
+      parameters:
+      - name: companyId
+        in: query
+        required: true
+        description: The id of the sending company. An external company id can also be used if a previous setup has been made where the external id has been connected to the company.
+        example: 8839abe6-5277-4145-a44f-dcca99ac13e5
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response. If matching datalists found, return the list of datalists. Otherwise return an empty result list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getDatalists
+      x-operation-id-source: derived
+    servers:
+    - url: https://api-emea.onesourcetax.com/einvoicing/document/v1
+    - url: https://api-emea.onesourcetax.com/einvoicing/company/v1
+  /datalists/{id}/entries:
+    get:
+      tags:
+      - Company
+      summary: Get all entries of a datalist
+      parameters:
+      - name: id
+        in: path
+        description: Id of the datalist
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatalistEntry'
+        '401':
+          description: Authentication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden to access the requested resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getDatalistsByIdEntries
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Company
+      summary: Replace a datalist's entries
+      parameters:
+      - name: id
+        in: path
+        description: Id of the datalist.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - payload
+              type: object
+              properties:
+                entries:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DatalistEntry'
+        required: true
+      responses:
+        '200':
+          description: Datalist entries successfully updated
+          content: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden to access the requested resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: putDatalistsByIdEntries
+      x-operation-id-source: derived
+    servers:
+    - url: https://api-emea.onesourcetax.com/einvoicing/document/v1
+    - url: https://api-emea.onesourcetax.com/einvoicing/company/v1
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentResponse'
+  schemas:
+    Description:
+      type: string
+      example: error message
+    Error:
+      type: object
+      properties:
+        descriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Description'
+    DataList:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the datalist
+          readOnly: true
+        name:
+          type: string
+          description: Name of datalist
+        description:
+          type: string
+          description: Description of datalist
+        companyId:
+          type: string
+          description: Id of the company that owns the datalist
+        systemName:
+          type: string
+          description: Name of the system that owns the datalist
+    CompanyId:
+      type: object
+      properties:
+        idType:
+          type: string
+          description: Type of id
+        value:
+          type: string
+          description: The id value
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          description: unique ID generated by OEI for each company
+        name:
+          type: string
+          description: The company name
+        department:
+          type: string
+          description: The department
+        address:
+          $ref: '#/components/schemas/CompanyAddress'
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyId'
+        contact:
+          $ref: '#/components/schemas/ContactInformation'
+        customerNumber:
+          type: string
+    DocumentResponse:
+      type: object
+      properties:
+        descriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Description'
+    DatalistEntry:
+      type: object
+      required:
+      - value
+      properties:
+        key:
+          type: string
+          description: Key of the entry
+        value:
+          type: string
+          description: Value of the entry
+    InternalServerErrorCompany:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: "Error code. Possible values:\n INTERNAL_SERVER_ERROR: Unknown error\n"
+          enum:
+          - INTERNAL_SERVER_ERROR
+        description:
+          type: string
+          description: The translated errormessage.
+        technicalDescription:
+          type: string
+          description: A more detailed description of the error in English.
+    CompanyAddress:
+      type: object
+      properties:
+        street:
+          type: string
+          description: Street address
+        postBox:
+          type: string
+          description: Post box
+        postCode:
+          type: string
+          description: Post code
+        town:
+          type: string
+          description: Town
+        province:
+          type: string
+          description: Province
+        countryCode:
+          type: string
+          description: Country code in ISO 3366-1 2-letter format
+    ContactInformation:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The company's email address
+        phone:
+          type: string
+          description: The company's phone number
+        fax:
+          type: string
+          description: The company's fax number
+x-refined-from:
+- thomson-reuters-onesource-e-invoicing-consolidated-apis-openapi.json
+- thomson-reuters-onesource-e-invoicing-consolidated-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,289 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Lookup Lists API
+  version: v1
+  description: 'Operations tagged LookupLists across 3 of this provider''s published API definitions: thomson-reuters-gofileroom-web-api-v1-v1-openapi.json, thomson-reuters-gofileroom-web-api-v1-openapi.yml, thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: LookupLists
+  description: LookupLists
+paths:
+  /api/v1/drawers/lookuplists/{lookupId}:
+    get:
+      tags:
+      - LookupLists
+      summary: Get lookup information
+      description: Get lookup details.
+      operationId: Get_Lookuplists
+      parameters:
+      - name: lookupId
+        in: path
+        description: Unique lookupLinkId ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok, Lookup details are ready.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+        '400':
+          description: Bad Request
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+      security:
+      - ApiKeyAuth: []
+    put:
+      tags:
+      - LookupLists
+      summary: Update Lookup
+      description: An endpoint used to update lookup information.
+      operationId: Put_Lookuplist
+      parameters:
+      - name: lookupId
+        in: path
+        description: Unique lookupLinkId ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+      security:
+      - ApiKeyAuth: []
+    post:
+      tags:
+      - LookupLists
+      summary: Insert Lookup
+      description: An endpoint used to add lookup information.
+      operationId: Post_Lookuplist
+      parameters:
+      - name: lookupId
+        in: path
+        description: Unique lookupLinkId ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookUpPostObject'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LookUpPostObject'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/LookUpPostObject'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/LookUpPostObject'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LookUpPostObject'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/LookUpListObject'
+      security:
+      - ApiKeyAuth: []
+    delete:
+      tags:
+      - LookupLists
+      summary: Delete Lookup
+      description: An endpoint used to delete an item from the lookuplist.
+      operationId: delete_Lookuplist
+      parameters:
+      - name: lookupId
+        in: path
+        description: Unique lookupLinkId ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LookUpListObject'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookUpDeleteResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/LookUpDeleteResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LookUpDeleteResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/LookUpDeleteResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: LookUpList
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    LookUpDeleteResponse:
+      type: object
+      properties:
+        RecordId:
+          type: string
+        IsDeleted:
+          type: boolean
+    LookUpPostObject:
+      type: object
+      properties:
+        Indexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookUpPostData'
+      description: ''
+    LookUpPostData:
+      type: object
+      properties:
+        IndexId:
+          type: string
+        IndexValue:
+          type: string
+    LookUpListData:
+      type: object
+      properties:
+        RecordId:
+          type: string
+        IndexId:
+          type: string
+        IndexValue:
+          type: string
+    LookUpListObject:
+      type: object
+      properties:
+        Indexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookUpListData'
+      description: ''
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.json
+- thomson-reuters-gofileroom-web-api-v1-openapi.yml
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

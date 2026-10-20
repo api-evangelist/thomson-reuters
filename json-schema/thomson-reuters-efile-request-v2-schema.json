@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-efile-request-v2-schema.json",
+  "title": "EFileRequestV2",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-gosystem-e-file-api-openapi.yml#/components/schemas/EFileRequestV2",
+  "type": "object",
+  "properties": {
+    "Year": {
+      "format": "int32",
+      "type": "integer",
+      "description": "The tax year for which the e-file is being processed. Must be a valid 4-digit year (e.g., 2024)."
+    },
+    "TaxType": {
+      "type": "string",
+      "description": "Specifies the type of tax return being processed. 1040, 1041, 1065, 1120, 990, 5500, 709."
+    },
+    "TaxReturnID": {
+      "type": "string",
+      "description": "A 6-digit unique alphanumeric identifier for the specific tax return. This is also referred to as the Locator ID."
+    },
+    "Jurisdiction": {
+      "type": "string",
+      "description": "The state or local jurisdiction code where the tax is being filed. Example: AL for Alabama. Use the /v2/e-file-jurisdictions endpoint to retrieve valid codes."
+    },
+    "EFileRequestType": {
+      "type": "string",
+      "description": "Indicates the type of e-file request. This value is predefined for each jurisdiction. Example: REG, REG2. Use the /v2/e-file-jurisdictions endpoint to retrieve valid request types for each jurisdiction.",
+      "enum": [
+        "REG",
+        "REG2",
+        "REG3",
+        "EXT",
+        "EXT2",
+        "EXT3",
+        "EXT4",
+        "EST",
+        "EST2",
+        "EST3"
+      ]
+    }
+  }
+}

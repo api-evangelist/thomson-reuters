@@ -1,0 +1,302 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Financial Hierarchy Service API
+  version: '1.0'
+  description: 'Operations tagged Financial Hierarchy Service across 2 of this provider''s published API definitions: thomson-reuters-referencedata-financial-hierarchy-service-openapi.json, thomson-reuters-referencedata-financial-hierarchy-service-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/administration/v1/financial-hierarchies
+  description: Generated server url
+security:
+- bearerAuth: []
+tags:
+- name: Financial Hierarchy Service
+paths:
+  /nodes/{id}/children:
+    post:
+      tags:
+      - Financial Hierarchy Service
+      summary: Create Custom Level4 node
+      operationId: createLevel4Node
+      parameters:
+      - name: id
+        in: path
+        description: Level3 Node id of the financial hierarchy
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomLevel4NodeRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/v1/financial-hierarchies
+      description: Generated server url
+  /nodes/{id}:
+    patch:
+      tags:
+      - Financial Hierarchy Service
+      summary: Update Custom Level4 Node
+      operationId: updateLevel4Node
+      parameters:
+      - name: id
+        in: path
+        description: Level4 Node id of the financial hierarchy
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomLevel4NodeRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomLevel4NodeResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/v1/financial-hierarchies
+      description: Generated server url
+  /nodes:
+    get:
+      tags:
+      - Financial Hierarchy Service
+      summary: Get the financial hierarchy Nodes
+      description: Use this operation to get list of financial hierarchy Nodes
+      operationId: getAllNodes
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: include_trc_mappings
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionFinancialHierarchyNodeResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/v1/financial-hierarchies
+      description: Generated server url
+  /branches:
+    get:
+      tags:
+      - Financial Hierarchy Service
+      summary: Get Financial Hierarchy Branches
+      description: Get all Financial Hierarchy Branches
+      operationId: getHierarchyBranches
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCollectionFinancialHierarchyBranchResponse'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/ApiCollectionFinancialHierarchyBranchResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/v1/financial-hierarchies
+      description: Generated server url
+components:
+  schemas:
+    IdResponseString:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 101001-881
+    ApiCollectionFinancialHierarchyNodeResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialHierarchyNodeResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    CustomLevel4NodeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 101001-002
+        name:
+          type: string
+          example: AccountGrouping-1
+        level_3_id:
+          type: string
+          example: 101001-000
+    ApiCollectionFinancialHierarchyBranchResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialHierarchyBranchResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    FinancialHierarchyBranchResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 101001-002
+        level_4_name:
+          type: string
+          example: 1234567892345_update
+        level_3_name:
+          type: string
+          example: Additional Investments, Current
+        level_2_name:
+          type: string
+          example: Cash, Cash Equivalents And Investments
+        level_1_name:
+          type: string
+          example: Assets
+        is_default:
+          type: boolean
+          example: false
+    CustomLevel4NodeRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: level4 Name
+          example: AccountGrouping-1
+    FinancialHierarchyNodeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 100101-000
+        name:
+          type: string
+          example: Additional Investments, Current
+        level:
+          type: integer
+          example: 3
+          format: int32
+        parent_id:
+          type: string
+        is_default:
+          type: boolean
+        trc_mappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRCMappingResponse'
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+          example: 4688
+        limit:
+          type: integer
+          format: int32
+          example: 200
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    TRCMappingResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        level_3_id:
+          type: string
+        year:
+          type: integer
+          format: int32
+        trc_code:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-referencedata-financial-hierarchy-service-openapi.json
+- thomson-reuters-referencedata-financial-hierarchy-service-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,85 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Media Metadata Controller API
+  version: '1.0'
+  description: 'Operations tagged media-metadata-controller across 2 of this provider''s published API definitions: thomson-reuters-eap-uat-trri-api-research-openapi.json, thomson-reuters-eap-uat-trri-api-research-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/regulatory-intelligence
+tags:
+- name: media-metadata-controller
+  description: Media Metadata Controller
+paths:
+  /v1/media/{mediaId}/metadata:
+    get:
+      tags:
+      - media-metadata-controller
+      summary: Returns a media metadata
+      operationId: getMediaMetadataUsingGET
+      parameters:
+      - name: mediaId
+        in: path
+        description: ID of media to return metadata
+        required: true
+        schema:
+          type: string
+        example: I4F4C91702D2711E4BB0B5CF9DD6E4844
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MediaMetadataDto'
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Requested media are forbidden to user
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get media metadata from Novus
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+components:
+  schemas:
+    MediaMetadataDto:
+      title: MediaMetadataDto
+      type: object
+      properties:
+        bytes:
+          type: string
+        content:
+          type: string
+        credit:
+          type: string
+        dpi:
+          type: integer
+          format: int32
+        format:
+          type: string
+        height:
+          type: integer
+          format: int32
+        keywords:
+          type: array
+          items:
+            type: string
+        width:
+          type: integer
+          format: int32
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: To generate Access Token, please use the steps described in <a href='/regulatory-intelligence/swagger_openapi_document/eap-trri-api-access-token/100?from=api&id=9296' rel='noopener noreferrer' target='_blank'>TRRI API Access Token</a> section, ex. 'Bearer {access_token}'.
+x-refined-from:
+- thomson-reuters-eap-uat-trri-api-research-openapi.json
+- thomson-reuters-eap-uat-trri-api-research-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

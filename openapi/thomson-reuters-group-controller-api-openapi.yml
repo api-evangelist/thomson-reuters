@@ -1,0 +1,81 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Group Controller API
+  version: 1.0.0
+  description: 'Operations tagged group-controller across 2 of this provider''s published API definitions: thomson-reuters-ogt-next-platform-openapi.json, thomson-reuters-ogt-next-platform-openapi.yml. Each path carries the servers of the definition it was published in.'
+security:
+- basicAuth: []
+tags:
+- name: group-controller
+paths:
+  /user-service/groups:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v1/groups
+    get:
+      tags:
+      - group-controller
+      operationId: getGroups
+      parameters:
+      - name: filterDto
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SystemFilterDto'
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SystemAndGroupsDto'
+      summary: Get groups
+      x-summary-source: derived
+components:
+  schemas:
+    GroupDto:
+      type: object
+      properties:
+        group:
+          type: string
+        description:
+          type: string
+    SystemAndGroupsDto:
+      type: object
+      properties:
+        systemCode:
+          type: integer
+          format: int64
+        systemName:
+          type: string
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupDto'
+    SystemFilterDto:
+      type: object
+      properties:
+        systemCode:
+          type: integer
+          format: int64
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-ogt-next-platform-openapi.json
+- thomson-reuters-ogt-next-platform-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

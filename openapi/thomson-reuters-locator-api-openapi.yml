@@ -1,0 +1,1099 @@
+openapi: 3.2.0
+info:
+  version: ''
+  title: GoSystem Locator API
+  description: A RESTful API that provides access to GoSystem Locator functionalities.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: Locator
+paths:
+  /v1/createnewlocator:
+    post:
+      summary: Create locator
+      description: Creates a new locator for a tax return. Provide the account details, tax year, and tax type in the request. Additional parameters vary based on the tax type.
+      tags:
+      - Locator
+      operationId: TriggerCreateLocator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLocatorRequestWrapper'
+            examples:
+              Create Locator Whole Request - Example:
+                $ref: '#/components/examples/CreateLocator-Example'
+              Create 1040 Locator - Example:
+                $ref: '#/components/examples/Create-1040-Locator'
+              Create 1041 Locator - Example:
+                $ref: '#/components/examples/Create-1041-Locator'
+              Create 1120 Locator - Example:
+                $ref: '#/components/examples/Create-1120-Locator'
+              Create 1065 Locator - Example:
+                $ref: '#/components/examples/Create-1065-Locator'
+              Create 5500/990 Locator - Example:
+                $ref: '#/components/examples/Create-5500-990-Locator'
+        required: true
+      responses:
+        '200':
+          description: Success. The locator is created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLocatorUpdationResponseList'
+              examples:
+                CreateLocatorSuccessResponse - Example:
+                  $ref: '#/components/examples/CreateLocatorSuccess'
+                CreateLocatorErrorResponse - Example:
+                  $ref: '#/components/examples/CreateLoactorFailure'
+                Create Locator Invalid Group - Example:
+                  $ref: '#/components/examples/CreateLocator-InvalidGroup'
+                Create Locator Required Field - Example:
+                  $ref: '#/components/examples/CreateLocator-TaxPayerName-Required'
+        '403':
+          description: Add user permission required.
+        '404':
+          description: Account doesn't belong to the firm.
+      x-operation-id-source: normalized
+      x-operation-id-original: Trigger Create locator
+  /locator/v2/deactivate:
+    post:
+      summary: Deactivate locator
+      description: Deactivates a locator for a specific tax return. Provide the account details, locator ID, tax year, and tax type in the request. If the locator is password-protected, you must also provide the password.
+      tags:
+      - Locator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeactivateLocatorRequest'
+            examples:
+              Deactivate Locator With Password:
+                $ref: '#/components/examples/Deactivate-Request'
+              Deactivate Locator Without Password:
+                $ref: '#/components/examples/Deactivate-Request-WithoutPassword'
+              Deactivate Locator Bad Request:
+                $ref: '#/components/examples/Deactivate-RequestWithoutLocatorId'
+      responses:
+        '200':
+          description: Success. The locator is deactivated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeactivateLocatorResponse'
+              examples:
+                Locator In Use:
+                  $ref: '#/components/examples/DeactivateLocatorInUse-Response'
+                Deactivate Locator Success:
+                  $ref: '#/components/examples/DeactivateSuccess'
+                Deactivate Locator Wrong Password:
+                  $ref: '#/components/examples/DeactivateLocator-WrongPassword'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                BadRequest - Response:
+                  $ref: '#/components/examples/SaveAsBadRequest-Response'
+        '500':
+          description: Internal server error.
+      operationId: postLocatorV2Deactivate
+      x-operation-id-source: derived
+  /locator/v2/saveas:
+    post:
+      summary: Create copy of locator
+      description: Creates a copy of an existing locator. Provide the account details, locator ID, tax year, tax type, and taxpayer first name in the request. You can include additional parameters to customize the new locator.
+      tags:
+      - Locator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveAsLocatorRequest'
+            examples:
+              SaveAs BasicSuccessRequest:
+                $ref: '#/components/examples/SaveAs-Request1'
+              SaveAs-1040/706/709-SuccessRequest:
+                $ref: '#/components/examples/SaveAs-1040'
+              SaveAs-1041/1120/1065/5500/990-SuccessRequest:
+                $ref: '#/components/examples/SaveAs-1041'
+              SaveAs-Full-SuccessRequest:
+                $ref: '#/components/examples/SaveAs-FullRequest'
+              SaveAs BadRequest:
+                $ref: '#/components/examples/Bad-Request'
+        required: true
+      responses:
+        '200':
+          description: Success. A copy of the locator is created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateLocatorResponse'
+              examples:
+                SaveAsSuccess - Response:
+                  $ref: '#/components/examples/SaveAsSuccess-Response'
+                SaveAsNoDataFound - Response:
+                  $ref: '#/components/examples/SaveAsNoDataExist-Response'
+                SaveAsInvalidPassword - Response:
+                  $ref: '#/components/examples/SaveAsInvalidPassword-Response'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                BadRequest - Response:
+                  $ref: '#/components/examples/SaveAsBadRequest-Response'
+        '500':
+          description: Internal server error.
+      operationId: postLocatorV2Saveas
+      x-operation-id-source: derived
+  /locator/v2/assignment:
+    post:
+      summary: Assign groups and users to tax returns
+      description: 'Assigns groups, preparers, reviewers, managers, partners, and time tracking information to tax returns.
+
+
+        When you assign an existing locator to a group without updating time tracking dates, you must still include the timeTracking object in the request as an empty object ("timeTracking": {}). Omitting it or passing null values results in a 400 Bad Request.
+
+
+        The flag field accepts the following values:
+
+
+        Users:
+
+        - N: Does nothing.
+
+        - U: Removes the assigned user.
+
+        - C: Assigns the user.
+
+
+        Groups:
+
+        - N: Does nothing.
+
+        - U: Removes the assigned groups.
+
+        - C: Assigns the groups.'
+      tags:
+      - Locator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocatorAssignmentRequest'
+            examples:
+              1040 Assignment Example:
+                $ref: '#/components/examples/Assignment-1040-Example'
+              1120 Assignment Example:
+                $ref: '#/components/examples/Assignment-1120-Example'
+              1065 Assignment Example:
+                $ref: '#/components/examples/Assignment-1065-Example'
+              5500 Assignment Example:
+                $ref: '#/components/examples/Assignment-5500-Example'
+              Bulk Assignment Example:
+                $ref: '#/components/examples/Assignment-Bulk-Example'
+              Assignment Without Time Tracking Example:
+                $ref: '#/components/examples/Assignment-Without-TimeTracking-Example'
+      responses:
+        '200':
+          description: Success. Groups and users are assigned to tax returns.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ValidateLocatorResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateLocatorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ValidateLocatorResponse'
+        '400':
+          description: Bad request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postLocatorV2Assignment
+      x-operation-id-source: derived
+  /locator/v2/validate:
+    post:
+      summary: Validate locator
+      description: Validates a locator by verifying that the provided taxpayer SSN matches the locator's SSN. Provide the account details, locator ID, tax year, tax type, and taxpayer SSN in the request.
+      tags:
+      - Locator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateLocatorRequest'
+            examples:
+              Full ValidateLocator Request:
+                $ref: '#/components/examples/ValidateLocator-Request1'
+              ValidateLocator Empty SSN Request:
+                $ref: '#/components/examples/ValidateLocator-EmptySSN'
+        required: true
+      responses:
+        '200':
+          description: Success. The locator is validated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateLocatorResponse'
+              examples:
+                Full ValidateLocator Response:
+                  $ref: '#/components/examples/ValidateLocator-Request1-Response'
+                Invalid SSN Response:
+                  $ref: '#/components/examples/ValidateLocator-InvalidSSN-Response'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Empty/Null SSN Response:
+                  $ref: '#/components/examples/ValidateLocator-EmptySSN-Response'
+        '500':
+          description: Internal server error.
+      operationId: postLocatorV2Validate
+      x-operation-id-source: derived
+components:
+  examples:
+    Assignment-5500-Example:
+      value:
+        taxReturns:
+        - account: '3777'
+          locator: ABCD5500
+          taxYear: '2024'
+          taxType: '5500'
+        assignment:
+          timeTracking:
+            dueDate: '2025-07-31T00:00:00Z'
+            extensionDate: '2025-10-15T00:00:00Z'
+            receivedDate: '2025-05-01T00:00:00Z'
+            promisedDate: '2025-07-15T00:00:00Z'
+          userAssignments:
+            preparer:
+              location: Test
+              loginID: PREP_5500
+              flag: U
+          groups:
+            groupCenter:
+            - groupCenter: '***'
+              groupName: 5500GRP
+            flag: U
+    CreateLocatorSuccess:
+      value:
+      - Description: Locator 1120 created successfully.
+        LocatorId: 5452MJ
+    Deactivate-Request:
+      value:
+        account: '3777'
+        locatorId: 1133JS
+        taxYear: '2024'
+        taxType: '1120'
+        password: surya2024
+    CreateLocator-TaxPayerName-Required:
+      value:
+      - Description: Taxpayer first name and last name cannot be empty for the 1040 tax type.
+        LocatorId: ''
+    ValidateLocator-EmptySSN:
+      value:
+        account: '3777'
+        locatorId: 0098JI
+        taxYear: '2023'
+        taxType: '1120'
+        taxPayerSSN: ''
+    Deactivate-Request-WithoutPassword:
+      value:
+        account: '3777'
+        locatorId: 1133JS
+        taxYear: '2024'
+        taxType: '1120'
+    Assignment-1120-Example:
+      value:
+        taxReturns:
+        - account: '3777'
+          locator: 5452MJ
+          taxYear: '2024'
+          taxType: '1120'
+        assignment:
+          timeTracking:
+            dueDate: '2025-03-15T00:00:00Z'
+            extensionDate: '2025-09-15T00:00:00Z'
+            receivedDate: '2025-01-15T00:00:00Z'
+            promisedDate: '2025-02-28T00:00:00Z'
+          userAssignments:
+            preparer:
+              location: Test
+              loginID: PREP123
+              flag: U
+            reviewer:
+              location: Test
+              loginID: REV456
+              flag: U
+          groups:
+            groupCenter:
+            - groupCenter: '***'
+              groupName: CORP
+            flag: U
+    Deactivate-RequestWithoutLocatorId:
+      value:
+        account: '3777'
+        locatorId: 1234AB
+        taxYear: '2024'
+        taxType: '1120'
+        password: surya2024
+    ValidateLocator-InvalidSSN-Response:
+      value:
+        error: true
+        code: -1
+        description: Locator Invalid
+        info: The specified SSN doesn't match the locator's SSN.
+    Create-1041-Locator:
+      value:
+      - account: '3777'
+        taxyear: '2022'
+        taxtype: '1041'
+        Taxpayer:
+          firstname: aaa
+        GroupAssignments:
+          Location: ''
+          Groups: []
+        Metadata:
+        - name: abcd
+          dataType: string
+          value: abcd
+    Create-1120-Locator:
+      value:
+      - account: '3777'
+        taxyear: '2022'
+        taxtype: '1120'
+        entityname: Rajat Joshi
+        returntype: 1120  - U.S. Corporation
+        entitytype: Corporate Single Entity
+        datasource: Electronic Organizer
+        Taxpayer: {}
+        GroupAssignments:
+          Location: ''
+          Groups: []
+        Metadata:
+        - name: abcd
+          dataType: string
+          value: abcd
+    DeactivateSuccess:
+      value:
+        error: false
+        code: 0
+        description: Finished
+        info: Deactivate Succeeded
+    CreateLocator-InvalidGroup:
+      value:
+      - Description: Some of the groups aren't valid under location ***.
+        LocatorId: ''
+    ValidateLocator-Request1:
+      value:
+        account: '3777'
+        locatorId: 0098JI
+        taxYear: '2023'
+        taxType: '1120'
+        taxPayerSSN: 77-6754321
+    Assignment-1040-Example:
+      value:
+        taxReturns:
+        - account: '3777'
+          locator: 1234MN
+          taxYear: '2024'
+          taxType: '1040'
+        assignment:
+          timeTracking:
+            dueDate: '2025-04-15T00:00:00Z'
+            extensionDate: '2025-10-15T00:00:00Z'
+            receivedDate: '2025-02-01T00:00:00Z'
+            promisedDate: '2025-03-15T00:00:00Z'
+          userAssignments:
+            preparer:
+              location: Test
+              loginID: PREP123
+              flag: U
+            reviewer:
+              location: Test
+              loginID: REV456
+              flag: U
+            manager:
+              location: Test
+              loginID: MGR789
+              flag: U
+            partner:
+              location: Test
+              loginID: PTR012
+              flag: U
+          groups:
+            groupCenter:
+            - groupCenter: '***'
+              groupName: 2MKN
+            - groupCenter: 1040TEST
+              groupName: 1040TEST
+            flag: U
+    Assignment-Without-TimeTracking-Example:
+      value:
+        taxReturns:
+        - account: '3777'
+          locator: ABCD5500
+          taxYear: '2024'
+          taxType: '5500'
+        assignment:
+          timeTracking: {}
+          userAssignments:
+            preparer:
+              location: Test
+              loginID: PREP_5500
+              flag: U
+          groups:
+            groupCenter:
+            - groupCenter: '***'
+              groupName: 5500GRP
+            flag: U
+    SaveAsBadRequest-Response:
+      value:
+        status: 400
+        errors:
+          LocatorId:
+          - The LocatorId field is required.
+    Bad-Request:
+      value:
+        account: '3777'
+        locatorId: 2220JR
+        taxYear: '2023'
+        taxType: '1065'
+        taxPayerFirstName: FirstName
+    CreateLocator-Example:
+      value:
+      - account: '3777'
+        taxyear: '2022'
+        taxtype: '1120'
+        Taxpayer:
+          firstname: Gaurav
+          middleinitial: Middle
+          lastName: TEst
+          suffix: Suffix
+        Spouse:
+          firstname: Spouse First
+          middleinitial: Spouse Ini
+          lastName: Spouse Last
+          suffix: Spouse Suffix
+        returntype: 1120-L,  Life Insurance Company
+        entitytype: Life Non-Life Eliminations
+        datasource: Consolidation/Eliminations
+        entityname: gauravtest1120return
+        Password: QA@123
+        clientPrefix: '1'
+        apptype: GRS
+        client: RAJATJ
+        clientcode: Hello
+        fein: ''
+        preparerValue:
+          Location: Test
+          LoginID: RAJATJ
+        reviewerValue:
+          Location: Test
+          LoginID: RAJATJ
+        ManagerValue:
+          Location: Test
+          LoginID: RAJATJ
+        PartnerValue:
+          Location: Test
+          LoginID: RAJATJ
+        GroupAssignments:
+          Location: '***'
+          Groups:
+          - 2MKN
+          - '1206'
+        Metadata:
+        - name: abcd
+          dataType: string
+          value: abcd
+    DeactivateLocatorInUse-Response:
+      value:
+        error: true
+        code: -1
+        description: Finished
+        info: Locator In Use State
+    Create-1065-Locator:
+      value:
+      - account: '3777'
+        taxyear: '2022'
+        taxtype: '1065'
+        entityname: RAJAT
+        returntype: '1065'
+        entitytype: Division
+        Taxpayer: {}
+        GroupAssignments:
+          Location: ''
+          Groups: []
+        Metadata:
+        - name: abcd
+          dataType: string
+          value: abcd
+    DeactivateLocator-WrongPassword:
+      value:
+        error: false
+        code: 0
+        description: Finished
+        info: Invalid Password
+    SaveAsSuccess-Response:
+      value:
+        error: false
+        code: 0
+        description: Save As Succeeded
+        info: 8149JR
+    SaveAs-Request1:
+      value:
+        account: '3777'
+        locatorId: 2220JR
+        taxYear: '2023'
+        taxType: '1065'
+        taxPayerFirstName: FirstName
+    ValidateLocator-Request1-Response:
+      value:
+        error: false
+        code: 0
+        description: Locator Valid
+        info: ''
+    Create-5500-990-Locator:
+      value:
+      - account: '3777'
+        taxyear: '2022'
+        taxtype: '5500'
+        entityname: Locator Entity
+        Taxpayer:
+          firstname: aaa
+          lastName: bbb
+        GroupAssignments:
+          Location: ''
+          Groups: []
+        Metadata:
+        - name: abcd
+          dataType: string
+          value: abcd
+    SaveAsNoDataExist-Response:
+      value:
+        error: true
+        code: -6
+        description: No data exists for this return. Cannot save a return without data.
+        info: ''
+    Create-1040-Locator:
+      value:
+      - account: '3777'
+        taxyear: '2022'
+        taxtype: '1040'
+        Taxpayer:
+          firstname: ANGELICA
+          lastName: TEST
+        Spouse: {}
+        GroupAssignments:
+          Location: ''
+          Groups: []
+        Metadata:
+        - name: abcd
+          dataType: string
+          value: abcd
+    Assignment-Bulk-Example:
+      value:
+        taxReturns:
+        - account: '3777'
+          locator: 1234MN
+          taxYear: '2024'
+          taxType: '1040'
+        - account: '3777'
+          locator: 5452MJ
+          taxYear: '2024'
+          taxType: '1120'
+        assignment:
+          userAssignments:
+            preparer:
+              location: Test
+              loginID: BULK_PREP
+              flag: U
+            reviewer:
+              location: Test
+              loginID: BULK_REV
+              flag: U
+          groups:
+            groupCenter:
+            - groupCenter: '***'
+              groupName: BULKGRP
+            flag: U
+    SaveAs-1041:
+      value:
+        account: '3777'
+        locatorId: 0016JP
+        taxYear: '2023'
+        taxType: '1041'
+        taxPayerFirstName: R
+    SaveAs-1040:
+      value:
+        account: '3777'
+        locatorId: 0007JN
+        taxYear: '2023'
+        taxType: '1040'
+        taxPayerFirstName: R -
+    Assignment-1065-Example:
+      value:
+        taxReturns:
+        - account: '3777'
+          locator: 7890PQ
+          taxYear: '2024'
+          taxType: '1065'
+        assignment:
+          timeTracking:
+            dueDate: '2025-03-15T00:00:00Z'
+            extensionDate: '2025-09-15T00:00:00Z'
+            receivedDate: '2025-02-01T00:00:00Z'
+            promisedDate: '2025-03-01T00:00:00Z'
+          userAssignments:
+            preparer:
+              location: Test
+              loginID: PTNR_PREP
+              flag: U
+            manager:
+              location: Test
+              loginID: MGR_PART
+              flag: U
+    ValidateLocator-EmptySSN-Response:
+      value:
+        status: 400
+        message: The SSN parameter is null or empty.
+    SaveAs-FullRequest:
+      value:
+        account: '3777'
+        locatorId: 0016JP
+        taxYear: '2023'
+        taxType: '1041'
+        clientCode: RAJATJ
+        taxPayerFirstName: R -
+        taxPayerLastName: '- J'
+        taxPayerInitial: Mr.
+        spouseInitial: Mr.
+        spouseFirstName: A
+        spouseLastName: B
+        password: ''
+    SaveAsInvalidPassword-Response:
+      value:
+        error: true
+        code: -5
+        description: Invalid password for password-protected return.
+        info: ''
+    CreateLoactorFailure:
+      value:
+      - Description: Entity type or return type cannot be null or empty for 1120 or 1065 tax types.
+        LocatorId: ''
+  schemas:
+    ManagerValue:
+      type: object
+      properties:
+        Location:
+          type: string
+        LoginID:
+          type: string
+    preparerValue:
+      type: object
+      properties:
+        Location:
+          type: string
+        LoginID:
+          type: string
+    GroupAssignments:
+      type: object
+      properties:
+        Location:
+          type: string
+        Groups:
+          type: array
+          items:
+            type: string
+    Groups:
+      type: object
+      properties:
+        groupCenter:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/GroupAllocations'
+        flag:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Assignment:
+      type: object
+      properties:
+        timeTracking:
+          $ref: '#/components/schemas/TimeTracking'
+        userAssignments:
+          $ref: '#/components/schemas/UserAssignments'
+        groups:
+          $ref: '#/components/schemas/Groups'
+      additionalProperties: false
+    TimeTracking:
+      type: object
+      properties:
+        dueDate:
+          type: string
+          format: date-time
+        extensionDate:
+          type: string
+          format: date-time
+        receivedDate:
+          type: string
+          format: date-time
+        promisedDate:
+          type: string
+          format: date-time
+      additionalProperties: false
+    LocatorAssignmentRequest:
+      type: object
+      properties:
+        taxReturns:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxReturn'
+        assignment:
+          $ref: '#/components/schemas/Assignment'
+      additionalProperties: false
+    CreateUserResponse:
+      type: object
+      properties:
+        Description:
+          type: string
+        LocatorId:
+          type: string
+    SaveAsLocatorRequest:
+      type: object
+      required:
+      - account
+      - locatorId
+      - taxYear
+      - taxType
+      - taxPayerFirstName
+      properties:
+        account:
+          type: string
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        locatorId:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the TaxReturnID.
+        taxYear:
+          type: string
+          description: The tax year for which the e-file is required. Must be a valid 4-digit year (for example, 2024).
+        taxType:
+          type: string
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+        taxPayerFirstName:
+          type: string
+          description: The first name of the taxpayer.
+        clientCode:
+          type: string
+          description: The client code for the respective locator.
+        taxPayerLastName:
+          type: string
+          description: The last name of the taxpayer.
+        taxPayerInitial:
+          type: string
+          description: The middle initial of the taxpayer.
+        spouseLastName:
+          type: string
+          description: The last name of the spouse.
+        spouseFirstName:
+          type: string
+          description: The first name of the spouse.
+        spouseInitial:
+          type: string
+          description: The middle initial of the spouse.
+        password:
+          type: string
+          description: The password for the locator, if one is required.
+      additionalProperties: false
+    CreateLocatorRequestWrapper:
+      type: array
+      items:
+        $ref: '#/components/schemas/CreateLocatorRequest'
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          default: 0
+        message:
+          type: string
+    UserAssignments:
+      type: object
+      properties:
+        preparer:
+          $ref: '#/components/schemas/UserAssignmentType'
+        reviewer:
+          $ref: '#/components/schemas/UserAssignmentType'
+        manager:
+          $ref: '#/components/schemas/UserAssignmentType'
+        partner:
+          $ref: '#/components/schemas/UserAssignmentType'
+      additionalProperties: false
+    CreateLocatorRequest:
+      type: object
+      required:
+      - account
+      - taxyear
+      - taxtype
+      properties:
+        account:
+          type: string
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        taxyear:
+          type: string
+          description: The tax year for which the e-file is required. Must be a valid 4-digit year (for example, 2024).
+        taxtype:
+          type: string
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+        Taxpayer:
+          $ref: '#/components/schemas/taxPayer'
+        Spouse:
+          $ref: '#/components/schemas/Spouse'
+        returntype:
+          type: string
+        entitytype:
+          type: string
+        datasource:
+          type: string
+        entityname:
+          type: string
+        Password:
+          type: string
+        clientPrefix:
+          type: string
+        apptype:
+          type: string
+        client:
+          type: string
+        clientcode:
+          type: string
+        fein:
+          type: string
+        preparerValue:
+          $ref: '#/components/schemas/preparerValue'
+        reviewerValue:
+          $ref: '#/components/schemas/reviewerValue'
+        ManagerValue:
+          $ref: '#/components/schemas/ManagerValue'
+        PartnerValue:
+          $ref: '#/components/schemas/PartnerValue'
+        GroupAssignments:
+          $ref: '#/components/schemas/GroupAssignments'
+        Metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataItem'
+    DeactivateLocatorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        code:
+          type: integer
+        description:
+          type: string
+        info:
+          type: string
+      additionalProperties: false
+    DeactivateLocatorRequest:
+      type: object
+      required:
+      - account
+      - locatorId
+      - taxYear
+      - taxType
+      properties:
+        account:
+          type: string
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        locatorId:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the TaxReturnID.
+        taxYear:
+          type: string
+          description: The tax year for which the e-file is required. Must be a valid 4-digit year (for example, 2024).
+        taxType:
+          type: string
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+        password:
+          type: string
+          description: The password for the locator, if one is required.
+      additionalProperties: false
+    PartnerValue:
+      type: object
+      properties:
+        Location:
+          type: string
+        LoginID:
+          type: string
+    taxPayer:
+      type: object
+      properties:
+        firstname:
+          type: string
+        middleinitial:
+          type: string
+        lastName:
+          type: string
+        suffix:
+          type: string
+    CreateLocatorUpdationResponseList:
+      type: array
+      items:
+        $ref: '#/components/schemas/CreateUserResponse'
+    GroupAllocations:
+      type: object
+      properties:
+        groupCenter:
+          type:
+          - string
+          - 'null'
+        groupName:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    reviewerValue:
+      type: object
+      properties:
+        Location:
+          type: string
+        LoginID:
+          type: string
+    TaxReturn:
+      type: object
+      properties:
+        account:
+          type:
+          - string
+          - 'null'
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        locator:
+          type:
+          - string
+          - 'null'
+          description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the TaxReturnID.
+        taxYear:
+          type:
+          - string
+          - 'null'
+          description: The tax year for which the e-file is required. Must be a valid 4-digit year (for example, 2024).
+        taxType:
+          type:
+          - string
+          - 'null'
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+      additionalProperties: false
+    ValidateLocatorRequest:
+      type: object
+      required:
+      - account
+      - locatorId
+      - taxYear
+      - taxType
+      - taxPayerSSN
+      properties:
+        account:
+          type: string
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        locatorId:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the TaxReturnID.
+        taxYear:
+          type: string
+          description: The tax year for which the e-file is required. Must be a valid 4-digit year (for example, 2024).
+        taxType:
+          type: string
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+        taxPayerSSN:
+          type: string
+          description: The taxpayer's Social Security Number (9 digits).
+      additionalProperties: false
+    Spouse:
+      type: object
+      properties:
+        firstname:
+          type: string
+        middleinitial:
+          type: string
+        lastName:
+          type: string
+        suffix:
+          type: string
+    UserAssignmentType:
+      type: object
+      properties:
+        location:
+          type:
+          - string
+          - 'null'
+        loginID:
+          type:
+          - string
+          - 'null'
+        flag:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ValidateLocatorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        code:
+          type: integer
+        description:
+          type: string
+        info:
+          type: string
+    MetadataItem:
+      type: object
+      properties:
+        name:
+          type: string
+        dataType:
+          type: string
+        value:
+          type: string
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

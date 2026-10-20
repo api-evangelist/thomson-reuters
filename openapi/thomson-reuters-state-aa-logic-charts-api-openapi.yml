@@ -1,0 +1,925 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts State AA Logic Charts API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: State AA Logic Charts
+paths:
+  /v2/years/{year}/logic-charts/{logicChartId}/apportionment-types:
+    get:
+      tags:
+      - State AA Logic Charts
+      summary: Returns the list of state AA Logic chart's apportionment types based on year…
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: Tax year.
+        schema:
+          type: integer
+          format: int32
+      - name: logicChartId
+        in: path
+        required: true
+        description: Logic chart ID.
+        schema:
+          type: string
+      - name: jurisdictionCode
+        in: query
+        required: false
+        description: Jurisdiction code.
+        schema:
+          type: string
+      - name: categoryId
+        in: query
+        required: false
+        description: Category ID.
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicChartApportionmentTypeRepresentation'
+              examples:
+                state-aa-categories-groups-representation:
+                  $ref: '#/components/examples/state-aa-logicchart-apportionmenttypes-get-representation'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      operationId: getV2YearsByYearLogicChartsByLogicChartIdApportionmentTypes
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - State AA Logic Charts
+      summary: Replaces multiple State AA Logic Chart's Apportionment Types for a year and…
+      parameters:
+      - name: year
+        in: path
+        description: Tax year.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: logicChartId
+        in: path
+        required: true
+        description: Logic chart ID.
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocumentStateAALogicApportionmentTypeRepresentation'
+            examples:
+              state-aa-logicchart-apportionmenttype-replace-operation:
+                $ref: '#/components/examples/state-aa-logicchart-apportionmenttype-replace-operation'
+              state-aa-logicchart-apportionmenttype-multiple-operations:
+                $ref: '#/components/examples/state-aa-logicchart-apportionmenttype-multiple-operations'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicApportionmentTypeMultipleResponseRepresentation'
+              examples:
+                state-aa-logicchart-apportionmenttype-success-responses:
+                  $ref: '#/components/examples/state-aa-logicchart-apportionmenttype-success-responses'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicApportionmentTypeMultipleResponseRepresentation'
+              examples:
+                state-aa-logicchart-apportionmenttype-multiple-responses:
+                  $ref: '#/components/examples/state-aa-logicchart-apportionmenttype-multiple-responses'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: stateAACategoriesPatchDocument
+      operationId: patchV2YearsByYearLogicChartsByLogicChartIdApportionmentTypes
+      x-operation-id-source: derived
+  /v1/years/{year}/state-aa-logic-charts:
+    get:
+      tags:
+      - State AA Logic Charts
+      summary: Returns the list of State AA Logic Charts based on year.
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: Tax year.
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicChartRepresentations'
+              examples:
+                state-aa-logic-charts:
+                  $ref: '#/components/examples/state-aa-logic-charts'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      operationId: getV1YearsByYearStateAaLogicCharts
+      x-operation-id-source: derived
+  /v1/state-aa-logic-charts:
+    post:
+      tags:
+      - State AA Logic Charts
+      summary: Creates a new State AA Logic Chart
+      operationId: CreatesNewStateAALogicChart.
+      parameters:
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: StateAALogicChart Representation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StateAALogicChartCreateRequestRepresentation'
+            examples:
+              create-state-aa-logic-chart-request:
+                $ref: '#/components/examples/create-state-aa-logic-chart-request'
+      responses:
+        '200':
+          description: StateAALogicChart created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicChartCreateResponseRepresentation'
+              examples:
+                create-state-aa-logic-chart-response:
+                  $ref: '#/components/examples/create-state-aa-logic-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates new State AA Logic Chart.
+  /v1/state-aa-logic-charts/{chartId}/copies:
+    post:
+      tags:
+      - State AA Logic Charts
+      summary: Creates a copy of an existing State AA Logic Chart. Enter the chartId in the URL
+      operationId: CreatesACopyOfAnExistingStateAALogicChart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: StateAALogicChart Representation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartRenameRepresentation'
+            examples:
+              create-state-aa-logic-chart:
+                $ref: '#/components/examples/international-summary-chart-rename-request'
+      responses:
+        '200':
+          description: StateAALogicChart created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicChartCreateResponseRepresentation'
+              examples:
+                create-state-aa-logic-chart-response:
+                  $ref: '#/components/examples/create-state-aa-logic-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates a copy of an existing State AA Logic Chart.
+  /v1/years/{year}/state-aa-logic-charts/throwback:
+    get:
+      tags:
+      - State AA Logic Charts
+      summary: Returns the throwback option details for the State AA Logic Charts of specified…
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: Tax year.
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicChartThrowbackResponseRepresentation'
+              examples:
+                throwback-option-state-aa-logic-chart-response:
+                  $ref: '#/components/examples/throwback-option-state-aa-logic-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      operationId: getV1YearsByYearStateAaLogicChartsThrowback
+      x-operation-id-source: derived
+    put:
+      tags:
+      - State AA Logic Charts
+      summary: Enables or disables the throwback option for the State AA Logic Charts of…
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: Tax year.
+        schema:
+          type: integer
+          format: int32
+      - name: isEnable
+        in: query
+        description: Throwback option.
+        schema:
+          type: boolean
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      operationId: putV1YearsByYearStateAaLogicChartsThrowback
+      x-operation-id-source: derived
+  /v1/state-aa-logic-charts/{chartId}:
+    put:
+      tags:
+      - State AA Logic Charts
+      summary: Renames a State AA Logic Chart. Enter the chartId in the URL
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartRenameRepresentation'
+            examples:
+              rename-state-aa-logic-chart:
+                $ref: '#/components/examples/international-summary-chart-rename-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicChartRepresentation'
+              examples:
+                rename-state-aa-logic-chart-response:
+                  $ref: '#/components/examples/state-aa-logic-chart'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1StateAaLogicChartsByChartId
+      x-operation-id-source: derived
+  /v1/state-aa-logic-charts/{chartId}/read-only-status:
+    put:
+      tags:
+      - State AA Logic Charts
+      summary: Updates the read-only status for a State AA Logic Chart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartReadOnlyStatusRepresentation'
+            examples:
+              read-only-status-state-aa-logic-chart:
+                $ref: '#/components/examples/international-summary-chart-read-only-status-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAALogicChartRepresentation'
+              examples:
+                read-only-status-state-aa-logic-chart-response:
+                  $ref: '#/components/examples/state-aa-logic-chart'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1StateAaLogicChartsByChartIdReadOnlyStatus
+      x-operation-id-source: derived
+components:
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    OperationStateAALogicApportionmentTypeRepresentation:
+      type: object
+      properties:
+        path:
+          type: string
+        op:
+          type: string
+          description: Specifies a CRUD operation.
+        value:
+          $ref: '#/components/schemas/StateAALogicChartApportionmentTypeRepresentation'
+    StateAALogicChartCreateResponseRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+    StateAALogicChartCreateRequestRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        applyDefaultLogic:
+          type: boolean
+          description: Indicates whether default logic is applied for the chart.
+    StateAALogicChartRepresentations:
+      type: array
+      items:
+        $ref: '#/components/schemas/StateAALogicChartRepresentation'
+    StateAALogicChartRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+        isDefault:
+          type: boolean
+        isAvailableForRollover:
+          type: boolean
+          description: Indicates whether the chart is available for rollover.
+        priorYearChartId:
+          type: string
+          description: Chart ID that the existing chart was rolled from.
+        priorYearChartName:
+          type: string
+          description: Chart name from the prior year.
+    InternationalSummaryChartRenameRepresentation:
+      type: object
+      properties:
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+    StateAALogicChartThrowbackResponseRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        isEnableThrowback:
+          type: boolean
+          description: Indicates whether the throwback option is enabled for the charts of the specified year.
+    StateAALogicChartApportionmentTypeRepresentation:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int32
+          description: Category ID.
+        isIncomeTax:
+          type: boolean
+        isFranchiseTax:
+          type: boolean
+        jurisdictionCode:
+          type: string
+          format: string
+          description: Jurisdiction code.
+        apportionmentType:
+          type: string
+          format: string
+          enum:
+          - None
+          - X
+          - N
+          - D
+          - B
+          description: 'Apportionment type: `None` - Factor excluded by state. `X` - Not applicable. `N` - Numerator only. `D` - Denominator only. `B` - Both numerator and denominator.
+
+            '
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    InternationalSummaryChartReadOnlyStatusRepresentation:
+      type: object
+      properties:
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+    JsonPatchDocumentStateAALogicApportionmentTypeRepresentation:
+      type: array
+      items:
+        $ref: '#/components/schemas/OperationStateAALogicApportionmentTypeRepresentation'
+    StateAALogicApportionmentTypeMultipleResponseRepresentation:
+      type: object
+      properties:
+        op:
+          type: string
+        path:
+          type: string
+        value:
+          $ref: '#/components/schemas/StateAALogicChartApportionmentTypeRepresentation'
+        statusCode:
+          type: integer
+        detail:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+  examples:
+    state-aa-logicchart-apportionmenttype-replace-operation:
+      value:
+      - op: replace
+        path: /stateAACategoryApportionments
+        value:
+          apportionmentType: B
+          categoryId: '100'
+          jurisdictionCode: AK
+          IsIncomeTax: true
+          IsFranchiseTax: true
+    international-summary-chart-rename-request:
+      value:
+        chartName: TestChart
+    state-aa-logicchart-apportionmenttype-multiple-responses:
+      value:
+      - op: Replace
+        path: /stateAACategoryApportionments
+        value:
+          categoryId: 100
+          isIncomeTax: true
+          isFranchiseTax: true
+          jurisdictionCode: AJ
+          apportionmentType: B
+          _links: []
+          _embedded: null
+        statusCode: 400
+        detail: null
+        fieldErrors:
+        - fieldName: JurisdictionCode
+          messages:
+          - '[JurisdictionCode] [AJ] is invalid'
+          errorCode: 0
+      - op: Replace
+        path: /stateAACategoryApportionments
+        value:
+          categoryId: 100
+          isIncomeTax: true
+          isFranchiseTax: true
+          jurisdictionCode: AL
+          apportionmentType: B
+          _links: []
+          _embedded: null
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    state-aa-logicchart-apportionmenttype-success-responses:
+      value:
+      - op: Replace
+        path: /stateAACategoryApportionments
+        value:
+          categoryId: 100
+          isIncomeTax: true
+          isFranchiseTax: true
+          jurisdictionCode: AK
+          apportionmentType: B
+          _links: []
+          _embedded: null
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+      - op: Replace
+        path: /stateAACategoryApportionments
+        value:
+          categoryId: 100
+          isIncomeTax: true
+          isFranchiseTax: true
+          jurisdictionCode: AL
+          apportionmentType: B
+          _links: []
+          _embedded: null
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    throwback-option-state-aa-logic-chart-response:
+      value:
+        year: 2022
+        isEnableThrowback: true
+    international-summary-chart-read-only-status-request:
+      value:
+        isReadOnly: false
+    state-aa-logicchart-apportionmenttypes-get-representation:
+      value:
+        year: 2018
+        chartId: ACT101010
+        resourceList:
+        - categoryId: 100
+          isIncomeTax: true
+          isFranchiseTax: true
+          jurisdictionCode: AL
+          apportionmentType: B
+        - categoryId: 100
+          isIncomeTax: true
+          isFranchiseTax: true
+          jurisdictionCode: AK
+          apportionmentType: B
+        - categoryId: 101
+          isIncomeTax: true
+          isFranchiseTax: true
+          jurisdictionCode: AZ
+          apportionmentType: B
+        - categoryId: 101
+          isIncomeTax: true
+          isFranchiseTax: true
+          jurisdictionCode: AR
+          apportionmentType: B
+    create-state-aa-logic-chart-response:
+      value:
+        year: 2022
+        chartId: E45V010100003L6F
+        chartName: TestChart
+    create-state-aa-logic-chart-request:
+      value:
+        year: 2022
+        chartName: TestChart
+        applyDefaultLogic: true
+    state-aa-logicchart-apportionmenttype-multiple-operations:
+      value:
+      - op: replace
+        path: /stateAACategoryApportionments
+        value:
+          apportionmentType: B
+          categoryId: '100'
+          jurisdictionCode: AK
+          IsIncomeTax: true
+          IsFranchiseTax: true
+      - op: replace
+        path: /stateAACategoryApportionments
+        value:
+          apportionmentType: B
+          categoryId: '100'
+          jurisdictionCode: AL
+          IsIncomeTax: true
+          IsFranchiseTax: true
+    state-aa-logic-charts:
+      value:
+      - year: 2022
+        chartId: E45V010100003L6F
+        chartName: _AutoAPISTAALogic_Rename1345
+        isReadOnly: false
+        isDefault: false
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2022
+        chartId: E45V010100003AWP
+        chartName: Default Chart of Logic
+        isReadOnly: true
+        isDefault: true
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2022
+        chartId: E45V010100003CYA
+        chartName: JP_StateA&ALogic
+        isReadOnly: false
+        isDefault: false
+        isAvailableForRollover: false
+        priorYearChartId: E45V01010000347T
+        priorYearChartName: JP_StateA&ALogic
+      - year: 2022
+        chartId: E45V010100003MF5
+        chartName: new chart
+        isReadOnly: false
+        isDefault: false
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+      - year: 2022
+        chartId: E45V010100003MF6
+        chartName: new chart without default logic
+        isReadOnly: false
+        isDefault: false
+        isAvailableForRollover: false
+        priorYearChartId: null
+        priorYearChartName: null
+    state-aa-logic-chart:
+      value:
+        year: 2022
+        chartId: E45V010100003L6F
+        chartName: TestChart
+        isReadOnly: false
+        isDefault: false
+        isAvailableForRollover: true
+        priorYearChartId: null
+        priorYearChartName: null
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

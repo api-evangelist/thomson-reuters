@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-trta-athena-models-api-v4-datasets-dataset-detail-schema.json",
+  "title": "TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail",
+  "description": "Represents detailed information about a specific dataset",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-datasets-api-openapi.yml#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the dataset",
+      "format": "uuid"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of dataset"
+    },
+    "startDate": {
+      "type": "string",
+      "description": "Start date of dataset"
+    },
+    "endDate": {
+      "type": "string",
+      "description": "End  date of dataset"
+    },
+    "year": {
+      "type": "integer",
+      "description": "Year of dataset",
+      "format": "int32"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Purpose of dataset"
+    },
+    "periodType": {
+      "type": "string",
+      "description": "Period type of dataset",
+      "readOnly": true
+    },
+    "returnType": {
+      "type": "string",
+      "description": "Return type of dataset"
+    },
+    "returns": {
+      "type": "array",
+      "description": "List of returns or calculations within the dataset",
+      "items": {
+        "$ref": "#/$defs/TRTA.Athena.Models.Api.V4.Datasets.Return"
+      }
+    }
+  },
+  "$defs": {
+    "TRTA.Athena.Models.Api.V4.Datasets.Entity": {
+      "type": "object",
+      "description": "Represents an entity within a dataset.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the entity.",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "description": "Entity name"
+        },
+        "shortName": {
+          "type": "string",
+          "description": "Entity short name"
+        }
+      }
+    },
+    "TRTA.Athena.Models.Api.V4.Datasets.Return": {
+      "type": "object",
+      "description": "Represents a return within a dataset",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the return.",
+          "format": "uuid"
+        },
+        "workbookId": {
+          "type": "string",
+          "description": "Unique identifier for the workbook associated with the return.",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the return."
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the return."
+        },
+        "efilingStatus": {
+          "type": "string",
+          "description": "E-filing status of the return."
+        },
+        "year": {
+          "type": "string",
+          "description": "Year of return"
+        },
+        "jurisdiction": {
+          "$ref": "#/$defs/TRTA.Athena.Models.Api.V4.Jurisdictions.Jurisdiction",
+          "description": "Jurisdiction details for the return."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Start date  of return"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "End date of return"
+        },
+        "entity": {
+          "$ref": "#/$defs/TRTA.Athena.Models.Api.V4.Datasets.Entity",
+          "description": "Entity details associated with the return."
+        },
+        "template": {
+          "$ref": "#/$defs/TRTA.Athena.Models.Api.V4.Datasets.Template",
+          "description": "Template details used for the return."
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "User who created the return."
+        },
+        "lastUpdatedBy": {
+          "type": "string",
+          "description": "User who last updated the return."
+        },
+        "createdDate": {
+          "type": "string",
+          "description": "Date when the return was created."
+        },
+        "lastUpdateDate": {
+          "type": "string",
+          "description": "Date when the return was last updated."
+        }
+      }
+    },
+    "TRTA.Athena.Models.Api.V4.Datasets.Template": {
+      "type": "object",
+      "description": "Represents a template used within a dataset.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the template.",
+          "format": "uuid"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the template"
+        },
+        "family": {
+          "type": "string",
+          "description": "Template family name"
+        }
+      }
+    },
+    "TRTA.Athena.Models.Api.V4.Jurisdictions.Jurisdiction": {
+      "type": "object",
+      "description": "Represents the jurisdiction details associated with a dataset or return.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id of jurisdiction"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of jurisdiction"
+        }
+      }
+    }
+  }
+}

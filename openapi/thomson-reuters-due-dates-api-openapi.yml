@@ -1,0 +1,1138 @@
+openapi: 3.2.0
+info:
+  title: Calendar Management Due Dates API
+  description: Calendar Due Dates Management API
+  version: v1
+servers:
+- url: https://api.onesourcetax.com
+- url: https://api-apac.onesourcetax.com
+- url: https://api-emea.onesourcetax.com
+security:
+- Bearer: []
+tags:
+- name: Due Dates
+paths:
+  /calendar/due-dates/v1:
+    get:
+      tags:
+      - Due Dates
+      summary: Returns due dates that match the search criteria
+      parameters:
+      - name: Year
+        in: query
+        description: Return due dates with one of the years specified.
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - name: TaxType
+        in: query
+        description: Return due dates with one or more of the tax types specified.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: Frequency
+        in: query
+        description: Return due dates with one of the frequency values specified.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ObligationType
+        in: query
+        description: Return due dates with one or more of the obligation types specified.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: DeliverableType
+        in: query
+        description: Return due dates with one or more of the deliverable types specified.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: Jurisdiction
+        in: query
+        description: Return due dates with one of the jurisdiction IDs specified. Example - http://ontology.onesourcetax.com/core/jurisdiction:USA
+        schema:
+          type: array
+          items:
+            type: string
+      - name: Entity
+        in: query
+        description: Return due dates with an entity matching one of the entity IDs specified. Example - 5dcab5c21eadad0fa2988bd8
+        schema:
+          type: array
+          items:
+            type: string
+      - name: Client
+        in: query
+        description: Return due dates with an client matching one of the client IDs specified. Example - 15
+        schema:
+          type: array
+          items:
+            type: string
+      - name: AssignedToUser
+        in: query
+        description: Return due dates with an assigned to user with one of the GUIDs specified. Use an empty value for unassigned records.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: OverallResponsibilityUser
+        in: query
+        description: Return due dates with an overall responsibility user with one of the GUIDs specified. Use an empty value for unassigned records.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: State
+        in: query
+        description: Return due dates that have one of the states specified. Valid values are [Complete, Open]
+        schema:
+          type: array
+          items:
+            type: string
+      - name: Status
+        in: query
+        description: Return due dates using a status with one of the status IDs specified.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: DueDate
+        in: query
+        description: Return due dates that have a due date value on this date.
+        schema:
+          type: string
+          format: date-time
+      - name: DueDateLte
+        in: query
+        description: Return due dates that have a due date value on or before this date.
+        schema:
+          type: string
+          format: date-time
+      - name: DueDateGte
+        in: query
+        description: Return due dates that have a due date value on or after this date.
+        schema:
+          type: string
+          format: date-time
+      - name: TaxYearEndDate
+        in: query
+        description: Return due dates that have a tax year end on this date.
+        schema:
+          type: string
+          format: date-time
+      - name: TaxYearEndDateLte
+        in: query
+        description: Return due dates that have a tax year end on or before this date.
+        schema:
+          type: string
+          format: date-time
+      - name: TaxYearEndDateGte
+        in: query
+        description: Return due dates that have a tax year end on or after this date.
+        schema:
+          type: string
+          format: date-time
+      - name: ReminderDate
+        in: query
+        description: Return due dates that have a reminder date on this date.
+        schema:
+          type: string
+          format: date-time
+      - name: ReminderDateLte
+        in: query
+        description: Return due dates that have a reminder date on or before this date.
+        schema:
+          type: string
+          format: date-time
+      - name: ReminderDateGte
+        in: query
+        description: Return due dates that have a reminder date on or after this date.
+        schema:
+          type: string
+          format: date-time
+      - name: CreatedBy
+        in: query
+        description: Return due dates that were created by one of these user IDs.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: CreatedOn
+        in: query
+        description: Return due dates that were created on this date.
+        schema:
+          type: string
+          format: date-time
+      - name: CreatedOnLte
+        in: query
+        description: Return due dates that were created on or before this date.
+        schema:
+          type: string
+          format: date-time
+      - name: CreatedOnGte
+        in: query
+        description: Return due dates that were created on or after this date.
+        schema:
+          type: string
+          format: date-time
+      - name: DateComplete
+        in: query
+        description: Return due dates that have a complete date on this date.
+        schema:
+          type: string
+          format: date-time
+      - name: DateCompleteLte
+        in: query
+        description: Return due dates that have a complete date on or before
+        schema:
+          type: string
+          format: date-time
+      - name: DateCompleteGte
+        in: query
+        description: Return due dates that have a complete date on or after this date.
+        schema:
+          type: string
+          format: date-time
+      - name: SortOrder
+        in: query
+        description: If sorting results by a specific field, order by ascending (asc) or descending (desc) order.
+        schema:
+          type: string
+      - name: OrderBy
+        in: query
+        description: Sort due date records by a specified field. If not specified, results are sorted by ID.
+        schema:
+          type: string
+      - name: Offset
+        in: query
+        description: Offset based pagination - zero-based index specifying the first item in the collection to return. It cannot be a negative value.
+        schema:
+          type: integer
+          format: int32
+      - name: Limit
+        in: query
+        description: Offset based pagination - maximum number of records to appear in the result. Maximum value of 100.
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DueDatesSearchResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      operationId: getCalendarDueDatesV1
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Due Dates
+      summary: Creates and schedules due dates
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DueDateCreateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DueDateCreateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DueDateCreateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DueDateCreateRequest'
+      responses:
+        '200':
+          description: Success
+      operationId: postCalendarDueDatesV1
+      x-operation-id-source: derived
+  /calendar/due-dates/v1/filters:
+    get:
+      tags:
+      - Due Dates
+      summary: Gets filter values of specific field for a user's due dates
+      parameters:
+      - name: fieldId
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DueDateFilterResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      operationId: getCalendarDueDatesV1Filters
+      x-operation-id-source: derived
+  /calendar/due-dates/v1/{id}:
+    patch:
+      tags:
+      - Due Dates
+      summary: Update single due date
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: notifyOnAssign
+        in: query
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/UpdateDueDateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDueDateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDueDateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateDueDateRequest'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      operationId: patchCalendarDueDatesV1ById
+      x-operation-id-source: derived
+  /calendar/due-dates/v1/custom:
+    post:
+      tags:
+      - Due Dates
+      summary: Creates custom due dates
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/CustomDueDateCreateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomDueDateCreateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CustomDueDateCreateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CustomDueDateCreateRequest'
+      responses:
+        '200':
+          description: Success
+      operationId: postCalendarDueDatesV1Custom
+      x-operation-id-source: derived
+components:
+  schemas:
+    JurisdictionRecord:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        code:
+          type:
+          - string
+          - 'null'
+        region:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DueDateRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the due date record.
+          format: uuid
+        groupId:
+          type: string
+          description: ID of the due date record's obligation group.
+          format: uuid
+        dueDate:
+          type:
+          - string
+          - 'null'
+          description: The current due date value for the record.
+          format: date-time
+        dueDateMetadata:
+          $ref: '#/components/schemas/DueDateMetadata'
+        taxYearStartDate:
+          type:
+          - string
+          - 'null'
+          description: Tax year start date that was used to create this record.
+          format: date-time
+        taxYearEndDate:
+          type:
+          - string
+          - 'null'
+          description: Tax year end date that was used to create this record.
+          format: date-time
+        comment:
+          type:
+          - string
+          - 'null'
+          description: Comments for this due date record.
+        year:
+          type: integer
+          description: The year for this due date record.
+          format: int32
+        domainType:
+          type:
+          - string
+          - 'null'
+          description: Domain types applicable the obligation.
+        taxType:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Tax types applicable the obligation.
+        deliverableType:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Deliverable types applicable to the obligation.
+        form:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Forms applicable to the obligation.
+        obligation:
+          $ref: '#/components/schemas/Obligation'
+        state:
+          type:
+          - string
+          - 'null'
+          description: The state of the due date record, based on its status.
+        status:
+          $ref: '#/components/schemas/DueDateStatusRecord'
+        entity:
+          $ref: '#/components/schemas/EntityRecord'
+        client:
+          $ref: '#/components/schemas/Client'
+        incorporationDate:
+          type:
+          - string
+          - 'null'
+          description: The incorporation date that was used while creating this record.
+          format: date-time
+        qualificationDate:
+          type:
+          - string
+          - 'null'
+          description: The qualification date that was used while creating this record.
+          format: date-time
+        jurisdiction:
+          $ref: '#/components/schemas/JurisdictionRecord'
+        assignedToUser:
+          type:
+          - string
+          - 'null'
+          description: GUID of the user assigned to this due date.
+        assignedToName:
+          type:
+          - string
+          - 'null'
+        overallResponsibilityUser:
+          type:
+          - string
+          - 'null'
+          description: GUID of the user with overall responsibility role to this due date.
+        overallResponsibilityName:
+          type:
+          - string
+          - 'null'
+        contentUpdates:
+          $ref: '#/components/schemas/DueDateContentUpdateInfo'
+        reminderDate:
+          type:
+          - string
+          - 'null'
+          description: User ID for the user that last modified this record.
+          format: date-time
+        reminderDateOverridden:
+          type: boolean
+          description: User ID for the user that last modified this record.
+        dateComplete:
+          type:
+          - string
+          - 'null'
+          description: User ID for the user that last modified this record.
+          format: date-time
+        dateCompleteOverridden:
+          type: boolean
+          description: User ID for the user that last modified this record.
+        documentsAssociated:
+          type:
+          - string
+          - 'null'
+        created:
+          type: string
+          description: User ID for the user that last modified this record.
+          format: date-time
+        createdBy:
+          type:
+          - string
+          - 'null'
+          description: User ID for the user that last modified this record.
+        modified:
+          type: string
+          description: The time that this record was last modified at, in UTC.
+          format: date-time
+        modifiedBy:
+          type:
+          - string
+          - 'null'
+          description: User ID for the user that last modified this record.
+      additionalProperties: {}
+    UpdateDueDateRequest:
+      type: object
+      properties:
+        DueDate:
+          type:
+          - string
+          - 'null'
+          description: The overridden due date value.
+          format: date-time
+        DueDateInUse:
+          $ref: '#/components/schemas/DueDateInUseUpdate'
+        Status:
+          type:
+          - string
+          - 'null'
+          description: The ID of the due date status.
+        Comments:
+          type:
+          - string
+          - 'null'
+          description: The comments for the due date.
+        ReminderDate:
+          type:
+          - string
+          - 'null'
+          description: The date at which the assigned users will be notified.
+          format: date-time
+        AssignedToUser:
+          type:
+          - string
+          - 'null'
+          description: The GUID of the ONESOURCE user to be assigned to this due date.
+        OverallResponsibilityUser:
+          type:
+          - string
+          - 'null'
+          description: The GUID of the ONESOURCE user to assume overall responsibility for this due date.
+      additionalProperties: {}
+    EntityRecord:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        code:
+          type:
+          - string
+          - 'null'
+        shortName:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    IncorporationAndQualification:
+      type: object
+      properties:
+        Id:
+          type:
+          - string
+          - 'null'
+        Jurisdiction:
+          type:
+          - string
+          - 'null'
+        Type:
+          type:
+          - string
+          - 'null'
+        Date:
+          type: string
+          format: date-time
+      additionalProperties: false
+    StatusData:
+      type: object
+      properties:
+        StatusId:
+          type: string
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    User:
+      type: object
+      properties:
+        GUID:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        UniversalId:
+          type:
+          - string
+          - 'null'
+        FullName:
+          type:
+          - string
+          - 'null'
+        EmailAddress:
+          type:
+          - string
+          - 'null'
+        IsNotified:
+          type: boolean
+      additionalProperties: false
+    DueDateMetadata:
+      type: object
+      properties:
+        dueDateInUse:
+          $ref: '#/components/schemas/DueDateInUseResponse'
+        originalDueDate:
+          type: string
+          description: The due date value
+          format: date-time
+        extensions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: date-time
+          description: The extensions available for the due date record.
+        extensionsRemaining:
+          type: integer
+          description: The
+          format: int32
+        totalExtensions:
+          type: integer
+          description: The number of extensions available for the due date.
+          format: int32
+        sequence:
+          type: integer
+          description: Sequence of the due date.
+          format: int32
+      additionalProperties: false
+    DueDateCreateRequest:
+      required:
+      - Entity
+      - ObligationId
+      - Year
+      - YearType
+      type: object
+      properties:
+        ObligationId:
+          type: integer
+          description: The obligation ID.
+          format: int32
+        Year:
+          type: integer
+          description: The year for this due date.
+          format: int32
+        YearType:
+          $ref: '#/components/schemas/YearType'
+        Entity:
+          type: string
+          description: The GUID of the entity associated to this due date.
+        Client:
+          type:
+          - string
+          - 'null'
+          description: The id of the client associated to this due date.
+        AssignedToUser:
+          type:
+          - string
+          - 'null'
+          description: The GUID of the ONESOURCE user to be assigned to this due date.
+        OverallResponsibilityUser:
+          type:
+          - string
+          - 'null'
+          description: The GUID of the ONESOURCE user to assume overall responsibility for this due date.
+      additionalProperties: {}
+    DueDateInUseResponse:
+      enum:
+      - overridden
+      - originalDueDate
+      - 1stExtension
+      - 2ndExtension
+      - 3rdExtension
+      - 4thExtension
+      type: string
+    CustomDueDateCreateRequest:
+      required:
+      - DueDate
+      - Entity
+      - JurisdictionCode
+      - ObligationDescription
+      - ObligationName
+      - TaxType
+      - Year
+      type: object
+      properties:
+        ObligationName:
+          type: string
+          description: The obligation Name.
+        ObligationDescription:
+          type: string
+          description: The obligation Description.
+        Year:
+          type: integer
+          description: The year for this due date.
+          format: int32
+        Entity:
+          type: string
+          description: The GUID of the entity associated to this due date.
+        DueDate:
+          type: string
+          description: The DueDate of the Instance.
+          format: date-time
+        JurisdictionCode:
+          type: string
+          description: The Jurisdiction Code for this due date.
+        TaxType:
+          type: array
+          items:
+            type: string
+          description: The TaxType for this due date.
+        Client:
+          type:
+          - string
+          - 'null'
+          description: The id of the client associated to this due date.
+        Form:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The Form for this due date.
+        DeliverableType:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The DeliverableType for this due date.
+        ObligationType:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The ObligationType for this due date.
+        Frequency:
+          type:
+          - string
+          - 'null'
+          description: The Frequency for this due date
+        TaxedAs:
+          type:
+          - string
+          - 'null'
+          description: The TaxedAs for this due date.
+        USReturnType:
+          type:
+          - string
+          - 'null'
+          description: The id of the client associated to this due date.
+        AssignedToUser:
+          type:
+          - string
+          - 'null'
+          description: The GUID of the ONESOURCE user to be assigned to this due date.
+        TaxYearStart:
+          type:
+          - string
+          - 'null'
+          description: The TaxYearStart for this due date.
+          format: date-time
+        TaxYearEnd:
+          type:
+          - string
+          - 'null'
+          description: The TaxYearEnd for this due date.
+          format: date-time
+        OverallResponsibilityUser:
+          type:
+          - string
+          - 'null'
+          description: The GUID of the ONESOURCE user to assume overall responsibility for this due date.
+      additionalProperties: {}
+    CreatedByInfo:
+      type: object
+      properties:
+        UniversalId:
+          type:
+          - string
+          - 'null'
+        FullName:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Client:
+      type: object
+      properties:
+        clientid:
+          type:
+          - string
+          - 'null'
+        clientname:
+          type:
+          - string
+          - 'null'
+        clientnumber:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Entity:
+      required:
+      - EntityId
+      type: object
+      properties:
+        EntityId:
+          type: string
+        EntityCode:
+          type:
+          - string
+          - 'null'
+        Type:
+          type:
+          - string
+          - 'null'
+        Name:
+          type:
+          - string
+          - 'null'
+        TaxId:
+          type:
+          - string
+          - 'null'
+        TaxYearBeginningDate:
+          type:
+          - string
+          - 'null'
+        TaxYearEndingDate:
+          type:
+          - string
+          - 'null'
+        ShortName:
+          type:
+          - string
+          - 'null'
+        Registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Registration'
+        Incorporation_Qualification:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/IncorporationAndQualification'
+      additionalProperties: false
+    Obligation:
+      type: object
+      properties:
+        id:
+          type:
+          - integer
+          - 'null'
+          description: ID of the obligation.
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the obligation.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the obligation.
+        isCustom:
+          type: boolean
+          description: If the due date is based on a custom obligation.
+        frequency:
+          type:
+          - string
+          - 'null'
+          description: Frequency of the obligation.
+        type:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The obligation's types.
+      additionalProperties: false
+    DueDateFilterResponse:
+      type: object
+      properties:
+        ObligationType:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        OverallResponsibilityUser:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/User'
+        AssignedToUser:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/User'
+        Frequency:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        Status:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/StatusData'
+        CreatedBy:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CreatedByInfo'
+        State:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        Year:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+        TaxType:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        Jurisdiction:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Jurisdiction'
+        DeliverableType:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        Entity:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Entity'
+        Client:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Client'
+      additionalProperties: {}
+    YearType:
+      enum:
+      - start
+      - end
+      type: string
+    DueDatesSearchResponse:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/SearchResponseMetadata'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DueDateRecord'
+      additionalProperties: false
+    DueDateInUseUpdate:
+      enum:
+      - originalDueDate
+      - firstExtension
+      - secondExtension
+      - thirdExtension
+      type: string
+    SearchResponseMetadata:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          format: int32
+      additionalProperties: false
+    TLUProcessType:
+      enum:
+      - obligationInfo
+      - calculationCorrection
+      - calculationChangeByTaxLawForFuture
+      - discontinueObligation
+      - dynamicAttribute
+      - holiday
+      - extension
+      - lookupCorrection
+      - dueDatesCountMismatch
+      type: string
+    Registration:
+      type: object
+      properties:
+        Registration_id:
+          type:
+          - string
+          - 'null'
+        Domain_label:
+          type:
+          - string
+          - 'null'
+        Jurisdiction_label:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Jurisdiction:
+      required:
+      - JurisdictionId
+      type: object
+      properties:
+        JurisdictionId:
+          type: string
+        Name:
+          type:
+          - string
+          - 'null'
+        Code:
+          type:
+          - string
+          - 'null'
+        Region:
+          type:
+          - string
+          - 'null'
+        Type:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DueDateContentUpdateInfo:
+      type: object
+      properties:
+        contentUpdateNotes:
+          type:
+          - string
+          - 'null'
+        contentUpdateTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TLUProcessType'
+        replacementObligations:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+      additionalProperties: false
+    DueDateStatusRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the due date status.
+          format: uuid
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the due date status.
+        displayColor:
+          type:
+          - string
+          - 'null'
+          description: Display color to associate with the status.
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: 'Enter the authorization token here. Example: Bearer ABC'
+      name: Authorization
+      in: header

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-auth-token-response-schema.json",
+  "title": "AuthTokenResponse",
+  "description": "Container Image Auth Service API - Response",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-container-images-auth-service-apis-openapi.yml#/components/schemas/AuthTokenResponse",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/auth"
+    },
+    {
+      "$ref": "#/$defs/error"
+    }
+  ],
+  "$defs": {
+    "auth": {
+      "properties": {
+        "registry": {
+          "description": "Container registry host",
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "created": {
+          "description": "Seconds since Epoch",
+          "type": "integer"
+        },
+        "validUntil": {
+          "description": "Seconds since Epoch",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "registry",
+        "user",
+        "token",
+        "created",
+        "validUntil"
+      ]
+    },
+    "error": {
+      "properties": {
+        "refId": {
+          "description": "Error reference for support context",
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
+  }
+}

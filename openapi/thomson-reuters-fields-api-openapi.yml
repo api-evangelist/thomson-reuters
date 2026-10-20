@@ -1,0 +1,154 @@
+openapi: 3.2.0
+info:
+  title: Calendar Due Dates Management Fields API
+  description: Calendar Due Dates Management API
+  version: v1
+servers:
+- url: https://api.onesourcetax.com
+- url: https://api-apac.onesourcetax.com
+- url: https://api-emea.onesourcetax.com
+security:
+- Bearer: []
+tags:
+- name: Fields
+paths:
+  /calendar/fields/v1:
+    get:
+      tags:
+      - Fields
+      summary: Retrieves fields available to the user
+      parameters:
+      - name: showSystemFields
+        in: query
+        description: true if system fields are returned.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldsResponse'
+        '401':
+          description: Unauthorized
+      operationId: getCalendarFieldsV1
+      x-operation-id-source: derived
+components:
+  schemas:
+    SearchResponseMetadata:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Field:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: ID of the field.
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the field.
+        dataType:
+          type:
+          - string
+          - 'null'
+          description: The data type for the field.
+        list:
+          $ref: '#/components/schemas/List'
+        isSystem:
+          type: boolean
+          description: If the field was created by Calendar.
+        isMultiValued:
+          type: boolean
+          description: If the field can store multiple values.
+        rollForward:
+          type: boolean
+          description: If the value for this field is copied over when roll forward occurs.
+        isRequiredToSchedule:
+          type: boolean
+          description: Whether this field requires a value before this record can be scheduled.
+        isRequiredForCompletion:
+          type: boolean
+          description: Whether this field requires a value before the due date can be assigned to a complete status.
+        isClientManagerEnabled:
+          type: boolean
+        fieldLength:
+          type: integer
+          description: The maximum length of data that can be stored in this field.
+          format: int32
+        created:
+          type: string
+          description: The time that this status was created in UTC time.
+          format: date-time
+        modified:
+          type:
+          - string
+          - 'null'
+          description: The time that this status was last updated in UTC time.
+          format: date-time
+      additionalProperties: false
+    List:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the list.
+          format: uuid
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the list.
+        dataType:
+          type:
+          - string
+          - 'null'
+          description: The type of data stored in this list.
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListItem'
+          description: The items stored in this list.
+      additionalProperties: false
+    ListItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the list value.
+          format: uuid
+        value:
+          type:
+          - string
+          - 'null'
+          description: The data that this list value holds.
+      additionalProperties: false
+    FieldsResponse:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/SearchResponseMetadata'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Field'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: 'Enter the authorization token here. Example: Bearer ABC'
+      name: Authorization
+      in: header

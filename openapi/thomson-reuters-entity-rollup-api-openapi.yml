@@ -1,0 +1,750 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Entity Rollup API
+  version: '1.0'
+  description: 'Operations tagged Entity Rollup across 2 of this provider''s published API definitions: thomson-reuters-common-entities-service-openapi.json, thomson-reuters-common-entities-service-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-uat.onesourcetax.com
+  description: UAT
+- url: https://api.onesourcetax.com
+  description: PROD
+tags:
+- name: Entity Rollup
+paths:
+  /entities/entities-rollup/v1/rollups:
+    get:
+      tags:
+      - Entity Rollup
+      summary: Get a paginated list of Rollups
+      description: Get Rollup's list with attributes
+      operationId: getRollups
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RollupResponse'
+      security:
+      - Authorization:
+        - global
+    post:
+      tags:
+      - Entity Rollup
+      summary: Create rollup
+      description: Create the Rollup records with the attributes
+      operationId: createRollup
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RollupRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseInteger'
+        '409':
+          description: Already Exists
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+    servers:
+    - url: https://api-uat.onesourcetax.com
+      description: UAT
+    - url: https://api.onesourcetax.com
+      description: PROD
+  /entities/entities-rollup/v1/rollups/{id}:
+    get:
+      tags:
+      - Entity Rollup
+      summary: Get rollup by id
+      description: Get Rollup by ID
+      operationId: getRollupById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RollupResponse'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+    patch:
+      tags:
+      - Entity Rollup
+      summary: Update rollup by id
+      description: Update the rollup records with the attributes
+      operationId: updateRollup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RollupPatchRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RollupResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+    servers:
+    - url: https://api-uat.onesourcetax.com
+      description: UAT
+    - url: https://api.onesourcetax.com
+      description: PROD
+  /entities/entities-rollup/v1/rollups/{rollupId}/nodes:
+    post:
+      tags:
+      - Entity Rollup
+      summary: Add entity to rollup
+      description: Add entity record to the Rollup
+      operationId: createNode
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodeRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseInteger'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '409':
+          description: Already Exists
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+    get:
+      tags:
+      - Entity Rollup
+      summary: Get rollup nodes
+      description: Get Rollup Nodes by Id
+      operationId: getRollupNodes
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionNodeResponse'
+      security:
+      - Authorization:
+        - global
+    servers:
+    - url: https://api-uat.onesourcetax.com
+      description: UAT
+    - url: https://api.onesourcetax.com
+      description: PROD
+  /entities/entities-rollup/v1/rollups/{rollupId}/nodes/{id}:
+    delete:
+      tags:
+      - Entity Rollup
+      summary: Delete rollup node
+      description: Delete Rollup Node and also all Child Nodes
+      operationId: deleteRollupNode
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization: []
+    patch:
+      tags:
+      - Entity Rollup
+      summary: Update rollup node
+      description: Update the rollup node with the attributes
+      operationId: patchEntitiesEntitiesRollupV1RollupsByRollupIdNodesById
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodePatchRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NodePatchResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization: []
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+      x-operation-id-source: normalized
+      x-operation-id-original: updateRollup
+    servers:
+    - url: https://api-uat.onesourcetax.com
+      description: UAT
+    - url: https://api.onesourcetax.com
+      description: PROD
+  /entities/entities-rollup/v1/rollups/{rollupId}/available-entities:
+    get:
+      tags:
+      - Entity Rollup
+      summary: Get a paginated list of available entities
+      description: Get Available Entities list with attributes
+      operationId: getEntities
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: include_disabled
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionAvailableEntityResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+    servers:
+    - url: https://api-uat.onesourcetax.com
+      description: UAT
+    - url: https://api.onesourcetax.com
+      description: PROD
+components:
+  schemas:
+    AvailaibleEntityResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        version_number:
+          type: integer
+        name:
+          type: string
+        code:
+          type: string
+        country:
+          type: string
+        version_id:
+          type: integer
+        associated_apps:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssociateAppResponse'
+        status:
+          type: string
+        percentage:
+          type: number
+    ApiErrorValidation:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    NodeRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the Entity
+          example: 5fb6b461b4f92004592dc5a8
+        version_id:
+          type: integer
+          description: Version Id of the Entity
+          example: 434564
+        parent_id:
+          type: integer
+          description: Parent Id of the Rollup Node
+          example: 1
+        percentage_share:
+          type: number
+          description: Percentage Share of the Rollup Node
+          example: 30.5
+    ApiCollectionNodeResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    RollupPatchRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the Rollup
+          example: US Entities
+        description:
+          type: string
+          description: Description of the Rollup
+          example: OIT US Entities
+        status:
+          type: string
+          description: Status of the rollup
+          example: Published/Unpublished
+    RollupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        year:
+          type: integer
+        created_by:
+          type: string
+        created_at:
+          type: string
+          description: Time at which this ingestion was created
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        updated_by:
+          type: string
+        updated_at:
+          type: string
+          description: Time at which this ingestion was updated
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        status:
+          type: boolean
+    NodePatchResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        entity_id:
+          type: string
+        entity_version_id:
+          type: integer
+        level:
+          type: integer
+        rollup_id:
+          type: integer
+        percentage_share:
+          type: number
+    IdResponseInteger:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier
+          format: int32
+          example: 1234
+    NodeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        entity_id:
+          type: string
+        entity_version_id:
+          type: integer
+        entity_version_number:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        level:
+          type: integer
+        parent_id:
+          type: integer
+        rollup_id:
+          type: integer
+        percentage_share:
+          type: number
+        child_count:
+          type: integer
+        is_latest_version:
+          type: boolean
+    NodePatchRequest:
+      type: object
+      properties:
+        version_id:
+          type: integer
+          description: version of an entity
+        percentage_share:
+          type: number
+          description: percentage node contains
+    ApiCollectionAvailableEntityResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailaibleEntityResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    RollupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the Rollup
+          example: US Entities
+        year:
+          type: integer
+          description: Year in which this Rollup was created
+          example: 2021
+        description:
+          type: string
+          description: Description of the Rollup
+          example: OIT US Entities
+    AssociateAppResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        related_apps:
+          type: string
+        version_id:
+          type: number
+        completion_percentage:
+          type: integer
+        status:
+          type: string
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-common-entities-service-openapi.json
+- thomson-reuters-common-entities-service-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

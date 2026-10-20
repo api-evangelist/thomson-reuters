@@ -1,0 +1,728 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Charts of Accounts API
+  version: '1.0'
+  description: 'Operations tagged Charts of Accounts across 4 of this provider''s published API definitions: thomson-reuters-common-accounts-service-1-0-openapi.json, thomson-reuters-common-accounts-service-openapi.json, thomson-reuters-common-accounts-service-1-0-openapi.yml, thomson-reuters-common-accounts-service-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+  description: Generated server url
+security:
+- Authorization: []
+tags:
+- name: Charts of Accounts
+paths:
+  /:
+    get:
+      tags:
+      - Charts of Accounts
+      summary: Get All Chart of Account
+      description: Get all Chart of Account records
+      operationId: getChartsOfAccounts
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionChartOfAccountsViewResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization: []
+    post:
+      tags:
+      - Charts of Accounts
+      summary: Create Chart of Account
+      description: Create Chart of Account records with the attributes
+      operationId: postChartsOfAccounts
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChartOfAccountsRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ChartOfAccountsCreateResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization: []
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{chart_of_accounts_id}/versions:
+    get:
+      tags:
+      - Charts of Accounts
+      summary: Get Chart of Account Versions
+      description: Get all versions of a Chart of Account
+      operationId: getChartOfAccountVersions
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        description: chart of accounts unique identifier
+        required: true
+        schema:
+          type: string
+      - name: filter
+        in: query
+        description: Search records based on filter condition.
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: Sort records ascending or descending order.
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Specify starting position of record.(page number)
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: 'How many records user want to see. (page size) '
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionChartOfAccountsVersionResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Charts of Accounts
+      summary: Create Chart of Account Version
+      description: Create Chart of Account Version records with the attributes
+      operationId: postChartOfAccountsVersion
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChartOfAccountsVersionRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{chart_of_accounts_id}:
+    get:
+      tags:
+      - Charts of Accounts
+      summary: Get Chart of Account
+      description: Get Chart of Account record by ID
+      operationId: getChartOfAccountByID
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ChartOfAccountsVersionResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization: []
+    patch:
+      tags:
+      - Charts of Accounts
+      summary: Update Chart of Account
+      description: Update Chart of Account record
+      operationId: putChartsOfAccounts
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChartOfAccountsPatchRequest'
+        required: true
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization: []
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+components:
+  schemas:
+    IdResponseString:
+      type: object
+      properties:
+        id:
+          type: string
+    ApiErrorValidation:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: code
+            message:
+              type: string
+              description: message
+    ChartOfAccountsViewResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        chart_of_account_version_id:
+          type: string
+        name:
+          type: string
+        no_of_accounts:
+          type: integer
+          format: int32
+        status:
+          type: string
+        has_reference:
+          type: boolean
+        chart_type:
+          type: string
+        accounting_convention:
+          type: string
+        effective_from:
+          type: string
+          format: date
+        effective_to:
+          type: string
+          format: date
+        version_label:
+          type: integer
+          format: int32
+        created_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        associated_jurisdictions:
+          type: array
+          description: List of jurisdiction codes associated with this chart of accounts
+          items:
+            type: string
+            description: List of jurisdiction codes associated with this chart of accounts
+        associated_applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationAssociationGetApiResponse'
+        associated_entities:
+          type: array
+          items:
+            type: string
+        mapped_rollup_count:
+          type: integer
+          format: int32
+        default_rollup_id:
+          type: integer
+          format: int32
+    ChartOfAccountsVersionRequest:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+        chart_type:
+          type: string
+        effective_from:
+          type: string
+          format: date
+        accounting_convention:
+          type: string
+          enum:
+          - NOT_DETERMINED
+          - DEBIT_CREDIT
+          - NATURAL_SIGN
+    ChartOfAccountsRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+        chart_type:
+          type: string
+        effective_from:
+          type: string
+          format: date
+        accounting_convention:
+          type: string
+          enum:
+          - NOT_DETERMINED
+          - DEBIT_CREDIT
+          - NATURAL_SIGN
+    ChartOfAccountsPatchRequest:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+        chart_type:
+          type: string
+        effective_from:
+          type: string
+          format: date
+        accounting_convention:
+          type: string
+          enum:
+          - NOT_DETERMINED
+          - DEBIT_CREDIT
+          - NATURAL_SIGN
+        default_rollup_id:
+          type: integer
+          format: int32
+    ApiCollectionChartOfAccountsVersionResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChartOfAccountsVersionResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ApplicationAssociationGetApiResponse:
+      type: object
+      properties:
+        application_id:
+          type: string
+        application_level2_id:
+          type: string
+        rollup_id:
+          type: integer
+          format: int32
+    ApiCollectionChartOfAccountsViewResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChartOfAccountsViewResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ChartOfAccountsVersionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        chart_of_account_version_id:
+          type: string
+        name:
+          type: string
+        no_of_accounts:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        has_reference:
+          type: boolean
+        chart_type:
+          type: string
+          enum:
+          - MASTER
+          - SOURCE
+        accounting_convention:
+          type: string
+        effective_from:
+          type: string
+          format: date
+        effective_to:
+          type: string
+          format: date
+        version_label:
+          type: integer
+          format: int32
+        created_by:
+          type: string
+        default_rollup_id:
+          type: integer
+          format: int32
+        created_at:
+          type: string
+          description: Time at which this ingestion was created
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        updated_by:
+          type: string
+        updated_at:
+          type: string
+          description: Time at which this ingestion was updated
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        associated_jurisdictions:
+          type: array
+          description: List of jurisdiction codes associated with this chart of accounts
+          items:
+            type: string
+            description: List of jurisdiction codes associated with this chart of accounts
+        associated_applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationAssociationGetApiResponse'
+        associated_entities:
+          type: array
+          items:
+            type: string
+        mapped_rollup_count:
+          type: integer
+          format: int32
+    ChartOfAccountsCreateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        info:
+          type: string
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    ApiErrorValidation_2:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ChartsOfAccountsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        no_of_accounts:
+          type: integer
+          format: int32
+        status:
+          type: string
+        created_by:
+          type: string
+        created_at:
+          type: string
+          description: Time at which this ingestion was created
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        updated_by:
+          type: string
+        updated_at:
+          type: string
+          description: Time at which this ingestion was updated
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+    ApiCollectionChartsOfAccountsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChartsOfAccountsResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ChartOfAccountsRequest_2:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+    ApiErrorValidation_3:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ChartOfAccountsRequest_3:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-common-accounts-service-1-0-openapi.json
+- thomson-reuters-common-accounts-service-openapi.json
+- thomson-reuters-common-accounts-service-1-0-openapi.yml
+- thomson-reuters-common-accounts-service-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

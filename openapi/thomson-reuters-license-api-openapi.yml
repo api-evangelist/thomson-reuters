@@ -1,0 +1,56 @@
+openapi: 3.2.0
+info:
+  version: ''
+  title: GoSystem Locator License API
+  description: A RESTful API that provides access to GoSystem Locator functionalities.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: License
+paths:
+  /license/v2/validate:
+    get:
+      summary: Validate license
+      description: Validates the license for the GoSystem API.
+      tags:
+      - License
+      responses:
+        '200':
+          description: Success. The license is validated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateLicenseResponse'
+              examples:
+                Validate License - Example:
+                  $ref: '#/components/examples/ValidateLicenseSuccess-Example'
+        '400':
+          description: Bad request.
+        '500':
+          description: Internal server error.
+      operationId: getLicenseV2Validate
+      x-operation-id-source: derived
+components:
+  schemas:
+    ValidateLicenseResponse:
+      type: object
+      properties:
+        licensed:
+          type: boolean
+        product:
+          type: string
+        productName:
+          type: string
+      additionalProperties: false
+  examples:
+    ValidateLicenseSuccess-Example:
+      value:
+        licensed: true
+        product: '0'
+        productName: GRS
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

@@ -1,0 +1,59 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Research Controller API
+  version: '1.0'
+  description: 'Operations tagged research-controller across 2 of this provider''s published API definitions: thomson-reuters-eap-uat-trri-api-research-openapi.json, thomson-reuters-eap-uat-trri-api-research-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/regulatory-intelligence
+tags:
+- name: research-controller
+  description: Research Controller
+paths:
+  /v1/documents/{guid}:
+    get:
+      tags:
+      - research-controller
+      summary: Returns document from Novus by GUID
+      operationId: getDocumentTextUsingGET
+      parameters:
+      - name: guid
+        in: path
+        description: ID of document to return
+        required: true
+        schema:
+          type: string
+        example: IC5A20E7DDE1C454EA14C5AEAA856E7DC
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Requested document are forbidden to user
+          content: {}
+        '404':
+          description: DocumentVersionDto not found by GUID
+          content: {}
+        '500':
+          description: Failed to get document from Novus
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+components:
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: To generate Access Token, please use the steps described in <a href='/regulatory-intelligence/swagger_openapi_document/eap-trri-api-access-token/100?from=api&id=9296' rel='noopener noreferrer' target='_blank'>TRRI API Access Token</a> section, ex. 'Bearer {access_token}'.
+x-refined-from:
+- thomson-reuters-eap-uat-trri-api-research-openapi.json
+- thomson-reuters-eap-uat-trri-api-research-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

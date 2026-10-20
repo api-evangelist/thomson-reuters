@@ -1,0 +1,370 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Files API
+  version: '1.0'
+  description: 'Operations tagged Files across 3 of this provider''s published API definitions: thomson-reuters-ingest-service-1-0-openapi.json, thomson-reuters-ingest-service-1-0-openapi.yml, thomson-reuters-ingest-service-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1/ingest
+security:
+- bearerAuth: []
+tags:
+- name: Files
+paths:
+  /files:
+    get:
+      tags:
+      - Files
+      summary: Get a paginated list of available Files
+      description: Returns a list of Files with their metadata
+      operationId: getAllFiles
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionFileResponse'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Files
+      summary: Adds File with metadata
+      description: Creates the metadata (name (mandatory), delimiter, year, period) and returns the file-id which is needed to upload the file
+      operationId: createFile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileRequest'
+      responses:
+        '201':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FileIdResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1/ingest
+  /files/{id}:
+    get:
+      tags:
+      - Files
+      summary: Get a File by ID
+      description: Returns File metadata for the specified File ID
+      operationId: getFile
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the File
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FileResponse'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Files
+      summary: Updates an existing ingest file
+      description: Updates ingest files metadata, ingestion parts, and ingestion metadata to change delimiter, year and period
+      operationId: updateMetadata
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the ingested data
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchIngestFileRequest'
+      responses:
+        '204':
+          description: default response
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1/ingest
+  /files/{id}/upload:
+    post:
+      tags:
+      - Files
+      summary: Initiate an upload of data into a file by ID
+      description: Adds source file ID to initiates the streaming upload (Supports UTF-8 and UTF-16 file formats)
+      operationId: uploadFile
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the file
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FileStatusResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1/ingest
+  /files/{id}/json-save:
+    post:
+      tags:
+      - Files
+      summary: Initiate an upload of JSON data into a file by ID
+      description: Adds source file ID to initiates the streaming upload (Supports UTF-8 and UTF-16 data formats)
+      operationId: uploadJsonFile
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the File
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                additionalProperties:
+                  type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FileStatusResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1/ingest
+components:
+  schemas:
+    FileResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the File
+          format: int32
+          example: 102
+        name:
+          type: string
+          description: Label of the File
+          example: My File Name.csv
+        status:
+          type: string
+          description: Status of file upload
+          enum:
+          - NEW
+          - UPLOADING
+          - UPLOADED
+          - UPLOAD_FAILED
+        delimiter:
+          type: string
+          description: String upon which the row will be split
+          example: ','
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        ingest_id:
+          type: string
+          description: Unique identifier of the Ingestion
+          example: 5ec57f677456242950884996
+        created_at:
+          type: string
+          description: File created at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        created_by:
+          type: string
+          example: UserA
+        completed_at:
+          type: string
+          description: Process completed at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        upload_started_at:
+          type: string
+          description: File upload started at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        upload_ended_at:
+          type: string
+          description: File upload ended at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        uploaded_bytes:
+          type: integer
+          description: Total file size uploaded
+          format: int64
+          example: 2384298367492834
+        mime_type:
+          type: string
+          description: file Mediatype
+          example: text/csv
+        content_type:
+          type: string
+          description: file ContentType
+          example: csv
+    FileStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: File Uploaded Successfully
+    ApiCollectionFileResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    FileRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the File
+          example: My File Name.csv
+        delimiter:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: String upon which the row will be split
+          example: ','
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+    PatchIngestFileRequest:
+      type: object
+      properties:
+        delimiter:
+          type: string
+          description: String upon which the row will be split
+          example: ','
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        name:
+          type: string
+          description: Label of the File
+          example: My File Name.csv
+    FileIdResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the File
+          format: int32
+          example: 102
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-ingest-service-1-0-openapi.json
+- thomson-reuters-ingest-service-1-0-openapi.yml
+- thomson-reuters-ingest-service-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

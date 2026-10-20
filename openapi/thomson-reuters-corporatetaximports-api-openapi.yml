@@ -1,0 +1,516 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Corporate Tax Imports API
+  version: v1
+  description: 'Operations tagged CorporateTaxImports across 2 of this provider''s published API definitions: thomson-reuters-onesource-trusts-imports-openapi.json, thomson-reuters-onesource-trusts-imports-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-uat.onesourcetax.com/trusts/v1/imports
+  description: UAT server for trusts datasets
+- url: https://api-apac.onesourcetax.com/trusts/v1/imports
+  description: APAC server for trusts datasets
+tags:
+- name: CorporateTaxImports
+paths:
+  /datasets/{id}/import-types:
+    get:
+      tags:
+      - CorporateTaxImports
+      summary: Retrieve Supported Import Types
+      description: This endpoint retrieves a list of all supported import types for a specific dataset. The response includes details about each import type.
+      operationId: CorporateTaxImports_GetSupportedImports
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the dataset.
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved the list of import types.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeListReponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeListReponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeListReponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeListReponse'
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/imports
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/imports
+      description: APAC server for trusts datasets
+  /datasets/{id}/import-types/{importtypeid}/metadata:
+    get:
+      tags:
+      - CorporateTaxImports
+      summary: Retrieve Import Type Metadata
+      description: This endpoint retrieves the input parameters and metadata for a specific import type within a dataset.
+      operationId: CorporateTaxImports_GetImportMedata
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the dataset.
+        schema:
+          type: string
+          format: uuid
+      - name: importtypeid
+        in: path
+        required: true
+        description: The unique identifier of the import type.
+        schema:
+          type: string
+          format: uuid
+      - name: importBasedOn
+        in: query
+        description: Specifies the basis for the import operation.
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved metadata for the specified import type.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeMetaDataListReponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeMetaDataListReponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeMetaDataListReponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeMetaDataListReponse'
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/imports
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/imports
+      description: APAC server for trusts datasets
+  /:
+    post:
+      tags:
+      - CorporateTaxImports
+      summary: Create Import Task
+      description: This endpoint creates a new import task to import data into calculations. Input parameters required for the import can be fetched from the metadata API.
+      parameters:
+      - name: isAppend
+        in: query
+        description: Indicates whether the data should be appended to the existing dataset.
+        schema:
+          type: boolean
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports'
+      responses:
+        '201':
+          description: Successfully created the import task.
+          content:
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+            application/xml:
+              schema:
+                type: boolean
+            text/xml:
+              schema:
+                type: boolean
+        '400':
+          description: Bad request due to invalid input.
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+      operationId: postRoot
+      x-operation-id-source: derived
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/imports
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/imports
+      description: APAC server for trusts datasets
+  /operations/{id}:
+    get:
+      tags:
+      - CorporateTaxImports
+      summary: Check Import Task Status
+      operationId: CorporateTaxImports_GetStatusForImport
+      description: This endpoint retrieves the current status of a specific import task using its unique identifier.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the import task.
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved the status of the import task.
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/imports
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/imports
+      description: APAC server for trusts datasets
+  /datasets/{datasetId}/journals:
+    get:
+      tags:
+      - CorporateTaxImports
+      summary: Retrieve Dataset Journals
+      description: This endpoint retrieves a list of all journals associated with a specific dataset.
+      operationId: CorporateTaxImports_GetAllJournals
+      parameters:
+      - name: datasetId
+        in: path
+        description: The unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved the list of journals.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalsListResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalsListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalsListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalsListResponse'
+    delete:
+      tags:
+      - CorporateTaxImports
+      summary: Delete Dataset Journals
+      description: This endpoint deletes all journals associated with a specific dataset.
+      operationId: CorporateTaxImports_DeleteJournalsbasedondatasetID
+      parameters:
+      - name: datasetId
+        in: path
+        description: The unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successfully deleted all journals for the dataset.
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/imports
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/imports
+      description: APAC server for trusts datasets
+  /datasets/{datasetId}/journals/{journalId}:
+    delete:
+      tags:
+      - CorporateTaxImports
+      summary: Delete Specific Dataset Journal
+      description: This endpoint deletes a specific journal associated with a dataset using its unique identifier.
+      operationId: CorporateTaxImports_DeleteJournalBasedondatasetIdandjournalId
+      parameters:
+      - name: datasetId
+        in: path
+        description: The unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: journalId
+        in: path
+        description: The unique identifier of the journal.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successfully deleted the specified journal.
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/imports
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/imports
+      description: APAC server for trusts datasets
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalsListResponse:
+      type: object
+      description: Represents the response containing a list of journals.
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalData'
+    TRTA.Athena.Models.Api.V4.Imports:
+      type: object
+      description: Represents the request body for creating an import task.
+      properties:
+        datasetId:
+          type: string
+          description: The unique identifier of the dataset to be imported.
+        importType:
+          type: string
+          description: The type of import operation to be performed.
+        importName:
+          type: string
+          description: The name of the import operation.
+        ImportBasedOn:
+          type: string
+          description: Specifies the basis for the import operation.
+        lineItems:
+          type: array
+          description: A list of line items to be imported.
+          items:
+            type: object
+            description: Line item details based on the import type and basis.
+            properties:
+              To be prepared based on importType and importBasedOn parameters. For more details please check the metadata get API.:
+                type: object
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportType:
+      type: object
+      description: Represents an individual import type.
+      properties:
+        name:
+          type: string
+          description: The name of the import type.
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeListReponse:
+      type: object
+      description: Represents the response containing a list of import types.
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportType'
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportTypeMetaDataListReponse:
+      type: object
+      description: Represents the response containing metadata for an import type.
+      properties:
+        fields:
+          type: array
+          description: A list of fields required for the import type.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportField'
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the journal.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        description:
+          type: string
+        returnId:
+          type: string
+          description: The unique identifier of the return associated with the journal.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        datasetName:
+          type: string
+          description: The name of the dataset associated with the journal.
+        period:
+          type: string
+          description: The period associated with the journal.
+        year:
+          type: integer
+          description: The year associated with the journal.
+          format: int32
+        referenceNumber:
+          type: string
+          description: The reference number of the journal.
+        entityId:
+          type: string
+          format: uuid
+          description: The unique identifier of the entity associated with the journal.
+          example: 00000000-0000-0000-0000-000000000000
+        entityIdentifier:
+          type: string
+          description: The identifier of the entity associated with the journal.
+        entityName:
+          type: string
+          description: The name of the entity associated with the journal.
+        entityShortName:
+          type: string
+          description: The short name of the entity associated with the journal.
+        lineItemsCount:
+          type: integer
+          description: The number of line items in the journal.
+          format: int32
+        importType:
+          type: string
+          description: The type of import associated with the journal.
+        isAppended:
+          type: boolean
+          description: Indicates whether the journal was appended.
+        startDate:
+          type: string
+          description: The start date of the journal.
+        endDate:
+          type: string
+          description: The end date of the journal.
+        createdBy:
+          type: string
+          description: The user who created the journal.
+        lastUpdatedBy:
+          type: string
+          description: The user who last updated the journal.
+        createdDate:
+          type: string
+          format: date-time
+          description: The date and time when the journal was created.
+        lastUpdateDate:
+          type: string
+          description: The date and time when the journal was last updated.
+          format: date-time
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.ImportField:
+      type: object
+      description: Represents a field required for an import type.
+      properties:
+        name:
+          type: string
+          description: The name of the field.
+        description:
+          type: string
+          description: A description or caption for the field.
+        isRequired:
+          type: boolean
+          description: Indicates whether the field is required.
+x-refined-from:
+- thomson-reuters-onesource-trusts-imports-openapi.json
+- thomson-reuters-onesource-trusts-imports-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

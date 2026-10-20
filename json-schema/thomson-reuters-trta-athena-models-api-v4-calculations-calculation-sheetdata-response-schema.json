@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-trta-athena-models-api-v4-calculations-calculation-sheetdata-response-schema.json",
+  "title": "TRTA.Athena.Models.Api.V4.Calculations.CalculationSheetdataResponse",
+  "description": "Response containing sheet data for a calculation, including dataset and calculation identifiers.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-datasets-api-openapi.yml#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationSheetdataResponse",
+  "type": "object",
+  "properties": {
+    "sheetData": {
+      "type": "array",
+      "description": "List of sheet data items.",
+      "items": {
+        "$ref": "#/$defs/TRTA.Athena.Models.Api.V4.Calculations.SheetData"
+      }
+    },
+    "datsetId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier of the dataset."
+    },
+    "calculationName": {
+      "type": "string",
+      "description": "Name of the calculation."
+    },
+    "calculationId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier of the calculation."
+    },
+    "entity": {
+      "type": "string",
+      "description": "Entity associated with the calculation."
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message, if any, related to the calculation data retrieval."
+    }
+  },
+  "$defs": {
+    "TRTA.Athena.Models.Api.V4.Calculations.ColumnData": {
+      "type": "object",
+      "description": "Represents data for a specific column within a row, including its index, identifier, and value.",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Index of the column within the row."
+        },
+        "columnId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier of the column."
+        },
+        "value": {
+          "type": "string",
+          "description": "Value of the column data."
+        }
+      }
+    },
+    "TRTA.Athena.Models.Api.V4.Calculations.RowData": {
+      "type": "object",
+      "description": "Represents a row of data within a sheet, including its index, identifier, and column data.",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Index of the row within the sheet."
+        },
+        "rowId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier of the row."
+        },
+        "columnData": {
+          "type": "array",
+          "description": "List of column data items within the row.",
+          "items": {
+            "$ref": "#/$defs/TRTA.Athena.Models.Api.V4.Calculations.ColumnData"
+          }
+        }
+      }
+    },
+    "TRTA.Athena.Models.Api.V4.Calculations.SheetData": {
+      "type": "object",
+      "description": "Represents data for a specific sheet, including its name, identifier, and row data.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the sheet."
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier of the sheet."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the sheet."
+        },
+        "rowData": {
+          "type": "array",
+          "description": "List of row data items within the sheet.",
+          "items": {
+            "$ref": "#/$defs/TRTA.Athena.Models.Api.V4.Calculations.RowData"
+          }
+        }
+      }
+    }
+  }
+}

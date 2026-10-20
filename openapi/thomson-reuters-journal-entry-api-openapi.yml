@@ -1,0 +1,1202 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Journal Entry API
+  version: v1
+  contact:
+    name: API Support
+    url: https://www.thomsonreuters.com/en/contact-us
+    email: engagementmanagerdevleads@thomsonreuters.com
+  description: 'Operations tagged Journal Entry across 2 of this provider''s published API definitions: thomson-reuters-engagement-manager-openapi.json, thomson-reuters-engagement-manager-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/us/engagementmanager
+  description: US Production
+- url: https://api.thomsonreuters.com/uk/engagementmanager
+  description: UK Production
+security:
+- Token: []
+tags:
+- name: Journal Entry
+  description: Get/Add/Edit/Delete Journal Entries
+paths:
+  /external/v1/journalentry/get/{engagementId}:
+    get:
+      tags:
+      - Journal Entry
+      summary: Retrieve all journal entries for a specific engagement
+      description: '## Purpose
+
+        Retrieves a complete list of all journal entries (JEs) associated with a specific engagement/binder. This endpoint provides access to adjusting entries, reclassifications, eliminations, and other manual entries made to the trial balance for the specified engagement, including detailed line-item breakdowns with debits, credits, and associated workpaper references.
+
+
+        ## Why Use This Endpoint
+
+        - View all journal entries for an engagement''s trial balance
+
+        - Retrieve JE details for audit documentation and review
+
+        - Extract journal entry data for external reporting or analysis
+
+        - Verify adjusting entries and their impact on the trial balance
+
+        - Review workpaper references and supporting documentation links
+
+        - Export journal entries for compliance or archival purposes
+
+        - Validate balanced entries (debits equal credits) before finalization
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get Journal Entries
+
+        - **Endpoint:** `GET /journalentry/get/{engagementId}` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2 in the URL path
+
+        - **Returns:** All journal entries for that engagement
+
+
+        ## Request Details
+
+        - **Route Parameter:** `engagementId` (required integer in URL path)
+
+        - **Format:** `/journalentry/get/{engagementId}`
+
+        - This is a URL route parameter, not a query string or request body parameter
+
+
+        ## Common Use Cases
+
+        1. **Audit Review:** Review all adjusting entries made during engagement finalization
+
+        2. **Work Paper Export:** Extract journal entry data for audit work papers
+
+        3. **Balance Validation:** Validate that all journal entries are balanced (debits = credits)
+
+        4. **Adjustment Analysis:** Generate reports on types of adjustments made (by JeType)
+
+        5. **Documentation Verification:** Verify workpaper references for supporting documentation
+
+        6. **Consolidation Review:** Analyze reclassifications and eliminations for consolidated financials
+
+        7. **Compliance Export:** Export journal entries for external audit or regulatory review
+
+
+        ## Important Notes
+
+        - Returns all journal entries for the specified engagement, regardless of type or status
+
+        - Each journal entry contains detailed line items in the JeDetails array
+
+        - DebitTotal should always equal CreditTotal in properly balanced entries
+
+        - IsLockedOrFinalized indicates whether the engagement or JE is locked for editing
+
+        - WorkpaperRef and JeWorkpaper provide links to supporting documentation
+
+        - JeType indicates the purpose: "Standard", "Adjusting", "Reclassification", "Elimination"
+
+        - Empty list is returned if the engagement has no journal entries
+
+        - The engagementId must correspond to a valid engagement that the authenticated user has access to'
+      operationId: EmMainEndPointsExternalJEGetJournalEntryExternalEndpoint
+      parameters:
+      - name: engagementId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: List of all journal entries for the specified engagement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalJournalEntryExternal'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 29d52e20-5fcc-496e-a111-105b107eac94
+                    dateTime: '2026-04-21T05:50:03.4364336Z'
+                    traceId: 8481e5dcb46647dd91124c36b4a8198a
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: e5c4e7e3-0ae2-4d81-85b4-45525eadfd94
+                    dateTime: '2026-04-21T05:50:03.4364145Z'
+                    traceId: afebc53336ff49f59ecd5d31f2c19e21
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 0a83b401-9f06-4175-9ae0-e2aac5e3a4b4
+                    dateTime: '2026-04-21T05:50:03.4364314Z'
+                    traceId: 3e9b51ea265041d5a2a7dcba9175b150
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 73e62aaa-935d-4282-90cb-8a7e9f0bee05
+                    dateTime: '2026-04-21T05:50:03.4364368Z'
+                    traceId: ea6664af027041b181309685c6838c03
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/journalentry/save:
+    post:
+      tags:
+      - Journal Entry
+      summary: Create a new journal entry in a trial balance
+      description: '## Purpose
+
+        Creates a new journal entry (JE) within a specified engagement''s trial balance. Journal entries are used to record adjustments, reclassifications, and other accounting transactions.
+
+
+        ## Why Use This Endpoint
+
+        - Record adjusting entries (accruals, deferrals, corrections)
+
+        - Document reclassification entries between accounts
+
+        - Track elimination entries for consolidated financial statements
+
+        - Maintain audit trail of all trial balance adjustments
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Save the Journal Entry
+
+        - **Endpoint:** `POST /journalentry/save` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2 in the request body
+
+
+        ## Request Body Details
+
+        - `EngagementId` (int, required) - The engagement identifier from Step 2
+
+        - `CurrentJe` (object, required) - Journal entry details including:
+
+        - `JeType` (string, required) - Type: "Standard", "Adjusting", "Reclassification", "Elimination"
+
+        - `JournalEntryRollForwardType` (string, required) - Roll forward behavior: "Manual", "Automatic", "None"
+
+        - `Reference` (string) - JE reference number (e.g., "JE-2024-001")
+
+        - `Description` (string) - Purpose of the entry
+
+        - `JeDetails` (array) - Debit and credit line items with accounts and amounts
+
+
+        ## Common Use Cases
+
+        1. **Year-end Adjustments:** Record accruals for unbilled revenue or expenses
+
+        2. **Error Corrections:** Fix misclassified transactions or amounts
+
+        3. **Reclassifications:** Move balances between accounts for proper presentation
+
+        4. **Consolidated Eliminations:** Remove intercompany transactions'
+      operationId: EmMainEndPointsExternalJESaveJournalEntryExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: JeServiceParametersExternal
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalJEJeServiceParametersExternal'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Journal entry created successfully. Returns the new JE key (ID).
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int32
+              example: 123
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: cc765094-8c67-42fd-9842-b19099ebc7f2
+                    dateTime: '2026-04-21T05:50:03.4430910Z'
+                    traceId: e70dbc82c29745e6a3d5d9160c960be1
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: c4178ee4-4dcc-42ad-ab6b-f81f01ba0b12
+                    dateTime: '2026-04-21T05:50:03.4430670Z'
+                    traceId: dc067b03a53d4db98893c207fc0fe3f7
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 0e5e0535-1116-48c7-b001-f5ee993be054
+                    dateTime: '2026-04-21T05:50:03.4430888Z'
+                    traceId: 16030206136c415887b52487b53a88a8
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 1e56bb0f-c525-4e18-afb3-acabb15fbf98
+                    dateTime: '2026-04-21T05:50:03.4430927Z'
+                    traceId: 3bdc9689b42c4ae980c76dc62b7877bc
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/journalentry/update:
+    put:
+      tags:
+      - Journal Entry
+      summary: Update an existing journal entry in a trial balance
+      description: '## Purpose
+
+        Modifies an existing journal entry (JE) within an engagement''s trial balance. Use this endpoint to correct amounts, update descriptions, change account classifications, or modify journal entry details after initial creation.
+
+
+        ## Why Use This Endpoint
+
+        - Correct data entry errors in existing journal entries
+
+        - Update journal entry descriptions or references
+
+        - Modify debit/credit amounts while maintaining balance
+
+        - Change account assignments or classifications
+
+        - Update roll forward behavior settings
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the Journal Entry details and `jeKey`
+
+        - **Endpoint:** `GET /journalentry/get/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of all journal entries with their keys and details
+
+        - **Example:** `jeKey: 12345`
+
+
+        **Step 4:** Update the Journal Entry
+
+        - **Endpoint:** `PUT /journalentry/update` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2 and `jeKey` from Step 3 in the request body
+
+
+        ## Request Body Details
+
+        - `EngagementId` (int, required) - The engagement identifier from Step 2
+
+        - `CurrentJe` (object, required) - Journal entry details including:
+
+        - `JeKey` (int, required) - The journal entry ID from Step 3
+
+        - `JeType` (string, required) - Type: "Standard", "Adjusting", "Reclassification", "Elimination"
+
+        - `JournalEntryRollForwardType` (string, required) - Roll forward behavior: "Manual", "Automatic", "None"
+
+        - `Reference` (string) - Updated JE reference number
+
+        - `Description` (string) - Updated purpose description
+
+        - `JeDetails` (array) - Updated debit and credit line items
+
+
+        ## Important Notes
+
+        - The journal entry must not be locked or finalized to be updated
+
+        - Debits must equal credits (balanced entry required)
+
+        - All existing JE details will be replaced with the new details provided
+
+        - The `jeKey` must correspond to an existing journal entry in the specified engagement
+
+
+        ## Common Use Cases
+
+        1. **Amount Corrections:** Fix incorrect debit or credit amounts
+
+        2. **Description Updates:** Clarify the purpose of the journal entry
+
+        3. **Account Changes:** Move entries to different accounts
+
+        4. **Reference Updates:** Correct or update JE reference numbers'
+      operationId: EmMainEndPointsExternalJEUpdateJournalEntryExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: JeServiceParametersExternal
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalJEJeServiceParametersExternal'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Journal entry updated successfully.
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 6ac96597-1bcf-4b7e-8efb-493479389377
+                    dateTime: '2026-04-21T05:50:03.4455451Z'
+                    traceId: 3e5cc9a4688d4496a1e0d4f70e8a023f
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 2bf6773b-6363-47f1-8669-f2762e3c63aa
+                    dateTime: '2026-04-21T05:50:03.4455252Z'
+                    traceId: c1345d2206c343beba16109623d2afdc
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 7e4e6e80-44e6-4166-839d-2e53a9fa7a89
+                    dateTime: '2026-04-21T05:50:03.4455431Z'
+                    traceId: ba97ed1779a94e33a8ab49ec1bf51b61
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 2b16854f-b932-4a86-b91c-04d80750eb7f
+                    dateTime: '2026-04-21T05:50:03.4455466Z'
+                    traceId: 700d816acf4743b0b0019e2bea1733ea
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/journalentry/delete:
+    post:
+      tags:
+      - Journal Entry
+      summary: Delete one or multiple journal entries
+      description: '## Purpose
+
+        Permanently removes one or more journal entries (JEs) from an engagement''s trial balance. This endpoint supports bulk deletion by accepting multiple journal entry keys in a single request.
+
+
+        ## Why Use This Endpoint
+
+        - Remove incorrect or duplicate journal entries
+
+        - Clean up test or draft entries before finalizing
+
+        - Delete obsolete adjustments no longer needed
+
+        - Bulk delete multiple entries efficiently in one operation
+
+        - Maintain clean audit trails by removing unwanted entries
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the Journal Entry keys (`jeKeys`)
+
+        - **Endpoint:** `GET /journalentry/get/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of all journal entries with their keys
+
+        - **Example:** `jeKeys: [12345, 12346, 12347]`
+
+
+        **Step 4:** Delete the Journal Entries
+
+        - **Endpoint:** `POST /journalentry/delete` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2 and `jeKeys` from Step 3 in the request body
+
+
+        ## Request Body Details
+
+        - `EngagementId` (int, required) - The engagement identifier from Step 2
+
+        - `JeKeys` (array of int, required) - List of journal entry IDs to delete from Step 3
+
+        - Can contain a single key for one entry: `[12345]`
+
+        - Or multiple keys for bulk deletion: `[12345, 12346, 12347]`
+
+
+        ## Important Notes
+
+        - **Permanent Operation:** Deleted journal entries cannot be recovered
+
+        - **Locked Entries:** Cannot delete entries that are locked or in finalized engagements
+
+        - **Bulk Operation:** All specified entries must belong to the same engagement
+
+        - **Transaction:** If any entry fails to delete, the entire operation may be rolled back
+
+        - **Audit Trail:** Deletion is logged for audit purposes
+
+
+        ## Common Use Cases
+
+        1. **Remove Test Data:** Clean up test entries before production use
+
+        2. **Delete Duplicates:** Remove accidentally duplicated journal entries
+
+        3. **Clean Draft Work:** Delete preliminary entries that are no longer needed
+
+        4. **Bulk Cleanup:** Remove multiple obsolete entries in a single operation
+
+
+        ## Error Responses
+
+        The endpoint will fail if:
+
+        - Any `jeKey` doesn''t exist in the specified engagement
+
+        - The engagement is finalized or locked
+
+        - Any journal entry is locked and cannot be deleted
+
+        - User lacks permissions to delete journal entries'
+      operationId: EmMainEndPointsExternalJEMultipleDeleteJournalEntryExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: JEMultipleDeleteDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalJEJEMultipleDeleteDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Journal entries deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: d0b7f4be-0aee-4503-822e-4edaa0875e25
+                    dateTime: '2026-04-21T05:50:03.4391376Z'
+                    traceId: f14b00176e4d4803bc3a11948fbf6ab3
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 375cfe72-a775-4c01-98ac-da3d81a3077d
+                    dateTime: '2026-04-21T05:50:03.4391122Z'
+                    traceId: ef4368fd2fc44e0fa5645165949eb9eb
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 1767daec-46e2-4e25-94a2-3a5fa9a35400
+                    dateTime: '2026-04-21T05:50:03.4391348Z'
+                    traceId: 18bc11aa16fc4e76b08f1514bbb4583e
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: d9a05b54-52b2-4bb9-b39c-751d36fd4f11
+                    dateTime: '2026-04-21T05:50:03.4391411Z'
+                    traceId: 5bf0718939ec4b94a0083df7f0ef810b
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+components:
+  schemas:
+    EMMainDataTransferObjectsModelsExternalJournalEntryExternal:
+      type: object
+      additionalProperties: false
+      required:
+      - jeKey
+      - trialBalancePeriodKey
+      - reference
+      properties:
+        jeKey:
+          type: integer
+          description: Unique identifier for the journal entry. This is the primary key used to reference this specific JE.
+          format: int32
+          example: 124
+        trialBalanceKey:
+          type: integer
+          description: Identifier for the trial balance that this journal entry belongs to. Links the JE to a specific TB.
+          format: int32
+          example: 854
+        trialBalancePeriodKey:
+          type: integer
+          description: Identifier for the trial balance period (e.g., fiscal year-end, quarter-end). Required field.
+          format: int32
+          example: 725
+        reference:
+          type: string
+          description: User-defined reference code or number for this journal entry (e.g., "JE-001", "ADJ-2024-15"). Required field.
+          minLength: 1
+          example: JE-2024-001
+        jeType:
+          type: string
+          description: Type classification of the journal entry (e.g., "Standard", "Adjusting", "Reclassification", "Elimination").
+          example: Adjusting
+        description:
+          type:
+          - string
+          - 'null'
+          description: General description or narrative explaining the purpose and nature of this journal entry.
+          example: Year-end accrual for unbilled revenue
+        accounts:
+          type:
+          - string
+          - 'null'
+          description: Comma-separated list or summary of account numbers affected by this journal entry.
+          example: 1200-Accounts Receivable, 4000-Revenue
+        amount:
+          type: number
+          description: Total amount of the journal entry. Typically equals the debit or credit side (both should be equal in a balanced entry).
+          format: decimal
+          example: 5000
+        workpaperRef:
+          type:
+          - string
+          - 'null'
+          description: Reference to the related workpaper document (e.g., "A-1", "B-3") where the supporting documentation exists.
+          example: A-1
+        jeDetails:
+          type: array
+          description: List of detailed line items (debits and credits) that make up this journal entry. Each detail represents one account affected.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsJeDetail'
+        journalEntryRollForwardType:
+          type: string
+          description: Classification for rollforward behavior (e.g., "Manual", "Automatic", "NoRollForward"). Indicates how this JE should be handled during period rollovers.
+          example: Manual
+        misstatementType:
+          type: string
+          description: Type of misstatement this journal entry addresses (e.g., "Material", "Immaterial", "None"). Used for audit purposes.
+          example: Immaterial
+        diffType:
+          type: string
+          description: Difference type classification (e.g., "Permanent", "Timing", "None"). Indicates the nature of the adjustment.
+          example: Timing
+        jeWorkpaper:
+          description: Associated workpaper information containing detailed supporting documentation for this journal entry. Null if no workpaper is attached.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalJEWorkpaperExternal'
+        workpaperKey:
+          type:
+          - integer
+          - 'null'
+          description: Unique identifier linking this journal entry to a specific workpaper. Null if no workpaper is associated.
+          format: int32
+          example: 384
+        debitTotal:
+          type: number
+          description: Sum of all debit amounts in the journal entry detail lines. Should equal CreditTotal in a balanced entry.
+          format: decimal
+          example: 5000
+        creditTotal:
+          type: number
+          description: Sum of all credit amounts in the journal entry detail lines. Should equal DebitTotal in a balanced entry.
+          format: decimal
+          example: 5000
+        isLockedOrFinalized:
+          type: boolean
+          description: Indicates whether this journal entry is locked for editing or the engagement is finalized. True means the JE cannot be modified.
+          example: false
+    EMMainDataTransferObjectsModelsJeDetail:
+      type: object
+      additionalProperties: false
+      properties:
+        account:
+          type:
+          - string
+          - 'null'
+          description: Account number or code that this journal entry line affects. Represents the chart of accounts entry.
+          example: 1200-Accounts Receivable
+        accountKey:
+          type: integer
+          description: Unique identifier for the account in the trial balance. Used to link this detail to a specific account.
+          format: int32
+          example: 2547
+        accountType:
+          type:
+          - string
+          - 'null'
+          description: Type or category of the account (e.g., "Asset", "Liability", "Revenue", "Expense").
+          example: Asset
+        credit:
+          type: number
+          description: Credit amount for this journal entry line. Use 0 if this is a debit-only line.
+          format: decimal
+          example: 5000
+        debit:
+          type: number
+          description: Debit amount for this journal entry line. Use 0 if this is a credit-only line.
+          format: decimal
+          example: 5000
+        description:
+          type:
+          - string
+          - 'null'
+          description: Detailed description or memo for this specific journal entry line explaining the transaction.
+          example: Accrued revenue for Q4 services
+        displayIndex:
+          type: integer
+          description: Order in which this line should be displayed in the journal entry. Used for sorting journal entry lines.
+          format: int32
+          example: 1
+        jeDistributionKey:
+          type: integer
+          description: Unique identifier for this journal entry distribution/detail line.
+          format: int32
+          example: 84725
+        parentJeKey:
+          type: integer
+          description: Identifier of the parent journal entry that this detail belongs to. Links the detail to the main JE.
+          format: int32
+          example: 12458
+    EMMainDataTransferObjectsModelsExternalJEJEMultipleDeleteDto:
+      type: object
+      description: Request model for deleting one or more journal entries. Supports bulk deletion by accepting multiple JE keys in a single operation.
+      additionalProperties: false
+      required:
+      - jeKeys
+      properties:
+        engagementId:
+          type: integer
+          description: Unique identifier of the engagement (binder) containing the journal entries to delete. All JE keys must belong to this engagement.
+          format: int32
+          example: 94
+        jeKeys:
+          type: array
+          description: List of journal entry keys (IDs) to permanently delete. Can contain a single key or multiple keys for bulk deletion. All entries must exist in the specified engagement.
+          minLength: 1
+          items:
+            type: integer
+            format: int32
+    EMMainDataTransferObjectsModelsExternalJEJournalEntryExternalBase:
+      type: object
+      description: Base model containing common properties for journal entry operations (save, update). Includes reference information, description, and line item details.
+      additionalProperties: false
+      required:
+      - reference
+      properties:
+        reference:
+          type: string
+          description: Unique reference number or identifier for the journal entry. Used for tracking and cross-referencing entries.
+          minLength: 1
+          example: 000002NHL9
+        description:
+          type:
+          - string
+          - 'null'
+          description: Detailed description explaining the purpose and nature of this journal entry. Helps auditors understand the adjustment.
+          example: JE Description
+        workpaperRef:
+          type:
+          - string
+          - 'null'
+          description: Reference to the workpaper documenting this journal entry. Links the JE to supporting documentation in the binder.
+          example: 000002NHL9
+        jeDetails:
+          type: array
+          description: Collection of debit and credit line items that make up this journal entry. Must contain at least two items and debits must equal credits.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalJEJeDetailExternal'
+        jeKey:
+          type: integer
+          description: Unique identifier (primary key) of the journal entry in the system. Required for update and delete operations. Auto-generated on save.
+          format: int32
+          example: 94
+    EMMainDataTransferObjectsModelsExternalJEJeServiceParametersExternal:
+      type: object
+      description: Request model for journal entry save and update operations. Contains the engagement context and the journal entry details to save or update.
+      additionalProperties: false
+      required:
+      - currentJe
+      - engagementId
+      properties:
+        currentJe:
+          description: The journal entry data to save or update, including all line items, classifications, and metadata.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalJEJournalEntrySaveExternal'
+        engagementId:
+          type: integer
+          description: Unique identifier of the engagement (binder) where this journal entry will be saved. Must correspond to an existing, non-finalized engagement.
+          format: int32
+          example: 94
+    EmMainExtensionsUtilityErrorExtensions:
+      type: object
+      description: 'Provides extended metadata and diagnostic information for error responses.
+
+        Includes status codes, error codes, timestamps, and distributed tracing identifiers.'
+      additionalProperties: false
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code (e.g., 400, 401, 403, 500)
+          format: int32
+          example: 401
+        code:
+          type: string
+          description: Application-specific error code for programmatic handling
+          example: ERR_AUTH_4010
+        errorId:
+          type: string
+          description: Unique identifier (GUID) for this error occurrence. Use this when reporting issues to support.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        dateTime:
+          type: string
+          description: ISO 8601 timestamp (UTC) when the error occurred
+          example: '2024-03-15T14:30:00Z'
+        traceId:
+          type: string
+          description: Distributed trace ID for correlating requests across microservices (W3C Trace Context format)
+          example: a1b2c3d4e5f67890abcdef1234567890
+        spanId:
+          type: string
+          description: Span ID for this specific operation within the distributed trace (W3C Trace Context format)
+          example: 358611c48f91f940
+    EmMainExtensionsUtilityErrorDetail:
+      type: object
+      description: Represents detailed information about a specific error that occurred during API request processing.
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          description: Gets or sets the human-readable error message describing what went wrong.
+          example: '"Unauthorized access."
+
+            "Bad request due to invalid input."
+
+            "Resource not found."
+
+            "An unexpected error occurred."'
+        extensions:
+          description: Gets or sets the extended error metadata containing additional diagnostic information.
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsUtilityErrorExtensions'
+    EMMainDataTransferObjectsModelsExternalJEJournalEntrySaveExternal:
+      allOf:
+      - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalJEJournalEntryExternalBase'
+      - type: object
+        description: Complete journal entry model for save and update operations. Extends the base model with classification fields for JE type, roll forward behavior, and misstatement categorization.
+        additionalProperties: false
+        properties:
+          jeType:
+            type: string
+            description: 'Classification of the journal entry type. Valid values: "Standard", "Adjusting", "Reclassification", "Elimination". Determines how the entry is categorized in financial reports.'
+          journalEntryRollForwardType:
+            type: string
+            description: 'Specifies how this journal entry should be handled during engagement roll forward to the next period. Valid values: "Manual" (review required), "Automatic" (auto-carry forward), "None" (one-time entry).'
+          misstatementType:
+            type: string
+            description: 'Type of misstatement this journal entry corrects or represents. Valid values: "Immaterial", "Material", "NotApplicable". Used for audit materiality assessment.'
+          diffType:
+            type: string
+            description: 'Classification of the difference being corrected. Valid values: "Timing" (reverses next period), "Permanent" (does not reverse), "NotApplicable". Helps determine audit adjustments.'
+    EMMainDataTransferObjectsModelsExternalJEWorkpaperExternal:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the workpaper associated with this journal entry.
+          format: int32
+          example: 384
+        reference:
+          type:
+          - string
+          - 'null'
+          description: Reference code or identifier for the workpaper (e.g., workpaper index like "A-1", "B-3").
+          example: A-1
+        description:
+          type:
+          - string
+          - 'null'
+          description: Descriptive text explaining the purpose or content of the workpaper.
+          example: Revenue Recognition Analysis
+        jeReference:
+          type:
+          - string
+          - 'null'
+          description: Journal entry reference code that links this workpaper to a specific JE.
+          example: JE-2024-001
+    EMMainDataTransferObjectsModelsExternalJEJeDetailExternal:
+      type: object
+      description: Represents a single line item (debit or credit) within a journal entry. Each JE detail corresponds to one account being debited or credited.
+      additionalProperties: false
+      properties:
+        accountKey:
+          type: integer
+          description: Unique identifier of the trial balance account to debit or credit. Must correspond to an existing account in the engagement's trial balance.
+          format: int32
+          example: 162
+        credit:
+          type: number
+          description: Credit amount for this line item. Set to 0 if this is a debit-only entry. Credits increase liability, equity, and revenue accounts.
+          format: decimal
+          example: 5000
+        debit:
+          type: number
+          description: Debit amount for this line item. Set to 0 if this is a credit-only entry. Debits increase asset and expense accounts.
+          format: decimal
+          example: 5000
+    EmMainExtensionsUtilityErrorResponse:
+      type: object
+      description: 'Represents a standardized error response structure for API errors.
+
+        Contains a collection of detailed error information.'
+      example:
+        errors:
+        - message: Unauthorized access.
+          extensions:
+            statusCode: 401
+            code: ERR_AUTH_4010
+            errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+            dateTime: '2024-03-15T14:30:00Z'
+            traceId: a1b2c3d4e5f67890abcdef1234567890
+            spanId: 358611c48f91f940
+      additionalProperties: false
+      properties:
+        errors:
+          type: array
+          description: Collection of detailed error information
+          items:
+            $ref: '#/components/schemas/EmMainExtensionsUtilityErrorDetail'
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: Please enter a valid token(M2M or GFR)
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-engagement-manager-openapi.json
+- thomson-reuters-engagement-manager-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

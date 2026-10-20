@@ -1,0 +1,216 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Likes API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Likes API across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Likes API
+paths:
+  /{version}/likes:
+    get:
+      tags:
+      - Likes API
+      summary: Get Likes List
+      description: 'Method to obtain User likes
+
+        This method is supported in version 4 of the API and above'
+      operationId: getUserLikes
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: contentid
+        in: query
+        description: "This the content id of the required content. \n<br> e.g. blogid for contenttype=blog and wikiid for contenttype=wiki"
+        required: true
+        schema:
+          type: string
+      - name: contenttype
+        in: query
+        description: "Content Types \n<br> e.g. /api/3/likes?contenttype=files&contentid=102 \n- Microblogs\n- Files\n- Wiki\n- Blog\n- Events\n- Comments"
+        required: true
+        schema:
+          type: string
+      - name: activitytype
+        in: query
+        description: "activity type \n<table border=\"1\" cellspacing=\"1\" cellpadding=\"1\" style=\"width: 50%;\"><tbody><tr><td><b>Content Type</b></td><td><b>Scope of activities</b></td></tr><tr><td>Files</td><td>UPLOADED<br /> UPDATED<br /> LIKED</td></tr><tr><td>Wiki</td><td>CREATED<br /> EDITED<br /> LIKED</td></tr><tr><td>Blog</td><td>PUBLISHED<br /> EDITED<br /> LIKED</td></tr><tr><td>Events</td><td>CREATED<br /> EDITED<br /> LIKED</td></tr><tr><td>Comments</td><td>ADDED</td></tr><tr><td>Tasks</td><td>ADDED<br /> UPDATED</td></tr></tbody></table>"
+        required: false
+        schema:
+          type: string
+      - name: foldertype
+        in: query
+        description: This parameter is used for QA attachment<br>e.g  foldertype = QA<br><br>It is optional and used for QA attachment in  version 5<br>api/5/likes?contenttype=files&contentid=1&foldertype=QA
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User likes returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserLikes'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLikes'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/UserLikes'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting user likes
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Likes API
+      summary: Like / Unlike content
+      description: 'Like / Unlike content API
+
+        This method is supported in version 4 of the API and above'
+      operationId: updateContentLike
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: contenttype
+        in: query
+        description: "Content Types \n<br> e.g. /api/3/likes?contenttype=files&contentid=102 \n- Microblogs\n- Files\n- Wiki\n- Blog\n- Events\n- Comments"
+        required: true
+        schema:
+          type: string
+      - name: contentid
+        in: query
+        description: "This the content id of the required content. \n<br> e.g. blogid for contenttype=blog and wikiid for contenttype=wiki"
+        required: true
+        schema:
+          type: string
+      - name: like
+        in: query
+        description: '0 : Unlike<br>1 : Like'
+        required: true
+        schema:
+          type: string
+      - name: activitytype
+        in: query
+        description: "activity type \n<table border=\"1\" cellspacing=\"1\" cellpadding=\"1\" style=\"width: 50%;\"><tbody><tr><td><b>Content Type</b></td><td><b>Scope of activities</b></td></tr><tr><td>Files</td><td>UPLOADED<br /> UPDATED<br /> LIKED</td></tr><tr><td>Wiki</td><td>CREATED<br /> EDITED<br /> LIKED</td></tr><tr><td>Blog</td><td>PUBLISHED<br /> EDITED<br /> LIKED</td></tr><tr><td>Events</td><td>CREATED<br /> EDITED<br /> LIKED</td></tr><tr><td>Comments</td><td>ADDED</td></tr><tr><td>Tasks</td><td>ADDED<br /> UPDATED</td></tr></tbody></table>"
+        required: false
+        schema:
+          type: string
+      - name: foldertype
+        in: query
+        description: This parameter is used for QA attachment<br>e.g  foldertype = QA<br><br>It is optional and used for QA attachment in  version 5.0<br>api/5/likes?contenttype=files&contentid=1&foldertype=QA
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User likes operation successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while performing user likes
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    UserLike:
+      type: object
+      properties:
+        userid:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        department:
+          type: string
+        org:
+          type: string
+        jobtitle:
+          type: string
+        title:
+          type: string
+        avatarhttplink:
+          type: string
+        avatarapilink:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: user
+    UserLikes:
+      type: object
+      properties:
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserLike'
+      xml:
+        name: users
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

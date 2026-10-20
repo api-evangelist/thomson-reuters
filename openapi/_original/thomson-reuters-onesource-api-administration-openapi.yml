@@ -1,0 +1,235 @@
+# x-archived-from: thomson-reuters-onesource-api-administration-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: ONESOURCE API Administration
+  description: ONESOURCE API Administration allows to manage Applications's credentials renew process.
+  version: '1'
+servers:
+- url: https://api.onesourcetax.com/api-administration/v1
+  description: ONESOURCE AMER region
+- url: https://api-emea.onesourcetax.com/api-administration/v1
+  description: ONESOURCE EMEA region
+- url: https://api-apac.onesourcetax.com/api-administration/v1
+  description: ONESOURCE APAC region
+paths:
+  /applications:
+    get:
+      tags:
+      - External
+      summary: Gets applications.
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalApiApplicationResponseList'
+      security:
+      - Bearer: []
+  /applications/{applicationName}:
+    get:
+      tags:
+      - External
+      summary: Get application details.
+      parameters:
+      - name: applicationName
+        in: path
+        description: Application name.
+        required: true
+        schema:
+          maxLength: 100
+          minLength: 0
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalApiApplicationDetails'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpError'
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - External
+      summary: 'Patch application: generate new consumer key and secret with supplied name and tenant id.'
+      parameters:
+      - name: applicationName
+        in: path
+        description: Application name. Supplied from route.
+        required: true
+        schema:
+          maxLength: 100
+          minLength: 0
+          type: string
+      requestBody:
+        description: Patch request body.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PatchApplicationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchApplicationRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PatchApplicationRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PatchApplicationRequest'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - Bearer: []
+components:
+  schemas:
+    ApiApplicationCredentials:
+      type: object
+      properties:
+        consumerKey:
+          type: string
+          nullable: true
+        consumerSecret:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ApplicationAuthenticationTypes:
+      enum:
+      - ClientSecret
+      - ClientAssertion
+      type: string
+    ApplicationTypes:
+      enum:
+      - User
+      - Machine
+      type: string
+    ExternalApiApplication:
+      type: object
+      properties:
+        applicationName:
+          type: string
+          nullable: true
+        applicationType:
+          $ref: '#/components/schemas/ApplicationTypes'
+        authenticationType:
+          $ref: '#/components/schemas/ApplicationAuthenticationTypes'
+        flowTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowType'
+          nullable: true
+      additionalProperties: false
+    ExternalApiApplicationDetails:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/ApiApplicationCredentials'
+        applicationName:
+          type: string
+          nullable: true
+        applicationType:
+          $ref: '#/components/schemas/ApplicationTypes'
+        authenticationType:
+          $ref: '#/components/schemas/ApplicationAuthenticationTypes'
+        flowTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowType'
+          nullable: true
+      additionalProperties: false
+    ExternalApiApplicationResponseList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalApiApplication'
+          nullable: true
+      additionalProperties: false
+    FlowType:
+      enum:
+      - Client Credentials
+      - Authorization Code
+      - Implicit
+      type: string
+    HttpError:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PatchApplicationCredentials:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/PatchApplicationCredentialsStatus'
+      additionalProperties: false
+    PatchApplicationCredentialsStatus:
+      enum:
+      - Renew
+      type: string
+    PatchApplicationRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/PatchApplicationCredentials'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: {}
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: JWT Authorization header using the Bearer scheme and ONESOURCE Opaque Token.
+      name: Authorization
+      in: header

@@ -1,0 +1,1628 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "ONESOURCE Trust Tax Administration",
+        "version": "1.0",
+		"description": "Administration APIs allow authenticated ONESOURCE Trust Tax users to retrieve a paginated list of Users, Custom Fields for a specific PAN. It also allows you to filter and sort the data using OData query specifications."
+    },
+    "servers": [
+        {
+            "url": "https://api.onesourcetax.com/trust-tax/administration"
+        }
+    ],
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
+    "paths": {
+        "/v1/trust-clients/{client_key}/pans/{pan}/trust-users": {
+            "get": {
+                "tags": [
+                    "Trust Users"
+                ],
+                "summary": "Retrieves users for a client and pan",
+                "description": "Allows authenticated users to access the User data by specific PAN for a Client",
+                "operationId": "Allows authenticated users to access the User data by specific PAN for a Client",
+                "parameters": [
+                    {
+                        "name": "client_key",
+                        "in": "path",
+                        "description": "The client key.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "The client key.",
+                            "nullable": true
+                        }
+                    },
+                    {
+                        "name": "pan",
+                        "in": "path",
+                        "description": "The pan.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "The pan.",
+                            "nullable": true
+                        }
+                    },
+                    {
+                        "name": "$select",
+                        "in": "query",
+                        "description": "Limits the properties returned in the result.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$expand",
+                        "in": "query",
+                        "description": "Indicates the related entities to be represented inline. The maximum depth is 2.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$filter",
+                        "in": "query",
+                        "description": "Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$orderby",
+                        "in": "query",
+                        "description": "Specifies the order in which items are returned. The maximum number of expressions is 5.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "Limits the number of items returned from a collection.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$skip",
+                        "in": "query",
+                        "description": "Excludes the specified number of items of the queried collection from the result.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$count",
+                        "in": "query",
+                        "description": "Indicates whether the total count of items within a collection are returned in the result.",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/trust-clients/{client_key}/trust-users": {
+            "get": {
+                "tags": [
+                    "Trust Users"
+                ],
+                "summary": "Retrieves users for a client",
+                "description": "Allows authenticated users to access the User data for a Client",
+                "operationId": "Allows authenticated users to access the User data for a Client",
+                "parameters": [
+                    {
+                        "name": "client_key",
+                        "in": "path",
+                        "description": "The client key.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "The client key.",
+                            "nullable": true
+                        }
+                    },
+                    {
+                        "name": "$select",
+                        "in": "query",
+                        "description": "Limits the properties returned in the result.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$expand",
+                        "in": "query",
+                        "description": "Indicates the related entities to be represented inline. The maximum depth is 2.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$filter",
+                        "in": "query",
+                        "description": "Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$orderby",
+                        "in": "query",
+                        "description": "Specifies the order in which items are returned. The maximum number of expressions is 5.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "Limits the number of items returned from a collection.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$skip",
+                        "in": "query",
+                        "description": "Excludes the specified number of items of the queried collection from the result.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$count",
+                        "in": "query",
+                        "description": "Indicates whether the total count of items within a collection are returned in the result.",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/pans/{pan}/fields": {
+            "get": {
+                "tags": [
+                    "Custom fields"
+                ],
+                "summary": "Returns customfields data for the particular PAN\r\nAllows users to access data elements for custom fields",
+                "description": "Allows authenticated users to access the Custom fields data by specific PAN for a Client",
+                "operationId": "Allows authenticated users to access the Custom fields data by specific PAN for a Client",
+                "parameters": [
+                    {
+                        "name": "pan",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "",
+                            "nullable": true
+                        }
+                    },
+                    {
+                        "name": "$select",
+                        "in": "query",
+                        "description": "Limits the properties returned in the result.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$expand",
+                        "in": "query",
+                        "description": "Indicates the related entities to be represented inline. The maximum depth is 2.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$filter",
+                        "in": "query",
+                        "description": "Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$orderby",
+                        "in": "query",
+                        "description": "Specifies the order in which items are returned. The maximum number of expressions is 5.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "Limits the number of items returned from a collection.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$skip",
+                        "in": "query",
+                        "description": "Excludes the specified number of items of the queried collection from the result.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$count",
+                        "in": "query",
+                        "description": "Indicates whether the total count of items within a collection are returned in the result.",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Field"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/pans/{pan}/options": {
+            "get": {
+                "tags": [
+                    "Options and Overrides"
+                ],
+                "summary": "Returns Options and Overrides data for the particular PAN",
+                "description": "Allows authenticated users to access the Options and Overrides data by specific PAN for a Client",
+                "operationId": "Allows authenticated users to access the Options and Overrides data by specific PAN for a Client",
+                "parameters": [
+                    {
+                        "name": "pan",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "",
+                            "nullable": true
+                        }
+                    },
+                    {
+                        "name": "$select",
+                        "in": "query",
+                        "description": "Limits the properties returned in the result.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$expand",
+                        "in": "query",
+                        "description": "Indicates the related entities to be represented inline. The maximum depth is 2.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$filter",
+                        "in": "query",
+                        "description": "Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$orderby",
+                        "in": "query",
+                        "description": "Specifies the order in which items are returned. The maximum number of expressions is 5.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "Limits the number of items returned from a collection.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$skip",
+                        "in": "query",
+                        "description": "Excludes the specified number of items of the queried collection from the result.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$count",
+                        "in": "query",
+                        "description": "Indicates whether the total count of items within a collection are returned in the result.",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Option"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/pans/{pan}/ten99controls": {
+            "get": {
+                "tags": [
+                    "Ten99 Controls"
+                ],
+                "summary": "Returns Paid To/For details for the particular PAN",
+                "description": "Allows authenticated users to access Ten99Control data",
+                "operationId": "Allows authenticated users to access Ten99Control data",
+                "parameters": [
+                    {
+                        "name": "pan",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "",
+                            "nullable": true
+                        }
+                    },
+                    {
+                        "name": "$select",
+                        "in": "query",
+                        "description": "Limits the properties returned in the result.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$expand",
+                        "in": "query",
+                        "description": "Indicates the related entities to be represented inline. The maximum depth is 2.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$filter",
+                        "in": "query",
+                        "description": "Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$orderby",
+                        "in": "query",
+                        "description": "Specifies the order in which items are returned. The maximum number of expressions is 5.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "Limits the number of items returned from a collection.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$skip",
+                        "in": "query",
+                        "description": "Excludes the specified number of items of the queried collection from the result.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$count",
+                        "in": "query",
+                        "description": "Indicates whether the total count of items within a collection are returned in the result.",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Ten99Control"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/pans/{pan}/load/statuses": {
+            "get": {
+                "tags": [
+                    "Load Statuses"
+                ],
+                "summary": "Returns load status data for the particular PAN",
+                "description": "Allows authenticated users to access the LoadStatus data",
+                "operationId": "Allows authenticated users to access the LoadStatus data",
+                "parameters": [
+                    {
+                        "name": "pan",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "",
+                            "nullable": true
+                        }
+                    },
+                    {
+                        "name": "$select",
+                        "in": "query",
+                        "description": "Limits the properties returned in the result.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$expand",
+                        "in": "query",
+                        "description": "Indicates the related entities to be represented inline. The maximum depth is 2.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$filter",
+                        "in": "query",
+                        "description": "Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$orderby",
+                        "in": "query",
+                        "description": "Specifies the order in which items are returned. The maximum number of expressions is 5.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "description": "Limits the number of items returned from a collection.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$skip",
+                        "in": "query",
+                        "description": "Excludes the specified number of items of the queried collection from the result.",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "$count",
+                        "in": "query",
+                        "description": "Indicates whether the total count of items within a collection are returned in the result.",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/LoadStatus"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseModel"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/$metadata": {
+            "get": {
+                "tags": [
+                    "Metadata"
+                ],
+				"summary": "Retrieves the metadata",
+                "description": "Retrieves the metadata",
+                "operationId": "Allows authenticated users to access the endpoint's metadata",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "YesNo": {
+                "enum": [
+                    "No",
+                    "Yes"
+                ],
+                "type": "integer",
+                "format": "int32"
+            },
+            "ChangeType": {
+                "enum": [
+                    "No_Change",
+                    "Add",
+                    "Change",
+                    "Delete"
+                ],
+                "type": "integer",
+                "format": "int32"
+            },
+            "ErrorResponseModel": {
+                "type": "object",
+                "properties": {
+                    "errors": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "nullable": true
+                    },
+                    "type": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "detail": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "instance": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "extensions": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": false
+                        },
+                        "nullable": true,
+                        "readOnly": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ListItem": {
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "integer",
+                        "description": "List value",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "text": {
+                        "type": "string",
+                        "description": "List text",
+                        "nullable": true
+                    },
+                    "order": {
+                        "type": "integer",
+                        "description": "Display order",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "added_ini": {
+                        "type": "string",
+                        "description": "Initials of person added",
+                        "nullable": true
+                    },
+                    "added_date": {
+                        "type": "string",
+                        "description": "Date list item was added",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "changed_date": {
+                        "type": "string",
+                        "description": "Change date for list item",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "change_ini": {
+                        "type": "string",
+                        "description": "Who changed list item",
+                        "nullable": true
+                    },
+                    "change_type": {
+                        "$ref": "#/components/schemas/ChangeType"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Field": {
+                "type": "object",
+                "properties": {
+                    "is_active": {
+                        "type": "boolean",
+                        "description": "Field State (Active/Inactive)"
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Category",
+                        "nullable": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name",
+                        "nullable": true
+                    },
+                    "permanent_or_year_dependent": {
+                        "type": "string",
+                        "description": "Permanent or year dependent",
+                        "nullable": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description",
+                        "nullable": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "Title",
+                        "nullable": true
+                    },
+                    "characters_allowed": {
+                        "type": "integer",
+                        "description": "Characters allowed",
+                        "format": "int32"
+                    },
+                    "characters_available": {
+                        "type": "integer",
+                        "description": "Characters available",
+                        "format": "int32"
+                    },
+                    "precision": {
+                        "type": "integer",
+                        "description": "Precision",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Field Type",
+                        "nullable": true
+                    },
+                    "list_items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ListItem"
+                        },
+                        "description": "List item details",
+                        "nullable": true
+                    },
+                    "added_ini": {
+                        "type": "string",
+                        "description": "Initials of person added",
+                        "nullable": true
+                    },
+                    "added_date": {
+                        "type": "string",
+                        "description": "Date field was added",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "changed_date": {
+                        "type": "string",
+                        "description": "Change date for fields",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "change_ini": {
+                        "type": "string",
+                        "description": "Who changed fields",
+                        "nullable": true
+                    },
+                    "change_type": {
+                        "$ref": "#/components/schemas/ChangeType"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Option": {
+                "type": "object",
+                "properties": {
+                    "pan": {
+                        "type": "string",
+                        "description": "Product Access Number",
+                        "nullable": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description",
+                        "nullable": true
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Category",
+                        "nullable": true
+                    },
+                    "overridden": {
+                        "type": "string",
+                        "description": "Overridden",
+                        "nullable": true
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "Text or Dropdown Value",
+                        "nullable": true
+                    },
+                    "updated_date": {
+                        "type": "string",
+                        "description": "Updated Date",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_by": {
+                        "type": "string",
+                        "description": "Updated By",
+                        "nullable": true
+                    },
+                    "level": {
+                        "type": "string",
+                        "description": "Level",
+                        "nullable": true
+                    },
+                    "group_field": {
+                        "type": "string",
+                        "description": "Group by Field",
+                        "nullable": true
+                    },
+                    "group_value": {
+                        "type": "string",
+                        "description": "Group by Value",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ClientStatus": {
+                "enum": [
+                    "Pending",
+                    "Processing",
+                    "Completed",
+                    "Received",
+                    "Received_Needs_Attention",
+                    "Received_Stop_Service",
+                    "Received_Load_on_Hold",
+                    "PreLoad_Queued",
+                    "Preload_Processing",
+                    "Preload_Complete",
+                    "Preload_Needs_Attention",
+                    "Preload_Split",
+                    "Return_Marked_As_Completed",
+                    "Load_Queued",
+                    "Load_Processing",
+                    "Load_Complete",
+                    "Load_Needs_Attention",
+                    "Loaded_with_Errors",
+                    "Load_Failed_See_Report",
+                    "Loaded_with_Failures",
+                    "Stop_Load_Requested",
+                    "Stop_Completed",
+                    "Delete_Load_Queued",
+                    "Delete_Load_Processing",
+                    "Delete_Load_Complete",
+                    "Delete_Load_Needs_Attention",
+                    "SB_Hits_Queued",
+                    "SB_Hits_Processing",
+                    "SB_Hits_Needs_Attention"
+                ],
+                "type": "integer",
+                "description": "Client Status",
+                "format": "int32"
+            },
+            "CompletionCode": {
+                "enum": [
+                    "Processing",
+                    "Completed",
+                    "Needs_Attention"
+                ],
+                "type": "integer",
+                "description": "Completion Code",
+                "format": "int32"
+            },
+            "LoadStatus": {
+                "type": "object",
+                "properties": {
+                    "month_end_data_loaded": {
+                        "type": "string",
+                        "description": "Month end of data being loaded",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ClientStatus"
+                    },
+                    "preload_started": {
+                        "type": "string",
+                        "description": "When pre-load started",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "load_started": {
+                        "type": "string",
+                        "description": "When load started",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "first_account": {
+                        "type": "string",
+                        "description": "Starting trust account number",
+                        "nullable": true
+                    },
+                    "last_account": {
+                        "type": "string",
+                        "description": "Ending trust account number",
+                        "nullable": true
+                    },
+                    "number_of_accounts": {
+                        "type": "integer",
+                        "description": "Number of accounts",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "load_id": {
+                        "type": "string",
+                        "description": "Unique ID assigned when Load file was received for processing",
+                        "format": "date-time"
+                    },
+                    "short_month": {
+                        "$ref": "#/components/schemas/YesNo"
+                    },
+                    "main_pan": {
+                        "type": "string",
+                        "description": "Main PAN number",
+                        "nullable": true
+                    },
+                    "vendor_id": {
+                        "type": "string",
+                        "description": "Vendor ID",
+                        "nullable": true
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "description": "Sequence",
+                        "format": "int32"
+                    },
+                    "oid_only": {
+                        "$ref": "#/components/schemas/YesNo"
+                    },
+                    "processing_step": {
+                        "type": "integer",
+                        "description": "Current processing step (internal)",
+                        "format": "int32"
+                    },
+                    "completion_status": {
+                        "$ref": "#/components/schemas/CompletionCode"
+                    },
+                    "volser": {
+                        "type": "string",
+                        "description": "VolSer of tape being loaded",
+                        "nullable": true
+                    },
+                    "received_file_name": {
+                        "type": "string",
+                        "description": "Name of Load File As Received from Vendor",
+                        "nullable": true
+                    },
+                    "number_of_accounts_closed": {
+                        "type": "integer",
+                        "description": "Number of accounts closed",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_sales": {
+                        "type": "integer",
+                        "description": "Number of sales",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_ctf_transactions": {
+                        "type": "integer",
+                        "description": "Number of CTF transactions",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_records_on_custom_file": {
+                        "type": "integer",
+                        "description": "Total Number Records on Custom File",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_5227_balance_sheet_record_8": {
+                        "type": "integer",
+                        "description": "Number of 5227 Balance Sheet Record 8",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_5227_asset_detail_record_82": {
+                        "type": "integer",
+                        "description": "Number of 5227 Asset Detail Record 82",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_5227_balance_sheet_record_81": {
+                        "type": "integer",
+                        "description": "Number of 5227 Balance Sheet Record 81",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_990_balance_sheet_record_89": {
+                        "type": "integer",
+                        "description": "Number of 990 Balance Sheet Record 89",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_accounts_loaded_5498_fmv": {
+                        "type": "integer",
+                        "description": "Number of Accounts Loaded 5498 FMV",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_ctf_factor_records_with_state": {
+                        "type": "integer",
+                        "description": "Number of CTF Factor Records with State",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_accounts_added": {
+                        "type": "integer",
+                        "description": "Number of accounts added",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_beneficiaries_loaded": {
+                        "type": "integer",
+                        "description": "Number of beneficiaries loaded",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_beneficiaries_added": {
+                        "type": "integer",
+                        "description": "Number of beneficiaries added",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_beneficiaries_deleted": {
+                        "type": "integer",
+                        "description": "Number of beneficiaries deleted",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_beneficiaries_changed": {
+                        "type": "integer",
+                        "description": "Number of changed beneficiaries",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_transactions": {
+                        "type": "integer",
+                        "description": "Number of transactions",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "total_number_of_records": {
+                        "type": "integer",
+                        "description": "Total number of records",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_k1_records": {
+                        "type": "integer",
+                        "description": "Number of K1 Records",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_copy_to_records": {
+                        "type": "integer",
+                        "description": "Number of Copy To Records",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_ctf_factor_records": {
+                        "type": "integer",
+                        "description": "Number of CTF Factor Records",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_mutual_fund_transaction_records": {
+                        "type": "integer",
+                        "description": "Number of Mutual Fund Transaction Records",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_portfolio_open_lot_position_3q": {
+                        "type": "integer",
+                        "description": "Number of Portfolio Open Lot Position (3Q)",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_portfolio_position_3p": {
+                        "type": "integer",
+                        "description": "Number of Portfolio Position (3P)",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_sales_stop_4s": {
+                        "type": "integer",
+                        "description": "Number of Sales Stop (4S)",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_sales_updated_4u": {
+                        "type": "integer",
+                        "description": "Number of Sales Updated (4U)",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_transactions_stop_3s": {
+                        "type": "integer",
+                        "description": "Number of Transactions Stop(3S)",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_transactions_updated_3u": {
+                        "type": "integer",
+                        "description": "Number of Transactions Updated (3U)",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_mineral_records": {
+                        "type": "integer",
+                        "description": "Number of Mineral Records",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "number_of_mutual_fund_factor_records": {
+                        "type": "integer",
+                        "description": "Number of Mutual Fund Factor Records",
+                        "format": "int32",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "PaidToFor": {
+                "enum": [
+                    "Paid_To",
+                    "Paid_For"
+                ],
+                "type": "integer",
+                "format": "int32"
+            },
+            "Ten99Control": {
+                "type": "object",
+                "properties": {
+                    "pan": {
+                        "type": "string",
+                        "description": "PAN",
+                        "nullable": true
+                    },
+                    "year": {
+                        "type": "integer",
+                        "description": "Year",
+                        "format": "int32"
+                    },
+                    "paid_to_for": {
+                        "$ref": "#/components/schemas/PaidToFor"
+                    },
+                    "added_ini": {
+                        "type": "string",
+                        "description": "Initials of person added",
+                        "nullable": true
+                    },
+                    "added_date": {
+                        "type": "string",
+                        "description": "Date when it was added",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "change_ini": {
+                        "type": "string",
+                        "description": "Who last changed",
+                        "nullable": true
+                    },
+                    "changed_date": {
+                        "type": "string",
+                        "description": "Date of last change",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "change_type": {
+                        "$ref": "#/components/schemas/ChangeType"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UserType": {
+                "enum": [
+                    "TrustTax",
+                    "Insight",
+                    "Developer",
+                    "Support",
+                    "Accountmanager",
+                    "TaxPrep",
+                    "Compliance",
+                    "Marketing",
+                    "WebDelivery",
+                    "Pseudo"
+                ],
+                "type": "integer",
+                "format": "int32"
+            },
+            "UserAccess": {
+                "enum": [
+                    "Enabled",
+                    "Disabled",
+                    "Deleted"
+                ],
+                "type": "integer",
+                "format": "int32"
+            },
+            "Right": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Rights ID",
+                        "format": "int32"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Rights Description",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UserHasAccess": {
+                "enum": [
+                    "No",
+                    "Yes"
+                ],
+                "type": "integer",
+                "format": "int32"
+            },
+            "UserRight": {
+                "type": "object",
+                "properties": {
+                    "right": {
+                        "$ref": "#/components/schemas/Right"
+                    },
+                    "user_has_access": {
+                        "$ref": "#/components/schemas/UserHasAccess"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "added_ini": {
+                        "type": "string",
+                        "description": "Initials of person added User Right",
+                        "nullable": true
+                    },
+                    "added_date": {
+                        "type": "string",
+                        "description": "Date User Right was added",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "change_ini": {
+                        "type": "string",
+                        "description": "Initials of person making last change to User Right",
+                        "nullable": true
+                    },
+                    "changed_date": {
+                        "type": "string",
+                        "description": "Date of last change to User Right",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "change_type": {
+                        "$ref": "#/components/schemas/ChangeType"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "description": "User ID",
+                        "nullable": true
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "description": "Client ID",
+                        "format": "int32"
+                    },
+                    "right_id": {
+                        "type": "integer",
+                        "description": "Rights Code",
+                        "format": "int32"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Pan": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "string",
+                        "description": "User ID",
+                        "nullable": true
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "description": "Client ID",
+                        "format": "int32"
+                    },
+                    "pan": {
+                        "type": "string",
+                        "description": "Product Access Number",
+                        "nullable": true
+                    },
+                    "added_ini": {
+                        "type": "string",
+                        "description": "Initials of person added User Account",
+                        "nullable": true
+                    },
+                    "added_date": {
+                        "type": "string",
+                        "description": "Date User Account was added",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "change_ini": {
+                        "type": "string",
+                        "description": "Initials of person making last change to User Account",
+                        "nullable": true
+                    },
+                    "changed_date": {
+                        "type": "string",
+                        "description": "Date of last change to User Account",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "change_type": {
+                        "$ref": "#/components/schemas/ChangeType"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "Client": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Client ID",
+                        "format": "int32"
+                    },
+                    "key": {
+                        "type": "string",
+                        "description": "Client Key",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "universal_id": {
+                        "type": "string",
+                        "description": "Universal Id",
+                        "nullable": true
+                    },
+                    "id": {
+                        "type": "string",
+                        "description": "User ID",
+                        "nullable": true
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "description": "Client ID",
+                        "format": "int32"
+                    },
+                    "user_type": {
+                        "$ref": "#/components/schemas/UserType"
+                    },
+                    "user_access": {
+                        "$ref": "#/components/schemas/UserAccess"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name",
+                        "nullable": true
+                    },
+                    "initials": {
+                        "type": "string",
+                        "description": "Initials",
+                        "nullable": true
+                    },
+                    "email_address": {
+                        "type": "string",
+                        "description": "Email Address",
+                        "nullable": true
+                    },
+                    "broadcast_flag": {
+                        "type": "integer",
+                        "description": "Send e-Newz",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "added_ini": {
+                        "type": "string",
+                        "description": "Initials of person added User Master",
+                        "nullable": true
+                    },
+                    "added_date": {
+                        "type": "string",
+                        "description": "Date User Master was added",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "change_ini": {
+                        "type": "string",
+                        "description": "Initials of person making last change to User Master",
+                        "nullable": true
+                    },
+                    "changed_date": {
+                        "type": "string",
+                        "description": "Date of last change to User Master",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "userrights": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserRight"
+                        },
+                        "description": "Rights",
+                        "nullable": true
+                    },
+                    "change_type": {
+                        "$ref": "#/components/schemas/ChangeType"
+                    },
+                    "pans": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Pan"
+                        },
+                        "description": "Pans",
+                        "nullable": true
+                    },
+                    "client": {
+                        "$ref": "#/components/schemas/Client"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

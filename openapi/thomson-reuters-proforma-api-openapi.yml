@@ -1,0 +1,242 @@
+openapi: 3.2.0
+info:
+  version: ''
+  title: GoSystem Locator Proforma API
+  description: A RESTful API that provides access to GoSystem Locator functionalities.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: Proforma
+paths:
+  /proforma/v2/rolloverlocator:
+    post:
+      summary: Roll over locator
+      description: Rolls over a locator to the next tax year. Provide the account details, locator ID, tax year, and tax type in the request. You can optionally overwrite existing data in the target year.
+      tags:
+      - Proforma
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RolloverLocatorRequest'
+            examples:
+              Success Rollover - Full Request:
+                $ref: '#/components/examples/Rollover-Request1'
+              Rollover Password - Request:
+                $ref: '#/components/examples/Rollover-Password-Request'
+              Rollover WithoutPassword - Request:
+                $ref: '#/components/examples/Rollover-Request2'
+              Rollover Overwrite To NextYear - Request:
+                $ref: '#/components/examples/Rollover-Request3'
+              Rollover Wrong - Request:
+                $ref: '#/components/examples/Rollover-Request4'
+        required: true
+      responses:
+        '200':
+          description: Success. The locator rollover is initiated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProformaBatchStatusResponse'
+              examples:
+                Success Rollover - Response:
+                  $ref: '#/components/examples/Rollover-Response1'
+                Wrong Password Rollover - Response:
+                  $ref: '#/components/examples/Rollover-WrongPassword-Response'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Rollover BadRequest - Response:
+                  $ref: '#/components/examples/Rollover-BadResponse'
+        '500':
+          description: Internal server error.
+      operationId: postProformaV2Rolloverlocator
+      x-operation-id-source: derived
+  /proforma/v2/status:
+    get:
+      summary: Get rollover status
+      description: Retrieves the status of a locator rollover operation using the job ID returned from the rollover endpoint.
+      tags:
+      - Proforma
+      parameters:
+      - name: jobId
+        in: query
+        description: The job ID returned after a proforma rollover locator operation.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success. The rollover status is retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProformaBatchStatusResponse'
+              examples:
+                Proforma Complete - Response:
+                  $ref: '#/components/examples/Proforma-complete-Response'
+                Rollover Running - Response:
+                  $ref: '#/components/examples/Rollover-running-example'
+                Rollover Unable To Retrieve Batch Status - Response:
+                  $ref: '#/components/examples/Rollover-unableToRetrieveBatchStatus-Response'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Rollover BadRequest - Response:
+                  $ref: '#/components/examples/ProformaStatus-BadResponse'
+        '500':
+          description: Internal server error.
+      operationId: getProformaV2Status
+      x-operation-id-source: derived
+components:
+  examples:
+    Rollover-unableToRetrieveBatchStatus-Response:
+      value:
+        error: true
+        code: -1
+        description: Finished
+        info: Unable to retrieve batch status
+        ident: ''
+    Proforma-complete-Response:
+      value:
+        error: false
+        code: 3
+        description: Finished
+        info: Proforma complete
+        ident: ''
+    Rollover-Request2:
+      value:
+        account: '3777'
+        locatorID: 2843JP
+        taxYear: '2023'
+        taxType: '1041'
+        overwrite: false
+    ProformaStatus-BadResponse:
+      value:
+        title: One or more validation errors occurred.
+        status: 400
+        errors:
+          jobId:
+          - The jobId field is required.
+    Rollover-WrongPassword-Response:
+      value:
+        error: true
+        code: -1
+        description: Unable to queue job
+        info: Invalid Password
+        ident: ''
+    Rollover-Request1:
+      value:
+        account: '3777'
+        locatorID: 2843JP
+        taxYear: '2023'
+        taxType: '1041'
+        password: password
+        overwrite: false
+    Rollover-Request3:
+      value:
+        account: '3777'
+        locatorID: 2843JP
+        taxYear: '2023'
+        taxType: '1041'
+        overwrite: true
+    Rollover-BadResponse:
+      value:
+        status: 400
+        message: TaxType Parameter is Null Or Empty
+    Rollover-Response1:
+      value:
+        error: false
+        code: 0
+        description: Proforma queued
+        info: ''
+        ident: 20241119\02\17\{C60FF036-5865-46BD-8209-0320CA2E4269}
+    Rollover-Password-Request:
+      value:
+        account: '3777'
+        locatorID: 2843JP
+        taxYear: '2023'
+        taxType: '1041'
+        password: password
+        overwrite: false
+    Rollover-Request4:
+      value:
+        account: '3777'
+        locatorID: 2843JP
+        taxYear: '2023'
+        taxType: '1041'
+        overwrite: true
+    Rollover-running-example:
+      value:
+        error: false
+        code: 2
+        description: Running
+        info: Proforma in progress
+        ident: ''
+  schemas:
+    RolloverLocatorRequest:
+      type: object
+      required:
+      - account
+      - locatorID
+      - taxYear
+      - taxType
+      properties:
+        account:
+          type: string
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        locatorID:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the TaxReturnID.
+        taxYear:
+          type: string
+          description: The tax year for which the e-file is required. Must be a valid 4-digit year (for example, 2024).
+        taxType:
+          type: string
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+        password:
+          type: string
+          description: The password for the locator, if one is required.
+        overwrite:
+          type: boolean
+          description: Indicates whether to overwrite existing data. Set to true to overwrite, or false to keep existing data.
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          default: 0
+        message:
+          type: string
+    ProformaBatchStatusResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        code:
+          type: integer
+        description:
+          type: string
+        info:
+          type: string
+        ident:
+          type: string
+        jobId:
+          type: string
+          description: The system-generated identifier for the e-file job.
+      additionalProperties: false
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

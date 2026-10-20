@@ -1,0 +1,221 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Currency Links API
+  version: v1
+  contact:
+    name: API Support
+    url: https://www.onesourcetax.com/support
+    email: api-support@onesourcetax.com
+  license:
+    name: Proprietary License
+    url: https://www.onesourcetax.com/licenses/proprietary
+  description: 'Operations tagged Currency-Links across 2 of this provider''s published API definitions: thomson-reuters-statutory-reporting-period-setup-apis-openapi.json, thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server providing global access to reporting entities
+- url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server providing global access to template entities
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the EMEA region
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the EMEA region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the APAC region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the APAC region.
+security:
+- Token: []
+tags:
+- name: Currency-Links
+  description: Retrieve all currency links within a specified financial period.
+paths:
+  /{entity-id}/financial-periods/{financial-period-id}/currency-links:
+    get:
+      tags:
+      - Currency-Links
+      description: Use this operation to obtain a list of all currency links associated with a particular financial period.
+      operationId: GetCurrencyLinks
+      summary: Get Currency Links
+      parameters:
+      - name: entity-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The entity id in which the financial period is created. To obtain a reporting entity ID, refer to the [Get Reporting Entities API](#tag/reporting-entities/get/) documentation. For guidance on obtaining a template entity ID, see the [Get Template Entities API](#tag/template-entities/get/) documentation.
+        example: 92abcd47-4e56-4961-b9b6-b30e00f46ba8
+      - name: financial-period-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The identifier of the financial period from which account assignment details are retrieved. Obtain this ID using the [Get Financial Periods API](#tag/financial-periods/get{entity-id}/financial-periods).
+        example: a5d4f2f3-5250-494d-b773-b30e00f46d48
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencyLink'
+              example:
+              - id: c1d2e3f4-a5b6-7890-1234-567890fedcba
+                entityId: a1b2c3d4-e5f6-7890-1234-567890abcdef
+                entityCode: ENTITY001
+                currencyId: CURR001
+                conversionAccountId: CONVACC001
+              - id: d2e3f4g5-b6c7-8901-2345-67890abcdef0
+                entityId: a1b2c3d4-e5f6-7890-1234-567890abcdef
+                entityCode: ENTITY001
+                currencyId: CURR002
+                conversionAccountId: CONVACC002
+        '400':
+          description: Bad Request. Occurs when the server cannot process the request due to invalid parameters or a malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidParameter:
+                  summary: Example invalid level category error
+                  value:
+                    statusCode: 400
+                    message: Level 1 category structure must be provided
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: https://developers.onesourcetax.com/errors/#keymanagement.service.invalid_access_token
+                  title:
+                    type: string
+                    example: Invalid Access Token
+                  detail:
+                    type: string
+                    example: Invalid Access Token
+                  status:
+                    type: integer
+                    example: 401
+                  instance:
+                    type: string
+                    example: /statutory-reporting/v1/reporting-entities/2f59b078-2bdb-4b14-9f1f-b38b00e09f19/financial-periods/b5a263b5-d840-41c6-a82a-b38e006ea87e/currency-links
+                  api_requestId:
+                    type: string
+                    example: rrt-0080bd6edb6a51c07-c-ea-1408325-2337761-1
+        '403':
+          description: 'Forbidden: The request was understood, but the server refuses to authorize it. The client does not have the necessary permissions to access the resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbiddenAccessDenied:
+                  summary: Example forbidden error - Insufficient permissions
+                  value:
+                    StatusCode: 403
+                    Message: 'Access Denied: User does not have the required role or permissions to perform this action.'
+        '404':
+          description: Not Found. The requested entity does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFoundError:
+                  summary: Example not found error
+                  value:
+                    StatusCode: 404
+                    Message: financial-period-id is not found
+        '500':
+          description: Internal Server Error. An unexpected error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                serverError:
+                  summary: Example server error
+                  value:
+                    StatusCode: 500
+                    Message: An unexpected error occurred.
+      security:
+      - Token: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Currency Links
+    servers:
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server providing global access to reporting entities
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server providing global access to template entities
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the EMEA region
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the EMEA region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the APAC region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the APAC region.
+components:
+  schemas:
+    CurrencyLink:
+      type: object
+      description: Represents an account that has been assigned to a category.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the currency link.
+        entityId:
+          type: string
+          format: uuid
+          description: Unique identifier for the entity.
+        entityCode:
+          type: string
+          nullable: true
+          description: Unique code for Entity.
+        currencyId:
+          type: string
+          format: uuid
+          description: Unique identifier for the currency. Refer to 'Currencies' API to get more details.
+        conversionAccountId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      description: Standard error response object containing HTTP status code and a descriptive message.
+      properties:
+        StatusCode:
+          type: integer
+          format: int32
+          description: HTTP status code of the error (for example, 400, 404, 500).
+          minimum: 100
+          maximum: 599
+        Message:
+          type: string
+          nullable: true
+          description: A human-readable message providing details about the error.
+          minLength: 1
+          maxLength: 512
+      additionalProperties: false
+      example:
+        StatusCode: 400
+        Message: Invalid request parameters.
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: 'Authorization header. Provide a valid Access token for authentication  Example: `Authorization: Bearer <<Access Token>>`. You can find Authentication process in ''API Access'' Section'
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.json
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

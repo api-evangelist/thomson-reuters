@@ -1,0 +1,4197 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Workpapers API
+  version: v1
+  contact:
+    name: API Support
+    url: https://www.thomsonreuters.com/en/contact-us
+    email: engagementmanagerdevleads@thomsonreuters.com
+  description: 'Operations tagged Workpapers across 2 of this provider''s published API definitions: thomson-reuters-engagement-manager-openapi.json, thomson-reuters-engagement-manager-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/us/engagementmanager
+  description: US Production
+- url: https://api.thomsonreuters.com/uk/engagementmanager
+  description: UK Production
+security:
+- Token: []
+tags:
+- name: Workpapers
+  description: Get/Add/Edit/Move workpapers and manage documents
+paths:
+  /external/v1/workpapers/tree-data/{engagementId}:
+    get:
+      tags:
+      - Workpapers
+      summary: Retrieve all binder items (workpapers and folders) for an engagement
+      description: '## Purpose
+
+        Retrieves the complete tree structure of all binder items including both folders and workpapers for a specific engagement. This endpoint provides a comprehensive view of the engagement''s document organization, including hierarchical relationships, metadata, and properties for all items.
+
+
+        ## Why Use This Endpoint
+
+        - Get complete engagement document structure in one call
+
+        - Display full binder contents including folders and workpapers
+
+        - Build navigation trees with complete item metadata
+
+        - Retrieve workpaper IDs for subsequent operations
+
+        - Analyze engagement organization and structure
+
+        - Export engagement content listings
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get All Binder Items
+
+        - **Endpoint:** `GET /workpapers/tree-data/{engagementId}` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** Complete tree structure with all folders and workpapers
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - **Content-Type:** application/json
+
+        - **Path Parameters:**
+
+        - `engagementId` (int, required) - The engagement identifier
+
+        - **No request body required**
+
+
+        ## Common Use Cases
+
+        1. **Full Binder View:** Display complete engagement contents to users
+
+        2. **Workpaper Selection:** Retrieve workpaper IDs for operations like updates or deletions
+
+        3. **Structure Analysis:** Analyze how engagement documents are organized
+
+        4. **Reporting:** Generate reports of engagement contents and organization
+
+
+        ## Important Notes
+
+        - Returns both folders and workpapers (unlike `/folder-structure/` which returns only folders)
+
+        - Response includes complete metadata for all items
+
+        - Tree structure reflects current state of the engagement
+
+        - Workpaper IDs from this response can be used in other workpaper operations
+
+        - Large engagements may return significant data; consider pagination if available
+
+        - Workpapers in recycle bin are typically excluded from this view
+
+        - Items are organized hierarchically based on folder relationships'
+      operationId: EmMainEndPointsExternalWorkpapersGetBinderItemsExternalEndpoint
+      parameters:
+      - name: engagementId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved the workpaper tree data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalEngagementBinderItemResultExternal'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: d0a1c0b7-5bed-4cb2-8fcc-3974205b547c
+                    dateTime: '2026-04-21T05:50:04.6952854Z'
+                    traceId: 82bc6b2eb6f14d68b5aab5bc728c248e
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 4ad00e22-2550-4852-9855-e362cbb4119f
+                    dateTime: '2026-04-21T05:50:04.6952139Z'
+                    traceId: 886501a387444db9b752a7a44bb51c61
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 9e5edb2c-83d4-4503-8369-a73e9efeeace
+                    dateTime: '2026-04-21T05:50:04.6952831Z'
+                    traceId: 154f88249c724504bd84ebd2309a165e
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 8c8a039e-3932-49f5-9434-9687f16c25c9
+                    dateTime: '2026-04-21T05:50:04.6952869Z'
+                    traceId: 7a735797a7c74317be134828aab8dffd
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/workpapers/folder-structure/{engagementId}:
+    get:
+      tags:
+      - Workpapers
+      summary: Retrieve hierarchical folder structure of workpapers for an engagement
+      description: '## Purpose
+
+        Retrieves the complete hierarchical folder structure for workpapers within a specific engagement. This endpoint returns the organizational structure of folders and workpapers, allowing you to understand how documents are organized within an engagement binder.
+
+
+        ## Why Use This Endpoint
+
+        - Understand the organizational structure of workpapers in an engagement
+
+        - Navigate the folder hierarchy programmatically
+
+        - Build user interfaces that display workpaper organization
+
+        - Identify folder IDs needed for adding or moving workpapers
+
+        - Retrieve folder metadata and properties
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the Folder Structure
+
+        - **Endpoint:** `GET /workpapers/folder-structure/{engagementId}` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** Hierarchical folder structure with folder IDs and properties
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - **Content-Type:** application/json
+
+        - **Path Parameters:**
+
+        - `engagementId` (int, required) - The engagement identifier
+
+        - **No request body required**
+
+
+        ## Common Use Cases
+
+        1. **Navigation UI:** Build a tree-view interface showing folder organization
+
+        2. **Folder Selection:** Provide users with folder options when uploading workpapers
+
+        3. **Structure Analysis:** Analyze how workpapers are organized across engagements
+
+        4. **Folder Management:** Identify folder IDs for moving or reorganizing workpapers
+
+
+        ## Important Notes
+
+        - Only returns folders, not individual workpapers (use `/workpapers/tree-data/{engagementId}` for full binder items)
+
+        - Folder structure reflects the current state of the engagement
+
+        - Empty folders are included in the response
+
+        - Folder IDs are required for operations like adding or moving workpapers
+
+        - The structure is hierarchical and preserves parent-child relationships'
+      operationId: EmMainEndPointsExternalWorkpapersGetWorkpaperFolderStructureExternalEndpoint
+      parameters:
+      - name: engagementId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved the workpaper folder structure.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersWorkpaperFolderStructureResponseExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 99663b51-3df5-434b-bcc1-a54201d497b6
+                    dateTime: '2026-04-21T05:50:04.7058469Z'
+                    traceId: 062702936c9b4dfb8c0e4273bae2643f
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 39d8771d-8e13-47db-b74c-aad8868db31d
+                    dateTime: '2026-04-21T05:50:04.7058259Z'
+                    traceId: 369fed24f0af4fad939e164bec77ec5a
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: c3a07932-25c9-48e1-ad97-2fec42d7daa1
+                    dateTime: '2026-04-21T05:50:04.7058449Z'
+                    traceId: b67412f8b384421b8e9c234fe16e2715
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: f0536a38-dc63-40d2-b9f7-ae927a7777c6
+                    dateTime: '2026-04-21T05:50:04.7058498Z'
+                    traceId: aa0ccfca512445cd923eb875b8eaac60
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/workpapers/load-all-workpaper-properties/{workpaperId}:
+    get:
+      tags:
+      - Workpapers
+      summary: Retrieve all properties of a specific workpaper
+      description: '## Purpose
+
+        Retrieves comprehensive information about a specific workpaper including all its properties, metadata, and configuration settings. This endpoint provides complete workpaper details including both editable and read-only properties.
+
+
+        ## Why Use This Endpoint
+
+        - View complete workpaper information and metadata
+
+        - Audit workpaper properties and settings
+
+        - Display full workpaper details in user interfaces
+
+        - Analyze workpaper configuration and assignments
+
+        - Retrieve information for reporting and documentation purposes
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `workpaperId`
+
+        - **Endpoint:** `GET /workpapers/tree-data/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of workpapers with their IDs
+
+        - **Example:** `workpaperId: 12345`
+
+
+        **Step 4:** Retrieve All Workpaper Properties
+
+        - **Endpoint:** `GET /workpapers/load-all-workpaper-properties/{workpaperId}` (this endpoint)
+
+        - **Use:** The `workpaperId` from Step 3
+
+        - **Returns:** Complete workpaper properties and metadata
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - **Content-Type:** application/json
+
+        - **Path Parameters:**
+
+        - `workpaperId` (int, required) - The unique identifier of the workpaper
+
+        - **No request body required**
+
+
+        ## Common Use Cases
+
+        1. **Workpaper Details View:** Display comprehensive workpaper information to users
+
+        2. **Audit Trail:** Review complete workpaper configuration for compliance
+
+        3. **Data Export:** Extract full workpaper data for reporting or migration
+
+        4. **Integration Sync:** Retrieve complete workpaper state for system synchronization
+
+
+        ## Important Notes
+
+        - Returns all properties including read-only fields
+
+        - For editing workpapers, use `/workpapers/load-editable-workpaper-properties/{workpaperId}` instead
+
+        - Workpaper must exist in the system
+
+        - User must have access permissions to the engagement containing the workpaper
+
+        - Response includes system-generated properties that cannot be modified'
+      operationId: EmMainEndPointsExternalWorkpapersLoadAllWorkpaperPropertiesEndpoint
+      parameters:
+      - name: workpaperId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved all workpaper properties.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersLoadWorkpaperPropertiesExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 32205a18-f109-4826-a8d8-07d3a566f1cd
+                    dateTime: '2026-04-21T05:50:04.7086665Z'
+                    traceId: 8734776f63d049c39e80620fb9ecdb2f
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 0ad7318a-f130-4b09-b0e5-fe4fd93b3e02
+                    dateTime: '2026-04-21T05:50:04.7086554Z'
+                    traceId: 0165b7d197b94793acf2d795ca802fa3
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 6f1e45f7-1fdd-4f2f-a985-351eb1564da1
+                    dateTime: '2026-04-21T05:50:04.7086646Z'
+                    traceId: 978e673f208441019c0f7de17d7dce14
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 27826f3b-03b9-4963-a5f3-65eb1d447859
+                    dateTime: '2026-04-21T05:50:04.7086709Z'
+                    traceId: f4a9055dff2645be82544708e36e159a
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/workpapers/load-editable-workpaper-properties/{workpaperId}:
+    get:
+      tags:
+      - Workpapers
+      summary: Retrieve only editable properties of a workpaper for modification
+      description: '## Purpose
+
+        Retrieves only the editable properties of a specific workpaper, excluding read-only system fields. This endpoint is designed specifically for workpaper update workflows, providing only the fields that can be modified by users.
+
+
+        ## Why Use This Endpoint
+
+        - Prepare workpaper data for editing in user interfaces
+
+        - Retrieve only modifiable properties to update a workpaper
+
+        - Reduce response payload by excluding read-only fields
+
+        - Build workpaper edit forms with appropriate fields
+
+        - Ensure users only interact with editable properties
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `workpaperId`
+
+        - **Endpoint:** `GET /workpapers/tree-data/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of workpapers with their IDs
+
+        - **Example:** `workpaperId: 12345`
+
+
+        **Step 4:** Retrieve Editable Workpaper Properties
+
+        - **Endpoint:** `GET /workpapers/load-editable-workpaper-properties/{workpaperId}` (this endpoint)
+
+        - **Use:** The `workpaperId` from Step 3
+
+        - **Returns:** Editable workpaper properties ready for modification
+
+
+        **Step 5 (Optional):** Update Workpaper Properties
+
+        - **Endpoint:** `PUT /workpapers/update-workpaper-properties`
+
+        - **Use:** Modify the properties from Step 4 and submit the updated object
+
+        - **Returns:** Success confirmation
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - **Content-Type:** application/json
+
+        - **Path Parameters:**
+
+        - `workpaperId` (int, required) - The unique identifier of the workpaper
+
+        - **No request body required**
+
+
+        ## Common Use Cases
+
+        1. **Workpaper Edit Form:** Populate edit forms with current editable values
+
+        2. **Property Updates:** Retrieve current values before making changes
+
+        3. **Bulk Updates:** Load properties for multiple workpapers to update programmatically
+
+        4. **Assignment Changes:** Update workpaper assignments to different users
+
+
+        ## Important Notes
+
+        - Returns only editable properties; use `/workpapers/load-all-workpaper-properties/{workpaperId}` for complete data
+
+        - The response object can be directly used with `/workpapers/update-workpaper-properties` endpoint
+
+        - Read-only system fields (timestamps, IDs, etc.) are excluded from the response
+
+        - Workpaper must exist and user must have edit permissions
+
+        - Some properties may be conditionally editable based on engagement state'
+      operationId: EmMainEndPointsWorkPapersLoadEditableWorkpaperPropertiesExternalEndpoint
+      parameters:
+      - name: workpaperId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved editable workpaper properties.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpaperExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 98ac3114-21a3-4cff-b9da-20ff5b9c81a6
+                    dateTime: '2026-04-21T05:50:03.2503179Z'
+                    traceId: f6aba1037830443893e1f30f8aa5223d
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: f74f3ed3-3b9e-4267-bd98-91b150bc1893
+                    dateTime: '2026-04-21T05:50:03.2502937Z'
+                    traceId: c1c77259a6be45f1be3fcc6de4f7cdec
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: c798b81d-873b-4136-9566-cb17ee542822
+                    dateTime: '2026-04-21T05:50:03.2503159Z'
+                    traceId: 0f18aac093e84463bee3ffcc42028f78
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: faa99691-5b81-481f-97ad-4ac3fe3b996d
+                    dateTime: '2026-04-21T05:50:03.2503260Z'
+                    traceId: fa535bd6c6b8423191b9eb6265f9a4f5
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/SignOff/get-all-signoffs:
+    get:
+      tags:
+      - Workpapers
+      summary: Retrieve all active sign-off types for workpapers
+      description: '## Purpose
+
+        Retrieves all active sign-off types available in the system. Sign-off types define the approval workflow stages for workpapers (e.g., Prepared, Reviewed, Manager Review, Partner Review). This endpoint provides the list of available sign-off options that can be applied to workpapers.
+
+
+        ## Why Use This Endpoint
+
+        - Retrieve available sign-off types for workpaper approval workflows
+
+        - Display sign-off options in user interfaces
+
+        - Validate sign-off type IDs before saving workpaper sign-offs
+
+        - Build approval workflow management features
+
+        - Understand the sign-off hierarchy and sequence
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get All Active Sign-Off Types
+
+        - **Endpoint:** `GET /SignOff/get-all-signoffs` (this endpoint)
+
+        - **Returns:** List of active sign-off types with their IDs and properties
+
+        - **Example:** Returns sign-off types like "Prepared", "Reviewed", "Manager Review", etc.
+
+
+        **Step 2 (Optional):** Save Workpaper Sign-Offs
+
+        - **Endpoint:** `POST /SignOff/save-workpaper-signoffs`
+
+        - **Use:** Use sign-off type IDs from Step 1 to assign sign-offs to workpapers
+
+        - **Returns:** Success confirmation
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - **Content-Type:** application/json
+
+        - **No path parameters required**
+
+        - **No request body required**
+
+
+        ## Common Use Cases
+
+        1. **Sign-Off Selection:** Populate dropdowns or selection lists with available sign-off types
+
+        2. **Workflow Configuration:** Display sign-off stages when configuring approval workflows
+
+        3. **Validation:** Verify sign-off type IDs before submitting workpaper sign-offs
+
+        4. **Status Display:** Show available approval stages in workpaper status views
+
+
+        ## Important Notes
+
+        - Only active sign-off types are returned (inactive types are excluded)
+
+        - Sign-off types are system-wide and apply to all engagements
+
+        - The order/sequence of sign-off types typically follows a hierarchical approval flow
+
+        - Sign-off type IDs are required when saving workpaper sign-offs via `/SignOff/save-workpaper-signoffs`
+
+        - Some sign-off types may have dependencies or require previous sign-offs to be completed'
+      operationId: EmMainEndPointsExternalBinderGetAllActiveSignOffsExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved all active sign-off types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsEngagementSignOffType'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 7df793cf-0714-49a9-8e5a-587fb314c6b3
+                    dateTime: '2026-04-21T05:50:04.7766479Z'
+                    traceId: 171d29e33ec044ee8510ca6ca6b5cf77
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 8190b184-7d4d-429b-8e2f-3196c1d83d84
+                    dateTime: '2026-04-21T05:50:04.7766336Z'
+                    traceId: 3f493a27cd384bb29bc768acf388f462
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: abb931ac-a66b-4294-adf7-4c4de814de11
+                    dateTime: '2026-04-21T05:50:04.7766456Z'
+                    traceId: c1175b8bc0c047c9bcd5f86ab3cd6b8a
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 54d51fb9-6123-42c7-913f-d98483730384
+                    dateTime: '2026-04-21T05:50:04.7766493Z'
+                    traceId: 02aeb05208934078be00db837ac3ed65
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/workpapers/get-binder-itemsExternal/{engagementId}:
+    get:
+      tags:
+      - Workpapers
+      summary: Retrieve binder items (folders and workpapers) available for move operations
+      description: '## Purpose
+
+        Retrieves a simplified list of all folders and workpapers in an engagement, specifically formatted for move and reorganization operations. This endpoint provides the necessary information to display available destination folders and validate move operations within the engagement binder structure.
+
+
+        ## Why Use This Endpoint
+
+        - Get a list of folders and workpapers for move/reorganization interfaces
+
+        - Display available destination folders when moving workpapers
+
+        - Validate that target folders exist before moving items
+
+        - Build folder selection dropdowns for move operations
+
+        - Retrieve folder hierarchy information for drag-and-drop interfaces
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get Binder Items for Move
+
+        - **Endpoint:** `GET /workpapers/get-binder-itemsExternal/{engagementId}` (this endpoint)
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** Simplified list of folders and workpapers formatted for move operations
+
+
+        **Step 4 (Optional):** Move Items
+
+        - **Endpoint:** `POST /workpapers/move`
+
+        - **Use:** Use folder IDs from Step 3 to specify destination folders
+
+        - **Returns:** Confirmation of successful move
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - **Content-Type:** application/json
+
+        - **Path Parameters:**
+
+        - `engagementId` (int, required) - The engagement identifier
+
+        - **No request body required**
+
+
+        ## Common Use Cases
+
+        1. **Move Dialog:** Populate folder selection in move workpaper dialogs
+
+        2. **Drag-and-Drop:** Provide folder structure for drag-and-drop reorganization
+
+        3. **Folder Validation:** Verify target folders exist before move operations
+
+        4. **Tree Navigation:** Build simplified tree views for reorganization interfaces
+
+
+        ## Important Notes
+
+        - Response is optimized for move operations (lighter than full tree-data endpoint)
+
+        - Includes recycle bin indicator to prevent moving items to deleted folders
+
+        - Folder IDs from this response are used in the move endpoint
+
+        - Items maintain hierarchical parent-child relationships
+
+        - Display order is included for maintaining item sequence
+
+        - Some metadata available in full tree-data endpoint may be excluded here for performance'
+      operationId: EmMainEndPointsExternalWorkpapersGetBinderItemsForMoveExternalEndpoint
+      parameters:
+      - name: engagementId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved binder items for move operations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersBinderItemsForMoveExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: a1da503f-8566-4343-94e7-d933cd9a43ed
+                    dateTime: '2026-04-21T05:50:04.7003115Z'
+                    traceId: 1c5f02a7c1d34d4b98b02c0472f7348d
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 78ad2f0d-d7dd-4fd5-bfb0-6b57f76042c3
+                    dateTime: '2026-04-21T05:50:04.7002983Z'
+                    traceId: f0abc5a04c5444e3aadbbb82e065b081
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 5281e5f5-4108-4a7c-a4c5-270ce6b0247e
+                    dateTime: '2026-04-21T05:50:04.7003095Z'
+                    traceId: 0d17828d45d241f7b67c52d2b7ba686d
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 6a122e6c-898c-4761-8b9e-3a6169819aa1
+                    dateTime: '2026-04-21T05:50:04.7003140Z'
+                    traceId: af395c02f8a04f38bd3de62e045f3236
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/workpapers/add-with-file:
+    post:
+      tags:
+      - Workpapers
+      summary: Create a new workpaper with file upload (max 95MB)
+      description: '## Purpose
+
+        Creates a new workpaper with an associated file upload in a single operation. This endpoint accepts both the workpaper metadata and the file content via multipart form-data. Suitable for files up to 95MB; for larger files, use the metadata + chunk upload workflow instead.
+
+
+        ## Why Use This Endpoint
+
+        - Add new workpapers with files in a single request
+
+        - Upload documents up to 95MB directly
+
+        - Simplify workpaper creation for standard-sized files
+
+        - Combine metadata and file upload in one operation
+
+        - Quick workpaper addition without multi-step workflows
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `folderId` (Optional)
+
+        - **Endpoint:** `GET /workpapers/folder-structure/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** Folder structure with folder IDs
+
+        - **Example:** `folderId: 393395`
+
+
+        **Step 4:** Get the `assignedLoginId` (Optional)
+
+        - **Endpoint:** `GET /users/all`
+
+        - **Returns:** List of users with their login IDs
+
+        - **Example:** `assignedLoginId: 1395`
+
+
+        **Step 5:** Add Workpaper with File
+
+        - **Endpoint:** `POST /workpapers/add-with-file` (this endpoint)
+
+        - **Use:** Submit form-data with file and metadata from previous steps
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** multipart/form-data
+
+        - **Form-Data Fields:**
+
+        - `File` (IFormFile, required) - The workpaper file to upload (max 95MB)
+
+        - `EngagementId` (int, required) - The engagement binder ID
+
+        - `Description` (string, required) - The workpaper title/description
+
+        - `Reference` (string, optional) - Reference number or code
+
+        - `FolderId` (int?, optional) - Destination folder ID (null for root level)
+
+        - `AssignedLoginId` (int?, optional) - Assigned user login ID
+
+        - `RollForwardType` (string, optional) - Roll forward behavior: "Include" (default), "Exclude", "Replace with placeholder"
+
+        - `DeleteDuringFinalize` (bool?, optional) - Whether to delete during finalization
+
+        - `DocumentId` (string, optional) - Document ID for positioning
+
+
+        ## Common Use Cases
+
+        1. **Standard Document Upload:** Add Excel, PDF, or Word files as workpapers
+
+        2. **Supporting Documentation:** Upload supporting documents for engagement work
+
+        3. **Initial Workpaper Setup:** Create workpaper structure with files during engagement setup
+
+        4. **Batch Workpaper Creation:** Programmatically add multiple workpapers with files
+
+
+        ## Important Notes
+
+        - Maximum file size is 95MB; files larger than this must use the chunk upload workflow
+
+        - For files >95MB: Use `/workpapers/add-metadata` endpoint first, then `/documentmanagement/upload-chunk/{documentId}`
+
+        - File is uploaded immediately and associated with the workpaper
+
+        - EngagementId, Description, and File are required fields
+
+        - FolderId determines where the workpaper appears in the folder hierarchy
+
+        - RollForwardType values: "Include", "Exclude", "Replace with placeholder"
+
+        - DocumentId is optional and used for positioning the workpaper after a specific document
+
+        - The request must use multipart/form-data encoding
+
+        - File type is automatically detected from the uploaded file'
+      operationId: EmMainEndPointsExternalWorkpapersAddWorkpaperUploadFileExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: ExternalWorkpaperUploadFormDataRequest
+        description: ''
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersExternalWorkpaperUploadFormDataRequest'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully created workpaper with file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersAddWorkpaperResponseExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: f279d136-452a-4a19-9a3f-738ac00d80da
+                    dateTime: '2026-04-21T05:50:03.4592957Z'
+                    traceId: 7fce9bcdcbcf4a9fb6b1065ebed204ab
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: e4e10f4f-0a45-49bf-80ca-48151350f391
+                    dateTime: '2026-04-21T05:50:03.4592768Z'
+                    traceId: 5c3224406caf459fbeedb946c38d9172
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: e6da393e-9d85-4c41-a7bd-eabe52e4bc87
+                    dateTime: '2026-04-21T05:50:03.4592938Z'
+                    traceId: 6044f64c04104e138ef01c2e210990ee
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 06355e57-ed04-46c8-be4a-68a5f74e2275
+                    dateTime: '2026-04-21T05:50:03.4592973Z'
+                    traceId: c10835173cbb4e9a93653dc8eedac687
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/workpapers/add-metadata:
+    post:
+      tags:
+      - Workpapers
+      summary: Add workpaper with metadata only (no file upload)
+      description: '## Purpose
+
+        Creates a new workpaper entry with metadata only, without uploading the file content. This endpoint is designed for large file workflows (files >95MB) where the workpaper metadata is created first, and the file is uploaded separately in chunks using the chunk upload endpoint. The endpoint returns a DocumentId that is used for subsequent chunk uploads. ## Why Use This Endpoint
+
+        - Upload files larger than 95MB using the chunk upload workflow
+
+        - Separate workpaper creation from file upload operations
+
+        - Pre-create workpaper entries before file upload completes
+
+        - Implement multi-step upload workflows
+
+        - Create placeholders for workpapers with pending file uploads
+
+        - Support resumable upload scenarios
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `folderId` (Optional)
+
+        - **Endpoint:** `GET /workpapers/folder-structure/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** Folder structure with folder IDs
+
+        - **Example:** `folderId: 393395`
+
+
+        **Step 4:** Get the `assignedLoginId` (Optional)
+
+        - **Endpoint:** `GET /users/all`
+
+        - **Returns:** List of users with their login IDs
+
+        - **Example:** `assignedLoginId: 1395`
+
+
+        **Step 5:** Add Workpaper Metadata
+
+        - **Endpoint:** `POST /workpapers/add-metadata` (this endpoint)
+
+        - **Use:** Submit workpaper metadata including FileSize and FileType
+
+        - **Returns:** WorkpaperId and DocumentId for the new workpaper
+
+
+        **Step 6:** Upload File in Chunks
+
+        - **Endpoint:** `POST /documentmanagement/upload-chunk/{documentId}`
+
+        - **Use:** The DocumentId from Step 5 to upload file chunks (max 10MB per chunk)
+
+        - **Repeat:** For each chunk until file upload is complete
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Request Body:** `AddWorkpaperExternalMainRequest` object with fields:
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `Description` (string, required) - Workpaper description/name
+
+        - `Reference` (string, optional) - Workpaper reference code
+
+        - `FolderId` (int, optional) - Parent folder ID
+
+        - `AssignedLoginId` (int, optional) - ID of user assigned to the workpaper
+
+        - `RollForwardType` (string, optional) - "Include", "Exclude", or "Replace with placeholder"
+
+        - `DeleteDuringFinalize` (bool, optional) - Whether to delete during finalization
+
+        - `DocumentId` (string, optional) - Position reference for workpaper insertion
+
+        - `FileSize` (long, required) - Total file size in bytes
+
+        - `FileType` (string, required) - File extension (e.g., "xlsx", "pdf", "docx")
+
+
+        ## Common Use Cases
+
+        1. **Large File Upload:** Upload files >95MB by creating metadata first, then uploading chunks
+
+        2. **Resumable Uploads:** Create workpaper entry before starting upload to enable resume capability
+
+        3. **Multi-Step Workflows:** Separate workpaper creation from file upload in complex workflows
+
+        4.'
+      operationId: EmMainEndPointsExternalWorkpapersAddWorkpaperMetadataExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: AddWorkpaperExternalMainRequest
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersAddWorkpaperExternalMainRequest'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully created workpaper metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersAddWorkpaperResponseExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 64dc1a86-5bea-4b3e-b102-0972f29203ba
+                    dateTime: '2026-04-21T05:50:03.4559643Z'
+                    traceId: 5acb1a29769343c7a719335f95270ef9
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: fad39704-05c0-4a56-bb3e-fff3d3ff2b60
+                    dateTime: '2026-04-21T05:50:03.4559394Z'
+                    traceId: 95f9a90bef3449a2863377da7aaafe12
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 94cbda8c-259b-42da-a233-c81499db4d79
+                    dateTime: '2026-04-21T05:50:03.4559611Z'
+                    traceId: 7d479b28fdc84d20a0e5268329dc4746
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 10f70cb2-6f65-43d3-9d28-0a5e28ff74aa
+                    dateTime: '2026-04-21T05:50:03.4559669Z'
+                    traceId: 64387b5ab45747e6aa3b97cc569028be
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/documentmanagement/upload-chunk/{documentId}:
+    post:
+      tags:
+      - Workpapers
+      summary: Upload large documents in chunks (max 10MB per chunk)
+      description: '## Purpose
+
+        Uploads large document files in smaller chunks to overcome file size limitations. This endpoint accepts file chunks up to 10MB each and assembles them server-side into the complete document. Used in conjunction with the add-metadata endpoint to upload files larger than 95MB that cannot be uploaded in a single request.
+
+
+        ## Why Use This Endpoint
+
+        - Upload files larger than 95MB that exceed single-request limits
+
+        - Implement reliable uploads for large files with resume capability
+
+        - Reduce network timeout risks by splitting large uploads
+
+        - Enable progress tracking for large file uploads
+
+        - Support unstable network connections with retry capability
+
+        - Upload very large files (hundreds of MB or GB) efficiently
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Create Workpaper Metadata
+
+        - **Endpoint:** `POST /workpapers/add-metadata`
+
+        - **Submit:** Workpaper metadata including FileSize and FileType
+
+        - **Returns:** DocumentId needed for chunk uploads
+
+        - **Example:** `documentId: "000000894T"`
+
+
+        **Step 2:** Prepare File for Chunking
+
+        - Split the file into chunks of maximum 10MB each
+
+        - Calculate total number of chunks needed
+
+        - Base64 encode each chunk for transmission
+
+        - Track byte offset for each chunk
+
+
+        **Step 3:** Upload Each Chunk
+
+        - **Endpoint:** `POST /documentmanagement/upload-chunk/{documentId}` (this endpoint)
+
+        - **Use:** The DocumentId from Step 1
+
+        - **Upload:** Each chunk sequentially with proper part numbers and offsets
+
+        - **Repeat:** For all chunks until complete file is uploaded
+
+
+        **Step 4:** Verify Upload Completion
+
+        - After uploading all chunks, verify the workpaper is accessible
+
+        - Check workpaper properties to confirm file is complete
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Path Parameters:**
+
+        - `documentId` (string, required) - Document identifier from add-metadata endpoint
+
+        - **Request Body:** `DocumentChunkExternalDto` object with fields:
+
+        - `DocumentType` (string, required) - File extension (e.g., "xlsx", "pdf", "docx")
+
+        - `FileName` (string, required) - Original complete filename (e.g., "report.xlsx")
+
+        - `FileNamePart` (string, required) - Chunk filename (e.g., "report.xlsx.part1.xlsx")
+
+        - `Chunk` (string, required) - Base64 encoded chunk data (max 10MB decoded)
+
+        - `offset` (long, required) - Byte offset position in complete file (e.g., 0 for first chunk)
+
+        - `FileSize` (long, required) - Total file size in bytes
+
+        - `part` (int, required) - Current chunk number (1-based, e.g., 1, 2, 3...)
+
+
+        ## Common Use Cases
+
+        1. **Large Excel Files:** Upload large financial workbooks exceeding 95MB
+
+        2. **PDF Documents:** Upload comprehensive PDF reports or scanned documents
+
+        3. **Video Files:** Upload video recordings or presentations
+
+        4. **Archive Files:** Upload ZIP or compressed archives containing multiple documents
+
+
+        ## Important Notes
+
+        - Maximum chunk size is 10MB (decoded); larger chunks will be rejected
+
+        - DocumentId must be obtained from `/workpapers/add-metadata` endpoint first
+
+        - Chunks must be uploaded sequentially with correct part numbers
+
+        - offset should match the byte position in the original file (0-based)
+
+        - part numbers are 1-based (first chunk is part=1)
+
+        - Chunk data must be base64 encoded before transmission
+
+        - FileSize should be consistent across all chunk uploads for the same file
+
+        - FileName should be the same for all chunks of the same file
+
+        - FileNamePart should include the part number for tracking
+
+        - All chunks must be uploaded for the file to be complete and accessible
+
+        - If upload is interrupted, you may need to restart from the beginning
+
+        - Server assembles chunks automatically when all parts are received
+
+        - DocumentType should match the file extension (e.g., "xlsx" for Excel files)'
+      operationId: EmMainEndPointsExternalDocumentManagementUploadLargeDocumentChunkExternalEndpoint
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: DocumentChunkExternalDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersDocumentChunkExternalDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully uploaded the chunk file data.
+          content:
+            application/json:
+              schema:
+                type: string
+              example: Chunk uploaded successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 51c874e9-aad6-402d-9712-981b94cd7875
+                    dateTime: '2026-04-21T05:50:03.4508786Z'
+                    traceId: 7e3d2e21b0d94376ba1cee57fa8ec91a
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 0ee72a4d-e620-40ea-bb70-64f8e7122e22
+                    dateTime: '2026-04-21T05:50:03.4508556Z'
+                    traceId: dd152e82137c4f4f9c15df5f042779c6
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 14cec526-56f3-4348-b27e-3355d4fc9e21
+                    dateTime: '2026-04-21T05:50:03.4508753Z'
+                    traceId: 9463f170f5934f92b4f85f75d7185d34
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 021272d7-f221-4f2d-b61b-61604de7f6c6
+                    dateTime: '2026-04-21T05:50:03.4508802Z'
+                    traceId: 213413c5d44c4a8684ce6b2a22e9a570
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/documentmanagement/chunk-status/{documentId}:
+    get:
+      tags:
+      - Workpapers
+      summary: Check the upload status of a chunked document upload by document ID
+      description: '## Purpose
+
+        Retrieves the current upload status for a specific document being uploaded via chunked upload (for files >95MB). This endpoint helps track upload progress and determine which chunks have been successfully uploaded, enabling resume capability for interrupted uploads. ## Why Use This Endpoint
+
+        - **Monitor Progress**: Check the status of large file uploads during chunked upload operations
+
+        - **Resume Uploads**: Determine which chunk to resume from if an upload is interrupted
+
+        - **Verify Completion**: Confirm that all chunks have been successfully uploaded
+
+        - **Error Handling**: Identify missing or failed chunk uploads to retry specific chunks
+
+        - **Large Files**: Essential for managing uploads of files exceeding 95MB that require chunked upload
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+        ## Workflow - How to Get Required IDs
+
+
+        **Step 1:** Get the `clientId`
+
+        - Use the `GET /binders/clients` endpoint to retrieve all clients
+
+        - Identify the client you want to work with and note its `clientId`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - Use the `GET /binders/engagements/{clientId}` endpoint with the `clientId` from Step 1
+
+        - Find the engagement you need and note its `engagementId`
+
+
+        **Step 3:** Create workpaper metadata and get `documentId`
+
+        - Use the `POST /workpapers/add-metadata` endpoint with the `engagementId` from Step 2
+
+        - The response will include the `documentId` needed for chunked upload operations
+
+
+        **Step 4:** Check upload status
+
+        - Use this endpoint with the `documentId` from Step 3 to check upload progress
+
+        - The response indicates completion status or which chunk to upload next
+
+
+        ## Request Details
+
+        **Route Parameters:**
+
+        - `documentId` (string) - The unique identifier of the document whose upload status you want to check. Obtained from the add-metadata endpoint response. ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+        ## Common Use Cases
+
+
+        **Use Case 1: Verify Upload Completion**
+
+        After uploading all chunks of a large file, verify the upload completed successfully:
+
+        ```
+
+        GET /documentmanagement/chunk-status/{documentId}
+
+        Response: "Upload Complete"
+
+        ```
+
+
+        **Use Case 2: Resume Interrupted Upload**
+
+        If an upload is interrupted due to network issues, determine where to resume:
+
+        ```
+
+        GET /documentmanagement/chunk-status/{documentId}
+
+        Response: "Resume by uploading chunk 5"
+
+        → Upload chunks starting from chunk 5
+
+        ```
+
+
+        **Use Case 3: Monitor Long-Running Upload**
+
+        Periodically check status during a large file upload to track progress:
+
+        ```
+
+        Example: File has 20 chunks total, you''ve uploaded chunks 1-7
+
+        GET /documentmanagement/chunk-status/{documentId}
+
+        Response: "Resume by uploading chunk 8"
+
+        → Indicates chunks 1-7 are complete, chunk 8 is next (13 more chunks remaining)
+
+        ```
+
+
+        **Use Case 4: Validate Metadata Creation**
+
+        After creating workpaper metadata, verify the documentId is valid before starting upload:
+
+        ```
+
+        GET /documentmanagement/chunk-status/{documentId}
+
+        Response: "Resume by uploading chunk 1"
+
+        → Metadata exists, ready to start uploading chunks from chunk 1
+
+        ```
+
+
+        ## Important Notes
+
+        - This endpoint is specifically for **chunked uploads** (files >95MB).'
+      operationId: EmMainEndPointsExternalWorkpapersGetUploadChunkStatusExternalEndpoint
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: The upload status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: b2000080-6ef2-4514-8ec4-2a7c7ba45a79
+                    dateTime: '2026-04-21T05:50:03.4530687Z'
+                    traceId: 7462c41f54a24ec7a526958b1944d017
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: addf7700-e9f6-4038-b5b1-970db4b333a5
+                    dateTime: '2026-04-21T05:50:03.4530504Z'
+                    traceId: 94a9f019da734fb0b31b24ab52e68f94
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 2ee9fce0-2709-45ff-b6a4-40f1aa345102
+                    dateTime: '2026-04-21T05:50:03.4530669Z'
+                    traceId: 217b4ee907dc4bfd9f36faa12f804ab7
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 59f2014a-f68b-4532-ac3e-6218894cce3f
+                    dateTime: '2026-04-21T05:50:03.4530702Z'
+                    traceId: 2d2b27a3c99c4bb2a8112b681be61920
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/workpapers/update-workpaper-properties:
+    put:
+      tags:
+      - Workpapers
+      summary: Update properties of an existing workpaper
+      description: '## Purpose
+
+        Updates the editable properties of an existing workpaper. This endpoint allows modification of workpaper metadata such as description, reference, assigned user, folder location, and roll forward settings. Use this to change workpaper information without affecting the associated file.
+
+
+        ## Why Use This Endpoint
+
+        - Modify workpaper description or reference codes
+
+        - Reassign workpapers to different users
+
+        - Move workpapers to different folders
+
+        - Update roll forward behavior settings
+
+        - Change workpaper finalization settings
+
+        - Bulk update workpaper properties programmatically
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `workpaperId`
+
+        - **Endpoint:** `GET /workpapers/tree-data/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of workpapers with their IDs
+
+        - **Example:** `workpaperId: 12345`
+
+
+        **Step 4:** Load Current Editable Properties
+
+        - **Endpoint:** `GET /workpapers/load-editable-workpaper-properties/{workpaperId}`
+
+        - **Use:** The `workpaperId` from Step 3
+
+        - **Returns:** Current editable workpaper properties
+
+        - **Note:** Use this response as the base for your updates
+
+
+        **Step 5:** Update Workpaper Properties
+
+        - **Endpoint:** `PUT /workpapers/update-workpaper-properties` (this endpoint)
+
+        - **Use:** Modify properties from Step 4 and submit the updated object
+
+
+        ## Request Details
+
+        - **Method:** PUT
+
+        - **Content-Type:** application/json
+
+        - **Request Body:** `WorkpaperExternalDto` object with fields:
+
+        - `WorkpaperId` (int, required) - The workpaper identifier
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `Description` (string, optional) - Workpaper description/name
+
+        - `Reference` (string, optional) - Workpaper reference code
+
+        - `AssignedLoginId` (int, optional) - ID of user assigned to the workpaper
+
+        - `FolderId` (int, optional) - Parent folder ID
+
+        - `RollForwardType` (string, optional) - "Include", "Exclude", or "Replace with placeholder"
+
+        - `DeleteDuringFinalize` (bool, optional) - Whether to delete during finalization
+
+
+        ## Common Use Cases
+
+        1. **Reassignment:** Change the assigned user for a workpaper
+
+        2. **Reorganization:** Move workpapers to different folders
+
+        3. **Description Updates:** Update workpaper descriptions for clarity
+
+        4. **Roll Forward Config:** Change roll forward behavior for year-end processes
+
+        5. **Bulk Updates:** Programmatically update multiple workpapers
+
+
+        ## Important Notes
+
+        - Load current properties first using `/workpapers/load-editable-workpaper-properties/{workpaperId}`
+
+        - Only editable properties can be modified; system fields are ignored
+
+        - Workpaper must exist and user must have edit permissions
+
+        - WorkpaperId and EngagementId are required and cannot be changed
+
+        - Moving to a different folder requires a valid FolderId from the same engagement
+
+        - Updates do not affect the associated file content
+
+        - Some properties may be read-only based on engagement state (e.g., finalized engagements)
+
+        - Invalid RollForwardType values will cause validation errors'
+      operationId: EmMainEndPointsExternalWorkpapersUpdateWorkpaperPropertiesEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: WorkpaperExternalDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpaperExternalDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully updated workpaper properties.
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 2015dc2c-3cb5-4da8-a13d-f02cfe0f17f0
+                    dateTime: '2026-04-21T05:50:04.7288066Z'
+                    traceId: b9890136ee8f4f4fb0464ae5c886ed22
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 37ff7ede-f44d-4697-9dac-84d3a9eec723
+                    dateTime: '2026-04-21T05:50:04.7285473Z'
+                    traceId: 346db2761de04672ab75227bb7d09650
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: cdf07b86-16e2-4bf0-8645-4ecef2a0577a
+                    dateTime: '2026-04-21T05:50:04.7285591Z'
+                    traceId: e8f1436ed2cf4ff881cd68be0c57ece7
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: bed955db-0cbc-4812-9529-5ad2e87dc59c
+                    dateTime: '2026-04-21T05:50:04.7288102Z'
+                    traceId: e34939bc18a14c7581ede55f5b9f0742
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/SignOff/save-workpaper-signoffs:
+    post:
+      tags:
+      - Workpapers
+      summary: Save or update sign-off statuses for workpapers
+      description: '## Purpose
+
+        Saves or updates sign-off statuses for one or more workpapers within an engagement. Sign-offs track the approval workflow stages (e.g., Prepared, Reviewed, Manager Review) and who completed each stage. This endpoint allows programmatic management of workpaper approval workflows.
+
+
+        ## Why Use This Endpoint
+
+        - Track workpaper approval workflow progress
+
+        - Record who prepared or reviewed workpapers
+
+        - Manage sign-off status programmatically
+
+        - Update sign-off dates and completion status
+
+        - Support audit trail requirements for workpaper reviews
+
+        - Integrate with external workflow systems
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get the `workpaperIds`
+
+        - **Endpoint:** `GET /workpapers/tree-data/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** List of workpapers with their IDs
+
+        - **Example:** `workpaperId: 12345`
+
+
+        **Step 4:** Get Sign-Off Type IDs
+
+        - **Endpoint:** `GET /SignOff/get-all-signoffs`
+
+        - **Returns:** List of active sign-off types with their IDs
+
+        - **Example:** SignOffTypeId for "Reviewed" = 2
+
+
+        **Step 5:** Get User IDs (for sign-off assignment)
+
+        - **Endpoint:** `GET /users/all`
+
+        - **Returns:** List of users with their IDs
+
+        - **Example:** `userId: 1395`
+
+
+        **Step 6:** Save Workpaper Sign-Offs
+
+        - **Endpoint:** `POST /SignOff/save-workpaper-signoffs` (this endpoint)
+
+        - **Use:** Submit sign-off data with IDs from previous steps
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Request Body:** `WorkPaperSignOffExternalRequest` object with fields:
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `WorkpaperSignOffs` (array, required) - List of sign-off records to save:
+
+        - `WorkpaperId` (int) - The workpaper identifier
+
+        - `SignOffTypeId` (int) - The sign-off type identifier (from get-all-signoffs)
+
+        - `UserId` (int) - The user who completed the sign-off
+
+        - `SignOffDate` (DateTime) - When the sign-off was completed
+
+        - `IsCompleted` (bool) - Whether the sign-off stage is complete
+
+
+        ## Common Use Cases
+
+        1. **Workpaper Preparation:** Mark workpapers as "Prepared" when initial work is complete
+
+        2. **Review Tracking:** Record review completion by managers or partners
+
+        3. **Approval Workflows:** Track multi-level approval processes
+
+        4. **Audit Documentation:** Maintain sign-off records for compliance and audit purposes
+
+
+        ## Important Notes
+
+        - Sign-off type IDs must be obtained from `/SignOff/get-all-signoffs` endpoint
+
+        - All workpaper IDs must belong to the specified engagement
+
+        - Sign-off dates should be in valid DateTime format (ISO 8601 recommended)
+
+        - User IDs must be valid users with access to the engagement
+
+        - Sign-offs can be updated by submitting the same workpaper/sign-off type combination
+
+        - Existing sign-offs are updated; new sign-offs are created
+
+        - Some sign-off types may have hierarchical dependencies
+
+        - Sign-off records are permanent and tracked for audit purposes
+
+        - Invalid sign-off type IDs or workpaper IDs will cause validation errors'
+      operationId: EmMainEndPointsExternalWorkpapersSaveWorkpaperSignOffsExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: WorkPaperSignOffExternalRequest
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersWorkPaperSignOffExternalRequest'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully saved workpaper sign-offs.
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 5c9e2407-21e8-4ae1-85e9-8a4a9720f29d
+                    dateTime: '2026-04-21T05:50:04.7257795Z'
+                    traceId: 748f5cb78ff34a318209766e8f70b9b8
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: c9e14d8f-105e-4ab4-98c5-8951694a295e
+                    dateTime: '2026-04-21T05:50:04.7257606Z'
+                    traceId: f0df5636ca09444a8099429736a82fa0
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 58e38519-2f20-4b92-b2a9-0e1615157278
+                    dateTime: '2026-04-21T05:50:04.7257745Z'
+                    traceId: 17705c83d48d427d97b0b52c8b251ffd
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: d69a53e0-0eaa-4f68-8f81-74c06cba5810
+                    dateTime: '2026-04-21T05:50:04.7257811Z'
+                    traceId: 3f7231c6c5e64530af7592b70e074c84
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/workpapers/move:
+    post:
+      tags:
+      - Workpapers
+      summary: Move workpapers or folders to different locations within an engagement
+      description: '## Purpose
+
+        Moves one or more binder items (workpapers and/or folders) to a different folder location within the same engagement. This endpoint allows reorganization of engagement structure while maintaining item properties and contents.
+
+
+        ## Why Use This Endpoint
+
+        - Reorganize engagement folder structure
+
+        - Move workpapers to different locations for better organization
+
+        - Relocate entire folder hierarchies to new positions
+
+        - Clean up and optimize engagement structure
+
+        - Implement bulk reorganization operations
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get Binder Item IDs and Folder Structure
+
+        - **Endpoint:** `GET /workpapers/tree-data/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** Complete binder structure with workpaper IDs and folder IDs
+
+
+        **Step 4:** Move Binder Items
+
+        - **Endpoint:** `POST /workpapers/move` (this endpoint)
+
+        - **Use:** Submit move request with source item IDs and destination folder ID
+
+        - **Select:** IDs of items to move and destination folder ID
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Request Body Parameters:**
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `DestFolderId` (int, required) - Destination folder ID where items will be moved
+
+        - `WorkpaperIds` (array of int, optional) - List of workpaper IDs to move
+
+        - `FolderIds` (array of int, optional) - List of folder IDs to move
+
+        - `DisplayOrderIndex` (int, optional) - Display order position in destination folder
+
+
+        **Note:** At least one of WorkpaperIds or FolderIds must be provided
+
+
+        ## Common Use Cases
+
+        1. **Workpaper Reorganization:** Move workpapers to appropriate folders after initial upload
+
+        2. **Folder Restructuring:** Relocate entire folders to reorganize engagement structure
+
+        3. **Batch Operations:** Move multiple items at once for efficiency
+
+        4. **Order Management:** Control item display order by specifying DisplayOrderIndex
+
+
+        ## Important Notes
+
+        - All item IDs must belong to the specified engagement
+
+        - Operation fails if any ID is invalid or doesn''t exist
+
+        - Files associated with workpapers remain in the system
+
+        - Some workpapers may be protected from operations based on engagement state
+
+        - Destination folder must exist in the same engagement
+
+        - Cannot move a folder into itself or its own descendants
+
+        - Moving a folder moves all its contents (subfolders and workpapers)
+
+        - DisplayOrderIndex determines position in destination folder (0-based)
+
+        - Items maintain all properties and metadata after moving
+
+        - Operation is atomic; either all items move or none do
+
+        - Cannot move items across different engagements
+
+        - Root-level folders may have restrictions on moving
+
+        - Invalid folder hierarchy operations will cause validation errors'
+      operationId: EmMainEndPointsExternalWorkpapersMoveBinderItemsExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: MoveItemsExternalDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersMoveItemsExternalDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully moved binder items.
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 3c1368e1-8103-44bd-a917-52e9b77a19b2
+                    dateTime: '2026-04-21T05:50:04.7139034Z'
+                    traceId: a3ff1ad061644e1eb070a658dc3e1fa9
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 40c1afa6-5e01-421a-a3d9-8c4aa1a5ac1e
+                    dateTime: '2026-04-21T05:50:04.7138402Z'
+                    traceId: dcda572f4a9046e99c61f29170b7d389
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 478b472f-b230-48e4-a86c-f79cedb49b4a
+                    dateTime: '2026-04-21T05:50:04.7138492Z'
+                    traceId: 400c857aebab49c0a4a4f3ed60638f29
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: bd33bac6-6651-4760-9f9d-96f988232416
+                    dateTime: '2026-04-21T05:50:04.7139077Z'
+                    traceId: acc05cb2365940ba820c8530e192a1f6
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/workpapers/move-recyclebin:
+    post:
+      tags:
+      - Workpapers
+      summary: Move workpapers to recycle bin (soft delete)
+      description: '## Purpose
+
+        Moves one or more workpapers to the recycle bin (soft delete). This operation marks workpapers as deleted without permanently removing them, allowing for recovery if needed.
+
+
+        ## Why Use This Endpoint
+
+        - Safely remove workpapers without permanent deletion
+
+        - Clean up unwanted or obsolete workpapers
+
+        - Delete multiple workpapers in a single operation
+
+        - Allow for workpaper recovery if deleted by mistake
+
+        - Maintain engagement organization and cleanliness
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Workflow - How to Get Required IDs
+
+        **Step 1:** Get the `clientId`
+
+        - **Endpoint:** `GET /clients/load-clients`
+
+        - **Returns:** List of clients with their IDs
+
+        - **Example:** `clientId: 1547`
+
+
+        **Step 2:** Get the `engagementId`
+
+        - **Endpoint:** `GET /engagements/{clientId}`
+
+        - **Use:** The `clientId` from Step 1
+
+        - **Returns:** List of engagements with their IDs
+
+        - **Example:** `engagementId: 94`
+
+
+        **Step 3:** Get Binder Item IDs and Folder Structure
+
+        - **Endpoint:** `GET /workpapers/tree-data/{engagementId}`
+
+        - **Use:** The `engagementId` from Step 2
+
+        - **Returns:** Complete binder structure with workpaper IDs and folder IDs
+
+
+        **Step 4:** Move Workpapers to Recycle Bin
+
+        - **Endpoint:** `POST /workpapers/move-recyclebin` (this endpoint)
+
+        - **Use:** The `engagementId` and list of `workpaperIds` in the request body
+
+        - **Select:** The IDs of workpapers you want to move to recycle bin
+
+        - **Example:** `workpaperIds: [12345, 12346, 12347]`
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Content-Type:** application/json
+
+        - **Request Body Parameters:**
+
+        - `EngagementId` (int, required) - The engagement identifier
+
+        - `WorkpaperIds` (array of int, required) - List of workpaper identifiers
+
+        - Must contain at least one workpaper ID
+
+        - All IDs must exist in the specified engagement
+
+        - Duplicates are handled gracefully
+
+
+        ## Common Use Cases
+
+        1. **Cleanup Operations:** Remove old or draft workpapers from active view
+
+        2. **Bulk Deletion:** Delete multiple workpapers at once
+
+        3. **Mistake Correction:** Remove workpapers added by error
+
+        4. **Engagement Organization:** Clean up engagement structure by removing unused workpapers
+
+
+        ## Important Notes
+
+        - All item IDs must belong to the specified engagement
+
+        - Operation fails if any ID is invalid or doesn''t exist
+
+        - Files associated with workpapers remain in the system
+
+        - Some workpapers may be protected from operations based on engagement state
+
+        - This is a soft delete operation; workpapers can be restored later
+
+        - Workpapers are moved to the recycle bin, not permanently deleted
+
+        - Workpapers in recycle bin are not visible in normal workpaper lists
+
+        - To permanently delete, use the recycle bin management features
+
+        - Workpapers can be restored from recycle bin by authorized users'
+      operationId: EmMainEndPointsExternalWorkpapersMoveWorkpaperToRecycleBinExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: MoveWorkpaperExternalRequestDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersMoveWorkpaperExternalRequestDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully moved workpapers to recycle bin.
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: b3365190-92d7-4f8a-b109-2ed6132392f8
+                    dateTime: '2026-04-21T05:50:04.7186840Z'
+                    traceId: 0834303d3cbb4d35b12a65ed4cab775b
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 39bc22a4-2a47-4d7c-886d-e0e66d6c562a
+                    dateTime: '2026-04-21T05:50:04.7186729Z'
+                    traceId: 0b588f3cba174e32a1d84192f4f12991
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: e7b07c83-bf7f-40e1-a598-30d02f25e471
+                    dateTime: '2026-04-21T05:50:04.7186822Z'
+                    traceId: 0e518b75e82846548f34d7a69f768cbc
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 35b6a1fa-8fc7-4fa7-9231-cc9961b1ce66
+                    dateTime: '2026-04-21T05:50:04.7186857Z'
+                    traceId: cddc12d466774e3c95be30d0a26bdf11
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+components:
+  schemas:
+    EMMainDataTransferObjectsModelsExternalWorkpapersBinderItemsForMoveExternalDto:
+      type: object
+      description: Response containing simplified binder items (folders and workpapers) for move operations
+      additionalProperties: false
+      properties:
+        engagementId:
+          type: integer
+          description: The engagement identifier
+          format: int32
+          example: 94
+        items:
+          type: array
+          description: Hierarchical list of folders and workpapers available for move operations
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersEngagementBinderItemForMoveExternal'
+    EMMainDataTransferObjectsModelsExternalWorkpapersDocumentChunkExternalDto:
+      type: object
+      description: Request DTO for uploading a document chunk as part of a chunked file upload process, enabling large file uploads by splitting into smaller parts.
+      additionalProperties: false
+      required:
+      - documentType
+      - fileName
+      - fileNamePart
+      - chunk
+      properties:
+        documentType:
+          type: string
+          description: The type of document being uploaded (e.g., "Excel", "Word", "PDF").
+          minLength: 1
+          example: txt
+        fileName:
+          type: string
+          description: The complete original file name of the document being uploaded.
+          minLength: 1
+          example: AuditWorkpaper_2024.xlsx
+        fileNamePart:
+          type: string
+          description: The file name for this specific chunk part.
+          minLength: 1
+          example: AuditWorkpaper_2024.xlsx.part1
+        chunk:
+          type: string
+          description: The base64-encoded binary data for this chunk of the file.
+          minLength: 1
+          example: tIHwgWW91ciBFeA==
+        offset:
+          type: integer
+          description: The byte offset position where this chunk starts in the complete file.
+          format: int64
+          example: 0
+        fileSize:
+          type: integer
+          description: The total size of the complete file in bytes.
+          format: int64
+          example: 5242880
+          exclusiveMinimum: 0
+        part:
+          type: integer
+          description: The sequential part number of this chunk (1-based indexing).
+          format: int32
+          example: 1
+          exclusiveMinimum: 0
+    EMMainDataTransferObjectsModelsExternalEngagementEngagementItemStatusPropertyExternal:
+      type: object
+      description: Status information for a workpaper or engagement item including checkout status, modification history, and publication state.
+      additionalProperties: false
+      properties:
+        checkedOutUserName:
+          type: string
+          description: Name of the user who has checked out this item. Empty string if the item is not checked out.
+          example: John Smith
+        checkedOutUserId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the user who has checked out this item. Null if the item is not checked out.
+          example: USER-5841
+        checkedOutDate:
+          type:
+          - string
+          - 'null'
+          description: Date and time when the item was checked out. Null if the item is not checked out.
+          format: date-time
+          example: '2024-03-15T10:30:00Z'
+        lastModifiedUserName:
+          type: string
+          description: Name of the user who last modified this item.
+          example: Jane Doe
+        lastModifiedDate:
+          type:
+          - string
+          - 'null'
+          description: Date and time when the item was last modified. Null if the item has never been modified.
+          format: date-time
+          example: '2024-03-15T14:45:00Z'
+        docStatusType:
+          type: string
+          description: 'Document status type indicating the current state of the document in GoFileRoom. Possible values: "None", "Indexed", "Printed", "Scanned", "Imported".'
+          example: Indexed
+        publishStatusType:
+          type: string
+          description: 'Publication status type indicating whether the document is published in GoFileRoom. Possible values: "None", "Indexed", "Printed", "Scanned", "Imported".'
+          example: Indexed
+        isFailed:
+          type: boolean
+          description: Indicates whether the last operation on this item failed (e.g., upload failure, processing error).
+          example: false
+        docSecurityNoEdit:
+          type: boolean
+          description: Indicates whether the document is secured against editing. When true, the document cannot be modified.
+          example: false
+        isLocked:
+          type: boolean
+          description: Indicates whether the item is locked for editing by system or administrative restrictions.
+          example: false
+    EMMainDataTransferObjectsModelsExternalEngagementSignOffExternalDto:
+      type: object
+      description: DTO representing a sign-off record for workpaper review and approval workflow, including the sign-off type, date, and user information.
+      additionalProperties: false
+      properties:
+        typeId:
+          type: integer
+          description: The unique identifier for the sign-off type (e.g., 1 = Prepared, 2 = Reviewed, 3 = Approved).
+          format: int32
+          example: 1
+        signOffDateTime:
+          type:
+          - string
+          - 'null'
+          description: The date and time when the sign-off was performed. Null indicates the sign-off has not been completed.
+          format: date-time
+          example: '2024-11-27T10:30:00Z'
+        user:
+          description: Historical user information for the person who performed the sign-off.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsWorkPaperHistoricalUserDto'
+        setTodaysSignOffDate:
+          type: boolean
+          description: Indicates whether the sign-off date should be automatically set to today's date when saving.
+          example: false
+        timeStamp:
+          type:
+          - string
+          - 'null'
+          description: The timestamp of when the sign-off record was last modified.
+          format: date-time
+          example: '2024-11-27T10:30:00Z'
+    EMMainDataTransferObjectsModelsExternalWorkpapersEngagementBinderItemBaseExternal:
+      type: object
+      description: Base class containing common properties for engagement binder items (folders and workpapers)
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the folder or workpaper
+          format: int32
+          example: 12345
+        name:
+          type: string
+          description: The name or title of the folder or workpaper
+          example: Cash Reconciliation
+        parentFolderId:
+          type: integer
+          description: The ID of the parent folder containing this item. 0 for root-level items.
+          format: int32
+          example: 5001
+        displayOrder:
+          type: integer
+          description: The display order/sequence of this item within its parent folder
+          format: int32
+          example: 1
+        origParentFolderId:
+          type: integer
+          description: The original parent folder ID before any move operations
+          format: int32
+          example: 5001
+        isFolder:
+          type: boolean
+          description: Indicates whether this item is a folder (true) or a workpaper (false)
+          example: false
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description or additional details for the workpaper. Null for folders.
+          example: Q4 Cash Reconciliation Workpaper
+        documentId:
+          type:
+          - string
+          - 'null'
+          description: The document identifier for workpapers with associated files. Null for folders or workpapers without files.
+          example: doc_abc123
+    EMMainDataTransferObjectsModelsExternalWorkpaperExternalDto:
+      type: object
+      description: Request DTO for updating editable properties of an existing workpaper within an engagement binder.
+      additionalProperties: false
+      properties:
+        binderId:
+          type: integer
+          description: The unique identifier for the engagement binder containing this workpaper.
+          format: int32
+          example: 94
+        workpaperId:
+          type: integer
+          description: The unique identifier for the workpaper to update.
+          format: int32
+          example: 45678
+        reference:
+          type: string
+          description: The workpaper reference number or code used for identification.
+          example: A-100
+        description:
+          type: string
+          description: The descriptive name or title of the workpaper.
+          example: Cash and Cash Equivalents - Updated
+        clearWarning:
+          type: boolean
+          description: Indicates whether warnings for this workpaper should be cleared.
+          example: false
+        deleteDuringFinalize:
+          type: boolean
+          description: Indicates whether the workpaper should be deleted during engagement finalization.
+          example: false
+        rollForwardType:
+          type: string
+          description: The roll forward behavior type (Include, Exclude, or other options).
+          example: Include
+        showWarning:
+          type: boolean
+          description: Indicates whether a warning should be displayed for this workpaper.
+          example: false
+        signOffs:
+          type: array
+          description: Collection of sign-off records for review and approval workflow.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalEngagementSignOffExternalDto'
+        staffAssignment:
+          description: The user assigned to complete this workpaper.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalAssignedUserExternalDto'
+    EMMainDataTransferObjectsModelsExternalWorkpapersWorkpaperFolderStructureResponseExternalDto:
+      type: object
+      description: Response DTO representing a hierarchical folder structure for organizing workpapers within an engagement binder.
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The display name of the folder.
+          example: Financial Statements
+        id:
+          type: integer
+          description: The unique identifier for this folder.
+          format: int32
+          example: 12345
+        parentFolderId:
+          type: integer
+          description: The identifier of the parent folder. Zero (0) indicates a root-level folder.
+          format: int32
+          example: 5000
+        items:
+          type:
+          - array
+          - 'null'
+          description: Collection of child folders nested within this folder. Returns null if no child folders exist.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersWorkpaperFolderStructureResponseExternalDto'
+    EMMainDataTransferObjectsModelsExternalWorkpapersAddWorkpaperResponseExternalDto:
+      type: object
+      description: Response DTO returned after successfully adding a workpaper to an engagement binder.
+      additionalProperties: false
+      properties:
+        reference:
+          type: string
+          description: The workpaper reference number or code assigned to the newly created workpaper.
+          example: A-100
+        description:
+          type: string
+          description: The descriptive name or title of the newly created workpaper.
+          example: Cash and Cash Equivalents
+        fileSystemDocumentId:
+          type: string
+          description: The unique identifier for the document in the file storage system.
+          example: doc_67890
+        workpaperId:
+          type: integer
+          description: The unique identifier assigned to the newly created workpaper.
+          format: int32
+          example: 45678
+    EmMainExtensionsEnumerationsGfrDocumentStatusType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - None
+      - Indexed
+      - Printed
+      - Scanned
+      - Imported
+      - Uploaded
+      - Filed
+      - Barcoded
+      - HasDocumentId
+      - Merged
+      - MergeDelete
+      - Reviewed
+      - TaxSorted
+      - Locked
+      - CheckedOut
+      - DistributionApproved
+      - InTaxSortQueue
+      - Archived
+      - Published
+      - Deleted
+      - LocalFile
+      - Viewed
+      - ReIndexed
+      - Added
+      - Verified
+      - Searched
+      - CopiedToLaptop
+      - Edited
+      - Saved
+      - ChangesUndone
+      - UnLocked
+      - Exported
+      - UnPublished
+      - UnArchived
+      - Restored
+      - PdfCommentsSynchronized
+      - DistributionUnapproved
+      - Emailed
+      - DocumentBeforeRedaction
+      - DocumentAfterRedaction
+      - RedactionFailed
+      - EFaxed
+      - Signed
+      - ReAssigned
+      - FileNameChangedByCompression
+      - FileNameChangedByOcr
+      - FileNameChangedByUserEditOrUpload
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+      - 45
+      - 46
+    EMMainDataTransferObjectsModelsWorkPaperEngagementItemStatusPropertyDto:
+      type: object
+      description: Status information for a workpaper or engagement item including checkout status, modification history, and publication state.
+      additionalProperties: false
+      properties:
+        checkedOutUserName:
+          type: string
+          description: Name of the user who has checked out this item. Empty string if the item is not checked out.
+          example: John Smith
+        checkedOutUserId:
+          type:
+          - string
+          - 'null'
+          description: The user ID of the person that last opened this document for editing when that use has not saved and closed the document yet.
+          example: USER-5841
+        checkedOutDate:
+          type:
+          - string
+          - 'null'
+          description: 'The date when a workpaper was opened for editing when it has not been saved and closed yet. '
+          format: date-time
+          example: '2024-03-15T10:30:00Z'
+        lastModifiedUserName:
+          type: string
+          description: Gives the user name of the last user to edit the document.
+          example: Jane Doe
+        lastModifiedDate:
+          type:
+          - string
+          - 'null'
+          description: Date and time when the item was last modified. Null if the item has never been modified.
+          format: date-time
+          example: '2024-03-15T14:45:00Z'
+        docStatusType:
+          description: 'Enumerated document status type indicating the current state of the document in GoFileRoom. Possible values: 0 = None, 1 = Indexed, 2 = Printed, 3 = Scanned, 4 = Imported.'
+          example: 1
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsEnumerationsGfrDocumentStatusType'
+        publishStatusType:
+          description: 'Enumerated publication status type indicating whether the document is published in GoFileRoom. Possible values: 0 = None, 1 = Indexed, 2 = Printed, 3 = Scanned, 4 = Imported.'
+          example: 1
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsEnumerationsGfrDocumentStatusType'
+        isFailed:
+          type: boolean
+          description: Indicates whether the last operation on this item failed (e.g., upload failure, processing error).
+          example: false
+        docSecurityNoEdit:
+          type: boolean
+          description: Indicates if the current document is allowed to be opened for editing by the current user. .
+          example: false
+        isLocked:
+          type: boolean
+          description: Indicates whether the item is locked for editing by system or administrative restrictions.
+          example: false
+    EMMainDataTransferObjectsModelsExternalAssignedUserExternalDto:
+      type: object
+      description: Represents a user assigned to a workpaper with their login credentials.
+      additionalProperties: false
+      properties:
+        loginName:
+          type: string
+          description: The login name (email address) of the user assigned to the workpaper.
+          example: john.doe@company.com
+    EmMainExtensionsUtilityErrorExtensions:
+      type: object
+      description: 'Provides extended metadata and diagnostic information for error responses.
+
+        Includes status codes, error codes, timestamps, and distributed tracing identifiers.'
+      additionalProperties: false
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code (e.g., 400, 401, 403, 500)
+          format: int32
+          example: 401
+        code:
+          type: string
+          description: Application-specific error code for programmatic handling
+          example: ERR_AUTH_4010
+        errorId:
+          type: string
+          description: Unique identifier (GUID) for this error occurrence. Use this when reporting issues to support.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        dateTime:
+          type: string
+          description: ISO 8601 timestamp (UTC) when the error occurred
+          example: '2024-03-15T14:30:00Z'
+        traceId:
+          type: string
+          description: Distributed trace ID for correlating requests across microservices (W3C Trace Context format)
+          example: a1b2c3d4e5f67890abcdef1234567890
+        spanId:
+          type: string
+          description: Span ID for this specific operation within the distributed trace (W3C Trace Context format)
+          example: 358611c48f91f940
+    EMMainDataTransferObjectsModelsExternalWorkpapersMoveItemsExternalDto:
+      type: object
+      description: Request DTO for moving workpapers and/or folders to a different location within an engagement binder.
+      additionalProperties: false
+      properties:
+        engagementId:
+          type: integer
+          description: The unique identifier of the engagement binder containing the items to move.
+          format: int32
+          example: 94
+        workpaperIds:
+          type: array
+          description: List of workpaper IDs to move. Can be empty if only moving folders.
+          items:
+            type: integer
+            format: int32
+        displayOrderIndex:
+          type: integer
+          description: The display order/position where the items should be placed in the destination folder. 0 indicates the first position.
+          format: int32
+          example: 0
+        destFolderId:
+          type:
+          - integer
+          - 'null'
+          description: The ID of the destination folder where items should be moved. Null indicates moving to the root level.
+          format: int32
+          example: 5001
+        folderIds:
+          type: array
+          description: List of folder IDs to move. Can be empty if only moving workpapers.
+          items:
+            type: integer
+            format: int32
+    EmMainExtensionsUtilityErrorDetail:
+      type: object
+      description: Represents detailed information about a specific error that occurred during API request processing.
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          description: Gets or sets the human-readable error message describing what went wrong.
+          example: '"Unauthorized access."
+
+            "Bad request due to invalid input."
+
+            "Resource not found."
+
+            "An unexpected error occurred."'
+        extensions:
+          description: Gets or sets the extended error metadata containing additional diagnostic information.
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsUtilityErrorExtensions'
+    EMMainDataTransferObjectsModelsExternalEngagementBinderItemResultExternal:
+      type: object
+      description: Response wrapper containing the complete hierarchical tree structure of folders and workpapers within an engagement binder.
+      additionalProperties: false
+      properties:
+        binderId:
+          type: integer
+          description: The unique identifier for the engagement binder.
+          format: int32
+          example: 94
+        items:
+          type: array
+          description: Collection of root-level folders and workpapers in the engagement binder's tree structure.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalEngagementEngagementBinderItemExternal'
+    EMMainDataTransferObjectsModelsWorkPaperHistoricalUserDto:
+      type: object
+      additionalProperties: false
+      properties:
+        historicalUserId:
+          type: integer
+          description: The historic user's ID
+          format: int32
+        historicalUserName:
+          type:
+          - string
+          - 'null'
+          description: The historic user name to display
+        historicalUserInitials:
+          type:
+          - string
+          - 'null'
+          description: The historic user initial to display
+    EMMainDataTransferObjectsModelsExternalWorkpapersWorkPaperSignOffExternalRequest:
+      type: object
+      description: Request DTO for saving or updating sign-off information for one or more workpapers within an engagement binder.
+      additionalProperties: false
+      properties:
+        engagementId:
+          type: integer
+          description: The unique identifier for the engagement binder containing the workpapers to sign off.
+          format: int32
+          example: 94
+        workpaperIds:
+          type: array
+          description: List of workpaper identifiers to which the sign-off will be applied.
+          items:
+            type: integer
+            format: int32
+        signOff:
+          description: The sign-off information to save, including the sign-off type name and date.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersSignOffExternal'
+    EMMainDataTransferObjectsModelsEngagementSignOffType:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          title: Name
+          type: string
+          description: The name of this sign-off type
+          maxLength: 50
+          minLength: 0
+        isSystemType:
+          type: boolean
+          description: Indicates whether this sign-off type is a system type
+        isEnabled:
+          type: boolean
+          description: Indicates whether this sign-off type is enabled
+        displayOrder:
+          type: integer
+          description: The order Id of this sign-off type
+          format: int32
+        ignoreWarningSign:
+          type: boolean
+    EMMainDataTransferObjectsModelsExternalWorkpapersSignOffExternal:
+      type: object
+      description: DTO representing sign-off data for workpaper review and approval workflow.
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The name or type of the sign-off (e.g., "Prepared", "Reviewed", "Approved").
+          example: Prepared
+        signedOffDate:
+          type:
+          - string
+          - 'null'
+          description: The date and time when the sign-off was performed. Null indicates the sign-off has not been completed.
+          format: date-time
+          example: '2024-11-27T10:30:00Z'
+    EMMainDataTransferObjectsModelsExternalWorkpapersAddWorkpaperExternalMainRequest:
+      allOf:
+      - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersAddWorkpaperRequestExternalDto'
+      - type: object
+        description: Request DTO for adding a new workpaper with file metadata, extending the base workpaper request with file-specific properties.
+        additionalProperties: false
+        properties:
+          fileType:
+            type: string
+            description: The MIME type or file extension of the workpaper file (e.g., "application/pdf", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx", ".pdf").
+            example: application/pdf
+          fileSize:
+            type: integer
+            description: The size of the workpaper file in bytes.
+            format: int32
+            example: 2048576
+    EMMainDataTransferObjectsModelsExternalWorkpapersExternalWorkpaperUploadFormDataRequest:
+      type: object
+      description: 'Request DTO for uploading a workpaper file with metadata using multipart/form-data encoding.
+
+        Each metadata field is submitted as an individual form field alongside the file.'
+      additionalProperties: false
+      required:
+      - description
+      - file
+      properties:
+        file:
+          type: string
+          description: The workpaper file to upload. Supported formats include Excel (.xlsx, .xls), Word (.docx, .doc), PDF (.pdf), and other document types.
+          format: binary
+        engagementId:
+          type: integer
+          description: The unique identifier for the engagement binder where the workpaper will be added.
+          format: int32
+          example: 94
+          exclusiveMinimum: 0
+        reference:
+          type: string
+          description: The workpaper reference number or code used for identification.
+          example: A-100
+        description:
+          type: string
+          description: The descriptive name or title of the workpaper. This field is required.
+          minLength: 1
+          example: Cash and Cash Equivalents
+        assignedLoginId:
+          type:
+          - integer
+          - 'null'
+          description: The login identifier of the user assigned to complete this workpaper. Null indicates no assignment.
+          format: int32
+          example: 1234
+        rollForwardType:
+          type:
+          - string
+          - 'null'
+          description: The roll forward behavior type for future engagement periods. Defaults to "Include" if not specified.
+          example: Include
+        deleteDuringFinalize:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the workpaper should be deleted during engagement finalization. Null uses default behavior.
+          example: false
+        folderId:
+          type:
+          - integer
+          - 'null'
+          description: The unique identifier for the destination folder within the binder. Null indicates the root level.
+          format: int32
+          example: 12345
+        documentId:
+          type: string
+          description: The document identifier if linking to an existing document in the file system.
+          example: 0000008DK9
+    EMMainDataTransferObjectsModelsEMEngagementBinderItemBase:
+      type: object
+      description: Base class representing an item (folder or document/workpaper) within an engagement binder's hierarchical structure. This class provides common properties for both folders and documents in the binder tree.
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for this binder item (folder or document).
+          format: int32
+          example: 12345
+        name:
+          type: string
+          description: The display name of the folder or document within the binder hierarchy.
+          example: Tax Workpapers
+        notesCount:
+          type: integer
+          description: The number of notes or annotations attached to this item. Used for displaying note indicators in the UI.
+          format: int32
+          example: 3
+        parentFolderId:
+          type: integer
+          description: The identifier of the parent folder containing this item. Use 0 or -1 for root-level items.
+          format: int32
+          example: 100
+        displayOrder:
+          type: integer
+          description: The sort order of this item within its parent folder. Lower numbers appear first in the display.
+          format: int32
+          example: 1
+        origParentFolderId:
+          type: integer
+          description: The original parent folder identifier before any move operations. Used for tracking item history and supporting undo operations.
+          format: int32
+          example: 100
+        isFolder:
+          type: boolean
+          description: Indicates whether this item is a folder (true) or a document/workpaper (false). Used to determine how to render and interact with the item.
+          example: true
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description or notes about this folder or document. Null when not provided.
+          example: Contains all supporting schedules for the tax return
+        docSecurityNoEdit:
+          type:
+          - boolean
+          - 'null'
+          description: Optional security flag indicating whether this document is read-only and cannot be edited. True means editing is disabled. Null when not applicable (e.g., for folders).
+          example: true
+        documentId:
+          type:
+          - string
+          - 'null'
+          description: Optional GoFileRoom document identifier for this item. Only populated for documents/workpapers, not folders. Used for document management operations like checkout, upload, and download.
+          example: GFR-DOC-789456
+    EmMainExtensionsUtilityErrorResponse:
+      type: object
+      description: 'Represents a standardized error response structure for API errors.
+
+        Contains a collection of detailed error information.'
+      example:
+        errors:
+        - message: Unauthorized access.
+          extensions:
+            statusCode: 401
+            code: ERR_AUTH_4010
+            errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+            dateTime: '2024-03-15T14:30:00Z'
+            traceId: a1b2c3d4e5f67890abcdef1234567890
+            spanId: 358611c48f91f940
+      additionalProperties: false
+      properties:
+        errors:
+          type: array
+          description: Collection of detailed error information
+          items:
+            $ref: '#/components/schemas/EmMainExtensionsUtilityErrorDetail'
+    EMMainDataTransferObjectsModelsExternalWorkpapersEngagementBinderItemForMoveExternal:
+      allOf:
+      - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersEngagementBinderItemBaseExternal'
+      - type: object
+        description: Represents a folder or workpaper item within an engagement binder for move operations
+        additionalProperties: false
+        properties:
+          items:
+            type: array
+            description: Nested child items (subfolders or workpapers) within this folder. Null if this is a workpaper or empty folder.
+            items:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalWorkpapersEngagementBinderItemForMoveExternal'
+          isRecycleBin:
+            type:
+            - boolean
+            - 'null'
+            description: Indicates whether this item is the recycle bin folder. Null for regular items.
+            example: false
+    EMMainDataTransferObjectsModelsExternalWorkpapersAddWorkpaperRequestExternalDto:
+      type: object
+      description: Request DTO for adding a new workpaper with metadata to an engagement binder.
+      additionalProperties: false
+      required:
+      - description
+      - engagementId
+      properties:
+        engagementId:
+          type: integer
+          description: The unique identifier for the engagement binder where the workpaper will be added.
+          format: int32
+          example: 94
+          exclusiveMinimum: 0
+        reference:
+          type: string
+          description: The workpaper reference number or code used for identification.
+          maxLength: 25
+          minLength: 0
+          example: A-100
+        description:
+          type: string
+          description: The descriptive name or title of the workpaper. This field is required.
+          maxLength: 255
+          minLength: 1
+          example: Cash and Cash Equivalents
+        assignedLoginId:
+          type:
+          - integer
+          - 'null'
+          description: The login identifier of the user assigned to complete this workpaper. Null indicates no assignment.
+          format: int32
+          example: 1234
+        rollForwardType:
+          type:
+          - string
+          - 'null'
+          description: The roll forward behavior type for future engagement periods. Defaults to "Include" if not specified.
+          example: Include
+        deleteDuringFinalize:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the workpaper should be deleted during engagement finalization. Null uses default behavior.
+          example: false
+        folderId:
+          type:
+          - integer
+          - 'null'
+          description: The unique identifier for the destination folder within the binder. Null indicates the root level.
+          format: int32
+          example: 12345
+        documentId:
+          type: string
+          description: The document identifier if linking to an existing document in the file system.
+          example: 0000008DK9
+    EMMainDataTransferObjectsModelsExternalWorkpapersLoadWorkpaperPropertiesExternalDto:
+      type: object
+      description: Response DTO containing all properties and metadata for a workpaper within an engagement binder.
+      additionalProperties: false
+      properties:
+        reference:
+          type: string
+          description: The workpaper reference number or code used for identification.
+          example: A-100
+        description:
+          type: string
+          description: The descriptive name or title of the workpaper.
+          example: Cash and Cash Equivalents
+        documentType:
+          type: string
+          description: The type of document (e.g., Excel, Word, PDF).
+          example: Excel
+        workPaperType:
+          type: string
+          description: The classification of the workpaper type.
+          example: Standard
+        reportId:
+          type: integer
+          description: The identifier for associated report. Zero indicates no associated report.
+          format: int32
+          example: 0
+        fileSystemDocumentId:
+          type: string
+          description: The unique identifier for the document in the file storage system.
+          example: doc_67890
+        fileType:
+          type: string
+          description: The file extension of the workpaper document.
+          example: .xlsx
+        signOffs:
+          type: array
+          description: Collection of sign-off records for review and approval workflow.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalEngagementSignOffExternalDto'
+        staffAssignment:
+          description: The user assigned to complete this workpaper.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalAssignedUserExternalDto'
+        binderId:
+          type: integer
+          description: The unique identifier for the engagement binder containing this workpaper.
+          format: int32
+          example: 94
+        isUploading:
+          type: boolean
+          description: Indicates whether the workpaper is currently being uploaded.
+          example: false
+        uploadGuid:
+          type: string
+          description: The unique identifier for tracking the upload process.
+          format: guid
+          example: 00000000-0000-0000-0000-000000000000
+        isFailed:
+          type: boolean
+          description: Indicates whether the workpaper upload or processing has failed.
+          example: false
+        isSmartDocument:
+          type: boolean
+          description: Indicates whether this is a Smart document integrated with external systems.
+          example: false
+        isCpeWorkpaper:
+          type: boolean
+          description: Indicates whether this workpaper is a CPE (Continuing Professional Education) practice aid.
+          example: false
+        cpePresentationType:
+          type: integer
+          description: The CPE presentation type identifier.
+          format: int32
+          example: 0
+        cpeRollforwardOption:
+          type: integer
+          description: The CPE roll forward option identifier.
+          format: int32
+          example: 0
+        cpePracticeAidId:
+          type: string
+          description: The unique identifier for the CPE practice aid.
+          example: ''
+        isSmartDocumentEnabled:
+          type: boolean
+          description: Indicates whether Smart document integration is enabled for this workpaper.
+          example: true
+        nonGfrEngagementItemStatusType:
+          type: string
+          description: The status type for non-GFR (GoFileRoom) engagement items.
+          example: Available
+        fileSourceInfo:
+          type: string
+          description: Information about the source of the file.
+          example: ''
+        placeholderId:
+          type: integer
+          description: The identifier for a placeholder workpaper. Zero indicates not a placeholder.
+          format: int32
+          example: 0
+        rollForwardType:
+          type: string
+          description: The roll forward behavior type (Include, Exclude, or other options).
+          example: Include
+        deleteDuringFinalize:
+          type: boolean
+          description: Indicates whether the workpaper should be deleted during engagement finalization.
+          example: false
+        statusProperty:
+          description: Status information including checkout, modification, and publication details.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsWorkPaperEngagementItemStatusPropertyDto'
+        clearWarning:
+          type: boolean
+          description: Indicates whether warnings for this workpaper should be cleared.
+          example: false
+        clearWarningTimeStamp:
+          type: string
+          description: The timestamp when the warning was cleared.
+          format: date-time
+          example: '0001-01-01T00:00:00'
+        showWarning:
+          type: boolean
+          description: Indicates whether a warning should be displayed for this workpaper.
+          example: false
+        customExcelOptionId:
+          type: integer
+          description: The identifier for custom Excel options applied to this workpaper.
+          format: int32
+          example: 0
+        jeReference:
+          type: string
+          description: The reference to an associated journal entry.
+          example: ''
+        copySignOff:
+          type: boolean
+          description: Indicates whether sign-offs should be copied during roll forward operations.
+          example: false
+        workpaperId:
+          type: integer
+          description: The unique identifier for this workpaper.
+          format: int32
+          example: 45678
+        name:
+          type: string
+          description: The file name of the workpaper document.
+          example: A-100 Cash and Cash Equivalents.xlsx
+        notesCount:
+          type: integer
+          description: The count of notes or comments attached to this workpaper.
+          format: int32
+          example: 0
+        parentFolderId:
+          type: integer
+          description: The identifier of the parent folder containing this workpaper.
+          format: int32
+          example: 12345
+        displayOrder:
+          type: integer
+          description: The sort order position within the parent folder.
+          format: int32
+          example: 1
+        origParentFolderId:
+          type: integer
+          description: The original parent folder identifier before any move operations.
+          format: int32
+          example: 12345
+        isFolder:
+          type: boolean
+          description: Indicates whether this item is a folder (true) or a workpaper document (false).
+          example: false
+    EMMainDataTransferObjectsModelsExternalWorkpapersMoveWorkpaperExternalRequestDto:
+      type: object
+      description: Request DTO for moving one or more workpapers to the recycle bin within an engagement binder.
+      additionalProperties: false
+      properties:
+        engagementId:
+          type: integer
+          description: The unique identifier for the engagement binder containing the workpapers to move.
+          format: int32
+          example: 94
+        workpaperIds:
+          type: array
+          description: List of workpaper identifiers to move to the recycle bin.
+          items:
+            type: integer
+            format: int32
+    EMMainDataTransferObjectsModelsExternalEngagementEngagementBinderItemExternal:
+      allOf:
+      - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsEMEngagementBinderItemBase'
+      - type: object
+        description: Response DTO representing a single item (folder or workpaper) within an engagement binder's hierarchical tree structure.
+        additionalProperties: false
+        properties:
+          documentType:
+            type:
+            - string
+            - 'null'
+            description: The type of document (e.g., "Excel", "Word", "PDF"). Null for folders.
+            example: Excel
+          isCheckedOut:
+            type:
+            - boolean
+            - 'null'
+            description: Indicates whether the workpaper is currently checked out by a user. Null for folders.
+            example: false
+          isDeleted:
+            type:
+            - boolean
+            - 'null'
+            description: Indicates whether the item is in the recycle bin (soft deleted). Omitted if false.
+            example: false
+          isLocked:
+            type:
+            - boolean
+            - 'null'
+            description: Indicates whether the item is locked for editing. Omitted if false.
+            example: false
+          isPublished:
+            type:
+            - boolean
+            - 'null'
+            description: Indicates whether the workpaper has been published. Omitted if false. Null for folders.
+            example: true
+          items:
+            type:
+            - array
+            - 'null'
+            description: Collection of child items (subfolders and workpapers) nested within this folder. Null if no children exist or if this is a workpaper.
+            items:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalEngagementEngagementBinderItemExternal'
+          isRecycleBin:
+            type:
+            - boolean
+            - 'null'
+            description: Indicates whether this folder is the recycle bin. Omitted if false.
+            example: false
+          statusProperty:
+            description: Detailed status information including checkout, modification, and publication details. Omitted if not applicable.
+            oneOf:
+            - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalEngagementEngagementItemStatusPropertyExternal'
+          statusType:
+            type:
+            - string
+            - 'null'
+            description: The status type of the item (e.g., "Available", "CheckedOut"). Omitted if not applicable.
+            example: Available
+          showWarning:
+            type:
+            - boolean
+            - 'null'
+            description: Indicates whether a warning should be displayed for this item. Omitted if false.
+            example: false
+          isPlaceholder:
+            type: boolean
+            description: Indicates whether this item is a placeholder workpaper awaiting content upload.
+            example: false
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: Please enter a valid token(M2M or GFR)
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-engagement-manager-openapi.json
+- thomson-reuters-engagement-manager-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,509 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters System Resource API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged System Resource across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: System Resource
+paths:
+  /{version}/configuration/filetypefunctions:
+    get:
+      tags:
+      - System Resource
+      summary: Check filetype functions
+      description: 'API method to check if the file type is supported for a specific functionality. For example if a file type is supported by online viewer or not. The client will send a single file extension in query string for which it wants to find the available functions, and in response Collaborate will respond with available functions for that filetype.
+
+
+        Confirmations and assumptions
+
+        Access rights of this API has been given a value of "ACCESS_ALL", which means everyone with a valid account can access this method.
+
+
+        Filetype parameter is a required parameter.
+
+        If blank filetype query parameter is supplied then an error message will be returned.
+
+        A error message is displayed If filetype query param contains any of the following characters \ / ? : * " > < | .
+
+        If the filetype is not present in the Collaborate system and the filetype is controlled in Collaborate using a block list. If the requested filetype is not present in the black list then default values will be returned for this filetype.
+
+        An error message is returned if the requested filetype parameter has a length greater than 50 characters.
+
+
+        "allowed" tag in the response XML determines if file of that type can be added to the system or not. A value of 0 means that a file with the specific extension cannot be inserted in the system and 1 means it can be inserted into the system.'
+      operationId: getSupportedFileTypeInfoByFileType
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: filetype
+        in: query
+        description: Provide the file extension for which the details are required
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Response successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/configuration'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/configuration'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting filetypes
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/configuration/basicdetails:
+    get:
+      tags:
+      - System Resource
+      summary: Get Instance details
+      description: 'This api method can be used to get basic details of a Collaborate Instance
+
+        Sample request URL : https://domain.com/instancename/api/1/configuration/basicdetails
+
+        Assumptions :
+
+        No credentials required to call this api method (Change introduced in 3.4.5)'
+      operationId: getInstanceDetails
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Response successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/configuration'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/configuration'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting basicdetail
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/configuration/supportedfiletypes:
+    get:
+      tags:
+      - System Resource
+      summary: Supported fileTypes info
+      description: 'This api method helps to obtain information about blacklist/whitelist filetypes of Instance
+
+        Sample request URL : https://domain.com/instancename/api/1/ configuration/supportedfiletypes
+
+        Assumptions :
+
+        Any system user can call this API If matched extension not found in system then only tag is display for that filetype'
+      operationId: getSupportedfiletypesInfo
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: Response successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/configuration'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/configuration'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting filetypes
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/appliance/audit:
+    post:
+      tags:
+      - System Resource
+      operationId: insertApplianceAudit
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appidentifier
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplianceInfoDBO'
+      summary: Insert appliance audit
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/microservice/authorize:
+    get:
+      tags:
+      - System Resource
+      operationId: authorizeMicroService
+      parameters:
+      - name: appname
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: microServiceTypeAlias
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: clientID
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: microServiceID
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: secretKey
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: microServiceAppName
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Authorize micro service
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/apiapplication:
+    get:
+      tags:
+      - System Resource
+      operationId: getAPIAppInfoByAppIdentifier
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appidentifier
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: apptype
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: resourcetype
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Get API app info by app identifier
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    ApplianceConnectorSchedulerInfoDBO:
+      type: object
+      properties:
+        schedulerid:
+          type: string
+        schedulertype:
+          type: string
+        schedulername:
+          type: string
+        schedulerfrequency:
+          type: string
+        lastrundate:
+          type: string
+        entitiesprocessed:
+          type: string
+        message:
+          type: string
+      xml:
+        name: scheduler
+    configuration:
+      type: object
+      properties:
+        listtype:
+          type: string
+        filetypes:
+          $ref: '#/components/schemas/FileTypes'
+        basicdetails:
+          $ref: '#/components/schemas/BasicDetails'
+      xml:
+        name: configuration
+    ApplianceConnectors:
+      type: object
+      properties:
+        connector:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplianceConnectorInfoDBO'
+      xml:
+        name: connectors
+    ApplianceConnectorInfoDBO:
+      type: object
+      properties:
+        connectorid:
+          type: string
+        connectorname:
+          type: string
+        connectortype:
+          type: string
+        connectorlastactivitydate:
+          type: string
+        connectorlastactivitycount:
+          type: string
+        createddate:
+          type: string
+        schedulers:
+          $ref: '#/components/schemas/ApplianceSchedulers'
+        dueDate:
+          type: boolean
+        id:
+          type: integer
+          format: int32
+      xml:
+        name: connectors
+    BasicDetails:
+      type: object
+      properties:
+        clientname:
+          type: string
+        productname:
+          type: string
+        clientandproductname:
+          type: string
+        clientsupportemail:
+          type: string
+        version:
+          type: string
+        timezone:
+          $ref: '#/components/schemas/Timezone'
+        instanceid:
+          type: string
+      xml:
+        name: basicdetails
+    FileTypes:
+      type: object
+      properties:
+        filetype:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileType'
+      xml:
+        name: filetypes
+    FileType:
+      type: object
+      properties:
+        type:
+          type: string
+        typeicon:
+          type: string
+        typedesc:
+          type: string
+        onlineviewersupport:
+          type: integer
+          format: int32
+        preconvertbeforeviewer:
+          type: integer
+          format: int32
+        converttopdf:
+          type: integer
+          format: int32
+        ocrsupport:
+          type: integer
+          format: int32
+        editwithwebdav:
+          type: integer
+          format: int32
+        displayname:
+          type: string
+        allowed:
+          type: integer
+          format: int32
+      xml:
+        name: filetype
+    ApplianceInfoDBO:
+      type: object
+      properties:
+        applianceid:
+          type: string
+        appliancename:
+          type: string
+        applianceversion:
+          type: string
+        applianceurl:
+          type: string
+        status:
+          type: integer
+          format: int32
+        dueDate:
+          type: boolean
+        connectors:
+          $ref: '#/components/schemas/ApplianceConnectors'
+        id:
+          type: integer
+          format: int32
+        lastconnectiontime:
+          type: string
+        appliancebuilddetails:
+          type: string
+      xml:
+        name: appliance
+    Timezone:
+      type: object
+      properties:
+        id:
+          type: string
+        displayname:
+          type: string
+        difference:
+          type: string
+      xml:
+        name: timezone
+    ApplianceSchedulers:
+      type: object
+      properties:
+        scheduler:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplianceConnectorSchedulerInfoDBO'
+      xml:
+        name: schedulers
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

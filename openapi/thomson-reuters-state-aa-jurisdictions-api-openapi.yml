@@ -1,0 +1,136 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts State AA Jurisdictions API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: State AA Jurisdictions
+paths:
+  /v2/years/{year}/state-aa-without-partnership-jurisdictions:
+    get:
+      tags:
+      - State AA Jurisdictions
+      summary: Returns the StateAA without partnership jurisdictions
+      operationId: V2YearsByYearStateAAWithoutPartnershipJurisdictionsGet
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAAJurisdictions'
+              examples:
+                state-aa-with-out-partnership-jurisdictions:
+                  $ref: '#/components/examples/state-aa-jurisdictions'
+        '204':
+          description: No data found for given inputs.
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+  /v1/years/{year}/state-aa-with-partnership-jurisdictions:
+    get:
+      tags:
+      - State AA Jurisdictions
+      summary: Returns the StateAA with partnership jurisdictions
+      operationId: V1YearsByYearStateAAWithPartnershipJurisdictionsGet
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateAAJurisdictions'
+              examples:
+                state-aa-with-partnership-jurisdictions:
+                  $ref: '#/components/examples/state-aa-jurisdictions'
+        '204':
+          description: No data found for given inputs.
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+components:
+  schemas:
+    StateAAJurisdictions:
+      type: array
+      items:
+        $ref: '#/components/schemas/StateAAJurisdiction'
+    StateAAJurisdiction:
+      type: object
+      properties:
+        jurisdictionCode:
+          type: string
+        name:
+          type: string
+  examples:
+    state-aa-jurisdictions:
+      value:
+      - jurisdictionCode: AL
+        name: Alabama
+      - jurisdictionCode: AK
+        name: Alaska
+      - jurisdictionCode: AZ
+        name: Arizona
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

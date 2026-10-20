@@ -1,0 +1,197 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Options and Overrides API
+  version: '1.0'
+  description: 'Operations tagged Options and Overrides across 2 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-administration-openapi.json, thomson-reuters-onesource-trust-tax-administration-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax/administration
+security:
+- bearerAuth: []
+tags:
+- name: Options and Overrides
+paths:
+  /v1/pans/{pan}/options:
+    get:
+      tags:
+      - Options and Overrides
+      summary: Returns Options and Overrides data for the particular PAN
+      description: Allows authenticated users to access the Options and Overrides data by specific PAN for a Client
+      operationId: AllowsAuthenticatedUsersToAccessTheOptionsAndOverridesDataBySpecificPANForAClient
+      parameters:
+      - name: pan
+        in: path
+        description: ''
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: ''
+      - name: $select
+        in: query
+        description: Limits the properties returned in the result.
+        schema:
+          type: string
+      - name: $expand
+        in: query
+        description: Indicates the related entities to be represented inline. The maximum depth is 2.
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: 'Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.'
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Specifies the order in which items are returned. The maximum number of expressions is 5.
+        schema:
+          type: string
+      - name: $top
+        in: query
+        description: Limits the number of items returned from a collection.
+        schema:
+          type: integer
+          format: int32
+      - name: $skip
+        in: query
+        description: Excludes the specified number of items of the queried collection from the result.
+        schema:
+          type: integer
+          format: int32
+      - name: $count
+        in: query
+        description: Indicates whether the total count of items within a collection are returned in the result.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Option'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Allows authenticated users to access the Options and Overrides data by specific PAN for a Client
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax/administration
+components:
+  schemas:
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+    Option:
+      type: object
+      properties:
+        pan:
+          type:
+          - string
+          - 'null'
+          description: Product Access Number
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description
+        category:
+          type:
+          - string
+          - 'null'
+          description: Category
+        overridden:
+          type:
+          - string
+          - 'null'
+          description: Overridden
+        value:
+          type:
+          - string
+          - 'null'
+          description: Text or Dropdown Value
+        updated_date:
+          type:
+          - string
+          - 'null'
+          description: Updated Date
+          format: date-time
+        updated_by:
+          type:
+          - string
+          - 'null'
+          description: Updated By
+        level:
+          type:
+          - string
+          - 'null'
+          description: Level
+        group_field:
+          type:
+          - string
+          - 'null'
+          description: Group by Field
+        group_value:
+          type:
+          - string
+          - 'null'
+          description: Group by Value
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-administration-openapi.json
+- thomson-reuters-onesource-trust-tax-administration-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

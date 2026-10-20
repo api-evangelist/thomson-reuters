@@ -1,0 +1,27 @@
+generated: '2026-10-20'
+method: searched
+source: https://developers.thomsonreuters.com/pages/api-catalog
+auth:
+  style: OAuth 2.0 client credentials / bearer JWT per product (ONESOURCE Authorization API issues tokens); some legacy SOAP APIs use Basic Authentication
+  see: authentication/thomson-reuters-authentication.yml
+idempotency:
+  coverage: none
+  note: No Idempotency-Key header or replay-protection mechanism is documented across the portal's API documentation or the 130 published OpenAPI documents.
+pagination:
+  note: Varies by API; ONESOURCE Indirect Tax documents searchAfter / cursor pagination ("Using searchAfter and cursor functionality").
+  evidence: https://developers.thomsonreuters.com/pages/api-catalog/50172ee5-942f-50ae-811b-375594ba9120
+versioning:
+  see: lifecycle/thomson-reuters-lifecycle.yml
+rate_limit_signaling:
+  status_code: 429
+  see: rate-limits/thomson-reuters-rate-limits.yml
+reversibility:
+  status: documented
+  surfaces:
+    - surface: ONESOURCE Indirect Tax Determination (committed tax documents)
+      reversal: POST /v1/reverse
+      operationId: null
+      text: "Reverse: Facilitates the reversal of a persisted document in the Audit Database."
+      window: null
+      evidence: https://developers.thomsonreuters.com/pages/api-catalog/50172ee5-942f-50ae-811b-375594ba9120
+  note: No reversal window is stated.

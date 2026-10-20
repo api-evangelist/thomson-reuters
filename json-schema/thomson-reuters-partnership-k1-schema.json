@@ -1,0 +1,4744 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-partnership-k1-schema.json",
+  "title": "PartnershipK1",
+  "description": "Schedule K1 Information.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-onesource-trust-tax-services-v2-openapi.yml#/components/schemas/PartnershipK1",
+  "type": "object",
+  "properties": {
+    "yrseq": {
+      "type": "integer",
+      "description": "Tax Year.",
+      "format": "int32"
+    },
+    "pan": {
+      "maxLength": 4,
+      "minLength": 4,
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Product Access Number."
+    },
+    "acctno": {
+      "maxLength": 20,
+      "minLength": 1,
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Trust Number."
+    },
+    "assetid": {
+      "maxLength": 12,
+      "minLength": 1,
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "AssetId."
+    },
+    "partI": {
+      "$ref": "#/$defs/Partnership.PartI"
+    },
+    "partII": {
+      "$ref": "#/$defs/Partnership.PartII"
+    },
+    "partIII": {
+      "$ref": "#/$defs/Partnership.PartIII"
+    },
+    "section_199A_qualified_business_income": {
+      "$ref": "#/$defs/Partnership.QualifiedBusinessIncome"
+    },
+    "other_income": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/Partnership.OtherDetails"
+      },
+      "description": "Current Year Other Income (loss) detail."
+    },
+    "foreign_taxes": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/Partnership.ForeignTax"
+      },
+      "description": "Current Year Foreign Taxes."
+    },
+    "suspended_losses": {
+      "$ref": "#/$defs/Partnership.SuspendedLossesInfo"
+    },
+    "other_state_specific_income": {
+      "$ref": "#/$defs/Partnership.ResidentStateOtherInfo"
+    },
+    "schedule_k3": {
+      "$ref": "#/$defs/Partnership.ForeignTaxK3"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "ChangeType": {
+      "enum": [
+        "Add",
+        "Update",
+        "Delete"
+      ],
+      "type": "string",
+      "description": "A type of a change."
+    },
+    "CountryCodes": {
+      "enum": [
+        "US",
+        "AF",
+        "AX",
+        "AL",
+        "AG",
+        "AQ",
+        "AN",
+        "AO",
+        "AV",
+        "AY",
+        "AC",
+        "AR",
+        "AM",
+        "AA",
+        "AT",
+        "AS",
+        "AU",
+        "AJ",
+        "BF",
+        "BA",
+        "FQ",
+        "BG",
+        "BB",
+        "BO",
+        "BE",
+        "BH",
+        "BN",
+        "BD",
+        "BT",
+        "BL",
+        "BK",
+        "BC",
+        "BV",
+        "BR",
+        "IO",
+        "BX",
+        "BU",
+        "UV",
+        "BM",
+        "BY",
+        "CB",
+        "CM",
+        "CA",
+        "CV",
+        "CJ",
+        "CT",
+        "CD",
+        "CI",
+        "CH",
+        "KT",
+        "IP",
+        "CK",
+        "CO",
+        "CN",
+        "CF",
+        "CG",
+        "CW",
+        "CR",
+        "CS",
+        "IV",
+        "HR",
+        "CU",
+        "UC",
+        "CY",
+        "EZ",
+        "DA",
+        "DX",
+        "DJ",
+        "DO",
+        "DR",
+        "TT",
+        "EC",
+        "EG",
+        "ES",
+        "EK",
+        "ER",
+        "EN",
+        "ET",
+        "FK",
+        "FO",
+        "FM",
+        "FJ",
+        "FI",
+        "FR",
+        "FP",
+        "FS",
+        "GB",
+        "GA",
+        "GG",
+        "GM",
+        "GH",
+        "GI",
+        "GR",
+        "GL",
+        "GJ",
+        "GQ",
+        "GT",
+        "GK",
+        "GV",
+        "PU",
+        "GY",
+        "HA",
+        "HM",
+        "VT",
+        "HO",
+        "HK",
+        "HQ",
+        "HU",
+        "IC",
+        "IN",
+        "ID",
+        "IR",
+        "IZ",
+        "EI",
+        "IM",
+        "IS",
+        "IT",
+        "JM",
+        "JN",
+        "JA",
+        "DQ",
+        "JE",
+        "JQ",
+        "JO",
+        "KZ",
+        "KE",
+        "KQ",
+        "KR",
+        "KN",
+        "KS",
+        "KV",
+        "KU",
+        "KG",
+        "LA",
+        "LG",
+        "LE",
+        "LT",
+        "LI",
+        "LY",
+        "LS",
+        "LH",
+        "LU",
+        "MC",
+        "MK",
+        "MA",
+        "MI",
+        "MY",
+        "MV",
+        "ML",
+        "MT",
+        "RM",
+        "MR",
+        "MP",
+        "MX",
+        "MQ",
+        "MD",
+        "MN",
+        "MG",
+        "MJ",
+        "MH",
+        "MO",
+        "MZ",
+        "WA",
+        "NR",
+        "BQ",
+        "NP",
+        "NL",
+        "NC",
+        "NZ",
+        "NU",
+        "NG",
+        "NI",
+        "NE",
+        "NF",
+        "CQ",
+        "NO",
+        "MU",
+        "OC",
+        "PK",
+        "PS",
+        "LQ",
+        "PM",
+        "PP",
+        "PF",
+        "PA",
+        "PE",
+        "RP",
+        "PC",
+        "PL",
+        "PO",
+        "RQ",
+        "QA",
+        "RO",
+        "RS",
+        "RW",
+        "TB",
+        "SH",
+        "SC",
+        "ST",
+        "RN",
+        "SB",
+        "VC",
+        "WS",
+        "SM",
+        "TP",
+        "SA",
+        "SG",
+        "RI",
+        "SE",
+        "SL",
+        "SN",
+        "NN",
+        "LO",
+        "SI",
+        "BP",
+        "SO",
+        "SF",
+        "SX",
+        "OD",
+        "SP",
+        "PG",
+        "CE",
+        "SU",
+        "NS",
+        "SV",
+        "WZ",
+        "SW",
+        "SZ",
+        "SY",
+        "TW",
+        "TI",
+        "TZ",
+        "TH",
+        "TO",
+        "TL",
+        "TN",
+        "TD",
+        "TS",
+        "TU",
+        "TX",
+        "TK",
+        "TV",
+        "UG",
+        "UP",
+        "AE",
+        "UK",
+        "UY",
+        "UZ",
+        "NH",
+        "VA",
+        "VE",
+        "VM",
+        "VI",
+        "VQ",
+        "WQ",
+        "WF",
+        "WI",
+        "YM",
+        "ZA",
+        "ZI",
+        "XY"
+      ],
+      "type": "string",
+      "description": "World countries."
+    },
+    "CreditDetails": {
+      "type": "object",
+      "properties": {
+        "current_year_credit_total": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Current year credit amount / Current year credit total.",
+          "format": "double"
+        },
+        "current_year_credit_passive_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Current year credit passive (override).",
+          "format": "double"
+        },
+        "current_year_credit_non_passive_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Current year credit non-passive (override).",
+          "format": "double"
+        },
+        "transfer_registration_number_general": {
+          "maxLength": 12,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Transfer registration number."
+        },
+        "elective_payment_registration_number_general": {
+          "maxLength": 12,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Elective payment registration number."
+        },
+        "transfer_entity_ein_general": {
+          "maxLength": 10,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Transfer entity EIN."
+        },
+        "credit_transfer_elections_sold_passive": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit transfer elections sold passive.",
+          "format": "double"
+        },
+        "credit_transfer_elections_sold_non_passive": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit transfer elections sold non-passive.",
+          "format": "double"
+        },
+        "credit_transfer_elections_purchased_passive": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit transfer elections purchased passive.",
+          "format": "double"
+        },
+        "credit_transfer_elections_purchased_non_passive": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit transfer elections purchased non-passive.",
+          "format": "double"
+        },
+        "gross_elective_payment_election_amount_total": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Gross elective payment election (EPE) amount total.",
+          "format": "double"
+        },
+        "amount_of_gross_epe_applied_against_tax_part_II_over_total": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Amount of gross EPE applied against tax in Part II (override) total.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Federal Form Lines."
+    },
+    "Disposition": {
+      "enum": [
+        "NoDisposition",
+        "FullyDisposed",
+        "PartiallyDisposed"
+      ],
+      "type": "string",
+      "description": "Disposition type."
+    },
+    "ForeignTaxAccountingMethod": {
+      "enum": [
+        "Paid",
+        "Accrued"
+      ],
+      "type": "string",
+      "description": "Foreign tax accounting method."
+    },
+    "ForeignTaxCategoryType": {
+      "enum": [
+        "ReportedByForeignCountry",
+        "RegulatedInvestmentCompany",
+        "TaxesReclassifiedUnderHighTaxKickout",
+        "Section951A"
+      ],
+      "type": "string",
+      "description": "Category Type (if not by country)."
+    },
+    "ForeignTaxIncomeCategory": {
+      "enum": [
+        "PassiveCategoryIncome",
+        "Section951AIncome",
+        "ForeignBranchIncome",
+        "GeneralCategoryIncome",
+        "LumpSumDistributions",
+        "Section901jIncome",
+        "IncomeResourcedByTreaty"
+      ],
+      "type": "string"
+    },
+    "ForeignTaxTypeofTax": {
+      "enum": [
+        "Dividends",
+        "Rents_And_Royalties",
+        "Interest",
+        "Other"
+      ],
+      "type": "string",
+      "description": "Type of Tax."
+    },
+    "ForeignTaxesGridLines": {
+      "type": "object",
+      "properties": {
+        "type_of_tax": {
+          "$ref": "#/$defs/ForeignTaxTypeofTax"
+        },
+        "section_951a_category_income_us": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 951A Category Income - U.S.",
+          "format": "double"
+        },
+        "section_951a_category_income_foreign": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 951A Category Income - Foreign.",
+          "format": "double"
+        },
+        "foreign_branch_category_income_us": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Foreign Branch Category Income - U.S.",
+          "format": "double"
+        },
+        "foreign_branch_category_income_foreign": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "foreign Branch Category Income - Foreign.",
+          "format": "double"
+        },
+        "foreign_branch_category_income_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "foreign Branch Category Income - Partner.",
+          "format": "double"
+        },
+        "passive_category_income_us": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income - U.S.",
+          "format": "double"
+        },
+        "passive_category_income_foreign": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income - Foreign.",
+          "format": "double"
+        },
+        "passive_category_income_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income - Partner.",
+          "format": "double"
+        },
+        "general_category_income_us": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income U.S.",
+          "format": "double"
+        },
+        "general_category_income_foreign": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income - Foreign.",
+          "format": "double"
+        },
+        "general_category_income_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income - Partner.",
+          "format": "double"
+        },
+        "other": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other.",
+          "format": "double"
+        },
+        "total": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ForeignTaxesLine1": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "$ref": "#/$defs/PartIIIDescriptionForeignTaxesLine1"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryCodes"
+        },
+        "category_type": {
+          "$ref": "#/$defs/ForeignTaxCategoryType"
+        },
+        "type_of_tax": {
+          "$ref": "#/$defs/ForeignTaxTypeofTax"
+        },
+        "section_951a_category_income_us": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 951A Category Income - U.S.",
+          "format": "double"
+        },
+        "section_951a_category_income_foreign": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 951A Category Income - Foreign.",
+          "format": "double"
+        },
+        "foreign_branch_category_income_us": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Foreign Branch Category Income - U.S.",
+          "format": "double"
+        },
+        "foreign_branch_category_income_foreign": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "foreign Branch Category Income - Foreign.",
+          "format": "double"
+        },
+        "foreign_branch_category_income_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "foreign Branch Category Income - Partner.",
+          "format": "double"
+        },
+        "passive_category_income_us": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income - U.S.",
+          "format": "double"
+        },
+        "passive_category_income_foreign": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income - Foreign.",
+          "format": "double"
+        },
+        "passive_category_income_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income - Partner.",
+          "format": "double"
+        },
+        "general_category_income_us": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income U.S.",
+          "format": "double"
+        },
+        "general_category_income_foreign": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income - Foreign.",
+          "format": "double"
+        },
+        "general_category_income_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income - Partner.",
+          "format": "double"
+        },
+        "other": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other.",
+          "format": "double"
+        },
+        "total": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Part III - Other Information for Preparation of Form 1116 or 1118, Section 4 - Foreign Taxes, Line 1."
+    },
+    "K1Status": {
+      "enum": [
+        "NotReceived",
+        "Draft",
+        "Amended",
+        "Final",
+        "Estimated",
+        "Imported",
+        "ImportedEstimated",
+        "ImportedRevised",
+        "InputReviewed",
+        "FinalReviewComplete",
+        "RevisedInputReviewed",
+        "RevisedFinalReviewComplete"
+      ],
+      "type": "string",
+      "description": "K1 status."
+    },
+    "LocationCode": {
+      "enum": [
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "DC",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY",
+        "DN",
+        "NP",
+        "VD",
+        "YZ",
+        "MV",
+        "NS"
+      ],
+      "type": "string",
+      "description": "State.\n\nAL - Alabama\nAK - Alaska\nAZ - Arizona\nAR - Arkansas\nCA - California\nCO - Colorado\nCT - Connecticut\nDE - Delaware\nDC - District of Columbia\nFL - Florida\nGA - Georgia\nHI - Hawaii\nID - Idaho\nIL - Illinois\nIN - Indiana\nIA - Iowa\nKS - Kansas\nKY - Kentucky\nLA - Louisiana\nME - Maine\nMD - Maryland\nMA - Massachusetts\nMI - Michigan\nMN - Minnesota\nMS - Mississippi\nMO - Missouri\nMT - Montana\nNE - Nebraska\nNV - Nevada\nNH - New Hampshire\nNJ - New Jersey\nNM - New Mexico\nNY - New York\nNC - North Carolina\nND - North Dakota\nOH - Ohio\nOK - Oklahoma\nOR - Oregon\nPA - Pennsylvania\nRI - Rhode Island\nSC - South Carolina\nSD - South Dakota\nTN - Tennessee\nTX - Texas\nUT - Utah\nVT - Vermont\nVA - Virginia\nWA - Washington\nWV - West Virginia\nWI - Wisconsin\nWY - Wyoming\nDN - DE, NJ (Port Authority bond)\nNP - NJ, PA (Port Authority bond)\nVD - VA, DC (Port Authority bond)\nYZ - NY, NJ (Port Authority bond)\nMV - MD, DC, VA (Metro Area Transit Bond)\nNS - No State"
+    },
+    "PartIIIDescriptionForeignTaxesLine1": {
+      "enum": [
+        "DirectForeignTaxes"
+      ],
+      "type": "string",
+      "description": "Part III - Other Information for Preparation of Form 1116 or 1118, Section 3 - Foreign Taxes, Line 1 - Description."
+    },
+    "Partnership.FederalFormLines": {
+      "type": "object",
+      "properties": {
+        "section_743_b_positive_adjustments": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 743(b) positive income adjustments,Schedule K-1 Part III Line 11f.",
+          "format": "double"
+        },
+        "section_743_b_negative_adjustments": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 743(b) negative adjustments,Schedule K-1 Part III Line 13v.",
+          "format": "double"
+        },
+        "section_751_gain_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 751 gain (loss),Schedule K-1 Part III Line 20ab.",
+          "format": "double"
+        },
+        "section_1h5_gain_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 1(h)(5) gain,Schedule K-1 Part III Line 20ac.",
+          "format": "double"
+        },
+        "deemed_section_1250_unrecaptured_gain": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Deemed section 1250 unrecaptured gain,Schedule K-1 Part III Line 20ad.",
+          "format": "double"
+        },
+        "excess_business_interest_expense_carryover": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Excess business interest expense carryover.",
+          "format": "double"
+        },
+        "2019_excess_business_interest_expense": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "2019 excess business interest expense.\n(*Note: This field is supported for the years 2020 for this API version)\n",
+          "format": "double"
+        },
+        "2019_excess_business_interest_expense_autopaid_accrued_2020": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "2019 excess business interest expense automatically paid and accrued in 2020.\n(*Note: This field is supported for the years 2019 to 2020 for this API version)\n",
+          "format": "double"
+        },
+        "cash_contributions_60p": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Cash contributions (60%),Schedule K-1 Part III Line 13a.",
+          "format": "double"
+        },
+        "cash_contributions_30p": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Cash contributions (30%),Schedule K-1 Part III Line 13b.",
+          "format": "double"
+        },
+        "noncash_contributions_50p": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Noncash contributions (50%),Schedule K-1 Part III Line 13c.",
+          "format": "double"
+        },
+        "noncash_contributions_30p": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Noncash contributions (30%),Schedule K-1 Part III Line 13d.",
+          "format": "double"
+        },
+        "capital_gain_property_to_a_50p_organization_30p": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Capital gain property to a 50% organization (30%),Schedule K-1 Part III Line 13e.",
+          "format": "double"
+        },
+        "capital_gain_property_20p": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Capital gain property (20%),Schedule K-1 Part III Line 13f.",
+          "format": "double"
+        },
+        "ordinary_gain_or_loss_form_4797_portfolio": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary gain/loss Form 4797 - Portfolio.",
+          "format": "double"
+        },
+        "ordinary_gain_or_loss_form_4797_investment_income_form_4952": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary gain/loss Form 4797 - Investment Income (Trader Fund).\n(*Note: This field is supported for the years 2021 to 2099 for this API version)\n",
+          "format": "double"
+        },
+        "credit_details": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "zero_emission_nuclear_power_production_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_production_from_advanced_nuclear_power_facilities": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "low_income_housing_credit_section_42_j_5": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "low_income_housing_credit_not_section_42_j_5": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "qualified_rehabilitation_expenditures_rental_real_estate": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "undistributed_capital_gains_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "biofuel_producer_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "work_opportunity_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "disabled_access_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "empowerment_zone_employment_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_increasing_research_activities": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_employer_social_security_and_medicare_taxes": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "backup_withholding": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "unused_investment_credit_coal_gasification_project": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "unused_investment_credit_advanced_energy_project": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "unused_investment_credit_advanced_manufacturing": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "unused_investment_credit_clean_electricity": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "unused_investment_credit_energy": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "unused_investment_credit_rehabilitation": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "advanced_manufacturing_production_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "clean_hydrogen_production_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "orphan_drug_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "enhanced_oil_recovery_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "renewable_electricity_production_credit_form_3800_line_1f": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "renewable_electricity_production_credit_form_3800_line_4e": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "biodiesel_renewable_diesel_sustainable_aviation_fuels_credit_1l": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "biodiesel_renewable_diesel_sustainable_aviation_fuels_credit_1ff": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "new_markets_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_small_employer_pension_plan_startup_costs": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_small_employer_auto_enrollment": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_military_spouse_participation": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_employer_provided_childcare_facilities_and_services": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "low_sulfur_diesel_fuel_producton_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "qualified_railroad_track_maintenance_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_oil_and_gas_production_from_marginal_wells": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "distilled_spirits_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "energy_efficient_home_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "alternative_fuel_vehicle_refueling_property": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_employer_differential_wage_payments": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "clean_electricity_production_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "clean_fuel_production_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "new_clean_vehicle_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "qualified_commercial_clean_vehicle_credit": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "credit_for_small_health_insurance_premiums": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "employer_credit_for_paid_family_and_medical_leave": {
+              "$ref": "#/$defs/CreditDetails"
+            },
+            "other_credits": {
+              "$ref": "#/$defs/CreditDetails"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Part III Other Schedule E Credit 2024 Forward.\n(*Note: This field is supported for the years 2024 to 9999 for this API version)\n"
+        },
+        "section_965a_incl_net_investment_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 965(a) inclusion - net investment income, Schedule K-1 Part III Line 11g.\n(*Note: This field is supported for the years 2019 to 2022 for this API version)\n",
+          "format": "double"
+        },
+        "section_965a_incl_non_net_investment_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 965(a) inclusion - Non-net investment income, Schedule K-1 Part III Line 11g.\n(*Note: This field is supported for the years 2019 to 2022 for this API version)\n",
+          "format": "double"
+        },
+        "excess_business_interest_expense": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Excess business interest expense (EBIE), Schedule K-1 Part III Line 13k.",
+          "format": "double"
+        },
+        "section_965c_ded_net_investment_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 965(c) deduction - net investment income, Schedule K-1 Part III Line 13x.\n(*Note: This field is supported for the years 2019 to 2022 for this API version)\n",
+          "format": "double"
+        },
+        "section_965c_ded_non_net_investment_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 965(c) deduction - Non-net investment income, Schedule K-1 Part III Line 13x.\n(*Note: This field is supported for the years 2019 to 2022 for this API version)\n",
+          "format": "double"
+        },
+        "excess_taxable_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Excess taxable income,Schedule K-1 Part III Line 20ae.",
+          "format": "double"
+        },
+        "excess_business_interest_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Excess business interest income,Schedule K-1 Part III Line 20af.",
+          "format": "double"
+        },
+        "coop_dpad_under_section_199ag": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "DPAD under Section 199A(g) from specified cooperative.",
+          "format": "double"
+        },
+        "ordinary_business_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary business income (loss), Schedule K-1 Part III Line 1.",
+          "format": "double"
+        },
+        "net_rental_real_estate_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net rental real estate income (loss), Schedule K-1 Part III Line 2.",
+          "format": "double"
+        },
+        "other_net_rental_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other net rental income (loss), Schedule K-1 Part III Line 3.",
+          "format": "double"
+        },
+        "guaranteed_payments_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Guaranteed payments, Schedule K-1 Part III Line 4.",
+          "format": "double"
+        },
+        "net_interest_income_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Interest income, Schedule K-1 Part III Line 5.",
+          "format": "double"
+        },
+        "interest_income_usgi_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Interest income, Schedule K-1 Part III Line 5 USGI.",
+          "format": "double"
+        },
+        "interest_income_non_usgi_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Interest income, Schedule K-1 Part III Line 5 Non USGI.",
+          "format": "double"
+        },
+        "ordinary_dividends_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary dividends, Schedule K-1 Part III Line 6a.",
+          "format": "double"
+        },
+        "qualified_dividends_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Qualified dividends, Schedule K-1 Part III Line 6b.",
+          "format": "double"
+        },
+        "royalties_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Royalties, Schedule K-1 Part III Line 7.",
+          "format": "double"
+        },
+        "net_short_term_capital_gain_or_Loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net short-term capital gain (loss), Schedule K-1 Part III Line 8.",
+          "format": "double"
+        },
+        "net_long_term_capital_gain_or_Loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net long-term capital gain (loss), Schedule K-1 Part III Line 9a.",
+          "format": "double"
+        },
+        "collectibles_28percent_gain_or_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Collectibles (28%) gain (loss), Schedule K-1 Part III Line 9b.\r\n(*Note: If you entered a collectibles (28%) gain (loss), you must enter the amount for total net long-term capital gain (loss). Enter 0 if you don't have a total net gain (loss).)",
+          "format": "double"
+        },
+        "unrecaptured_section_1250_gain_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Unrecaptured section 1250 gain, Schedule K-1 Part III Line 9c.",
+          "format": "double"
+        },
+        "net_section_1231_gain_or_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net section 1231 gain (loss), Schedule K-1 Part III Line 10.",
+          "format": "double"
+        },
+        "other_portfolio_income_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other portfolio income, Schedule k-1 part III Line 11 a.",
+          "format": "double"
+        },
+        "section_1256_contracts_and_straddles_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Sec. 1256 contracts and straddles,Schedule k-1 part III Line 11c.",
+          "format": "double"
+        },
+        "other_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other, Schedule k-1 part III Line 11zz.",
+          "format": "double"
+        },
+        "charitable_contributions_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Contributions (100%), Schedule K-1 Part III Line 13g.",
+          "format": "double"
+        },
+        "investment_interest_expenses_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Investment interest expenses, Schedule K-1 Part III Line 13h.",
+          "format": "double"
+        },
+        "deductions_royalty_income_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Deductions-royalty income, Schedule K-1 Part III Line 13i.",
+          "format": "double"
+        },
+        "section_59e2_expenditures_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 59(e)(2) expenditures, Schedule K-1 Part III Line 13j.",
+          "format": "double"
+        },
+        "portfolio_other_deductions_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Deductions - portfolio (other), Schedule K-1 Part III Line 13l.",
+          "format": "double"
+        },
+        "ordinary_gain_loss_form_4797_business": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary gain/loss Form 4797 Business.",
+          "format": "double"
+        },
+        "low_income_housing_credit_sec42j5_pre2k8_buildings_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credits and credit recapture, Schedule K-1 Part III Line 15.\r\nLow income housing credit (section 42(j)(5)) from pre-2008 buildings, Line 15A.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "low_income_housing_credit_other_pre2k8_buildings_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Low income housing credit (other) from pre-2008 buildings,Schedule K-1 Part III Line 15B.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "low_income_housing_credit_sec42j5_post2k7_buildings_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Low income housing credit (section 42(j)(5)) from post-2007 buildings,Schedule K-1 Part III Line 15C.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "low_income_housing_credit_other_post2k7_buildings_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Low income housing credit (other) from post-2007 buildings,Schedule K-1 Part III Line 15D.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "undistributed_capital_gains_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Undistributed capital gains credit,Schedule K-1 Part III Line 15H.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "biofuel_producer_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Biofuel producer credit,Schedule K-1 Part III Line 15I.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "work_opportunity_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Work opportunity credit,Schedule K-1 Part III Line 15J.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "disabled_access_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Disabled access credit,Schedule K-1 Part III Line 15K.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "emp_zone_renewal_community_emplymt_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Empowerment zone and renewal community employment credit,Schedule K-1 Part III Line 15L.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "research_activities_allothers_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit for increasing research activities (All others),Schedule K-1 Part III Line 15M.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "research_activities_smallbusiness_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit for increasing research activities (Eligible small business),Schedule K-1 Part III Line 15M.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "socialsecurity_medicare_taxes_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit for employer social security and Medicare taxes,Schedule K-1 Part III Line 15N.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "backup_withholding_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit for backup withholding,Schedule K-1 Part III Line 15O.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "advanced_manufacturing_production_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Advanced manufacturing production credit, Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2022 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "agricultural_chemical_security_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Agricultural chemical security credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "alternate_fuel_vehicle_refueling_property_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Alternative fuel vehicle refueling property credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "alternate_motor_vehicle_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Alternative motor vehicle credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "biodiesel_renewable_fuels_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Biodiesel and renewable diesel fuels credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "carbon_dioxide_sequestration_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Carbon dioxide sequestration credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "employer_diff_wage_payments_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit for employer differential wage payments,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "employer_provided_childcare_facilities_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit for employer-provided child care and facilities,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "small_emp_health_insurance_premiums_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit for small employer health insurance premiums,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "small_emp_pension_plan_startup_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit for small employer pension plan startup,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "oil_gas_prod_4m_marginal_wells_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Credit from oil and gas production from marginal wells,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "distilled_spirits_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Distilled spirits credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "employee_retention_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Employee retention credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "energy_efficient_home_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Energy efficient home credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "enhanced_oil_recovery_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Enhanced oil recovery credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "electing_large_partnership_credits_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General credits from an electing large partnership,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "indian_employment_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Indian employment credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "low_sulfur_diesel_fuel_prod_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Low sulfur diesel fuel production credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "mine_rescue_team_training_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Mine rescue team training credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "new_markets_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "New markets credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "orphan_drug_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Orphan drug credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "qualified_electric_vehicle_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Qualified plug-in electric drive motor vehicle credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "qualified_railroad_maintenance_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Qualified railroad track maintenance credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "employer_credit_for_paid_family_and_medical_leave": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Employer credit for paid family and medical leave,Schedule K-1 Part III Line 15p.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "renewable_electricity_coal_credit_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Renewable electricity, refined coal, and Indian coal production credit,Schedule K-1 Part III Line 15P.\n(*Note: This field is supported for the years 2019 to 2023 for this API version)\n",
+          "format": "double"
+        },
+        "line19_distributions": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Distributions, Schedule K-1 Part III Line 19.\n(*Note: This field is supported for the years 2023 to 9999 for this API version)\n",
+          "format": "double"
+        },
+        "post_1986_depreciation_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Post 1986 depreciation adjustment,Schedule K-1 Part III Line 17a.",
+          "format": "double"
+        },
+        "adjusted_gain_or_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Adjusted gain or loss,Schedule K-1 Part III Line 17b.",
+          "format": "double"
+        },
+        "depletion_other_than_oil_and_gas_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Depletion (other than oil and gas),Schedule K-1 Part III Line 17c.",
+          "format": "double"
+        },
+        "oil_gas_and_geothermal_income_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Oil, gas and geothermal-gross income,Schedule K-1 Part III Line 17d.",
+          "format": "double"
+        },
+        "oil_gas_and_geothermal_deductions_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Oil, gas and geothermal-deductions,Schedule K-1 Part III Line 17e.",
+          "format": "double"
+        },
+        "other_items_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other AMT items,Schedule K-1 Part III Line 17f.",
+          "format": "double"
+        },
+        "excess_intangible_drilling_costs": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Excess intangible drilling costs.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "double"
+        },
+        "resident_tax_exempt_interest_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Resident tax-exempt interest income.",
+          "format": "double"
+        },
+        "nonresident_tax_exempt_interest_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Nonresident tax-exempt interest income.",
+          "format": "double"
+        },
+        "line18c_nondeductible_expenses_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Nondeductible expenses, Schedule K-1 Part III Line 18c.",
+          "format": "double"
+        },
+        "investment_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Investment income,Schedule K-1 Part III Line 20a.",
+          "format": "double"
+        },
+        "investment_expenses": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Investment expenses,Schedule K-1 Part III Line 20b.",
+          "format": "double"
+        },
+        "net_income_before_depletion": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net Income before depletion (Override).",
+          "format": "double"
+        },
+        "line20b_depletion_carryover_from_prior_year": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Depletion carryover from prior year.",
+          "format": "double"
+        },
+        "depletion_rate_or_amount_of_depletion": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Depletion rate or amount of depletion (Required).",
+          "format": "double"
+        },
+        "65_percent_limitation_amount": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "65% limitation amount(Override).",
+          "format": "double"
+        },
+        "unrelated_business_taxable_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Unrelated business taxable income,Schedule K-1 Part III Line 20v.",
+          "format": "double"
+        },
+        "section_1202_gain_50_exclusion": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 1202 gain - 50% exclusion.",
+          "format": "double"
+        },
+        "section_1202_gain_60_exclusion": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 1202 gain - 60% exclusion.",
+          "format": "double"
+        },
+        "section_1202_gain_75_exclusion": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 1202 gain - 75% exclusion.",
+          "format": "double"
+        },
+        "section_1202_gain_100_exclusion": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 1202 gain - 100% exclusion.",
+          "format": "double"
+        },
+        "short_term_capital_loss_carryover": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Short-term capital loss carryover.",
+          "format": "double"
+        },
+        "long_term_capital_loss_carryover": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Long-term capital loss carryover.",
+          "format": "double"
+        },
+        "net_operating_loss_carryover": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net operating loss carryover.",
+          "format": "double"
+        },
+        "income_loss_real_estate_pros_only": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Income/loss(real estate pros only).",
+          "format": "double"
+        },
+        "info_needed_to_figure_depletion_oil_and_gas_gross": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Info. needed to figure depletion - oil and gas(gross).",
+          "format": "double"
+        },
+        "net_investment_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net Investment Income (NII).",
+          "format": "double"
+        },
+        "gross_income_oil_and_gas": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Gross income - oil and gas.",
+          "format": "double"
+        },
+        "deductions_oil_and_gas": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Deductions - oil and gas.",
+          "format": "double"
+        },
+        "state_deductions_subject_2_perc_agi": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Deductions - portfolio income (state deductions subject to 2% AGI).",
+          "format": "double"
+        },
+        "state_bonus_depreciation_adjustment": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Bonus Depreciation Adjustment.",
+          "format": "double"
+        },
+        "state_tax_withholding_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Tax Withholding Income.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "double"
+        },
+        "state_tax_withheld": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Tax Withheld.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "double"
+        },
+        "state_tax_withholding_credit": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Tax Withholding Credits.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "double"
+        },
+        "state_oilgas_withheld": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Oil Gas/Royalty Tax Withheld.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Federal Form Lines - Version 2."
+    },
+    "Partnership.ForeignTax": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "$ref": "#/$defs/CountryCodes"
+        },
+        "income_category": {
+          "$ref": "#/$defs/ForeignTaxIncomeCategory"
+        },
+        "foreign_gross_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Foreign Gross Income.",
+          "format": "double"
+        },
+        "qualified_foreign_dividends": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Qualified Foreign Dividends.",
+          "format": "double"
+        },
+        "qualified_foreign_dividends_tax": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Qualified Foreign Dividends Tax.",
+          "format": "double"
+        },
+        "deductions": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Deductions.",
+          "format": "double"
+        },
+        "total_foreign_dividend_tax": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total Foreign Dividend Tax.",
+          "format": "double"
+        },
+        "accounting_method": {
+          "$ref": "#/$defs/ForeignTaxAccountingMethod"
+        },
+        "date_paid_or_accrued": {
+          "pattern": "yyyy-MM-dd",
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "DatePaid Or Accrued."
+        },
+        "reduction_in_taxes": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Reduction In Taxes.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Foreign Taxes."
+    },
+    "Partnership.ForeignTaxK3": {
+      "type": "object",
+      "properties": {
+        "partII_sec1": {
+          "$ref": "#/$defs/Partnership.PartIISec1"
+        },
+        "partII_sec2": {
+          "$ref": "#/$defs/Partnership.PartIISec2"
+        },
+        "partIII_sec4": {
+          "$ref": "#/$defs/Partnership.PartIIISec4"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Foreign Taxes."
+    },
+    "Partnership.ForeignTaxPartIISec1GrossIncome": {
+      "type": "object",
+      "properties": {
+        "income_category": {
+          "$ref": "#/$defs/Sec1GrossIncomeCategory"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryCodes"
+        },
+        "category_type": {
+          "$ref": "#/$defs/Sec1GrossIncomeCategoryType"
+        },
+        "us_source": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "U.S Source.",
+          "format": "double"
+        },
+        "foreign_branch_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Foreign Branch Category Income.",
+          "format": "double"
+        },
+        "passive_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income.",
+          "format": "double"
+        },
+        "general_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income.",
+          "format": "double"
+        },
+        "other_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other Income.",
+          "format": "double"
+        },
+        "sourced_by_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Sourced By Partner.",
+          "format": "double"
+        },
+        "total": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Part II - Foreign Tax Credit Limitation, Section 1 - Gross Income."
+    },
+    "Partnership.MassachusettsSpecificOtherInfo": {
+      "type": "object",
+      "properties": {
+        "savings_interest": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Savings interest for Mass.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Massachusetts Specific Information."
+    },
+    "Partnership.NJSpecificOtherInfo": {
+      "type": "object",
+      "properties": {
+        "total_distributions": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total Distributions.",
+          "format": "double"
+        },
+        "source_amounts": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "NJ Source Amounts.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "NJ Distributive Share of Partnership Income Loss."
+    },
+    "Partnership.NorthCarolinaSpecificOtherInfo": {
+      "type": "object",
+      "properties": {
+        "begin_tax_year": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Begin Tax Year.",
+          "format": "date-time"
+        },
+        "end_tax_year": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "End Tax Year.",
+          "format": "date-time"
+        },
+        "share_income_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Share of income (loss).",
+          "format": "double"
+        },
+        "addition_for_bonus_depreciation": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Addition for bonus depreciation.",
+          "format": "double"
+        },
+        "other_additional_income_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other addition to income (loss).",
+          "format": "double"
+        },
+        "deduction_for_bonus_depreciation": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Deduction for bonus depreciation.",
+          "format": "double"
+        },
+        "other_deduction_from_income_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other deduction from income (loss).",
+          "format": "double"
+        },
+        "share_taxpaid_to_other_state_country": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Share of tax paid to other state or country.",
+          "format": "double"
+        },
+        "share_other_tax_credit": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Share of other tax credits.",
+          "format": "double"
+        },
+        "share_from_nonwage_compensation": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Share of tax withheld from nonwage compensation.",
+          "format": "double"
+        },
+        "nonresisdent_share_taxable_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Nonresident's share of N.C. taxable income.",
+          "format": "double"
+        },
+        "bonus_deprec_add_attribute_source": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Bonus depreciation addition attributed to NC sources.",
+          "format": "double"
+        },
+        "other_add_attribute_source": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other additions attributed to NC sources.",
+          "format": "double"
+        },
+        "bonus_deprec_substract_attribute_source": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Bonus depreciation substraction attributed to NC sources.",
+          "format": "double"
+        },
+        "other_substract_attribute_source": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other substractions attributed to NC sources.",
+          "format": "double"
+        },
+        "nonresident_share_by_partnership_scorp": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Nonresident's share of net tax paid by Partnership/S-Corp.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "North Carolina Specific Other Information.\n\n(*Note: This model is supported for the following years: 2020 to 9999, for this API version)\n"
+    },
+    "Partnership.OklahomaSpecificOtherInfo": {
+      "type": "object",
+      "properties": {
+        "qualifying_long_term_capital_gain_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Qualifying Oklahoma Long-Term Capital Gain or Loss.",
+          "format": "double"
+        },
+        "qualifying_1231_gain_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Qualifying Oklahoma 1231 Gain or Loss.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Oklahoma Specific Other Information."
+    },
+    "Partnership.OtherDetails": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "maxLength": 255,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Partnership.OtherScheduleEDetail": {
+      "required": [
+        "ein",
+        "trade_or_business_name"
+      ],
+      "type": "object",
+      "properties": {
+        "seq_no": {
+          "type": "integer",
+          "description": "SeqNo.",
+          "format": "int32"
+        },
+        "trade_or_business_name": {
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string",
+          "description": "Trade or Business Name."
+        },
+        "ein": {
+          "maxLength": 10,
+          "minLength": 10,
+          "pattern": "11-1111111 (TIN)",
+          "type": "string",
+          "description": "EIN."
+        },
+        "ptp": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "PTP."
+        },
+        "sstb": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "SSTB."
+        },
+        "ordinary_business_income_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary Business Income Loss.",
+          "format": "double"
+        },
+        "rental_income_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Rental Income Loss.",
+          "format": "double"
+        },
+        "royalty_income_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Royalty Income Loss.",
+          "format": "double"
+        },
+        "other_income_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other Income Loss.",
+          "format": "double"
+        },
+        "w2_wages": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "W-2 Wages.",
+          "format": "double"
+        },
+        "ubia": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "UBIA.",
+          "format": "double"
+        },
+        "reit_dividends": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "REIT Dividends.",
+          "format": "double"
+        },
+        "section_1231_gain_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 1231 Gain (Loss).",
+          "format": "double"
+        },
+        "section_179_deductions": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 179 Deductions.",
+          "format": "double"
+        },
+        "charitable_contributions": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Charitable Contributions.",
+          "format": "double"
+        },
+        "other_deductions": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other Deductions.",
+          "format": "double"
+        },
+        "section_59e2_Expense": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 59(e)(2) Expenses.",
+          "format": "double"
+        },
+        "ordinary_gain_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary Gain (Loss).",
+          "format": "double"
+        },
+        "qbi_suspended_losses": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI***.",
+          "format": "double"
+        },
+        "qptp_suspended_losses": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "SLQPTP.",
+          "format": "double"
+        },
+        "qbi_included_in_payments": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI Included in Payments.",
+          "format": "double"
+        },
+        "wages_allocable_to_qualified_payments": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Wages allocable to Qualified Payments.",
+          "format": "double"
+        },
+        "additional_info_section_199ag_deduction": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "aggregation_id": {
+          "maxLength": 4,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Aggregation ID."
+        },
+        "aggregation_parent": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Aggregation Parent."
+        },
+        "qbi_before_adjustments": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI Overrides (Before Adjustments).",
+          "format": "double"
+        },
+        "qbi_section_1231_gain_loss_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI Section 1231 Gain/Loss Override.",
+          "format": "double"
+        },
+        "qbi_section_59e2_expense_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI Section 59(e)(2) Expense Override.",
+          "format": "double"
+        },
+        "qbi_passive_loss_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI Passive Loss Override.",
+          "format": "double"
+        },
+        "qbi_section_652b_expenses_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI Section 652(b) Expenses Override.",
+          "format": "double"
+        },
+        "qbi_fiduciary_share_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI Fiduciary Share Override.",
+          "format": "double"
+        },
+        "qbi_beneficiary_share_ordinary_business_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI Beneficiary Share Ordinary Business Override.",
+          "format": "double"
+        },
+        "qbi_beneficiary_share_rental_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QBI Beneficiary Share Rental Override.",
+          "format": "double"
+        },
+        "qptp_before_adjustments": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Qualified PTP Income.",
+          "format": "double"
+        },
+        "qptp_section_1231_gain_loss_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QPTP Section 1231 Gain (Loss) Override.",
+          "format": "double"
+        },
+        "qptp_section_59e2_expense_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QPTP Section 59(e)(2) Expense Override.",
+          "format": "double"
+        },
+        "qptp_ordinary_gain_loss_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QPTP Ordinary Gain (Loss) Override.",
+          "format": "double"
+        },
+        "qptp_passive_loss_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QPTP Passive Loss Override.",
+          "format": "double"
+        },
+        "qptp_section_652b_expenses_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QPTP Section 652(b) Expenses Override.",
+          "format": "double"
+        },
+        "qptp_fiduciary_share_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QPTP Fiduciary Share Override.",
+          "format": "double"
+        },
+        "qptp_beneficiary_share_ordinary_business_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QPTP Beneficiary Share Ordinary Business Override.",
+          "format": "double"
+        },
+        "qptp_beneficiary_share_rental_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "QPTP Beneficiary Share Rental Override.",
+          "format": "double"
+        },
+        "change_type": {
+          "$ref": "#/$defs/ChangeType"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Section 199A Other Schedule-E Details."
+    },
+    "Partnership.PartI": {
+      "type": "object",
+      "properties": {
+        "at_risk_amount": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "At Risk Amount.",
+          "format": "double"
+        },
+        "some_investment_not_at_risk_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Some investment not at risk."
+        },
+        "partnership_ein": {
+          "pattern": "11-1111111 (TIN)",
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Partnership EIN."
+        },
+        "state": {
+          "$ref": "#/$defs/LocationCode"
+        },
+        "property_address": {
+          "$ref": "#/$defs/Partnership.PropertyAddress"
+        },
+        "taxable_for": {
+          "$ref": "#/$defs/TaxCode"
+        },
+        "passive_active_type": {
+          "$ref": "#/$defs/PassiveActiveType"
+        },
+        "disposition_type": {
+          "$ref": "#/$defs/Disposition"
+        },
+        "disposition_percentage_of_activity": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Disposition Percentage of Activity.\n(*Note: This field is supported for the years 2021 to 9999 for this API version)\n",
+          "format": "double"
+        },
+        "more_than_one_activity_for_at_risk_purposes": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "More than one activity for at-risk purposes."
+        },
+        "more_than_one_activity_for_passive_activity_purposes": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "More than one activity for passive activity purposes."
+        },
+        "partnership_giin": {
+          "maxLength": 19,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "partnership giin.\n(*Note: This field is supported for the years 2022 to 9999 for this API version)\n"
+        },
+        "partnership_chapter3_status": {
+          "$ref": "#/$defs/PartnershipChapter3Status"
+        },
+        "partnership_chapter4_status": {
+          "$ref": "#/$defs/PartnershipChapter4Status"
+        },
+        "partnership_name": {
+          "maxLength": 80,
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Partnership Name."
+        },
+        "foreign_partnership_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Indicator for Foreign Partnership."
+        },
+        "reporting_pya_or_upe_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Reporting PYA or UPE."
+        },
+        "section_1_263A_1_f_safeharborelection_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Sec 1.263A-1(f) Safe Harbor Election."
+        },
+        "specified_service_trade_or_business_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Specified Service Trade Or Business."
+        },
+        "basis_computation_required_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Basis computation is required."
+        },
+        "section_751_election_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Sec 751 Election.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n"
+        },
+        "did_you_make_any_payments_required_to_file_1099s_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Did you make any payments in 2018 that would require you to file Form(s) 1099?"
+        },
+        "did_you_file_all_required_1099s_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Did you or will you file all required Form(s) 1099?"
+        },
+        "date_of_disposition": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Date of Disposition.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Partnership Information (Maps to Section 1 in K1) - Version 2."
+    },
+    "Partnership.PartII": {
+      "type": "object",
+      "properties": {
+        "general_partner_or_llc_member_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "General partner of LLC Member."
+        },
+        "limited_partner_or_other_llc_member_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Limited partner or other LLC Member."
+        },
+        "domestic_partner_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Domestic partner."
+        },
+        "foreign_partner_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Foreign partner."
+        },
+        "partner_entity_type": {
+          "maxLength": 45,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "What type of entity is partner."
+        },
+        "partners_interest_in_profit_boy_rate": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Partner's Share of Profit Beginning of Year.",
+          "format": "double"
+        },
+        "partners_interest_in_profit_eoy_rate": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Partner's Share of Profit End of Year.",
+          "format": "double"
+        },
+        "partners_interest_in_loss_boy_rate": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Partner's Share of Loss Beginning of Year.",
+          "format": "double"
+        },
+        "partners_interest_in_loss_eoy_rate": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Partner's Share of Loss End of Year.",
+          "format": "double"
+        },
+        "partners_interest_in_capital_boy_rate": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Partner's Share of Capital Beginning of Year.",
+          "format": "double"
+        },
+        "partners_interest_in_capital_eoy_rate": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Partner's Share of Capital End of Year.",
+          "format": "double"
+        },
+        "partners_liabilities_nonrecourse_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Partner's share of liability at year end: NonRecourse.",
+          "format": "double"
+        },
+        "partners_liabilities_qualified_nonrecourse_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Partner's share of liability at year end: Qualified NonRecourse Financing.",
+          "format": "double"
+        },
+        "partners_liabilities_recourse_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Partner's share of liability at year end: Recourse.",
+          "format": "double"
+        },
+        "partners_cap_analysis_boy_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Beginning Capital Account.",
+          "format": "double"
+        },
+        "partners_cap_analysis_contribution_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Capital Contributed During the Year.",
+          "format": "double"
+        },
+        "partners_cap_analysis_increase_decrease_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Current Year Increase (Decrease).",
+          "format": "double"
+        },
+        "partners_cap_analysis_withdrawls_distributions_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Withdrawals and distributions.",
+          "format": "double"
+        },
+        "partners_cap_analysis_ending_capital_account": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ending Capital Account.",
+          "format": "double"
+        },
+        "tax_basis_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Tax Basis Box."
+        },
+        "gaap_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "GAAP."
+        },
+        "section_704b_book_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Section 704(b) book."
+        },
+        "other_explain_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Other (explain)."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Partner Information."
+    },
+    "Partnership.PartIII": {
+      "type": "object",
+      "properties": {
+        "print_k1_status_diagnostic_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Print K-1 Status Diagnostic."
+        },
+        "capital_gain_loss_form_461_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Gain/Losses attributable on form 461.\n(*Note: This field is supported for the years 2021 to 9999 for this API version)\n"
+        },
+        "treat_all_item_form461_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Treat all items for form 461.\n(*Note: This field is supported for the years 2021 to 9999 for this API version)\n"
+        },
+        "gains_losses_listed_are_passive_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Gains/Losses are passive."
+        },
+        "sec_1231_losses_listed_are_portfolio_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Sec 1231 Gains/Losses are portfolio."
+        },
+        "k1_status": {
+          "$ref": "#/$defs/K1Status"
+        },
+        "depletion_is_for_royalty_income_fl": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Depletion for Royalty Income."
+        },
+        "current_yr_federal_source_income": {
+          "$ref": "#/$defs/Partnership.FederalFormLines"
+        },
+        "current_yr_nonresident_state_source_income": {
+          "$ref": "#/$defs/ScheduleK1StateSourceIncome"
+        },
+        "state_pass_through_entity_elective_tax_credit": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "AL": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "AZ": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "AR": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "CA": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "CO": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "CT": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "DE": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "DC": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "GA": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "HI": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "ID": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "IL": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "IN": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "IA": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "KS": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "KY": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "LA": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "ME": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "MD": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "MA": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "MI": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "MN": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "MS": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "MO": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "MT": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "NE": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "NH": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "NJ": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "NM": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "NY": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "NC": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "ND": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "OH": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "OK": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "OR": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "PA": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "RI": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "SC": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "TN": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "UT": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "VT": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "VA": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "WV": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            },
+            "WI": {
+              "$ref": "#/$defs/Partnership.StatePTETaxCredit"
+            }
+          },
+          "additionalProperties": false,
+          "description": "State pass-through entity elective tax credit.\n(*Note: This field is supported for the years 2021 to 9999 for this API version)\n"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Federal Specific Partner Share of Current Year Income Deductions - Version 2."
+    },
+    "Partnership.PartIIISec4": {
+      "type": "object",
+      "properties": {
+        "foreign_taxes_line1_by_country": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/ForeignTaxesLine1"
+          },
+          "description": "Part III - Other Information for Preparation of Form 1116 or 1118, Section 4 - Foreign Taxes."
+        },
+        "foreign_taxes_line1": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "taxes_on_foreign_mineral_income": {
+              "$ref": "#/$defs/ForeignTaxesGridLines"
+            },
+            "international_boycott_provisions": {
+              "$ref": "#/$defs/ForeignTaxesGridLines"
+            },
+            "failure_to_file_provisions": {
+              "$ref": "#/$defs/ForeignTaxesGridLines"
+            },
+            "taxes_with_respect_to_splitter_arrangements": {
+              "$ref": "#/$defs/ForeignTaxesGridLines"
+            },
+            "taxes_on_foreign_corporate_distributions": {
+              "$ref": "#/$defs/ForeignTaxesGridLines"
+            },
+            "other": {
+              "$ref": "#/$defs/ForeignTaxesGridLines"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Part III - Other Information for Preparation of Form 1116 or 1118, Section 4 - Foreign Taxes, Line 1."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Part III - Other Information for Preparation of Form 1116 or 1118, Section 4 - Foreign Taxes, Line 1."
+    },
+    "Partnership.PartIISec1": {
+      "type": "object",
+      "properties": {
+        "gross_income_by_country": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/Partnership.ForeignTaxPartIISec1GrossIncome"
+          },
+          "description": "Part II - Foreign Tax Credit Limitation, Section 1 - Gross Income."
+        },
+        "gross_income": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "guaranteed_payments": {
+              "$ref": "#/$defs/Partnership.Sec1GridLines"
+            },
+            "section_986_c_gain": {
+              "$ref": "#/$defs/Partnership.Sec1GridLines"
+            },
+            "section_987_gain": {
+              "$ref": "#/$defs/Partnership.Sec1GridLines"
+            },
+            "section_988_gain": {
+              "$ref": "#/$defs/Partnership.Sec1GridLines"
+            },
+            "section_951aa_inclusions_1120_s": {
+              "$ref": "#/$defs/Partnership.Sec1GridLines"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Part II - Foreign Tax Credit Limitation."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Part II - Foreign Tax Credit Limitation, Section 1 - Gross Income."
+    },
+    "Partnership.PartIISec2": {
+      "type": "object",
+      "properties": {
+        "deductions_by_sic": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/Sec2Deductions"
+          },
+          "description": "Part II - Foreign Tax Credit Limitation, Section 1 - Deductions."
+        },
+        "deductions": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "expenses_allocable_to_sales_income": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "expenses_allocable_to_gross_income_from_performance_of_services": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "net_short_term_loss": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "net_long_term_loss": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "collectibles_loss": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "net_section_1231_loss": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "other_losses": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "allocable_rental_expenses_depreciation_depletion_and_amortization": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "allocable_rental_expenses_other_than_depreciation_depletion_and_amortization": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "allocable_royalty_and_licensing_expenses_depreciation_depletion_and_amortization": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "allocable_royalty_and_licensing_expenses_other_than_depreciation_depletion_and_amortization": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "depreciation_not_included_on_line_33_or_35": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "charitable_contributions": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "interest_expense_specifically_allocable_under_regulations_section_1_861_10e": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "other_interest_expense_specifically_allocable_under_regulations_section_1_861_10t": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "other_interest_expense_business": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "other_interest_expense_investment": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "other_interest_expense_passive_activity": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "section_59_e_2_expenditures_excluding_r_e_expenses_on_line_32": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "foreign_taxes_not_creditable_but_deductible": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "section_986_c_loss": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "section_987_loss": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "section_988_loss": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "other_allocable_deductions": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "other_apportioned_share_of_deductions": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "total_deductions_sum_of_lines_25_through_53": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            },
+            "net_income_loss": {
+              "$ref": "#/$defs/Partnership.Sec2GridLines"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Part II - Foreign Tax Credit Limitation."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Part II - Foreign Tax Credit Limitation, Section 2 - Deductions."
+    },
+    "Partnership.PennsylvaniaSpecificOtherInfo": {
+      "type": "object",
+      "properties": {
+        "activity_address": {
+          "maxLength": 35,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Activity's Address."
+        },
+        "income_rpt_r_k1_or_nr_k1_ind": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Income is reported from PA Schedule RK-1 or NRK-1."
+        },
+        "credit_paid_from_par_k1_consolidated_return": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Credit paid to other states or countries is from PA RK-1 or consolidated return."
+        },
+        "ordinary_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary business income (loss).",
+          "format": "double"
+        },
+        "real_estate_net_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net rental real estate income (loss).",
+          "format": "double"
+        },
+        "other_rental_income_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other net rental income (loss).",
+          "format": "double"
+        },
+        "interest_income_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Interest income, Schedule K-1 Part III Line 5.",
+          "format": "double"
+        },
+        "us_gov_interest_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "US Government interest.",
+          "format": "double"
+        },
+        "total_dividends_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total dividends (qualified or non qualified).",
+          "format": "double"
+        },
+        "royalties_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Royalties.",
+          "format": "double"
+        },
+        "other_portfolio_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other portfolio income(loss).",
+          "format": "double"
+        },
+        "guaranteed_pymts_to_partner_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Guaranteed payments to partners.",
+          "format": "double"
+        },
+        "total_net_short_term_capital_gain_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total Net short-term capital gain(loss)(entire year).",
+          "format": "double"
+        },
+        "total_net_long_term_capital_gain_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total Net long-term capital gain(loss)(entire year).",
+          "format": "double"
+        },
+        "ordinary_gain_loss_form4797_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary gain (loss) Form 4797.",
+          "format": "double"
+        },
+        "net_gain_loss_section1231_max15_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net gain (loss) Section 1231 - 15% Max.",
+          "format": "double"
+        },
+        "net_gain_loss_section1231_unrecap_section1250_gain_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net gain (loss) Section 1231 - Unrecap Section 1250 gain.",
+          "format": "double"
+        },
+        "resident_tax_exempt_interest_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Resident tax-exempt interest.",
+          "format": "double"
+        },
+        "non_resident_tax_exempt_interest_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Nonresident tax-exempt interest.",
+          "format": "double"
+        },
+        "non_resident_tax_withheld_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Nonresident tax withheld.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Pennsylvania Specific Other Information."
+    },
+    "Partnership.PropertyAddress": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "maxLength": 45,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Address."
+        },
+        "city": {
+          "maxLength": 22,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "City."
+        },
+        "country": {
+          "$ref": "#/$defs/CountryCodes"
+        },
+        "state": {
+          "$ref": "#/$defs/PropertyStateCode"
+        },
+        "zip": {
+          "maxLength": 10,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Zip."
+        },
+        "foreign_province": {
+          "maxLength": 40,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Foreign Address."
+        },
+        "foreign_postal_code": {
+          "maxLength": 15,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Foreign Postal Code."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Partnership Property Address."
+    },
+    "Partnership.QualifiedBusinessIncome": {
+      "type": "object",
+      "properties": {
+        "no_adjustment_for_section_1231_gain_loss": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Don't adjust QBI/QPTP for Section 1231 gain/loss."
+        },
+        "no_adjustment_for_section_59e2_expense": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Don't adjust QBI/QPTP for Section 59(e)(2) expense."
+        },
+        "no_adjustment_for_ordinary_gain_loss": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Don't adjust QPTP/QPTP for Ordinary gain/loss."
+        },
+        "no_adjustment_for_depletion": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Don't adjust QPTP/QPTP for Depletion.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n"
+        },
+        "reit_dividends": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 199A REIT dividends.",
+          "format": "double"
+        },
+        "section_199ag_deduction": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 199A(g) deduction.",
+          "format": "double"
+        },
+        "pre2018_suspended_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Section 199A Pre-2018 Suspended Loss.",
+          "format": "double"
+        },
+        "other_schedule_e_details": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/Partnership.OtherScheduleEDetail"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "description": "Section 199A - Qualified Business Income Information."
+    },
+    "Partnership.ResidentStateOtherInfo": {
+      "type": "object",
+      "properties": {
+        "oklahoma_specific": {
+          "$ref": "#/$defs/Partnership.OklahomaSpecificOtherInfo"
+        },
+        "massachusetts_specific": {
+          "$ref": "#/$defs/Partnership.MassachusettsSpecificOtherInfo"
+        },
+        "nj_specific": {
+          "$ref": "#/$defs/Partnership.NJSpecificOtherInfo"
+        },
+        "pennsylvania_specific": {
+          "$ref": "#/$defs/Partnership.PennsylvaniaSpecificOtherInfo"
+        },
+        "northcarolina_specific": {
+          "$ref": "#/$defs/Partnership.NorthCarolinaSpecificOtherInfo"
+        },
+        "westvirginia_specific": {
+          "$ref": "#/$defs/Partnership.WestVirginiaSpecificOtherInfo"
+        }
+      },
+      "additionalProperties": false,
+      "description": "State Specific Return Information."
+    },
+    "Partnership.Sec1GridLines": {
+      "type": "object",
+      "properties": {
+        "us_source": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "U.S Source.",
+          "format": "double"
+        },
+        "foreign_branch_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Foreign Branch Category Income.",
+          "format": "double"
+        },
+        "passive_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income.",
+          "format": "double"
+        },
+        "general_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income.",
+          "format": "double"
+        },
+        "other_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other Income.",
+          "format": "double"
+        },
+        "sourced_by_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Sourced By Partner.",
+          "format": "double"
+        },
+        "total": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Part II - Foreign Tax Credit Limitation, Section 1."
+    },
+    "Partnership.Sec2GridLines": {
+      "type": "object",
+      "properties": {
+        "us_source": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "U.S Source.",
+          "format": "double"
+        },
+        "foreign_branch_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Foreign Branch Category Income.",
+          "format": "double"
+        },
+        "passive_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income.",
+          "format": "double"
+        },
+        "general_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income.",
+          "format": "double"
+        },
+        "other_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other Income.",
+          "format": "double"
+        },
+        "sourced_by_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Sourced By Partner.",
+          "format": "double"
+        },
+        "total": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Partnership.StateFormLines": {
+      "type": "object",
+      "properties": {
+        "ordinary_gain_or_loss_form_4797_portfolio": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary gain/loss Form 4797 - Portfolio, Line 20ah.",
+          "format": "double"
+        },
+        "change_type": {
+          "$ref": "#/$defs/ChangeType"
+        },
+        "ordinary_business_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary business income (loss), Schedule K-1 Part III Line 1.",
+          "format": "double"
+        },
+        "net_rental_real_estate_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net rental real estate income (loss), Schedule K-1 Part III Line 2.",
+          "format": "double"
+        },
+        "other_net_rental_income_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other net rental income (loss), Schedule K-1 Part III Line 3.",
+          "format": "double"
+        },
+        "guaranteed_payments_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Guaranteed payments, Schedule K-1 Part III Line 4.",
+          "format": "double"
+        },
+        "interest_income_usgi_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Interest income, Schedule K-1 Part III Line 5 USGI.",
+          "format": "double"
+        },
+        "interest_income_non_usgi_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Interest income, Schedule K-1 Part III Line 5 Non USGI.",
+          "format": "double"
+        },
+        "ordinary_dividends_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary dividends, Schedule K-1 Part III Line 6a.",
+          "format": "double"
+        },
+        "royalties_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Royalties, Schedule K-1 Part III Line 7.",
+          "format": "double"
+        },
+        "net_short_term_capital_gain_or_Loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net short-term capital gain (loss), Schedule K-1 Part III Line 8.",
+          "format": "double"
+        },
+        "net_long_term_capital_gain_or_Loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net long-term capital gain (loss), Schedule K-1 Part III Line 9a.",
+          "format": "double"
+        },
+        "unrecaptured_section_1250_gain_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Unrecaptured section 1250 gain, Schedule K-1 Part III Line 9c.",
+          "format": "double"
+        },
+        "net_section_1231_gain_or_loss_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Net section 1231 gain (loss), Schedule K-1 Part III Line 10.",
+          "format": "double"
+        },
+        "other_portfolio_income_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other portfolio income, Schedule k-1 part III Line 11 a.",
+          "format": "double"
+        },
+        "charitable_contributions_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Contributions (100%), Schedule K-1 Part III Line 13g.",
+          "format": "double"
+        },
+        "deductions_royalty_income_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Deductions-royalty income, Schedule K-1 Part III Line 13i.",
+          "format": "double"
+        },
+        "portfolio_other_deductions_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Deductions - portfolio (other), Schedule K-1 Part III Line 13l.",
+          "format": "double"
+        },
+        "ordinary_gain_loss_form_4797_business": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Ordinary gain/loss Form 4797 Business.",
+          "format": "double"
+        },
+        "suspended_loss_operating": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Suspended Loss - Operating.",
+          "format": "double"
+        },
+        "suspended_loss_short_term": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Suspended Loss - Short-Term.",
+          "format": "double"
+        },
+        "suspended_loss_long_term": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Suspended Loss - Long-Term.",
+          "format": "double"
+        },
+        "suspended_loss_section_1231": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Suspended Loss - Section 1231.",
+          "format": "double"
+        },
+        "suspended_loss_ordinary_loss": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Suspended Loss - Ordinary Loss.",
+          "format": "double"
+        },
+        "state_bonus_depreciation_adjustment": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Bonus Depreciation Adjustment.",
+          "format": "double"
+        },
+        "state_tax_withholding_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Tax Withholding Income.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "double"
+        },
+        "state_tax_withheld": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Tax Withheld.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "double"
+        },
+        "state_tax_withholding_credit": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Tax Withholding Credits.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "double"
+        },
+        "state_oilgas_withheld": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "State Oil Gas/Royalty Tax Withheld.\n(*Note: This field is supported for the years 2020 to 9999 for this API version)\n",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "State specific Partner's Share of Current Year Income, Deductions, Credits, and Other Items."
+    },
+    "Partnership.StatePTETaxCredit": {
+      "type": "object",
+      "properties": {
+        "tax_credit": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Tax Credit.",
+          "format": "double"
+        },
+        "addition_override": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Addition Override.",
+          "format": "double"
+        },
+        "change_type": {
+          "$ref": "#/$defs/ChangeType"
+        }
+      },
+      "additionalProperties": false,
+      "description": "State pass-through entity elective tax credit."
+    },
+    "Partnership.SuspendedLossesInfo": {
+      "type": "object",
+      "properties": {
+        "operating_loss_federal_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Operating Loss, Federal Regular.",
+          "format": "double"
+        },
+        "operating_loss_federal_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Operating Loss, Federal AMT.",
+          "format": "double"
+        },
+        "operating_loss_state_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Operating Loss, State Regular (if different).",
+          "format": "double"
+        },
+        "operating_loss_state_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Operating Loss, State AMT (if different).",
+          "format": "double"
+        },
+        "sched_d_st_loss_federal_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Schedule D short-term loss, Federal Regular.",
+          "format": "double"
+        },
+        "sched_d_st_loss_federal_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Schedule D short-term loss, Federal AMT.",
+          "format": "double"
+        },
+        "sched_d_st_loss_state_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Schedule D short-term loss, State Regular (if different).",
+          "format": "double"
+        },
+        "sched_d_st_loss_state_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Schedule D short-term loss, State AMT (if different).",
+          "format": "double"
+        },
+        "sched_d_lt_loss_federal_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Schedule D long-term loss, Federal Regular.",
+          "format": "double"
+        },
+        "sched_d_lt_loss_federal_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Schedule D long-term loss, Federal AMT.",
+          "format": "double"
+        },
+        "sched_d_lt_loss_state_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Schedule D long-term loss, State Regular (if different).",
+          "format": "double"
+        },
+        "sched_d_lt_loss_state_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Schedule D long-term loss, State AMT (if different).",
+          "format": "double"
+        },
+        "form_4797_sec_1231_loss_federal_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Form 4797 Section 1231 loss, Federal Regular.",
+          "format": "double"
+        },
+        "form_4797_sec_1231_loss_federal_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Form 4797 Section 1231 loss, Federal AMT.",
+          "format": "double"
+        },
+        "form_4797_sec_1231_loss_state_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Form 4797 Section 1231 loss, State Regular (if different).",
+          "format": "double"
+        },
+        "form_4797_sec_1231_loss_state_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Form 4797 Section 1231 loss, State AMT (if different).",
+          "format": "double"
+        },
+        "form_4797_ordinary_loss_federal_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Form 4797 ordinary loss, Federal Regular.",
+          "format": "double"
+        },
+        "form_4797_ordinary_loss_federal_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Form 4797 ordinary loss, Federal AMT.",
+          "format": "double"
+        },
+        "form_4797_ordinary_loss_state_regular": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Form 4797 ordinary loss, State Regular (if different).",
+          "format": "double"
+        },
+        "form_4797_ordinary_loss_state_amt": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Form 4797 ordinary loss, State AMT (if different).",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Suspended Losses From Prior Year (positive number)."
+    },
+    "Partnership.WestVirginiaSpecificOtherInfo": {
+      "type": "object",
+      "properties": {
+        "income_subject_to_withholding_for_nonresident_as_reported_on_tax_return": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Income subject to withholding for nonresident as reported on tax return.",
+          "format": "double"
+        },
+        "amount_of_west_virginia_income_tax_withheld_and_refunded": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Amount of West Virginia income tax withheld and refunded.",
+          "format": "double"
+        },
+        "limited_liability_company": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Limited Liability Company."
+        },
+        "begin_tax_year": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Begin Tax Year.",
+          "format": "date-time"
+        },
+        "end_tax_year": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "End Tax Year.",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false,
+      "description": "West Virginia Specific Other Information.\n\n(*Note: This model is supported for the following years: 2021 to 9999, for this API version)\n"
+    },
+    "PartnershipChapter3Status": {
+      "enum": [
+        "None",
+        "03-Territory FI treated as U.S. Person",
+        "04-Territory FI not treated as U.S. Person",
+        "05-U.S. branch of Participating FFI - treated as U.S. Person",
+        "06-U.S. branch of Participating FFI - not treated as U.S. Person",
+        "07-U.S. branch of Registered Deemed-Compliant FFI - treated as U.S. Person",
+        "08-Partnership other than WFP or PTP",
+        "09-Withholding Foreign Partnership",
+        "10-Trust other than Withholding Foreign Trust",
+        "11-Withholding Foreign Trust",
+        "12-Qualified Intermediary",
+        "13-Qualified Securities Lender - Qualified Intermediary",
+        "14-Qualified Securities Lender - Other",
+        "15-Corporation",
+        "16-Individual",
+        "17-Estate",
+        "18-Private Foundation",
+        "19-International Organization",
+        "20-Tax Exempt Organization (Section 501(c) entities)",
+        "21-Unknown Recipient",
+        "22-Artist or Athlete",
+        "23-Pension",
+        "24-Foreign Central Bank of Issue",
+        "25-Nonqualified Itermediary",
+        "26-Hybrid entity making Treaty Claim",
+        "27-Withholding Rate Pool - General",
+        "28-Withholding Rate Pool - Exempt Organization",
+        "29-PAI Withholding Rate Pool - General",
+        "30-PAI Withholding Rate Pool - Exempt Organization",
+        "31-Agency Withholding Rate Pool - General",
+        "32-Agency Withholding Rate Pool - Exempt Organization",
+        "35-Qualified Derivatives Dealer",
+        "36-Foreign Government - Integral Part",
+        "37-Foreign Government - Controlled Entity",
+        "38-Publicly Traded Partnership"
+      ],
+      "type": "string",
+      "description": "Partnership Chapter 3 Status.\n(*Note: This field is supported for the years 2022 to 9999 for this API version)"
+    },
+    "PartnershipChapter4Status": {
+      "enum": [
+        "None",
+        "01-U.S. Withholding Agent - FI",
+        "02-U.S. Withholding Agent - Other",
+        "03-Territory FI - not treated as U.S. Person",
+        "04-Territory FI - treated as U.S. Person",
+        "05-Participating FFI - Other",
+        "06-Participating FFI - Reporting Model 2 FFI",
+        "07-Registered Deemed-Compliant FFI - Reporting Model 1 FFI",
+        "08-Registered Deemed-Compliant FFI - Sponsored Entity",
+        "09-Registered Deemed-Compliant FFI - Other",
+        "10-Certified Deemed-Compliant FFI - Other",
+        "11-Certified Deemed-Compliant FFI - FFI with Low Value Accounts",
+        "12-Certified Deemed-Compliant FFI - Non-Registering Local Bank",
+        "13-Certified Deemed-Compliant FFI - Sponsored Entity",
+        "14-Certified Deemed-Compliant FFI - Investment Advisor or Investment Manager",
+        "15-Nonparticipating FFI",
+        "16-Owner-Documented FFI",
+        "17-U.S. Branch - treated as U.S. person",
+        "18-U.S. Branch - not treated as U.S. person (reporting under section 1471)",
+        "19-Passive NFFE identifying Substantial U.S. Owners",
+        "20-Passive NFFE with no Substantial U.S. Owners",
+        "21-Publicly Traded Corporation or Affiliate of Publicly Traded Corporation",
+        "22-Active NFFE",
+        "23-Individual",
+        "24-Section 501(c) Entities",
+        "25-Excepted Territory NFFE",
+        "26-Excepted NFFE - Other",
+        "27-Exempt Beneficial Owner",
+        "28-Entity Wholly Owned By Exempt Beneficial Owners",
+        "29-Unknown Recipient",
+        "30-Recalcitrant Account Holder",
+        "31-Nonreporting IGA FFI",
+        "32-Direct reporting NFFE",
+        "33-U.S. reportable account",
+        "34-Non-consenting U.S. account",
+        "35-Sponsored direct reporting NFFE",
+        "36-Excepted Inter-affliiate FFI",
+        "37-Undocumented Preexisting Obligation",
+        "38-U.S. Branch - ECI presumption applied",
+        "39-Account Holder or Excluded Financial Account",
+        "40-Passive NFFE reported by FFi",
+        "41-NFFE subject to 1472 withholding",
+        "42-Recalcitrant Pool - No U.S. Indicia",
+        "43-Recalcitrant Pool - U.S. Indicia",
+        "44-Recalcitrant Pool - Dormant Account",
+        "45-Recalcitrant Pool - U.S. Persons",
+        "46-Recalcitrant Pool - Passive NFFEs",
+        "47-Nonparticipating FFI Pool",
+        "48-U.S. Payees Pool",
+        "49-QI-Recalcitrant Pool - GeneraI",
+        "50-U.S. Withholding Agent - Foreign branch of FI"
+      ],
+      "type": "string",
+      "description": "Partnership Chapter 4 Status.\n(*Note: This field is supported for the years 2022 to 9999 for this API version)"
+    },
+    "PassiveActiveType": {
+      "enum": [
+        "Passive",
+        "Active",
+        "Portfolio",
+        "RealEstateWithActiveParticipation",
+        "PubliclyTradedPartnership"
+      ],
+      "type": "string"
+    },
+    "PropertyStateCode": {
+      "enum": [
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "AS",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "DC",
+        "FL",
+        "FM",
+        "GA",
+        "GU",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MH",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MP",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PW",
+        "PA",
+        "PR",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "VI",
+        "WA",
+        "WV",
+        "WI",
+        "WY",
+        "AA",
+        "AE",
+        "AP"
+      ],
+      "type": "string",
+      "description": "US State codes.\n\n\tAL - Alabama\n\tAK - Alaska\n\tAZ - Arizona\n\tAR - Arkansas\n\tAS - American Samoa\n\tCA - California\n\tCO - Colorado\n\tCT - Connecticut\n\tDE - Delaware\n\tDC - District of Columbia\n\tFL - Florida\n\tFM - Federated States of Micronesia\n\tGA - Georgia\n\tGU - Guam\n\tHI - Hawaii\n\tID - Idaho\n\tIL - Illinois\n\tIN - Indiana\n\tIA - Iowa\n\tKS - Kansas\n\tKY - Kentucky\n\tLA - Louisiana\n\tME - Maine\n\tMD - Maryland\n\tMA - Massachusetts\n\tMH - Marshall Islands\n\tMI - Michigan\n\tMN - Minnesota\n\tMS - Mississippi\n\tMO - Missouri\n\tMP - Northern Mariana Islands\n\tMT - Montana\n\tNE - Nebraska\n\tNV - Nevada\n\tNH - New Hampshire\n\tNJ - New Jersey\n\tNM - New Mexico\n\tNY - New York\n\tNC - North Carolina\n\tND - North Dakota\n\tOH - Ohio\n\tOK - Oklahoma\n\tOR - Oregon\n\tPW - Palau\n\tPA - Pennsylvania\n\tPR - Puerto Rico\n\tRI - Rhode Island\n\tSC - South Carolina\n\tSD - South Dakota\n\tTN - Tennessee\n\tTX - Texas\n\tUT - Utah\n\tVT - Vermont\n\tVA - Virginia\n\tVI - Virgin Islands\n\tWA - Washington\n\tWV - West Virginia\n\tWI - Wisconsin\n\tWY - Wyoming\n\tAA - APO (ZIP 340xx)\n\tAE - APO (ZIP 090xx-0989xx)\n\tAP - APO (ZIP 962xx-966xx)"
+    },
+    "ScheduleK1StateSourceIncome": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "AL": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "AZ": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "AR": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "CO": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "CT": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "GA": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "HI": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "ID": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "IL": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "IN": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "IA": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "KS": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "KY": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "LA": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "ME": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "MD": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "MA": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "MI": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "MN": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "MO": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "MS": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "MT": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "NE": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "NJ": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "NM": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "NY": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "NC": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "ND": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "OH": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "OK": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "OR": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "RI": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "SC": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "UT": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "VA": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "WI": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        },
+        "WV": {
+          "$ref": "#/$defs/Partnership.StateFormLines"
+        }
+      },
+      "additionalProperties": false,
+      "description": "State Specific Partner's Share of Current Year Income, Deductions, Credits, and Other Items."
+    },
+    "Sec1GrossIncomeCategory": {
+      "enum": [
+        "Sales",
+        "GrossIncomeFromPerformanceOfServices",
+        "GrossRentalRealEstateIncome",
+        "OtherGrossRentalIncome",
+        "InterestIncome",
+        "OrdinaryDividendsNonqualified",
+        "QualifiedDividends",
+        "RoyaltiesAndLicenseFee",
+        "NetShort_TermCapitalGain",
+        "NetLong_TermCapitalGain",
+        "Collectibles_28_Gain",
+        "UnrecapturedSection1250Gain",
+        "NetSection1231Gain",
+        "Section951_A_Inclusions",
+        "OtherIncome",
+        "TotalGrossIncomeSumOfLines1_23"
+      ],
+      "type": "string",
+      "description": "Income Category."
+    },
+    "Sec1GrossIncomeCategoryType": {
+      "enum": [
+        "ReportedByForeignCountry",
+        "RegulatedInvestmentCompany",
+        "HighTaxedIncome",
+        "Section951A"
+      ],
+      "type": "string",
+      "description": "Category Type (if not by country)."
+    },
+    "Sec2Deductions": {
+      "type": "object",
+      "properties": {
+        "income_category": {
+          "$ref": "#/$defs/Sec2DeductionsIncomeCategory"
+        },
+        "sic_code": {
+          "pattern": "^(?!0000)\\d{4}$",
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "SIC Code."
+        },
+        "us_source": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "U.S Source.",
+          "format": "double"
+        },
+        "foreign_branch_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Foreign Branch Category Income.",
+          "format": "double"
+        },
+        "passive_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Passive Category Income.",
+          "format": "double"
+        },
+        "general_category_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "General Category Income.",
+          "format": "double"
+        },
+        "other_income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Other Income.",
+          "format": "double"
+        },
+        "sourced_by_partner": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Sourced By Partner.",
+          "format": "double"
+        },
+        "total": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Total.",
+          "format": "double"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Sec2DeductionsIncomeCategory": {
+      "enum": [
+        "ResearchAndExperimental_RE_Expenses"
+      ],
+      "type": "string",
+      "description": "Income Category."
+    },
+    "TaxCode": {
+      "enum": [
+        "FederalAndState",
+        "FederalOnly",
+        "CaliforniaOnly"
+      ],
+      "type": "string",
+      "description": "TaxCode."
+    }
+  }
+}

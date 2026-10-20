@@ -1,0 +1,205 @@
+openapi: 3.2.0
+info:
+  title: OSA OData Query Service Reconciliation Data API
+  description: OData API for querying OSA collections including effective rates, reconciliation data, numerator/denominator data, state data, and everywhere data
+  version: 1.0.0
+  contact:
+    name: OSA Team
+    email: support@thomsonreuters.com
+servers:
+- url: https://api.onesourcetax.com/data-query-reporting/state-apportionment/odata/v1/
+  description: AMERS endpoints
+security:
+- basicAuth: []
+tags:
+- name: Reconciliation Data
+  description: Reconciliation - shows state-wide totals alongside Per Return amounts, helping users identify and reconcile variances.
+paths:
+  /odata/v1/reconciliation:
+    get:
+      summary: Query Reconciliation Data
+      description: Retrieve reconciliation data with OData query options
+      operationId: getReconciliationData
+      parameters:
+      - $ref: '#/components/parameters/FilterParam'
+      - $ref: '#/components/parameters/SelectParam'
+      - $ref: '#/components/parameters/OrderByParam'
+      - $ref: '#/components/parameters/TopParam'
+      - $ref: '#/components/parameters/SkipParam'
+      - $ref: '#/components/parameters/CountParam'
+      responses:
+        '200':
+          description: Reconciliation data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationDataCollection'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+      security:
+      - basicAuth: []
+      tags:
+      - Reconciliation Data
+components:
+  parameters:
+    OrderByParam:
+      name: $orderby
+      in: query
+      description: OData orderby expression
+      required: false
+      schema:
+        type: string
+      example: year desc,jurisdiction asc
+    TopParam:
+      name: $top
+      in: query
+      description: OData top expression - maximum number of records to return
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+      example: 100
+    FilterParam:
+      name: $filter
+      in: query
+      description: OData filter expression
+      required: false
+      schema:
+        type: string
+      example: year eq '2025' and jurisdiction eq 'CA'
+    CountParam:
+      name: $count
+      in: query
+      description: OData count expression - include total count in response
+      required: false
+      schema:
+        type: boolean
+      example: true
+    SkipParam:
+      name: $skip
+      in: query
+      description: OData skip expression - number of records to skip
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+      example: 50
+    SelectParam:
+      name: $select
+      in: query
+      description: OData select expression - comma-separated list of properties
+      required: false
+      schema:
+        type: string
+      example: ID,name,jurisdiction,year
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Authentication failed
+        message:
+          type: string
+          example: Username or password incorrect.
+    ReconciliationDataCollection:
+      type: object
+      properties:
+        '@odata.context':
+          type: string
+          example: $metadata#reconciliation
+        '@odata.count':
+          type: integer
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReconciliationData'
+    ReconciliationData:
+      type: object
+      properties:
+        ID:
+          type: string
+          description: Entity ID
+        jurisdiction:
+          type: string
+          description: Tax jurisdiction
+        account:
+          type: string
+          description: Account name
+        parentAccount:
+          type: string
+          description: Parent account
+        factor:
+          type: string
+          description: Factor
+        category:
+          type: string
+          description: Category
+        source:
+          type: string
+          description: Data source
+        time:
+          type: string
+          description: Time period
+        type:
+          type: string
+          description: Type
+        amount:
+          type: number
+          format: double
+          description: Amount
+        isIncluded:
+          type: string
+          description: Is included flag
+        path:
+          type: string
+          description: Entity path
+        ultimateOwnershipPercentage:
+          type: number
+          format: double
+          description: Ultimate ownership percentage
+        isBlocked:
+          type: string
+          description: Is blocked flag
+        blockingEntity:
+          type: string
+          description: Blocking entity
+        blockingReason:
+          type: string
+          description: Blocking reason
+        jurisdictionType:
+          type: string
+          description: Jurisdiction type
+        businessActivity:
+          type: string
+          description: Business activity
+        memberName:
+          type: string
+          description: Member name
+        member:
+          type: string
+          description: Member
+        sourceName:
+          type: string
+          description: Source name
+        entityType:
+          type: string
+          description: Entity type
+        year:
+          type: string
+          description: Tax year
+        scenarioName:
+          type: string
+          description: Scenario name
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication using username and password

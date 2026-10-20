@@ -1,0 +1,312 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Assignments API
+  version: v1
+  contact:
+    name: API Support
+    url: https://www.onesourcetax.com/support
+    email: api-support@onesourcetax.com
+  license:
+    name: Proprietary License
+    url: https://www.onesourcetax.com/licenses/proprietary
+  description: 'Operations tagged Assignments across 2 of this provider''s published API definitions: thomson-reuters-statutory-reporting-period-setup-apis-openapi.json, thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server providing global access to reporting entities
+- url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server providing global access to template entities
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the EMEA region
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the EMEA region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the APAC region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the APAC region.
+security:
+- Token: []
+tags:
+- name: Assignments
+  description: Assignments endpoints for statutory reporting. Retrieves master account assignments for a category structure in a financial period.
+paths:
+  /{entity-id}/financial-periods/{financial-period-id}/categories/{category-id}/assignments:
+    get:
+      tags:
+      - Assignments
+      description: Use this operation to return a list of account assignments associated with a category.
+      operationId: GetListOfAccountAssigments
+      summary: Get List of Account Assigments
+      parameters:
+      - name: entity-id
+        in: path
+        required: true
+        description: The entity id in which the financial period is created. To obtain a reporting entity ID, refer to the [Get Reporting Entities API](#tag/reporting-entities/get/) documentation. For guidance on obtaining a template entity ID, see the [Get Template Entities API](#tag/template-entities/get/) documentation.
+        schema:
+          type: string
+          format: uuid
+        example: 90eb7c21-8d0d-46b9-8079-b38d004dd6a0
+      - name: financial-period-id
+        in: path
+        required: true
+        description: The identifier of the financial period from which account assignment details are retrieved. Obtain this ID using the [Get Financial Periods API](#tag/financial-periods/get{entity-id}/financial-periods).
+        schema:
+          type: string
+          format: uuid
+        example: 0f4252ee-8f46-4ba5-a8e4-b39c00881c11
+      - name: category-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier for the category. Refer to the [Get Categories API](#tag/categories/get{entity-id}/financial-periods/{financial-period-id}/categories) endpoint in this documentation for category Id details.
+        example: c3d4e5f6-a7b8-9012-3456-7890abcdef23
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 4000
+        description: The maximum number of items to return in a single page of results.
+        example: 100
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        description: The page number to retrieve for paginated results.
+        example: 2
+      responses:
+        '200':
+          description: Successfully retrieved a list of assignments with its count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignments'
+              examples:
+                listOfAssignments:
+                  summary: Example of a successful assignments response
+                  value:
+                    items:
+                    - categoryCode: Balance
+                      categoryName: Balance
+                      accounts:
+                      - code: suspense
+                        name: suspense
+                        assignmentType: Always
+                      - code: Test_02
+                        name: Testaccount
+                        assignmentType: Always
+                    count: 2
+        '400':
+          description: Bad Request. Occurs when the server cannot process the request due to invalid parameters or a malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidParameter:
+                  summary: Example invalid category-id error
+                  value:
+                    statusCode: 400
+                    message: A root category ID must be provided
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: https://developers.onesourcetax.com/errors/#keymanagement.service.invalid_access_token
+                  title:
+                    type: string
+                    example: Invalid Access Token
+                  detail:
+                    type: string
+                    example: Invalid Access Token
+                  status:
+                    type: integer
+                    example: 401
+                  instance:
+                    type: string
+                    example: /statutory-reporting/v1/reporting-entities/92abcd47-4e56-4961-b9b6-b30e00f46ba8/financial-periods/a5d4f2f3-5250-494d-b773-b30e00f46d48/categories/c3d4e5f6-a7b8-9012-3456-7890abcdef23/assignments
+                  api_requestId:
+                    type: string
+                    example: rrt-0080bd6edb6a51c07-c-ea-1408325-2337761-1
+        '403':
+          description: 'Forbidden: The request was understood, but the server refuses to authorize it. The client does not have the necessary permissions to access the resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbiddenAccessDenied:
+                  summary: Example forbidden error - Insufficient permissions
+                  value:
+                    StatusCode: 403
+                    Message: 'Access Denied: User does not have the required role or permissions to perform this action.'
+        '404':
+          description: Not Found. The requested entity does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFoundError:
+                  summary: Example not found error
+                  value:
+                    statusCode: 404
+                    message: There are no assignments with the given inputs.
+        '500':
+          description: Internal Server Error. An unexpected error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                serverError:
+                  summary: Example server error
+                  value:
+                    StatusCode: 500
+                    Message: An unexpected error occurred.
+      security:
+      - Token: []
+      x-operation-id-source: normalized
+      x-operation-id-original: 'Get List Of Account Assigments '
+    servers:
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server providing global access to reporting entities
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server providing global access to template entities
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the EMEA region
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the EMEA region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the APAC region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the APAC region.
+components:
+  schemas:
+    Assignments:
+      type: object
+      description: Represents a collection of assignments, typically including a list of individual assignment elements and their total count.
+      properties:
+        items:
+          type: array
+          description: A list of individual assignment elements.
+          items:
+            $ref: '#/components/schemas/AssignmentElement'
+          nullable: true
+        count:
+          type: integer
+          format: int32
+          description: The total number of assignment elements in the collection.
+          example: 2
+      additionalProperties: false
+      example:
+        items:
+        - categoryCode: EXP
+          categoryName: Expenses
+          accounts:
+          - code: ACC001
+            name: Rent Expense
+            assignmentType: Direct
+          - code: ACC002
+            name: Utilities Expense
+            assignmentType: Direct
+        - categoryCode: REV
+          categoryName: Revenue
+          accounts:
+          - code: ACC003
+            name: Sales Revenue
+            assignmentType: Direct
+        count: 2
+    AccountAssigned:
+      type: object
+      description: Represents an account that has been assigned to a category.
+      properties:
+        code:
+          type: string
+          nullable: true
+          description: The unique code of the assigned account.
+          example: ACC001
+        name:
+          type: string
+          nullable: true
+          description: The human-readable name of the assigned account.
+          example: Rent Expense
+        assignmentType:
+          type: string
+          nullable: true
+          description: The type of assignment for this account (e.g., 'Direct', 'Indirect').
+          example: Direct
+      additionalProperties: false
+      example:
+        code: ACC001
+        name: Rent Expense
+        assignmentType: Direct
+    AssignmentElement:
+      type: object
+      description: Represents a single assignment, linking a category to a set of accounts.
+      properties:
+        categoryCode:
+          type: string
+          nullable: true
+          description: A unique code for the category.
+          example: EXP
+        categoryName:
+          type: string
+          nullable: true
+          description: The human-readable name of the category.
+          example: Expenses
+        accounts:
+          type: array
+          description: A list of accounts assigned to this category.
+          items:
+            $ref: '#/components/schemas/AccountAssigned'
+          nullable: true
+      additionalProperties: false
+      example:
+        categoryCode: EXP
+        categoryName: Expenses
+        accounts:
+        - code: ACC001
+          name: Rent Expense
+          assignmentType: Direct
+        - code: ACC002
+          name: Utilities Expense
+          assignmentType: Direct
+    ErrorResponse:
+      type: object
+      description: Standard error response object containing HTTP status code and a descriptive message.
+      properties:
+        StatusCode:
+          type: integer
+          format: int32
+          description: HTTP status code of the error (for example, 400, 404, 500).
+          minimum: 100
+          maximum: 599
+        Message:
+          type: string
+          nullable: true
+          description: A human-readable message providing details about the error.
+          minLength: 1
+          maxLength: 512
+      additionalProperties: false
+      example:
+        StatusCode: 400
+        Message: Invalid request parameters.
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: 'Authorization header. Provide a valid Access token for authentication  Example: `Authorization: Bearer <<Access Token>>`. You can find Authentication process in ''API Access'' Section'
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.json
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

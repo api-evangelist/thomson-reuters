@@ -1,0 +1,1157 @@
+openapi: 3.2.0
+info:
+  title: GoSystem Tax Return TaxReturn (V1) API
+  description: This API exposes features for working with GoSystem Tax Returns.
+  version: beta
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: TaxReturn (V1)
+paths:
+  /v1/save-fields:
+    post:
+      tags:
+      - TaxReturn (V1)
+      summary: Save one or more field values in an open tax return
+      description: This endpoint saves one or more field values in an open tax return. You must open the tax return by calling the open endpoint before calling this endpoint.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveFieldsRequestDTO'
+            examples:
+              save-fields-request-simple-v1:
+                $ref: '#/components/examples/save-fields-request-simple-v1'
+              save-fields-request-group-v1:
+                $ref: '#/components/examples/save-fields-request-group-v1'
+              1120-add-rental-ordinary-master-group-request-v1:
+                $ref: '#/components/examples/1120-add-rental-ordinary-master-group-request'
+              1120-add-rental-other-master-group-request-v1:
+                $ref: '#/components/examples/1120-add-rental-other-master-group-request'
+              1120-add-K1-pass-through-ordinary-master-group-request-v1:
+                $ref: '#/components/examples/1120-add-K1-pass-through-ordinary-master-group-request'
+              1120-add-K1-pass-through-others-master-group-request-v1:
+                $ref: '#/components/examples/1120-add-K1-pass-through-others-master-group-request'
+              1120-add-form-master-group-request-v1:
+                $ref: '#/components/examples/1120-add-form-master-group-request'
+              1065-other-rental-master-group-request:
+                $ref: '#/components/examples/1065-other-rental-master-group-request'
+              1065-other-expense-under-rental-master-group-request-v1:
+                $ref: '#/components/examples/1065-other-expense-under-rental-master-group-request-v1'
+              1040-add-schedule-K1-partnership-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-schedule-K1-partnership-master-group-request'
+              1040-add-schedule-K1-estate-trust-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-schedule-K1-estate-trust-master-group-request'
+              1040-add-schedule-K1-S-corporation-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-schedule-K1-S-corporation-master-group-request'
+              1040-add-schedule-K1-PTP-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-schedule-K1-PTP-master-group-request'
+              1040-add-schedule-C-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-schedule-C-master-group-request'
+              1040-add-business-expenses-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-business-expenses-master-group-request'
+              1040-add-consolidated-1099-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-consolidated-1099-master-group-request'
+              1040-add-schedule-E-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-schedule-E-master-group-request'
+              1040-add-schedule-F-rental-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-schedule-F-rental-master-group-request'
+              1040-add-schedule-F-master-group-request-v1:
+                $ref: '#/components/examples/1040-add-schedule-F-master-group-request'
+              1040-add-wages-request-v1:
+                $ref: '#/components/examples/1040-add-wages-request-v1'
+              1040-save-grid-tables-v1:
+                $ref: '#/components/examples/1040-save-grid-tables-v1'
+              1041-add-form-1099-INT-request-v1:
+                $ref: '#/components/examples/1041-add-form-1099-INT-request-v1'
+              990-add-compensation-of-officer-form-990-request-v1:
+                $ref: '#/components/examples/990-add-compensation-of-officer-form-990-request-v1'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveFieldsResponseDTOV1'
+              examples:
+                save-fields-success-v1:
+                  $ref: '#/components/examples/save-fields-response-success-v1'
+        '207':
+          description: Multi Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveFieldsResponseDTOV1'
+              examples:
+                save-fields-response-validation-failure-simple-v1:
+                  $ref: '#/components/examples/save-fields-response-validation-failure-simple-v1'
+                save-fields-response-validation-failure-group-v1:
+                  $ref: '#/components/examples/save-fields-response-validation-failure-group-v1'
+        '400':
+          description: Bad Request - Invalid input parameters or validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                BadRequest:
+                  summary: Bad Request
+                  value:
+                    responseType: BadRequest
+                    statusCode: '400'
+                    message: Bad Request
+                    fieldErrors: []
+        '401':
+          description: Unauthorized - Missing or invalid authentication
+        '403':
+          description: Forbidden - Valid authentication but insufficient permissions to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                Forbidden_ReadOnlyTaxReturn_SaveFields:
+                  summary: Read-only tax return
+                  value:
+                    responseType: Forbidden
+                    statusCode: '403'
+                    message: Read Only TaxReturn
+                    fieldErrors: []
+        '500':
+          description: Internal Server Error - Server-side errors during tax return processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                InternalServerError_GenericError_SaveFields:
+                  summary: Generic server error
+                  value:
+                    responseType: InternalServerError
+                    statusCode: '500'
+                    message: Something went wrong. Please connect support team.
+                    fieldErrors: []
+        '503':
+          description: Service Unavailable - Dependent services are temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                ServiceUnavailable:
+                  summary: Service unavailable
+                  value:
+                    responseType: ServiceUnavailable
+                    statusCode: '503'
+                    message: Service unavailable
+                    fieldErrors: []
+                ServiceUnavailable_TaxReturn_Busy:
+                  summary: Tax return is busy
+                  value:
+                    responseType: Bad Request
+                    statusCode: '400'
+                    message: TaxReturn is busy
+                    fieldErrors: []
+      operationId: postV1SaveFields
+      x-operation-id-source: derived
+  /v1/retrieve-fields:
+    post:
+      tags:
+      - TaxReturn (V1)
+      summary: Retrieve one or more field values from an open tax return
+      description: This endpoint retrieves one or more field values from an open tax return. You must open the tax return by calling the open endpoint before calling this endpoint.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrieveFieldsRequestDTO'
+            examples:
+              retrieve-fields-request-simple-v1:
+                $ref: '#/components/examples/retrieve-fields-request-simple'
+              retrieve-fields-request-group-v1:
+                $ref: '#/components/examples/retrieve-fields-request-group-v1'
+              1120-rental-activity-number-retrieve-fields-master-group-request-v1:
+                $ref: '#/components/examples/1120-rental-activity-number-retrieve-fields-master-group-request'
+              1065-rental-activity-number-retrieve-fields-master-group-request-v1:
+                $ref: '#/components/examples/1065-rental-activity-number-retrieve-fields-master-group-request'
+              1040-retrieve-fields-request-simple-v1:
+                $ref: '#/components/examples/1040-retrieve-fields-request-simple'
+              1040-retrieve-fields-request-group-v1:
+                $ref: '#/components/examples/1040-retrieve-fields-request-group'
+              1040-schedule-C-activity-number-retrieve-fields-master-group-request-v1:
+                $ref: '#/components/examples/1040-schedule-C-activity-number-retrieve-fields-master-group-request'
+              retrieve-1120-all-activity-number-master-group-request-v1:
+                $ref: '#/components/examples/1120-all-activity-number-retrieve-master-group-request'
+              retrieve-1065-all-activity-number-master-group-request-v1:
+                $ref: '#/components/examples/1065-all-activity-number-retrieve-master-group-request'
+              retrieve-1040-all-activity-number-master-group-request-v1:
+                $ref: '#/components/examples/1040-all-activity-number-retrieve-master-group-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveFieldsResponseDTOV1'
+              examples:
+                retrieve-fields-response-simple-v1:
+                  $ref: '#/components/examples/retrieve-fields-response-simple-v1'
+                retrieve-fields-response-group-v1:
+                  $ref: '#/components/examples/retrieve-fields-response-group-v1'
+        '207':
+          description: Multi Status - Partial success, some fields retrieved successfully while others may have failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveFieldsResponseDTOV1'
+              examples:
+                PartialSuccess_RetrieveFields_V1:
+                  summary: Partial success with field errors
+                  value:
+                    fieldsResponse:
+                    - groupField: null
+                      fields:
+                      - fieldId: RS.ENTITYNAME
+                        value: Thomson Reuters
+                        isGroup: false
+                        override: true
+                        responseStatus: null
+                      - fieldId: BASEIN
+                        value: 12-1234567
+                        isGroup: false
+                        override: true
+                        responseStatus:
+                          isSuccess: false
+                          code: '500'
+                          message: '500'
+        '400':
+          description: Bad Request - Invalid input parameters or validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                BadRequest:
+                  summary: Bad Request
+                  value:
+                    responseType: BadRequest
+                    statusCode: '400'
+                    message: Bad Request
+                    fieldErrors: []
+        '406':
+          description: Not Acceptable - Validation failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                ValidationFailure_RetrieveFields:
+                  summary: Validation Failure
+                  value:
+                    responseType: ValidationFailure
+                    statusCode: '400'
+                    message: Validation Failure
+                    fieldErrors: []
+        '500':
+          description: Internal Server Error - Server-side errors during tax return processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                InternalServerError_RetrieveFields:
+                  summary: Unable to open tax return
+                  value:
+                    responseType: Failure
+                    statusCode: '500'
+                    message: Unable to open Tax Return, please try again later or contact support team
+                    fieldErrors: []
+        '503':
+          description: Service Unavailable - Dependent services are temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                ServiceUnavailable:
+                  summary: Service unavailable
+                  value:
+                    responseType: ServiceUnavailable
+                    statusCode: '503'
+                    message: Service unavailable
+                    fieldErrors: []
+      operationId: postV1RetrieveFields
+      x-operation-id-source: derived
+  /v1/jurisdiction-details:
+    post:
+      tags:
+      - TaxReturn (V1)
+      summary: Generate the list of active jurisdictions and their e-file data
+      description: This endpoint generates the list of active jurisdictions and their e-file data for a given tax year and locator.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenTaxReturnRequestDto'
+            examples:
+              2024-jurisdiction-details-request:
+                $ref: '#/components/examples/2024-jurisdiction-details-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileSummary'
+              examples:
+                jurisdiction-details-All-States-Active-success-response:
+                  $ref: '#/components/examples/jurisdiction-details-partial-success-response'
+        '400':
+          description: Bad Request - Invalid input parameters, validation errors, or business logic failures
+          content:
+            application/json:
+              examples:
+                validation-error-missing-required-fields:
+                  summary: Missing required fields validation error
+                  value:
+                    type: https://tools.ietf.org/html/rfc9110#section-15.5.1
+                    title: One or more validation errors occurred.
+                    status: 400
+                    errors:
+                      Account:
+                      - The Account field is required.
+                      TaxYear:
+                      - The TaxYear field is required.
+                    traceId: 00-11c19133aa9dccd8fbb39793fe435ced-82c168f58fe8659e-00
+                invalid-tax-return-or-year:
+                  summary: Invalid tax return id or tax year
+                  value:
+                    statusCode: '400'
+                    message: Invalid tax return id or tax year
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error - Unexpected server error during processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                unknown-error:
+                  value:
+                    statusCode: '500'
+                    message: Unknown Error occured
+      operationId: postV1JurisdictionDetails
+      x-operation-id-source: derived
+components:
+  schemas:
+    EFileJurisdiction:
+      type:
+      - object
+      - 'null'
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        jurisdiction:
+          type:
+          - string
+          - 'null'
+        returnType:
+          type:
+          - string
+          - 'null'
+        eFileRequestType:
+          type:
+          - string
+          - 'null'
+        paperFile:
+          type:
+          - string
+          - 'null'
+    FieldsRequestDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        groupField:
+          $ref: '#/components/schemas/GroupData'
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldData'
+    SaveFieldsResponseDTOV1:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldsResponse:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldsResponseDTOV1'
+    RetrieveFieldsRequestDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldsRequest:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldsRequestDTO'
+    GroupData:
+      type:
+      - object
+      - 'null'
+      properties:
+        index:
+          type: integer
+          format: int32
+        fieldId:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+          description: Value or Activity Number of the Group, that uniquely identify the group/master group parent.
+        child:
+          $ref: '#/components/schemas/GroupData'
+        responseStatus:
+          $ref: '#/components/schemas/FieldResponse'
+    OpenTaxReturnRequestDto:
+      required:
+      - account
+      - taxReturnId
+      - taxYear
+      type:
+      - object
+      - 'null'
+      properties:
+        account:
+          type: string
+        taxYear:
+          type: string
+        taxReturnId:
+          type: string
+        password:
+          type: string
+    FieldData:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldId:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+          description: Value of the field. This value must be unique when Master Group data is added.
+        isGroup:
+          type: boolean
+        responseStatus:
+          $ref: '#/components/schemas/FieldResponse'
+    EFileSummary:
+      type:
+      - object
+      - 'null'
+      properties:
+        taxType:
+          type:
+          - string
+          - 'null'
+        eFiles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EFileJurisdiction'
+    RetrieveFieldsResponseDTOV1:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldsResponse:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldsResponseDTOV1'
+    ProblemResponseDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        responseType:
+          type:
+          - string
+          - 'null'
+        statusCode:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        fieldErrors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldError'
+    SaveFieldsRequestDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldsRequest:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldsRequestDTO'
+    FieldResponse:
+      type:
+      - object
+      - 'null'
+      properties:
+        isSuccess:
+          type: boolean
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        messageVariables:
+          type:
+          - array
+          - 'null'
+          items:
+            type:
+            - string
+            - 'null'
+    FieldError:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldId:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        errorCode:
+          type:
+          - string
+          - 'null'
+    FieldsResponseDTOV1:
+      type:
+      - object
+      - 'null'
+      properties:
+        groupField:
+          $ref: '#/components/schemas/GroupData'
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldDataV1'
+    FieldDataV1:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldId:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+          description: Value of the field. This value must be unique when Master Group data is added.
+        isGroup:
+          type: boolean
+        override:
+          type: boolean
+          default: true
+          description: Indicates whether the field value can be overridden.
+        responseStatus:
+          $ref: '#/components/schemas/FieldResponse'
+  examples:
+    1040-schedule-C-activity-number-retrieve-fields-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: BUS.PROPNUMBER
+            isGroup: true
+    1040-add-schedule-C-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: BUS.PROPNUMBER
+            value: '12'
+            child: null
+          fields:
+          - fieldId: BUS.BUSNAME
+            value: PS2
+          - fieldId: BUS.EMPLIDENTNO
+            value: 12-1234567
+    1040-retrieve-fields-request-simple:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: FED.ULTRT
+          - fieldId: FED.ULTACT
+    1041-add-form-1099-INT-request-v1:
+      value:
+        fieldsRequest:
+        - groupField:
+            index: 0
+            fieldId: INT.PAYRNAME
+            value: NewForm
+          fields:
+          - fieldId: INT.RECNAME
+            value: TaxpayerName
+    jurisdiction-details-partial-success-response:
+      value:
+        taxType: '1065'
+        eFiles:
+        - name: Maryland
+          jurisdiction: MD
+          returnType: Regular
+          eFileRequestType: REG
+          paperFile: 'true'
+        - name: Maryland Extension
+          jurisdiction: MD
+          returnType: Extension
+          eFileRequestType: EXT
+          paperFile: 'false'
+    retrieve-fields-request-simple:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: RS.ENTITYNAME
+          - fieldId: BASEIN
+    1040-add-consolidated-1099-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: INT.ACTNUMBER
+            value: '1'
+            child: null
+          fields:
+          - fieldId: INT.PAYERBR
+            value: PS2
+    save-fields-response-success-v1:
+      value:
+        fieldsResponse: null
+    1040-retrieve-fields-request-group:
+      value:
+        fieldsRequest:
+        - groupField:
+            index: 0
+            fieldId: SLS.PY1231TSJ
+            value: J
+          fields:
+          - fieldId: SLS.PY31ONE
+            isGroup: true
+          - fieldId: SLS.PY31TWO
+            isGroup: true
+    1040-add-schedule-F-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: FRM.PROPNUMBER
+            value: '13'
+            child: null
+          fields:
+          - fieldId: FRM.FARMNAME
+            value: PS2
+          - fieldId: FRM.XFARMRENTAL
+            value: X
+    retrieve-fields-response-simple-v1:
+      value:
+        fieldsResponse:
+        - groupField: null
+          fields:
+          - fieldId: RS.ENTITYNAME
+            value: Thomson Reuters
+            override: true
+            responseStatus: null
+          - fieldId: BASEIN
+            value: 12-1234567
+            override: true
+            responseStatus: null
+    1065-all-activity-number-retrieve-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: ORAP20A01
+            isGroup: true
+          - fieldId: ORAP20A01
+            isGroup: true
+          - fieldId: FRMNO
+            isGroup: true
+          - fieldId: PTESET
+            isGroup: true
+          - fieldId: MTBSET
+            isGroup: true
+          - fieldId: DPLSETNUM
+            isGroup: true
+    1065-rental-activity-number-retrieve-fields-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: RNTP19A01
+            isGroup: true
+    1120-rental-activity-number-retrieve-fields-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: RNT.NUMBER
+            isGroup: true
+    1040-add-schedule-K1-partnership-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: SK1.ID
+            value: '2'
+          - fieldId: SK1.NAME
+            value: ps32
+          - fieldId: SK1.TYPEK1
+            value: A
+    1040-add-schedule-E-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: RNT.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: RNT.KINDPROP
+            value: PS2
+          - fieldId: RNT.LOCATION
+            value: HYD
+          - fieldId: RNT.TYPE
+            value: '1'
+    2024-jurisdiction-details-request:
+      value:
+        account: '3777'
+        taxYear: '2024'
+        taxReturnId: 96662D
+        password: ''
+    retrieve-fields-request-group-v1:
+      value:
+        fieldsRequest:
+        - groupField:
+            index: 0
+            fieldId: FOR.NAME2
+            child: null
+          fields:
+          - fieldId: FOR.PERCENT
+          - fieldId: X178.1576.3
+    1040-add-schedule-K1-S-corporation-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: SK1.ID
+            value: '2'
+          - fieldId: SK1.NAME
+            value: ps32
+          - fieldId: SK1.TYPEK1
+            value: C
+    1120-add-K1-pass-through-others-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.SET2
+            value: '4'
+            child: null
+          fields:
+          - fieldId: SK1.ACTNAME
+            value: K1 PASS 1
+          - fieldId: SK1.ACTTYPE
+            value: C
+    1040-add-business-expenses-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: CAR.PROPNUMBER
+            value: '123'
+            child: null
+          fields:
+          - fieldId: FED.F2106
+            value: PS2
+    1040-all-activity-number-retrieve-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: BUS.PROPNUMBER
+            isGroup: true
+          - fieldId: CAR.PROPNUMBER
+            isGroup: true
+          - fieldId: INT.ACTNUMBER
+            isGroup: true
+          - fieldId: RNT.PROP
+            isGroup: true
+          - fieldId: SK1.PROP
+            isGroup: true
+          - fieldId: FRM.PROPNUMBER
+            isGroup: true
+    save-fields-response-validation-failure-simple-v1:
+      value:
+        fieldsResponse:
+        - groupField: null
+          fields:
+          - fieldId: BASSTATE
+            value: '123'
+            isGroup: false
+            override: true
+            responseStatus:
+              isValid: false
+              code: E1003
+              message: The input value - 123 is not in allowed list of values
+              messageVariables:
+              - '123'
+    retrieve-fields-response-group-v1:
+      value:
+        fieldsResponse:
+        - groupField:
+            index: 0
+            fieldId: ORAP20A02
+            value: test-other-rental
+            child: null
+          fields:
+          - fieldId: DPR.A1
+            value: test1
+            isGroup: true
+            override: true
+            responseStatus: null
+          - fieldId: DPR.A1
+            value: test2
+            isGroup: true
+            override: true
+            responseStatus: null
+    1120-add-rental-other-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: RNT.NUMBER
+            value: '2'
+            child: null
+          fields:
+          - fieldId: RNT.NAME
+            value: RENT TREE
+          - fieldId: RNT.TYPE
+            value: C
+    1040-save-grid-tables-v1:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: FED.TPFIRST
+            value: EA ST 1040
+          - fieldId: FED.TPSSN
+            value: 12-1234567
+          - fieldId: FED.TPBIRTH
+            value: 10/10/2000
+          - index: 0
+            fieldId: XO.PPOH
+            value: '100'
+            isGroup: true
+          - index: 1
+            fieldId: XO.PPOH
+            value: '200'
+            isGroup: true
+          - index: 2
+            fieldId: XO.PPOH
+            value: '300'
+            isGroup: true
+          - index: 0
+            fieldId: X0.PPOR
+            value: '1000'
+            isGroup: true
+          - index: 1
+            fieldId: X0.PPOR
+            value: '2000'
+            isGroup: true
+          - index: 2
+            fieldId: X0.PPOR
+            value: '3000'
+            isGroup: true
+    save-fields-request-group-v1:
+      value:
+        fieldsRequest:
+        - groupField:
+            index: 0
+            fieldId: FOR.NAME2
+            value: test-foreign-corp
+            child: null
+          fields:
+          - fieldId: FOR.PERCENT
+            value: 90
+          - fieldId: X178.1576.3
+            value: Former Test Name
+    1040-add-schedule-K1-PTP-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: SK1.ID
+            value: '2'
+          - fieldId: SK1.NAME
+            value: ps32
+          - fieldId: SK1.TYPEK1
+            value: F
+    save-fields-request-simple-v1:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: WAG.WAGES
+            value: '100'
+          - fieldId: WAG.FEDERALWH
+            value: '200'
+          - fieldId: WAG.SSWAGES
+            value: '300'
+          - fieldId: WAG.SSWH
+            value: '400'
+    1065-other-expense-under-rental-master-group-request-v1:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: RNTP19A01
+            value: 1
+          fields:
+          - fieldId: RNTP19A02
+            value: Income Name
+          - index: 0
+            fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - index: 0
+            fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - index: 1
+            fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - index: 1
+            fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - index: 2
+            fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - index: 2
+            fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - index: 3
+            fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - index: 3
+            fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+    1040-add-schedule-F-rental-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: FRM.PROPNUMBER
+            value: '13'
+            child: null
+          fields:
+          - fieldId: FRM.FARMNAME
+            value: PS2
+    1120-add-form-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: FRM.ACTNUMBER
+            value: '5'
+            child: null
+          fields:
+          - fieldId: FRM.NAME
+            value: FORM 1
+    1040-add-wages-request-v1:
+      value:
+        fieldsRequest:
+        - groupField:
+            index: 0
+            fieldId: WAG.NAME
+            value: Test
+          fields:
+          - fieldId: WAG.EMPID
+            value: 12-1234567
+    1120-all-activity-number-retrieve-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: RNT.NUMBER
+            isGroup: true
+          - fieldId: FRM.ACTNUMBER
+            isGroup: true
+          - fieldId: SK1.SET2
+            isGroup: true
+    1040-add-schedule-K1-estate-trust-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: SK1.ID
+            value: '2'
+          - fieldId: SK1.NAME
+            value: ps32
+          - fieldId: SK1.TYPEK1
+            value: B
+    1120-add-rental-ordinary-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: RNT.NUMBER
+            value: '1'
+            child: null
+          fields:
+          - fieldId: RNT.NAME
+            value: RENT TREE
+          - fieldId: RNT.TYPE
+            value: A
+    1065-other-rental-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: ORAP20A01
+            value: '1'
+            child: null
+          fields:
+          - fieldId: ORAP20A02
+            value: test-other-rental2
+    1120-add-K1-pass-through-ordinary-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.SET2
+            value: '3'
+            child: null
+          fields:
+          - fieldId: SK1.ACTNAME
+            value: K1 PASS 1
+          - fieldId: SK1.ACTTYPE
+            value: A
+    save-fields-response-validation-failure-group-v1:
+      value:
+        fieldsResponse:
+        - groupField:
+            index: 0
+            fieldId: FOR.NAME2
+            value: test-foreign-corp
+            child: null
+            responseStatus: null
+          fields:
+          - fieldId: FOR.PERCENT
+            value: text
+            isGroup: false
+            override: true
+            responseStatus:
+              isSuccess: false
+              code: E1004
+              message: text is invalid for a Dollar field
+              messageVariables:
+              - text
+    990-add-compensation-of-officer-form-990-request-v1:
+      value:
+        fieldsRequest:
+        - groupField:
+            index: 0
+            fieldId: E110.NAME
+            value: OfficerName
+          fields:
+          - fieldId: E110.TITLE
+            value: Title
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

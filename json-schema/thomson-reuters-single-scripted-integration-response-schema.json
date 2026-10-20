@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-single-scripted-integration-response-schema.json",
+  "title": "SingleScriptedIntegrationResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-ingest-service-openapi.yml#/components/schemas/SingleScriptedIntegrationResponse",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Unique identifier of the integration",
+      "format": "int32"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the script"
+    },
+    "application": {
+      "type": "string",
+      "description": "Application from which we can pull data into the Data Lake"
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ParameterDTO"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/TagDTO"
+      }
+    },
+    "short_code": {
+      "type": "string",
+      "description": "Short id of the script"
+    }
+  },
+  "$defs": {
+    "ParameterDTO": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of parameter",
+          "enum": [
+            "String",
+            "Integer",
+            "Decimal",
+            "Date"
+          ]
+        },
+        "key": {
+          "type": "string",
+          "description": "Parameter key for the Script"
+        }
+      }
+    },
+    "TagDTO": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Tag Name"
+        }
+      }
+    }
+  }
+}

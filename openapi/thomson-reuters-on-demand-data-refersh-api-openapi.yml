@@ -1,0 +1,183 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters On-Demand Data Refersh API
+  version: v1
+  description: 'Operations tagged On-Demand Data Refersh across 2 of this provider''s published API definitions: thomson-reuters-onesource-tax-provision-odata-apis-openapi.json, thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+  description: AMERS endpoints
+- url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+  description: EMEA endpoints
+security:
+- Basic: []
+tags:
+- name: On-Demand Data Refersh
+  description: Provides data refresh capabilities for the ONESOURCE™ Tax Provision Data Query-Reporting tile and OData, allowing users to access the most current data without having to wait for scheduled updates.
+paths:
+  /odata/v1/get-last-sync-info:
+    get:
+      tags:
+      - On-Demand Data Refersh
+      description: Returns the details of the most recently completed sync for the authenticated user's default instance, including its status, timestamp, triggered by user or automatic refresh, and when the next sync is scheduled.
+      summary: Gets the Last Sync Information
+      responses:
+        '200':
+          description: Returns the last sync information including last sync time, current status, next scheduled sync, and submitted by user.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/SyncInfoDTO'
+        '401':
+          description: Unauthorized if the user is not authenticated or the token is invalid.
+        '404':
+          description: Not Found if the user does not have an OTP schema or no sync history is found.
+        '500':
+          description: Internal Server Error if an exception occurs while fetching the last sync details.
+      operationId: getOdataV1GetLastSyncInfo
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+      description: AMERS endpoints
+    - url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+      description: EMEA endpoints
+  /odata/v1/trigger-sync:
+    post:
+      tags:
+      - On-Demand Data Refersh
+      description: Triggers a sync for the default instance associated with the authenticated user. Use this endpoint to refresh data for the ONESOURCE Tax Provision Data Query — Reporting tile and OData, enabling access to the most current data without waiting for scheduled updates. .
+      summary: Trigger OTP Datalake Sync
+      responses:
+        '200':
+          description: Returns the sync details including last sync time and current status.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/SyncInfoDTO'
+        '401':
+          description: Unauthorized if the authentication token is invalid or missing.
+        '500':
+          description: Internal Server Error if an exception occurs while triggering the sync.
+      operationId: postOdataV1TriggerSync
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+      description: AMERS endpoints
+    - url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+      description: EMEA endpoints
+  /odata/v1/get-sync-history:
+    get:
+      tags:
+      - On-Demand Data Refersh
+      description: The sync history returns a list of all sync runs — both manual and scheduled — for the default instance, ordered from most recent to oldest. Each entry in the list represents a single sync run.
+      summary: Gets User Sync History
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns a list of DagRun objects representing the sync history.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DagRun'
+        '401':
+          description: Unauthorized if the authentication token is invalid or missing.
+        '500':
+          description: Internal Server Error if an exception occurs while fetching the sync history.
+      operationId: getOdataV1GetSyncHistory
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+      description: AMERS endpoints
+    - url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+      description: EMEA endpoints
+components:
+  schemas:
+    DagRun:
+      type: object
+      properties:
+        dagRunId:
+          type: string
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        externalTrigger:
+          type: boolean
+        dateSubmitted:
+          type: string
+          format: date-time
+        note:
+          type: string
+          nullable: true
+        runType:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        userAccount:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SyncInfoDTO:
+      type: object
+      properties:
+        currentStatus:
+          type: string
+          nullable: true
+        lastSync:
+          type: string
+          format: date-time
+          nullable: true
+        submittedBy:
+          type: string
+          nullable: true
+        nextScheduledSync:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Basic:
+      type: http
+      scheme: basic
+x-refined-from:
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.json
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

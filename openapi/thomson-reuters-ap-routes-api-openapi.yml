@@ -1,0 +1,195 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters AP Routes API
+  version: '1.0'
+  description: 'Operations tagged AP Routes across 2 of this provider''s published API definitions: thomson-reuters-ap-exchange-api-1-0-openapi.json, thomson-reuters-ap-exchange-api-1-0-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+tags:
+- name: AP Routes
+  description: Use the AP Routes AP Exchange API to view existing AP routes in Tracker.
+paths:
+  /routes:
+    get:
+      tags:
+      - AP Routes
+      summary: Returns all APRoutes available for user
+      operationId: APRoute_GetAPRoutes
+      parameters:
+      - name: $filter
+        in: query
+        description: 'Filter results (example: emails/enabled eq true)'
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Select fields defined in request
+        schema:
+          type: string
+      - name: $count
+        in: query
+        description: Include parameter with count of items
+        schema:
+          type: boolean
+      - name: $top
+        in: query
+        description: Limit quantity of items
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: Skip quantity of items
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: TrackerODataResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackerODataResponseOfAPRouteModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    APRouteSFTPModel:
+      type: object
+      additionalProperties: false
+      properties:
+        enabled:
+          type: boolean
+    TrackerODataResponseOfAPRouteModel:
+      type: object
+      properties:
+        count:
+          type: integer
+        value:
+          type: array
+          items:
+            title: APRouteModel
+            type: object
+            additionalProperties: false
+            properties:
+              id:
+                type: integer
+                format: int32
+              name:
+                type:
+                - string
+                - 'null'
+              active:
+                type: boolean
+              emails:
+                $ref: '#/components/schemas/APRouteEmailModel'
+              sftp:
+                $ref: '#/components/schemas/APRouteSFTPModel'
+              webService:
+                $ref: '#/components/schemas/APRouteWebServiceModel'
+        nextLink:
+          type: string
+    APRouteEmailModel:
+      type: object
+      additionalProperties: false
+      properties:
+        enabled:
+          type: boolean
+    APRouteWebServiceModel:
+      type: object
+      additionalProperties: false
+      properties:
+        emailNotificationEnabled:
+          type:
+          - boolean
+          - 'null'
+        accountId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-ap-exchange-api-1-0-openapi.json
+- thomson-reuters-ap-exchange-api-1-0-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

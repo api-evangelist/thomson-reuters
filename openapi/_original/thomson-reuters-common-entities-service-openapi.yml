@@ -1,0 +1,3293 @@
+# x-archived-from: thomson-reuters-common-entities-service-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  description: API documentation for the Common Entities service
+  version: '1.0'
+  title: Common Entities service
+servers:
+- url: https://api-uat.onesourcetax.com
+  description: UAT
+- url: https://api.onesourcetax.com
+  description: PROD
+paths:
+  /administration/v1/entities:
+    get:
+      tags:
+      - Entities
+      summary: Retrieves a list of existing entities
+      description: 'Use this operation to return a list of entities with all its attributes. Warning: This API call may return large set of records, depending on your filter settings'
+      operationId: Retrieves a list of existing entities
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The page of data to return (0 = first page).
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: The number of entities per page.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: sort
+        in: query
+        description: The sort string of the form [+/-]?{fieldName}
+        required: false
+        schema:
+          type: string
+          default: id
+      - name: Fields
+        in: query
+        description: This returns all the attributes for a given Entity.
+        required: false
+        schema:
+          type: string
+      - name: include_disabled
+        in: query
+        description: This is to return DISABLED entities along with ACTIVE entities.
+        required: false
+        schema:
+          type: boolean
+          enum:
+          - true
+          - false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+    post:
+      tags:
+      - Entities
+      summary: Create a new entity
+      description: Use this operation to create a new entity with its attributes
+      operationId: Create a new entity
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityBaseDTO'
+        description: The details about the entities that will be added.
+      responses:
+        '200':
+          description: Created
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+    patch:
+      tags:
+      - Entities
+      summary: Updates a list of existing entities
+      description: Use this operation to partially update attributes for a given list of entities. This operation can be used to associate a list of entities with ONESOURCE applications to leverage the same entities across various applications
+      operationId: Updates a list of existing entities
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UnitJsonPatchDTO'
+        description: The input object for performing bulk update.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityUpdateDTOResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityUpdateDTOResponse'
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+  /administration/v1/entities/versions/{versionId}:
+    get:
+      tags:
+      - Entities
+      summary: Retrieve specific version of an existing entity with all its attributes
+      description: Use this operation to retrieve specific version of existing entity with its attributes. Enter version Id in the URL
+      operationId: Retrieve specific version of an existing entity with all its attributes
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: versionId
+        in: path
+        description: The version ID that will be filtered.
+        required: true
+        schema:
+          type: string
+      - name: Fields
+        in: query
+        description: This returns all the attributes for a given Entity.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+    put:
+      tags:
+      - Entities
+      summary: Update an existing version for a particular entity
+      description: Use this operation to update an existing entity version with its attributes. Enter the version Id in the URL
+      operationId: Update an existing version for a particular entity
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: versionId
+        in: path
+        description: The Version attributes that will be modified
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityBaseDTO'
+        description: The details about the version attributes will be updated.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+  /administration/v1/entities/{entityId}:
+    get:
+      tags:
+      - Entities
+      summary: Retrieve latest version of an ACTIVE and DISABLED entity with all its attributes
+      description: Use this operation to retrieve latest version of an existing entity and its attributes. Enter the entity Id in the URL
+      operationId: Retrieve latest version of an existing entity with all its attributes
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: entityId
+        in: path
+        description: The entity ID that will be filtered.
+        required: true
+        schema:
+          type: string
+      - name: Fields
+        in: query
+        description: This returns all the attributes for a given Entity.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+    patch:
+      tags:
+      - Entities
+      summary: Updates status of existing entity from ACTIVE to DISABLED
+      description: Use this operation to update status of existing entity.
+      operationId: Updates status of existing entity
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: entityId
+        in: path
+        description: The Entity instance that will be modified
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityStatusUpdateDTORequest'
+        description: Pass ACTIVE/DISABLED as status below to update entity's status.
+      responses:
+        '204':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityUpdateDTOResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityUpdateDTOResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+    put:
+      tags:
+      - Entities
+      summary: Update latest version of an existing entity
+      description: Use this operation to update latest version of an existing entity and its attributes. Enter the entity Id in the URL
+      operationId: Update latest version of an existing entity
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: entityId
+        in: path
+        description: The Entity instance that will be modified
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityBaseDTO'
+        description: The details about the Entity whose attributes will be updated.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+    delete:
+      tags:
+      - Entities
+      summary: Delete an existing entity
+      description: 'Use this operation to soft delete an existing entity with all its attributes and versions. Enter the entity Id in the URL. Warning: Though this operation is soft delete, we currently do not support the “Undo” API to recover the deleted entity'
+      operationId: Delete an existing entity
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: entityId
+        in: path
+        description: The Entity ID associated to all other versions that will be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+  /administration/v1/entities/{entityId}/versions:
+    get:
+      tags:
+      - Entities
+      summary: Retrieves all versions for a particular entity
+      description: Use this operation to return the existing versions for a particular entity. Enter the entity Id in the URL
+      operationId: Retrieves all versions for a particular entity
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: entityId
+        in: path
+        description: The Entity ID that will be filtered.
+        required: true
+        schema:
+          type: string
+      - name: Fields
+        in: query
+        description: This returns all the attributes for a given Entity.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+    post:
+      tags:
+      - Entities
+      summary: Creates new version for a particular entity
+      description: Use this operation to create a new entity version with its attributes. Enter the entity Id in the URL
+      operationId: Creates new version for a particular entity
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: entityId
+        in: path
+        description: The entity id for which the version will be created.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityBaseDTO'
+        description: The details about the entity that will be added.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+  /administration/v1/entities/custom-field/types:
+    get:
+      tags:
+      - Entities
+      summary: Retrieves all custom field types
+      description: Use this operation to return all custom field types configured
+      operationId: Retrieves all custom field types
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldTypesResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldTypesResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+  /administration/v1/entities/custom-field:
+    post:
+      tags:
+      - Entities
+      summary: Creates new custom field for a particular client and tenant.
+      description: Use this operation to create a new custom field with its attributes.
+      operationId: Creates new custom field for a particular client and tenant.
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CustomFieldDTO'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/IdResponseInteger'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdResponseInteger'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - globa
+    get:
+      tags:
+      - Entities
+      summary: Retrieves a list of existing custom fields
+      description: Use this operation to return a list of custom entity fields
+      operationId: Retrieves a list of existing custom fields
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The page of data to return (0 = first page).
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: The number of custom fields per page.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: sort
+        in: query
+        description: The sort string of the form [+/-]?{fieldName}
+        required: false
+        schema:
+          type: string
+          default: id
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldsResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+  /administration/v1/entities/custom-field/{id}:
+    get:
+      tags:
+      - Entities
+      summary: Retrieve custom field by ID in entities
+      description: Use this operation to retrieve the custom fields in entities by id.
+      operationId: Retrieve custom field by ID in entities
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: The custom field ID that will be filtered.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.ce.def.v1+json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+    patch:
+      tags:
+      - Entities
+      summary: Updating the custom field
+      description: Use this operation to Update a custom field.
+      operationId: Updating the custom field
+      parameters:
+      - name: Accept
+        in: header
+        description: Content type
+        required: false
+        schema:
+          type: string
+          enum:
+          - application/json
+          - application/vnd.tri.onesource.ce.def.v1+json
+          default: application/json
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: The custom field ID that will be filtered.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CustomFieldDTO'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+      security:
+      - Authorization:
+        - global
+  /entities/entities-rollup/v1/rollups:
+    get:
+      tags:
+      - Entity Rollup
+      summary: Get a paginated list of Rollups
+      description: Get Rollup's list with attributes
+      operationId: getRollups
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RollupResponse'
+      security:
+      - Authorization:
+        - global
+    post:
+      tags:
+      - Entity Rollup
+      summary: Create rollup
+      description: Create the Rollup records with the attributes
+      operationId: createRollup
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RollupRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseInteger'
+        '409':
+          description: Already Exists
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+  /entities/entities-rollup/v1/rollups/{id}:
+    get:
+      tags:
+      - Entity Rollup
+      summary: Get rollup by id
+      description: Get Rollup by ID
+      operationId: getRollupById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RollupResponse'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+    patch:
+      tags:
+      - Entity Rollup
+      summary: Update rollup by id
+      description: Update the rollup records with the attributes
+      operationId: updateRollup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RollupPatchRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RollupResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+  /entities/entities-rollup/v1/rollups/{rollupId}/nodes:
+    post:
+      tags:
+      - Entity Rollup
+      summary: Add entity to rollup
+      description: Add entity record to the Rollup
+      operationId: createNode
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodeRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseInteger'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '409':
+          description: Already Exists
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+    get:
+      tags:
+      - Entity Rollup
+      summary: Get rollup nodes
+      description: Get Rollup Nodes by Id
+      operationId: getRollupNodes
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionNodeResponse'
+      security:
+      - Authorization:
+        - global
+  /entities/entities-rollup/v1/rollups/{rollupId}/nodes/{id}:
+    delete:
+      tags:
+      - Entity Rollup
+      summary: Delete rollup node
+      description: Delete Rollup Node and also all Child Nodes
+      operationId: deleteRollupNode
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization: []
+    patch:
+      tags:
+      - Entity Rollup
+      summary: Update rollup node
+      description: Update the rollup node with the attributes
+      operationId: updateRollup
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodePatchRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NodePatchResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization: []
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+  /entities/entities-rollup/v1/rollups/{rollupId}/available-entities:
+    get:
+      tags:
+      - Entity Rollup
+      summary: Get a paginated list of available entities
+      description: Get Available Entities list with attributes
+      operationId: getEntities
+      parameters:
+      - name: rollupId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: include_disabled
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionAvailableEntityResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - Authorization:
+        - global
+components:
+  requestBodies:
+    CustomFieldDTO:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomFieldDTO'
+      description: The details about the custom field that will be added.
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    Meta:
+      type: object
+      properties:
+        data_type:
+          type: string
+          description: data_type
+        total_results:
+          type: integer
+          format: int32
+          description: total_results
+        items_count:
+          type: integer
+          format: int32
+          description: items_count
+    related_app_status:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the RelatedApp.
+        completion_percentage:
+          type: integer
+          format: int32
+          description: The completion percentage of the RelatedApp Information.
+        status:
+          type: string
+          description: The Status of the RelatedApp.
+      description: The details about RelatedApps.
+    IncorporationQualificationDetailDTO:
+      type: object
+      properties:
+        jurisdiction:
+          type: string
+          description: The jurisdiction of the incorporation.
+        type:
+          type: string
+          description: The incorporation/qualification choice.
+        date:
+          type: string
+          description: The date of incorporation.
+        id:
+          type: string
+          description: The audit id of the incorporation.
+      description: The details about Incorporation
+    IncorporationQualificationDetailResponseDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The audit id of the incorporation.
+        jurisdiction:
+          type: string
+          description: The jurisdiction of the incorporation.
+        jurisdiction_label:
+          type: string
+          description: The jurisdiction_label of the incorporation.
+        type:
+          type: string
+          description: The incorporation_status label of the incorporation.
+        date:
+          type: string
+          description: The incorporation_Date of the incorporation.
+      description: The details about Incorporation
+    Authorities:
+      type: object
+      properties:
+        authority:
+          type: string
+          description: The id of the authority.
+        authority_id:
+          type: string
+          description: The value of the selected authority
+        authority_label:
+          type: string
+          description: The label of the authority
+        id:
+          type: string
+          description: The unique id of the authority
+      description: The details about a Authority.
+    RegistrationResponseDTO:
+      type: object
+      properties:
+        registration_id:
+          type: string
+          description: The id of the registration.
+        domain:
+          type: string
+          description: The domain of the registration.
+        domain_label:
+          type: string
+          description: The domain label of the registration.
+        jurisdiction:
+          type: string
+          description: The jurisdiction of the registration.
+        jurisdiction_label:
+          type: string
+          description: The jurisdiction label of the registration.
+        audit_id:
+          type: string
+          description: The audit id of the registration.
+      description: The details about Registration
+    EntityDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the Entity.
+        unit_guid:
+          type: string
+          description: The GUID of the Entity.
+        code:
+          type: string
+          description: The Entity ID/Code of the Entity.
+        version_id:
+          type: string
+          description: The GUID of the Entity.
+        name:
+          type: string
+          description: The Entity Name of the Entity.
+        version_number:
+          type: string
+          description: The version number of the Entity.
+        effective_date:
+          type: string
+          description: The Effective/As Of Date of the Entity.
+        effective_end_date:
+          type: string
+          description: The Effective End Date of the Entity.
+        country:
+          type: string
+          description: The Country of the Entity.
+        related_apps:
+          type: array
+          description: The list of relatedApps to which the Entity are added.
+          items:
+            type: string
+        status:
+          type: string
+          description: The Entity Status of the Entity.
+        pbac:
+          type: string
+          description: The Principle Business Activity Code of the Entity.
+        sic:
+          type: string
+          description: The Standard Industrial Classification Code of the Entity.
+        duns:
+          type: string
+          description: The Dun & Bradstreet Number/Perm ID of the Entity.
+        dba_id:
+          type: string
+          description: 'The DBA: ID of the Entity.'
+        branch_office_id:
+          type: string
+          description: The Identifying number of branch office or agent in the US of the Entity.
+        name2:
+          type: string
+          description: The Entity Name (line 2) of the Entity.
+        name1:
+          type: string
+          description: The Entity Name (line 1) of the Entity.
+        short_name:
+          type: string
+          description: The Entity Short Name of the Entity.
+        dba_assumed_name:
+          type: string
+          description: The DBA/Assumed Name of the Entity.
+        dba_name:
+          type: string
+          description: 'The DBA: Name of the Entity.'
+        notes:
+          type: string
+          description: The Comment/Note/Description of the Entity.
+        tax_year_beginning_date:
+          type: string
+          description: The Tax Year Beginning Date of the Entity.
+        tax_year_ending_date:
+          type: string
+          description: The Tax Year Ending Date of the Entity.
+        financial_beginning_date:
+          type: string
+          description: The Financial/Book Year Beginning Date of the Entity.
+        financial_ending_date:
+          type: string
+          description: The Financial/Book Year Ending Date of the Entity.
+        incorporation_date:
+          type: string
+          description: The Incorporation Date of the Entity.
+        month_in_which_tax_year_ends:
+          type: string
+          description: 'The 52/53 Week info:  Year-End Month Name of the Entity.'
+        week_day_in_which_tax_year_ends:
+          type: string
+          description: 'The 52/53 Week info:  Day Name for Year-End of the Entity.'
+        method_used:
+          type: string
+          description: 'The 52/53 Week info:  Method Used of the Entity.'
+        registration_date:
+          type: string
+          description: The Registration Date of the Entity.
+        registration_end_date:
+          type: string
+          description: The Registration End Date of the Entity.
+        renewal_date:
+          type: string
+          description: The Renewal Date of the Entity.
+        dba_from_date:
+          type: string
+          description: 'The DBA: From Date of the Entity.'
+        dba_to_date:
+          type: string
+          description: 'The DBA: To Date of the Entity.'
+        year_of_startup:
+          type: string
+          description: The Year of Startup Determination of the Entity.
+        date_dissolved:
+          type: string
+          description: The Date Dissolved of the Entity.
+        address:
+          type: string
+          description: The Street Address of the Entity.
+        city:
+          type: string
+          description: The City of the Entity.
+        state:
+          type: string
+          description: The State/Province of the Entity.
+        zip:
+          type: string
+          description: The ZIP/Postal Code of the Entity.
+        country_of_incorporation:
+          type: string
+          description: The Country of Incorporation of the Entity.
+        state_of_incorporation:
+          type: string
+          description: The State of Incorporation of the Entity.
+        tax_id_jurisdiction:
+          type: string
+          description: The Jurisdiction for Tax ID / Registration of the Entity.
+        tax_id_address:
+          type: string
+          description: The Address for Tax ID / Registration of the Entity.
+        principal_place_of_business_country:
+          type: string
+          description: The Country/Region for Principal Place of Business of the Entity.
+        principal_place_of_business_state:
+          type: string
+          description: The State/Province of Principal Place of Business of the Entity.
+        dba_address:
+          type: string
+          description: The Address for DBA of the Entity.
+        locations:
+          type: string
+          description: The Locations of the Entity.
+        resident_agent_information:
+          type: string
+          description: The Address of Corporate Statutory or Resident Agent in Country/Region of Incorporation of the Entity.
+        agent_in_country_address:
+          type: string
+          description: The Address of branch office or agent in the US of the Entity.
+        person_with_custody_of_records_address:
+          type: string
+          description: The Address of person with Custody of books and records of the Entity.
+        base_currency:
+          type: string
+          description: The Base Currency of the Entity.
+        local_currency:
+          type: string
+          description: The Local Currency of the Entity.
+        functional_currency:
+          type: string
+          description: The Functional Currency of the Entity.
+        reporting_currency:
+          type: string
+          description: The Reporting Currency of the Entity.
+        part_of_gaap_consolidated_group:
+          type: string
+          description: The Part of GAAP Consolidated Group of the Entity.
+        part_of_provision_filing_group:
+          type: string
+          description: The Part of Provision Filing Group of the Entity.
+        part_of_ifrs_filing_group:
+          type: string
+          description: The Part of IFRS Filing Group of the Entity.
+        owner_type:
+          type: string
+          description: The Owner Type of the Entity.
+        type:
+          type: string
+          description: The Entity Function(s)/Type(s) of the Entity.
+        foreign_entity_designation:
+          type: string
+          description: The Foreign Entity designation of the Entity.
+        financial_entity_designation:
+          type: string
+          description: The Financial Entity designation of the Entity.
+        industry:
+          type: string
+          description: The Industry of the Entity.
+        business_activity:
+          type: string
+          description: The Business Activity of the Entity.
+        entity_status_by_time_period:
+          type: string
+          description: The Entity Status by Time Period of the Entity.
+        dba_status:
+          type: string
+          description: The Status for DBA of the Entity.
+        phone_number:
+          type: string
+          description: The Company Phone Number of the Entity.
+        fax_number:
+          type: string
+          description: The Company Fax Number of the Entity.
+        contact:
+          type: string
+          description: The Contact Person of the Entity.
+        registering_agent:
+          type: string
+          description: The Registering Agent of the Entity.
+        main_contact:
+          type: string
+          description: 'The Main Contact: Name/Title/Phone of the Entity.'
+        additional_contact:
+          type: string
+          description: 'The Additional Contact:  Name/Title/Phone of the Entity.'
+        additional_contact2:
+          type: string
+          description: 'The Additional Contact:  Name/Title/Phone of the Entity.'
+        dba_phone_number:
+          type: string
+          description: The Phone number for DBA of the Entity.
+        name_of_branch_office:
+          type: string
+          description: The Name of branch office or agent in the US of the Entity.
+        name_of_corporate_statutory:
+          type: string
+          description: The Name of Corporate Statutory of the Entity.
+        agent_in_country:
+          type: string
+          description: The Resident Agent in Country/Region of Incorporation of the Entity.
+        person_with_custody_of_record:
+          type: string
+          description: The Name of person with Custody of books and records of the Entity.
+        tax_id_city:
+          type: string
+          description: The City for Tax ID / Registration of the Entity.
+        tax_id_state:
+          type: string
+          description: The State for Tax ID / Registration of the Entity.
+        tax_id_zip:
+          type: string
+          description: The ZIP for Tax ID / Registration of the Entity.
+        tax_id_country:
+          type: string
+          description: The Country for Tax ID / Registration of the Entity.
+        main_title:
+          type: string
+          description: 'The Main Contact: Title of the Entity.'
+        main_phone:
+          type: string
+          description: 'The Main Contact: Phone of the Entity.'
+        additional_title:
+          type: string
+          description: 'The Additional Contact:  Title of the Entity.'
+        additional_phone:
+          type: string
+          description: 'The Additional Contact:  Phone of the Entity.'
+        person_with_custody_of_records_city:
+          type: string
+          description: The City of person with Custody of books and records of the Entity.
+        person_with_custody_of_records_state:
+          type: string
+          description: The State of person with Custody of books and records of the Entity.
+        person_with_custody_of_records_zip:
+          type: string
+          description: The ZIP of person with Custody of books and records of the Entity.
+        person_with_custody_of_records_country:
+          type: string
+          description: The Country of person with Custody of books and records of the Entity.
+        corporate_statutory_address:
+          type: string
+          description: The Address of Corporate Statutory of the Entity.
+        corporate_statutory_city:
+          type: string
+          description: The City of Corporate Statutory of the Entity.
+        corporate_statutory_state:
+          type: string
+          description: The State of Corporate Statutory of the Entity.
+        corporate_statutory_zip:
+          type: string
+          description: The ZIP of Corporate Statutory of the Entity.
+        corporate_statutory_country:
+          type: string
+          description: The Country of Corporate Statutory of the Entity.
+        branch_office_city:
+          type: string
+          description: The City of branch office or agent in the US of the Entity.
+        branch_office_state:
+          type: string
+          description: The State of branch office or agent in the US of the Entity.
+        branch_office_zip:
+          type: string
+          description: The ZIP of branch office or agent in the US of the Entity.
+        branch_office_country:
+          type: string
+          description: The Country of branch office or agent in the US of the Entity.
+        dba_city:
+          type: string
+          description: 'The DBA: City of the Entity.'
+        dba_state:
+          type: string
+          description: 'The DBA: State of the Entity.'
+        dba_zip:
+          type: string
+          description: 'The DBA: ZIP of the Entity.'
+        dba_country:
+          type: string
+          description: 'The DBA: Country of the Entity.'
+        principal_place_of_business_code:
+          type: string
+          description: Principle Place of Business code in  the Entity.
+        principal_place_of_business_name:
+          type: string
+          description: Principle Place of Business name in  the Entity.
+        email_address:
+          type: string
+          description: 'The Contact Information: Email Address of the Entities'
+        unit_type:
+          type: string
+          description: The Unit Type value of the Entity.
+        description:
+          type: string
+          description: The description of the Entity.
+        entity_designations_taxed_as:
+          type: string
+          description: Entity designations taxedas IRI
+        entity_designations_taxed_as_sub_category:
+          type: string
+          description: Entity Designation taxedas subcategory
+        entity_designations_us_return_type:
+          type: string
+          description: US Return type IRI
+        authorities:
+          type: array
+          description: The list of authorities for a given entity.
+          items:
+            $ref: '#/components/schemas/Authorities'
+        entity_type:
+          type: string
+          description: The Entity Type value for a given entity.
+        us_return_type:
+          type: string
+          description: The US Return Type value of the Entity Attributes.
+        source_of_data_for_tax_return:
+          type: string
+          description: The Source of Data for Tax Return of the Entity.
+        international_filing_type:
+          type: string
+          description: The International Filing Type value of the Entity Attributes.
+        level_of_consolidation_elimination:
+          type: string
+          description: The Level of Consolidation Elimination value of the Entity Attributes.
+        ein:
+          type: string
+          description: 'The Tax ID / Registration: Number of the Entity.'
+        entity_number:
+          type: string
+          description: The Entity Number for a given entity.
+        created_by:
+          type: string
+          description: The createdBy of the Entity.
+        state_label:
+          type: string
+          description: The State shortName of the Entity.
+        state_of_incorporation_label:
+          type: string
+          description: The State Of Incorporation shortName of the Entity.
+        principal_place_of_business_state_label:
+          type: string
+          description: The Principal Place Of Business State shortName of the Entity.
+        tax_id_state_label:
+          type: string
+          description: The Tax Id State shortName of the Entity.
+        dba_state_label:
+          type: string
+          description: The Dba State shortName of the Entity.
+        branch_office_state_label:
+          type: string
+          description: The Branch Office State shortName of the Entity.
+        corporate_statutory_state_label:
+          type: string
+          description: The Corporate Statutory State shortName of the Entity.
+        person_with_custody_of_records_state_label:
+          type: string
+          description: The Person With Custody Of Records State shortName of the Entity.
+        country_label:
+          type: string
+          description: The Country shortName of the Entity.
+        country_of_incorporation_label:
+          type: string
+          description: The country Of Incorporation shortName of the Entity.
+        principal_place_of_business_country_label:
+          type: string
+          description: The Principal Place Of Business Country shortName of the Entity.
+        tax_id_country_label:
+          type: string
+          description: The TaxId Country shortName of the Entity.
+        dba_country_label:
+          type: string
+          description: The Dba Country shortName of the Entity.
+        branch_office_country_label:
+          type: string
+          description: The Branch Office Country shortName of the Entity.
+        corporate_statutory_country_label:
+          type: string
+          description: The Corporate Statutory Country shortName of the Entity.
+        person_with_custody_of_records_country_label:
+          type: string
+          description: The Person With Custody Of Records Country shortName of the Entity.
+        base_currency_label:
+          type: string
+          description: The Base Currency shortName of the Entity.
+        local_currency_label:
+          type: string
+          description: The Local Currency shortName of the Entity.
+        functional_currency_label:
+          type: string
+          description: The Functional Currency shortName of the Entity.
+        reporting_currency_label:
+          type: string
+          description: The Reporting Currency shortName of the Entity.
+        related_apps_label:
+          type: array
+          description: The RelatedApps Label of the Entity
+          items:
+            type: string
+        client_name:
+          type: string
+          description: The clientName to which the entity belongs to.
+        client_number:
+          type: string
+          description: The clientNumber to which the entity belongs to.
+        ls2_client_id:
+          type: integer
+          format: int64
+          description: The LS2 ClientId to which the entity belongs to.
+        entity_designations_taxed_as_label:
+          type: string
+          description: Entity designations taxedas prefered label
+        entity_designations_taxed_as_sub_category_label:
+          type: string
+          description: Entity Designation taxedas subcategory label
+        entity_designations_us_return_type_label:
+          type: string
+          description: US Return type preferred label
+        effective_date_label:
+          type: string
+          description: The Effective Date Label of the Entity
+        incorporation_date_label:
+          type: string
+          description: The Incorporation Date Label of the Entity
+        date_dissolved_label:
+          type: string
+          description: The Date Dissolved Label of the Entity
+        renewal_date_label:
+          type: string
+          description: The Renewal Date Label of the Entity
+        registration_date_label:
+          type: string
+          description: The Registration Date Label of the Entity
+        registration_end_date_label:
+          type: string
+          description: The Registration End Date Label of the Entity
+        dba_from_date_label:
+          type: string
+          description: The Dba From Date Label of the Entity
+        dba_to_date_label:
+          type: string
+          description: The Dba To Date Label of the Entity
+        tax_year_beginning_date_label:
+          type: string
+          description: The TaxYear Beginning Date Label of the Entity
+        tax_year_ending_date_label:
+          type: string
+          description: The TaxYear Ending Date Label of the Entity
+        financial_beginning_date_label:
+          type: string
+          description: The Financial/Book Year Date Label of the Entity
+        financial_ending_date_label:
+          type: string
+          description: The Financial/Book Year Date Label of the Entity
+        year_of_startup_label:
+          type: string
+          description: The Year of Startup Label of the Entity
+        has_multiple_versions:
+          type: boolean
+          example: false
+          description: Fields to determine entity has multiple versions or not
+        related_app_status:
+          type: array
+          description: The RelatedApp status attributes.
+          items:
+            $ref: '#/components/schemas/related_app_status'
+        linked_version_guids:
+          type: array
+          description: The version GUIDs
+          items:
+            type: string
+        registrations:
+          type: array
+          description: The list of registrations for a given entity.
+          items:
+            $ref: '#/components/schemas/RegistrationResponseDTO'
+        rank:
+          type: integer
+          format: int32
+          description: The rank of the matched entity.
+        entity_type_label:
+          type: string
+          description: The Entity Type Label of the Entity
+        us_return_type_label:
+          type: string
+          description: The US Return Type Label of the Entity
+        international_filing_type_label:
+          type: string
+          description: The International Filing Type Label of the Entity
+        source_of_data_for_tax_return_label:
+          type: string
+          description: The Source of data for tax return Label of the Entity
+        level_of_consolidation_elimination_label:
+          type: string
+          description: The Level of consolidation Elimination Label of the Entity
+        ein_label:
+          type: string
+          description: The Ein Label of the Entity
+        entity_number_label:
+          type: string
+          description: The Entity Number Label of the Entity
+        method_used_label:
+          type: string
+          description: The Method Used Label of the Entity
+        week_day_in_which_tax_year_ends_label:
+          type: string
+          description: The Day of the tax year Label of the Entity
+        month_in_which_tax_year_ends_label:
+          type: string
+          description: The Month of the tax year Label of the Entity
+        incorporation_qualification_details:
+          type: array
+          description: The list of incorporation for a given entity.
+          items:
+            $ref: '#/components/schemas/IncorporationQualificationDetailResponseDTO'
+        custom_fields:
+          $ref: '#/components/schemas/EntityCustomFieldDTO'
+      description: The Data Transfer Object used as response object for Entities.
+    ResponseEntity:
+      type: object
+      properties:
+        body:
+          type: object
+        statusCode:
+          type: string
+          enum:
+          - '100'
+          - '101'
+          - '102'
+          - '103'
+          - '200'
+          - '201'
+          - '202'
+          - '203'
+          - '204'
+          - '205'
+          - '206'
+          - '207'
+          - '208'
+          - '226'
+          - '300'
+          - '301'
+          - '302'
+          - '303'
+          - '304'
+          - '305'
+          - '307'
+          - '308'
+          - '400'
+          - '401'
+          - '402'
+          - '403'
+          - '404'
+          - '405'
+          - '406'
+          - '407'
+          - '408'
+          - '409'
+          - '410'
+          - '411'
+          - '412'
+          - '413'
+          - '414'
+          - '415'
+          - '416'
+          - '417'
+          - '418'
+          - '419'
+          - '420'
+          - '421'
+          - '422'
+          - '423'
+          - '424'
+          - '426'
+          - '428'
+          - '429'
+          - '431'
+          - '451'
+          - '500'
+          - '501'
+          - '502'
+          - '503'
+          - '504'
+          - '505'
+          - '506'
+          - '507'
+          - '508'
+          - '509'
+          - '510'
+          - '511'
+        statusCodeValue:
+          type: integer
+          format: int32
+    EntityResponse:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/EntityDTO'
+        error:
+          $ref: '#/components/schemas/Error_EntityDTO_'
+    CustomFieldTypesResponse:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/CustomFieldType'
+    CustomFieldsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/CustomFieldResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    EntityUpdateDTOResponse:
+      type: object
+      properties:
+        successesCount:
+          type: integer
+          format: int32
+          description: The number of successful items that were processed.
+        successes:
+          type: array
+          description: The collection of items that were successfully processed.
+          items:
+            $ref: '#/components/schemas/UnitJsonPatchDTO'
+        failuresCount:
+          type: integer
+          format: int32
+          description: The number of failures that were encountered.
+        failures:
+          type: array
+          description: The collection of failures that were encountered.
+          items:
+            $ref: '#/components/schemas/Failure_UnitJsonPatchDTO_'
+    EntityBaseDTO:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The Entity ID/Code of the Entity.
+        name:
+          type: string
+          description: The Entity Name of the Entity.
+        effective_date:
+          type: string
+          description: The Effective/As Of Date of the Entity.
+        country:
+          type: string
+          description: The Country of the Entity.
+        related_apps:
+          type: array
+          description: The list of relatedApps to which the Entity are added.
+          items:
+            type: string
+        status:
+          type: string
+          description: The Entity Status of the Entity.
+        pbac:
+          type: string
+          description: The Principle Business Activity Code of the Entity.
+        sic:
+          type: string
+          description: The Standard Industrial Classification Code of the Entity.
+        duns:
+          type: string
+          description: The Dun & Bradstreet Number/Perm ID of the Entity.
+        dba_id:
+          type: string
+          description: 'The DBA: ID of the Entity.'
+        branch_office_id:
+          type: string
+          description: The Identifying number of branch office or agent in the US of the Entity.
+        name2:
+          type: string
+          description: The Entity Name (line 2) of the Entity.
+        name1:
+          type: string
+          description: The Entity Name (line 1) of the Entity.
+        short_name:
+          type: string
+          description: The Entity Short Name of the Entity.
+        dba_assumed_name:
+          type: string
+          description: The DBA/Assumed Name of the Entity.
+        dba_name:
+          type: string
+          description: 'The DBA: Name of the Entity.'
+        notes:
+          type: string
+          description: The Comment/Note/Description of the Entity.
+        tax_year_beginning_date:
+          type: string
+          description: The Tax Year Beginning Date of the Entity.
+        tax_year_ending_date:
+          type: string
+          description: The Tax Year Ending Date of the Entity.
+        financial_beginning_date:
+          type: string
+          description: The Financial/Book Year Beginning Date of the Entity.
+        financial_ending_date:
+          type: string
+          description: The Financial/Book Year Ending Date of the Entity.
+        incorporation_date:
+          type: string
+          description: The Incorporation Date of the Entity.
+        month_in_which_tax_year_ends:
+          type: string
+          description: 'The 52/53 Week info:  Year-End Month Name of the Entity.'
+        week_day_in_which_tax_year_ends:
+          type: string
+          description: 'The 52/53 Week info:  Day Name for Year-End of the Entity.'
+        method_used:
+          type: string
+          description: 'The 52/53 Week info:  Method Used of the Entity.'
+        registration_date:
+          type: string
+          description: The Registration Date of the Entity.
+        registration_end_date:
+          type: string
+          description: The Registration End Date of the Entity.
+        renewal_date:
+          type: string
+          description: The Renewal Date of the Entity.
+        dba_from_date:
+          type: string
+          description: 'The DBA: From Date of the Entity.'
+        dba_to_date:
+          type: string
+          description: 'The DBA: To Date of the Entity.'
+        year_of_startup:
+          type: string
+          description: The Year of Startup Determination of the Entity.
+        date_dissolved:
+          type: string
+          description: The Date Dissolved of the Entity.
+        address:
+          type: string
+          description: The Street Address of the Entity.
+        city:
+          type: string
+          description: The City of the Entity.
+        state:
+          type: string
+          description: The State/Province of the Entity.
+        zip:
+          type: string
+          description: The ZIP/Postal Code of the Entity.
+        country_of_incorporation:
+          type: string
+          description: The Country of Incorporation of the Entity.
+        state_of_incorporation:
+          type: string
+          description: The State of Incorporation of the Entity.
+        tax_id_jurisdiction:
+          type: string
+          description: The Jurisdiction for Tax ID / Registration of the Entity.
+        tax_id_address:
+          type: string
+          description: The Address for Tax ID / Registration of the Entity.
+        principal_place_of_business_country:
+          type: string
+          description: The Country/Region for Principal Place of Business of the Entity.
+        principal_place_of_business_state:
+          type: string
+          description: The State/Province of Principal Place of Business of the Entity.
+        dba_address:
+          type: string
+          description: The Address for DBA of the Entity.
+        locations:
+          type: string
+          description: The Locations of the Entity.
+        resident_agent_information:
+          type: string
+          description: The Address of Corporate Statutory or Resident Agent in Country/Region of Incorporation of the Entity.
+        agent_in_country_address:
+          type: string
+          description: The Address of branch office or agent in the US of the Entity.
+        person_with_custody_of_records_address:
+          type: string
+          description: The Address of person with Custody of books and records of the Entity.
+        base_currency:
+          type: string
+          description: The Base Currency of the Entity.
+        local_currency:
+          type: string
+          description: The Local Currency of the Entity.
+        functional_currency:
+          type: string
+          description: The Functional Currency of the Entity.
+        reporting_currency:
+          type: string
+          description: The Reporting Currency of the Entity.
+        part_of_gaap_consolidated_group:
+          type: string
+          description: The Part of GAAP Consolidated Group of the Entity.
+        part_of_provision_filing_group:
+          type: string
+          description: The Part of Provision Filing Group of the Entity.
+        part_of_ifrs_filing_group:
+          type: string
+          description: The Part of IFRS Filing Group of the Entity.
+        owner_type:
+          type: string
+          description: The Owner Type of the Entity.
+        type:
+          type: string
+          description: The Entity Function(s)/Type(s) of the Entity.
+        foreign_entity_designation:
+          type: string
+          description: The Foreign Entity designation of the Entity.
+        financial_entity_designation:
+          type: string
+          description: The Financial Entity designation of the Entity.
+        industry:
+          type: string
+          description: The Industry of the Entity.
+        business_activity:
+          type: string
+          description: The Business Activity of the Entity.
+        entity_status_by_time_period:
+          type: string
+          description: The Entity Status by Time Period of the Entity.
+        dba_status:
+          type: string
+          description: The Status for DBA of the Entity.
+        phone_number:
+          type: string
+          description: The Company Phone Number of the Entity.
+        fax_number:
+          type: string
+          description: The Company Fax Number of the Entity.
+        contact:
+          type: string
+          description: The Contact Person of the Entity.
+        registering_agent:
+          type: string
+          description: The Registering Agent of the Entity.
+        main_contact:
+          type: string
+          description: 'The Main Contact: Name/Title/Phone of the Entity.'
+        additional_contact:
+          type: string
+          description: 'The Additional Contact:  Name/Title/Phone of the Entity.'
+        additional_contact2:
+          type: string
+          description: 'The Additional Contact:  Name/Title/Phone of the Entity.'
+        dba_phone_number:
+          type: string
+          description: The Phone number for DBA of the Entity.
+        name_of_branch_office:
+          type: string
+          description: The Name of branch office or agent in the US of the Entity.
+        name_of_corporate_statutory:
+          type: string
+          description: The Name of Corporate Statutory of the Entity.
+        agent_in_country:
+          type: string
+          description: The Resident Agent in Country/Region of Incorporation of the Entity.
+        person_with_custody_of_record:
+          type: string
+          description: The Name of person with Custody of books and records of the Entity.
+        tax_id_city:
+          type: string
+          description: The City for Tax ID / Registration of the Entity.
+        tax_id_state:
+          type: string
+          description: The State for Tax ID / Registration of the Entity.
+        tax_id_zip:
+          type: string
+          description: The ZIP for Tax ID / Registration of the Entity.
+        tax_id_country:
+          type: string
+          description: The Country for Tax ID / Registration of the Entity.
+        main_title:
+          type: string
+          description: 'The Main Contact: Title of the Entity.'
+        main_phone:
+          type: string
+          description: 'The Main Contact: Phone of the Entity.'
+        additional_title:
+          type: string
+          description: 'The Additional Contact:  Title of the Entity.'
+        additional_phone:
+          type: string
+          description: 'The Additional Contact:  Phone of the Entity.'
+        person_with_custody_of_records_city:
+          type: string
+          description: The City of person with Custody of books and records of the Entity.
+        person_with_custody_of_records_state:
+          type: string
+          description: The State of person with Custody of books and records of the Entity.
+        person_with_custody_of_records_zip:
+          type: string
+          description: The ZIP of person with Custody of books and records of the Entity.
+        person_with_custody_of_records_country:
+          type: string
+          description: The Country of person with Custody of books and records of the Entity.
+        corporate_statutory_address:
+          type: string
+          description: The Address of Corporate Statutory of the Entity.
+        corporate_statutory_city:
+          type: string
+          description: The City of Corporate Statutory of the Entity.
+        corporate_statutory_state:
+          type: string
+          description: The State of Corporate Statutory of the Entity.
+        corporate_statutory_zip:
+          type: string
+          description: The ZIP of Corporate Statutory of the Entity.
+        corporate_statutory_country:
+          type: string
+          description: The Country of Corporate Statutory of the Entity.
+        branch_office_city:
+          type: string
+          description: The City of branch office or agent in the US of the Entity.
+        branch_office_state:
+          type: string
+          description: The State of branch office or agent in the US of the Entity.
+        branch_office_zip:
+          type: string
+          description: The ZIP of branch office or agent in the US of the Entity.
+        branch_office_country:
+          type: string
+          description: The Country of branch office or agent in the US of the Entity.
+        dba_city:
+          type: string
+          description: 'The DBA: City of the Entity.'
+        dba_state:
+          type: string
+          description: 'The DBA: State of the Entity.'
+        dba_zip:
+          type: string
+          description: 'The DBA: ZIP of the Entity.'
+        dba_country:
+          type: string
+          description: 'The DBA: Country of the Entity.'
+        principal_place_of_business_code:
+          type: string
+          description: Principle Place of Business code in  the Entity.
+        principal_place_of_business_name:
+          type: string
+          description: Principle Place of Business name in  the Entity.
+        email_address:
+          type: string
+          description: 'The Contact Information: Email Address of the Entities'
+        unit_type:
+          type: string
+          description: The Unit Type value of the Entity.
+        description:
+          type: string
+          description: The description of the Entity.
+        entity_designations_taxed_as:
+          type: string
+          description: Entity designations taxedas IRI
+        entity_designations_taxed_as_sub_category:
+          type: string
+          description: Entity Designation taxedas subcategory
+        entity_designations_us_return_type:
+          type: string
+          description: US Return type IRI
+        authorities:
+          type: array
+          description: The list of authorities for a given entity.
+          items:
+            $ref: '#/components/schemas/Authorities'
+        registrations:
+          type: array
+          description: The list of registrations for a given entity.
+          items:
+            $ref: '#/components/schemas/RegistrationDTO'
+        entity_type:
+          type: string
+          description: The Entity Type value for a given entity.
+        us_return_type:
+          type: string
+          description: The US Return Type value of the Entity Attributes.
+        source_of_data_for_tax_return:
+          type: string
+          description: The Source of Data for Tax Return of the Entity.
+        international_filing_type:
+          type: string
+          description: The International Filing Type value of the Entity Attributes.
+        level_of_consolidation_elimination:
+          type: string
+          description: The Level of Consolidation Elimination value of the Entity Attributes.
+        ein:
+          type: string
+          description: 'The Tax ID / Registration: Number of the Entity.'
+        entity_number:
+          type: string
+          description: The Entity Number for a given entity.
+        incorporation_qualification_details:
+          type: array
+          description: The list of incorporation/qualification Details for Calendar
+          items:
+            $ref: '#/components/schemas/IncorporationQualificationDetailDTO'
+        custom_field_1:
+          type: string
+          description: Custom Field ID
+        custom_field_2:
+          type: string
+          description: Custom Field ID
+        custom_field_3:
+          type: string
+          description: Custom Field ID
+        custom_field_4:
+          type: string
+          description: Custom Field ID
+        custom_field_5:
+          type: string
+          description: Custom Field ID
+        custom_field_6:
+          type: string
+          description: Custom Field ID
+        custom_field_7:
+          type: string
+          description: Custom Field ID
+        custom_field_8:
+          type: string
+          description: Custom Field ID
+        custom_field_9:
+          type: string
+          description: Custom Field ID
+        custom_field_10:
+          type: string
+          description: Custom Field ID
+      description: The Data Transfer Object used for creating Entities.
+    EntityStatusUpdateDTORequest:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The Entity Status of the Entity.
+    CustomFieldDTO:
+      type: object
+      properties:
+        display_name:
+          type: string
+          description: The display name of the custom field.
+        type_id:
+          type: integer
+          format: int32
+          description: The type id of the custom field.
+        values:
+          type: array
+          description: The list of dropdown values for the custom field.
+          items:
+            type: string
+    UnitJsonPatchDTO:
+      type: object
+      properties:
+        op:
+          type: string
+          description: operation to be performed. Only replace is allowed.
+        path:
+          type: string
+          description: path of the resource(entity) that is affected by the requested operation.
+        value:
+          $ref: '#/components/schemas/UnitPatchDTOValue'
+      description: The input object for performing bulk update. This follows JsonPatch (http://jsonpatch.com/) format
+    RegistrationDTO:
+      type: object
+      properties:
+        registration_id:
+          type: string
+          description: The id of the registration.
+        domain:
+          type: string
+          description: The domain of the registration.
+        jurisdiction:
+          type: string
+          description: The jurisdiction of the registration.
+        audit_id:
+          type: string
+          description: The audit id of the registration.
+      description: The details about Registration
+    CustomFieldType:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: CustomFieldType ID
+        name:
+          type: string
+          description: The CustomFieldType Name.
+      description: The details about CustomFieldTypes
+    CustomFieldResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Custom Field ID
+        key:
+          type: string
+          description: The customKey.
+        display_name:
+          type: string
+          description: The display_name.
+        type_id:
+          type: integer
+          format: int32
+          description: CustomFieldType ID
+        values:
+          type: array
+          description: The list of dropdown values added for custom field.
+          items:
+            type: string
+      description: The details about CustomFields
+    UnitPatchDTOValue:
+      type: object
+      properties:
+        related_apps:
+          type: array
+          description: The list of relatedApps to which the Entity are added.
+          items:
+            type: string
+    EntityCustomFieldDTO:
+      type: object
+      properties:
+        custom_field_1:
+          type: string
+          description: Custom Field ID
+        custom_field_2:
+          type: string
+          description: Custom Field ID
+        custom_field_3:
+          type: string
+          description: Custom Field ID
+        custom_field_4:
+          type: string
+          description: Custom Field ID
+        custom_field_5:
+          type: string
+          description: Custom Field ID
+        custom_field_6:
+          type: string
+          description: Custom Field ID
+        custom_field_7:
+          type: string
+          description: Custom Field ID
+        custom_field_8:
+          type: string
+          description: Custom Field ID
+        custom_field_9:
+          type: string
+          description: Custom Field ID
+        custom_field_10:
+          type: string
+          description: Custom Field ID
+    Failure_UnitJsonPatchDTO_:
+      type: object
+      properties:
+        detail_count:
+          type: integer
+          format: int32
+          description: The number of failures that were encountered.
+        details:
+          type: array
+          description: The collection of failures that were encountered.
+          items:
+            $ref: '#/components/schemas/FailureDetail_UnitJsonPatchDTO_'
+        item:
+          $ref: '#/components/schemas/UnitJsonPatchDTO'
+      description: Contains information about a failure.
+    FailureDetail_UnitJsonPatchDTO_:
+      type: object
+      properties:
+        cause:
+          type: string
+          description: The cause of a failure. This is used to identify what POJO field may be in error or what DB could not be reached.
+        description:
+          type: string
+          description: A description of the failure. This is used to provide some meaningful description of the failure. The message should be considered internal and not customer facing.
+        error_id:
+          type: string
+          description: The error identifier
+        error_parameters:
+          type: object
+          description: The error parameter keys and values
+          additionalProperties:
+            type: string
+        failure_type:
+          type: string
+          description: The general category of the type of failure.
+          enum:
+          - ERROR
+          - WARNING
+          - VALIDATION
+        message:
+          type: string
+          description: The default message category
+      description: Provides detail information about a failure.
+    FailureDetail_EntityDTO_:
+      type: object
+      properties:
+        cause:
+          type: string
+          description: The cause of a failure. This is used to identify what POJO field may be in error or what DB could not be reached.
+        description:
+          type: string
+          description: A description of the failure. This is used to provide some meaningful description of the failure. The message should be considered internal and not customer facing.
+        error_id:
+          type: string
+          description: The error identifier
+        error_parameters:
+          type: object
+          description: The error parameter keys and values
+          additionalProperties:
+            type: string
+        failure_type:
+          type: string
+          description: The general category of the type of failure.
+          enum:
+          - ERROR
+          - WARNING
+          - VALIDATION
+        message:
+          type: string
+          description: The default message category
+      description: Provides detail information about a failure.
+    Failure_EntityDTO_:
+      type: object
+      properties:
+        detail_count:
+          type: integer
+          format: int32
+          description: The number of failures that were encountered.
+        details:
+          type: array
+          description: The collection of failures that were encountered.
+          items:
+            $ref: '#/components/schemas/FailureDetail_EntityDTO_'
+        item:
+          $ref: '#/components/schemas/EntityDTO'
+      description: Contains information about a failure.
+    QueryResponseDTO_EntityDTO_:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/EntityDTO'
+        error:
+          $ref: '#/components/schemas/Error_EntityDTO_'
+    Error_EntityDTO_:
+      type: object
+      properties:
+        code:
+          type: string
+          description: code
+        message:
+          type: string
+          description: message
+        error_count:
+          type: integer
+          format: int32
+          description: error_count
+        failures:
+          type: array
+          description: failures
+          items:
+            $ref: '#/components/schemas/Failure_EntityDTO_'
+    ApiErrorValidation:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    IdResponseInteger:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier
+          format: int32
+          example: 1234
+    ApiCollectionNodeResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    NodeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        entity_id:
+          type: string
+        entity_version_id:
+          type: integer
+        entity_version_number:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        level:
+          type: integer
+        parent_id:
+          type: integer
+        rollup_id:
+          type: integer
+        percentage_share:
+          type: number
+        child_count:
+          type: integer
+        is_latest_version:
+          type: boolean
+    AvailaibleEntityResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        version_number:
+          type: integer
+        name:
+          type: string
+        code:
+          type: string
+        country:
+          type: string
+        version_id:
+          type: integer
+        associated_apps:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssociateAppResponse'
+        status:
+          type: string
+        percentage:
+          type: number
+    AssociateAppResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        related_apps:
+          type: string
+        version_id:
+          type: number
+        completion_percentage:
+          type: integer
+        status:
+          type: string
+    ApiCollectionAvailableEntityResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailaibleEntityResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    RollupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        year:
+          type: integer
+        created_by:
+          type: string
+        created_at:
+          type: string
+          description: Time at which this ingestion was created
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        updated_by:
+          type: string
+        updated_at:
+          type: string
+          description: Time at which this ingestion was updated
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        status:
+          type: boolean
+    RollupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the Rollup
+          example: US Entities
+        year:
+          type: integer
+          description: Year in which this Rollup was created
+          example: 2021
+        description:
+          type: string
+          description: Description of the Rollup
+          example: OIT US Entities
+    RollupPatchRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the Rollup
+          example: US Entities
+        description:
+          type: string
+          description: Description of the Rollup
+          example: OIT US Entities
+        status:
+          type: string
+          description: Status of the rollup
+          example: Published/Unpublished
+    NodePatchRequest:
+      type: object
+      properties:
+        version_id:
+          type: integer
+          description: version of an entity
+        percentage_share:
+          type: number
+          description: percentage node contains
+    NodeRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the Entity
+          example: 5fb6b461b4f92004592dc5a8
+        version_id:
+          type: integer
+          description: Version Id of the Entity
+          example: 434564
+        parent_id:
+          type: integer
+          description: Parent Id of the Rollup Node
+          example: 1
+        percentage_share:
+          type: number
+          description: Percentage Share of the Rollup Node
+          example: 30.5
+    NodePatchResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        entity_id:
+          type: string
+        entity_version_id:
+          type: integer
+        level:
+          type: integer
+        rollup_id:
+          type: integer
+        percentage_share:
+          type: number
+x-tr-jtp:
+  default:
+    array-element-count: 20
+    container-depth: 10
+    object-entry-count: 3000
+    object-entry-name-length: 50
+    string-value-length: 500
+x-tr-identity-provider: ONESOURCE
+x-tr-proxy-name: ONESOURCE-Entities
+x-tr-api-version: beta
+x-tr-asset-insight-id: '204896'
+x-tr-apigee-base-path: /entities/entities-rollup/beta
+x-tr-logging-provider:
+- SumoLogic
+- DataDog
+x-tr-servers:
+  default:
+    onesourceZuulServer: true
+    basePath: /dep-services/entities/v3
+    regions:
+    - amer
+    - apac
+    - emea
+x-onesource-max-request-limit: 30ps
+x-onesource-throttle-category: Entity_MetadataRequests_Limit
+x-tr-deploy-permissions:
+- dc-A8bQzXjSn1fRCWeFxc4J1j
+x-tr-promote-permissions:
+- dc-A8bQzXjSn1fRCWeFxc4J1j

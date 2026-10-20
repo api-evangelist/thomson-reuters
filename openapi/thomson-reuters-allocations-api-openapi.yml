@@ -1,0 +1,303 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Configuration…
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: Allocations
+paths:
+  /master-data/allocations:
+    get:
+      tags:
+      - Allocations
+      summary: List all the allocation specifications
+      operationId: Allocations_GetAllocationSpecifications
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsApiResponse'
+              example:
+                items:
+                - id: 1
+                  name: Allocation Specification 1
+                  useErpCodes: true
+                  useNorwayCodes: false
+                  inUse: null
+                  createdBy: null
+                  createdDate: '0001-01-01T00:00:00'
+                - id: 2
+                  name: Allocation Specification 2
+                  useErpCodes: false
+                  useNorwayCodes: true
+                  inUse: null
+                  createdBy: null
+                  createdDate: '0001-01-01T00:00:00'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsApiResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsApiResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsApiResponse'
+    post:
+      tags:
+      - Allocations
+      summary: Create an allocation specification
+      operationId: Allocations_CreateAllocationSpecification
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'
+              example:
+                id: 1
+                name: Allocation Specification
+                useErpCodes: true
+                useNorwayCodes: false
+                inUse: null
+                createdBy: null
+                createdDate: '0001-01-01T00:00:00'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'
+        '400':
+          description: BadRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsCreateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsCreateModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsCreateModel'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsCreateModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsCreateModel'
+        required: true
+  /master-data/allocations/{allocationId}:
+    get:
+      tags:
+      - Allocations
+      summary: Get allocation specification by its id
+      operationId: Allocations_GetAllocationSpecificationById
+      parameters:
+      - name: allocationId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'
+              example:
+                id: 1
+                name: Allocation Specification
+                useErpCodes: true
+                useNorwayCodes: false
+                inUse: null
+                createdBy: null
+                createdDate: '0001-01-01T00:00:00'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'
+        '404':
+          description: NotFound
+    put:
+      tags:
+      - Allocations
+      summary: Update an allocation specification
+      operationId: Allocations_UpdateAllocationSpecification
+      parameters:
+      - name: allocationId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+        '400':
+          description: BadRequest
+        '404':
+          description: NotFound
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsUpdateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsUpdateModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsUpdateModel'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsUpdateModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsUpdateModel'
+        required: true
+    delete:
+      tags:
+      - Allocations
+      summary: Delete an allocation specification
+      operationId: Allocations_DeleteAllocationSpecification
+      parameters:
+      - name: allocationId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+        '404':
+          description: NotFound
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel:
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Allocation specification id
+          type: integer
+        name:
+          description: Allocation specification name
+          type: string
+        useErpCodes:
+          description: Use ERP codes
+          type: boolean
+        useNorwayCodes:
+          description: Use Norway codes
+          type: boolean
+        inUse:
+          description: In Use
+          type: string
+        createdBy:
+          description: CreatedBy
+          type: string
+        createdDate:
+          format: date-time
+          description: CreatedDate
+          type: string
+        lastUpdatedBy:
+          description: LastUpdatedBy
+          type: string
+        lastUpdatedDate:
+          format: date-time
+          description: LastUpdatedBy
+          type: string
+    TRTA.Athena.Models.Api.V4.Allocations.AllocationsCreateModel:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          description: Allocation specification name
+          type: string
+        useErpCodes:
+          description: Use ERP codes
+          type: boolean
+        useNorwayCodes:
+          description: Use Norway codes
+          type: boolean
+      example:
+        name: Allocation Specification
+        useErpCodes: true
+        useNorwayCodes: false
+    TRTA.Athena.Models.Api.V4.Allocations.AllocationsUpdateModel:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          description: Allocation specification name
+          type: string
+        useErpCodes:
+          description: Use ERP codes
+          type: boolean
+        useNorwayCodes:
+          description: Use Norway codes
+          type: boolean
+      example:
+        name: Allocation Specification
+        useErpCodes: true
+        useNorwayCodes: false
+    TRTA.Athena.Models.Api.V4.Allocations.AllocationsApiResponse:
+      type: object
+      properties:
+        items:
+          description: List of allocations
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'

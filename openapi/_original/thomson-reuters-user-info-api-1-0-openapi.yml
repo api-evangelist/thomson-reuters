@@ -1,0 +1,223 @@
+# x-archived-from: thomson-reuters-user-info-api-1-0-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: User Info API
+  description: The User Info API enables the retrieval of user information in Legal Tracker
+  contact:
+    name: devportal
+  version: '1.0'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/user-info-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/user-info-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/user-info-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/user-info-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/user-info-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/user-info-api/v1
+paths:
+  /users/{id}/actionItems:
+    get:
+      tags:
+      - ActionItems
+      summary: Retrieve action items for a specific user.
+      operationId: ActionItems_Get
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the user to get action items for.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: $top
+        in: query
+        description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          default: 50
+        example: 50
+      - name: $skip
+        in: query
+        description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+        example: 0
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> title, count, url, dueDate, message
+        schema:
+          type: string
+          nullable: true
+        example: id eq 111222
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - title
+            - count
+            - url
+            - dueDate
+            - message
+            type: string
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - title
+            - count
+            - url
+            - dueDate
+            - message
+            - title desc
+            - count desc
+            - url desc
+            - dueDate desc
+            - message desc
+            type: string
+      - name: $count
+        in: query
+        description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Returns the action items for a particular user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionItemCollection'
+        '400':
+          description: The request is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The request could not be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Insufficient permissions to access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The requested resource does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ActionItem:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        count:
+          type: integer
+          format: int32
+        url:
+          type: string
+          nullable: true
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ActionItemCollection:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActionItem'
+          nullable: true
+      additionalProperties: false
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+        details:
+          type: array
+          items:
+            required:
+            - code
+            - message
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              target:
+                type: string
+        innerError:
+          required:
+          - code
+          - message
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      additionalProperties: false
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes: {}
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+security:
+- OAuth2: []
+- Token: []
+tags:
+- name: ActionItems
+  description: Use the ActionItems endpoint to get the action items of a user in Legal Tracker.

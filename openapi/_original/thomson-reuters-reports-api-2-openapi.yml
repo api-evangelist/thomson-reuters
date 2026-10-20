@@ -1,0 +1,961 @@
+# x-archived-from: thomson-reuters-reports-api-2-openapi.yml
+# x-archived-on: 2026-10-20
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))
+openapi: 3.0.0
+info:
+  title: Reports API
+  version: '2.0'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+paths:
+  /reports:
+    post:
+      tags:
+      - Reports
+      summary: Generate a report by ID with option to modify the report filters on the fly.
+      description: Generate a report by ID with option to modify the report filters on the fly.
+      operationId: Report_Post
+      requestBody:
+        x-name: reportOptions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportOptionsWithFiltersModel'
+        x-position: 1
+      responses:
+        '200':
+          description: Expected format of report file
+          content:
+            text/csv:
+              schema:
+                type: string
+                description: Report in CSV format
+                format: binary
+            application/xml:
+              schema:
+                type: string
+                description: Report in XML format
+                format: binary
+            application/pdf:
+              schema:
+                type: string
+                description: Report in PDF format
+                format: binary
+            application/vnd.ms-excel:
+              schema:
+                type: string
+                description: Report in Excel format
+                format: binary
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                description: Report in Excelx format
+                format: binary
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '415':
+          description: Report cannot be returned in any of the specified formats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+  /reports/{id}/exports:
+    post:
+      tags:
+      - Reports
+      summary: Create a request to generate a report in asynchronous mode. Additional params allow to modify report filters on the fly.
+      operationId: Report_ExportTo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      requestBody:
+        x-name: exportOptions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportOptionsExportModel'
+        x-position: 2
+      responses:
+        '200':
+          description: Request to export the report was created.
+          headers:
+            Location:
+              description: The value of the header is a URL that can be used to retrieve or update the resource.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedExport'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+  /reports/{reportId}/exports/{exportId}:
+    get:
+      tags:
+      - Reports
+      summary: Returns the status of the Export to file job.
+      operationId: Report_GetExport
+      parameters:
+      - name: reportId
+        in: path
+        required: true
+        description: Id of the report.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: exportId
+        in: path
+        required: true
+        description: Id of the export.
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        '200':
+          description: The actual status of report export.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Export'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+  /filter-definitions/{id}:
+    get:
+      tags:
+      - Report filter definitions
+      summary: Retrieve the list of parameters with possible values that can be used for the filter.
+      description: Each filter has it's own list of parameters. This endpoint allows to retrieve the list of parameters with possible values that can be used for the particular filter.
+      operationId: Report_GetFilter
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Full path to the filter
+        examples:
+          Path for filter Matter -> Short Name:
+            summary: Path for filter Matter -> Short Name
+            value: Matter.Name
+          'Path for filter Matter -> Org. Unit: Select from list':
+            summary: 'Path for filter Matter -> Org. Unit: Select from list'
+            value: Matter.OrgUnit.TreePicklist
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        '200':
+          description: The list of parameters that can be used for the filter with possible values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportFilterDefinition'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+  /report-definitions/{id}/filters:
+    get:
+      tags:
+      - Report definitions
+      summary: Retrieve all filters that are applied to the report.
+      description: Retrieve all filters that are applied to the report.
+      operationId: Report_GetFilters
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Saved report Tracker id.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '200':
+          description: ''
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportFiltersModel'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+  /report-definitions/{id}/filters/{filterId}:
+    patch:
+      tags:
+      - Report definitions
+      summary: Update an existing filter in a report.
+      description: Update an existing filter in a report.
+      operationId: Report_UpdateFilter
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Saved report Tracker id.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: filterId
+        in: path
+        required: true
+        description: Filter unique identifier.
+        schema:
+          type: string
+        x-position: 2
+      - name: If-Match
+        in: header
+        required: true
+        description: The ETag for the record to perform a concurrency check
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        description: "* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.\r\n* return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.\r\n"
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        x-name: FilterParameters
+        description: Filter parameters to be posted
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            examples:
+              Fiter Invoice.GeneralDateRangeWithDefaults:
+                summary: Example for Invoice.GeneralDateRangeWithDefaults filter
+                description: Represents filter for BillingPeriodEndDate field with custom serach ranges from 1/6/2010 12:00:00 AM to 12/31/2020 11:59:59 PM
+                value:
+                - 1/6/2010 12:00:00 AM
+                - 12/31/2020 11:59:59 PM
+                - '1'
+                - BillingPeriodEndDate
+                - null
+              Fiter for Matter.Name:
+                summary: Example for Matter.Name filter
+                description: Search for values that are started from 'searched value'
+                value:
+                - '2'
+                - searched value
+              Filter Matter.OrgUnit.TreePicklist:
+                summary: Example for Matter.OrgUnit.TreePicklist filter
+                description: Search for Org Units that have Tracker Ids 12345 and 9876
+                value:
+                - '12345'
+                - '9876'
+        required: true
+      responses:
+        '200':
+          description: Updated filter with the list of new parameters
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    ReportOptionsWithFiltersModel:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          description: The ID of the saved report to run.
+          format: int32
+        pdfFontSize:
+          type: integer
+          description: The font size to use when the output format is PDF.
+          format: int32
+        pdfHeaderIncludeName:
+          type: boolean
+          description: Indicates whether to include report name into PDF header.
+        pdfHeaderIncludeDate:
+          type: boolean
+          description: Indicates whether to include date into PDF header.
+        pdfHeaderIncludePageNumber:
+          type: boolean
+          description: Indicates whether to include page numbering into PDF header.
+        pdfFooterIncludeName:
+          type: boolean
+          description: Indicates whether to include report name into PDF footer.
+        pdfFooterIncludeDate:
+          type: boolean
+          description: Indicates whether to include date into PDF footer.
+        pdfFooterIncludePageNumber:
+          type: boolean
+          description: Indicates whether to include page numbering into PDF footer.
+        excelApplyRounding:
+          type: boolean
+          description: Indicates whether applied rounding currency values into Excel or not.
+        pdfCustomHeader:
+          type: string
+          description: Text of the custom header for PDF. Can override report name, date or page number in headers.
+          nullable: true
+        pdfCustomHeaderAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfCustomFooter:
+          type: string
+          description: Text of the custom footer for PDF. Can override report name, date or page number in footers.
+          nullable: true
+        pdfCustomFooterAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfPageOrientation:
+          description: Page orientation for exported file
+          $ref: '#/components/schemas/PageOrientation'
+        pdfCommonCustomMargin:
+          type: integer
+          description: 'The margin that set to all sides of pages
+
+            If some of the custom margins have been set, a common margin is set for all others sides'
+          format: int32
+          nullable: true
+        pdfCustomLeftMargin:
+          type: integer
+          description: The margins that can be set to the left of the page
+          format: int32
+          nullable: true
+        pdfCustomTopMargin:
+          type: integer
+          description: The margins that can be set to the top of the page
+          format: int32
+          nullable: true
+        pdfCustomRightMargin:
+          type: integer
+          description: The margins that can be set to the right of the page
+          format: int32
+          nullable: true
+        pdfCustomBottomMargin:
+          type: integer
+          description: The margins that can be set to the bottom of the page
+          format: int32
+          nullable: true
+        pdfCustomCellAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfHeaderFormat:
+          description: Header/footer format
+          $ref: '#/components/schemas/HeaderFooterFormat'
+        pdfFooterFormat:
+          description: Header/footer format
+          $ref: '#/components/schemas/HeaderFooterFormat'
+        csvDelimiter:
+          $ref: '#/components/schemas/CSVDelimiter'
+        filters:
+          type: array
+          description: "The list of filters that should be updated\n            "
+          nullable: true
+          items:
+            $ref: '#/components/schemas/FilterModel'
+        advancedFilter:
+          type: string
+          description: Updated advanced filter that should be applied to the report
+          nullable: true
+    CustomLabelAlignment:
+      type: string
+      description: ''
+      x-enumNames:
+      - Default
+      - Left
+      - Center
+      - Right
+      enum:
+      - Default
+      - Left
+      - Center
+      - Right
+    PageOrientation:
+      type: string
+      description: ''
+      x-enumNames:
+      - Landscape
+      - Portrait
+      enum:
+      - Landscape
+      - Portrait
+    HeaderFooterFormat:
+      type: string
+      description: ''
+      x-enumNames:
+      - Standard
+      - Branded
+      enum:
+      - Standard
+      - Branded
+    CSVDelimiter:
+      type: string
+      description: ''
+      x-enumNames:
+      - 'Null'
+      - Comma
+      - Asterisk
+      - Pipe
+      - Tilde
+      - Semicolon
+      enum:
+      - 'Null'
+      - Comma
+      - Asterisk
+      - Pipe
+      - Tilde
+      - Semicolon
+    FilterModel:
+      type: object
+      additionalProperties: false
+      required:
+      - filterId
+      - params
+      properties:
+        filterId:
+          type: string
+          description: Filter unique id
+          minLength: 1
+          example: fe044d73d549438fa6017e151f718e0f
+        params:
+          type: array
+          description: "List of updated parameters for filter. \nUse filter-definitions/{id} endpoint in order to find description of each parameter. "
+          example:
+          - 1/6/2010 12:00:00 AM
+          - 12/31/2020 11:59:59 PM
+          - 1
+          - BillingPeriodEndDate
+          - null
+          items:
+            type: string
+    CreatedExport:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          description: The Export to file job ID.
+          format: int32
+    ReportOptionsExportModel:
+      type: object
+      additionalProperties: false
+      required:
+      - reportFormat
+      properties:
+        pdfFontSize:
+          type: integer
+          description: The font size to use when the output format is PDF.
+          format: int32
+        pdfHeaderIncludeName:
+          type: boolean
+          description: Indicates whether to include report name into PDF header.
+        pdfHeaderIncludeDate:
+          type: boolean
+          description: Indicates whether to include date into PDF header.
+        pdfHeaderIncludePageNumber:
+          type: boolean
+          description: Indicates whether to include page numbering into PDF header.
+        pdfFooterIncludeName:
+          type: boolean
+          description: Indicates whether to include report name into PDF footer.
+        pdfFooterIncludeDate:
+          type: boolean
+          description: Indicates whether to include date into PDF footer.
+        pdfFooterIncludePageNumber:
+          type: boolean
+          description: Indicates whether to include page numbering into PDF footer.
+        excelApplyRounding:
+          type: boolean
+          description: Indicates whether applied rounding currency values into Excel or not.
+        pdfCustomHeader:
+          type: string
+          description: Text of the custom header for PDF. Can override report name, date or page number in headers.
+          nullable: true
+        pdfCustomHeaderAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfCustomFooter:
+          type: string
+          description: Text of the custom footer for PDF. Can override report name, date or page number in footers.
+          nullable: true
+        pdfCustomFooterAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfPageOrientation:
+          description: Page orientation for exported file
+          $ref: '#/components/schemas/PageOrientation'
+        pdfCommonCustomMargin:
+          type: integer
+          description: 'The margin that set to all sides of pages
+
+            If some of the custom margins have been set, a common margin is set for all others sides'
+          format: int32
+          nullable: true
+        pdfCustomLeftMargin:
+          type: integer
+          description: The margins that can be set to the left of the page
+          format: int32
+          nullable: true
+        pdfCustomTopMargin:
+          type: integer
+          description: The margins that can be set to the top of the page
+          format: int32
+          nullable: true
+        pdfCustomRightMargin:
+          type: integer
+          description: The margins that can be set to the right of the page
+          format: int32
+          nullable: true
+        pdfCustomBottomMargin:
+          type: integer
+          description: The margins that can be set to the bottom of the page
+          format: int32
+          nullable: true
+        pdfCustomCellAlignment:
+          description: Alignment that can be used for cells
+          $ref: '#/components/schemas/CustomLabelAlignment'
+        pdfHeaderFormat:
+          description: Header/footer format
+          $ref: '#/components/schemas/HeaderFooterFormat'
+        pdfFooterFormat:
+          description: Header/footer format
+          $ref: '#/components/schemas/HeaderFooterFormat'
+        csvDelimiter:
+          $ref: '#/components/schemas/CSVDelimiter'
+        filters:
+          type: array
+          description: "The list of filters that should be updated\n            "
+          nullable: true
+          items:
+            $ref: '#/components/schemas/FilterModel'
+        advancedFilter:
+          type: string
+          description: Updated advanced filter that should be applied to the report
+          nullable: true
+        reportFormat:
+          description: File format for exported report
+          $ref: '#/components/schemas/ReportFormat'
+    ReportFormat:
+      type: string
+      description: ''
+      x-enumNames:
+      - Csv
+      - Pdf
+      - Xml
+      - Excel
+      - Excelx
+      enum:
+      - Csv
+      - Pdf
+      - Xml
+      - Excel
+      - Excelx
+    Export:
+      type: object
+      additionalProperties: false
+      properties:
+        createdDateTime:
+          type: string
+          description: The start time of the Export to file job.
+          format: date-time
+        expirationTime:
+          type: string
+          description: The expiration time of the URL. Empty when the result is not available.
+          format: date-time
+        exportState:
+          $ref: '#/components/schemas/ExportState'
+        id:
+          type: integer
+          description: The Export to file job ID.
+          format: int32
+        fileInfo:
+          nullable: true
+          $ref: '#/components/schemas/FileInfoModel'
+    ExportState:
+      type: string
+      description: ''
+      x-enumNames:
+      - Undefined
+      - InProgress
+      - Completed
+      - Error
+      enum:
+      - Undefined
+      - InProgress
+      - Completed
+      - Error
+    FileInfoModel:
+      type: object
+      additionalProperties: false
+      properties:
+        fileName:
+          type: string
+          description: Name of the original file.
+          nullable: true
+        size:
+          type: integer
+          description: Size of the file (in bytes).
+          format: int32
+        uploadedDateTime:
+          type: string
+          description: The date and time at which the file was uploaded.
+          format: date-time
+        md5Hash:
+          type: string
+          description: The MD5 Hash string of the file.
+          nullable: true
+        downloadLink:
+          type: string
+          description: The temporary link to download the file.
+          nullable: true
+    ReportFilterDefinition:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Filter unique identifier (actual full path to a filter)
+          nullable: true
+        name:
+          type: string
+          description: Displayed name of the filter.
+          nullable: true
+        type:
+          type: string
+          description: Filter type.
+          nullable: true
+        params:
+          type: object
+          description: Parameters that are used in filter with accepted values.
+          nullable: true
+          additionalProperties:
+            $ref: '#/components/schemas/FilterParameter'
+    FilterParameter:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+          nullable: true
+        options:
+          type: object
+          nullable: true
+          additionalProperties:
+            type: string
+        multiselect:
+          type: boolean
+        parameterType:
+          $ref: '#/components/schemas/FilterParameterType'
+    FilterParameterType:
+      type: string
+      description: ''
+      x-enumNames:
+      - BooleanValue
+      - NumericValue
+      - StringValue
+      - DateTimeValue
+      - PeriodValue
+      - EnumerationValue
+      - Operator
+      - Field
+      enum:
+      - BooleanValue
+      - NumericValue
+      - StringValue
+      - DateTimeValue
+      - PeriodValue
+      - EnumerationValue
+      - Operator
+      - Field
+    ReportFiltersModel:
+      type: object
+      additionalProperties: false
+      properties:
+        advancedFilter:
+          type: string
+          description: Advanced filter that is specified in the report
+          nullable: true
+        filters:
+          type: array
+          description: The list of filters that are applied to the report
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Filter'
+    Filter:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Filter unique Id
+        name:
+          type: string
+          description: Displayed name of the filter
+          nullable: true
+        type:
+          type: string
+          description: Filter type
+        parent:
+          type: string
+          description: Name or Custom Name of parent. Applicable for column level filters.
+          nullable: true
+        order:
+          type: integer
+          description: Order on UI. Not applicable for column level filters
+          format: int32
+          nullable: true
+        filterDefinitionId:
+          type: string
+          description: Unique id of a filter definition (actual Full path to the filter). Can be used to identify available filter parameters
+        params:
+          type: array
+          description: Filter parameters. The list of parameters depends on filter type
+          items:
+            type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+tags:
+- name: Reports
+  description: Generate reports and manage report filters.

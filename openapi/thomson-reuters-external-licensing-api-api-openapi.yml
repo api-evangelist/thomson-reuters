@@ -1,0 +1,137 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters External Licensing API
+  version: 1.0.0
+  description: 'Operations tagged external-licensing-api across 2 of this provider''s published API definitions: thomson-reuters-ogt-next-platform-openapi.json, thomson-reuters-ogt-next-platform-openapi.yml. Each path carries the servers of the definition it was published in.'
+security:
+- basicAuth: []
+tags:
+- name: external-licensing-api
+paths:
+  /license-service/link-named-users:
+    x-tr-target-path: platform-bff/api/license-service/v1/ext-license/link-named-users
+    put:
+      tags:
+      - external-licensing-api
+      operationId: linkNamedUsers
+      parameters:
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModuleNamedUsersDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+      summary: Link named users
+      x-summary-source: derived
+  /license-service/licensing:
+    x-tr-target-path: platform-bff/api/license-service/v1/ext-license/licensing
+    get:
+      tags:
+      - external-licensing-api
+      operationId: getLicensing
+      parameters:
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModuleLicenseDto'
+      summary: Get licensing
+      x-summary-source: derived
+  /license-service/unlink-named-users:
+    x-tr-target-path: platform-bff/api/license-service/v1/ext-license/unlink-named-users
+    post:
+      tags:
+      - external-licensing-api
+      operationId: unlinkNamedUsers
+      parameters:
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModuleNamedUsersDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+      summary: Unlink named users
+      x-summary-source: derived
+components:
+  schemas:
+    ModuleNamedUsersDto:
+      type: object
+      properties:
+        moduleCode:
+          type: integer
+          format: int64
+        namedUsers:
+          type: array
+          items:
+            type: string
+    ModuleLicenseDto:
+      type: object
+      properties:
+        moduleCode:
+          type: string
+        moduleName:
+          type: string
+        licenseType:
+          type: string
+        totalLicenses:
+          type: integer
+          format: int64
+        namedUsers:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-ogt-next-platform-openapi.json
+- thomson-reuters-ogt-next-platform-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

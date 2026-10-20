@@ -1,0 +1,417 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Token API
+  version: v1
+  description: 'Operations tagged Token across 4 of this provider''s published API definitions: thomson-reuters-engagement-manager-openapi.json, thomson-reuters-oauth2-for-onesource-apis-openapi.json, thomson-reuters-engagement-manager-openapi.yml, thomson-reuters-oauth2-for-onesource-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/us/engagementmanager
+  description: US Production
+- url: https://api.thomsonreuters.com/uk/engagementmanager
+  description: UK Production
+- url: https://api.onesourcetax.com/oauth2/v1
+  description: ONESOURCE AMER region
+- url: https://api-emea.onesourcetax.com/oauth2/v1
+  description: ONESOURCE EMEA region
+- url: https://api-apac.onesourcetax.com/oauth2/v1
+  description: ONESOURCE APAC region
+tags:
+- name: Token
+  description: Get authorization for all api's
+paths:
+  /external/v1/token/get:
+    get:
+      tags:
+      - Token
+      summary: Retrieve the user token
+      description: '## Purpose
+
+        This endpoint exchanges your API key for a JWT (JSON Web Token) access token required to authenticate all subsequent API requests.
+
+
+        ## Why Use This Endpoint
+
+        - Obtain a time-limited access token for secure API authentication
+
+        - Enable authorized access to protected resources and operations
+
+        - Implement token-based authentication flow in your application
+
+        - Required as the first step before calling any other external API endpoints
+
+
+        ## Authentication
+
+        This endpoint uses API key authentication via the `X-TR-EM-APIKEY` header (not Bearer token authentication like other endpoints).
+
+
+        ## Authentication Flow
+
+        **Step 1:** Request Token
+
+        - Call this endpoint with your API key in the `X-TR-EM-APIKEY` header
+
+        - **Header Format:** `X-TR-EM-APIKEY: your-api-key-here`
+
+
+        **Step 2:** Receive Token
+
+        - Get an access token and its expiration timestamp in the response
+
+
+        **Step 3:** Use Token for All Other API Calls
+
+        - Include the access token in the Authorization header for all other API endpoints
+
+        - **Format:** `Authorization: Bearer {accessToken}`
+
+
+        **Step 4:** Refresh Token Before Expiration
+
+        - Request a new token before the current one expires to maintain uninterrupted access
+
+
+        ## Token Validity
+
+        - Tokens are valid until the Unix timestamp specified in the `expiry` field
+
+        - Expired tokens will be rejected with a 401 Unauthorized response
+
+        - Plan to refresh tokens before expiration to maintain uninterrupted access
+
+
+        ## Common Use Cases
+
+        1. **Initial Authentication:** Obtain access token at the start of your session
+
+        2. **Token Refresh:** Get a new token when the current one is about to expire
+
+        3. **Session Management:** Manage authentication state in your application
+
+        4. **Automated Workflows:** Include token retrieval in automated scripts or integrations
+
+
+        ## Important Notes
+
+        - This is the only endpoint that uses API key authentication (`X-TR-EM-APIKEY` header)
+
+        - All other external endpoints require Bearer token authentication using the token from this endpoint
+
+        - Keep your API key secure - never expose it in client-side code or public repositories
+
+        - Tokens are time-limited for security - implement automatic refresh logic'
+      operationId: EmMainEndPointsExternalTokenTokenEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved user token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalTokenApiResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: dea87ce3-3b44-4541-8f90-652705d2f25d
+                    dateTime: '2026-04-21T05:50:03.4188522Z'
+                    traceId: 5b22ea0dc794477ea39dfea5893a2561
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 76ad4a1c-71c9-4d30-927d-26e339c5148e
+                    dateTime: '2026-04-21T05:50:03.4188284Z'
+                    traceId: e956a2aab70a41c4b0c634c75b27fd10
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: bf2e922d-fd0a-47b8-9d9f-ca01742ad11b
+                    dateTime: '2026-04-21T05:50:03.4188479Z'
+                    traceId: 5c2f2305b5c940ada6e4480ab0381843
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: b02de0f4-a9b8-486e-9859-1298b32b2a4c
+                    dateTime: '2026-04-21T05:50:03.4188551Z'
+                    traceId: b598d67aa5674a57b2eec676ffb168ea
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /token:
+    post:
+      summary: Issues an OUATH token
+      description: 'This endpoint is used to generate an access token to call ONESOURCE APIs. It verifies and authenticates your organization and application entitlements, permissions and validity when calling ONESOURCE APIs. Two OAuth2.0 grant types are supported
+
+
+        Client Credentials - Used with service accounts. A client assertion and
+
+        consumer key from your Service Account are required. For more
+
+        information, see the Getting Started instructions in Documentation of the Developer Portal. Access
+
+        tokens are inserted as bearer tokens in the Authorization header. Tokens expire after
+
+        30 minutes and must be regenerated to continue calling APIs.
+
+
+        Authorization Code - An authorization code, consumer key and
+
+        consumer secret from your application are required. For more
+
+        information, see the Getting Started instructions in Documentation of the Developer Portal. Access
+
+        tokens are inserted as bearer tokens in the Authorization header. Tokens expire after
+
+        60 minutes and must be regenerated to continue calling APIs.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                  description: Consumer Key found in Developer Portal.
+                scopes:
+                  type: string
+                  description: "Scopes of the API Product you want to access, separated by comma There are 3 types of scopes in ONESOURCE API <ul>\n  <li>\n    Product Scope - used to get access to Product APIs. There could be more than 1 product scope in a token request to access APIs. Example&colon; urn:tr:onesourcetax:auth:api:incometax\n  </li>\n  <li>\n    Account Scope - used to get access token for a switched account and not for the Home account the one the service account belongs to. Example&colon; urn:tr:onesourcetax:auth:account:46A\n  </li>\n  <li>\n    Client Scope - used with Client Manager to get access token to access product APIs for Client Manager clients. Example&colon;urn:tr:onesourcetax:auth:client:1234\n  </li>\n</ul>"
+                grant_type:
+                  type: string
+                  enum:
+                  - client_credentials
+                  - authorization_code
+                  description: OAuth2 grant type. Supported grant types are "client_credentials" and "authorization_code"
+                client_assertion_type:
+                  type: string
+                  default: urn:ietf:params:oauth:client-assertion-type:jwt-bearer
+                  description: Type of client assertion. This field is required when generating a token using client assertion.
+                client_assertion:
+                  type: string
+                  description: -> customer generated client assertion signed with private key associated with X.509 certificate. It is validated with the X.509 certificate of the service account. Used only client_credentials grant type.
+                client_secret:
+                  type: string
+                  description: Consumer Secret found in Developer portal. Used only in "authorization_code" grant type.
+                authcode:
+                  type: string
+                  description: Authorization code obtained by calling /authorize endpoint. Expires after 1 minute. Used only in "authorization_code" grant type.
+              required:
+              - client_id
+              - scopes
+              - grant_type
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                  token:
+                    type: string
+                    description: The Access Token you need to call APIs
+                  access_token:
+                    type: string
+                    description: The Access Token you need to call APIs
+                  token_type:
+                    type: string
+                  expires_in:
+                    type: string
+                  issued_at:
+                    type: string
+                  client_id:
+                    type: string
+        '400':
+          description: "<b>Bad Request</b> <ul>\n  <li>\n    Could not decode client_assertion, invalid client_assertion - The client_assertion field contains errors or was generated incorrectly.\n  </li>\n  <li> \n    urn:tr:onesource:auth:api scope is invalid or API product was not enabled - Api product scope is not enabled for the tenant or is invalid.\n  </li>\n  <li> \n    client_assertion is either empty or missing - The client_assertion field is either missing from request body or is empty.\n  </li>\n  <li> \n    The field client_id is either empty or missing - The client_id field is either missing from request body or is empty.\n  </li>\n  <li> \n    Invalid Client Id - The client_id value contains errors or does not exist.\n  </li>\n  <li>\n    client_assertion_type is either empty, missing or not set to urn:ietf:params:oauth:client-assertion-type:jwt-bearer - the client_assertion_type field is either missing from request body, empty or not set to urn:ietf:params:oauth:client-assertion-type:jwt-bearer.\n  </li>\n  <li>\n    grant_type is either empty, missing or not set to authorization_code or client_credentials - the grant_type field is either missing from request body, empty or not set to authorization_code or client_credentials.\n  </li>\n  <li>\n    Invalid client_id - client_id value contains errors.\n  </li>\n  <li>\n    Minimum one urn:tr:onesource:auth:api scope is needed - request body has to contain minimum one api product scope.\n  </li>\n  <li>\n    'scopes' property is either empty or missing - the scopes field is either missing from request body or is empty.\n  </li>\n  <li>\n    authcode is empty or missing - The authcode field is either missing from request body or is empty.\n  </li>\n  <li>\n    The scopes are missing quotes - the scopes value is missing scopes\n  </li>\n  <li>\n    urn:tr:onesource:auth:account scope is invalid - Account you are trying to access either does not exist or is not connected to your app.\n  </li>\n  <li>\n    urn:tr:onesource:auth:client is invalid or has not been added to a service account - client does not exist in a tenant or has not been added to an app.\n  </li>\n  <li>\n    client_secret is either invalid, missing or empty - The client_secret field is either missing from request body, empty or contains errors\n  </li>\n  <li>\n    urn:tr:onesource:auth:api scope is invalid - Api product scope is not enabled for the tenant or is invalid.\n  </li>\n</ul>"
+        '401':
+          description: "<b>Unauthorized.</b>  <ul>\n  <li>\n    No client has been added to a service account - app has no clients added.\n  </li>\n  <li>\n    Client Assertion Expired - client assertion has expired, please generate new client assertion.\n  </li>\n  <li>\n    Requested scopes are not authorized for this application. - api product has not been added to the app but is enabled for a tenant.\n  </li>\n  <li>\n    Invalid Authorization Code - authcode field value is invalid or was not generated for the app.\n  </li>\n  <li>\n    Disabled ServiceAccount - app has been disabled.\n  </li>\n  <li>\n    Client manager is not enabled - client managaer is not enabled for a tenant where the app has been created.\n  </li>\n  <li>\n    Authorization Code Expired - authorization code has expired, please consider generating new authorization code.\n  </li>\n  <li>\n    The issuer does not match client_id - client assertion issuer does not match client_id in request body.\n  </li>\n  <li>\n    client_id does not match client assertion subject - client assertion subject does not match client_id in request body.\n  </li>\n  <li>\n    API Product is not available for urn:tr:onesource:auth:client - Api product has not been enabled for a client in client manager.\n  </li>\n</ul>"
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  status:
+                    type: number
+                  instance:
+                    type: string
+                  api_request_id:
+                    type: string
+      tags:
+      - Token
+      operationId: postToken
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/oauth2/v1
+      description: ONESOURCE AMER region
+    - url: https://api-emea.onesourcetax.com/oauth2/v1
+      description: ONESOURCE EMEA region
+    - url: https://api-apac.onesourcetax.com/oauth2/v1
+      description: ONESOURCE APAC region
+components:
+  schemas:
+    EmMainExtensionsUtilityErrorDetail:
+      type: object
+      description: Represents detailed information about a specific error that occurred during API request processing.
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          description: Gets or sets the human-readable error message describing what went wrong.
+          example: '"Unauthorized access."
+
+            "Bad request due to invalid input."
+
+            "Resource not found."
+
+            "An unexpected error occurred."'
+        extensions:
+          description: Gets or sets the extended error metadata containing additional diagnostic information.
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsUtilityErrorExtensions'
+    EmMainExtensionsUtilityErrorExtensions:
+      type: object
+      description: 'Provides extended metadata and diagnostic information for error responses.
+
+        Includes status codes, error codes, timestamps, and distributed tracing identifiers.'
+      additionalProperties: false
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code (e.g., 400, 401, 403, 500)
+          format: int32
+          example: 401
+        code:
+          type: string
+          description: Application-specific error code for programmatic handling
+          example: ERR_AUTH_4010
+        errorId:
+          type: string
+          description: Unique identifier (GUID) for this error occurrence. Use this when reporting issues to support.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        dateTime:
+          type: string
+          description: ISO 8601 timestamp (UTC) when the error occurred
+          example: '2024-03-15T14:30:00Z'
+        traceId:
+          type: string
+          description: Distributed trace ID for correlating requests across microservices (W3C Trace Context format)
+          example: a1b2c3d4e5f67890abcdef1234567890
+        spanId:
+          type: string
+          description: Span ID for this specific operation within the distributed trace (W3C Trace Context format)
+          example: 358611c48f91f940
+    EmMainExtensionsUtilityErrorResponse:
+      type: object
+      description: 'Represents a standardized error response structure for API errors.
+
+        Contains a collection of detailed error information.'
+      example:
+        errors:
+        - message: Unauthorized access.
+          extensions:
+            statusCode: 401
+            code: ERR_AUTH_4010
+            errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+            dateTime: '2024-03-15T14:30:00Z'
+            traceId: a1b2c3d4e5f67890abcdef1234567890
+            spanId: 358611c48f91f940
+      additionalProperties: false
+      properties:
+        errors:
+          type: array
+          description: Collection of detailed error information
+          items:
+            $ref: '#/components/schemas/EmMainExtensionsUtilityErrorDetail'
+    EMMainDataTransferObjectsModelsExternalTokenApiResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        accessToken:
+          type: string
+          description: 'A signed JWT access token used for API authentication.
+
+            Include this token in the Authorization header as:
+
+            Bearer {AccessToken} for all subsequent requests.'
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik
+        expiry:
+          type: integer
+          description: 'The absolute expiration time (in seconds).
+
+            Useful for tracking token validity in your application.'
+          format: int32
+          example: 86400
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: Please enter a valid token(M2M or GFR)
+      name: Authorization
+      in: header
+externalDocs:
+  description: External user's guide documentaton for OAUTH2 endpoints
+  url: https://8o0y42ycsacwxt4k23aooi8ha9sqq5u4jlttdxwbxee0yoa6ia.mcoutput.com/36636/Content/01%20-%20ONESOURCE%20APIs/General/Introduction.htm
+x-refined-from:
+- thomson-reuters-engagement-manager-openapi.json
+- thomson-reuters-oauth2-for-onesource-apis-openapi.json
+- thomson-reuters-engagement-manager-openapi.yml
+- thomson-reuters-oauth2-for-onesource-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

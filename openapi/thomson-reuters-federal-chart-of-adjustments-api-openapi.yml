@@ -1,0 +1,1263 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts Federal Chart of Adjustments API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: Federal Chart of Adjustments
+paths:
+  /v1/fcoa/{fcoaChartId}/adjustment-charts:
+    get:
+      tags:
+      - Federal Chart of Adjustments
+      summary: Returns adjustment charts for a Federal Chart of Accounts.
+      operationId: RetrievesAdjustmentCharts
+      parameters:
+      - name: fcoaChartId
+        in: path
+        description: 16-character chart ID, unique identifier for Federal Chart of Accounts.
+        required: true
+        schema:
+          type: string
+      - name: adjustmentTypes
+        in: query
+        description: 3-character adjustment types.
+        schema:
+          type: string
+      - name: year
+        in: query
+        description: 4-digit year.
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FederalChartOfAdjustmentsListRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Adjustment Charts
+    post:
+      tags:
+      - Federal Chart of Adjustments
+      summary: Adds a new adjustment chart for a Federal Chart of Accounts.
+      operationId: CreatesNewAdjustmentChart
+      parameters:
+      - name: fcoaChartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicate the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FederalChartOfAdjustmentSummariesRepresentation'
+        required: false
+      responses:
+        '201':
+          description: Created
+          content: {}
+        '400':
+          description: Request failed. This error is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: federalChartOfAdjustmentsRepresentation
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates New Adjustment Chart
+  /v1/fcoa/{fcoaChartId}/adjustment-charts/{adjustmentChartId}:
+    get:
+      tags:
+      - Federal Chart of Adjustments
+      summary: Returns an Adjustment Chart for a Federal Chart of Accounts.
+      operationId: RetrievesAnAdjustmentChart
+      parameters:
+      - name: fcoaChartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: adjustmentChartId
+        in: path
+        description: 16-character adjustment chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves an Adjustment Chart
+    put:
+      tags:
+      - Federal Chart of Adjustments
+      summary: Updates an Adjustment Chart name for a Federal Chart of Accounts.
+      operationId: UpdatesAnAdjustmentChartName
+      parameters:
+      - name: fcoaChartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: adjustmentChartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdjustmentChartPropertyDetailRepresentation'
+        required: false
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: fcoaAdjChartRepresentation
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates an Adjustment Chart Name
+  /v1/fcoa/{fcoaChartId}/adjustment-charts/{adjustmentChartId}/adjustments:
+    get:
+      tags:
+      - Federal Chart of Adjustments
+      summary: Returns the adjustments in an Adjustment Chart for a Federal Chart of Accounts.
+      operationId: RetrieveAdjustmentsOfAnAdjustmentChart
+      parameters:
+      - name: fcoaChartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: adjustmentChartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FederalAdjustmentsListRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve Adjustments of an Adjustment Chart
+    post:
+      tags:
+      - Federal Chart of Adjustments
+      summary: Adds a single new adjustment to an Adjustment Chart.
+      operationId: AddsNewAdjustment
+      parameters:
+      - name: fcoaChartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: adjustmentChartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FederalAdjustmentDetailRepresentation'
+        required: false
+      responses:
+        '201':
+          description: Created.
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: federalChartOfAdjustmentItemRepresentation
+      x-operation-id-source: normalized
+      x-operation-id-original: Adds New Adjustment
+  /v1/fcoa/{fcoaChartId}/adjustment-charts/{adjustmentChartId}/adjustments/{adjustmentId}/accounts:
+    patch:
+      tags:
+      - Federal Chart of Adjustments
+      summary: Adds, removes, or replaces multiple accounts from an adjustment, sets…
+      operationId: AddsOrRemovesMultipleAccounts
+      parameters:
+      - name: fcoaChartId
+        in: path
+        description: Federal chart ID.
+        required: true
+        schema:
+          type: string
+      - name: adjustmentChartId
+        in: path
+        description: Federal adjustment chart ID.
+        required: true
+        schema:
+          type: string
+      - name: adjustmentId
+        in: path
+        description: Adjustment ID.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: Patch description.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocumentFederalTaxAdjustmentDetailRepresentation'
+            examples:
+              Book-Add_Account:
+                $ref: '#/components/examples/Book-Add_Account'
+              Reclass-Add_Account:
+                $ref: '#/components/examples/Reclass-Add_Account'
+              Tax-Add_Account:
+                $ref: '#/components/examples/Tax-Add_Account'
+              Book-Remove_Account:
+                $ref: '#/components/examples/Book-Remove_Account'
+              Reclass-Remove_Account:
+                $ref: '#/components/examples/Reclass-Remove_Account'
+              Tax-Remove_Account:
+                $ref: '#/components/examples/Tax-Remove_Account'
+              Book-Replace_Account Automatics:
+                $ref: '#/components/examples/Book-Replace_AccountAutomatics'
+              Reclass-Replace_Account Automatics:
+                $ref: '#/components/examples/Reclass-Replace_AccountAutomatics'
+              Tax-Replace_Account Automatics:
+                $ref: '#/components/examples/Tax-Replace_AccountAutomatics'
+              Book-Replace_Adjustment Properties:
+                $ref: '#/components/examples/Book-Replace_AdjustmentProperties'
+              Reclass-Replace_Adjustment Properties:
+                $ref: '#/components/examples/Reclass-Replace_AdjustmentProperties'
+              Tax-Replace_Adjustment Properties:
+                $ref: '#/components/examples/Tax-Replace_AdjustmentProperties'
+              Tax-Replace_Adjustment Domestic Tax Return Presentation and Special Adjustments:
+                $ref: '#/components/examples/Tax-Replace_AdjustmentDomesticTaxReturnPresentationAndSpecialAdjustments'
+              Tax-Replace_Adjustment Foreign Tax Return Presentation:
+                $ref: '#/components/examples/Tax-Replace_AdjustmentForeignTaxReturnPresentation'
+        required: true
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: fcoaAdjustmentPatchDocument
+      x-operation-id-source: normalized
+      x-operation-id-original: Adds or Removes Multiple Accounts
+  /v1/groups/{groupId}/fcoa/{fcoaChartId}/adjustment-charts/{adjustmentChartId}:
+    delete:
+      tags:
+      - Federal Chart of Adjustments
+      summary: Deletes an Adjustment Chart from the Federal Chart of Adjustments.
+      operationId: DeletesAnAdjustmentChart
+      parameters:
+      - name: groupId
+        in: path
+        description: Group name.
+        required: true
+        schema:
+          type: string
+      - name: fcoaChartId
+        in: path
+        description: 16-character FCOA chart ID.
+        required: true
+        schema:
+          type: string
+      - name: adjustmentChartId
+        in: path
+        description: 16-character adjustment chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Deletes an Adjustment Chart
+components:
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FederalAccountSummaryRepresentation:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          description: System-generated ID for an account number in the chart of accounts.
+          format: int32
+        accountCode:
+          type: string
+          description: Account number in the chart of accounts.
+        accountDescription:
+          type: string
+          description: Account description in the chart of accounts.
+        accountType:
+          type: string
+          description: Account code associated with either income or balance sheet (mutually exclusive).
+        tccId:
+          type: integer
+          description: System-generated ID code used to combine accounts into subcategories within a single TRC.
+          format: int32
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        trcDescription:
+          type: string
+          description: System-defined description for a TRC.
+        tccNumber:
+          type: string
+          description: User-defined code used to combine accounts into subcategories within a single TRC.
+        tccDescription:
+          type: string
+          description: User-defined description used to combine accounts into subcategories within a single TRC (tax return code).
+        trcFormattedNumber:
+          type: string
+          description: System-defined number for a TRC.
+    FederalTaxAdjustmentDetailRepresentation:
+      type: object
+      properties:
+        fcoaChartId:
+          type: string
+          description: 16-character chart ID, unique identifier for Federal Chart of Accounts.
+        adjustmentChartId:
+          type: string
+          description: 16-character adjustment chart ID.
+        adjustmentChartName:
+          type: string
+          description: Chart name for a specific adjustment chart.
+        year:
+          type: string
+          description: Four-digit year.
+        adjustmentChartType:
+          type: string
+          description: 'Type of adjustment chart: Book, Reclass, Tax AMT, or ACE.'
+        adjustmentId:
+          type: integer
+          description: System-generated unique identifier for a specific adjustment.
+        adjustmentNumber:
+          type: string
+          description: User-defined number for an adjustment.
+        adjustmentDescription:
+          type: string
+          description: User-defined description for an adjustment.
+        permanentTemporary:
+          type: boolean
+          description: Mutually exclusive designation for tax adjustment.
+        deductibleTaxable:
+          type: boolean
+          description: ''
+        current:
+          type: boolean
+          description: ''
+        equity:
+          type: boolean
+          description: ''
+        partK1:
+          type: boolean
+          description: ''
+        foreignPartK1:
+          type: boolean
+          description: ''
+        purchaseAccounting:
+          type: boolean
+          description: ''
+        ftcIncomeInclusion:
+          type: boolean
+          description: ''
+        foreignEntityTaxableIncome:
+          type: boolean
+        incomeTax:
+          type: boolean
+          description: ''
+        provision:
+          type: boolean
+          description: ''
+        hasXrefMapping:
+          type: boolean
+          description: ''
+        hasPartnerK1Mapping:
+          type: boolean
+          description: ''
+        has8865K1Mapping:
+          type: boolean
+          description: ''
+        federalAdjustmentAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederalAccountSummaryRepresentation'
+        creditTaxReturnPresentation:
+          $ref: '#/components/schemas/TaxReturnPresentationItem'
+        debitTaxReturnPresentation:
+          $ref: '#/components/schemas/TaxReturnPresentationItem'
+        internationalCreditTaxReturnPresentation:
+          $ref: '#/components/schemas/TaxReturnPresentationItem'
+        internationalDebitTaxReturnPresentation:
+          $ref: '#/components/schemas/TaxReturnPresentationItem'
+    FederalAdjustmentsListRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederalAdjustmentDetailRepresentation'
+    FederalAdjustmentAccount:
+      type: object
+      properties:
+        accountOrder:
+          type: integer
+          format: int32
+        automaticOption:
+          type: string
+          description: Designates the accounts within an adjustment that will automatically adjust certain types of balances for designated accounts.
+          enum:
+          - None
+          - Account
+          - BalanceEntry
+        isAutoAccount:
+          type: boolean
+          description: Indicates whether automatic attributes have been designated for the account in an adjustment.
+        federalAutomaticAccountOption:
+          $ref: '#/components/schemas/FederalAutomaticAccountOption'
+        accountId:
+          type: integer
+          description: System-generated ID for an account number in the chart of accounts.
+          format: int32
+        accountCode:
+          type: string
+          description: Account number in the chart of accounts.
+        accountDescription:
+          type: string
+          description: Account description in the chart of accounts.
+        accountType:
+          type: string
+          description: Account code associated with either income or balance sheet (mutually exclusive).
+        tccId:
+          type: integer
+          description: System-generated ID code used to combine accounts into subcategories within a single TRC (Tax Return Code).
+          format: int32
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        trcDescription:
+          type: string
+          description: System-defined description for a TRC.
+        tccNumber:
+          type: integer
+          description: User-defined code used to combine accounts into subcategories within a single TRC.
+          format: int32
+        tccDescription:
+          type: string
+          description: User-defined description used to combine accounts into subcategories within a single TRC (Tax Return Code).
+        trcFormattedNumber:
+          type: string
+          description: System-defined number for a TRC.
+    OperationFederalTaxAdjustmentDetailOrAccountRepresentation:
+      oneOf:
+      - type: object
+        properties:
+          value:
+            $ref: '#/components/schemas/FederalTaxAdjustmentDetailRepresentation'
+          path:
+            type: string
+          op:
+            type: string
+          from:
+            type: string
+      - type: object
+        properties:
+          value:
+            $ref: '#/components/schemas/FederalAccountRepresentation'
+          path:
+            type: string
+          op:
+            type: string
+          from:
+            type: string
+    FederalChartOfAdjustmentsListRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederalChartOfAdjustmentSummariesRepresentation'
+    JsonPatchDocumentFederalTaxAdjustmentDetailRepresentation:
+      type: object
+      description: Patch document representation that contains adjustment details and accounts operations. Account representation can be used directly for account-only operations. For adjustment operations and account-only operations, send adjustment detail representation and account representation, respectively.
+      properties:
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperationFederalTaxAdjustmentDetailOrAccountRepresentation'
+    FederalAccount:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          description: System-generated ID for an account number in the chart of accounts.
+          format: int32
+        accountCode:
+          type: string
+          description: Account number in the chart of accounts.
+        accountDescription:
+          type: string
+          description: Account description in the chart of accounts.
+        accountType:
+          type: string
+          description: Account code associated with either income or balance sheet (mutually exclusive).
+        tccId:
+          type: integer
+          description: System-generated ID code used to combine accounts into subcategories within a single TRC.
+          format: int32
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        trcDescription:
+          type: string
+          description: System-defined description for a TRC.
+        tccNumber:
+          type: integer
+          description: User-defined code used to combine accounts into subcategories within a single TRC.
+          format: int32
+        tccDescription:
+          type: string
+          description: User-defined description used to combine accounts into subcategories within a single TRC (Tax Return Code).
+        trcFormattedNumber:
+          type: string
+          description: System-defined number for a TRC.
+    FederalAccountRepresentation:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          description: System-generated ID for an account number in the chart of accounts.
+          format: int32
+        accountCode:
+          type: string
+          description: Account number in the chart of accounts.
+        accountDescription:
+          type: string
+          description: Account description in the chart of accounts.
+        accountType:
+          type: string
+          description: Account code associated with either income or balance sheet (mutually exclusive).
+        tccId:
+          type: integer
+          description: System-generated ID code used to combine accounts into subcategories within a single TRC.
+          format: int32
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        trcDescription:
+          type: string
+          description: System-defined description for a TRC.
+        tccNumber:
+          type: string
+          description: User-defined code used to combine accounts into subcategories within a single TRC.
+        tccDescription:
+          type: string
+          description: User-defined description used to combine accounts into subcategories within a single TRC (tax return code).
+        trcFormattedNumber:
+          type: string
+    FederalChartOfAdjustmentItemRepresentation:
+      type: object
+      properties:
+        adjustmentChartId:
+          type: string
+          description: System-generated unique identifier for a specific adjustment chart.
+        adjustmentChartName:
+          type: string
+          description: Chart name for a specific adjustment chart.
+        year:
+          type: string
+          description: Tax year.
+        adjustmentChartType:
+          type: string
+          description: 'Type of adjustment chart: Book, Reclass, Tax, AMT, or ACE.'
+        adjustmentId:
+          type: integer
+          description: System-generated unique identifier for a specific adjustment.
+          format: int32
+        adjustmentNumber:
+          type: string
+          description: User-defined number for an adjustment.
+        adjustmentDescription:
+          type: string
+          description: User-defined description for an adjustment.
+        federalAdjustmentAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederalAccountSummaryRepresentation'
+    FederalChartOfAdjustmentSummariesRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        adjustmentChartId:
+          type: string
+          description: System-generated unique identifier for a specific adjustment chart.
+        adjustmentChartName:
+          type: string
+          description: Chart name for a specific adjustment chart.
+        copyAdjustmentChartId:
+          type: string
+        fcoaChartId:
+          type: string
+          description: Unique identifier for a Federal Chart of Accounts.
+        adjustmentChartType:
+          type: string
+          description: 'Type of adjustment chart: Book, Reclass, Tax AMT, or ACE.'
+        adjustmentTypeDescription:
+          type: string
+        federalAdjustments:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederalChartOfAdjustmentItemRepresentation'
+    FederalAdjustmentDetailRepresentation:
+      type: object
+      properties:
+        fcoaChartId:
+          type: string
+          description: Unique identifier for a Federal Chart of Accounts.
+        adjustmentChartId:
+          type: string
+          description: System-generated unique identifier for a specific adjustment chart.
+        adjustmentChartName:
+          type: string
+          description: Chart name for a specific adjustment chart.
+        year:
+          type: string
+          description: Tax year.
+        adjustmentChartType:
+          type: string
+          description: 'Type of adjustment chart: Book, Reclass, Tax, AMT, or ACE.'
+        adjustmentId:
+          type: integer
+          description: System-generated unique identifier for a specific adjustment.
+          format: int32
+        adjustmentNumber:
+          type: string
+          description: User-defined number for an adjustment.
+        adjustmentDescription:
+          type: string
+          description: User-defined description for an adjustment.
+        permanentTemporary:
+          type: boolean
+          description: Mutually exclusive designation for tax adjustment.
+        deductibleTaxable:
+          type: boolean
+        current:
+          type: boolean
+          description: Adjustments.
+        equity:
+          type: boolean
+        partK1:
+          type: boolean
+          description: Special tax adjustment.
+        foreignPartK1:
+          type: boolean
+        purchaseAccounting:
+          type: boolean
+        ftcIncomeInclusion:
+          type: boolean
+          description: Indicates whether an Inclusion Transfer Mapping chart has been assigned to the binder.
+        foreignEntityTaxableIncome:
+          type: boolean
+        incomeTax:
+          type: boolean
+        provision:
+          type: boolean
+        hasXrefMapping:
+          type: boolean
+          description: Indicates whether a cross-reference mapping chart has been assigned to the binder.
+        hasPartnerK1Mapping:
+          type: boolean
+          description: Indicates whether a Partnership K-1 chart has been assigned to the binder.
+        has8865K1Mapping:
+          type: boolean
+          description: Indicates whether an 8865 K-1 chart has been assigned to the binder.
+        federalAdjustmentAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederalAdjustmentAccount'
+        creditTaxReturnPresentation:
+          $ref: '#/components/schemas/TaxReturnPresentationItem'
+        debitTaxReturnPresentation:
+          $ref: '#/components/schemas/TaxReturnPresentationItem'
+        internationalCreditTaxReturnPresentation:
+          $ref: '#/components/schemas/TaxReturnPresentationItem'
+        internationalDebitTaxReturnPresentation:
+          $ref: '#/components/schemas/TaxReturnPresentationItem'
+    AdjustmentChartPropertyDetailRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        adjustmentChartId:
+          type: string
+          description: System-generated unique identifier for a specific adjustment chart.
+        adjustmentChartName:
+          type: string
+          description: Chart name for a specific adjustment chart.
+        adjustmentChartType:
+          type: string
+          description: 'Type of adjustment chart: Book, Reclass, Tax, AMT, or ACE.'
+        fcoaChartId:
+          type: string
+          description: Unique identifier for a Federal Chart of Accounts.
+        fcoaChartName:
+          type: string
+        priorYearChartName:
+          type: string
+          description: Chart name from the prior year.
+        tccChartId:
+          type: string
+          description: System-generated ID for a TCC chart.
+        tccChartName:
+          type: string
+          description: User-defined name for a TCC chart.
+        readOnlyIndicator:
+          type: boolean
+          description: Indicates whether a binder can be deleted. A binder can't be deleted if it's read-only.
+        rollover:
+          type: boolean
+    FederalAutomaticAccountOption:
+      type: object
+      properties:
+        negate:
+          type: boolean
+        balanceType:
+          type: string
+          enum:
+          - Preliminary
+          - Book
+          - Reclass
+          - Tax
+          - AMT
+          - ACE
+        computeOption:
+          type: string
+          enum:
+          - Ending
+          - Beginning
+          - Difference
+        defaultProvision:
+          type: boolean
+        automaticAccountPercentage:
+          type: integer
+          format: int32
+        sourceAccount:
+          $ref: '#/components/schemas/FederalAccount'
+    TaxReturnPresentationItem:
+      type: object
+      properties:
+        trcFormattedNumber:
+          type: string
+          description: System-defined number for a TRC.
+        trcDescription:
+          type: string
+          description: System-defined description for a TRC.
+        tccId:
+          type: integer
+          description: System-generated ID code used to combine accounts into subcategories within a single TRC.
+          format: int32
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        tccNumber:
+          type: integer
+          description: User-defined code used to combine accounts into subcategories within a single TRC.
+          format: int32
+        tccDescription:
+          type: string
+          description: User-defined description used to combine accounts into subcategories within a single TRC (Tax Return Code).
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+  examples:
+    Tax-Replace_AdjustmentProperties:
+      value:
+      - op: replace
+        path: /tax/adjustment
+        value:
+          adjustmentId: 27651
+          adjustmentNumber: 0001a
+          adjustmentDescription: M & E Reclass-new
+    Tax-Add_Account:
+      value:
+      - op: add
+        path: /tax/account
+        value:
+          accountCode: 123456
+    Reclass-Remove_Account:
+      value:
+      - op: remove
+        path: /reclass/account
+        value:
+          accountCode: 123456
+    Book-Replace_AdjustmentProperties:
+      value:
+      - op: replace
+        path: /book/adjustment
+        value:
+          adjustmentId: 27651
+          adjustmentNumber: 0001a
+          adjustmentDescription: M & E Reclass-new
+    Reclass-Add_Account:
+      value:
+      - op: add
+        path: /reclass/account
+        value:
+          accountCode: 123456
+    Tax-Replace_AdjustmentDomesticTaxReturnPresentationAndSpecialAdjustments:
+      value:
+      - op: replace
+        path: /tax/adjustment
+        value:
+          adjustmentId: 27692
+          adjustmentNumber: AM62a
+          adjustmentDescription: tax Dividend Income - new
+          creditTaxReturnPresentation:
+            trcFormattedNumber: 60-210
+            trcDescription: Book Over Tax Depreciation
+            tccId: 1507279
+            trcCategoryId: 60
+            trcNumber: 210
+            tccNumber: 10
+            tccDescription: Book Over Tax Depreciation
+          debitTaxReturnPresentation:
+            trcFormattedNumber: 60-210
+            trcDescription: Book Over Tax Depreciation
+            tccId: 1507279
+            trcCategoryId: 60
+            trcNumber: 210
+            tccNumber: 10
+            tccDescription: Book Over Tax Depreciation
+          internationalCreditTaxReturnPresentation: null
+          internationalDebitTaxReturnPresentation: null
+          permanentTemporary: false
+          partK1: false
+          foreignPartK1: false
+          ftcIncomeInclusion: false
+          foreignEntityTaxableIncome: false
+    Reclass-Replace_AccountAutomatics:
+      value:
+      - op: replace
+        path: /reclass/account
+        value:
+          automaticOption: Account
+          isAutoAccount: true
+          federalAutomaticAccountOption:
+            automaticAccountPercentage: 50
+            balanceType: Preliminary
+            computeOption: Ending
+            isDirty: true
+            negate: true
+            sourceAccount:
+              accountCode: 151108
+          accountCode: 151108
+      - op: replace
+        path: /reclass/account
+        value:
+          automaticOption: BalanceEntry
+          isAutoAccount: true
+          federalAutomaticAccountOption: {}
+          accountCode: '700001'
+    Book-Add_Account:
+      value:
+      - op: add
+        path: /book/account
+        value:
+          accountCode: 123456
+    Tax-Replace_AccountAutomatics:
+      value:
+      - op: replace
+        path: /tax/account
+        value:
+          automaticOption: Account
+          isAutoAccount: true
+          federalAutomaticAccountOption:
+            automaticAccountPercentage: 50
+            balanceType: Preliminary
+            computeOption: Ending
+            isDirty: true
+            negate: true
+            sourceAccount:
+              accountCode: 151108
+          accountCode: 151108
+      - op: replace
+        path: /tax/account
+        value:
+          automaticOption: BalanceEntry
+          isAutoAccount: true
+          federalAutomaticAccountOption: {}
+          accountCode: '700001'
+    Reclass-Replace_AdjustmentProperties:
+      value:
+      - op: replace
+        path: /reclass/adjustment
+        value:
+          adjustmentId: 27651
+          adjustmentNumber: 0001a
+          adjustmentDescription: M & E Reclass-new
+    Tax-Remove_Account:
+      value:
+      - op: remove
+        path: /tax/account
+        value:
+          accountCode: 123456
+    Tax-Replace_AdjustmentForeignTaxReturnPresentation:
+      value:
+      - op: replace
+        path: /tax/adjustment
+        value:
+          adjustmentId: 27692
+          adjustmentNumber: AM62a
+          adjustmentDescription: tax Dividend Income - new
+          creditTaxReturnPresentation:
+            tccDescription: Sched K-1 from Dwnstrm Energy Vent Co-new
+            tccId: '1507219'
+            tccNumber: '150'
+            trcCategoryId: 60
+            trcDescription: Other Taxable Income Not Recorded on Books
+            trcFormattedNumber: 60-150
+            trcNumber: 150
+          debitTaxReturnPresentation:
+            tccDescription: Sched K-1 from Dwnstrm Energy Vent Co-new
+            tccId: '1507219'
+            tccNumber: '150'
+            trcCategoryId: 60
+            trcDescription: Other Taxable Income Not Recorded on Books
+            trcFormattedNumber: 60-150
+            trcNumber: 150
+          internationalCreditTaxReturnPresentation:
+            tccDescription: Depreciation and Amortization
+            tccId: '1507422'
+            tccNumber: '001'
+            trcCategoryId: 62
+            trcDescription: Depreciation and Amortization
+            trcFormattedNumber: 62-102
+            trcNumber: 102
+          internationalDebitTaxReturnPresentation:
+            tccDescription: Depreciation and Amortization
+            tccId: '1507422'
+            tccNumber: '001'
+            trcCategoryId: 62
+            trcDescription: Depreciation and Amortization
+            trcFormattedNumber: 62-102
+            trcNumber: 102
+          permanentTemporary: false
+          partK1: false
+          foreignPartK1: false
+          ftcIncomeInclusion: false
+          foreignEntityTaxableIncome: false
+    Book-Replace_AccountAutomatics:
+      value:
+      - op: replace
+        path: /book/account
+        value:
+          automaticOption: Account
+          isAutoAccount: true
+          federalAutomaticAccountOption:
+            automaticAccountPercentage: 50
+            balanceType: Preliminary
+            computeOption: Ending
+            isDirty: true
+            negate: true
+            sourceAccount:
+              accountCode: 151108
+          accountCode: 151108
+      - op: replace
+        path: /book/account
+        value:
+          automaticOption: BalanceEntry
+          isAutoAccount: true
+          federalAutomaticAccountOption: {}
+          accountCode: '700001'
+    Book-Remove_Account:
+      value:
+      - op: remove
+        path: /book/account
+        value:
+          accountCode: 123456
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

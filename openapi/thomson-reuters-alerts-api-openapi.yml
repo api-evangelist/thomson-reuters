@@ -1,0 +1,485 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Alerts API
+  version: '2.0'
+  contact:
+    name: devportal
+  description: 'Operations tagged Alerts across 2 of this provider''s published API definitions: thomson-reuters-firms-api-2-0-openapi.json, thomson-reuters-firms-api-2-0-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.co.uk/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.ca/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.com.au/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.de/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.ae/legal-tracker/firms-api/v2
+security:
+- OAuth2: []
+- Token: []
+tags:
+- name: Alerts
+  description: Manage the firm alerts to control the firm invoice processing flow. The alerts are displayed on invoices submitted by firms or when the firm attempts to submit an invoice.
+paths:
+  /alerts:
+    get:
+      tags:
+      - Alerts
+      summary: Get firm alerts
+      parameters:
+      - name: $top
+        in: query
+        description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          default: 50
+        example: 50
+      - name: $skip
+        in: query
+        description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+        example: 0
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, firmId, description, linkUrl, createdDateTime, createdByUser, lastModifiedDateTime, lastModifiedByUser, createdByUser/id, createdByUser/name, createdByUser/email, lastModifiedByUser/id, lastModifiedByUser/name, lastModifiedByUser/email
+        schema:
+          type:
+          - string
+          - 'null'
+        example: id eq 111222
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - firmId
+            - description
+            - linkUrl
+            - createdDateTime
+            - createdByUser
+            - lastModifiedDateTime
+            - lastModifiedByUser
+            type: string
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - firmId
+            - description
+            - linkUrl
+            - createdDateTime
+            - lastModifiedDateTime
+            - id desc
+            - firmId desc
+            - description desc
+            - linkUrl desc
+            - createdDateTime desc
+            - lastModifiedDateTime desc
+            type: string
+      - name: $expand
+        in: query
+        description: Expand a complex property, see [Expand](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionexpand)
+        schema:
+          type: string
+      - name: $count
+        in: query
+        description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A list of firm alerts is successfully returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertCollection'
+        '400':
+          description: FirmId is not provided in the request filter or it identifies a firm not connected to the company or there are some other invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getAlerts
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Alerts
+      summary: Create a new firm alert to halt invoice processing
+      parameters:
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.'
+        schema:
+          type: string
+        example: return=representation
+      requestBody:
+        description: The new firm alert.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewAlert'
+        required: true
+      responses:
+        '201':
+          description: Record was created successfully.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+            Location:
+              description: URL to object.
+              schema:
+                type: string
+                description: URL to object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '204':
+          description: Record was created successfully.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+        '400':
+          description: invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postAlerts
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/firms-api/v2
+  /alerts/{id}:
+    get:
+      tags:
+      - Alerts
+      summary: Retrieve information about an existing alert identified by the alert Tracker ID
+      parameters:
+      - name: id
+        in: path
+        description: The firm alert identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '304':
+          description: Firm alert is not modified.
+        '400':
+          description: Invalid alert identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Firm alert is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getAlertsById
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Alerts
+      summary: Delete a firm alert identified by the alert Tracker ID.
+      parameters:
+      - name: id
+        in: path
+        description: The firm alert identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-Match
+        in: header
+        description: The ETag for the record to perform a concurrency check.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Record was deleted successfully.
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Firm alert is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '412':
+          description: ETag provided in the If-Match header is out of date.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '428':
+          description: Missing the "If-Match" header.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: deleteAlertsById
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/firms-api/v2
+components:
+  schemas:
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    NewAlert:
+      required:
+      - description
+      - firmId
+      type: object
+      properties:
+        firmId:
+          type: integer
+          format: int32
+        description:
+          maxLength: 150
+          type: string
+        linkUrl:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alert:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firmId:
+          type: integer
+          format: int32
+        description:
+          type:
+          - string
+          - 'null'
+        linkUrl:
+          type:
+          - string
+          - 'null'
+        createdDateTime:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        createdByUser:
+          $ref: '#/components/schemas/Contact'
+        lastModifiedDateTime:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        lastModifiedByUser:
+          $ref: '#/components/schemas/Contact'
+      additionalProperties: false
+    AlertCollection:
+      type: object
+      properties:
+        value:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alert'
+      additionalProperties: false
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+        details:
+          type: array
+          items:
+            required:
+            - code
+            - message
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              target:
+                type: string
+        innerError:
+          required:
+          - code
+          - message
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      additionalProperties: false
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes: {}
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-firms-api-2-0-openapi.json
+- thomson-reuters-firms-api-2-0-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

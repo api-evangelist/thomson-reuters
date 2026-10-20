@@ -1,0 +1,2266 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Activity API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Activity across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Activity
+paths:
+  /{version}/comments:
+    get:
+      tags:
+      - Activity
+      summary: Get Comment List
+      description: Method to obtain comments on a particular content. This method is supported in version 2 of the API and above
+      operationId: getCommentList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: contentid
+        in: query
+        description: This the content id of the required content. <br/>e.g. blogid for contenttype=blog, taskid for contenttype=tasks
+        required: true
+        schema:
+          type: string
+      - name: contenttype
+        in: query
+        description: 'content types <br/><i>e.g. /api/1/comments?contenttype=files</i>
+
+          - Microblogs
+
+          - Files
+
+          - Wiki
+
+          - Blog
+
+          - Tasks
+
+          - Events'
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The integer value of the last comment fetched.
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: 'No of comments to return in one request. Default is 20  and the maximum value is 100
+
+          If a value of 0 or less is provided in the request then 20 comments will be returned.
+
+          If a value of more than 100 is provided then 100 comments are returned.'
+        required: false
+        schema:
+          type: string
+      - name: siteid
+        in: query
+        description: "Provide site id of the required site, the parameter only accepts one site in the current implementation. <br/>e.g. <i>/api/1/comments?siteid=<siteid></i> \nFor global contents like microblogs please provide 0 as the siteid "
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Comments returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Comments'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comments'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: ' Internal error occurred while returning comments'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/microblog:
+    post:
+      tags:
+      - Activity
+      summary: Post Microblog
+      description: API method to post a Microblog
+      operationId: addMicroBlog
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: groupsupport
+        in: query
+        description: groupsupport flag for mention group & share with group
+        required: false
+        schema:
+          type: string
+          default: '0'
+      responses:
+        '200':
+          description: Activity returned successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while posting microblog
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Microblog'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Microblog'
+    servers:
+    - url: /monumentuat/api
+  /{version}/microblog/{microblogid}:
+    delete:
+      tags:
+      - Activity
+      summary: Delete Microblog
+      description: API method to delete a microblog
+      operationId: deleteMicroblog
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '6'
+      - name: microblogid
+        in: path
+        description: ID of the microblog
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Microblog deleted successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while deleting microlbog
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/activities/{activityid}:
+    get:
+      tags:
+      - Activity
+      summary: Get Activity
+      description: To get the individual activity - currently only the microblog is supported
+      operationId: getRecentActivity
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: groupsupport
+        in: query
+        description: groupsupport flag for share with group
+        required: false
+        schema:
+          type: string
+          default: '0'
+      - name: activityid
+        in: path
+        description: The activity id of requested activity
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Activity returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Activity'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting activity
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/microblog/sharewith:
+    get:
+      tags:
+      - Activity
+      summary: Get sharewith options for microblog
+      description: API to get list of sharewith option for post microblog
+      operationId: getSharewithOptions
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: q
+        in: query
+        description: Text that will be searched against Org name, Site name and Group to filter out.
+        required: true
+        schema:
+          type: string
+      - name: siteid
+        in: query
+        description: Site id of the site in which microblog is being posted
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Sharewith options returned successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting sharewith options for microblog
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/activities/activityfilter:
+    get:
+      tags:
+      - Activity
+      summary: Get Activity Filters
+      description: This API method can be used to obtain the list of filters available for the activity API, please note that this API only provide the filters relevant to a specific activity list and does not return the content activity.
+      operationId: getRecentActivityFilterList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: site
+        in: query
+        description: This is an optional parameter if the parameter is not supplied or an "ALL" value is provided then filters relevant to the activity for all sites is returned. <br/>Provide a list of comma separated site ID's if activity filters for specific sites are required. <br/>e.g. site = 10,11,12
+        required: false
+        schema:
+          type: string
+          default: all
+      - name: contenttype
+        in: query
+        description: If a limited set of filters are required then provide a comma separated list of content types <br/>e.g. contenttype = files, blog, wiki <br/>otherwise, do not use this parameter or provide a value of "ALL" for this parameter.
+        required: false
+        schema:
+          type: string
+          default: all
+      - name: activitytype
+        in: query
+        description: all/post/activity
+        required: false
+        schema:
+          type: string
+          default: all
+      - name: searchtext
+        in: query
+        description: Search Text
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The integer value of the last record fetched.
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: 'No of records to return in one request. Default is 20  and the maximum value is 100
+
+          If a value of 0 or less is provided in the request then 20 records will be returned.
+
+          If a value of more than 100 is provided then 100 records are returned.'
+        required: false
+        schema:
+          type: string
+      - name: filtertype
+        in: query
+        description: Provide filter type if the parameter is not supplied all filters will be returned. <br/>e.g. filtertype = content_site_filter, content_type_filter, content_user_filter <br/>
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ActivityFilter'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityFilter'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while gettting activity filter list
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/getImageForLinkPreview:
+    get:
+      tags:
+      - Activity
+      summary: Get Image for Link Preview
+      description: API method to get image for Link Preview in Microblog
+      operationId: getImageForLinkPreview
+      parameters:
+      - name: imgURL
+        in: query
+        description: image URL
+        required: true
+        schema:
+          type: string
+      - name: width
+        in: query
+        description: width for image
+        required: true
+        schema:
+          type: string
+      - name: height
+        in: query
+        description: height for image
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while gettting image file
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/comments/{commentid}:
+    get:
+      tags:
+      - Activity
+      summary: Get Comment
+      description: Method to obtain a comment on a particular content. This method is supported in version 6 of the API and above
+      operationId: getCommentByCommentID
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '6'
+      - name: commentid
+        in: path
+        description: Comment id to get single comment's details
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Comment returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Comments'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comments'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Comments'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: ' Internal error occurred while returning comment'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/activities:
+    get:
+      tags:
+      - Activity
+      summary: Get Activity List
+      description: 'This API method can be used to obtain a collection of activity items. The activity is based on a specific filter.
+
+
+        By default the activity of the authenticated OAuth token are used to provide the activity, however if the OAuth token user has got administrative rights they are able to obtain activity on behalf of other users.
+
+
+        The type of activity returned can be altered by the filter parameters.
+
+
+        Each activity has an Actor, Verb and Object:
+
+
+        Actor: A person that performs the activity (user object)
+
+
+        Verb : The activities verb, which indicates what action was performed
+
+
+        Object: The object of the activity
+
+
+        e.g. Mark posted a comment on the wiki page "Welcome to the show"
+
+
+        In the above activity description, "Mark" is the actor, "posted" is the verb and "wiki page" is the object.
+
+
+        <noofcomments> <nooflikes> <comments> <images> tags are only included in the returned xml when there are values available for those items.
+
+
+        The activity ID is only returned for microblog items and not for the any other activity.'
+      operationId: getRecentActivityList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: site
+        in: query
+        description: 'If siteid is provided, the parameter for sitescope is ignored, sitescope parameter is only considered when no siteid is given.
+
+          <p>For System Admin (scope can be all or it can be the sites they are a member of)<br/></p>'
+        required: false
+        schema:
+          type: string
+      - name: sitescope
+        in: query
+        description: "If site id is provided , the parameter for site scope is ignore, site scope parameter is only considered when no site id is given.\n <br>For System admin (scope can be all or it can be the sites they are a member of)<br><i>/api/1/activities?sitescope={all / memberoff /favourite}</i>"
+        required: false
+        schema:
+          type: string
+          enum:
+          - all
+          - memberoff
+          - favourite
+      - name: people
+        in: query
+        description: '<ul><li>Default scope is <strong>All</strong>. At one time only, one option is sent. </li>
+
+          <li><strong>Author</strong> [supports only one author at this time] (As on the person&rsquo;s personal profile page)<br/>e.g Imran is the OAuth user, now Imran wants the activity for Keyur, then the call will be <br />/api/1/activities?<br />people=author&amp;authoremail=keyur@highq.com</li>
+
+          <li><strong>Following</strong><br />/api/1/activities?people=following</li>
+
+          <li><strong>Followers</strong><br />/api/1/activities?people=followers</li>
+
+          <li><strong>MyOrganisation</strong> (People in my organisation)</li>
+
+          <li><strong>MentionsMe</strong></li></ul>'
+        required: false
+        schema:
+          type: string
+      - name: authoremail
+        in: query
+        description: The author email address
+        required: false
+        schema:
+          type: string
+      - name: contenttype
+        in: query
+        description: "The type of content to filter by. Default is All, however you can filter by all content types available in the activity stream such as:\n<br><i>/api/1/activities?contenttype=files</i>\nThe possible values for content types are:\n- Microblogs\n- Files\n- Wiki\n- Blog\n- Tasks\n- Events\n- Comments \n<p><span>The API supports filtering by multiple content types from Collaborate 4.1.4 onwards.</span></p>\n<p>for example, to get activity by three content types use the following syntax.</p>\n<p><em>contenttype=files,events,tasks</em></p>"
+        required: false
+        schema:
+          type: string
+      - name: groupsupport
+        in: query
+        description: groupsupport flag for share with groups.
+        required: false
+        schema:
+          type: string
+          default: '0'
+      - name: offset
+        in: query
+        description: The no of the last activity fetched
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: No of items to return. Default is 20 (Max is 100 , Activity up to a maximum of 3 months can be provided)
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Activity returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Activities'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activities'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting activity list
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    QaDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Assignees:
+      type: object
+      properties:
+        assignee:
+          type: array
+          items:
+            $ref: '#/components/schemas/Assignee'
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    ContentTypes:
+      type: object
+      properties:
+        contenttype:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisplaynameValue'
+    user:
+      type: object
+      properties:
+        userid:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        email:
+          type: string
+        name:
+          $ref: '#/components/schemas/UserName'
+        userlink:
+          type: string
+        httplink:
+          type: string
+        httpavatar:
+          type: string
+        avatar:
+          type: string
+        externalid:
+          type: string
+        dateofbirth:
+          type: string
+        phone:
+          type: string
+        jobtitle:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        status:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        img:
+          type: string
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        bio:
+          type: string
+        sourcetype:
+          type: string
+        specialities:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        link:
+          type: string
+        loggeduserlike:
+          type: integer
+          format: int32
+        userName:
+          type: string
+    BidderSiteDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+        advancedqapermission:
+          type: string
+    PeopleFilter:
+      type: object
+      properties:
+        peoples:
+          $ref: '#/components/schemas/Peoples'
+        myorganisation:
+          $ref: '#/components/schemas/DisplaynameValue'
+        following:
+          $ref: '#/components/schemas/DisplaynameValue'
+        followers:
+          $ref: '#/components/schemas/DisplaynameValue'
+        mentionsme:
+          $ref: '#/components/schemas/DisplaynameValue'
+    site:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sitename:
+          type: string
+        sitetemplateID:
+          type: integer
+          format: int32
+          xml:
+            name: sitetemplateid
+        role:
+          type: string
+        sitedescription:
+          type: string
+        enabledmodules:
+          type: string
+        sitefolderID:
+          type: string
+        folder:
+          $ref: '#/components/schemas/Folder'
+        sitefolderpermission:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        adminnote:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+        createddate:
+          type: string
+        archiveddate:
+          type: string
+        clientno:
+          type: string
+        matterno:
+          type: string
+        landingpage:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        maxpagecount:
+          type: string
+        siteowner:
+          $ref: '#/components/schemas/UserDBO'
+        sitehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModule'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        csvSiteCategory:
+          type: string
+        biddersite:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        sitenametranslations:
+          $ref: '#/components/schemas/translations'
+        siteNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        siteLogoName:
+          type: string
+        siteLogoFileSize:
+          type: integer
+          format: int64
+        siteLogoHeight:
+          type: integer
+          format: int32
+        siteLogoWidth:
+          type: integer
+          format: int32
+        siteStatus:
+          type: integer
+          format: int32
+        applySiteTerms:
+          type: integer
+          format: int32
+        siteTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        nextLoginSiteTerms:
+          type: integer
+          format: int32
+        defaultSiteTermsEnable:
+          type: integer
+          format: int32
+        advancedQAPermission:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        siteLabelDisplay:
+          type: string
+        allowSiteAdministration:
+          type: integer
+          format: int32
+        siteLevelPasswordEnable:
+          type: integer
+          format: int32
+        siteLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        sitePassword:
+          type: string
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        applySiteHomePage:
+          type: integer
+          format: int32
+        siteHomePage:
+          type: string
+        siteHomePageType:
+          type: integer
+          format: int32
+        nextLoginSiteHomePage:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        siteCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        siteModuleID:
+          type: integer
+          format: int32
+        icalSecurity:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        announcementMLJSON:
+          type: string
+        siteRestrictionType:
+          $ref: '#/components/schemas/SiteRestrictionType'
+        enableDocumentRedaction:
+          type: boolean
+          xml:
+            name: enabledocumentredaction
+        mysite:
+          type: boolean
+    Recipient:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        category:
+          type: string
+        categorytext:
+          type: string
+        sitename:
+          type: string
+        grouptypetext:
+          type: string
+      xml:
+        name: recipient
+    Contentitem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        title:
+          type: string
+        link:
+          type: string
+        apilink:
+          type: string
+        type:
+          type: string
+        imagetype:
+          type: string
+        filetype:
+          type: string
+        author:
+          $ref: '#/components/schemas/Actor'
+        datepublished:
+          type: string
+        parentcontent:
+          $ref: '#/components/schemas/Parentcontent'
+        location:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+        siterootfolderid:
+          type: integer
+          format: int32
+        version:
+          type: integer
+          format: int32
+        originaltype:
+          type: string
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: contentitem
+    Image:
+      type: object
+      properties:
+        caption:
+          type: string
+        imagelink:
+          type: string
+        apilink:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        filesize:
+          type: string
+        imagetype:
+          type: string
+        createddate:
+          type: string
+        displayversion:
+          type: string
+        parentfolderid:
+          type: string
+        folderpath:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        taskcount:
+          type: string
+        commentcount:
+          type: string
+        id:
+          type: string
+        siteid:
+          type: string
+        height:
+          type: string
+        width:
+          type: string
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+    Inbox:
+      type: object
+      properties:
+        enable:
+          type: string
+        accountname:
+          type: string
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDBO'
+    FileModule:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showsitemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    users:
+      type: object
+      properties:
+        total:
+          type: string
+        totalcount:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+      xml:
+        name: users
+    Folder:
+      type: object
+      required:
+      - foldername
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        dmsfolderid:
+          type: string
+          xml:
+            attribute: true
+        permission:
+          type: string
+          xml:
+            attribute: true
+        foldername:
+          type: string
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/Folder'
+        child:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: folder
+    Actors:
+      type: object
+      properties:
+        actor:
+          type: array
+          items:
+            $ref: '#/components/schemas/Actor'
+    ContactUSDBO:
+      type: object
+      properties:
+        value:
+          type: string
+      xml:
+        name: values
+    Folderpermissions:
+      type: object
+      properties:
+        viewfolder:
+          type: string
+        viewfiles:
+          type: string
+        addfiles:
+          type: string
+        admin:
+          type: string
+        disableprint:
+          type: string
+        disablesave:
+          type: string
+        watermark:
+          type: string
+      xml:
+        name: folderpermissions
+    Attachment:
+      type: object
+      properties:
+        file:
+          type: string
+        name:
+          type: string
+        order:
+          type: string
+        id:
+          type: integer
+          format: int32
+        extension:
+          type: string
+        parentfolderid:
+          type: integer
+          format: int32
+        filehttplink:
+          type: string
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+        displayname:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+      xml:
+        name: attachment
+    ModuleDBO:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeDBO'
+        activity:
+          $ref: '#/components/schemas/ActivityDBO'
+        document:
+          $ref: '#/components/schemas/DocumentDBO'
+        blog:
+          $ref: '#/components/schemas/BlogDBO'
+        wiki:
+          $ref: '#/components/schemas/WikiDBO'
+        task:
+          $ref: '#/components/schemas/TaskDBO'
+        event:
+          $ref: '#/components/schemas/EventDBO'
+        isheet:
+          $ref: '#/components/schemas/ISheetDBO'
+        qa:
+          $ref: '#/components/schemas/QaDBO'
+        people:
+          $ref: '#/components/schemas/PeopleDBO'
+    ShareWith:
+      type: object
+      properties:
+        emaillist:
+          $ref: '#/components/schemas/EmailList'
+        sites:
+          $ref: '#/components/schemas/sites'
+        groups:
+          $ref: '#/components/schemas/groups'
+      xml:
+        name: sharewith
+    Recipients:
+      type: object
+      properties:
+        internalorganisation:
+          type: string
+        sites:
+          $ref: '#/components/schemas/sites'
+        users:
+          $ref: '#/components/schemas/users'
+        recipient:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recipient'
+      xml:
+        name: recipients
+    sites:
+      type: object
+      properties:
+        site:
+          type: array
+          items:
+            $ref: '#/components/schemas/site'
+    DMSDocumentDBO:
+      type: object
+      properties:
+        dmsdocid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmseditdate:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmsversion:
+          type: string
+      xml:
+        name: dms
+    ActivityFilter:
+      type: object
+      properties:
+        sitefilter:
+          $ref: '#/components/schemas/SiteFilter'
+        contenttypes:
+          $ref: '#/components/schemas/ContentTypes'
+        peoplefilter:
+          $ref: '#/components/schemas/PeopleFilter'
+      xml:
+        name: activityfilter
+    Peoples:
+      type: object
+      properties:
+        people:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+    Images:
+      type: object
+      properties:
+        image:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+    MetadataListDBO:
+      type: object
+      properties:
+        metadataname:
+          type: array
+          items:
+            type: string
+        metadatavalue:
+          type: array
+          items:
+            type: string
+    Activities:
+      type: object
+      properties:
+        activity:
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity'
+        lastactivityid:
+          type: integer
+          format: int32
+    ISheetDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    FilesDBO:
+      type: object
+      properties:
+        file:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDBO'
+        attachment:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDBO'
+    DocumentDBO:
+      type: object
+      properties:
+        documentname:
+          type: string
+          xml:
+            name: filename
+        dmsVersion:
+          type: string
+        notification:
+          type: string
+          example: E.g. 1/2/3
+        folderID:
+          type: string
+        documentID:
+          type: string
+          xml:
+            name: fileid
+        batchID:
+          type: string
+        status:
+          type: string
+        documentKey:
+          type: string
+        dmsDocumentDBO:
+          xml:
+            name: dms
+          $ref: '#/components/schemas/DMSDocumentDBO'
+        enable:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        versionid:
+          type: integer
+          format: int32
+        versionnote:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        type:
+          type: string
+        originaltype:
+          type: string
+        icon:
+          type: string
+        commentscount:
+          type: integer
+          format: int32
+        likescount:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/TagsDBO'
+        location:
+          type: string
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        siteid:
+          type: integer
+          format: int32
+        parentfolderid:
+          type: integer
+          format: int32
+        error:
+          type: string
+        size:
+          type: integer
+          format: int64
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: file
+    EmailList:
+      type: object
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+      xml:
+        name: emaillist
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    GroupsDBO:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            type: string
+    ExperiencesDBO:
+      type: object
+      properties:
+        experience:
+          type: array
+          items:
+            type: string
+    Emailmetadata:
+      type: object
+      properties:
+        enable:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailmetadataallfolder:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailfrom:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailto:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailcc:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailsent:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailreceived:
+          type: string
+          enum:
+          - TRUE/FALSE
+    Actor:
+      type: object
+      properties:
+        username:
+          type: string
+        httpavatar:
+          type: string
+        email:
+          type: string
+        avatar:
+          type: string
+        userlink:
+          type: string
+        httplink:
+          type: string
+    ActivityAttachmentsDBO:
+      type: object
+      properties:
+        attachment:
+          type: array
+          items:
+            xml:
+              name: attachment
+            $ref: '#/components/schemas/Attachment'
+      xml:
+        name: attachments
+    LocationDBO:
+      type: object
+      properties:
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postcode:
+          type: string
+    TaskDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        timelineview:
+          type: string
+    Permissions:
+      type: object
+      properties:
+        inherited:
+          type: string
+        usergrouppermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserGroupPermissions'
+        add:
+          type: string
+        edit:
+          type: string
+        delete:
+          type: string
+      xml:
+        name: permissions
+    CategoryDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: CategoryDBO
+    SiteFilter:
+      type: object
+      properties:
+        favourite:
+          $ref: '#/components/schemas/DisplaynameValue'
+        memberoff:
+          $ref: '#/components/schemas/DisplaynameValue'
+        sites:
+          $ref: '#/components/schemas/sites'
+    TagsDBO:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            type: string
+    SiteRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedsite:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    Assignee:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        link:
+          type: string
+        assigneetype:
+          type: integer
+          format: int32
+    WikiDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Likes:
+      type: object
+      properties:
+        loggeduserlike:
+          type: integer
+          format: int32
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+      xml:
+        name: likes
+    ContentSpecificDetail:
+      type: object
+      properties:
+        categories:
+          $ref: '#/components/schemas/Categories'
+        fullday:
+          type: integer
+          format: int32
+        startdate:
+          type: string
+        starttime:
+          type: string
+        enddate:
+          type: string
+        endtime:
+          type: string
+        location:
+          type: string
+        timezone:
+          type: string
+        assignees:
+          $ref: '#/components/schemas/Assignees'
+        duedate:
+          type: string
+        priority:
+          type: string
+        files:
+          $ref: '#/components/schemas/FilesDBO'
+        fileidcsv:
+          type: string
+        parentfolderid:
+          type: integer
+          format: int32
+        filelistapilink:
+          type: string
+        versionnotes:
+          type: string
+        folderid:
+          type: integer
+          format: int32
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        sharewith:
+          $ref: '#/components/schemas/ShareWith'
+        linkpreview:
+          $ref: '#/components/schemas/LinkPreview'
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        html:
+          type: string
+        author:
+          $ref: '#/components/schemas/Actor'
+        datepublished:
+          type: string
+        nooflikes:
+          type: integer
+          format: int32
+        images:
+          $ref: '#/components/schemas/Images'
+        attachments:
+          $ref: '#/components/schemas/ActivityAttachmentsDBO'
+        permissions:
+          $ref: '#/components/schemas/Permissions'
+        timepublisedutc:
+          type: string
+        userLikes:
+          $ref: '#/components/schemas/Likes'
+    ContactUS:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactUSDBO'
+        type:
+          type: string
+      xml:
+        name: contactus
+    FileDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        extension:
+          type: string
+        folderpath:
+          type: string
+        filehttplink:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+    ActivityDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        microblog:
+          type: string
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Parentcontent:
+      type: object
+      properties:
+        title:
+          type: string
+        link:
+          type: string
+        apilink:
+          type: string
+      xml:
+        name: parentcontent
+    AttachmentDBO:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        siteid:
+          type: string
+        parentfolderid:
+          type: string
+        filehttplink:
+          type: string
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: string
+        imagetype:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        displayversion:
+          type: string
+        documentcount:
+          type: string
+        taskcount:
+          type: string
+        commentcount:
+          type: string
+      xml:
+        name: attachment
+    PeopleDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    HomeDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    DisplaynameValue:
+      type: object
+      properties:
+        displayname:
+          type: string
+        value:
+          type: string
+    Comments:
+      type: object
+      properties:
+        comment:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+    Filepermissions:
+      type: object
+      properties:
+        view:
+          type: string
+        update:
+          type: string
+        disableprint:
+          type: string
+        disablesave:
+          type: string
+        watermark:
+          type: string
+      xml:
+        name: filepermissions
+    Activity:
+      type: object
+      properties:
+        activitydesc:
+          type: string
+        activitydeschtml:
+          type: string
+        timepublished:
+          type: string
+        actors:
+          $ref: '#/components/schemas/Actors'
+        sitename:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+        siterole:
+          type: string
+        noofcomments:
+          type: integer
+          format: int32
+        nooflikes:
+          type: integer
+          format: int32
+        contentitem:
+          $ref: '#/components/schemas/Contentitem'
+        comments:
+          $ref: '#/components/schemas/Comments'
+        images:
+          $ref: '#/components/schemas/Images'
+        contentspecificdetail:
+          $ref: '#/components/schemas/ContentSpecificDetail'
+        attachments:
+          $ref: '#/components/schemas/ActivityAttachmentsDBO'
+        activitytypealias:
+          type: string
+        addcommentaccess:
+          type: integer
+          format: int32
+        permissions:
+          $ref: '#/components/schemas/Permissions'
+        timepublisedutc:
+          type: string
+        userLikes:
+          $ref: '#/components/schemas/Likes'
+      xml:
+        name: activity
+    NameValueLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    groups:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+      xml:
+        name: groups
+    Group:
+      type: object
+      properties:
+        groupId:
+          type: integer
+          format: int32
+        groupName:
+          type: string
+        groupDescription:
+          type: string
+        siteName:
+          type: string
+        siteId:
+          type: integer
+          format: int32
+        groupType:
+          type: string
+        defaultSiteGroup:
+          type: integer
+          format: int32
+        associateSystemGroupId:
+          type: integer
+          format: int32
+        sourceTypeId:
+          type: integer
+          format: int32
+        hyperlink:
+          type: string
+    UserName:
+      type: object
+      properties:
+        title:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        goesby:
+          type: string
+      xml:
+        name: username
+    PermissionDBO:
+      type: object
+      properties:
+        view:
+          type: integer
+          format: int32
+        edit:
+          type: integer
+          format: int32
+        delete:
+          type: integer
+          format: int32
+        addEditAllFiles:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
+        viewAllFiles:
+          type: integer
+          format: int32
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    LinkPreview:
+      type: object
+      properties:
+        title:
+          type: string
+        originalurl:
+          type: string
+        previewurl:
+          type: string
+        description:
+          type: string
+        provider:
+          type: string
+        providerurl:
+          type: string
+        providerDisplay:
+          type: string
+        faviconurl:
+          type: string
+        dominantcolor:
+          type: string
+        imageurl:
+          type: string
+        imagewidth:
+          type: string
+        imageheight:
+          type: string
+        previewtype:
+          type: string
+        contenthtml:
+          type: string
+      xml:
+        name: linkpreview
+    Microblog:
+      type: object
+      properties:
+        description:
+          type: string
+        recipients:
+          $ref: '#/components/schemas/Recipients'
+        images:
+          $ref: '#/components/schemas/Images'
+        files:
+          $ref: '#/components/schemas/FilesDBO'
+      xml:
+        name: microblog
+    Link:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValueLink'
+    RawSiteSize:
+      type: object
+      properties:
+        activedocumentsize:
+          type: integer
+          format: int64
+        deleteddocumentsize:
+          type: integer
+          format: int64
+        totalsize:
+          type: integer
+          format: int64
+    UserGroupPermissions:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        folderpermissions:
+          $ref: '#/components/schemas/Folderpermissions'
+        filepermissions:
+          $ref: '#/components/schemas/Filepermissions'
+        usergrouptype:
+          type: string
+          xml:
+            attribute: true
+          enum:
+          - 1/2
+      xml:
+        name: usergrouppermissions
+    categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+      xml:
+        name: categories
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

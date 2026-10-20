@@ -1,0 +1,549 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Deliverable API
+  version: v1
+  description: 'Operations tagged Deliverable across 3 of this provider''s published API definitions: thomson-reuters-firmflow-web-api-services-v1-openapi.json, thomson-reuters-firmflow-web-api-services-openapi.yml, thomson-reuters-firmflow-web-api-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: Deliverable
+paths:
+  /firmflow/api/v1/Deliverable/GetDeliverableList:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Deliverable
+      summary: Get a list of deliverables based on the provided criteria
+      description: Retrieves a list of deliverables matching the specified criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliverableListCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeliverableListCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeliverableListCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeliverableListResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableListResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableListResponse'
+      operationId: postFirmflowApiV1DeliverableGetDeliverableList
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/v1/Deliverable/SaveDeliverableList:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Deliverable
+      summary: Save a list of deliverables
+      description: Saves a list of deliverables based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveDeliverableListCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SaveDeliverableListCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SaveDeliverableListCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeliverableSaveResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableSaveResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableSaveResponse'
+      operationId: postFirmflowApiV1DeliverableSaveDeliverableList
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/v1/Deliverable/UpdateDeliverableList:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Deliverable
+      summary: Update a list of deliverables
+      description: Updates a list of deliverables based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeliverableListCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeliverableListCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeliverableListCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeliverableUpdateResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableUpdateResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableUpdateResponse'
+      operationId: postFirmflowApiV1DeliverableUpdateDeliverableList
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/v1/Deliverable/DeleteDeliverableList:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Deliverable
+      summary: Delete a list of deliverables
+      description: Deletes a list of deliverables based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteDeliverableListCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeleteDeliverableListCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeleteDeliverableListCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliverableDeleteResponse'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliverableDeleteResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliverableDeleteResponse'
+      operationId: postFirmflowApiV1DeliverableDeleteDeliverableList
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    DeliverableListDTO:
+      type: object
+      properties:
+        deliverableName:
+          type: string
+          nullable: true
+        extensionType:
+          type: string
+          nullable: true
+        dueDate:
+          type: string
+          nullable: true
+        firstExtension:
+          type: string
+          nullable: true
+        secondExtension:
+          type: string
+          nullable: true
+        thirdExtension:
+          type: string
+          nullable: true
+        extension:
+          type: string
+          nullable: true
+        action:
+          type: string
+          nullable: true
+        obligationId:
+          type: string
+          nullable: true
+        firmManagedOption:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UpdateDeliverableListCriteria:
+      required:
+      - calenderOrFiscal
+      - currentdeliverableName
+      - drawerName
+      - dueDate
+      - extension
+      - firstExtension
+      - secondExtension
+      - serviceType
+      - thirdExtension
+      type: object
+      properties:
+        currentdeliverableName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        updatedeliverableName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          nullable: true
+        dueDate:
+          maxLength: 10
+          minLength: 0
+          type: string
+        firstExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        secondExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        thirdExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        calenderOrFiscal:
+          maxLength: 1
+          minLength: 0
+          type: string
+        extension:
+          type: integer
+          format: int32
+        serviceType:
+          type: string
+        drawerName:
+          type: string
+      additionalProperties: false
+    SaveDeliverableListCriteria:
+      required:
+      - calenderOrFiscal
+      - deliverableName
+      - drawerName
+      - dueDate
+      - extension
+      - firstExtension
+      - secondExtension
+      - serviceType
+      - thirdExtension
+      type: object
+      properties:
+        deliverableName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        dueDate:
+          maxLength: 10
+          minLength: 0
+          type: string
+        firstExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        secondExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        thirdExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        calenderOrFiscal:
+          maxLength: 1
+          minLength: 0
+          type: string
+        extension:
+          type: integer
+          format: int32
+        serviceType:
+          type: string
+        drawerName:
+          type: string
+      additionalProperties: false
+    DeleteDeliverableListCriteria:
+      required:
+      - deliverableNames
+      - drawerName
+      - serviceType
+      type: object
+      properties:
+        deliverableNames:
+          type: array
+          items:
+            type: string
+        serviceType:
+          type: string
+        drawerName:
+          type: string
+      additionalProperties: false
+    DeliverableSaveResponse:
+      type: object
+      properties:
+        isSaved:
+          type: boolean
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeliverableUpdateResponse:
+      type: object
+      properties:
+        isUpdated:
+          type: boolean
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeliverableListCriteria:
+      required:
+      - drawerName
+      - pageNumber
+      - pageSize
+      - serviceType
+      type: object
+      properties:
+        pageNumber:
+          maximum: 2147483647
+          minimum: 1
+          type: integer
+          format: int32
+        pageSize:
+          maximum: 2147483647
+          minimum: 1
+          type: integer
+          format: int32
+        serviceType:
+          type: string
+        drawerName:
+          type: string
+      additionalProperties: false
+    DeliverableDeleteResponse:
+      type: object
+      properties:
+        isDeleted:
+          type: boolean
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeliverableListResponse:
+      type: object
+      properties:
+        deliverableList:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliverableListDTO'
+          nullable: true
+        totalRecords:
+          type: string
+          nullable: true
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeliverableListDTO_2:
+      type: object
+      properties:
+        deliverableName:
+          type:
+          - string
+          - 'null'
+        extensionType:
+          type:
+          - string
+          - 'null'
+        dueDate:
+          type:
+          - string
+          - 'null'
+        firstExtension:
+          type:
+          - string
+          - 'null'
+        secondExtension:
+          type:
+          - string
+          - 'null'
+        thirdExtension:
+          type:
+          - string
+          - 'null'
+        extension:
+          type:
+          - string
+          - 'null'
+        action:
+          type:
+          - string
+          - 'null'
+        obligationId:
+          type:
+          - string
+          - 'null'
+        firmManagedOption:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    UpdateDeliverableListCriteria_2:
+      required:
+      - calenderOrFiscal
+      - currentdeliverableName
+      - drawerName
+      - dueDate
+      - extension
+      - firstExtension
+      - secondExtension
+      - serviceType
+      - thirdExtension
+      type: object
+      properties:
+        currentdeliverableName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        updatedeliverableName:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        dueDate:
+          maxLength: 10
+          minLength: 0
+          type: string
+        firstExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        secondExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        thirdExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        calenderOrFiscal:
+          maxLength: 1
+          minLength: 0
+          type: string
+        extension:
+          type: integer
+          format: int32
+        serviceType:
+          type: string
+        drawerName:
+          type: string
+      additionalProperties: false
+    DeliverableSaveResponse_2:
+      type: object
+      properties:
+        isSaved:
+          type: boolean
+        responseMessage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DeliverableUpdateResponse_2:
+      type: object
+      properties:
+        isUpdated:
+          type: boolean
+        responseMessage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DeliverableDeleteResponse_2:
+      type: object
+      properties:
+        isDeleted:
+          type: boolean
+        responseMessage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DeliverableListResponse_2:
+      type: object
+      properties:
+        deliverableList:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DeliverableListDTO_2'
+        totalRecords:
+          type:
+          - string
+          - 'null'
+        responseMessage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+x-refined-from:
+- thomson-reuters-firmflow-web-api-services-v1-openapi.json
+- thomson-reuters-firmflow-web-api-services-openapi.yml
+- thomson-reuters-firmflow-web-api-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

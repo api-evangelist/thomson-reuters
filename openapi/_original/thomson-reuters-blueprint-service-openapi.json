@@ -1,0 +1,1032 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Blueprint Service",
+    "description": "A description of the desired output for a file or a set of files. \n   Blueprints can be used to create collections that reconcile topics",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.onesourcetax.com/data-hub/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/blueprints": {
+      "get": {
+        "tags": [
+          "Blueprints"
+        ],
+        "summary": "Get a paginated list of available Blueprints",
+        "description": "Returns a list of Blueprints with their metadata",
+        "operationId": "getBlueprints",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiCollectionBlueprintMeta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Blueprints"
+        ],
+        "summary": "Create a new Blueprint",
+        "description": "Adds Blueprint with required minimum criteria of name and can have additional information around type & columns definition (ontology, name, type, required, validate)<br /> <br /><br /> Potential values for ontology:  <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>financial-hierarchy-position</td> </tr> <tr> <td>2</td> <td>chart of accounts</td> </tr> <tr> <td>3</td> <td>entity</td> </tr> <tr> <td>4</td> <td>account</td> </tr> <tr> <td>5</td> <td>balance</td> </tr> </tbody> </table>",
+        "operationId": "createBlueprint",
+        "requestBody": {
+          "description": "Initial attributes for a new Blueprint",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataMinimalDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlueprintId"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/blueprints/{id}": {
+      "get": {
+        "tags": [
+          "Blueprints"
+        ],
+        "summary": "Get Blueprint by ID",
+        "description": "Returns Blueprint metadata for the specified Blueprint ID<br /><br /> Potential values for ontology: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>financial-hierarchy-position</td> </tr> <tr> <td>2</td> <td>chart of accounts</td> </tr> <tr> <td>3</td> <td>entity</td> </tr> <tr> <td>4</td> <td>account</td> </tr> <tr> <td>5</td> <td>balance</td> </tr> </tbody> </table>",
+        "operationId": "getBlueprint",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the Blueprint",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Blueprints"
+        ],
+        "summary": "Update blueprint name",
+        "description": "Update existing blueprint name and return no content response",
+        "operationId": "patchBluueprintName",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the Blueprint",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchBluePrintNameDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/blueprints/{blueprintId}/columns/{name}": {
+      "patch": {
+        "tags": [
+          "Blueprints"
+        ],
+        "summary": "Update blueprint column name",
+        "description": "Update existing blueprint name and return no content response",
+        "operationId": "updateBlueprintDisplayname",
+        "parameters": [
+          {
+            "name": "blueprintId",
+            "in": "path",
+            "description": "Unique identifier of the Blueprint",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Unique identifier of the Blueprint Column name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBluePrintColumnDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/blueprints/{id}/custom-views": {
+      "get": {
+        "tags": [
+          "Blueprint CustomViews"
+        ],
+        "summary": "Get a paginated list of available Blueprint Custom views",
+        "description": "Returns a list of Blueprint Custom views",
+        "operationId": "getBlueprintCustomViews",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the Blueprint",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiCollectionBlueprintMeta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Blueprint CustomViews"
+        ],
+        "summary": "Create a new Custom View",
+        "description": "Adds Custom View  with required minimum criteria of name and can have additional information around aggregation & group by definition ",
+        "operationId": "createCustomView",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the Blueprint",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomViewDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/customViewId"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/blueprints/{id}/custom-views/{CustomViewId}": {
+      "get": {
+        "tags": [
+          "Blueprint CustomViews"
+        ],
+        "summary": "Get a Blueprint Custom view by Id",
+        "description": "Returns a Blueprint Custom view",
+        "operationId": "getBlueprintCustomViewsById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the Blueprint",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "CustomViewId",
+            "in": "path",
+            "description": "Unique identifier of the Blueprint Custom View",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomViewResponseDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/blueprint-types": {
+      "get": {
+        "tags": [
+          "Blueprint Types"
+        ],
+        "summary": "Get a list of Blueprint types",
+        "description": "Returns a list of Blueprints for Blueprint types",
+        "operationId": "getBlueprintTypes",
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionDTOBlueprintTypeMeta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/blueprint-types/{id}/columns": {
+      "get": {
+        "tags": [
+          "Blueprint Types"
+        ],
+        "summary": "Get the list of columns for a Blueprint type by ID",
+        "description": "Returns a list of Blueprints for Blueprint types for IDs with column definitions<br /><br /><br /> Potential values for ontology: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>financial-hierarchy-position</td> </tr> <tr> <td>2</td> <td>chart of accounts</td> </tr> <tr> <td>3</td> <td>entity</td> </tr> <tr> <td>4</td> <td>account</td> </tr> <tr> <td>5</td> <td>balance</td> </tr> </tbody> </table>",
+        "operationId": "getBlueprintTypeColumnById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the Blueprint type",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of records in a collection to skip before starting the response set",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of records to return in the result set",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionDTOBlueprintTypeColumn"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ColumnDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Label of the column",
+            "example": "My Column Name"
+          },
+          "type": {
+            "type": "string",
+            "description": "Expected data type of the column values",
+            "example": "number",
+            "enum": [
+              "currency",
+              "date",
+              "number",
+              "string"
+            ]
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Requires templates to map this column",
+            "example": true
+          },
+          "index": {
+            "type": "boolean"
+          },
+          "ontology_id": {
+            "type": "integer",
+            "description": "Unique identifier of the ontology this column represents",
+            "format": "int32",
+            "example": 1
+          }
+        }
+      },
+      "MetadataDTO": {
+        "required": [
+          "columns",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the Blueprint",
+            "format": "int32",
+            "example": 46
+          },
+          "version": {
+            "type": "integer",
+            "description": "Version of the Blueprint",
+            "format": "int32",
+            "example": 5
+          },
+          "name": {
+            "type": "string",
+            "description": "Label of the Blueprint",
+            "example": "My Blueprint Name"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColumnDTO"
+            }
+          },
+          "type_id": {
+            "type": "integer",
+            "description": "Unique identifier of the Blueprint type",
+            "format": "int32",
+            "example": 2
+          },
+          "is_hidden": {
+            "type": "boolean",
+            "description": "Visibility of the Blueprint",
+            "example": false
+          }
+        }
+      },
+      "ApiCollectionBlueprintMeta": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BlueprintMeta"
+            }
+          },
+          "_meta": {
+            "$ref": "#/components/schemas/ApiMeta"
+          }
+        }
+      },
+      "ApiMeta": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "string"
+          },
+          "extra": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            },
+            "writeOnly": true
+          }
+        }
+      },
+      "BlueprintMeta": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the Blueprint",
+            "format": "int32",
+            "example": 46
+          },
+          "version": {
+            "type": "integer",
+            "description": "Version of the Blueprint",
+            "format": "int32",
+            "example": 5
+          },
+          "name": {
+            "type": "string",
+            "description": "Label of the Blueprint",
+            "example": "My Blueprint Name"
+          },
+          "type_id": {
+            "type": "integer",
+            "description": "Unique identifier of the Blueprint type",
+            "format": "int32",
+            "example": 2
+          },
+          "is_hidden": {
+            "type": "boolean",
+            "description": "Visibility of the Blueprint",
+            "example": false
+          }
+        }
+      },
+      "PatchBluePrintNameDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "A new name for the Blueprint"
+          },
+          "is_hidden": {
+            "type": "boolean",
+            "description": "Visibility of the Template",
+            "example": false
+          }
+        }
+      },
+      "UpdateBluePrintColumnDTO": {
+        "type": "object",
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "description": "Blueprint Column display_name"
+          }
+        }
+      },
+      "UpdateMetadataRequestDTO": {
+        "required": [
+          "columns",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Label of the Blueprint",
+            "example": "My Blueprint Name"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColumnDTO"
+            }
+          }
+        }
+      },
+      "MetadataMinimalDTO": {
+        "required": [
+          "columns",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Label of the Blueprint",
+            "example": "My Blueprint Name"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColumnDTO"
+            }
+          },
+          "type_id": {
+            "type": "integer",
+            "description": "Unique identifier of the Blueprint type",
+            "format": "int32",
+            "example": 2
+          }
+        }
+      },
+      "BlueprintId": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the Blueprint",
+            "format": "int32",
+            "example": 46
+          },
+          "version": {
+            "type": "integer",
+            "description": "Version of the Blueprint",
+            "format": "int32",
+            "example": 5
+          }
+        }
+      },
+      "CustomViewDTO": {
+        "required": [
+          "aggregation",
+          "group_by",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Label of the Custom View",
+            "example": "My Custom View Name"
+          },
+          "aggregation": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AggregationDTO"
+            }
+          },
+          "group_by": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GroupByDTO"
+            }
+          }
+        }
+      },
+      "GroupByDTO": {
+        "required": [
+          "source_column"
+        ],
+        "type": "object",
+        "properties": {
+          "source_column": {
+            "type": "string",
+            "description": "identifier of the column name",
+            "example": "onesource_account_code"
+          },
+          "type": {
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#/components/schemas/ConfigDTO"
+          }
+        }
+      },
+      "AggregationDTO": {
+        "required": [
+          "name",
+          "operator",
+          "source_column"
+        ],
+        "type": "object",
+        "properties": {
+          "source_column": {
+            "type": "string",
+            "description": "identifier of the column Id",
+            "example": "149114"
+          },
+          "name": {
+            "type": "string",
+            "description": "Output Name",
+            "example": "Output Name"
+          },
+          "operator": {
+            "type": "string",
+            "description": "operator",
+            "example": "MAX"
+          },
+          "config": {
+            "$ref": "#/components/schemas/ConfigDTOAggregation"
+          }
+        }
+      },
+      "ConfigDTO": {
+        "type": "object",
+        "properties": {
+          "rollup_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "root_entity_column": {
+            "type": "string"
+          },
+          "allocation_column": {
+            "type": "string"
+          }
+        }
+      },
+      "ConfigDTOAggregation": {
+        "type": "object",
+        "properties": {
+          "weighted_on": {
+            "type": "string"
+          }
+        }
+      },
+      "customViewId": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the CustomView",
+            "format": "int32",
+            "example": 6
+          }
+        }
+      },
+      "CustomViewResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "custom view id",
+            "format": "int32",
+            "example": 12
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the custom view",
+            "example": "name"
+          },
+          "blueprint_id": {
+            "type": "integer",
+            "description": "blueprint id of the custom view",
+            "format": "int32",
+            "example": 1
+          },
+          "aggregation": {
+            "type": "array",
+            "description": "list of custom view aggregation",
+            "items": {
+              "$ref": "#/components/schemas/CustomViewAggregation"
+            }
+          },
+          "group_by": {
+            "type": "array",
+            "description": "list of custom view group by",
+            "items": {
+              "$ref": "#/components/schemas/CustomViewGroupBy"
+            }
+          }
+        }
+      },
+      "CustomViewAggregation": {
+        "type": "object",
+        "properties": {
+          "operator": {
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#/components/schemas/ConfigDTOAggregation"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "source_column": {
+            "type": "string"
+          }
+        },
+        "description": "list of custom view aggregation"
+      },
+      "CustomViewGroupBy": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#/components/schemas/ConfigDTO"
+          },
+          "source_column": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "ontology_id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "list of custom view group by"
+      },
+      "BlueprintTypeMeta": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the Blueprint type",
+            "format": "int32",
+            "example": 2
+          },
+          "name": {
+            "type": "string",
+            "description": "Label of the Blueprint type",
+            "example": "Trial Balance",
+            "enum": [
+              "Generic",
+              "Trial Balance",
+              "Apportionment"
+            ]
+          }
+        }
+      },
+      "CollectionDTOBlueprintTypeMeta": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BlueprintTypeMeta"
+            }
+          }
+        }
+      },
+      "BlueprintTypeColumn": {
+        "type": "object",
+        "properties": {
+          "ontology_id": {
+            "type": "integer",
+            "description": "Unique identifier of the ontology this column represents",
+            "format": "int32",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Label of the column",
+            "example": "My Column Name"
+          },
+          "type": {
+            "type": "string",
+            "description": "Expected data type of the column values",
+            "example": "number",
+            "enum": [
+              "currency",
+              "date",
+              "number",
+              "string"
+            ]
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Requires templates to map this column",
+            "example": true
+          }
+        }
+      },
+      "CollectionDTOBlueprintTypeColumn": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BlueprintTypeColumn"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

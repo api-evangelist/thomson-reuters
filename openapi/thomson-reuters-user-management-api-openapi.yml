@@ -1,0 +1,3414 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters User Management API
+  version: v1
+  description: 'Operations tagged User Management across 3 of this provider''s published API definitions: thomson-reuters-engagement-manager-openapi.json, thomson-reuters-gosystem-user-management-api-openapi.json, thomson-reuters-engagement-manager-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/us/engagementmanager
+  description: US Production
+- url: https://api.thomsonreuters.com/uk/engagementmanager
+  description: UK Production
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+tags:
+- name: User Management
+  description: Get/Add/Edit/Delete user and manage permissions
+paths:
+  /external/v1/usermanagement/users/all:
+    get:
+      tags:
+      - User Management
+      summary: Retrieve all users with their permission groups
+      description: '## Purpose
+
+        This endpoint retrieves a complete list of all users in the system along with their assigned permission groups (security roles). Use this for user management, access control audits, and user listing displays.
+
+
+        ## Why Use This Endpoint
+
+        - Retrieve all users in the organization
+
+        - View user details including login names, initials, and status
+
+        - Check permission group assignments for each user
+
+        - Build user management interfaces
+
+        - Perform user access audits
+
+        - Export user lists for reporting
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Common Use Cases
+
+        1. **User Management Dashboard:** Display all users in administrative interface
+
+        2. **Access Reports:** Generate user access reports for compliance
+
+        3. **Permission Audits:** Audit user permissions across the organization
+
+        4. **User Selection:** Build user selection dropdowns for assignment
+
+        5. **Data Export:** Export user data for compliance requirements
+
+        6. **Role Analysis:** Identify users with specific permission groups'
+      operationId: EmMainEndPointsExternalUserManagementGetAllUsersExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved all user list.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalUserListDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: e2149401-466f-4e32-acd4-eb1b56321c1c
+                    dateTime: '2026-04-21T05:50:03.3873623Z'
+                    traceId: da7048a63715437ea42e7406e0abf991
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 7fc24fe3-849d-478e-a7a4-af5ddfe10cb6
+                    dateTime: '2026-04-21T05:50:03.3873311Z'
+                    traceId: 89b68037f6d34063991761a33c6339d6
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 787fa2fa-4bd1-4afc-8dd6-82e297050d49
+                    dateTime: '2026-04-21T05:50:03.3873590Z'
+                    traceId: 1dee99234c0d46ffac3bbbd47e873347
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: db740722-3615-45ee-9938-deced4dfb91a
+                    dateTime: '2026-04-21T05:50:03.3873648Z'
+                    traceId: 93df5ce16cbe49c78263320acd6911da
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/usermanagement/users/gfr-permission-groups:
+    get:
+      tags:
+      - User Management
+      summary: Retrieve all available GoFileRoom (GFR) security groups
+      description: '## Purpose
+
+        Retrieves a complete list of all GoFileRoom (GFR) security groups available in the system. These security groups control document access in GFR''s file cabinet system and define file storage permissions that can be assigned to users. Each group may have multi-factor authentication (MFA) requirements configured.
+
+
+        ## Why Use This Endpoint
+
+        - Populate file storage group dropdowns during user creation/modification
+
+        - Display available GFR security groups in administrative interfaces
+
+        - Validate security group IDs before assigning document access to users
+
+        - Audit available file storage groups and their MFA settings
+
+        - Implement document access control configuration interfaces
+
+        - Check MFA requirements for specific file storage groups
+
+        - Generate reports on available file cabinet access levels
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - No request body or parameters required
+
+        - Returns all available GoFileRoom security groups
+
+        - Security groups control document access in the GFR file system
+
+        - Retrieved from the connected GoFileRoom instance
+
+
+        ## Common Use Cases
+
+        1. **User Creation:** Loading available file storage groups for user creation form
+
+        2. **Permission Management:** Displaying file cabinet access options when modifying user permissions
+
+        3. **Validation:** Validating file storage group IDs before user operations
+
+        4. **Profile View:** Showing current user''s file storage group assignments
+
+        5. **Access Control:** Implementing document access management interfaces
+
+        6. **Security Audit:** Auditing MFA requirements across file storage groups
+
+        7. **Policy Configuration:** Configuring document security policies
+
+
+        ## Important Notes
+
+        - Returns GoFileRoom-specific security groups (not EmMain permission groups)
+
+        - For EmMain permission groups, use the `/users/em-permission-groups` endpoint instead
+
+        - Security group membership controls which file cabinets and folders users can access
+
+        - MFA settings are configured at the security group level in GoFileRoom
+
+        - MfaRequired=1 means users in this group must use MFA to access documents
+
+        - The list reflects the current GFR configuration and may change when GFR groups are modified
+
+        - SecurityGroupId values are used when assigning file storage groups to users'
+      operationId: EmMainEndPointsExternalUserManagementGetGfrSecurityGroupsExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: List of all available GoFileRoom security groups with MFA settings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementSecurityGroupResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 6a09ff97-dd99-40bf-a7cd-f8b0d071c520
+                    dateTime: '2026-04-21T05:50:03.3922171Z'
+                    traceId: cb597ccf8a26405ab6ad79d94c47e10e
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 5d618fe6-2d50-41d5-979e-3c322b9a827c
+                    dateTime: '2026-04-21T05:50:03.3921985Z'
+                    traceId: ca72fd0f3358403b95dca628d7764a6b
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 45cf2414-d71b-41b0-8730-6b570b44c0b5
+                    dateTime: '2026-04-21T05:50:03.3922151Z'
+                    traceId: a84836b0d3a44fb19c6186ef6abc3eb1
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 16596974-b13f-47ee-abd0-19b6ab0a708d
+                    dateTime: '2026-04-21T05:50:03.3922188Z'
+                    traceId: bc5066cd64b247bd8924d3b24e15e71b
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/usermanagement/users/em-permission-groups:
+    get:
+      tags:
+      - User Management
+      summary: Retrieve all available Engagement Manager (EM) permission groups
+      description: '## Purpose
+
+        Retrieves a complete list of all Engagement Manager (EmMain) permission groups (security roles) available in the system. These permission groups define sets of access rights and capabilities that can be assigned to users for controlling their access to engagement management features.
+
+
+        ## Why Use This Endpoint
+
+        - Populate dropdown lists for permission group selection during user creation/modification
+
+        - Display available permission groups in administrative interfaces
+
+        - Validate permission group IDs before assigning them to users
+
+        - Audit available security roles in the system
+
+        - Implement role-based access control (RBAC) configuration interfaces
+
+        - Document available permission levels for system administrators
+
+        - Compare user permissions against available roles
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Request Details
+
+        - No request body or parameters required
+
+        - Returns all available EmMain permission groups
+
+        - Permission groups are system-defined and control access to EM features
+
+
+        ## Common Use Cases
+
+        1. **User Creation Forms:** Populate permission group dropdown lists
+
+        2. **User Modification:** Display available permission groups when modifying user access
+
+        3. **Validation:** Validate permission group IDs before user update operations
+
+        4. **Profile Views:** Show current user''s assigned permission groups
+
+        5. **Role Management:** Implement permission group management interfaces
+
+        6. **Documentation:** Generate documentation of available system roles
+
+        7. **Audit Reports:** Generate reports showing all available access levels
+
+
+        ## Important Notes
+
+        - Returns all system-defined EmMain permission groups
+
+        - Permission groups control access to Engagement Manager features only (not GFR)
+
+        - For GoFileRoom (GFR) security groups, use the `/users/gfr-permission-groups` endpoint instead
+
+        - PermissionGroupId values are used when assigning permission groups to users
+
+        - Permission groups may have dependencies or hierarchies (e.g., Admin includes all lower permissions)
+
+        - The list is relatively static and can be cached on the client side'
+      operationId: EmMainEndPointsExternalUserManagementGetEmPermissionGroupsExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: List of all available EmMain permission groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementSecurityRoleDetailsDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: a0d4f19e-d710-483e-87b8-596806863d4a
+                    dateTime: '2026-04-21T05:50:03.3899255Z'
+                    traceId: 3af0e527bc2d44e0aef3f2b1243d581b
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: b191b2fe-5cb5-485f-a46d-cb52335bfc0d
+                    dateTime: '2026-04-21T05:50:03.3899023Z'
+                    traceId: 3cda5232fe8342b788d1f9cc9f8bbf0f
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: bebbd4c8-2368-4f05-87a7-65795e220c8f
+                    dateTime: '2026-04-21T05:50:03.3899234Z'
+                    traceId: a7e1b05a6dc14fc39bef68bd72b38dc7
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: dfc43321-5fff-482e-a611-f6947fa62154
+                    dateTime: '2026-04-21T05:50:03.3899270Z'
+                    traceId: 758dd3e40b464ffc92e12216f4b8d5ba
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/usermanagement/users/create:
+    post:
+      tags:
+      - User Management
+      summary: Create a new user account in the system
+      description: '## Purpose
+
+        Creates a new user account with specified permissions, file storage groups, and account settings. This endpoint provisions a new user in both the EmMain system and GoFileRoom (GFR) with complete configuration including permission groups, file access, and optional account expiration.
+
+
+        ## Why Use This Endpoint
+
+        - Onboard new team members to the organization
+
+        - Provision user accounts with specific permission groups and file storage access
+
+        - Set up user accounts with expiration dates for temporary access
+
+        - Create users with custom initials and full names
+
+        - Automatically configure GFR Administrator access when needed
+
+        - Provision contractor or temporary user accounts with time-limited access
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Request Body:** `CreateUpdateUserRequestDto` object with the following fields:
+
+
+        **Required Fields:**
+
+        - `LoginName` (string) - User''s login name/email address (must be unique in the system)
+
+        - `FullName` (string) - Full name of the user (First Name + Last Name)
+
+        - `PermissionGroups` (array) - List of `UserPermissionsGroupModel` objects with permission groups to assign (at least one required), each containing:
+
+        - `PermissionGroupId` (integer) - Unique identifier of the permission group to assign
+
+        - `PermissionGroupName` (string) - Name of the permission group (for reference/display purposes)
+
+
+        **Optional Fields:**
+
+        - `Initials` (string) - User''s initials (typically 2-3 characters) for signatures and audit trails
+
+        - `IsAccountExpires` (boolean) - Whether the account has an expiration date (if true, AccountExpiresDate is required)
+
+        - `AccountExpiresDate` (string) - Account expiration date in ISO 8601 format (required only if IsAccountExpires is true)
+
+        - `FileStorageGrp` (array of strings) - List of GoFileRoom file storage groups the user should be added to (for document management permissions)
+
+        - `IsGFRAdminGrp` (boolean) - Whether user should be added to GFR Administrators group with full administrative privileges
+
+
+        ## Common Use Cases
+
+        1. **New Employee:** Creating a new employee account with standard permissions
+
+        2. **Temporary Access:** Setting up a temporary contractor account with expiration date
+
+        3. **File Access:** Provisioning a user with specific file storage group access for document management
+
+        4. **Administrator:** Creating an administrator account with GFR admin privileges
+
+        5. **Bulk Onboarding:** Creating multiple user accounts during organizational expansion
+
+        6. **Project Team:** Setting up project team members with specific permission groups
+
+
+        ## Important Notes
+
+        - User creation is transactional - if any part fails, the entire operation rolls back
+
+        - LoginName must be unique across the system and should be a valid email address
+
+        - If IsAccountExpires is true, AccountExpiresDate must be provided in ISO 8601 format
+
+        - At least one permission group must be assigned to the user
+
+        - Permission groups are validated before user creation - invalid IDs will cause failure
+
+        - The operation returns HTTP 200 even for business logic failures (check IsCreatedORModified to determine success)
+
+        - File storage groups control which file cabinets and folders the user can access in GoFileRoom
+
+        - IsGFRAdminGrp grants full administrative privileges in the GFR system
+
+        - User is provisioned in both EmMain and GoFileRoom systems simultaneously'
+      operationId: EmMainEndPointsExternalUserManagementCreateUserExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: CreateUpdateUserRequestDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalCreateUpdateUserRequestDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: User creation result (success or failure)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementCreateModifyUserResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: f2029fba-f049-4b6c-9c53-037379703b60
+                    dateTime: '2026-04-21T05:50:03.3817271Z'
+                    traceId: b35509b5059940f1b46ceda8db42e924
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 8b03e06f-f44e-4d59-9b3e-ef9427974129
+                    dateTime: '2026-04-21T05:50:03.3816967Z'
+                    traceId: 62827ec0a24e475b8b13c68dd5920aae
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: b8cbc437-1ea3-44a6-ae23-b5b28a449513
+                    dateTime: '2026-04-21T05:50:03.3817242Z'
+                    traceId: d88e5d9bb51a4affb99dfed9dbf9f633
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: e5b5c008-85cc-4724-bdd3-0999bc945e77
+                    dateTime: '2026-04-21T05:50:03.3817294Z'
+                    traceId: c12b109d57094287834d2dde9bdeb7b4
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/usermanagement/users/update/{isSelfUser}:
+    put:
+      tags:
+      - User Management
+      summary: Update an existing user account with new details
+      description: '## Purpose
+
+        Updates an existing user account''s details including full name, login name, initials, account status, expiration settings, file storage groups, GFR administrator status, and permission groups. This endpoint modifies user properties in both EmMain and GoFileRoom (GFR).
+
+
+        ## Why Use This Endpoint
+
+        - Update user profile information (name, initials)
+
+        - Change user''s login email address
+
+        - Disable or enable user accounts with comments
+
+        - Modify account expiration dates for temporary access
+
+        - Update file storage group assignments
+
+        - Add or remove GFR Administrator privileges
+
+        - Reassign permission groups
+
+        - Self-service profile updates (when isSelfUser=true)
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Request Details
+
+        - **Method:** PUT
+
+        - **Route Parameter `isSelfUser`** (boolean) - Indicates if the user is updating their own profile
+
+        - `true` = User updating their own account (limited fields can be modified)
+
+        - `false` = Administrator updating another user''s account (all fields can be modified)
+
+        - **Request Body:** `ModifyUserRequestDto` object with fields to update (only provide fields you want to change; null values leave existing data unchanged)
+
+
+        **Key Request Fields:**
+
+        - LoginName (required) - Identifies the user to update
+
+        - NewLoginName (optional) - New email/login name
+
+        - FullName, Initials - Profile updates
+
+        - IsDisabled, DisabledComments - Account status
+
+        - IsAccountExpires, AccountExpiresDate - Expiration settings
+
+        - FileStorageGrp - GFR access groups
+
+        - IsGFRAdminGrp - Administrator privileges
+
+        - PermissionGroups - Replaces ALL existing permission groups
+
+
+        ## Common Use Cases
+
+        1. **Name Change:** Updating user''s full name after marriage/legal name change
+
+        2. **Email Change:** Changing user''s email address (login name)
+
+        3. **Account Disable:** Disabling a former employee''s account with reason
+
+        4. **Expiration Update:** Extending or removing account expiration dates
+
+        5. **Access Modification:** Modifying user''s file storage group access
+
+        6. **Privilege Grant:** Promoting a user to GFR Administrator
+
+        7. **Self-Service:** User updating their own initials or name
+
+
+        ## Important Notes
+
+        - Update is transactional - if any part fails, no changes are applied
+
+        - NewLoginName must be unique if changing the login
+
+        - If IsDisabled is set to true, DisabledComments must be provided
+
+        - If IsAccountExpires is true, AccountExpiresDate must be provided
+
+        - Providing PermissionGroups replaces ALL existing groups (not additive)
+
+        - Self-service updates (isSelfUser=true) have restricted field modifications
+
+        - The operation returns HTTP 200 even for business logic failures (check IsCreatedORModified to determine success)'
+      operationId: EmMainEndPointsExternalUserManagementUpdateUserExternalEndpoint
+      parameters:
+      - name: isSelfUser
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: ModifyUserRequestDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalModifyUserRequestDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: User update result (success or failure)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementCreateModifyUserResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 33aea9dc-cb95-47a8-922d-8bcbe2508652
+                    dateTime: '2026-04-21T05:50:03.4040404Z'
+                    traceId: 2e8a52fb01ea4d41bdb6d9c4669c3d6d
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 8f9b2ed0-9a71-40d0-a665-023667728589
+                    dateTime: '2026-04-21T05:50:03.4040235Z'
+                    traceId: 48cc462d52b64ed085073a4a11387111
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 8c0c2edd-7cb2-4579-9dc3-dec8a26dea5d
+                    dateTime: '2026-04-21T05:50:03.4040383Z'
+                    traceId: a2af4c881c254f51bc9bf111f252a01f
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 0a4cf9ad-caea-418b-9c1f-70671225bcbe
+                    dateTime: '2026-04-21T05:50:03.4040432Z'
+                    traceId: 340aac92407849c19ed077d33904fdae
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/usermanagement/users/delete:
+    post:
+      tags:
+      - User Management
+      summary: Delete one or multiple user accounts from the system
+      description: '## Purpose
+
+        Permanently deletes one or more user accounts from both EmMain and GoFileRoom (GFR) systems. This endpoint processes multiple deletion requests in a single operation and returns individual results for each user.
+
+
+        ## Why Use This Endpoint
+
+        - Remove former employees or contractors from the system
+
+        - Clean up inactive or test user accounts
+
+        - Perform bulk user deletion operations
+
+        - Offboard multiple users simultaneously during organizational changes
+
+        - Maintain system hygiene by removing unnecessary accounts
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Request Body Parameter `DeleteLoginNames`** (array of strings, required) - List of login names (email addresses) to delete
+
+        - Must provide at least one login name
+
+        - Can delete multiple users in a single request
+
+        - Login names should be obtained from the `/usermanagement/users/all` endpoint
+
+        - Each login name is processed independently
+
+
+        ## Common Use Cases
+
+        1. **Single Offboarding:** Offboarding a single employee who has left the organization
+
+        2. **Bulk Deletion:** Bulk deletion of temporary contractor accounts after project completion
+
+        3. **Cleanup:** Removing test accounts after UAT or demo
+
+        4. **Duplicate Removal:** Cleaning up duplicate or incorrectly created user accounts
+
+        5. **Mass Offboarding:** Mass offboarding during organizational restructuring
+
+
+        ## Important Notes
+
+        - Deletion is permanent and cannot be undone
+
+        - Each user deletion is processed independently; some may succeed while others fail
+
+        - If a user doesn''t exist, the operation will fail for that specific user with IsDeleted=false
+
+        - Users with active sessions may have their sessions invalidated
+
+        - The operation returns HTTP 200 even if some or all deletions fail (check IsDeleted for each user)
+
+        - Associated user data (permissions, file access) is also removed from both EmMain and GFR
+
+        - You must check the IsDeleted property for each user to determine success or failure
+
+        - DeleteUserException will contain error details if IsDeleted is false'
+      operationId: EmMainEndPointsExternalUserManagementDeleteUsersExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: DeleteUsersRequestDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalDeleteUsersRequestDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Deletion results for each user (success or failure)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementUserDeleteResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: d46b5de9-5dac-4cc0-9ae5-0129653f1768
+                    dateTime: '2026-04-21T05:50:03.3847284Z'
+                    traceId: a0c10694bfe848858c80f943d936b85a
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 0fab8d90-c568-49c2-92dd-38a8c93a0a0d
+                    dateTime: '2026-04-21T05:50:03.3847020Z'
+                    traceId: 00cf16186d40471c8840b3593633af1c
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 7d23fb1f-0957-4d74-af4c-b49942145b2e
+                    dateTime: '2026-04-21T05:50:03.3847256Z'
+                    traceId: c664aaa49a074d28b12499e5992f7528
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 39448d56-0885-4131-a111-143c8944934a
+                    dateTime: '2026-04-21T05:50:03.3847308Z'
+                    traceId: 5d455d693f9840c69b6e9d888748379f
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/usermanagement/users/details:
+    post:
+      tags:
+      - User Management
+      summary: Retrieve comprehensive details for a specific user account
+      description: '## Purpose
+
+        Retrieves complete user account information including profile details, permissions, file storage group access, account status, expiration settings, and administrative privileges. This endpoint provides a comprehensive view of a user''s configuration in both EmMain and GoFileRoom (GFR) systems.
+
+
+        ## Why Use This Endpoint
+
+        - View complete user account information before making updates
+
+        - Audit user permissions and access rights
+
+        - Verify user account status and expiration dates
+
+        - Check GFR Administrator status and file storage group assignments
+
+        - Retrieve permission groups for authorization decisions
+
+        - Validate user existence before performing operations
+
+        - Display user profile information in administrative interfaces
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Request Details
+
+        - **Method:** POST
+
+        - **Request Body Parameter `LoginName`** (string, required) - Email address of the user to retrieve
+
+        - Login names can be obtained from the `/usermanagement/users/all` endpoint
+
+        - The endpoint validates user existence and returns full details if found
+
+
+        ## Common Use Cases
+
+        1. **Edit User:** Loading user details for editing in an administration interface
+
+        2. **Permission Verification:** Verifying user permissions before granting access to resources
+
+        3. **Account Audit:** Auditing user account configuration and access rights
+
+        4. **Status Check:** Checking account status (enabled/disabled) before authentication
+
+        5. **File Access Control:** Retrieving file storage groups for document access control
+
+        6. **User Validation:** Validating user existence before creating related records
+
+
+        ## Important Notes
+
+        - Returns full user details even for disabled accounts
+
+        - Legacy AdvanceFlow fields are only populated for migrated users from the predecessor system
+
+        - Groups field contains GFR file storage group names that control document access
+
+        - GFRAdmin is a string field with values like "Yes" or "No"
+
+        - UserDisabled uses numeric values: 0 = enabled, 1 = disabled
+
+        - AdvanceflowUserPermission is only populated for users migrated from legacy AdvanceFlow system
+
+        - This endpoint uses POST method to send the LoginName in the request body'
+      operationId: EmMainEndPointsExternalUserManagementGetUserDetailsEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: UserDetailRequestDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementUserDetailRequestDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully retrieved user details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalUserDetailsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 6875e257-ad35-489b-bbeb-a52db1c8c19e
+                    dateTime: '2026-04-21T05:50:03.3967537Z'
+                    traceId: 30e0a7605a0747388e6cc7a7621c331d
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 48322382-c49b-4352-b259-c7b409ff7983
+                    dateTime: '2026-04-21T05:50:03.3967361Z'
+                    traceId: d5c6a7a1bb20427bbaa7d8369432437f
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 4cdb2206-c938-430a-9291-d07d07cf9a25
+                    dateTime: '2026-04-21T05:50:03.3967517Z'
+                    traceId: c851743df3ae4f01ad492f77e9613771
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 33714ec2-866b-4bcf-8e8e-813062a471a4
+                    dateTime: '2026-04-21T05:50:03.3967560Z'
+                    traceId: 82d1a03f808b449ea90892e37598ab27
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/usermanagement/users/{permissiongroupId}:
+    get:
+      tags:
+      - User Management
+      summary: Retrieve all users assigned to a specific permission group
+      description: '## Purpose
+
+        Retrieves a list of all users who are members of a specified EmMain permission group (security role). This endpoint allows filtering users by their assigned permission group to understand group membership and audit access rights.
+
+
+        ## Why Use This Endpoint
+
+        - View all users with a specific permission level
+
+        - Audit permission group membership for compliance
+
+        - Generate reports on users by role assignment
+
+        - Verify who has access to specific features controlled by the permission group
+
+        - Display team members with particular access rights
+
+        - Identify users for bulk permission changes
+
+        - Validate permission group assignments before making changes
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - **Route Parameter `permissiongroupId`** (integer, required) - ID of the permission group
+
+        - Permission group IDs can be obtained from `/usermanagement/users/em-permission-groups` endpoint
+
+        - Returns all active users assigned to the specified permission group
+
+        - Users may belong to multiple permission groups (only those with this specific group are returned)
+
+
+        ## Common Use Cases
+
+        1. **Permission Audit:** View all System Administrators for audit purposes
+
+        2. **Role Reports:** List all users with specific permissions (e.g., "Tax Preparer")
+
+        3. **Access Verification:** Verify who has access to sensitive features
+
+        4. **User Migration:** Identify users for permission group migration
+
+        5. **Team Structure:** Display team structure organized by roles
+
+        6. **Compliance:** Generate compliance reports on access control
+
+
+        ## Important Notes
+
+        - Returns only users who have the specified permission group assigned
+
+        - Users may appear with multiple permission groups in their PermissionGroups list
+
+        - Empty list is returned if no users are assigned to the permission group
+
+        - Only active users are typically included (disabled users may be excluded)
+
+        - The permissiongroupId must be a valid EmMain permission group ID
+
+        - For GFR security groups, this endpoint does not apply'
+      operationId: EmMainEndPointsExternalUserManagementGetUsersByRoleIdExternalEndpoint
+      parameters:
+      - name: permissiongroupId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: List of all users assigned to the specified permission group
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalUserListDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 37fed720-75c2-495a-9e53-8327086ba11e
+                    dateTime: '2026-04-21T05:50:03.4017248Z'
+                    traceId: 3d71acf5a3bb42ad8cfad0b0ecafc95d
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: f3807a5a-0b73-45df-aba8-89b8000ad2b9
+                    dateTime: '2026-04-21T05:50:03.4017024Z'
+                    traceId: 163427b74c344daba777413c81511087
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 62a20b63-3d83-43e6-bf1c-5cea6fc51a2a
+                    dateTime: '2026-04-21T05:50:03.4017212Z'
+                    traceId: c0455add1cf042a68958b1092b360976
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 2cea9224-23e6-40b0-a273-6578f7078ba6
+                    dateTime: '2026-04-21T05:50:03.4017279Z'
+                    traceId: ae2cc3505f2149cfa39e726adf395705
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/usermanagement/users/logged-in-user-details:
+    get:
+      tags:
+      - User Management
+      summary: Retrieve complete profile information for the currently authenticated user
+      description: '## Purpose
+
+        Retrieves comprehensive account information for the currently logged-in user based on their authentication token. This endpoint provides a complete user profile including personal details, permission groups, account status, file system access, administrative privileges, and confirmation history.
+
+
+        ## Why Use This Endpoint
+
+        - Display user profile information in the application interface
+
+        - Verify current user''s permissions and access rights
+
+        - Retrieve user settings and preferences for personalization
+
+        - Check account status and expiration before performing operations
+
+        - Obtain user initials for document annotations and audit trails
+
+        - Validate Smart integration metadata for Onvio Smart users
+
+        - Implement self-service profile viewing functionality
+
+        - Get file system identifiers for document management operations
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+        The user''s identity is automatically determined from the authentication token - no user identifier is required in the request.
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - No request body or parameters required
+
+        - User identity is extracted from the Bearer token automatically
+
+        - Endpoint uses the authenticated user''s context from the CIAM token
+
+
+        ## Common Use Cases
+
+        1. **Profile Display:** Load user profile on application startup or login
+
+        2. **Navigation:** Display user information in navigation header or profile dropdown
+
+        3. **Permission Check:** Check if user has specific administrative privileges
+
+        4. **Form Prepopulation:** Retrieve user initials for prepopulating forms or signatures
+
+        5. **UI Features:** Validate user permissions before showing UI features
+
+        6. **Smart Integration:** Get Smart metadata for Onvio Smart integration workflows
+
+        7. **Self-Service:** Implement "View My Profile" functionality
+
+
+        ## Important Notes
+
+        - Returns data for the authenticated user only (cannot view other users'' details)
+
+        - Requires valid CIAM authentication token
+
+        - SmartMetadata contains JSON-formatted Onvio Smart integration details
+
+        - Roles list may be empty if user has no assigned permission groups
+
+        - ConfirmationUser contains email of the account approver/modifier
+
+        - FileSystemId is the user''s identifier in GoFileRoom (GFR)'
+      operationId: EmMainEndPointsExternalUserManagementGetLoggedInUserDetailsExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Complete profile for the authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalGetUsersResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: be1e4618-7896-4391-b018-56b469355b25
+                    dateTime: '2026-04-21T05:50:03.3942263Z'
+                    traceId: f2be03527a5941f794585bfe4ce3772e
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: e15641a0-8353-4222-87bc-3538bb25911c
+                    dateTime: '2026-04-21T05:50:03.3942099Z'
+                    traceId: 169b6939c4cc43f79cf74b1f51c13f3e
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 5f56f488-f7ec-4142-bb6a-0aefd5f065cc
+                    dateTime: '2026-04-21T05:50:03.3942244Z'
+                    traceId: d53d9bf6479049edb1196d0a059944a0
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 790ce42f-264c-4592-a5e7-4241c3532750
+                    dateTime: '2026-04-21T05:50:03.3942278Z'
+                    traceId: 7b8919128b1e492ea4e465dd2d56b353
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/usermanagement/users/license-count:
+    get:
+      tags:
+      - User Management
+      summary: Retrieve current license usage statistics for AdvanceFlow and GoFileRoom
+      description: '## Purpose
+
+        Retrieves comprehensive license usage information for both legacy AdvanceFlow and GoFileRoom (GFR) dedicated licenses. This endpoint provides visibility into total purchased licenses, currently assigned licenses, and available license capacity for both systems, enabling license management and compliance monitoring.
+
+
+        ## Why Use This Endpoint
+
+        - Monitor license utilization and capacity planning
+
+        - Verify available licenses before creating new users
+
+        - Generate license compliance and audit reports
+
+        - Track license consumption trends over time
+
+        - Identify when additional licenses need to be purchased
+
+        - Prevent exceeding licensed user capacity
+
+        - Support financial planning for license renewals
+
+        - Display license status in administrative dashboards
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Request Details
+
+        - **Method:** GET
+
+        - No request body or parameters required
+
+        - Returns real-time license counts from both systems
+
+        - License information is retrieved from active user assignments
+
+
+        ## Common Use Cases
+
+        1. **Pre-Creation Check:** Verify available licenses before creating new users
+
+        2. **Capacity Planning:** License capacity planning and forecasting
+
+        3. **Compliance Reports:** Monthly/quarterly license usage reporting
+
+        4. **Budget Planning:** Budget planning for license procurement
+
+        5. **Compliance Audits:** Compliance audits of license assignments
+
+        6. **Limit Monitoring:** Monitoring approaching license limits with alerts
+
+        7. **Dashboard Display:** Dashboard widgets showing license utilization percentages
+
+
+        ## Important Notes
+
+        - Returns combined information for both legacy (AdvanceFlow) and current (GFR) systems
+
+        - License counts reflect currently active user assignments
+
+        - AdvanceFlow licenses apply to migrated users from the legacy EmMain predecessor system
+
+        - GFR Dedicated licenses apply to standard GoFileRoom users
+
+        - Available licenses = TotalLicenses - AssignedLicenses
+
+        - All numeric values are returned as strings for consistency
+
+        - If license retrieval fails for either system, GetLicenseException will contain error details
+
+        - License information is retrieved in real-time (not cached)
+
+        - Monitor regularly to avoid exceeding capacity
+
+        - Plan purchases when assigned licenses reach 80-90% of total'
+      operationId: EmMainEndPointsExternalUserManagementGetUserLicenseCountEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Current license usage statistics for both AdvanceFlow and GFR systems
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementGfrAdvanceflowLicenseResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 7d849bb6-1f8a-4199-8fa5-10e766c4a0bb
+                    dateTime: '2026-04-21T05:50:03.3991957Z'
+                    traceId: 55d80ea8f9cf4389b0395a86a56ce545
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 458609a0-d7f7-45bc-acf7-be828806e690
+                    dateTime: '2026-04-21T05:50:03.3991687Z'
+                    traceId: e7d0cba5bcf54d97b9673ca08b3858a5
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 2f011009-607b-4a10-99c2-fc54aa29fcc5
+                    dateTime: '2026-04-21T05:50:03.3991919Z'
+                    traceId: 0f5b35bc467f4833ab854157ddc6e96d
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 3be01781-e83f-423e-bc2f-096ecdf8b231
+                    dateTime: '2026-04-21T05:50:03.3991987Z'
+                    traceId: 2e43a87be2d940d78375948c51c3cfcb
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /v1/users:
+    post:
+      tags:
+      - User Management
+      summary: Create user
+      operationId: TriggerCreateUser
+      description: 'This endpoint creates a new user in the GoSystem User Management system.
+
+        Parameters for this endpoint include user details such as full name, email, password, group IDs, and user rights. The user must have the Add User permission to create new users.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestWrapper'
+            examples:
+              Create user request:
+                value:
+                - ID:
+                    Location: FTSUPPORT
+                    LoginId: TestUser001
+                  Password: Password
+                  Email: test.user@test.com
+                  EmployeeID: '12345'
+                  Fullname: Test User
+                  IsAdministrator: true
+                  GrantUserRights:
+                  - FORMSOURCE
+                  - EFORMRS
+                  - TAXINFOADMIN
+                  - TAXINFOUSERFULL
+                  - WEBORGUSERR
+                  - ELFADMIN
+                  - ELFUNLOCK
+                  - PRIORYEAR
+                  - K1ANALYZER
+                  - TEQ
+                  - RMVCMPDATE
+                  GrantAdminRights:
+                  - CREATEADMIN
+                  - GROUPIMPORT
+                  - ADDGROUPS
+                  - EDITGROUPS
+                  - DELETEGROUPS
+                  - ADDUSER
+                  - EDITUSER
+                  - DELETEUSER
+                  - FREERETURNS
+                  - TRANSFER
+                  GroupIds:
+                  - 11
+                  - 17
+              Create user without group:
+                value:
+                - Fullname: testing user
+                  Email: rajesh.mondal@thomsonreuters.com
+                  EmployeeID: ''
+                  IsAdministrator: true
+                  Deleted: false
+                  ID:
+                    Firm: FT
+                    Location: FTSUPPORT
+                    LoginId: testinguser994
+                  GrantUserRights:
+                  - EFORMRS
+                  - ELFUNLOCK
+                  GrantAdminRights:
+                  - EDITGROUPS
+                  - DELETEUSER
+                  - TRANSFER
+                  - CREATEADMIN
+                  - GROUPIMPORT
+                  - FREERETURNS
+                  GroupIds:
+                  - 11
+                  - 17
+                  Password: Password1$
+              Create user without add permission:
+                value:
+                - Fullname: testing user
+                  Email: rajesh.mondal@thomsonreuters.com
+                  EmployeeID: ''
+                  IsAdministrator: true
+                  Deleted: false
+                  ID:
+                    Firm: FT
+                    Location: FTSUPPORT
+                    LoginId: testinguser994
+                  GrantUserRights:
+                  - EFORMRS
+                  - ELFUNLOCK
+                  GrantAdminRights:
+                  - EDITGROUPS
+                  - DELETEUSER
+                  - TRANSFER
+                  - CREATEADMIN
+                  - GROUPIMPORT
+                  - FREERETURNS
+                  GroupIds:
+                  - 11
+                  - 17
+                  Password: Password1$
+              Create triple star user with firm config right:
+                value:
+                - Fullname: testing user
+                  Email: rajesh.mondal@thomsonreuters.com
+                  EmployeeID: ''
+                  IsAdministrator: true
+                  Deleted: false
+                  ID:
+                    Firm: FT
+                    Location: '***'
+                    LoginId: TestUser
+                  GrantUserRights:
+                  - EFORMRS
+                  - ELFUNLOCK
+                  GrantAdminRights:
+                  - EDITGROUPS
+                  - FIRMCONFIG
+                  - DELETEUSER
+                  - TRANSFER
+                  - CREATEADMIN
+                  - GROUPIMPORT
+                  - FREERETURNS
+                  GroupIds:
+                  - 11
+                  - 17
+                  Password: Password33
+              Create user in another location as logged in user:
+                value:
+                - Fullname: testing user
+                  Email: rajesh.mondal@thomsonreuters.com
+                  EmployeeID: ''
+                  IsAdministrator: true
+                  Deleted: false
+                  ID:
+                    Firm: FT
+                    Location: '***'
+                    LoginId: TestUser
+                  GrantUserRights:
+                  - EFORMRS
+                  - ELFUNLOCK
+                  GrantAdminRights:
+                  - EDITGROUPS
+                  - FIRMCONFIG
+                  - DELETEUSER
+                  - TRANSFER
+                  - CREATEADMIN
+                  - GROUPIMPORT
+                  - FREERETURNS
+                  GroupIds:
+                  - 11
+                  - 17
+                  Password: Password33
+              Create user in different location logged in as triple star:
+                value:
+                - Fullname: testing user
+                  Email: rajesh.mondal@thomsonreuters.com
+                  EmployeeID: ''
+                  IsAdministrator: true
+                  Deleted: false
+                  ID:
+                    Firm: FT
+                    Location: FTSUPPORT
+                    LoginId: TestUser
+                  GrantUserRights:
+                  - EFORMRS
+                  - ELFUNLOCK
+                  GrantAdminRights:
+                  - EDITGROUPS
+                  - FIRMCONFIG
+                  - DELETEUSER
+                  - TRANSFER
+                  - CREATEADMIN
+                  - GROUPIMPORT
+                  - FREERETURNS
+                  GroupIds:
+                  - 11
+                  - 17
+                  Password: Password33
+              Create user assign admin user rights to non admin user:
+                value:
+                - Fullname: testing user
+                  Email: rajesh.mondal@thomsonreuters.com
+                  EmployeeID: ''
+                  IsAdministrator: false
+                  Deleted: false
+                  ID:
+                    Firm: FT
+                    Location: FTSUPPORT
+                    LoginId: TestUser
+                  GrantUserRights:
+                  - EFORMRS
+                  - ELFUNLOCK
+                  GrantAdminRights:
+                  - EDITGROUPS
+                  - FIRMCONFIG
+                  - DELETEUSER
+                  - TRANSFER
+                  - CREATEADMIN
+                  - GROUPIMPORT
+                  - FREERETURNS
+                  GroupIds:
+                  - 11
+                  - 17
+                  Password: Password33
+        required: true
+      responses:
+        '200':
+          description: Success. The user is created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdationResponseList'
+              examples:
+                Success response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Message: User Created Successfully
+                    Status: 0
+                Error response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Message: User TESTUSER001 (FTSUPPORT) in firm FT already exists.
+                    Status: 1
+                Create user without group error response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: testinguser994
+                    Message: You have to provide at least one group
+                    Status: 1
+                Create user in another location as logged in user response:
+                  value:
+                  - UserDetails:
+                      Location: '***'
+                      LoginId: RAJAT
+                    Message: User must have same location as logged-In user('RAJATJ') location
+                    Status: 1
+                Create user assign admin user rights to non admin user response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: testinguser990
+                    Message: You can not grant admin rights to non-admin user
+                    Status: 1
+        '403':
+          description: Add user permission required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccessNotPresentResponse'
+              examples:
+                Create user without add permission response:
+                  value: Add user permission required
+        '404':
+          description: Not found
+      security:
+      - Authorization: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Trigger Create User
+    patch:
+      tags:
+      - User Management
+      summary: Patch user
+      operationId: UpdateUserStatuses(Delete,DisableLoginFlags)
+      description: This endpoint updates user statuses including the delete and disable login flags.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchUserRequestWrapper'
+            examples:
+              Patch user request:
+                value:
+                - User:
+                    Location: FTSUPPORT
+                    LoginId: TestUser001
+                  Activate: true
+                  DisableLogin: false
+        required: true
+      externalDocs:
+        url: https://confluence.thomsonreuters.com/display/USIT/GoSystem+User+Creation+APIs
+      responses:
+        '200':
+          description: Success. Users are patched.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdationResponseList'
+              examples:
+                Success response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Message: User Restored Successfully; User Enabled Successfully
+                    Status: 0
+                Error response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Message: user does not exist; User must have same location as logged-In user location
+                    Status: 1
+        '403':
+          description: Delete user permission required.
+        '404':
+          description: Not found
+      security:
+      - Authorization: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Update User Statuses(Delete, DisableLogin flags)
+    put:
+      tags:
+      - User Management
+      summary: Update user
+      operationId: UpdateUserProperties
+      description: This endpoint updates user properties including login ID, activation status, time tracking settings, and location changes.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRequestWrapper'
+            examples:
+              Update user login ID:
+                value:
+                - Fullname: Rajat JoshiTest
+                  Email: test@test.com
+                  EmployeeID: ''
+                  IsAdministrator: true
+                  Deleted: false
+                  WantToActivateUser: false
+                  LockedOut: false
+                  LoggedIn: true
+                  DisableLogin: false
+                  ID:
+                    Firm: FT
+                    Location: FTSUPPORT
+                    LoginId: RAJAT-TEST1
+                  NewLoginId: RAJAT-TEST
+                  GrantUserRights: []
+                  GrantAdminRights:
+                  - CREATEADMIN
+                  - GROUPIMPORT
+                  - ADDGROUPS
+                  - EDITGROUPS
+                  - DELETEGROUPS
+                  - EDITUSER
+                  - DELETEUSER
+                  - FREERETURNS
+                  - TRANSFER
+                  - NEWFREE
+                  - ADDUSER
+                  RevokeAdminRights: []
+                  RevokeUserRights: []
+                  Password: ''
+                  GroupIds:
+                  - 16
+              Deactivate or delete user:
+                value:
+                - Fullname: Rajat JoshiTest
+                  Email: test@test.com
+                  ID:
+                    Firm: FT
+                    Location: FTSUPPORT
+                    LoginId: RAJAT-TEST
+                  Deleted: true
+                  GroupIds:
+                  - 16
+                  Password: Password1$
+                  GrantUserRights: []
+              Enable time tracking:
+                value:
+                - Fullname: Rajat JoshiTest
+                  Email: test@test.com
+                  ID:
+                    Firm: FT
+                    Location: FTSUPPORT
+                    LoginId: RAJAT-TEST
+                  GroupIds:
+                  - 16
+                  BillingRate: 20
+                  EnableTT: true
+                  EditTimeLog: true
+                  Password: Password1$
+                  GrantUserRights: []
+              Disable time tracking:
+                value:
+                - Fullname: Rajat JoshiTest
+                  Email: test@test.com
+                  ID:
+                    Firm: FT
+                    Location: FTSUPPORT
+                    LoginId: RAJAT-TEST
+                  GroupIds:
+                  - 16
+                  EnableTT: false
+                  Password: Password1$
+                  GrantUserRights: []
+              Change location of non triple star user using triple star user:
+                value:
+                - Fullname: Rajat JoshiTest
+                  Email: test@test.com
+                  ID:
+                    Firm: FT
+                    Location: FTSUPPORT
+                    LoginId: RAJAT-TEST
+                  GroupIds:
+                  - 16
+                  NewLocation: FT
+              Change location of triple star user logged in as other location triple star:
+                value:
+                - Fullname: Rajat JoshiTest
+                  Email: test@test.com
+                  ID:
+                    Firm: 2WF5
+                    Location: '***'
+                    LoginId: NEWTEST
+                  GroupIds:
+                  - 16
+                  NewLocation: FT
+        required: true
+      responses:
+        '200':
+          description: Success. The user is updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdationResponseList'
+              examples:
+                Success response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Message: User Updated Successfully
+                    Status: 0
+                Update user login ID success response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: RAJAT-TEST1
+                    Message: User Updated Successfully
+                    Status: 0
+                Error response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Message: You can not grant or revoke EFORMRS, because you don't own it; You can not grant or revoke EFORMRS, because you don't own it
+                    Status: 1
+                Change location of triple star logged in as other location triple star error response:
+                  value:
+                  - UserDetails:
+                      Location: '***'
+                      LoginId: NEWTEST
+                    Message: user(NEWTEST) is either deleted or does not exist
+                    Status: 1
+        '403':
+          description: Edit user permission required.
+        '404':
+          description: Not found
+      security:
+      - Authorization: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Update User Properties
+    delete:
+      tags:
+      - User Management
+      summary: Delete user
+      operationId: TriggerDeleteUser
+      description: This endpoint deletes a user from the GoSystem User Management system.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteUserRequestWrapper'
+            examples:
+              Delete user request:
+                value:
+                - Location: FTSUPPORT
+                  LoginId: TestUser001
+        required: true
+      responses:
+        '200':
+          description: Success. The user is deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdationResponseList'
+              examples:
+                Success response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Message: User Deleted Successfully
+                    Status: 0
+                Error response:
+                  value:
+                  - UserDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Message: user(testuser001) is either deleted or does not exist
+                    Status: 1
+        '403':
+          description: Add user permission required.
+        '404':
+          description: Not found
+      security:
+      - Authorization: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Trigger Delete User
+    get:
+      tags:
+      - User Management
+      summary: Get active or inactive users list
+      operationId: GetUsersList
+      description: This endpoint retrieves a list of active or inactive users for a specified location.
+      parameters:
+      - name: location
+        in: query
+        description: Current location name of the firm.
+        required: true
+        schema:
+          type: string
+      - name: getActive
+        in: query
+        description: Flag for getting active users.
+        required: true
+        schema:
+          type: boolean
+      - name: getInactive
+        in: query
+        description: Flag for getting inactive users.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success. The users list is retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserResponseWrapper'
+              examples:
+                Success response:
+                  value:
+                  - Deleted: true
+                    ID:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Email: test.user@test.com
+                    EmployeeID: '12345'
+                    Fullname: Test User
+                    IsAdministrator: true
+                    GrantUserRights:
+                    - FORMSOURCE
+                    - EFORMRS
+                    - TAXINFOADMIN
+                    - TEQ
+                    - RMVCMPDATE
+                    GrantAdminRights:
+                    - CREATEADMIN
+                    - GROUPIMPORT
+                    - FREERETURNS
+                    - TRANSFER
+                    GroupIds:
+                    - 11
+                    - 17
+                  - Deleted: false
+                    ID:
+                      Location: FTSUPPORT
+                      LoginId: TestUser002
+                    Email: test.user2@test.com
+                    EmployeeID: '12345'
+                    Fullname: Test User2
+                    IsAdministrator: false
+                    GrantUserRights:
+                    - FORMSOURCE
+                    GrantAdminRights: []
+                    GroupIds:
+                    - 11
+        '404':
+          description: Not found
+      security:
+      - Authorization: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Get users list
+    servers:
+    - url: https://api.thomsonreuters.com/gosystem/tax-returns
+  /v1/users/myprofile:
+    get:
+      tags:
+      - User Management
+      summary: Get current user and permissions details
+      operationId: GetCurrentUserDetails
+      description: This endpoint retrieves the current user's profile and permissions details.
+      responses:
+        '200':
+          description: Success. The user profile and permissions details are retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserResponse'
+              examples:
+                Success response:
+                  value:
+                    Deleted: false
+                    ID:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    Email: test.user@test.com
+                    EmployeeID: '12345'
+                    Fullname: Test User
+                    IsAdministrator: true
+                    GrantUserRights:
+                    - FORMSOURCE
+                    - EFORMRS
+                    - TAXINFOADMIN
+                    - TEQ
+                    - RMVCMPDATE
+                    GrantAdminRights:
+                    - CREATEADMIN
+                    - GROUPIMPORT
+                    - FREERETURNS
+                    - TRANSFER
+                    GroupIds:
+                    - 11
+                    - 17
+        '404':
+          description: Not found
+      security:
+      - Authorization: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Get current user details
+    servers:
+    - url: https://api.thomsonreuters.com/gosystem/tax-returns
+  /v1/users/allpermissions:
+    get:
+      tags:
+      - User Management
+      summary: Get all user and admin related permissions
+      operationId: GetPermissionDetails
+      description: This endpoint retrieves all user and admin related permissions available in the system.
+      responses:
+        '200':
+          description: Success. All user and admin permissions are retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionResponse'
+              examples:
+                Success response:
+                  value:
+                    AdminRights:
+                    - Right: Add Groups
+                      Code: ADDGROUPS
+                      Description: Allows users to add new groups
+                    - Right: Edit Groups
+                      Code: EDITGROUPS
+                      Description: Allows users to edit existing groups
+                    - Right: Delete Groups
+                      Code: DELETEGROUPS
+                      Description: Allows users to delete existing groups
+                    - Right: Firm Config
+                      Code: FIRMCONFIG
+                      Description: User will have access to firm config and also make changes to it
+                    - Right: Letters and Filing Instr
+                      Code: LAFI
+                      Description: User can fully access Letters and Filling instructions
+                    - Right: Add Users
+                      Code: ADDUSER
+                      Description: Allows users to add new users
+                    - Right: Edit Users
+                      Code: EDITUSER
+                      Description: Allows users to edit existing users
+                    - Right: Delete Users
+                      Code: DELETEUSER
+                      Description: Allows users to delete existing users
+                    - Right: Transfer
+                      Code: TRANSFER
+                      Description: User will have access to transfer returns from one account to another within same firm
+                    - Right: External Transfer
+                      Code: ETXR
+                      Description: User will have access to transfer returns from account to another outside own firm too
+                    - Right: Create Administrator
+                      Code: CREATEADMIN
+                      Description: Allows users to create new administrator users with admin rights
+                    - Right: Group Import
+                      Code: GROUPIMPORT
+                      Description: Allow users to do group import
+                    - Right: Free Other Returns
+                      Code: FREERETURNS
+                      Description: Allows user to  free returns
+                    - Right: De-Federate User
+                      Code: DEFEDERATE
+                      Description: Allow user to de federate a federated user
+                    UserRights:
+                    - Right: FormSource
+                      Code: FORMSOURCE
+                      Description: Gives user access to use formsource and run queries.
+                    - Right: e-Form RS
+                      Code: EFORMRS
+                      Description: Gives user permission to access E-form RS application in Gosystem RS
+                    - Right: Export Grid Data
+                      Code: EXPORTGRIDDATA
+                      Description: Allows user access to export grid data
+                    - Right: MyTaxInfo Admin
+                      Code: TAXINFOADMIN
+                      Description: Gives user administrator access to MyTaxInfo, allowing them to have full access to customize theme, contact email and legal information. Review/Edit a tax payer questionnaire etc
+                    - Right: MyTaxInfo Preparer (Full Access)
+                      Code: WEBORGUSER
+                      Description: Gives user the preparer access to MyTaxInfo, allowing them to create questionnaire, view status reports review/edit and send questionnaire to Gosystem
+                    - Right: MyTaxInfo Preparer (read only)
+                      Code: WEBORGUSERR
+                      Description: Gives user the prepare access to MyTaxInfo, allowing them to review and send the questionnaire
+                    - Right: Elf Admin
+                      Code: ELFADMIN
+                      Description: Allows user to access E-file section to submit and download e-files and generate e-file report
+                    - Right: Elf Unlock
+                      Code: ELFUNLOCK
+                      Description: Allows user to unlock e-files if any of the jurisdictions are locked
+                    - Right: Prior Year
+                      Code: PRIORYEAR
+                      Description: User will have access to prior year returns
+                    - Right: TEQ
+                      Code: TEQ
+                      Description: ''
+                    - Right: Remove Completed Date
+                      Code: RMVCMPDATE
+                      Description: User will have access to remove completed date from return
+                    - Right: K1 Analyzer
+                      Code: K1ANALYZER
+                      Description: User will have access to K1 Analyzer
+        '404':
+          description: Not found
+      security:
+      - Authorization: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Get permission details
+    servers:
+    - url: https://api.thomsonreuters.com/gosystem/tax-returns
+  /v1/groups:
+    get:
+      tags:
+      - User Management
+      summary: Get all group details
+      operationId: GetAllGroupDetails
+      description: This endpoint retrieves all group details for the firm.
+      responses:
+        '200':
+          description: Success. All group details are retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGroupResponseWraper'
+              examples:
+                Success response:
+                  value:
+                  - Id: 11
+                    GroupName: FT_ADMIN
+                    Center: '***'
+                    Firm: FT
+                    CanAddLocators: true
+                    CanDeleteLocators: true
+                    CanAssignLocators: true
+                    CanSetPasswords: true
+                    CanBypassBatchPrintPwd: false
+                  - Id: 16
+                    GroupName: RS DEVELOPMENT
+                    Center: DALLAS-D100
+                    Firm: FT
+                    CanAddLocators: true
+                    CanDeleteLocators: true
+                    CanAssignLocators: true
+                    CanSetPasswords: true
+                    CanBypassBatchPrintPwd: false
+                  - Id: 17
+                    GroupName: RS TESTERS
+                    Center: DALLAS
+                    Firm: FT
+                    CanAddLocators: true
+                    CanDeleteLocators: true
+                    CanAssignLocators: true
+                    CanSetPasswords: true
+                    CanBypassBatchPrintPwd: false
+        '404':
+          description: Not found
+      security:
+      - Authorization: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Get All group details
+    servers:
+    - url: https://api.thomsonreuters.com/gosystem/tax-returns
+components:
+  schemas:
+    EmMainExtensionsEnumerationsFileSystemSource:
+      type: integer
+      description: ''
+      x-enumNames:
+      - None
+      - GoFileRoom
+      - SmartOnline
+      enum:
+      - 0
+      - 1
+      - 2
+    EMMainDataTransferObjectsModelsUserManagementUserDeleteResponseDto:
+      type: object
+      additionalProperties: false
+      properties:
+        loginId:
+          type: string
+          description: Login name of the user that was attempted to be deleted.
+          example: john.smith@company.com
+        isDeleted:
+          type: boolean
+          description: Indicates whether the user was successfully deleted. True if deleted, false if deletion failed.
+          example: true
+        deleteUserException:
+          type: string
+          description: Error message if deletion failed, otherwise contains success message or empty string.
+          example: User deleted successfully
+    EMMainDataTransferObjectsModelsExternalUserListDto:
+      type: object
+      additionalProperties: false
+      properties:
+        userId:
+          type: integer
+          description: Unique identifier for the user in the system.
+          format: int32
+          example: 12345
+        displayName:
+          type: string
+          description: Full display name of the user (typically First Name + Last Name).
+          example: John Smith
+        fileSystemId:
+          type: string
+          description: GoFileRoom file system identifier for the user. Used for GFR integration and document management.
+          example: GFR-USR-001
+        loginName:
+          type: string
+          description: User's login name/email address used for authentication.
+          example: john.smith@company.com
+        initials:
+          type: string
+          description: User's initials, typically used for document signatures and audit trails.
+          example: JS
+        userAccountStatus:
+          type: string
+          description: Current account status as a human-readable string (e.g., "Active", "Inactive", "Locked").
+          example: Active
+        permissionGroups:
+          type: array
+          description: List of permission groups (security roles) assigned to the user. Defines user access and capabilities within the system.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementSecurityRoleDetailsDto'
+    EMMainDataTransferObjectsModelsUserManagementSecurityGroupResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        securityGroupId:
+          type: string
+          description: Unique identifier for the GoFileRoom (GFR) security group. This ID is used to reference the group in GFR operations.
+          example: GFR-SEC-GROUP-147
+        securityGroupName:
+          type: string
+          description: Human-readable name of the GoFileRoom security group. This name describes the group's purpose or access level.
+          example: Corporate Documents Access
+        mfa:
+          type: integer
+          description: 'Multi-factor authentication (MFA) setting for this security group. Numeric flag indicating MFA status: 0 = not configured, 1 = enabled.'
+          format: int32
+          example: 1
+        mfaRequired:
+          type: integer
+          description: Indicates whether MFA is required for members of this security group. 0 = not required, 1 = required.
+          format: int32
+          example: 1
+    EMMainDataTransferObjectsModelsExternalGetUsersResponse:
+      allOf:
+      - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalUserBaseExternal'
+      - type: object
+        additionalProperties: false
+        properties:
+          roles:
+            type: array
+            description: List of permission groups (security roles) assigned to the user. Each role defines a set of permissions and access rights within the system.
+            items:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementSecurityRoleDetailsDto'
+          confirmationUser:
+            description: Information about the user who confirmed or last modified this user account. Contains the confirming user's email address.
+            oneOf:
+            - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementConfirmationUserDto'
+    EMMainDataTransferObjectsModelsExternalUserPermissionsGroupModel:
+      type: object
+      additionalProperties: false
+      properties:
+        permissionGroupId:
+          type: integer
+          description: Unique identifier of the permission group to assign to the user.
+          format: int32
+          example: 5
+        permissionGroupName:
+          type: string
+          description: Name of the permission group (for reference/display purposes).
+          example: Senior Accountant
+    EMMainDataTransferObjectsModelsExternalCreateUpdateUserRequestDto:
+      required:
+      - permissionGroups
+      allOf:
+      - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementCreateModifyUserRequestDtoBase'
+      - type: object
+        additionalProperties: false
+        properties:
+          permissionGroups:
+            type: array
+            description: List of permission groups (security roles) to assign to the new user. At least one permission group is required.
+            items:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalUserPermissionsGroupModel'
+    EMMainDataTransferObjectsModelsUserManagementLicenseResponseDto:
+      type: object
+      additionalProperties: false
+      properties:
+        license:
+          type: string
+          description: Type or name of the license being reported (e.g., "AdvanceFlow", "GFR Dedicated").
+          example: AdvanceFlow
+        totalLicenses:
+          type: string
+          description: Total number of licenses purchased or allocated for this license type. Numeric value as string.
+          example: '50'
+        assignedLicenses:
+          type: string
+          description: Number of licenses currently assigned to active users. Numeric value as string.
+          example: '42'
+        message:
+          type: string
+          description: Informational message about license status, such as remaining capacity or warnings about approaching limits.
+          example: 8 licenses available
+        getLicenseException:
+          type: string
+          description: Error message if license retrieval failed, otherwise empty. Contains exception details when license information cannot be obtained.
+          example: None
+    EmMainExtensionsUtilityErrorExtensions:
+      type: object
+      description: 'Provides extended metadata and diagnostic information for error responses.
+
+        Includes status codes, error codes, timestamps, and distributed tracing identifiers.'
+      additionalProperties: false
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code (e.g., 400, 401, 403, 500)
+          format: int32
+          example: 401
+        code:
+          type: string
+          description: Application-specific error code for programmatic handling
+          example: ERR_AUTH_4010
+        errorId:
+          type: string
+          description: Unique identifier (GUID) for this error occurrence. Use this when reporting issues to support.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        dateTime:
+          type: string
+          description: ISO 8601 timestamp (UTC) when the error occurred
+          example: '2024-03-15T14:30:00Z'
+        traceId:
+          type: string
+          description: Distributed trace ID for correlating requests across microservices (W3C Trace Context format)
+          example: a1b2c3d4e5f67890abcdef1234567890
+        spanId:
+          type: string
+          description: Span ID for this specific operation within the distributed trace (W3C Trace Context format)
+          example: 358611c48f91f940
+    EmMainExtensionsUtilityErrorDetail:
+      type: object
+      description: Represents detailed information about a specific error that occurred during API request processing.
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          description: Gets or sets the human-readable error message describing what went wrong.
+          example: '"Unauthorized access."
+
+            "Bad request due to invalid input."
+
+            "Resource not found."
+
+            "An unexpected error occurred."'
+        extensions:
+          description: Gets or sets the extended error metadata containing additional diagnostic information.
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsUtilityErrorExtensions'
+    EMMainDataTransferObjectsModelsUserManagementSecurityRoleDetailsDto:
+      type: object
+      additionalProperties: false
+      properties:
+        permissionGroupId:
+          type: integer
+          description: The id of the security role.
+          format: int32
+          example: 1
+        permissionGroupName:
+          type: string
+          description: The name of the security role.
+          example: Administrators
+        description:
+          type: string
+          description: The description of the security role.
+          example: System Administrators
+        isDisabled:
+          type: boolean
+          description: Flag indicating if this security role is disabled
+          example: false
+        isAdmin:
+          type: boolean
+          description: Flag indicating if this security role is the special "Administrators" group
+          example: false
+    EMMainDataTransferObjectsModelsUserManagementCreateModifyUserResponseDto:
+      type: object
+      additionalProperties: false
+      properties:
+        isCreatedORModified:
+          type: boolean
+          description: Indicates whether the user was successfully created or modified. True if operation succeeded, false if it failed.
+          example: true
+        createdORModifiedException:
+          type: string
+          description: Success message or error description if the operation failed. Contains details about what went wrong.
+          example: User created successfully
+    EMMainDataTransferObjectsModelsUserManagementCreateModifyUserRequestDtoBase:
+      type: object
+      additionalProperties: false
+      required:
+      - loginName
+      - fullName
+      properties:
+        loginName:
+          type: string
+          description: User's login name/email address. Must be unique in the system.
+          minLength: 1
+          example: john.smith@company.com
+        fullName:
+          type: string
+          description: Full name of the user (First Name + Last Name).
+          minLength: 1
+          example: John Smith
+        initials:
+          type: string
+          description: User's initials (typically 2-3 characters), used for signatures and audit trails.
+          example: JS
+        isAccountExpires:
+          type: boolean
+          description: Indicates whether the account has an expiration date. Set to true to enable account expiration.
+          example: false
+        accountExpiresDate:
+          type: string
+          description: Account expiration date in ISO 8601 format. Required if IsAccountExpires is true.
+          example: '2025-12-31T23:59:59Z'
+        fileStorageGrp:
+          type: array
+          description: List of GoFileRoom file storage groups the user should be added to. Used for document management permissions.
+          items:
+            type: string
+        isGFRAdminGrp:
+          type: boolean
+          description: Indicates whether the user should be added to the GFR Administrators group with full administrative privileges.
+          example: false
+    EMMainDataTransferObjectsModelsExternalUserBaseExternal:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          description: Unique database identifier for the user record. This is the primary key in the user table.
+          format: int32
+          example: 3847
+        fileSystemSource:
+          description: Source file system where the user account is managed. Typically set to GoFileRoom for standard users.
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsEnumerationsFileSystemSource'
+        fileSystemId:
+          type: string
+          description: Unique identifier of the user in the external file system (GoFileRoom). Used for cross-system user identification.
+          example: GFR-USER-5841
+        displayName:
+          type: string
+          description: User's full display name shown throughout the application interface.
+          example: Michael Thompson
+        loginName:
+          type: string
+          description: User's login name (email address) used for authentication.
+          example: michael.thompson@company.com
+        isSysAdmin:
+          type: boolean
+          description: Indicates whether the user has system administrator privileges with full access to all system features.
+          example: false
+        isInternalAdminUser:
+          type: boolean
+          description: Indicates whether the user is an internal administrative user with elevated maintenance privileges.
+          example: false
+        isFirmSetupUser:
+          type: boolean
+          description: Indicates whether the user has permissions to configure firm-level settings and preferences.
+          example: true
+        forcePasswordChange:
+          type: boolean
+          description: Indicates whether the user must change their password on next login. Used for security policies and initial account setup.
+          example: false
+        initials:
+          type: string
+          description: User's initials, typically used for audit trails, document annotations, and compact displays.
+          example: MT
+        smartMetadata:
+          type: string
+          description: JSON metadata string containing Onvio Smart integration details and synchronization information.
+          example: ''
+        userAccountStatus:
+          type: string
+          description: Human-readable account status description. Common values include "Active", "Disabled", "Expired", "PasswordChangeRequired".
+          example: Active
+    EMMainDataTransferObjectsModelsExternalUserDetailsResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        loginId:
+          type: string
+          description: User's login name (email address) used for authentication.
+          example: john.smith@company.com
+        advanceflowUserId:
+          type:
+          - integer
+          - 'null'
+          description: Legacy AdvanceFlow user identifier. Null if the user is not from the legacy AdvanceFlow system.
+          format: int32
+          example: 8472
+        userId:
+          type: string
+          description: Unique user identifier in the system. This is the primary user ID used across EmMain.
+          example: '5841'
+        fullName:
+          type: string
+          description: User's full name as displayed throughout the system.
+          example: John Smith
+        initial:
+          type: string
+          description: User's initials, typically used for audit trails and document annotations.
+          example: JS
+        accountExpirationDate:
+          type:
+          - string
+          - 'null'
+          description: Date and time when the user account expires in ISO 8601 format. Null if the account does not expire.
+          example: '2025-12-31T23:59:59Z'
+        userDisabled:
+          type:
+          - integer
+          - 'null'
+          description: Numeric flag indicating user disabled status. 0 = enabled, 1 = disabled.
+          format: int32
+          example: 0
+        disabledByAdmin:
+          type: boolean
+          description: Indicates whether the user account was disabled by an administrator. True if disabled by admin, false otherwise.
+          example: false
+        disabledComments:
+          type: string
+          description: Comments or reason provided when the account was disabled. Empty if account is not disabled or no comments were provided.
+          example: User left the company
+        isAdvanceFlowUser:
+          type: boolean
+          description: Indicates whether this user account originated from the legacy AdvanceFlow system.
+          example: false
+        advanceflowUserPermission:
+          type: array
+          description: List of AdvanceFlow permission groups assigned to the user. Only populated for legacy AdvanceFlow users.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementSecurityRoleDetailsDto'
+        groups:
+          type: array
+          description: List of GoFileRoom (GFR) file storage groups the user has access to. These control which file cabinets and folders the user can access.
+          items:
+            type: string
+        isUserAdministration:
+          type: boolean
+          description: Indicates whether the user has user administration privileges in the EmMain system.
+          example: true
+        portalUserAdministration:
+          type: boolean
+          description: Indicates whether the user has portal user administration privileges.
+          example: false
+        gfrAdmin:
+          type: string
+          description: 'Indicates the user''s GFR Administrator status. Possible values: "Yes", "No", or other status indicators.'
+          example: 'Yes'
+    EmMainExtensionsUtilityErrorResponse:
+      type: object
+      description: 'Represents a standardized error response structure for API errors.
+
+        Contains a collection of detailed error information.'
+      example:
+        errors:
+        - message: Unauthorized access.
+          extensions:
+            statusCode: 401
+            code: ERR_AUTH_4010
+            errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+            dateTime: '2024-03-15T14:30:00Z'
+            traceId: a1b2c3d4e5f67890abcdef1234567890
+            spanId: 358611c48f91f940
+      additionalProperties: false
+      properties:
+        errors:
+          type: array
+          description: Collection of detailed error information
+          items:
+            $ref: '#/components/schemas/EmMainExtensionsUtilityErrorDetail'
+    EMMainDataTransferObjectsModelsUserManagementConfirmationUserDto:
+      type: object
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          description: Email address of the user who confirmed or last modified the account. Used for tracking account modifications and approvals.
+          example: admin@company.com
+    EMMainDataTransferObjectsModelsExternalModifyUserRequestDto:
+      type: object
+      additionalProperties: false
+      required:
+      - loginName
+      - fullName
+      properties:
+        loginName:
+          type: string
+          description: Current login name of the user to be updated. Used to identify the user.
+          minLength: 1
+          example: john.smith@company.com
+        fullName:
+          type: string
+          description: Updated full name for the user.
+          minLength: 1
+          example: John M. Smith
+        newLoginName:
+          type:
+          - string
+          - 'null'
+          description: New login name if changing the user's email/login. Leave null to keep existing login name.
+          example: john.m.smith@company.com
+        isDisabled:
+          type:
+          - boolean
+          - 'null'
+          description: Set to true to disable the user account, false to enable. Null to leave unchanged.
+          example: false
+        disabledComments:
+          type:
+          - string
+          - 'null'
+          description: Comments explaining why the account was disabled. Required if IsDisabled is set to true.
+          example: User left the company
+        initials:
+          type:
+          - string
+          - 'null'
+          description: Updated initials for the user. Null to leave unchanged.
+          example: JMS
+        isAccountExpires:
+          type:
+          - boolean
+          - 'null'
+          description: Set whether the account should have an expiration date. Null to leave unchanged.
+          example: true
+        accountExpiresDate:
+          type:
+          - string
+          - 'null'
+          description: Account expiration date in ISO 8601 format. Required if IsAccountExpires is true.
+          example: '2025-12-31T23:59:59Z'
+        fileStorageGrp:
+          type:
+          - array
+          - 'null'
+          description: Updated list of GoFileRoom file storage groups. Null to leave unchanged.
+          items:
+            type: string
+        isGFRAdminGrp:
+          type:
+          - boolean
+          - 'null'
+          description: Set whether user should be in GFR Administrators group. Null to leave unchanged.
+          example: false
+        permissionGroups:
+          type:
+          - array
+          - 'null'
+          description: Updated list of permission groups. Null to leave unchanged. If provided, replaces all existing permission groups.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalUserPermissionsGroupModel'
+    EMMainDataTransferObjectsModelsExternalDeleteUsersRequestDto:
+      type: object
+      additionalProperties: false
+      required:
+      - deleteLoginNames
+      properties:
+        deleteLoginNames:
+          type: array
+          description: List of login names (email addresses) of users to delete. At least one login name is required.
+          minLength: 1
+          items:
+            type: string
+    EMMainDataTransferObjectsModelsUserManagementGfrAdvanceflowLicenseResponseDto:
+      type: object
+      additionalProperties: false
+      properties:
+        advanceFlowLicense:
+          description: License information for legacy AdvanceFlow (EmMain predecessor system) licenses. Contains total, assigned, and available license counts for AdvanceFlow users.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementLicenseResponseDto'
+        gfrDedicatedLicense:
+          description: License information for GoFileRoom (GFR) dedicated licenses. Contains total, assigned, and available license counts for GFR users.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsUserManagementLicenseResponseDto'
+    EMMainDataTransferObjectsModelsUserManagementUserDetailRequestDto:
+      type: object
+      additionalProperties: false
+      required:
+      - loginName
+      properties:
+        loginName:
+          type: string
+          description: Login name (email address) of the user whose details to retrieve.
+          minLength: 1
+          example: john.smith@company.com
+    GroupIds:
+      type: array
+      items:
+        type: integer
+    UpdateRequestWrapper:
+      type: array
+      items:
+        $ref: '#/components/schemas/UpdateRequest'
+    UserRights:
+      type: array
+      items:
+        type: string
+      description: Check all the permissions on endpoint /v1/users/allpermissions.
+    DeleteUserRequest:
+      type: object
+      properties:
+        LoginId:
+          type: string
+        Location:
+          type: string
+    PatchUserRequestWrapper:
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchUserRequest'
+    DeleteUserRequestWrapper:
+      type: array
+      items:
+        $ref: '#/components/schemas/DeleteUserRequest'
+    CreateUserResponse:
+      type: object
+      properties:
+        UserDetails:
+          $ref: '#/components/schemas/UserID'
+        Message:
+          type: string
+        Status:
+          type: integer
+    GetGroupResponse:
+      type: object
+      properties:
+        Id:
+          type: integer
+        GroupName:
+          type: string
+        Center:
+          type: string
+        Firm:
+          type: string
+        CanAddLocators:
+          type: boolean
+        CanDeleteLocators:
+          type: boolean
+        CanAssignLocators:
+          type: boolean
+        CanSetPasswords:
+          type: boolean
+        CanBypassBatchPrintPwd:
+          type: boolean
+    UserAccessNotPresentResponse:
+      type: string
+    MembershipVariable:
+      type: object
+      properties:
+        GroupID:
+          type: integer
+        GrpManager:
+          type: boolean
+    PermissionResponse:
+      type: object
+      properties:
+        AdminRights:
+          $ref: '#/components/schemas/PermissionAdminRights'
+        UserRights:
+          $ref: '#/components/schemas/PermissionUserRights'
+    UpdateRequest:
+      type: object
+      properties:
+        ID:
+          $ref: '#/components/schemas/UserID'
+        Fullname:
+          type: string
+        Password:
+          type: string
+        Email:
+          type: string
+        EmployeeID:
+          type: string
+        IsAdministrator:
+          type: boolean
+        Deleted:
+          type: boolean
+        WantToActivateUser:
+          type: boolean
+        BillingRate:
+          type: integer
+        EnableTT:
+          type: boolean
+        EditTimeLog:
+          type: boolean
+        IsSuperAdmin:
+          type: boolean
+        Sunday:
+          type: string
+        Monday:
+          type: string
+        Tuesday:
+          type: string
+        Wednesday:
+          type: string
+        Thrusday:
+          type: string
+        Friday:
+          type: string
+        Saturday:
+          type: string
+        LockedOut:
+          type: boolean
+        LoggedIn:
+          type: boolean
+        DisableLogin:
+          type: boolean
+        NewLoginId:
+          type: string
+        NewLocation:
+          type: string
+        Memberships:
+          $ref: '#/components/schemas/Memberships'
+        RegionsIds:
+          $ref: '#/components/schemas/RegionIds'
+        GrantAdminRights:
+          $ref: '#/components/schemas/UserRights'
+        RevokeAdminRights:
+          $ref: '#/components/schemas/AdminRights'
+        GrantUserRights:
+          $ref: '#/components/schemas/AdminRights'
+        RevokeUserRights:
+          $ref: '#/components/schemas/UserRights'
+        GroupIds:
+          $ref: '#/components/schemas/GroupIds'
+    UserID:
+      type: object
+      required:
+      - LoginId
+      - Location
+      properties:
+        Location:
+          type: string
+        LoginId:
+          type: string
+        Firm:
+          type: string
+    PermissionAdminRights:
+      type: array
+      items:
+        $ref: '#/components/schemas/PermissionNode'
+    PermissionUserRights:
+      type: array
+      items:
+        $ref: '#/components/schemas/PermissionNode'
+    GetUserResponseWrapper:
+      type: array
+      items:
+        $ref: '#/components/schemas/GetUserResponse'
+    UserRequest:
+      type: object
+      required:
+      - Fullname
+      - Email
+      - Password
+      - GroupIds
+      - GrantUserRights
+      properties:
+        ID:
+          $ref: '#/components/schemas/UserID'
+        Fullname:
+          type: string
+        Email:
+          type: string
+        EmployeeID:
+          type: string
+        IsAdministrator:
+          type: boolean
+        UserId:
+          type: string
+        Deleted:
+          type: boolean
+        RegionsIds:
+          type: array
+          items:
+            type: string
+        SAMLNameIdentifier:
+          type: string
+        Password:
+          type: string
+        ConfirmPassword:
+          type: string
+        GrantUserRights:
+          $ref: '#/components/schemas/UserRights'
+        GrantAdminRights:
+          $ref: '#/components/schemas/AdminRights'
+        GroupIds:
+          $ref: '#/components/schemas/GroupIds'
+        Memberships:
+          $ref: '#/components/schemas/Memberships'
+        BillingRate:
+          type: integer
+        EnableTT:
+          type: boolean
+        EditTimeLog:
+          type: boolean
+        Sunday:
+          type: string
+        Monday:
+          type: string
+        Tuesday:
+          type: string
+        Wednesday:
+          type: string
+        Thrusday:
+          type: string
+        Friday:
+          type: string
+        Saturday:
+          type: string
+        DisableLogin:
+          type: boolean
+    Memberships:
+      type: array
+      items:
+        $ref: '#/components/schemas/MembershipVariable'
+    PatchUserRequest:
+      type: object
+      properties:
+        User:
+          $ref: '#/components/schemas/UserID'
+        Activate:
+          type: boolean
+        DisableLogin:
+          type: boolean
+    GetGroupResponseWraper:
+      type: array
+      items:
+        $ref: '#/components/schemas/GetGroupResponse'
+    UserRequestWrapper:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserRequest'
+    AdminRights:
+      type: array
+      items:
+        type: string
+      description: Check all the permissions on endpoint /v1/users/allpermissions.
+    GetUserResponse:
+      type: object
+      properties:
+        Deleted:
+          type: boolean
+        ID:
+          $ref: '#/components/schemas/UserID'
+        Fullname:
+          type: string
+        Email:
+          type: string
+        EmployeeID:
+          type: string
+        IsAdministrator:
+          type: boolean
+        AdminRights:
+          $ref: '#/components/schemas/AdminRights'
+        UserRights:
+          $ref: '#/components/schemas/UserRights'
+        GroupIds:
+          $ref: '#/components/schemas/GroupIds'
+    PermissionNode:
+      type: object
+      properties:
+        Right:
+          type: string
+        Code:
+          type: string
+        Description:
+          type: string
+    RegionIds:
+      type: array
+      items:
+        type: number
+    UserUpdationResponseList:
+      type: array
+      items:
+        $ref: '#/components/schemas/CreateUserResponse'
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: Please enter a valid token(M2M or GFR)
+      name: Authorization
+      in: header
+    Authorization:
+      type: http
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-engagement-manager-openapi.json
+- thomson-reuters-gosystem-user-management-api-openapi.json
+- thomson-reuters-engagement-manager-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,5452 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters User API
+  version: '1.0'
+  description: 'Operations tagged User across 8 of this provider''s published API definitions: thomson-reuters-firmflow-web-api-services-v1-openapi.json, thomson-reuters-gofileroom-web-api-v1-v1-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-firmflow-web-api-services-openapi.yml, thomson-reuters-firmflow-web-api-services-v1-openapi.yml, thomson-reuters-gofileroom-web-api-v1-openapi.yml, thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+- url: /monumentuat/api
+tags:
+- name: User
+paths:
+  /api/v1/user/login:
+    post:
+      tags:
+      - User
+      summary: Logs a user into the application
+      operationId: User_LoginAsyncV1
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Authentication of a user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+      x-codegen-request-body-name: userAuthentication
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/user/validate:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+      summary: Validate the Security Token
+      operationId: User_ValidateTokenV1
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/user/logout:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+      summary: Logs out the currently authenticated user
+      description: Logs out the currently authenticated user and invalidates their session.
+      operationId: User_LogoutV1
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IsLogoutSuccessful'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IsLogoutSuccessful'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IsLogoutSuccessful'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/IsLogoutSuccessful'
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/user/validatesession:
+    post:
+      tags:
+      - User
+      summary: Validate the session of a user
+      description: An endpoint used to validate a GoFileRoom user session.
+      operationId: User_ValidateSession
+      parameters:
+      - name: firmID
+        in: query
+        description: firmID of the user.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: loginName
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: sessionID
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginStatus'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/LoginStatus'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LoginStatus'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/LoginStatus'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /{version}/users/{id}/avatar:
+    get:
+      tags:
+      - User
+      summary: Get user avatar
+      description: 'This is an API method to get the user avatar.
+
+        Response
+
+        The API response is a multipart stream of data. If the avatar has not been uploaded then a place holder default system avatar is returned. In the case of an error, an error object is returned with the appropriate error message.
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-62788'
+      operationId: getUserAvatar
+      parameters:
+      - name: id
+        in: path
+        description: 'id parameter is the User id of the user, whose avatar is to be obtained. '
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: size
+        in: query
+        description: 'Size of the avatar.Following are supported <br> '
+        required: true
+        schema:
+          type: integer
+          format: int32
+          enum:
+          - 16
+          - 32
+          - 48
+          - 64
+          - 96
+          - 128
+          - 256
+          - 512
+          - 330
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: 'Avatar was returned successfully '
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: 'Validation failed/ Forbidden '
+        '404':
+          description: Avatar does not exist in the system
+        '405':
+          description: 'Method not allowed (calling API with the wrong method) '
+        '500':
+          description: Internal error occurred
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/experiences:
+    get:
+      tags:
+      - User
+      summary: User experience list
+      description: 'This API call is used to get list of experience.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        A User id is required
+
+
+        109
+
+
+        User id is not in proper format
+
+
+        113
+
+
+        The following users do not exist within the system:
+
+
+        110
+
+
+        The given action cannot be performed on the anonymised user(s).
+
+
+        325
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-66714'
+      operationId: getUserExperienceList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: userid
+        in: query
+        description: The ID of the user whose experience is to be listed
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/experiences'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experiences'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - User
+      summary: Add user experience
+      description: 'This API call is used to add a new experience object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        User id is not in proper format
+
+
+        113
+
+
+        The given userid is invalid
+
+
+        342
+
+
+        The company name is required
+
+
+        328
+
+
+        The job title is required
+
+
+        329
+
+
+        The Experience From month field is required
+
+
+        330
+
+
+        The Experience From year field is required
+
+
+        331
+
+
+        The Experience To month field is required
+
+
+        332
+
+
+        The Experience To year field is required
+
+
+        333
+
+
+        The information in the Experience From month field is not valid
+
+
+        335
+
+
+        The information in the Experience To month field is not valid
+
+
+        336
+
+
+        Please enter a year between 1900 and the current year as your start date
+
+
+        337
+
+
+        Please enter a year between 1900 and the current year as your end date
+
+
+        338
+
+
+        The information in the Experience from year field is not formatted correctly
+
+
+        339
+
+
+        The information in the Experience To year field is not formatted correctly
+
+
+        340
+
+
+        The information in the Currently working value field is not valid
+
+
+        341
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-66711'
+      operationId: addUserExperience
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: userid
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK [id,link included in response. others are not.]
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/experience'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experience'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/experience'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/experience'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experience'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/experience'
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/{userId_Email}:
+    get:
+      tags:
+      - User
+      summary: Get user
+      description: 'Get a user from Collaborate
+
+
+        This API call is used to retrieve a user from the system.
+
+
+        Note:
+
+
+        1. The following fields have been introduced in this version
+
+
+        emaildomain, org, invitationsent, createdby, createddate, modifiedby, modifieddate, ifpartner, lastlogindate, invalidlogins, externalid, publicwebsiteprofileid, systemuser, resetpassworddate, usertypeid, avatar, practicegroup, langcode, publicprofile, dateOfBirth
+
+
+        2. The "location" tag has been renamed to "address" tag to make it consistent with the Collaborate UI
+
+
+        The response will now display the address as
+
+
+        <address>
+
+
+        <addressid>1</addressid>
+
+
+        <addressline1>2nd floor</addressline1>
+
+
+        <addressline2>additional</addressline2>
+
+
+        <city>london</city>
+
+
+        <state>state</state>
+
+
+        <country>uk</country>
+
+
+        <postCode>EC4R</postCode>
+
+
+        </address>
+
+
+        Instead of
+
+
+        <location>
+
+
+        <addressline1>2nd floor, 55 King William Street</addressline1>
+
+
+        <addressline2>additional</addressline2>
+
+
+        <addressline3>state</addressline3>
+
+
+        <city>London</city>
+
+
+        <country>United Kingdom</country>
+
+
+        <postcode>EC4R 9AD</postcode>
+
+
+        </location>
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        User does not exists in the system
+
+
+        110
+
+        110
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65605'
+      operationId: getUser_1
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: userId_Email
+        in: path
+        description: The ID or email of the user to retrieve
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IntegrationUserDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationUserDBO'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/admin/impersonate:
+    get:
+      tags:
+      - User
+      operationId: generateAccessTokenForAdminImpersonation
+      parameters:
+      - name: userid
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: useremail
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Generate access token for admin impersonation
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/sayHello:
+    get:
+      tags:
+      - User
+      operationId: sayHello
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - OAuth: []
+      summary: Say hello
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/followers/{userid}/followers:
+    get:
+      tags:
+      - User
+      summary: Get Followers
+      description: 'Method to obtain user''s followers
+
+        This method is supported in version 6 of the API and above'
+      operationId: getFollowersList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '6'
+      - name: userid
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Followers returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/users'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting followers
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/followers/{userid}/followings:
+    get:
+      tags:
+      - User
+      summary: Get Following
+      description: 'Method to obtain user''s following
+
+        This method is supported in version 6 of the API and above'
+      operationId: getUserFollowing
+      parameters:
+      - name: userid
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '6'
+      responses:
+        '201':
+          description: Following users returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/users'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting following users
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/{userid}:
+    put:
+      tags:
+      - User
+      summary: Update User
+      description: 'This API call is used to update an existing user in the system.Note:
+
+        1. The following fields have been introduced in the response body emaildomain, org, invitationsent, createdby, createddate, modifiedby, modifieddate, ifpartner, lastlogindate, invalidlogins, externalid, publicwebsiteprofileid, systemuser, resetpassworddate, usertypeid, avatar, practicegroup, langcode, publicprofile, dateOfBirth
+
+        2. Address tag is available from API version 4
+
+        <address>
+
+        <addressid>1</addressid>
+
+        </address>
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        User ID is not in proper format
+
+
+        113
+
+
+        113
+
+
+        User does not exist in the system
+
+
+        110
+
+        110
+
+
+        Update user is not applicable in the case of a self registered user
+
+
+        188
+
+
+        188
+
+
+        Email address is required
+
+
+        101
+
+        101
+
+
+        Invalid email address
+
+
+        104
+
+        104
+
+
+        First name is required
+
+
+        102
+
+        102
+
+
+        Max characters allowed for first name must be between 1 to 100
+
+
+        102
+
+        352
+
+
+        The secretary''s email address is not valid
+
+
+        104
+
+        353
+
+
+        Status must be active or inactive
+
+
+        116
+
+        116
+
+
+        The entered department cannot be more than 256 characters
+
+
+        N/A
+
+        354
+
+
+        The entered ifpartner attribute is invalid
+
+
+        N/A
+
+        355
+
+
+        The entered systemuser attribute is invalid
+
+
+        N/A
+
+        356
+
+
+        The entered usertypeid attribute is invalid
+
+
+        N/A
+
+        357
+
+
+        The entered langcode attribute is invalid
+
+
+        N/A
+
+        358
+
+
+        The entered sourcetype attribute is invalid. Valid values are System, Active directory or System default
+
+
+        N/A
+
+        359
+
+
+        Please enter valid phone number
+
+
+        N/A
+
+        360
+
+
+        Please enter valid phone number in format {countrycode} ${areacode}${number}.
+
+
+        N/A
+
+        361
+
+
+        Please enter valid mobile number in format {countrycode}${number}.
+
+
+        N/A
+
+        362
+
+
+        Enter a valid office phone country code
+
+
+        N/A
+
+        363
+
+
+        The office phone country code can have a maximum of 4 digits
+
+
+        N/A
+
+        364
+
+
+        Enter a valid office phone area code
+
+
+        N/A
+
+        365
+
+
+        The office phone area code can have a maximum of 5 Digits
+
+
+        N/A
+
+        366
+
+
+        Office phone number should have Maximum 15 digits
+
+
+        N/A
+
+        368
+
+
+        Enter a valid mobile phone country code
+
+
+        N/A
+
+        369
+
+
+        The mobile phone country code can have a maximum of 4 Digits
+
+
+        N/A
+
+        372
+
+
+        Please enter valid mobile number
+
+
+        N/A
+
+        373
+
+
+        Mobile phone number should have Maximum 20 digits
+
+
+        N/A
+
+        374
+
+
+        Domain does not exist
+
+
+        105
+
+        105
+
+
+        Email already exists in the system
+
+
+        111
+
+        111
+
+
+        Mention organisation in the case of an exceptional domain
+
+
+        115
+
+        115
+
+
+        Org ID is not in proper format
+
+
+        112
+
+        112
+
+
+        Organisation does not exist
+
+
+        106
+
+        106
+
+
+        Domain exists in other organisation
+
+
+        114
+
+        114
+
+
+        Entered Address ID is not valid
+
+
+        N/A
+
+        308
+
+
+        Social link name not found in system
+
+
+        N/A
+
+        375
+
+
+        The social link name is required
+
+
+        N/A
+
+        376
+
+
+        The social link value is required
+
+
+        N/A
+
+        377
+
+
+        Maximum characters for social link value must be between 1 to 500
+
+
+        N/A
+
+        378
+
+
+        Enter the name for the custom link
+
+
+        N/A
+
+        379
+
+
+        The custom link value is required
+
+
+        N/A
+
+        380
+
+
+        Maximum characters for custom link name must be between 1 to 500
+
+
+        N/A
+
+        381
+
+
+        Maximum characters for custom link value must be between 1 to 500
+
+
+        N/A
+
+        382
+
+
+        The message link name is required
+
+
+        N/A
+
+        383
+
+
+        Message link name not found in system.
+
+
+        N/A
+
+        384
+
+
+        The message link value is required
+
+
+        N/A
+
+        385
+
+
+        Maximum characters for message link value must be between 1 to 500
+
+
+        N/A
+
+        386
+
+
+        The social link is disabled
+
+
+        N/A
+
+        408
+
+
+        The message link is disabled
+
+
+        N/A
+
+        409
+
+
+        The custom link is disabled
+
+
+        N/A
+
+        410
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65687'
+      operationId: updateUser
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: userid
+        in: path
+        description: The ID of the user to retrieve
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IntegrationUserDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationUserDBO'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/IntegrationUserDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationUserDBO'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/IntegrationUserDBO'
+    delete:
+      tags:
+      - User
+      summary: Archive User
+      description: 'This API call is used to archive a user within the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        The following users do not exist within the system
+
+
+        110
+
+        110
+
+
+        A User ID is required
+
+
+        109
+
+        109
+
+
+        User ID is not in the proper format
+
+
+        113
+
+        113
+
+
+        The User''s ID length cannot exceeds 50 characters
+
+
+        N/A
+
+        304
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-67441'
+      operationId: deleteUser
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: userid
+        in: path
+        description: user id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/users:
+    get:
+      tags:
+      - User
+      summary: Get user list
+      description: 'Get a list of users
+
+
+        This API call is used to retrieve a list of users from the system.
+
+
+        Note:
+
+
+        1. New query parameters introduced with this version are:
+
+
+        neverlogin, neverinvited, notingroup, ordertype, orderby, orgid, groupid, externalid, firstname, lastname, email, search
+
+
+        2. Introduced fields totalcount, total
+
+
+        3. Introduced the following fields for the response body
+
+
+        emaildomain, org, invitationsent, createdby, createddate, modifiedby, modifieddate, ifpartner, lastlogindate, invalidlogins, externalid, publicwebsiteprofileid, systemuser, resetpassworddate, usertypeid, avatar, practicegroup, langcode, publicprofile, dateOfBirth
+
+
+        4. The "location" tag has been renamed to "address" tag to make it consistent with the Collaborate UI
+
+
+        5. In every GET API # value for search is not supported because the jersey framework itself does not support #. After # all the parameters/values will be ignored.The response will now display the address as:
+
+
+        <address>
+
+
+        <addressid>1</addressid>
+
+
+        <addressline1>2nd floor</addressline1>
+
+
+        <addressline2>additional</addressline2>
+
+
+        <city>london</city>
+
+
+        <state>state</state>
+
+
+        <country>uk</country>
+
+
+        <postCode>EC4R</postCode>
+
+
+        </address>
+
+
+        Instead of
+
+        <location>
+
+        <addressline1>2nd floor, 55 King William Street</addressline1>
+
+        <addressline2>additional</addressline2>
+
+        <addressline3>state</addressline3>
+
+        <city>London</city>
+
+        <country>United Kingdom</country>
+
+        <postcode>EC4R 9AD</postcode>
+
+        </location>
+
+        Notes :
+
+
+        The value of limit parameter has the following behaviour:
+
+
+        If no value is provided in the limit, 100 is used as the default value.
+
+
+        If the limit is higher than 0, then it uses that value as limit.
+
+
+        To return all the records use -1 for the limit.
+
+
+        If the limit is lower than -1 then the limit value is set to a default value of 100.
+
+
+        The value of the offset parameter has the following behaviour:
+
+
+        If no value is provided in the offset, 0 is used as the default value.
+
+
+        If the offset is lower than 0, then an offset value is set to be a default value of 0.
+
+
+        If the offset is higher than 0 and less than the number of records in the user list, then the records starting from the offset value are returned.
+
+
+        If the offset is higher than the total number of records in the user list, then the offset has a default value of 0.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        Invalid input for user status. It would be ACTIVE,ARCHIVED or INACTIVE
+
+
+        147
+
+        147
+
+
+        The Organisation id is invalid
+
+
+        N/A
+
+        260
+
+
+        The neverinvited value is invalid. True and false are supported neverinvited values.
+
+
+        N/A
+
+        387
+
+
+        The neverlogin value is invalid. True and false are supported neverlogin values.
+
+
+        N/A
+
+        388
+
+
+        The groupids are invalid.
+
+
+        N/A
+
+        214
+
+
+        The notingroup value is invalid. True and false are supported notingroup values.
+
+
+        N/A
+
+
+        389
+
+
+        The ordertype is invalid. name, organisation, status, invited,lastlogin,lname,fname,email,jobtitle,department,
+
+
+        createddate,modifieddate and userid are supported ordertypes
+
+
+        N/A
+
+        289
+
+
+        The orderby value is invalid. asc and desc are supported orderby values.
+
+
+        N/A
+
+        290
+
+
+        The offset value is invalid.
+
+
+        138
+
+        138
+
+
+        The limit value is invalid.
+
+
+        137
+
+        137
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65899'
+      operationId: getAllSystemUsers
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: status
+        in: query
+        description: 'Possible values for the status are Active, Archived, Inactive and Locked. If more than one is specified, this should be in a comma separated list
+
+          If a value is not provided, the API endpoint will return a list of all users with any status in the system. i.e if the user is active, archived or inactive,locked'
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The starting position of the user list from when the user list should be returned. This is to allow pagination.
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The number of items to return in an individual get call.
+        required: false
+        schema:
+          type: string
+      - name: orgid
+        in: query
+        description: Organisations - if more than one is specified, this should be in a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: neverinvited
+        in: query
+        description: Returns a list of users who have never been invited. The value can be either true or false.
+        required: false
+        schema:
+          type: string
+      - name: neverlogin
+        in: query
+        description: Returns a list of users who have never logged in. The value can be either true or false.
+        required: false
+        schema:
+          type: string
+      - name: groupid
+        in: query
+        description: User Groups - if more than one is specified, this should be in a comma separated list
+        required: false
+        schema:
+          type: string
+      - name: notingroup
+        in: query
+        description: Returns a list of users who are not in any group. The value can be either true or false.
+        required: false
+        schema:
+          type: string
+      - name: ordertype
+        in: query
+        description: 'This returns a list of users on a specified sort type. The default sort type is organisation.<br>Possible fields: name, organisation, status, invited, lastlogin, fname, lname, email, jobtitle, department, createddate, modifieddate, userid'
+        required: false
+        schema:
+          type: string
+          enum:
+          - name
+          - organisation
+          - status
+          - invited
+          - lastlogin
+          - fname
+          - lname
+          - email
+          - jobtitle
+          - department
+          - createddate
+          - modifieddate
+          - userid
+      - name: orderby
+        in: query
+        description: 'This sorts the result on ordertype. The default value of orderby is asc.
+
+          Possible Values: asc and desc'
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: externalid
+        in: query
+        description: Returns a user who has the given externalid
+        required: false
+        schema:
+          type: string
+      - name: firstname
+        in: query
+        description: Returns a list of users whose first name is given in the parameter.
+        required: false
+        schema:
+          type: string
+      - name: lastname
+        in: query
+        description: Returns a list of users whose last name is given in the parameter.
+        required: false
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: Returns a user who has given the email id.
+        required: false
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: This returns list of users whose first name, last name, email, externalID, job title, department, organisation, street address, city, country, office phone and mobile phone that match with the value given in the parameter.
+        required: false
+        schema:
+          type: string
+      - name: alphabets
+        in: query
+        description: Returns list of users whose last name starts with the value given in parameter.
+        required: false
+        schema:
+          type: string
+      - name: jobtitle
+        in: query
+        description: Returns list of users whose jobtitle matches any of the exact values given in the parameter pipe separated values
+        required: false
+        schema:
+          type: string
+      - name: locations
+        in: query
+        description: Returns list of users whose address city matches any of the exact values given in the parameter pipe separated values
+        required: false
+        schema:
+          type: string
+      - name: departments
+        in: query
+        description: Returns list of users whose department matches any of the exact values given in the parameter pipe separated values
+        required: false
+        schema:
+          type: string
+      - name: organisations
+        in: query
+        description: Returns list of users whose organisation name matches any of the exact values given in the parameter pipe separated values
+        required: false
+        schema:
+          type: string
+      - name: specialities
+        in: query
+        description: 'Returns list of users whose specialities consist any of the exact values given in the parameter pipe separated values '
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/users'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - User
+      summary: Add User
+      description: 'This API call is used to add a new user to the system.
+
+        Note:
+
+        1. Added support for the following new fields
+
+        emaildomain, org, invitationsent, createdby, createddate, modifiedby, modifieddate, ifpartner, lastlogindate, invalidlogins, externalid, publicwebsiteprofileid, systemuser, resetpassworddate, usertypeid, avatar, practicegroup, langcode, publicprofile, dateOfBirth
+
+        2. Address tag has been added in API version 4
+
+        <address>
+
+        <addressid>1</addressid>
+
+        </address>
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        Email address is required
+
+
+        101
+
+        101
+
+
+        Invalid email address
+
+
+        104
+
+        104
+
+
+        First name is required
+
+
+        102
+
+        102
+
+
+        Maximum allowed characters for the first name must be between 1 to 100
+
+
+        102
+
+        352
+
+
+        The secretary''s email address is not valid
+
+
+        104
+
+        353
+
+
+        Status must be active or inactive
+
+
+        116
+
+        116
+
+
+        The entered department cannot be more than 256 characters
+
+
+        N/A
+
+        354
+
+
+        The entered ifpartner attribute is invalid
+
+
+        N/A
+
+        355
+
+
+        The entered systemuser attribute is invalid
+
+
+        N/A
+
+        356
+
+
+        The entered usertypeid attribute is invalid
+
+
+        N/A
+
+        357
+
+
+        The entered langcode attribute is invalid
+
+
+        N/A
+
+        358
+
+
+        The entered sourcetype attribute is invalid.Valid values are System, Active directory or System default .
+
+
+        N/A
+
+        359
+
+
+        Please enter valid phone number
+
+
+        N/A
+
+        360
+
+
+        Please enter valid phone number in format {countrycode} ${areacode}${number}.
+
+
+        N/A
+
+        361
+
+
+        Please enter valid mobile number in format {countrycode}${number}.
+
+
+        N/A
+
+        362
+
+
+        Enter a valid office phone country code
+
+
+        N/A
+
+        363
+
+
+        The office phone country code can have a maximum of 4 digits
+
+
+        N/A
+
+        364
+
+
+        Enter a valid office phone area code
+
+
+        N/A
+
+        365
+
+
+        The office phone area code can have a maximum of 5 Digits
+
+
+        N/A
+
+        366
+
+
+        Office phone number should have maximum of 15 digits
+
+
+        N/A
+
+        368
+
+
+        Enter a valid mobile phone country code
+
+
+        N/A
+
+        369
+
+
+        The mobile phone country code can have a maximum of 4 Digits
+
+
+        N/A
+
+        372
+
+
+        Please enter a valid mobile number
+
+
+        N/A
+
+        373
+
+
+        Mobile phone number should have maximum of 20 digits
+
+
+        N/A
+
+        374
+
+
+        Domain does not exist
+
+
+        105
+
+        105
+
+
+        Email already exists in the system
+
+
+        111
+
+        111
+
+
+        Mention organisation in case of self registered domain
+
+
+        187
+
+        187
+
+
+        Mention organisation in case of exceptional domain
+
+
+        115
+
+        115
+
+
+        Org id is not in the proper format
+
+
+        112
+
+        112
+
+
+        Organisation does not exist
+
+
+        106
+
+        106
+
+
+        Domain exist in other organisation
+
+
+        114
+
+        114
+
+
+        Entered Address Id is not valid
+
+
+        N/A
+
+        308
+
+
+        Social link name not found in system.
+
+
+        N/A
+
+        375
+
+
+        The social link name is required
+
+
+        N/A
+
+        376
+
+
+        The social link value is required
+
+
+        N/A
+
+        377
+
+
+        Maximum characters for social link value must be between 1 to 500
+
+
+        N/A
+
+        378
+
+
+        Enter the name for the custom link
+
+
+        N/A
+
+        379
+
+
+        The custom link value required
+
+
+        N/A
+
+        380
+
+
+        Max characters for custom link name must be between 1 to 500
+
+
+        N/A
+
+        381
+
+
+        Max characters for custom link value must be between 1 to 500
+
+
+        N/A
+
+        382
+
+
+        The message link name required
+
+
+        N/A
+
+        383
+
+
+        Message link name not found in system
+
+
+        N/A
+
+        384
+
+
+        The message link value required
+
+
+        N/A
+
+        385
+
+
+        Max characters for message link value must be between 1 to 500
+
+
+        N/A
+
+        386
+
+
+        The social link is disabled
+
+
+        N/A
+
+        408
+
+
+        The message link is disabled
+
+
+        N/A
+
+        409
+
+
+        The custom link is disabled
+
+
+        N/A
+
+        410
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65685'
+      operationId: createUser
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: OK [userid,firstname,lastname,link]
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IntegrationUserDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationUserDBO'
+        '400':
+          description: ''
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: ''
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/IntegrationUserDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationUserDBO'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/IntegrationUserDBO'
+    put:
+      tags:
+      - User
+      summary: Update user status
+      description: 'Activate a user within Collaborate
+
+        This API call is used to activate/inactive/anonymise a user within the system. The user identifier is the user ID of the user.
+
+        This API call is also used to unlock (users who are locked), invite or resetpassword
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        A User ID is required
+
+
+        109
+
+
+        The following users do not exist within the system
+
+
+        110
+
+
+        The status of following anonymised user(s) cannot be changed.
+
+
+        325
+
+
+        User ID is not in the proper format
+
+
+        113
+
+
+        This given action is invalid. Please use unlock,invite or resetpassword
+
+
+        367
+
+
+        The following users are not active in the system
+
+
+        395
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-62810'
+      operationId: activateUsers
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: status
+        in: query
+        description: update status inactive,activate,anonymise
+        required: false
+        schema:
+          type: string
+          enum:
+          - inactive
+          - activate
+          - anonymise
+      - name: action
+        in: query
+        description: user action unlock,invite,resetpassword
+        required: false
+        schema:
+          type: string
+          enum:
+          - unlock
+          - invite
+          - resetpassword
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/UsersDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsersDBO'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UsersDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/{userid}/avatar:
+    post:
+      tags:
+      - User
+      summary: Add User profile image(Avatar)
+      description: 'Add a profile image for a user in Publisher
+
+        This API call is used to add a new profile image(avatar)
+
+        Note:
+
+        1. Following form-data parameters are optional: avatarXPosition, avatarYPosition,avatarWidth, avatarHeight
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V5)
+
+
+        Please enter valid numbers
+
+
+        396
+
+
+        The file was not found
+
+
+        397
+
+
+        Upload an image which has a size greater than 0
+
+
+        406
+
+
+        The image type you are trying to upload is not supported
+
+
+        398
+
+
+        Due to a system error, this {0} cannot be uploaded
+
+
+        399
+
+
+        This file is unsupported, the file upload has been terminated
+
+
+        400
+
+
+        This image is too small. Ensure the shortest side is at least 256 pixels long.
+
+
+        401
+
+
+        Please enter valid x position or width. The sum of x position and width should not exceed the actual width of an image.
+
+
+        402
+
+
+        Please enter valid y position or height. The sum of y position and height should not exceed the actual height of an image.
+
+
+        403
+
+
+        Image height and width must be same. Only a square image can be uploaded for a user avatar.
+
+
+        404
+
+
+        Error occurred while transferring data to repository or updating database
+
+
+        405
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-66662'
+      operationId: addUserAvtar
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: userid
+        in: path
+        description: 'ID of user '
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: file to upload
+                  format: binary
+                avatarXPosition:
+                  type: string
+                  description: x position of image
+                avatarYPosition:
+                  type: string
+                  description: y position of image
+                avatarWidth:
+                  type: string
+                  description: width of image
+                avatarHeight:
+                  type: string
+                  description: height of image
+              required:
+              - file
+    delete:
+      tags:
+      - User
+      summary: Delete User profile image
+      description: 'Delete a profile image for a user
+
+        This API call is used to delete a profile image.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The following users do not exist within the system
+
+
+        110
+
+
+        The given action cannot be performed on anonymised user(s).
+
+
+        325
+
+
+        User ID is not in proper format
+
+
+        113
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-66663'
+      operationId: deleteUserAvtar
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: userid
+        in: path
+        description: ID of user to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/mentions:
+    get:
+      tags:
+      - User
+      summary: Mentions API
+      description: 'Method to obtain a list of users for the Mentions flow in a Microblog (post), Comment and Message
+
+
+        Sample request format for different operation
+
+        1. While Adding/Sharing a microblog (post)
+
+        scope = microblog
+
+        sharewith = ORG_1,SITE_10,SITE_102,SYSTEM_GROUP_1,GROUP_1 (optional)
+
+
+        2. While adding / editing a comment on microblog
+
+        scope = comment
+
+        contentype = microblog
+
+        contentid = {microblog id}
+
+
+        3. While Sending a new message / reply
+
+        scope = message'
+      operationId: getUsersForMention
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '6'
+      - name: scope
+        in: query
+        description: comment/microblog/message
+        required: true
+        schema:
+          type: string
+      - name: contenttype
+        in: query
+        description: Files/Wiki/Blog/Tasks/Events/Microblogs
+        required: true
+        schema:
+          type: string
+      - name: contentid
+        in: query
+        description: content's ID. If a comment is being added/edited on a wiki then use the wiki's id
+        required: true
+        schema:
+          type: string
+      - name: sharewith
+        in: query
+        description: In case of posting a Microblog use the example ORG_1,SITE_10,SITE_23,SYSTEM_GROUP_1,GROUP_1
+        required: false
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: Text that will be searched against user's details
+        required: false
+        schema:
+          type: string
+      - name: groupsupport
+        in: query
+        description: groupsupport to get groups in listing.
+        required: false
+        schema:
+          type: string
+          default: '0'
+      - name: offset
+        in: query
+        description: The integer value of the last user list fetched
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: No of users to return in one request
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Users or Groups returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/users'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting users
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/experiences/{expid}:
+    get:
+      tags:
+      - User
+      summary: Get user experience
+      description: 'This API call is used to get an experience object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The experience id is invalid
+
+
+        326
+
+        N/A
+
+
+        User id is not in the proper format
+
+
+        113
+
+        N/A
+
+
+        The given userid is invalid
+
+
+        342
+
+        N/A
+
+
+        The experience id is not associated with the given user id
+
+
+        343
+
+        N/A
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-66710'
+      operationId: getUserExperience
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expid
+        in: path
+        description: The ID of the experience to get
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: query
+        description: ID of the user whose experience you are updating
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/experience'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experience'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - User
+      summary: Update user experience
+      description: 'This API call is used to change a experience.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        User id is not in proper format
+
+
+        113
+
+
+        The given userid is invalid
+
+
+        342
+
+
+        The experience id is invalid
+
+
+        326
+
+
+        The experience id is not associated with the given user id
+
+
+        343
+
+
+        The company name is required
+
+
+        328
+
+
+        The job title is required
+
+
+        329
+
+
+        The Experience From month field is required
+
+
+        330
+
+
+        The Experience From year field is required
+
+
+        331
+
+
+        The Experience To month field is required
+
+
+        332
+
+
+        The Experience To year field is required
+
+
+        333
+
+
+        The information in the Experience From month field is not valid
+
+
+        335
+
+
+        The information in the Experience To month field is not valid
+
+
+        336
+
+
+        Please enter a year between 1900 and the current year as your start date
+
+
+        337
+
+
+        Please enter a year between 1900 and the current year as your end date
+
+
+        338
+
+
+        The information in the Experience from year field is not formatted correctly
+
+
+        339
+
+
+        The information in the Experience To year field is not formatted correctly
+
+
+        340
+
+
+        The information in the Currently working value field is not valid
+
+
+        341
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-66712'
+      operationId: updateUserExperience
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: expid
+        in: path
+        description: The experience id to be updated
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: query
+        description: The ID of the user whose experience is to be updated
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/experience'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experience'
+    delete:
+      tags:
+      - User
+      summary: Delete user experience
+      description: 'This API call is used to delete an experience.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The experience id is invalid
+
+
+        326
+
+        N/A
+
+
+        User id is not in the proper format
+
+
+        113
+
+        N/A
+
+
+        The given userid is invalid
+
+
+        342
+
+        N/A
+
+
+        The experience id is not associated with the given user id
+
+
+        343
+
+        N/A
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-66713'
+      operationId: deleteUserExperience
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: expid
+        in: path
+        description: The ID of the experience to delete
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: query
+        description: ID of the user whose experience is to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/domains/{domainID}:
+    put:
+      tags:
+      - User
+      summary: Move bulk users to another domain
+      description: 'Move an existing domain from one organisation to another within Collaborate
+
+        This API call is used to move a domain to a new organisation object in the system. This in turn will move all users who have an email address associated with that domain to the new organisation.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The given domain ID is invalid
+
+
+        263
+
+
+        A User ID is required
+
+
+        109
+
+
+        User ID is not in proper format
+
+
+        113
+
+
+        The following users do not exist within the system
+
+
+        110
+
+
+        Moving the selected users to ''bidder'' will turn the users into bidders. Delete the following files and retry this operation.
+
+
+        334
+
+
+        The given action cannot be performed on anonymised user(s).
+
+
+        325
+
+
+        The specified organisation does not exist
+
+
+        100
+
+
+        The organisation ID does not match with the domain ID
+
+
+        411
+
+
+        The Organisation ID is required
+
+
+        322
+
+
+        The Organisation ID is invalid
+
+
+        260
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-75419'
+      operationId: moveUsersToNewDomain
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: domainID
+        in: path
+        description: The domain ID to be moved
+        required: true
+        schema:
+          type: string
+      - name: orgid
+        in: query
+        description: organisation id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/UserIDListDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserIDListDBO'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserIDListDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/userprofile/specialities:
+    get:
+      tags:
+      - User
+      operationId: getUserprofileSpecialities
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Get userprofile specialities
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/sharesettings:
+    get:
+      tags:
+      - User
+      operationId: getMyFileShareSettings
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Get my file share settings
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/users/activities:
+    get:
+      tags:
+      - User
+      summary: Get User Activities
+      description: 'Get User Activities API
+
+        There are three key activity areas in Collaborate.
+
+        1. Dashboard activity
+
+        2. Site Activity
+
+        3. User Activity
+
+
+        The purpose of this API method is to provide the user activity. The user activity API has been separated from the activity API, due to multiple reasons listed below:
+
+        - The user activity should include activity from MySite which does not exist in Dashboard activity and hence in Activity API
+
+        - The user activity includes personal actions like viewing documents, which can flood the dashboard activity feed
+
+        - The folder views do not need to be included in the activity stream, however creation of folder should be included in the user activity stream.
+
+        - When the document is download from the server using the API, a download audit should be recorded for that activity
+
+        - Once the document is download and is cached on the client, any view action should be recorded as an additional activity, and should be posted to the server. ( e.g on iOS device, if the local cache of the document does not send a download call on each click in the activity stream, then we should register it as a view option on each view on the iOS device )
+
+        - The activity should have the site filter to get user activity specific to a site
+
+        - The activity API should have a content filter to filter the activity based on a specific content.
+
+
+        Technical Considerations:
+
+        - The download and view activity of documents is not displayed in the desktop activity, however we need to display it for the mobile interface, which means we need to treat it differently.
+
+        - The activity stream needs to include MySites activity.
+
+
+        The Activities are:
+
+        - Add
+
+        - Update ( Add version)
+
+        - View
+
+        - Download
+
+        - File saved from Microsoft Office
+
+        - File opened in Microsoft Office'
+      operationId: getUserSpecificActivity
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: site
+        in: query
+        description: "- Site \n<br>e.g. /users/activities?site=<siteid>\nIf site id is provided , the parameter for sitescope is ignored, sitescope parameter is only considered when no site id is given. \n \n- Predefined grouping of sites\n<br> e.g./user/activities?sitescope={all / memberoff /favourite}  (The all parameter only applies to a user who is a system admin)"
+        required: false
+        schema:
+          type: string
+      - name: contenttype
+        in: query
+        description: 'The type of content to filter by.<br><br>Default is Files, however you can filter by all content types available in the activitiy stream like
+
+          e.g. /users/activities?contenttype=files
+
+          - Files'
+        required: false
+        schema:
+          type: string
+          default: files
+      - name: limit
+        in: query
+        description: No of items to return. Default is 20 (Max is 100 , Activity to a maximum of 3 months can be provided)
+        required: false
+        schema:
+          type: string
+      - name: lastactivityid
+        in: query
+        description: The no of last activity fetched.
+        required: false
+        schema:
+          type: string
+      - name: sitescope
+        in: query
+        description: 'Predefined grouping of sites
+
+          <br> e.g./user/activities?sitescope={all / memberoff /favourite}  (The all parameter only applies to a user who is a system admin)'
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User activities returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Activities'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activities'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting user activities
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/followers/{userid}:
+    put:
+      tags:
+      - User
+      summary: Follow / Unfollow User
+      description: Follow / Unfollow user API
+      operationId: insertUpdateFollowers
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '6'
+      - name: userid
+        in: path
+        description: User id
+        required: true
+        schema:
+          type: string
+      - name: follow
+        in: query
+        description: follow = 1 ; for follow<br>follow = 0 ; for unfollow
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Follow/Unfollow user performed successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while performing follow/unfollow user
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        Token:
+          type: string
+          description: Gets or sets the authorisation token
+        AuthSuccess:
+          type: boolean
+          description: True if authorisation was a success, false otherwise
+        AuthenticationResponse:
+          type: string
+          description: Provides an error message if the authentication did not succeed.
+        UserName:
+          type: string
+          description: The full name of the authorized user.
+        UserId:
+          type: string
+          description: Gets or sets the UserId of a user
+        CustomerId:
+          type: string
+          description: Gets or sets the FirmId of a user
+        IdleSessionTimeoutMinutes:
+          type: integer
+          description: The number of idle minutes before the user session will expire.
+          format: int32
+        LoneStarFirmId:
+          type: string
+        LoneStarValidated:
+          type: boolean
+        ErrorCode:
+          type: string
+      description: The response to an authorization attempt.
+    UserAuthentication:
+      type: object
+      properties:
+        LoginName:
+          type: string
+          description: Gets or sets the login name of a user
+        Password:
+          type: string
+          description: Gets or sets the password of a user
+        Language:
+          type: string
+          description: Gets or Sets the user Interface Language
+        LSValidated:
+          type: boolean
+          description: Gets or Sets the user validated against lonestar
+        SessionId:
+          type: integer
+          description: Gets or Sets the classic asp session id
+          format: int32
+        Captcha:
+          type: string
+          description: ''
+        CaptchaType:
+          type: integer
+          description: ''
+          format: int32
+      description: Properties related to user authentication
+    IsLogoutSuccessful:
+      type: object
+      properties:
+        IsLogoutSuccess:
+          type: boolean
+          default: false
+          description: Indicates whether the logout was successful.
+    LoginStatus:
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: Gets or sets the user identifier.
+        Status:
+          type: string
+          description: Gets or sets the status for the user.
+          enum:
+          - None
+          - Valid
+          - Disabled
+          - Expired
+          - DoesNotExist
+      description: Represents the logged in status of the user.
+    AuthResponse_2:
+      type: object
+      properties:
+        Token:
+          type: string
+          description: Gets or sets the authorization token.
+        AuthSuccess:
+          type: boolean
+          description: True if authorization was a success, false otherwise.
+        AuthenticationResponse:
+          type: string
+          description: Provides an error message if the authentication didn't succeed.
+        UserName:
+          type: string
+          description: The full name of the authorized user.
+        UserId:
+          type: string
+          description: Gets or sets the UserId of a user.
+        CustomerId:
+          type: string
+          description: Gets or sets the FirmId of a user.
+        IdleSessionTimeoutMinutes:
+          type: integer
+          description: The number of idle minutes before the user session will expire.
+          format: int32
+        LoneStarFirmId:
+          type: string
+        LoneStarValidated:
+          type: boolean
+        ErrorCode:
+          type: string
+      description: The response to an authorization attempt.
+    UserAuthentication_2:
+      type: object
+      properties:
+        LoginName:
+          type: string
+          description: Gets or sets the login name of a user.
+        Password:
+          type: string
+          description: Gets or sets the password of a user.
+        Language:
+          type: string
+          description: Gets or Sets the user Interface Language.
+        LSValidated:
+          type: boolean
+          description: Gets or Sets the user validated against lonestar.
+        SessionId:
+          type: integer
+          description: Gets or Sets the classic asp session ID.
+          format: int32
+        Captcha:
+          type: string
+          description: ''
+        CaptchaType:
+          type: integer
+          description: ''
+          format: int32
+      description: Properties related to user authentication.
+    IsLogoutSuccessful_2:
+      type: object
+      properties:
+        IsLogoutSuccess:
+          type: boolean
+          description: Indicates whether the logout was successful.
+      description: A class containing properties for logging out user.
+    QaDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Assignees:
+      type: object
+      properties:
+        assignee:
+          type: array
+          items:
+            $ref: '#/components/schemas/Assignee'
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    user:
+      type: object
+      properties:
+        userid:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        email:
+          type: string
+        name:
+          $ref: '#/components/schemas/UserName'
+        userlink:
+          type: string
+        httplink:
+          type: string
+        httpavatar:
+          type: string
+        avatar:
+          type: string
+        externalid:
+          type: string
+        dateofbirth:
+          type: string
+        phone:
+          type: string
+        jobtitle:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        status:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        img:
+          type: string
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        bio:
+          type: string
+        sourcetype:
+          type: string
+        specialities:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        link:
+          type: string
+        loggeduserlike:
+          type: integer
+          format: int32
+        userName:
+          type: string
+    BidderSiteDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+        advancedqapermission:
+          type: string
+    IntegrationUserDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        userid:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        lastname:
+          type: string
+        practicegroup:
+          type: string
+        langcode:
+          type: string
+        localeID:
+          type: string
+        publicprofile:
+          type: string
+        pwpid:
+          type: string
+        usertypeid:
+          type: string
+        systemuser:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        address:
+          $ref: '#/components/schemas/Address'
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        img:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        externalid:
+          type: string
+        jobtitle:
+          type: string
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        specialities:
+          type: string
+        title:
+          type: string
+        goesby:
+          type: string
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        bio:
+          type: string
+        dateOfBirth:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+        sourcetype:
+          type: string
+        orgid:
+          type: string
+        ifpartner:
+          type: string
+        emaildomain:
+          type: string
+        invitationsent:
+          type: string
+        createdby:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        lastlogindate:
+          type: string
+        invalidlogins:
+          type: string
+        publicwebsiteprofileid:
+          type: string
+        resetpassworddate:
+          type: string
+        avatar:
+          type: string
+        followingcount:
+          type: integer
+          format: int32
+        followercount:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        sites:
+          $ref: '#/components/schemas/sites'
+        role:
+          type: string
+        orgName:
+          type: string
+      xml:
+        name: user
+    site:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sitename:
+          type: string
+        sitetemplateID:
+          type: integer
+          format: int32
+          xml:
+            name: sitetemplateid
+        role:
+          type: string
+        sitedescription:
+          type: string
+        enabledmodules:
+          type: string
+        sitefolderID:
+          type: string
+        folder:
+          $ref: '#/components/schemas/Folder'
+        sitefolderpermission:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        adminnote:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+        createddate:
+          type: string
+        archiveddate:
+          type: string
+        clientno:
+          type: string
+        matterno:
+          type: string
+        landingpage:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        maxpagecount:
+          type: string
+        siteowner:
+          $ref: '#/components/schemas/UserDBO'
+        sitehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModule'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        csvSiteCategory:
+          type: string
+        biddersite:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        sitenametranslations:
+          $ref: '#/components/schemas/translations'
+        siteNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        siteLogoName:
+          type: string
+        siteLogoFileSize:
+          type: integer
+          format: int64
+        siteLogoHeight:
+          type: integer
+          format: int32
+        siteLogoWidth:
+          type: integer
+          format: int32
+        siteStatus:
+          type: integer
+          format: int32
+        applySiteTerms:
+          type: integer
+          format: int32
+        siteTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        nextLoginSiteTerms:
+          type: integer
+          format: int32
+        defaultSiteTermsEnable:
+          type: integer
+          format: int32
+        advancedQAPermission:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        siteLabelDisplay:
+          type: string
+        allowSiteAdministration:
+          type: integer
+          format: int32
+        siteLevelPasswordEnable:
+          type: integer
+          format: int32
+        siteLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        sitePassword:
+          type: string
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        applySiteHomePage:
+          type: integer
+          format: int32
+        siteHomePage:
+          type: string
+        siteHomePageType:
+          type: integer
+          format: int32
+        nextLoginSiteHomePage:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        siteCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        siteModuleID:
+          type: integer
+          format: int32
+        icalSecurity:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        announcementMLJSON:
+          type: string
+        siteRestrictionType:
+          $ref: '#/components/schemas/SiteRestrictionType'
+        enableDocumentRedaction:
+          type: boolean
+          xml:
+            name: enabledocumentredaction
+        mysite:
+          type: boolean
+    Contentitem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        title:
+          type: string
+        link:
+          type: string
+        apilink:
+          type: string
+        type:
+          type: string
+        imagetype:
+          type: string
+        filetype:
+          type: string
+        author:
+          $ref: '#/components/schemas/Actor'
+        datepublished:
+          type: string
+        parentcontent:
+          $ref: '#/components/schemas/Parentcontent'
+        location:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+        siterootfolderid:
+          type: integer
+          format: int32
+        version:
+          type: integer
+          format: int32
+        originaltype:
+          type: string
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: contentitem
+    Image:
+      type: object
+      properties:
+        caption:
+          type: string
+        imagelink:
+          type: string
+        apilink:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        filesize:
+          type: string
+        imagetype:
+          type: string
+        createddate:
+          type: string
+        displayversion:
+          type: string
+        parentfolderid:
+          type: string
+        folderpath:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        taskcount:
+          type: string
+        commentcount:
+          type: string
+        id:
+          type: string
+        siteid:
+          type: string
+        height:
+          type: string
+        width:
+          type: string
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+    Inbox:
+      type: object
+      properties:
+        enable:
+          type: string
+        accountname:
+          type: string
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDBO'
+    FileModule:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showsitemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    users:
+      type: object
+      properties:
+        total:
+          type: string
+        totalcount:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+      xml:
+        name: users
+    Folder:
+      type: object
+      required:
+      - foldername
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        dmsfolderid:
+          type: string
+          xml:
+            attribute: true
+        permission:
+          type: string
+          xml:
+            attribute: true
+        foldername:
+          type: string
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/Folder'
+        child:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: folder
+    Actors:
+      type: object
+      properties:
+        actor:
+          type: array
+          items:
+            $ref: '#/components/schemas/Actor'
+    ContactUSDBO:
+      type: object
+      properties:
+        value:
+          type: string
+      xml:
+        name: values
+    Folderpermissions:
+      type: object
+      properties:
+        viewfolder:
+          type: string
+        viewfiles:
+          type: string
+        addfiles:
+          type: string
+        admin:
+          type: string
+        disableprint:
+          type: string
+        disablesave:
+          type: string
+        watermark:
+          type: string
+      xml:
+        name: folderpermissions
+    Attachment:
+      type: object
+      properties:
+        file:
+          type: string
+        name:
+          type: string
+        order:
+          type: string
+        id:
+          type: integer
+          format: int32
+        extension:
+          type: string
+        parentfolderid:
+          type: integer
+          format: int32
+        filehttplink:
+          type: string
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+        displayname:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+      xml:
+        name: attachment
+    ModuleDBO:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeDBO'
+        activity:
+          $ref: '#/components/schemas/ActivityDBO'
+        document:
+          $ref: '#/components/schemas/DocumentDBO'
+        blog:
+          $ref: '#/components/schemas/BlogDBO'
+        wiki:
+          $ref: '#/components/schemas/WikiDBO'
+        task:
+          $ref: '#/components/schemas/TaskDBO'
+        event:
+          $ref: '#/components/schemas/EventDBO'
+        isheet:
+          $ref: '#/components/schemas/ISheetDBO'
+        qa:
+          $ref: '#/components/schemas/QaDBO'
+        people:
+          $ref: '#/components/schemas/PeopleDBO'
+    ShareWith:
+      type: object
+      properties:
+        emaillist:
+          $ref: '#/components/schemas/EmailList'
+        sites:
+          $ref: '#/components/schemas/sites'
+        groups:
+          $ref: '#/components/schemas/groups'
+      xml:
+        name: sharewith
+    sites:
+      type: object
+      properties:
+        site:
+          type: array
+          items:
+            $ref: '#/components/schemas/site'
+    DMSDocumentDBO:
+      type: object
+      properties:
+        dmsdocid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmseditdate:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmsversion:
+          type: string
+      xml:
+        name: dms
+    Images:
+      type: object
+      properties:
+        image:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+    UsersDBO:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserIDListDBO'
+        email:
+          $ref: '#/components/schemas/emailDBO'
+        redirecturl:
+          type: string
+      xml:
+        name: users
+    MetadataListDBO:
+      type: object
+      properties:
+        metadataname:
+          type: array
+          items:
+            type: string
+        metadatavalue:
+          type: array
+          items:
+            type: string
+    Activities:
+      type: object
+      properties:
+        activity:
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity'
+        lastactivityid:
+          type: integer
+          format: int32
+    ISheetDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    FilesDBO:
+      type: object
+      properties:
+        file:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDBO'
+        attachment:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDBO'
+    DocumentDBO:
+      type: object
+      properties:
+        documentname:
+          type: string
+          xml:
+            name: filename
+        dmsVersion:
+          type: string
+        notification:
+          type: string
+          example: E.g. 1/2/3
+        folderID:
+          type: string
+        documentID:
+          type: string
+          xml:
+            name: fileid
+        batchID:
+          type: string
+        status:
+          type: string
+        documentKey:
+          type: string
+        dmsDocumentDBO:
+          xml:
+            name: dms
+          $ref: '#/components/schemas/DMSDocumentDBO'
+        enable:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        versionid:
+          type: integer
+          format: int32
+        versionnote:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        type:
+          type: string
+        originaltype:
+          type: string
+        icon:
+          type: string
+        commentscount:
+          type: integer
+          format: int32
+        likescount:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/TagsDBO'
+        location:
+          type: string
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        siteid:
+          type: integer
+          format: int32
+        parentfolderid:
+          type: integer
+          format: int32
+        error:
+          type: string
+        size:
+          type: integer
+          format: int64
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: file
+    EmailList:
+      type: object
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+      xml:
+        name: emaillist
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    GroupsDBO:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            type: string
+    ExperiencesDBO:
+      type: object
+      properties:
+        experience:
+          type: array
+          items:
+            type: string
+    Emailmetadata:
+      type: object
+      properties:
+        enable:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailmetadataallfolder:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailfrom:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailto:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailcc:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailsent:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailreceived:
+          type: string
+          enum:
+          - TRUE/FALSE
+    Actor:
+      type: object
+      properties:
+        username:
+          type: string
+        httpavatar:
+          type: string
+        email:
+          type: string
+        avatar:
+          type: string
+        userlink:
+          type: string
+        httplink:
+          type: string
+    Address:
+      type: object
+      properties:
+        addressid:
+          type: string
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postCode:
+          type: string
+        knownas:
+          type: string
+    ActivityAttachmentsDBO:
+      type: object
+      properties:
+        attachment:
+          type: array
+          items:
+            xml:
+              name: attachment
+            $ref: '#/components/schemas/Attachment'
+      xml:
+        name: attachments
+    LocationDBO:
+      type: object
+      properties:
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postcode:
+          type: string
+    TaskDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        timelineview:
+          type: string
+    emailDBO:
+      type: object
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+      xml:
+        name: email
+    Permissions:
+      type: object
+      properties:
+        inherited:
+          type: string
+        usergrouppermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserGroupPermissions'
+        add:
+          type: string
+        edit:
+          type: string
+        delete:
+          type: string
+      xml:
+        name: permissions
+    experience:
+      type: object
+      properties:
+        experienceid:
+          type: string
+        companyname:
+          type: string
+        jobtitle:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+        companywebsite:
+          type: string
+        currentlyworking:
+          type: string
+        frommonth:
+          type: string
+        fromyear:
+          type: string
+        tomonth:
+          type: string
+        toyear:
+          type: string
+        link:
+          type: string
+      xml:
+        name: experience
+    CategoryDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: CategoryDBO
+    TagsDBO:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            type: string
+    SiteRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedsite:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    Assignee:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        link:
+          type: string
+        assigneetype:
+          type: integer
+          format: int32
+    WikiDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Likes:
+      type: object
+      properties:
+        loggeduserlike:
+          type: integer
+          format: int32
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+      xml:
+        name: likes
+    ContentSpecificDetail:
+      type: object
+      properties:
+        categories:
+          $ref: '#/components/schemas/Categories'
+        fullday:
+          type: integer
+          format: int32
+        startdate:
+          type: string
+        starttime:
+          type: string
+        enddate:
+          type: string
+        endtime:
+          type: string
+        location:
+          type: string
+        timezone:
+          type: string
+        assignees:
+          $ref: '#/components/schemas/Assignees'
+        duedate:
+          type: string
+        priority:
+          type: string
+        files:
+          $ref: '#/components/schemas/FilesDBO'
+        fileidcsv:
+          type: string
+        parentfolderid:
+          type: integer
+          format: int32
+        filelistapilink:
+          type: string
+        versionnotes:
+          type: string
+        folderid:
+          type: integer
+          format: int32
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        sharewith:
+          $ref: '#/components/schemas/ShareWith'
+        linkpreview:
+          $ref: '#/components/schemas/LinkPreview'
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        html:
+          type: string
+        author:
+          $ref: '#/components/schemas/Actor'
+        datepublished:
+          type: string
+        nooflikes:
+          type: integer
+          format: int32
+        images:
+          $ref: '#/components/schemas/Images'
+        attachments:
+          $ref: '#/components/schemas/ActivityAttachmentsDBO'
+        permissions:
+          $ref: '#/components/schemas/Permissions'
+        timepublisedutc:
+          type: string
+        userLikes:
+          $ref: '#/components/schemas/Likes'
+    ContactUS:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactUSDBO'
+        type:
+          type: string
+      xml:
+        name: contactus
+    FileDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        extension:
+          type: string
+        folderpath:
+          type: string
+        filehttplink:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+    ActivityDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        microblog:
+          type: string
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Parentcontent:
+      type: object
+      properties:
+        title:
+          type: string
+        link:
+          type: string
+        apilink:
+          type: string
+      xml:
+        name: parentcontent
+    AttachmentDBO:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        siteid:
+          type: string
+        parentfolderid:
+          type: string
+        filehttplink:
+          type: string
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: string
+        imagetype:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        displayversion:
+          type: string
+        documentcount:
+          type: string
+        taskcount:
+          type: string
+        commentcount:
+          type: string
+      xml:
+        name: attachment
+    UserIDListDBO:
+      type: object
+      properties:
+        userid:
+          type: array
+          items:
+            type: string
+      xml:
+        name: user
+    PeopleDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    HomeDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Comments:
+      type: object
+      properties:
+        comment:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+    Filepermissions:
+      type: object
+      properties:
+        view:
+          type: string
+        update:
+          type: string
+        disableprint:
+          type: string
+        disablesave:
+          type: string
+        watermark:
+          type: string
+      xml:
+        name: filepermissions
+    Activity:
+      type: object
+      properties:
+        activitydesc:
+          type: string
+        activitydeschtml:
+          type: string
+        timepublished:
+          type: string
+        actors:
+          $ref: '#/components/schemas/Actors'
+        sitename:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+        siterole:
+          type: string
+        noofcomments:
+          type: integer
+          format: int32
+        nooflikes:
+          type: integer
+          format: int32
+        contentitem:
+          $ref: '#/components/schemas/Contentitem'
+        comments:
+          $ref: '#/components/schemas/Comments'
+        images:
+          $ref: '#/components/schemas/Images'
+        contentspecificdetail:
+          $ref: '#/components/schemas/ContentSpecificDetail'
+        attachments:
+          $ref: '#/components/schemas/ActivityAttachmentsDBO'
+        activitytypealias:
+          type: string
+        addcommentaccess:
+          type: integer
+          format: int32
+        permissions:
+          $ref: '#/components/schemas/Permissions'
+        timepublisedutc:
+          type: string
+        userLikes:
+          $ref: '#/components/schemas/Likes'
+      xml:
+        name: activity
+    NameValueLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    groups:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+      xml:
+        name: groups
+    Group:
+      type: object
+      properties:
+        groupId:
+          type: integer
+          format: int32
+        groupName:
+          type: string
+        groupDescription:
+          type: string
+        siteName:
+          type: string
+        siteId:
+          type: integer
+          format: int32
+        groupType:
+          type: string
+        defaultSiteGroup:
+          type: integer
+          format: int32
+        associateSystemGroupId:
+          type: integer
+          format: int32
+        sourceTypeId:
+          type: integer
+          format: int32
+        hyperlink:
+          type: string
+    UserName:
+      type: object
+      properties:
+        title:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        goesby:
+          type: string
+      xml:
+        name: username
+    PermissionDBO:
+      type: object
+      properties:
+        view:
+          type: integer
+          format: int32
+        edit:
+          type: integer
+          format: int32
+        delete:
+          type: integer
+          format: int32
+        addEditAllFiles:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
+        viewAllFiles:
+          type: integer
+          format: int32
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    LinkPreview:
+      type: object
+      properties:
+        title:
+          type: string
+        originalurl:
+          type: string
+        previewurl:
+          type: string
+        description:
+          type: string
+        provider:
+          type: string
+        providerurl:
+          type: string
+        providerDisplay:
+          type: string
+        faviconurl:
+          type: string
+        dominantcolor:
+          type: string
+        imageurl:
+          type: string
+        imagewidth:
+          type: string
+        imageheight:
+          type: string
+        previewtype:
+          type: string
+        contenthtml:
+          type: string
+      xml:
+        name: linkpreview
+    Link:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValueLink'
+    experiences:
+      type: object
+      properties:
+        experience:
+          type: array
+          items:
+            $ref: '#/components/schemas/experience'
+      xml:
+        name: experiences
+    RawSiteSize:
+      type: object
+      properties:
+        activedocumentsize:
+          type: integer
+          format: int64
+        deleteddocumentsize:
+          type: integer
+          format: int64
+        totalsize:
+          type: integer
+          format: int64
+    UserGroupPermissions:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        folderpermissions:
+          $ref: '#/components/schemas/Folderpermissions'
+        filepermissions:
+          $ref: '#/components/schemas/Filepermissions'
+        usergrouptype:
+          type: string
+          xml:
+            attribute: true
+          enum:
+          - 1/2
+      xml:
+        name: usergrouppermissions
+    categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+      xml:
+        name: categories
+    AuthResponse_3:
+      type: object
+      properties:
+        Token:
+          type: string
+          description: Gets or sets the authorization token
+        AuthSuccess:
+          type: boolean
+          description: True if authorization was a success, false otherwise
+        AuthenticationResponse:
+          type: string
+          description: Provides an error message if the authentication did not succeed.
+        UserName:
+          type: string
+          description: The full name of the authorized user.
+        UserId:
+          type: string
+          description: Gets or sets the UserId of a user
+        CustomerId:
+          type: string
+          description: Gets or sets the FirmId of a user
+        IdleSessionTimeoutMinutes:
+          type: integer
+          description: The number of idle minutes before the user session will expire.
+          format: int32
+        LoneStarFirmId:
+          type: string
+        LoneStarValidated:
+          type: boolean
+        ErrorCode:
+          type: string
+      description: The response to an authorization attempt.
+    IsLogoutSuccessful_3:
+      type: object
+      properties:
+        IsLogoutSuccess:
+          type: boolean
+          description: Indicates whether the logout was successful.
+      description: A class containing properties for logging out user
+    AuthResponse_4:
+      type: object
+      properties:
+        Token:
+          type: string
+          description: Gets or sets the authorization token.
+        AuthSuccess:
+          type: boolean
+          description: True if authorization was a success, false otherwise.
+        AuthenticationResponse:
+          type: string
+          description: Provides an error message if the authentication didn't succeed.
+        UserName:
+          type: string
+          description: The full name of the authorized user.
+        UserId:
+          type: string
+          description: Gets or sets the UserId of a user.
+        CustomerId:
+          type: string
+          description: Gets or sets the FirmId of a user.
+        IdleSessionTimeoutMinutes:
+          type: integer
+          description: The number of idle minutes before the user session will expire.
+          format: int32
+        LoneStarFirmId:
+          type: string
+        LoneStarValidated:
+          type: boolean
+        ErrorCode:
+          type: string
+      description: The response to an authorization attempt.
+    UserAuthentication_3:
+      type: object
+      properties:
+        LoginName:
+          type: string
+          description: Gets or sets the login name of a user.
+        Password:
+          type: string
+          description: Gets or sets the password of a user.
+        Language:
+          type: string
+          description: Gets or Sets the user Interface Language.
+        LSValidated:
+          type: boolean
+          description: Gets or Sets the user validated against lonestar.
+        SessionId:
+          type: integer
+          description: Gets or Sets the classic asp session ID.
+          format: int32
+        Captcha:
+          type: string
+          description: ''
+        CaptchaType:
+          type: integer
+          description: ''
+          format: int32
+      description: Properties related to user authentication.
+    IsLogoutSuccessful_4:
+      type: object
+      properties:
+        IsLogoutSuccess:
+          type: boolean
+          description: Indicates whether the logout was successful.
+      description: A class containing properties for logging out user.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-firmflow-web-api-services-v1-openapi.json
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-firmflow-web-api-services-openapi.yml
+- thomson-reuters-firmflow-web-api-services-v1-openapi.yml
+- thomson-reuters-gofileroom-web-api-v1-openapi.yml
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

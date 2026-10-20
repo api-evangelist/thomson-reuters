@@ -1,0 +1,346 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Configuration Exchange…
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: ExchangeRateMappings
+paths:
+  /master-data/allocations/{allocationId}/exchange-rate-maps:
+    get:
+      tags:
+      - ExchangeRateMappings
+      summary: Fetch all exchange rate maps
+      operationId: ExchangeRateMappings_GetExchangeRateMappings
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse'
+              example:
+                items:
+                - id: 1
+                  entityId: c123456d-7890-123c-a456-789c01e23f4a
+                  entityName: Entity 1
+                  transactionType: AP
+                  exchangeRateSource: SourceFile
+                  effectiveDateType: InvoiceDate
+                  dateOffset: 0
+                - id: 2
+                  entityId: c987654d-3210-987c-a654-321c09e87f6a
+                  entityName: Entity 2
+                  transactionType: AR
+                  exchangeRateSource: Custom Source 1
+                  effectiveDateType: PostingDate
+                  dateOffset: 2
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse'
+        '404':
+          description: NotFound
+    post:
+      tags:
+      - ExchangeRateMappings
+      summary: Create exchange rate map
+      operationId: ExchangeRateMappings_AddExchangeRateMapping
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse'
+              example:
+                items:
+                - id: 1
+                  entityId: c123456d-7890-123c-a456-789c01e23f4a
+                  entityName: Entity 1
+                  transactionType: AP
+                  exchangeRateSource: SourceFile
+                  effectiveDateType: InvoiceDate
+                  dateOffset: 0
+                - id: 2
+                  entityId: c987654d-3210-987c-a654-321c09e87f6a
+                  entityName: Entity 2
+                  transactionType: AR
+                  exchangeRateSource: Custom Source 1
+                  effectiveDateType: PostingDate
+                  dateOffset: 2
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse'
+        '400':
+          description: BadRequest
+        '404':
+          description: NotFound
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequest'
+        required: true
+  /master-data/allocations/{allocationId}/exchange-rate-maps/{exchangeRateMapId}:
+    get:
+      tags:
+      - ExchangeRateMappings
+      summary: Fetch exchange rate map by id
+      operationId: ExchangeRateMappings_GetExchangeRateMappingById
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: exchangeRateMapId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingResponseModel'
+              example:
+                id: 1
+                entityId: c123456d-7890-123c-a456-789c01e23f4a
+                entityName: Entity 1
+                transactionType: AP
+                exchangeRateSource: SourceFile
+                effectiveDateType: InvoiceDate
+                dateOffset: 0
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingResponseModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingResponseModel'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingResponseModel'
+        '404':
+          description: NotFound
+    put:
+      tags:
+      - ExchangeRateMappings
+      summary: Update exchange rate map
+      operationId: ExchangeRateMappings_UpdateExchangeRateMapping
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: exchangeRateMapId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+        '400':
+          description: BadRequest
+        '404':
+          description: NotFound
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequestModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequestModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequestModel'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequestModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequestModel'
+        required: true
+    delete:
+      tags:
+      - ExchangeRateMappings
+      summary: Delete exchange rate map
+      operationId: ExchangeRateMappings_DeleteTaxCodeMapping
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: exchangeRateMapId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+        '404':
+          description: NotFound
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse:
+      type: object
+      properties:
+        items:
+          description: List of Exchnage Rate Mappings
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingResponseModel'
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingResponseModel:
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+        entityId:
+          format: uuid
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        entityName:
+          type: string
+        transactionType:
+          enum:
+          - AP
+          - AR
+          type: string
+        exchangeRateSource:
+          type: string
+        effectiveDateType:
+          type: string
+        dateOffset:
+          format: int32
+          type: integer
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequestModel:
+      required:
+      - entityId
+      - transactionType
+      - exchangeRateSource
+      - effectiveDateType
+      type: object
+      properties:
+        entityId:
+          type: string
+        transactionType:
+          enum:
+          - AP
+          - AR
+          type: string
+        exchangeRateSource:
+          type: string
+        effectiveDateType:
+          type: string
+        dateOffset:
+          format: int32
+          type: integer
+      example:
+        entityId: c123456d-7890-123c-a456-789c01e23f4a
+        transactionType: -1
+        exchangeRateSource: ECB
+        effectiveDateType: InvoiceDate
+        dateOffset: 0
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequest:
+      type: object
+      properties:
+        items:
+          description: ExchangeRateMappings
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequestModel'
+      example:
+        items:
+        - entityId: c123456d-7890-123c-a456-789c01e23f4a
+          transactionType: -1
+          exchangeRateSource: SourceFile
+          effectiveDateType: InvoiceDate
+          dateOffset: 0
+        - entityId: c987654d-3210-987c-a654-321c09e87f6a
+          transactionType: 1
+          exchangeRateSource: ECB
+          effectiveDateType: PostingDate
+          dateOffset: 2

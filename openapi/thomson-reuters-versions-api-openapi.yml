@@ -1,0 +1,1235 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Versions API
+  version: '1.0'
+  description: 'Operations tagged Versions across 3 of this provider''s published API definitions: thomson-reuters-collection-service-1-0-openapi.json, thomson-reuters-collection-service-1-0-openapi.yml, thomson-reuters-collection-service-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+tags:
+- name: Versions
+paths:
+  /collections/{id}/versions:
+    get:
+      tags:
+      - Versions
+      summary: Return a list of metadata for all version of collection
+      description: 'Return a list of metadata for the all version of collection.
+
+
+        Potential values for published status:
+
+
+        id name
+
+
+        1 UNPUBLISHED
+
+
+        2 PUBLISHING
+
+
+        3 PUBLISHED
+
+
+        4 UNPUBLISHING
+
+
+        5 ERROR
+
+
+        Potential values for Blueprint type:
+
+
+        id name
+
+
+        1 Generic
+
+
+        2 Trial Balance
+
+
+        3 Apportionment
+
+
+        ... ...
+
+
+        Potential values for ontology:
+
+
+        id name
+
+
+        1 financial-hierarchy-position
+
+
+        2 chart of accounts
+
+
+        3 entity
+
+
+        4 account
+
+
+        5 balance'
+      operationId: getCollectionVersions
+      parameters:
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: id
+        in: path
+        description: Unique identifier for a Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionResponseDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/{id}/versions/latest:
+    delete:
+      tags:
+      - Versions
+      summary: Remove unpublished latest version of a collection
+      description: Removes unpublished latest version with the specified Collection ID.
+      operationId: deleteUnpublishedLatestVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deleted Successfully
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/{id}/versions/{versionNumber}:
+    get:
+      tags:
+      - Versions
+      summary: Return a Version metadata by version number
+      description: 'Returns Version metadata for the specified version number of collection.
+
+
+        Potential values for published status:
+
+
+        id name
+
+
+        1 UNPUBLISHED
+
+
+        2 PUBLISHING
+
+
+        3 PUBLISHED
+
+
+        4 UNPUBLISHING
+
+
+        5 ERROR
+
+
+        Potential values for Blueprint type:
+
+
+        id name
+
+
+        1 Generic
+
+
+        2 Trial Balance
+
+
+        3 Apportionment
+
+
+        ... ...
+
+
+        Potential values for ontology:
+
+
+        id name
+
+
+        1 financial-hierarchy-position
+
+
+        2 chart of accounts
+
+
+        3 entity
+
+
+        4 account
+
+
+        5 balance'
+      operationId: getCollectionByVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for a Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionVersionDTO'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Versions
+      summary: Update Collection Version Description by ID and Version Number
+      description: Updates Collection Version Description attribute for the specified Collection ID and Version.
+      operationId: updateVersionDescription
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for a Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionVersionDescriptionPatchRequestDTO'
+        required: true
+      responses:
+        '204':
+          description: No Content
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/{id}/versions/{versionNumber}/recordsets:
+    get:
+      tags:
+      - Versions
+      summary: Get a paginated list of Recordsets by Collection ID and version number
+      description: 'Returns a list of Recordset IDs for the specified Collection ID and Version number.
+
+
+        Potential values for item status:
+
+
+        id name
+
+
+        1 Pending
+
+
+        2 Processing
+
+
+        3 Complete
+
+
+        4 Removing
+
+
+        5 Error'
+      operationId: getRecordsetsInCollectionByVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsetsResponseDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/{id}/versions/{versionNumber}/records:
+    get:
+      tags:
+      - Versions
+      summary: Get a paginated list of records in the specific version of the Collection
+      description: Returns a paginated list of records in the specific version of the Collection as structured in the Blueprints. Can filter down by 'topic_id' property.
+      operationId: getRecordsByVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionRecordDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/collection-versions:
+    get:
+      tags:
+      - Versions
+      summary: Get a paginated list of Collections versions
+      description: 'Returns a list of Collections versions with their metadata.
+
+
+        Potential values for published status:
+
+
+        id name
+
+
+        1 UNPUBLISHED
+
+
+        2 PUBLISHING
+
+
+        3 PUBLISHED
+
+
+        4 UNPUBLISHING
+
+
+        5 ERROR
+
+
+        Potential values for Blueprint type:
+
+
+        id name
+
+
+        1 Generic
+
+
+        2 Trial Balance
+
+
+        3 Apportionment
+
+
+        ... ...'
+      operationId: getCollectionsVersions
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionResponseDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/{id}/versions/{versionNumber}/columns:
+    get:
+      tags:
+      - Versions
+      summary: Return Collection columns by Collection ID and Version Number
+      description: Returns Collection columns for the specified Collection by Collection ID and Version Number.
+      operationId: getCollectionColumnsByVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: Unique identifier of the Collection with Version.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: Number of columns in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of columns to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionCollectionColumnDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/{id}/versions/{versionNumber}/associations:
+    get:
+      tags:
+      - Versions
+      summary: Return associations
+      description: Returns associations for a specific version of a specific collection.
+      operationId: getAssociations
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: Version number of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionString'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Versions
+      summary: Create an Association
+      description: Creates an association on a collection version.
+      operationId: createAssociation
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: Version number of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAssociationRequest'
+      responses:
+        '201':
+          description: default response
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /collections/{id}/versions/{versionNumber}/associations/{externalId}:
+    delete:
+      tags:
+      - Versions
+      summary: Remove an association
+      description: Remove an association from a collection version.
+      operationId: deleteAssociation
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The version number of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: externalId
+        in: path
+        description: The association.
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deleted Successfully
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+components:
+  schemas:
+    RecordField:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+    CollectionColumnDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the column.
+          example: My Column Name
+        type:
+          type: string
+          description: Expected data type of the column values.
+          enum:
+          - currency
+          - date
+          - number
+          - string
+        index:
+          type: boolean
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents.
+          format: int32
+          example: 1
+        is_required:
+          type: boolean
+          description: Requires templates to map this column.
+          example: true
+        is_system:
+          type: boolean
+          description: Checks for system generated column.
+          example: true
+    ApiCollectionString:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: string
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    CollectionResponseDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionDTO'
+        _meta:
+          $ref: '#/components/schemas/Meta'
+    RecordsetsResponseDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordsetDTO'
+        _meta:
+          $ref: '#/components/schemas/Meta'
+    ApiCollectionCollectionColumnDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionColumnDTO'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    CollectionVersionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection.
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Collection.
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the Collection.
+          format: int32
+          example: 3
+        records_count:
+          type: integer
+          description: Total records exist in collection.
+          format: int64
+          example: 100
+        status:
+          type: string
+          description: State of the published status.
+          enum:
+          - UNPUBLISHED
+          - PUBLISHING
+          - PUBLISHED
+          - UNPUBLISHING
+          - ERROR
+        blueprint:
+          $ref: '#/components/schemas/BlueprintDTO'
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionColumnDTO'
+        year:
+          type: integer
+          description: Relevant year of importance for the file data.
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision.
+          format: int32
+          example: 12
+        created_date:
+          type: string
+          description: Version created date and time.
+          format: date-time
+          example: '2021-03-31T07:46:52.98Z'
+        created_by:
+          type: string
+          example: UserA
+        recordset_count:
+          type: integer
+          format: int32
+    RecordDTO:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordField'
+    ApiCollectionRecordDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordDTO'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    Meta:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+          example: 0
+        limit:
+          type: integer
+          format: int32
+          example: 200
+    BlueprintDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Blueprint.
+          format: int32
+          example: 46
+        version:
+          type: integer
+          description: Version of the Blueprint.
+          format: int32
+          example: 5
+        type_id:
+          type: integer
+          description: Unique identifier of the Blueprint type.
+          format: int32
+          example: 2
+    CollectionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection.
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Collection.
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the Collection.
+          format: int32
+          example: 3
+        status:
+          type: string
+          description: State of the published status.
+          enum:
+          - UNPUBLISHED
+          - PUBLISHING
+          - PUBLISHED
+          - UNPUBLISHING
+          - ERROR
+        blueprint:
+          $ref: '#/components/schemas/BlueprintDTO'
+        year:
+          type: integer
+          description: Relevant year of importance for the file data.
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision.
+          format: int32
+          example: 12
+        is_hidden:
+          type: boolean
+          description: Visibility of the Collection.
+          example: false
+        recordset_count:
+          type: integer
+          format: int32
+        created_date:
+          type: string
+          description: Version created date and time.
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    RecordsetDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Recordset.
+          format: int32
+          example: 123
+        status:
+          type: integer
+          description: Current state of the background job that copies the records into the Collection.
+          format: int32
+          example: 3
+        topic_id:
+          type: string
+          description: Unique identifier of the Topic.
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Topic.
+          example: My Topic Name
+        qualifying_records:
+          type: integer
+          description: Total number of records that are ready.
+          format: int64
+          example: 988
+        ingested_records:
+          type: integer
+          description: Current number of qualifying records that have been ingested.
+          format: int64
+          example: 988
+        created_by:
+          type: string
+          description: Recordset created by.
+          example: testuser.dep
+        created_at:
+          type: string
+          description: Recordset created at time.
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    CollectionVersionDescriptionPatchRequestDTO:
+      type: object
+      properties:
+        version_description:
+          type: string
+          description: Collection version Description.
+          example: My First Collection version
+    CreateAssociationRequest:
+      type: object
+      properties:
+        association:
+          type: string
+          description: The value to associate the version with.
+          example: '12345'
+    CollectionColumnDTO_2:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the column
+          example: My Column Name
+        type:
+          type: string
+          description: Expected data type of the column values
+          enum:
+          - currency
+          - date
+          - number
+          - string
+        index:
+          type: boolean
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents
+          format: int32
+          example: 1
+        is_required:
+          type: boolean
+          description: Requires templates to map this column
+          example: true
+        is_system:
+          type: boolean
+          description: Checks for system generated column
+          example: true
+    CollectionVersionDTO_2:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Collection
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the Collection
+          format: int32
+          example: 3
+        records_count:
+          type: integer
+          description: Total records exist in collection
+          format: int64
+          example: 100
+        status:
+          type: string
+          description: State of the published status
+          enum:
+          - UNPUBLISHED
+          - PUBLISHING
+          - PUBLISHED
+          - UNPUBLISHING
+          - ERROR
+        blueprint:
+          $ref: '#/components/schemas/BlueprintDTO_2'
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionColumnDTO_2'
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        created_date:
+          type: string
+          description: Version created date and time
+          format: date-time
+          example: '2021-03-31T07:46:52.98Z'
+        created_by:
+          type: string
+          example: UserA
+        recordset_count:
+          type: integer
+          format: int32
+    BlueprintDTO_2:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Blueprint
+          format: int32
+          example: 46
+        version:
+          type: integer
+          description: Version of the Blueprint
+          format: int32
+          example: 5
+        type_id:
+          type: integer
+          description: Unique identifier of the Blueprint type
+          format: int32
+          example: 2
+    CollectionDTO_2:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Collection
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the Collection
+          format: int32
+          example: 3
+        status:
+          type: string
+          description: State of the published status
+          enum:
+          - UNPUBLISHED
+          - PUBLISHING
+          - PUBLISHED
+          - UNPUBLISHING
+          - ERROR
+        blueprint:
+          $ref: '#/components/schemas/BlueprintDTO_2'
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        is_hidden:
+          type: boolean
+          description: Visibility of the Collection
+          example: false
+        recordset_count:
+          type: integer
+          format: int32
+        created_date:
+          type: string
+          description: Version created date and time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    RecordsetDTO_2:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Recordset
+          format: int32
+          example: 123
+        status:
+          type: integer
+          description: Current state of the background job that copies the records into the Collection
+          format: int32
+          example: 3
+        topic_id:
+          type: string
+          description: Unique identifier of the Topic
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Topic
+          example: My Topic Name
+        qualifying_records:
+          type: integer
+          description: Total number of records that are ready
+          format: int64
+          example: 988
+        ingested_records:
+          type: integer
+          description: Current number of qualifying records that have been ingested
+          format: int64
+          example: 988
+        created_by:
+          type: string
+          description: Recordset created by
+          example: testuser.dep
+        created_at:
+          type: string
+          description: Recordset created at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    CollectionVersionDescriptionPatchRequestDTO_2:
+      type: object
+      properties:
+        version_description:
+          type: string
+          description: Collection version Description
+          example: My First Collection version
+    CreateAssociationRequest_2:
+      type: object
+      properties:
+        association:
+          type: string
+          description: The value to associate the version with
+          example: '12345'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-collection-service-1-0-openapi.json
+- thomson-reuters-collection-service-1-0-openapi.yml
+- thomson-reuters-collection-service-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

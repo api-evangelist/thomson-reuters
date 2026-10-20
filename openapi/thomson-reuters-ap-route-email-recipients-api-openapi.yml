@@ -1,0 +1,173 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters AP Route Email Recipients API
+  version: '1.0'
+  description: 'Operations tagged AP Route Email Recipients across 2 of this provider''s published API definitions: thomson-reuters-ap-exchange-api-1-0-openapi.json, thomson-reuters-ap-exchange-api-1-0-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+tags:
+- name: AP Route Email Recipients
+  description: Use the AP Route Email Recipients Exchange API to view the email addresses of recipients for AP route.
+paths:
+  /routes/{routeId}/emailRecipients:
+    get:
+      tags:
+      - AP Route Email Recipients
+      summary: Returns the information about email recipients of the AP Route (AP Route…
+      operationId: APRoute_GetEmailRecipients
+      parameters:
+      - name: routeId
+        in: path
+        required: true
+        description: ID of AP route (Sequence Number)
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '200':
+          description: IEnumerable
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipientEmailModel'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+components:
+  schemas:
+    RecipientRole:
+      type: string
+      description: ''
+      x-enumNames:
+      - APRouteManager
+      - TrackerCoordinator
+      - BackupTrackerCoordinator
+      - AdditionalRecipient
+      enum:
+      - APRouteManager
+      - TrackerCoordinator
+      - BackupTrackerCoordinator
+      - AdditionalRecipient
+    RecipientEmailModel:
+      type: object
+      additionalProperties: false
+      properties:
+        email:
+          type:
+          - string
+          - 'null'
+        role:
+          $ref: '#/components/schemas/RecipientRole'
+        firstName:
+          type:
+          - string
+          - 'null'
+        lastName:
+          type:
+          - string
+          - 'null'
+        userId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        recipientType:
+          $ref: '#/components/schemas/RecipientType'
+    RecipientType:
+      type: string
+      description: ''
+      x-enumNames:
+      - TO
+      - CC
+      enum:
+      - TO
+      - CC
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-ap-exchange-api-1-0-openapi.json
+- thomson-reuters-ap-exchange-api-1-0-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

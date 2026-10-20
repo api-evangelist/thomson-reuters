@@ -1,0 +1,417 @@
+openapi: 3.2.0
+info:
+  title: Companies Offices API
+  description: The Companies API provides access to offices, organizational units and practice groups in the Tracker Company database.
+  contact:
+    name: devportal
+  version: '1.0'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/companies-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/companies-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/companies-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/companies-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/companies-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/companies-api/v1
+security:
+- OAuth2: []
+tags:
+- name: Offices
+  description: Use the Offices endpoint to get company offices details.
+paths:
+  /offices/{id}:
+    get:
+      tags:
+      - Offices
+      summary: Get a company office with the provided identifier
+      operationId: Companies_GetCompanyOffice
+      parameters:
+      - name: id
+        in: path
+        description: The company office identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - name
+            - isActive
+            - address
+            - mailingAddress
+            - phone
+            - fax
+            - coordinator
+            - backupCoordinator
+            - defaultLocale
+            - auditInformation
+            type: string
+      responses:
+        '200':
+          description: A company office is successfully returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyOffice'
+        '304':
+          description: Company office is not modified.
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Company office is not found.
+  /offices:
+    get:
+      tags:
+      - Offices
+      summary: Query for company offices based on an OData filter query
+      operationId: Companies_GetCompanyOffices
+      parameters:
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      - name: $top
+        in: query
+        description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          default: 50
+        example: 50
+      - name: $skip
+        in: query
+        description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+        example: 0
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, isActive, address, mailingAddress, phone, fax, coordinator, backupCoordinator, defaultLocale, auditInformation, address/street1, address/street2, address/city, address/state, address/provinceRegion, address/zip, address/country, address/state/id, address/state/name, address/state/abbreviation, address/country/id, address/country/name, address/country/isoCode, mailingAddress/street1, mailingAddress/street2, mailingAddress/city, mailingAddress/state, mailingAddress/provinceRegion, mailingAddress/zip, mailingAddress/country, mailingAddress/state/id, mailingAddress/state/name, mailingAddress/state/abbreviation, mailingAddress/country/id, mailingAddress/country/name, mailingAddress/country/isoCode, coordinator/id, coordinator/name, coordinator/email, backupCoordinator/id, backupCoordinator/name, backupCoordinator/email, auditInformation/createdDateTime, auditInformation/createdBy, auditInformation/changedDateTime, auditInformation/changedBy, auditInformation/createdBy/id, auditInformation/createdBy/name, auditInformation/createdBy/email, auditInformation/changedBy/id, auditInformation/changedBy/name, auditInformation/changedBy/email
+        schema:
+          type:
+          - string
+          - 'null'
+        examples:
+          Filter name:
+            value: name eq 'office1'
+          Filter address/city:
+            value: address/city in ('Toronto', 'London')
+          StartsWith Function:
+            value: startswith(phone, '416')
+          IndexOf Function:
+            value: indexof(name, 'office1') eq 2
+          Mixed Filter:
+            value: contains(name, 'office1') and address/zip eq 'M2L3W9'
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - name
+            - isActive
+            - address
+            - mailingAddress
+            - phone
+            - fax
+            - coordinator
+            - backupCoordinator
+            - defaultLocale
+            - auditInformation
+            type: string
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - name
+            - isActive
+            - phone
+            - fax
+            - defaultLocale
+            - id desc
+            - name desc
+            - isActive desc
+            - phone desc
+            - fax desc
+            - defaultLocale desc
+            type: string
+      - name: $expand
+        in: query
+        description: Expand a complex property, see [Expand](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionexpand)
+        schema:
+          type: string
+      - name: $count
+        in: query
+        description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Returns the company office or offices that match the OData query.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyOfficeCollection'
+        '304':
+          description: Returns a not modified response with empty body.
+        '400':
+          description: If the OData filter is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    State:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        abbreviation:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Country:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        isoCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    AuditInformation:
+      type: object
+      properties:
+        createdDateTime:
+          type: string
+          format: date-time
+        createdBy:
+          $ref: '#/components/schemas/Contact'
+        changedDateTime:
+          type: string
+          format: date-time
+        changedBy:
+          $ref: '#/components/schemas/Contact'
+      additionalProperties: false
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Address:
+      type: object
+      properties:
+        street1:
+          type:
+          - string
+          - 'null'
+        street2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        state:
+          $ref: '#/components/schemas/State'
+        provinceRegion:
+          type:
+          - string
+          - 'null'
+        zip:
+          type:
+          - string
+          - 'null'
+        country:
+          $ref: '#/components/schemas/Country'
+      additionalProperties: false
+    CompanyOfficeCollection:
+      type: object
+      properties:
+        value:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CompanyOffice'
+      additionalProperties: false
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+        details:
+          type: array
+          items:
+            required:
+            - code
+            - message
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              target:
+                type: string
+        innerError:
+          required:
+          - code
+          - message
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      additionalProperties: false
+    CompanyOffice:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        isActive:
+          type: boolean
+        address:
+          $ref: '#/components/schemas/Address'
+        mailingAddress:
+          $ref: '#/components/schemas/Address'
+        phone:
+          type:
+          - string
+          - 'null'
+        fax:
+          type:
+          - string
+          - 'null'
+        coordinator:
+          $ref: '#/components/schemas/Contact'
+        backupCoordinator:
+          $ref: '#/components/schemas/Contact'
+        defaultLocale:
+          type:
+          - string
+          - 'null'
+        auditInformation:
+          $ref: '#/components/schemas/AuditInformation'
+      additionalProperties: false
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes: {}

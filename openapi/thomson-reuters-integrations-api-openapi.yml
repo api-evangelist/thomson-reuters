@@ -1,0 +1,184 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Integrations API
+  version: '1.0'
+  description: 'Operations tagged Integrations across 3 of this provider''s published API definitions: thomson-reuters-ingest-service-1-0-openapi.json, thomson-reuters-ingest-service-1-0-openapi.yml, thomson-reuters-ingest-service-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1/ingest
+security:
+- bearerAuth: []
+tags:
+- name: Integrations
+paths:
+  /integrations:
+    get:
+      tags:
+      - Integrations
+      summary: Gets available integrations
+      description: Gets the available pre-configured application integrations
+      operationId: getIntegrations
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionScriptedIntegrationResponse'
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1/ingest
+  /integrations/{id}:
+    get:
+      tags:
+      - Integrations
+      summary: Get an integration by id
+      description: Gets a single pre-configured application integration
+      operationId: getIntegrationById
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the script
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SingleScriptedIntegrationResponse'
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1/ingest
+components:
+  schemas:
+    ScriptedIntegrationResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the integration
+          format: int32
+          example: 101
+        name:
+          type: string
+          description: Name of the script
+          example: 'Statutory Reporting: Journal Entries'
+        short_code:
+          type: string
+          description: Short id of the script
+          example: sr-je
+    ApiCollectionScriptedIntegrationResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScriptedIntegrationResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    SingleScriptedIntegrationResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the integration
+          format: int32
+          example: 101
+        name:
+          type: string
+          description: Name of the script
+          example: 'Statutory Reporting: Journal Entries'
+        application:
+          type: string
+          description: Application from which we can pull data into the Data Lake
+          example: ONESOURCE Statutory Reporting
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterDTO'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagDTO'
+        short_code:
+          type: string
+          description: Short id of the script
+          example: sr-je
+    TagDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Tag Name
+          example: source:osr
+    ParameterDTO:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of parameter
+          example: Integer
+          enum:
+          - String
+          - Integer
+          - Decimal
+          - Date
+        key:
+          type: string
+          description: Parameter key for the Script
+          example: Year
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-ingest-service-1-0-openapi.json
+- thomson-reuters-ingest-service-1-0-openapi.yml
+- thomson-reuters-ingest-service-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

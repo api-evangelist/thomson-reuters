@@ -1,0 +1,1805 @@
+openapi: 3.2.0
+info:
+  title: GoSystem Tax Return TaxReturn (beta) API
+  description: This API exposes features for working with GoSystem Tax Returns.
+  version: beta
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: TaxReturn (beta)
+paths:
+  /beta/open:
+    post:
+      tags:
+      - TaxReturn (beta)
+      summary: Open a tax return for editing
+      description: This endpoint opens a tax return for editing. You must call this endpoint before calling other tax return operations.
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenTaxReturnRequestDto'
+            examples:
+              tax-return-open-request:
+                $ref: '#/components/examples/tax-return-open-request'
+              password-protected-tax-return-open-request:
+                $ref: '#/components/examples/password-protected-tax-return-open-request'
+      responses:
+        '200':
+          description: Success - Tax return opened successfully. Returns session tokens required for subsequent operations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenTaxReturnResponseDto'
+              examples:
+                open-return-success-response:
+                  $ref: '#/components/examples/open-return-success-response'
+        '400':
+          description: Bad Request - Invalid input parameters, validation errors, or business logic failures. Includes model validation errors, account/tax return existence validation, tax year range errors, and password requirements.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenLocatorErrorResponse'
+              examples:
+                BadRequest_InvalidTaxReturnOrYear:
+                  $ref: '#/components/examples/BadRequest_InvalidTaxReturnOrYear'
+                BadRequest_InvalidAccount:
+                  $ref: '#/components/examples/BadRequest_InvalidAccount'
+                BadRequest_InvalidTaxYear:
+                  $ref: '#/components/examples/BadRequest_InvalidTaxYear'
+                BadRequest_InvalidTaxReturnId:
+                  $ref: '#/components/examples/BadRequest_InvalidTaxReturnId'
+                BadRequest_AccountDoesNotExist:
+                  $ref: '#/components/examples/BadRequest_AccountDoesNotExist'
+                BadRequest_TaxReturnIdDoesNotExist:
+                  $ref: '#/components/examples/BadRequest_TaxReturnIdDoesNotExist'
+                BadRequest_TaxYearOutOfRange:
+                  $ref: '#/components/examples/BadRequest_TaxYearOutOfRange'
+                BadRequest_TaxYearTooHigh:
+                  $ref: '#/components/examples/BadRequest_TaxYearTooHigh'
+                BadRequest_PasswordRequired:
+                  $ref: '#/components/examples/BadRequest_PasswordRequired'
+                BadRequest_TaxReturnNotFoundForParameters:
+                  $ref: '#/components/examples/BadRequest_TaxReturnNotFoundForParameters'
+        '401':
+          description: Unauthorized - Missing or invalid authentication, incorrect passwords, or insufficient user permissions. Includes JWT token issues, password errors for protected returns, and user access failures.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenLocatorErrorResponse'
+              examples:
+                Unauthorized_GroupNoAccessToTaxReturn:
+                  $ref: '#/components/examples/Unauthorized_GroupNoAccessToTaxReturn'
+                Unauthorized_InvalidCredentials:
+                  $ref: '#/components/examples/Unauthorized_InvalidCredentials'
+                Unauthorized_IncorrectPassword:
+                  $ref: '#/components/examples/Unauthorized_IncorrectPassword'
+                Unauthorized_NoAccessToTaxReturn:
+                  $ref: '#/components/examples/Unauthorized_NoAccessToTaxReturn'
+        '403':
+          description: Forbidden - Valid authentication but insufficient permissions to access the resource. Includes user group access control failures, account access restrictions, and group assignment issues.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenLocatorErrorResponse'
+              examples:
+                Forbidden_NotMemberOfGroups:
+                  $ref: '#/components/examples/Forbidden_NotMemberOfGroups'
+                Forbidden_UserGroupNoAccess:
+                  $ref: '#/components/examples/Forbidden_UserGroupNoAccess'
+                Forbidden_NoAccessToAccount:
+                  $ref: '#/components/examples/Forbidden_NoAccessToAccount'
+                Forbidden_UserNotMemberOfAnyGroups:
+                  $ref: '#/components/examples/Forbidden_UserNotMemberOfAnyGroups'
+        '404':
+          description: Not Found - The requested tax return can't be found in the system.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenLocatorErrorResponse'
+              examples:
+                NotFound_TaxReturnNotFound:
+                  $ref: '#/components/examples/NotFound_TaxReturnNotFound'
+        '500':
+          description: Internal Server Error - Server-side errors during tax return opening process. Includes tax return busy states, generic system errors, and data corruption issues.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenLocatorErrorResponse'
+              examples:
+                InternalServerError_TaxReturnBusy:
+                  $ref: '#/components/examples/InternalServerError_TaxReturnBusy'
+                InternalServerError_GenericError:
+                  $ref: '#/components/examples/InternalServerError_GenericError'
+                InternalServerError_TaxReturnDataDeleted:
+                  $ref: '#/components/examples/InternalServerError_TaxReturnDataDeleted'
+        '503':
+          description: Service Unavailable - Dependent services are temporarily unavailable. Includes database connectivity issues and system maintenance scenarios.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenLocatorErrorResponse'
+              examples:
+                ServiceUnavailable_UnableToFetchLastTaxYear:
+                  $ref: '#/components/examples/ServiceUnavailable_UnableToFetchLastTaxYear'
+      operationId: postBetaOpen
+      x-operation-id-source: derived
+  /beta/save-fields:
+    post:
+      tags:
+      - TaxReturn (beta)
+      summary: Save one or more field values in an open tax return
+      description: This endpoint saves one or more field values in an open tax return. You must open the tax return by calling the open endpoint before calling this endpoint.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveFieldsRequestDTO'
+            examples:
+              save-fields-request-simple:
+                $ref: '#/components/examples/save-fields-request-simple'
+              save-fields-request-group:
+                $ref: '#/components/examples/save-fields-request-group'
+              1120-add-rental-ordinary-master-group-request:
+                $ref: '#/components/examples/1120-add-rental-ordinary-master-group-request'
+              1120-add-rental-other-master-group-request:
+                $ref: '#/components/examples/1120-add-rental-other-master-group-request'
+              1120-add-K1-pass-through-ordinary-master-group-request:
+                $ref: '#/components/examples/1120-add-K1-pass-through-ordinary-master-group-request'
+              1120-add-K1-pass-through-others-master-group-request:
+                $ref: '#/components/examples/1120-add-K1-pass-through-others-master-group-request'
+              1120-add-form-master-group-request:
+                $ref: '#/components/examples/1120-add-form-master-group-request'
+              1065-other-rental-master-group-request:
+                $ref: '#/components/examples/1065-other-rental-master-group-request'
+              1065-other-expense-under-rental-master-group-request:
+                $ref: '#/components/examples/1065-other-expense-under-rental-master-group-request'
+              1040-add-schedule-K1-partnership-master-group-request:
+                $ref: '#/components/examples/1040-add-schedule-K1-partnership-master-group-request'
+              1040-add-schedule-K1-estate-trust-master-group-request:
+                $ref: '#/components/examples/1040-add-schedule-K1-estate-trust-master-group-request'
+              1040-add-schedule-K1-S-corporation-master-group-request:
+                $ref: '#/components/examples/1040-add-schedule-K1-S-corporation-master-group-request'
+              1040-add-schedule-K1-PTP-master-group-request:
+                $ref: '#/components/examples/1040-add-schedule-K1-PTP-master-group-request'
+              1040-add-schedule-C-master-group-request:
+                $ref: '#/components/examples/1040-add-schedule-C-master-group-request'
+              1040-add-business-expenses-master-group-request:
+                $ref: '#/components/examples/1040-add-business-expenses-master-group-request'
+              1040-add-consolidated-1099-master-group-request:
+                $ref: '#/components/examples/1040-add-consolidated-1099-master-group-request'
+              1040-add-schedule-E-master-group-request:
+                $ref: '#/components/examples/1040-add-schedule-E-master-group-request'
+              1040-add-schedule-F-rental-master-group-request:
+                $ref: '#/components/examples/1040-add-schedule-F-rental-master-group-request'
+              1040-add-schedule-F-master-group-request:
+                $ref: '#/components/examples/1040-add-schedule-F-master-group-request'
+              1040-add-wages-request:
+                $ref: '#/components/examples/1040-add-wages-request'
+              1040-save-grid-tables:
+                $ref: '#/components/examples/1040-save-grid-tables'
+              1041-add-form-1099-INT-request:
+                $ref: '#/components/examples/1041-add-form-1099-INT-request'
+              990-add-compensation-of-officer-form-990-request:
+                $ref: '#/components/examples/990-add-compensation-of-officer-form-990-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveFieldsResponseDTO'
+              examples:
+                save-fields-success:
+                  $ref: '#/components/examples/save-fields-response-success'
+        '207':
+          description: Multi Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveFieldsResponseDTO'
+              examples:
+                save-fields-response-validation-failure-simple:
+                  $ref: '#/components/examples/save-fields-response-validation-failure-simple'
+                save-fields-response-validation-failure-group:
+                  $ref: '#/components/examples/save-fields-response-validation-failure-group'
+        '400':
+          description: Bad Request - Invalid input parameters or validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                BadRequest:
+                  summary: Bad Request
+                  value:
+                    responseType: BadRequest
+                    statusCode: '400'
+                    message: Bad Request
+                    fieldErrors: []
+        '401':
+          description: Unauthorized - Missing or invalid authentication
+        '403':
+          description: Forbidden - Valid authentication but insufficient permissions to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                Forbidden_ReadOnlyTaxReturn_SaveFields:
+                  summary: Read-only tax return
+                  value:
+                    responseType: Forbidden
+                    statusCode: '403'
+                    message: Read Only TaxReturn
+                    fieldErrors: []
+        '500':
+          description: Internal Server Error - Server-side errors during tax return processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                InternalServerError_GenericError_SaveFields:
+                  summary: Generic server error
+                  value:
+                    responseType: InternalServerError
+                    statusCode: '500'
+                    message: Something went wrong. Please connect support team.
+                    fieldErrors: []
+        '503':
+          description: Service Unavailable - Dependent services are temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                ServiceUnavailable:
+                  summary: Service unavailable
+                  value:
+                    responseType: ServiceUnavailable
+                    statusCode: '503'
+                    message: Service unavailable
+                    fieldErrors: []
+      operationId: postBetaSaveFields
+      x-operation-id-source: derived
+  /beta/save-field-attributes:
+    post:
+      tags:
+      - TaxReturn (beta)
+      summary: Save one or more field attributes in an open tax return
+      description: This endpoint saves one or more field attributes in an open tax return. You must open the tax return by calling the open endpoint before calling this endpoint.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveFieldAttributesRequestDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveFieldAttributesRequestDto'
+        '400':
+          description: Bad Request - Invalid input parameters or validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                BadRequest:
+                  summary: Bad Request
+                  value:
+                    responseType: BadRequest
+                    statusCode: '400'
+                    message: Bad Request
+                    fieldErrors: []
+        '401':
+          description: Unauthorized - Missing or invalid authentication
+        '403':
+          description: Forbidden - Valid authentication but insufficient permissions to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                Forbidden_ReadOnlyTaxReturn_SaveFields:
+                  summary: Read-only tax return
+                  value:
+                    responseType: Forbidden
+                    statusCode: '403'
+                    message: Read Only TaxReturn
+                    fieldErrors: []
+        '500':
+          description: Internal Server Error - Server-side errors during tax return processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                InternalServerError_GenericError_SaveFields:
+                  summary: Generic server error
+                  value:
+                    responseType: InternalServerError
+                    statusCode: '500'
+                    message: Something went wrong. Please connect support team.
+                    fieldErrors: []
+        '503':
+          description: Service Unavailable - Dependent services are temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                ServiceUnavailable:
+                  summary: Service unavailable
+                  value:
+                    responseType: ServiceUnavailable
+                    statusCode: '503'
+                    message: Service unavailable
+                    fieldErrors: []
+      operationId: postBetaSaveFieldAttributes
+      x-operation-id-source: derived
+  /beta/retrieve-fields:
+    post:
+      tags:
+      - TaxReturn (beta)
+      summary: Retrieve one or more field values from an open tax return
+      description: This endpoint retrieves one or more field values from an open tax return. You must open the tax return by calling the open endpoint before calling this endpoint.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrieveFieldsRequestDTO'
+            examples:
+              retrieve-fields-request-simple:
+                $ref: '#/components/examples/retrieve-fields-request-simple'
+              retrieve-fields-request-group:
+                $ref: '#/components/examples/retrieve-fields-request-group'
+              1120-rental-activity-number-retrieve-fields-master-group-request:
+                $ref: '#/components/examples/1120-rental-activity-number-retrieve-fields-master-group-request'
+              1065-rental-activity-number-retrieve-fields-master-group-request:
+                $ref: '#/components/examples/1065-rental-activity-number-retrieve-fields-master-group-request'
+              1040-retrieve-fields-request-simple:
+                $ref: '#/components/examples/1040-retrieve-fields-request-simple'
+              1040-retrieve-fields-request-group:
+                $ref: '#/components/examples/1040-retrieve-fields-request-group'
+              1040-schedule-C-activity-number-retrieve-fields-master-group-request:
+                $ref: '#/components/examples/1040-schedule-C-activity-number-retrieve-fields-master-group-request'
+              retrieve-1120-all-activity-number-master-group-request:
+                $ref: '#/components/examples/1120-all-activity-number-retrieve-master-group-request'
+              retrieve-1065-all-activity-number-master-group-request:
+                $ref: '#/components/examples/1065-all-activity-number-retrieve-master-group-request'
+              retrieve-1040-all-activity-number-master-group-request:
+                $ref: '#/components/examples/1040-all-activity-number-retrieve-master-group-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveFieldsResponseDTO'
+              examples:
+                retrieve-fields-response-simple:
+                  $ref: '#/components/examples/retrieve-fields-response-simple'
+                retrieve-fields-response-group:
+                  $ref: '#/components/examples/retrieve-fields-response-group'
+        '207':
+          description: Multi Status - Partial success, some fields retrieved successfully while others may have failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveFieldsResponseDTO'
+              examples:
+                PartialSuccess_RetrieveFields_V1:
+                  summary: Partial success with field errors
+                  value:
+                    fieldsResponse:
+                    - groupField: null
+                      fields:
+                      - fieldId: RS.ENTITYNAME
+                        value: Thomson Reuters
+                        responseStatus: null
+                      - fieldId: BASEIN
+                        value: 12-1234567
+                        responseStatus:
+                          isSuccess: false
+                          code: '500'
+                          message: '500'
+        '400':
+          description: Bad Request - Invalid input parameters or validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                BadRequest:
+                  summary: Bad Request
+                  value:
+                    responseType: BadRequest
+                    statusCode: '400'
+                    message: Bad Request
+                    fieldErrors: []
+        '406':
+          description: Not Acceptable - Validation failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                ValidationFailure_RetrieveFields:
+                  summary: Validation Failure
+                  value:
+                    responseType: ValidationFailure
+                    statusCode: '400'
+                    message: Validation Failure
+                    fieldErrors: []
+        '500':
+          description: Internal Server Error - Server-side errors during tax return processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                InternalServerError_RetrieveFields:
+                  summary: Unable to open tax return
+                  value:
+                    responseType: Failure
+                    statusCode: '500'
+                    message: Unable to open Tax Return, please try again later or contact support team
+                    fieldErrors: []
+        '503':
+          description: Service Unavailable - Dependent services are temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                ServiceUnavailable:
+                  summary: Service unavailable
+                  value:
+                    responseType: ServiceUnavailable
+                    statusCode: '503'
+                    message: Service unavailable
+                    fieldErrors: []
+      operationId: postBetaRetrieveFields
+      x-operation-id-source: derived
+  /beta/diagnostics:
+    get:
+      tags:
+      - TaxReturn (beta)
+      summary: Get diagnostics of opened tax return
+      description: This endpoint gets diagnostics of an opened tax return. You must open the tax return by calling the open endpoint before calling this endpoint.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiagnosticsResponseDto'
+              examples:
+                diagnostics-example:
+                  $ref: '#/components/examples/diagnostics-example'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                InternalServerError_Diagnostics:
+                  summary: An error has occurred
+                  value:
+                    statusCode: '500'
+                    responseType: Failure
+                    message: An error has occurred
+      operationId: getBetaDiagnostics
+      x-operation-id-source: derived
+  /beta/overrides:
+    get:
+      tags:
+      - TaxReturn (beta)
+      summary: Get overrides of opened tax return
+      description: This endpoint gets overrides of an opened tax return. You must open the tax return by calling the open endpoint before calling this endpoint.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OverridesResponseDto'
+              examples:
+                overrides-example:
+                  $ref: '#/components/examples/overrides-example'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                InternalServerError_Diagnostics:
+                  summary: An error has occurred
+                  value:
+                    statusCode: '500'
+                    responseType: Failure
+                    message: An error has occurred
+      operationId: getBetaOverrides
+      x-operation-id-source: derived
+  /beta/fullcompute:
+    post:
+      tags:
+      - TaxReturn (beta)
+      summary: Trigger a full compute for an already opened tax return
+      description: This endpoint triggers a full compute for an already opened tax return. You must open the tax return by calling the open endpoint before calling this endpoint.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: The response values can be either "true" or "false", representing success or failure, respectively.
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                success:
+                  value: 'true'
+                failure:
+                  value: 'false'
+      operationId: postBetaFullcompute
+      x-operation-id-source: derived
+  /beta/close:
+    post:
+      tags:
+      - TaxReturn (beta)
+      summary: Close an already opened tax return
+      description: This endpoint closes an already opened tax return. You must open the tax return by calling the open endpoint before calling this endpoint.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                BadRequest_Close_TaxReturn_Busy:
+                  summary: Tax return is busy
+                  value:
+                    statusCode: '400'
+                    message: Unable to close the tax return. The tax return might already be closed. If not, the tax return will be auto-closed after some time by the system.
+      operationId: postBetaClose
+      x-operation-id-source: derived
+  /beta/opentaxdefaults:
+    post:
+      tags:
+      - TaxReturn (beta)
+      summary: Open default tax return for editing
+      description: This endpoint opens a default tax return for editing. Only administrator roles have access to this endpoint.
+      requestBody:
+        description: Request to open tax defaults
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenTaxReturnDefaultRequestDto'
+            examples:
+              opentaxdefaults-request:
+                summary: Open tax defaults request
+                value:
+                  account: '3777'
+                  taxYear: '2024'
+      responses:
+        '200':
+          description: Success - Tax defaults opened successfully. Returns session tokens required for subsequent operations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenTaxReturnResponseDto'
+        '400':
+          description: Bad Request - Invalid input parameters, validation errors, access denied for non-admin users, or business logic failures.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                BadRequest_InvalidModelState:
+                  summary: Model validation failed
+                  value:
+                    type: https://tools.ietf.org/html/rfc9110#section-15.5.1
+                    title: One or more validation errors occurred.
+                    status: 400
+                    errors:
+                      Account:
+                      - Invalid account
+                      TaxYear:
+                      - Invalid tax year
+                BadRequest_InvalidTaxReturnOrYear:
+                  summary: Invalid tax return id or tax year
+                  value:
+                    message: Invalid tax return id or tax year
+                    statusCode: '400'
+                BadRequest_OnlyAdminAccess:
+                  summary: Only administrators can access tax defaults
+                  value:
+                    message: Only Admin roles have access to open tax defaults
+                    statusCode: '400'
+        '401':
+          description: Unauthorized - Missing or invalid authentication, or missing required user claims.
+        '500':
+          description: Internal Server Error - Server-side errors during tax defaults opening process.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                InternalServerError_Generic:
+                  summary: Generic server error
+                  value:
+                    message: An unexpected error occurred
+                    statusCode: '500'
+      operationId: postBetaOpentaxdefaults
+      x-operation-id-source: derived
+components:
+  examples:
+    Unauthorized_IncorrectPassword:
+      value:
+        statusCode: '401'
+        message: Password incorrect. Please try again.
+    BadRequest_AccountDoesNotExist:
+      value:
+        statusCode: '400'
+        message: FAILED, Invalid account.
+    retrieve-fields-request-simple:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: RS.ENTITYNAME
+          - fieldId: BASEIN
+    1040-add-consolidated-1099-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: INT.ACTNUMBER
+            value: '1'
+            child: null
+          fields:
+          - fieldId: INT.PAYERBR
+            value: PS2
+    1040-add-schedule-F-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: FRM.PROPNUMBER
+            value: '13'
+            child: null
+          fields:
+          - fieldId: FRM.FARMNAME
+            value: PS2
+          - fieldId: FRM.XFARMRENTAL
+            value: X
+    1040-save-grid-tables:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: FED.TPFIRST
+            value: EA ST 1040
+          - fieldId: FED.TPSSN
+            value: 12-1234567
+          - fieldId: FED.TPBIRTH
+            value: 10/10/2000
+          - fieldId: XO.PPOH
+            value: '100'
+          - fieldId: XO.PPOH
+            value: '200'
+          - fieldId: XO.PPOH
+            value: '300'
+          - fieldId: X0.PPOR
+            value: '1000'
+          - fieldId: X0.PPOR
+            value: '2000'
+          - fieldId: X0.PPOR
+            value: '3000'
+    1065-rental-activity-number-retrieve-fields-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: RNTP19A01
+            isGroup: true
+    save-fields-response-validation-failure-simple:
+      value:
+        fieldsResponse:
+        - groupField: null
+          fields:
+          - fieldId: BASSTATE
+            value: '123'
+            isGroup: false
+            responseStatus:
+              isValid: false
+              code: E1003
+              message: The input value - 123 is not in allowed list of values
+              messageVariables:
+              - '123'
+    save-fields-request-group:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: FOR.NAME2
+            value: test-foreign-corp
+            child: null
+          fields:
+          - fieldId: FOR.PERCENT
+            value: 90
+          - fieldId: X178.1576.3
+            value: Former Test Name
+    Forbidden_NotMemberOfGroups:
+      value:
+        statusCode: '401'
+        message: FAILED, Tax return is not assigned to your group.
+    retrieve-fields-response-simple:
+      value:
+        fieldsResponse:
+        - groupField: null
+          fields:
+          - fieldId: RS.ENTITYNAME
+            value: Thomson Reuters
+            responseStatus: null
+          - fieldId: BASEIN
+            value: 12-1234567
+            responseStatus: null
+    1120-add-rental-ordinary-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: RNT.NUMBER
+            value: '1'
+            child: null
+          fields:
+          - fieldId: RNT.NAME
+            value: RENT TREE
+          - fieldId: RNT.TYPE
+            value: A
+    BadRequest_InvalidAccount:
+      value:
+        statusCode: '400'
+        message: Invalid account
+    overrides-example:
+      value:
+      - computedValue: ''
+        overrideValue: 800-123-4567
+        selector: Paid Preparer Information
+        fieldId: FTEL1
+      - computedValue: Jack O Speed===============x
+        overrideValue: Mr. Nice Guy
+        selector: Alternative Signature Method
+        fieldId: PPN1
+      - computedValue: 55,000.
+        overrideValue: 65,000.
+        selector: GTBLINE1B
+        fieldId: GTBLINE1B
+      - computedValue: Jack O Speed===============x
+        overrideValue: Preppers Prepp
+        selector: Letter Options
+        fieldId: LET.SIGNER
+      - computedValue: J's Suppertax
+        overrideValue: INT REL 08-0 NEW PLATFORM TEST
+        selector: GRID Paid Preparer Information
+        fieldId: CO.GRID.FIRM
+      - computedValue: 200 Turbin Road
+        overrideValue: 200 TURBIN ROAD
+        selector: GRID Paid Preparer Information
+        fieldId: CO.GRID.FADD
+      - computedValue: Sports Car City
+        overrideValue: SPORTS CAR CITY
+        selector: GRID Paid Preparer Information
+        fieldId: CO.GRID.FCITY
+      - computedValue: 01/01/2000
+        overrideValue: 02/02/2004
+        selector: GRID - General Information (CS Hidden)
+        fieldId: ST0611
+    save-fields-request-simple:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: RS.ENTITYNAME
+            value: Entity Name
+          - fieldId: BASEIN
+            value: 12-1234567
+          - fieldId: BASAPPLY
+            value: X
+          - fieldId: BASADD1D
+            value: Add 1
+          - fieldId: BASCITY
+            value: City
+          - fieldId: BASSTATE
+            value: '123'
+          - fieldId: BASZIP
+            value: '12345'
+    BadRequest_InvalidTaxReturnId:
+      value:
+        statusCode: '400'
+        message: Invalid tax return id
+    BadRequest_InvalidTaxReturnOrYear:
+      value:
+        statusCode: '400'
+        message: Invalid tax return id or tax year
+    diagnostics-example:
+      value:
+      - typeDescription: Severe
+        jurisdictionId: 90
+        jurisdiction: AllCities
+        jurisdictiontype: City
+        description: 'State Return: The City of Philadelphia requires that the State of Pennsylvaia return be active in order to file the city return.'
+        isSuppressed: false
+        fieldId: ''
+      - typeDescription: Informational
+        jurisdictionId: 90
+        jurisdiction: AllCities
+        jurisdictiontype: City
+        description: 'Philadelphia: The City of Philadelphia requires the city account number to match the Entity ID (EIN).'
+        isSuppressed: false
+        fieldId: PH6B
+      - typeDescription: Electronic Filing - Rejects
+        jurisdictionId: 90
+        jurisdiction: AllCities
+        jurisdictiontype: City
+        description: 'Philadelphia: The City of Philadelphia requires the account number/ID to be active.'
+        isSuppressed: false
+        fieldId: PHACTIVE
+      - typeDescription: Electronic Filing - Alerts
+        jurisdictionId: 7
+        jurisdiction: Colorado
+        jurisdictiontype: State
+        description: 'Form DR 8453P: Colorado does not require that the DR 8453P to be attached as a pdf to the efiled partnership return in order accept and process the return, but it must be available upon demand from the preparer.'
+        isSuppressed: false
+        fieldId: CO.DR8453PK
+      - typeDescription: Electronic Filing - Rejects
+        jurisdictionId: 7
+        jurisdiction: Colorado
+        jurisdictiontype: State
+        description: 'Partner Information: Partner name PARSONS JIM Social Security number or Colorado ID number is missing.'
+        isSuppressed: false
+        fieldId: ''
+      - typeDescription: Informational
+        jurisdictionId: 91
+        jurisdiction: CommonState
+        jurisdictiontype: State
+        description: 'Common State: Federal attachments are not provided for states that require a complete federal return. Please check the filing requirements for the following state returns: DC, Philadelphia,Fayette,Lexington-Fayette,'
+        isSuppressed: false
+        fieldId: ''
+      - typeDescription: Electronic Filing - Alerts
+        jurisdictionId: 91
+        jurisdiction: CommonState
+        jurisdictiontype: State
+        description: 'Common State E-file Alert: Please review and verify that the PIN is accurate and that the preparer is the registered owner of the PTIN.'
+        isSuppressed: false
+        fieldId: ''
+      - typeDescription: Electronic Filing - Rejects
+        jurisdictionId: 10
+        jurisdiction: DC
+        jurisdictiontype: State
+        description: 'Foreign Address of Paid Preparer: DC does not accept a foreign address when electronically filing a D-65. To file using a foreign address of the preparer you  will need to file on paper. DCPTRHDR-0014'
+        isSuppressed: false
+        fieldId: X95.346.14
+      - typeDescription: Severe
+        jurisdictionId: 0
+        jurisdiction: Federal
+        jurisdictiontype: Federal
+        description: 'Partner Allocations: Partner Allocations have not been enabled.  Amounts will not be computed for the Schedule K-1s.  To enable partner allocations, select Options from the menu bar and then select Partner Allocations.'
+        isSuppressed: false
+        fieldId: ''
+      - typeDescription: Informational
+        jurisdictionId: 31
+        jurisdiction: Nevada
+        jurisdictiontype: State
+        description: 'Filing Period for Nevada Commerce Tax: Nevada has a tax year of July 1 to June 30.   Returns for a filing period cover the period between these two dates.  Returns for a filing year are not to be filed until after June 3th UNLESS the business closes before the end of the filing period.   If that is the case the business is to indicate on the form that it is a final return.  If the business is still active, the return will be rejected.'
+        isSuppressed: false
+        fieldId: ''
+    1040-add-wages-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: WAG.NAME
+            value: Test
+          fields:
+          - fieldId: WAG.EMPID
+            value: 12-1234567
+    1040-add-business-expenses-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: CAR.PROPNUMBER
+            value: '123'
+            child: null
+          fields:
+          - fieldId: FED.F2106
+            value: PS2
+    Forbidden_NoAccessToAccount:
+      value:
+        statusCode: '403'
+        message: FAILED, The user does not have access to account.
+    1120-add-rental-other-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: RNT.NUMBER
+            value: '2'
+            child: null
+          fields:
+          - fieldId: RNT.NAME
+            value: RENT TREE
+          - fieldId: RNT.TYPE
+            value: C
+    1040-all-activity-number-retrieve-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: BUS.PROPNUMBER
+            isGroup: true
+          - fieldId: CAR.PROPNUMBER
+            isGroup: true
+          - fieldId: INT.ACTNUMBER
+            isGroup: true
+          - fieldId: RNT.PROP
+            isGroup: true
+          - fieldId: SK1.PROP
+            isGroup: true
+          - fieldId: FRM.PROPNUMBER
+            isGroup: true
+    save-fields-response-success:
+      value:
+        fieldsResponse: null
+    Unauthorized_NoAccessToTaxReturn:
+      value:
+        statusCode: '401'
+        message: User does not have access to this tax return.
+    InternalServerError_TaxReturnDataDeleted:
+      value:
+        statusCode: '500'
+        message: The tax return doesn't exist, please contact support.
+    BadRequest_PasswordRequired:
+      value:
+        statusCode: '400'
+        message: Tax-return is password protected, please provide password.
+    BadRequest_TaxReturnIdDoesNotExist:
+      value:
+        statusCode: '400'
+        message: FAILED, Invalid tax return id.
+    1065-other-rental-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: ORAP20A01
+            value: '1'
+            child: null
+          fields:
+          - fieldId: ORAP20A02
+            value: test-other-rental2
+    save-fields-response-validation-failure-group:
+      value:
+        fieldsResponse:
+        - groupField:
+            index: null,
+            fieldId: FOR.NAME2
+            value: test-foreign-corp
+            child: null
+            responseStatus: null
+          fields:
+          - fieldId: FOR.PERCENT
+            value: text
+            isGroup: false
+            override: true,
+            responseStatus:
+              isSuccess: false
+              code: E1004
+              message: text is invalid for a Dollar field
+              messageVariables:
+              - text
+    open-return-success-response:
+      value:
+        taxReturnSessionToken: taxReturnSessionToken=3e4dff4f-8467-4bfa-9f2e-eeeea784c864~~~BIGipServerSANDBOX-OTWSVC-9100=564121098.35875.0000; path=/; Httponly; Secure
+        authToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2NhdG9yVG9rZW4iOiI5MjNmNGYxNS1mMzJiLTRkNjEtYTVhOS0yMjVlYTNhOGQzZjMiLCJzZXNzaW9uaWQiOiI0ZjlhN2IyNGZlOGM0MzZjYTI1MzM5ZmY5ZWRlZGU2OSIsImxvY2F0b3IiOiJQNzc0NENMOCIsInVzZXJuYW1lIjoiIiwiZmlybSI6IkZUIiwibG9jYXRpb24iOiIiLCJuc21ldGhvZCI6IkZhbHNlIn0.TP5X6q_jmcKZ0CJWDirnBLSIBYIa_ao703mQVeQ_HL8
+        encodedLocatorDetails: aXNBdXRoZW50aWNhdGVkPUZhbHNlJmlkbGVUaW1lb3V0SW5TZWM9MTIwMCZkaXNjb25uZWN0VGltZW91dEluU2VjPTYwMCZjYW5Db21wdXRlPVRydWUmYXV0b0NvbXB1dGVTdGF0ZT1UcnVlJnJlYWRPbmx5TG9jYXRvcj1GYWxzZSZ1c2VTaWduYWxSPUZhbHNlJmFsbG93U3ViVmlldz1GYWxzZSZsb2NhdG9ySWQ9UDc3NDRDTDgmdGF4QXBwWWVhcj0yMDE4JmVudGl0eU9yVGF4UGF5ZXJOYW1lPVRlc3QgTmFtZSBmcm9tIFBPQyZyZWRhY3RlZFVzZXI9RmFsc2UmcmVkYWN0ZWRQcmludEVuYWJsZWQ9VHJ1ZSZmb3JtU291cmNlSG9zdE5hbWU9aHR0cHM6Ly9zaS1nb3N5c3RlbXJzLmZhc3R0YXguY29tJmNvb2tpZUV4cGlyYXRpb25PbkNsb3NlSW5TZWM9MTAmY29va2llRXhwaXJhdGlvbk9uU2VuZEluU2VjPTk5OTkmaXNPbmVTb3VyY2U9RmFsc2U=
+        locatorToken: f1f9e413-016f-4566-b432-f1e48ae3cf9b
+        apiServerCookie: 564121098.35875.0000
+    1120-rental-activity-number-retrieve-fields-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: RNT.NUMBER
+            isGroup: true
+    retrieve-fields-request-group:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: FOR.NAME2
+            child: null
+          fields:
+          - fieldId: FOR.PERCENT
+          - fieldId: X178.1576.3
+    1040-add-schedule-E-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: RNT.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: RNT.KINDPROP
+            value: PS2
+          - fieldId: RNT.LOCATION
+            value: HYD
+          - fieldId: RNT.TYPE
+            value: '1'
+    Unauthorized_InvalidCredentials:
+      value:
+        statusCode: '401'
+        message: Unauthorized access
+    BadRequest_TaxYearTooHigh:
+      value:
+        statusCode: '400'
+        message: FAILED, Tax year can not be greater than 2024
+    1041-add-form-1099-INT-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: INT.PAYRNAME
+            value: NewForm
+          fields:
+          - fieldId: INT.RECNAME
+            value: TaxpayerName
+    1040-add-schedule-K1-PTP-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: SK1.ID
+            value: '2'
+          - fieldId: SK1.NAME
+            value: ps32
+          - fieldId: SK1.TYPEK1
+            value: F
+    NotFound_TaxReturnNotFound:
+      value:
+        statusCode: '404'
+        message: FAILED, Tax return not found.
+    tax-return-open-request:
+      value:
+        account: '1234'
+        taxYear: '2021'
+        taxReturnId: 3549SE
+    1040-add-schedule-K1-estate-trust-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: SK1.ID
+            value: '2'
+          - fieldId: SK1.NAME
+            value: ps32
+          - fieldId: SK1.TYPEK1
+            value: B
+    1065-other-expense-under-rental-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: RNTP19A01
+            value: 1
+            child: null
+          fields:
+          - fieldId: RNTP19A02
+            value: Rental 1
+          - fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+          - fieldId: RNTP19A05DESC
+            value: OTHER INCOME-1
+            isGroup: true
+          - fieldId: RNTP19A05AMT
+            value: '2222'
+            isGroup: true
+    Unauthorized_GroupNoAccessToTaxReturn:
+      value:
+        statusCode: '403'
+        message: The group you are in does not have access to tax return.
+    Forbidden_UserGroupNoAccess:
+      value:
+        statusCode: '403'
+        message: FAILED,The user or the user group does not have access to the tax return
+    InternalServerError_GenericError:
+      value:
+        statusCode: '500'
+        message: An error occurred while opening the tax return, please try again, and contact support if you are unable to open the tax return
+    1040-schedule-C-activity-number-retrieve-fields-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: BUS.PROPNUMBER
+            isGroup: true
+    1040-add-schedule-C-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: BUS.PROPNUMBER
+            value: '12'
+            child: null
+          fields:
+          - fieldId: BUS.BUSNAME
+            value: PS2
+          - fieldId: BUS.EMPLIDENTNO
+            value: 12-1234567
+    1040-retrieve-fields-request-simple:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: FED.ULTRT
+          - fieldId: FED.ULTACT
+    InternalServerError_TaxReturnBusy:
+      value:
+        statusCode: '500'
+        message: Tax return is currently busy with another operation
+    1040-retrieve-fields-request-group:
+      value:
+        fieldsRequest:
+        - groupField:
+            index: 0
+            fieldId: SLS.PY1231TSJ
+            value: J
+          fields:
+          - fieldId: SLS.PY31ONE
+            isGroup: true
+          - fieldId: SLS.PY31TWO
+            isGroup: true
+    password-protected-tax-return-open-request:
+      value:
+        account: '1234'
+        taxYear: '2021'
+        taxReturnId: 0722JH
+        password: '123456'
+    retrieve-fields-response-group:
+      value:
+        fieldsResponse:
+        - groupField:
+            index: 0
+            fieldId: ORAP20A02
+            value: test-other-rental
+            child: null
+          fields:
+          - fieldId: DPR.A1
+            value: test1
+            isGroup: true
+            responseStatus: null
+          - fieldId: DPR.A1
+            value: test2
+            isGroup: true
+            responseStatus: null
+    1065-all-activity-number-retrieve-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: ORAP20A01
+            isGroup: true
+          - fieldId: ORAP20A01
+            isGroup: true
+          - fieldId: FRMNO
+            isGroup: true
+          - fieldId: PTESET
+            isGroup: true
+          - fieldId: MTBSET
+            isGroup: true
+          - fieldId: DPLSETNUM
+            isGroup: true
+    BadRequest_TaxReturnNotFoundForParameters:
+      value:
+        statusCode: '400'
+        message: Locator ABC123 not found for account TEST in firm DEMO for year 2023.
+    1040-add-schedule-K1-partnership-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: SK1.ID
+            value: '2'
+          - fieldId: SK1.NAME
+            value: ps32
+          - fieldId: SK1.TYPEK1
+            value: A
+    1040-add-schedule-K1-S-corporation-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.PROP
+            value: '1'
+            child: null
+          fields:
+          - fieldId: SK1.ID
+            value: '2'
+          - fieldId: SK1.NAME
+            value: ps32
+          - fieldId: SK1.TYPEK1
+            value: C
+    1120-add-K1-pass-through-others-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.SET2
+            value: '4'
+            child: null
+          fields:
+          - fieldId: SK1.ACTNAME
+            value: K1 PASS 1
+          - fieldId: SK1.ACTTYPE
+            value: C
+    1040-add-schedule-F-rental-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: FRM.PROPNUMBER
+            value: '13'
+            child: null
+          fields:
+          - fieldId: FRM.FARMNAME
+            value: PS2
+    990-add-compensation-of-officer-form-990-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: E110.NAME
+            value: OfficerName
+          fields:
+          - fieldId: E110.TITLE
+            value: Title
+    1120-add-form-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: FRM.ACTNUMBER
+            value: '5'
+            child: null
+          fields:
+          - fieldId: FRM.NAME
+            value: FORM 1
+    ServiceUnavailable_UnableToFetchLastTaxYear:
+      value:
+        statusCode: '503'
+        message: FAILED, Could not able to fetch last tax year.
+    1120-all-activity-number-retrieve-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField: null
+          fields:
+          - fieldId: RNT.NUMBER
+            isGroup: true
+          - fieldId: FRM.ACTNUMBER
+            isGroup: true
+          - fieldId: SK1.SET2
+            isGroup: true
+    BadRequest_TaxYearOutOfRange:
+      value:
+        statusCode: '400'
+        message: FAILED, Accessing return data includes only the current tax year and the four previous tax years.
+    BadRequest_InvalidTaxYear:
+      value:
+        statusCode: '400'
+        message: Invalid tax year
+    1120-add-K1-pass-through-ordinary-master-group-request:
+      value:
+        fieldsRequest:
+        - groupField:
+            fieldId: SK1.SET2
+            value: '3'
+            child: null
+          fields:
+          - fieldId: SK1.ACTNAME
+            value: K1 PASS 1
+          - fieldId: SK1.ACTTYPE
+            value: A
+    Forbidden_UserNotMemberOfAnyGroups:
+      value:
+        statusCode: '403'
+        message: FAILED, The user is not member of any Groups.
+  schemas:
+    FieldsRequestDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        groupField:
+          $ref: '#/components/schemas/GroupData'
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldData'
+    OpenLocatorErrorResponse:
+      type:
+      - object
+      - 'null'
+      properties:
+        statusCode:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+    RetrieveFieldsResponseDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldsResponse:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldsRequestDTO'
+    ProblemResponseDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        responseType:
+          type:
+          - string
+          - 'null'
+        statusCode:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        fieldErrors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldError'
+    OpenTaxReturnResponseDto:
+      type:
+      - object
+      - 'null'
+      properties:
+        taxReturnSessionToken:
+          type:
+          - string
+          - 'null'
+        authToken:
+          type:
+          - string
+          - 'null'
+        encodedLocatorDetails:
+          type:
+          - string
+          - 'null'
+        locatorToken:
+          type:
+          - string
+          - 'null'
+        apiServerCookie:
+          type:
+          - string
+          - 'null'
+    DiagnosticsResponseDto:
+      type: object
+      properties:
+        typeDescription:
+          type: string
+        jurisdictionId:
+          type: integer
+          format: int32
+        jurisdiction:
+          type: string
+        jurisdictionType:
+          type: string
+        description:
+          type: string
+        IsSuppressed:
+          type: string
+        FieldId:
+          type: string
+    RetrieveFieldsRequestDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldsRequest:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldsRequestDTO'
+    GroupData:
+      type:
+      - object
+      - 'null'
+      properties:
+        index:
+          type: integer
+          format: int32
+        fieldId:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+          description: Value or Activity Number of the Group, that uniquely identify the group/master group parent.
+        child:
+          $ref: '#/components/schemas/GroupData'
+        responseStatus:
+          $ref: '#/components/schemas/FieldResponse'
+    FieldData:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldId:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+          description: Value of the field. This value must be unique when Master Group data is added.
+        isGroup:
+          type: boolean
+        responseStatus:
+          $ref: '#/components/schemas/FieldResponse'
+    SaveFieldAttributesRequestDto:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldAttributesRequests:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldAttributesRequest'
+    OpenTaxReturnDefaultRequestDto:
+      required:
+      - account
+      - taxYear
+      type: object
+      properties:
+        account:
+          type: string
+          pattern: ^\s*[a-zA-Z0-9]{4}\s*$
+          description: Four character alphanumeric account identifier
+        taxYear:
+          type: string
+          pattern: ^\s*[0-9]{4}\s*$
+          description: Four digit tax year
+      additionalProperties: false
+    SaveFieldsRequestDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldsRequest:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldsRequestDTO'
+    FieldResponse:
+      type:
+      - object
+      - 'null'
+      properties:
+        isSuccess:
+          type: boolean
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        messageVariables:
+          type:
+          - array
+          - 'null'
+          items:
+            type:
+            - string
+            - 'null'
+    FieldAttributeDto:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldId:
+          type:
+          - string
+          - 'null'
+        fieldAttributes:
+          $ref: '#/components/schemas/FieldAttributes'
+        responseStatus:
+          $ref: '#/components/schemas/FieldResponse'
+    FieldAttributesRequest:
+      type:
+      - object
+      - 'null'
+      properties:
+        groupField:
+          $ref: '#/components/schemas/GroupData'
+        fieldAttributes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldAttributeDto'
+    SaveFieldsResponseDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldsResponse:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldsResponseDTO'
+    FieldAttributes:
+      type:
+      - object
+      - 'null'
+      properties:
+        locked:
+          type: boolean
+    FieldError:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldId:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        errorCode:
+          type:
+          - string
+          - 'null'
+    OverridesResponseDto:
+      type: object
+      properties:
+        ComputedValue:
+          type: string
+        OverrideValue:
+          type: string
+        Selector:
+          type: string
+        FieldId:
+          type: string
+    OpenTaxReturnRequestDto:
+      required:
+      - account
+      - taxReturnId
+      - taxYear
+      type:
+      - object
+      - 'null'
+      properties:
+        account:
+          type: string
+        taxYear:
+          type: string
+        taxReturnId:
+          type: string
+        password:
+          type: string
+    FieldsResponseDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        groupField:
+          $ref: '#/components/schemas/GroupData'
+        fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldData'
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

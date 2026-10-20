@@ -1,0 +1,3527 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters ISheet Module API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged ISheet Module across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: ISheet Module
+paths:
+  /{version}/isheet/doctemplate/generatedocument/singlerecord/{doctemplateid}:
+    get:
+      tags:
+      - ISheet Module
+      summary: To download the single-record documents from iSheet
+      description: 'This API call is used to download the single-record documents from iSheet.
+
+
+        Use the progress key to check the status and to download the generated doc template by calling the below API.
+
+        /api/{version}/isheet/doctemplate/generatedocument/{doctemplateid}/download?key={progressiveKey}
+
+        Note: If the iSheet doc template is configured with the setting ''Download document'' checked (this can be found in the add/edit manage document template page) then '' will be returned in the response.'
+      operationId: generateSheetContractAutomationReport
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: doctemplateid
+        in: path
+        description: Id of the document template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: isheetrecordid
+        in: query
+        description: Id of iSheet record
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: isheetid
+        in: query
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: viewid
+        in: query
+        description: Id of the iSheet view
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/{isheetid}/items:
+    get:
+      tags:
+      - ISheet Module
+      summary: To get a list of iSheet items by item id
+      description: 'This API call is used to get a list of iSheet items.
+
+
+        Note: As seen in the UI, the response will be shown with iSheet views in the correct sequences.'
+      operationId: getISheetItems
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: sheetviewid
+        in: query
+        description: Id of the iSheet view. Optional. Default view will be returned
+        required: false
+        schema:
+          type: string
+      - name: sortcolumnid
+        in: query
+        description: Id of the column to be sorted. Optional. First column sorting will be applied. The sort column id is necessary to pass, if the sort column is set.
+        required: false
+        schema:
+          type: string
+      - name: sortorder
+        in: query
+        description: 'The sorting order. Optional. Default value : 0. Pass 1 for Ascending and 2 for Descending Order'
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: 'The maximum number of records to show per request. Optional. Default value : 100'
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: 'Offset allows us to specify which row to start from retrieving data. Optional. Default value : 0'
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the list of the iSheet items
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - ISheet Module
+      summary: To create the iSheet item
+      description: 'This API call is used to insert iSheet item. Multiple iSheets can be supported.
+
+
+        To get the status of an iSheet item based on a progressive key, call API POST /api/3/progressivekeystatus/{progressive_key}
+
+        e.g. POST /api/{version}/progressivekeystatus/{progressive_key}
+
+
+        NameTypeDescription
+
+
+        progressive_keyString Key to check the status of your action.
+
+
+        Response
+
+
+        <progressivekeyresponse>
+
+        <items>
+
+        <item>
+
+        <itemid>1232</itemid>
+
+        <status>SUCCESS</status>
+
+        <statuscode>200</statuscode>
+
+        <message>Record added successfully</message>
+
+        </item>
+
+        <item>
+
+        <itemid>1233</itemid>
+
+        <status>SUCCESS</status>
+
+        <statuscode>200</statuscode>
+
+        <message>Record added successfully</message>
+
+        </item>
+
+        </items>
+
+        </progressivekeyresponse>'
+      operationId: insertISheetItems
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+    delete:
+      tags:
+      - ISheet Module
+      summary: To delete iSheet item by iSheet id
+      description: 'This API call is used to delete iSheet item. This supports multiple sheet items in a single call or all iSheet items.
+
+
+        To get the status of an iSheet item based on a progressive key
+
+        POST /api/{version}/progressivekeystatus/{progressiveKey}
+
+
+        {progressiveKey} - This key is returned when a long-running operation is called and can be used to find the final status of the operation
+
+
+        Response
+
+
+        <progressivekeyresponse>
+
+        <items>
+
+        <item>
+
+        <itemid>{itemId}</itemid>
+
+        <externalid>{externalId}</externalid>
+
+        <status>INPROGRESS or DONE or FAIL</status>
+
+        <statuscode>{statusCode (e.g. - 200)}</statuscode>
+
+        <message>{API response message (e.g. - Deleted successfully)}</message>
+
+        </item>
+
+        </items>
+
+        </progressivekeyresponse>'
+      operationId: deleteISheetItems
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: itemids
+        in: query
+        description: Id(s) of the iSheet item
+        required: true
+        schema:
+          type: string
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API returns progressive object with status of either 'INPROGRESS', 'DONE', or 'FAIL'. Using the progressive key, an API user can see the status of an iSheet item.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/{isheetid}/items/{itemid}:
+    get:
+      tags:
+      - ISheet Module
+      summary: To get an iSheet items by item id
+      description: 'This API call is used to get an iSheet item.
+
+
+        Note : As seen in the UI, the response will be shown with iSheet views in the correct sequences.'
+      operationId: getISheetItem
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: itemid
+        in: path
+        description: Id of the iSheet item
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: sheetviewid
+        in: query
+        description: Id of the iSheet view. Optional. Default view will be returned
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the specific iSheet item
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Module
+      summary: To edit iSheet item by using the item id
+      description: This API call is used to edit Isheet item by item ID.
+      operationId: editIsheetItem
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: itemid
+        in: path
+        description: Id of the iSheet item
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '409':
+          description: Another user is editing the same rowid / Unable to aquire data source
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/item/{itemid}/attachment/{attachmentid}:
+    get:
+      tags:
+      - ISheet Module
+      summary: To download the isheet item attachment
+      description: This API call is used to download iSheet attachment.
+      operationId: downloadIsheetItemAttachment
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: itemid
+        in: path
+        description: Id of the iSheet item
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: attachmentid
+        in: path
+        description: Id of the iSheet item attachment
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/businessWorkflow/isheet/{isheetid}/search:
+    post:
+      tags:
+      - ISheet Module
+      summary: To get the number of records of the iSheet item
+      description: This API call is used for Isheet item search record count.
+      operationId: businessWorkflowSheetItemSearch
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '6'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: The maximum number of records to show per request
+        required: false
+        schema:
+          type: string
+          default: '100'
+      - name: offset
+        in: query
+        description: Offset allows us to specify which row to start from retrieving data
+        required: false
+        schema:
+          type: string
+          default: '0'
+      - name: ruleId
+        in: query
+        description: ruleId of RuleDetails
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: 'API will return the count of totalRecords. Exa: { "totalRecords": {totalCounts} }'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetItemSearchDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetItemSearchDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetItemSearchDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/doctemplate/generatedocument/sitewide/{doctemplateid}:
+    get:
+      tags:
+      - ISheet Module
+      summary: Generate site-wide document
+      description: 'This API call is used to download a site-wide documents from iSheet.
+
+
+        To get the status of an iSheet item based on a progressive key, call API POST /api/3/progressivekeystatus/{progressive_key}
+
+        e.g. POST /api/{version}/progressivekeystatus/{progressive_key}
+
+
+        NameTypeDescription
+
+
+        progressive_keyString Key to check the status of your action.
+
+
+        Response
+
+
+        If generating a document that is in progress
+
+
+        <progressivekeyresponse>
+
+        <progressivekeystatus>INPROGRESS</progressivekeystatus>
+
+        </progressivekeyresponse>
+
+
+        If generating a document that is now complete
+
+
+        <progressivekeyresponse>
+
+        <progressivekeystatus>DONE</progressivekeystatus>
+
+        <downloadlink>https://local.com/sitepont/api/{apiversion}/isheet/doctemplate/generatedocument/{docTemplateId}/download/key={progressiveKey}</downloadlink>
+
+        </progressivekeyresponse>
+
+
+        Note : If the iSheet doc template is configured with the setting ''Download document'' checked (this can be found in the add/edit manage document template page) then '' will be returned in the response.'
+      operationId: generateSheetDocReport
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: doctemplateid
+        in: path
+        description: Id of the document template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: isheetrecordids
+        in: query
+        description: Id(s) of the iSheet record
+        required: false
+        schema:
+          type: string
+      - name: isheetid
+        in: query
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/doctemplate/generatedocument/{doctemplateid}/download:
+    get:
+      tags:
+      - ISheet Module
+      summary: Download generated document for document template
+      description: 'This API call is used to download the generated document template using /isheet/doctemplate/generatedocument API. And a key can be found in the response from the API.
+
+
+        If generating a document that is in progress
+
+
+        <progressivekeyresponse>
+
+        <progressivekeystatus>INPROGRESS</progressivekeystatus>
+
+        </progressivekeyresponse>
+
+
+        If generating a document that is now complete
+
+
+        <progressivekeyresponse>
+
+        <progressivekeystatus>DONE</progressivekeystatus>
+
+        <downloadlink>https://local.com/sitepont/api//isheet/doctemplate/generatedocument/{docTemplateId}/download/key={progressiveKey}</downloadlink>
+
+        </progressivekeyresponse>
+
+
+        Response will be in binary stream of document'
+      operationId: downloadDocuAutoReport
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: key
+        in: query
+        description: The key generated in response of document generation api
+        required: true
+        schema:
+          type: string
+      - name: doctemplateid
+        in: path
+        description: Id of the document template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/{isheetid}/items/byexternalid/{externalid}:
+    get:
+      tags:
+      - ISheet Module
+      summary: To get iSheet item by the external id
+      description: This API call is used to get iSheet item by external ID.
+      operationId: getISheetItemByExternalId
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: externalid
+        in: path
+        description: External id of the iSheet
+        required: true
+        schema:
+          type: string
+      - name: sheetviewid
+        in: query
+        description: Id of the iSheet view. Optional. Default view will be returned
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return a dynamic XML/JSON Object
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '409':
+          description: Another user is editing the same rowid / Unable to aquire data source
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ItemErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Module
+      summary: To edit an iSheet item by using the external id
+      description: This API call is used to edit an iSheet item by external id.
+      operationId: editIsheetItemByExternalID
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: externalid
+        in: path
+        description: External id of the iSheet
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/{isheetid}/attachment:
+    get:
+      tags:
+      - ISheet Module
+      summary: To download isheet items attachments zip
+      description: 'Method to download isheet attachment zip.
+
+
+        If the operation is successful, the API returns approprivate file object.
+
+        In the case of a failure, an error object is returned with the appropriate error code.
+
+        This method is supported in version 8 of the API and above.'
+      operationId: downloadIsheetAttachmentZIP
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: isheetid
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: zipID
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: If the operation is successful, the API returns approprivate file object. In case of a failure, an error object is returned with the appropriate error code.
+          content:
+            application/xml:
+              schema:
+                type: string
+                format: binary
+            application/json:
+              schema:
+                type: string
+                format: binary
+            text/xml:
+              schema:
+                type: string
+                format: binary
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - ISheet Module
+      summary: To prepare isheet items attachments zip
+      description: 'Method to prepare isheet attachment zip.
+
+
+        To get the status of zip creation process based on a progressive key, call API POST /api/3/progressivekeystatus/{progressive_key}
+
+
+        e.g. POST /api/{version}/progressivekeystatus/{progressive_key}
+
+
+        NameTypeDescription
+
+
+        progressive_keyStringThis key is returned when a long-running operation is called and can be used to find the final status of the operation
+
+
+        If the operation is successful, the API returns a progressive key resource object. The possible status values are "INPROGRESS", "DONE" or "FAIL".
+
+        Also send zip creation id.
+
+        In the case of a failure, an error object is returned with the appropriate error code.
+
+        This method is supported in version 8 of the API and above.'
+      operationId: prepareIsheetAttachmentZIP
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: isheetid
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: If the operation is successful, the API returns a progressive key resource object. Using the progressive key. In case of a failure, an error object is returned with the appropriate error code.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/downloadAttachmentParamDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/downloadAttachmentParamDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/downloadAttachmentParamDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/{isheetid}/audit:
+    get:
+      tags:
+      - ISheet Module
+      summary: To get the iSheet level audit history
+      description: This API call is used to get a list of audit history at iSheet level. Audit details like what, when and by whom the actions were performed, IP address of user, audit identification.
+      operationId: getISheetLevelAuditHistory
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: string
+      - name: nextauditid
+        in: query
+        description: Next audit id to get the list of audit history from provided audit id.
+        required: false
+        schema:
+          type: string
+          default: '0'
+      - name: limit
+        in: query
+        description: The maximum number of records to show per request. Default value is 25
+        required: false
+        schema:
+          type: string
+          default: '25'
+      responses:
+        '200':
+          description: API will return the list of audit history for an iSheet
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AuditsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/AuditsDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/{isheetid}/items/{itemid}/audit:
+    get:
+      tags:
+      - ISheet Module
+      summary: To get the iSheet item level audit history
+      description: This API call is used to get a list of audit history of an iSheet at item level. Audit details like what, when and by whom the actions were performed, IP address of user, audit identification.
+      operationId: getISheetItemLevelAuditHistory
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: string
+      - name: itemid
+        in: path
+        description: Id of the iSheet item
+        required: true
+        schema:
+          type: string
+      - name: nextauditid
+        in: query
+        description: Next audit id to get the list of audit history from provided audit id
+        required: false
+        schema:
+          type: string
+          default: '0'
+      - name: limit
+        in: query
+        description: The maximum number of records to show per request. Default value is 25
+        required: false
+        schema:
+          type: string
+          default: '25'
+      responses:
+        '200':
+          description: API will return the list of audit history of an iSheet item
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AuditsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/AuditsDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/{isheetid}/items/byexternalid:
+    delete:
+      tags:
+      - ISheet Module
+      summary: To delete the iSheet items by external id(s)
+      description: 'This API call is used to delete iSheet items by using external id. This supports multiple sheet items in a single call or all iSheet items.
+
+
+        To get the status of an iSheet item based on a progressive key
+
+        POST /api/{version}/progressivekeystatus/{progressiveKey}
+
+
+        {progressiveKey} - This key is returned when a long-running operation is called and can be used to find the final status of the operation
+
+
+        Response
+
+
+        <progressivekeyresponse>
+
+        <items>
+
+        <item>
+
+        <itemid>{itemId}</itemid>
+
+        <externalid>{externalId}</externalid>
+
+        <status>INPROGRESS or DONE or FAIL</status>
+
+        <statuscode>{statusCode (e.g. - 200)}</statuscode>
+
+        <message>{API response message (e.g. - Deleted successfully)}</message>
+
+        </item>
+
+        </items>
+
+        </progressivekeyresponse>'
+      operationId: deleteISheetItemsByExternalIds
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: externalids
+        in: query
+        description: External id(s) of iSheet which is linked with an iSheet item id. You can get the external id from the get all iSheet item api call.<br/>For Specific external ids (Example - EX101, EX102, EX103) or Remove all records where external id is set (Example - ALL)
+        required: true
+        schema:
+          type: string
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/{isheetid}/attachment:
+    post:
+      tags:
+      - ISheet Module
+      summary: To add iSheet attachment
+      description: 'This API call is used to upload file in iSheet for image and attachment column type fields.
+
+
+        The returned attachment id by calling progressive key API will be used in image or attachment column type while adding/updating an item.
+
+
+        The file should be added as multipart form data. Please note that the parameters are case sensitive.
+
+
+        Add iSheet Attachment API response
+
+
+        <progressivekeyresponse>
+
+        <progressivekey>{progressiveKey}</progressivekey>
+
+        <progressivekeystatus>INPROGRESS or DONE or FAIL</progressivekeystatus>
+
+        </progressivekeyresponse>
+
+
+        To get the status of an iSheet attachment based on a progressive key
+
+
+        POST /api/{version}/progressivekeystatus/{progressive_key}
+
+
+        <progressivekeyresponse>
+
+        <progressivekeystatus>INPROGRESS or DONE or FAIL</progressivekeystatus>
+
+        <attachment>
+
+        <id>{attachmentId}</id>
+
+        </attachment>
+
+        </progressivekeyresponse>'
+      operationId: addISheetAttachment
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: The parameter name should be the file and the value should be the file to be uploaded
+                  format: binary
+                filename:
+                  type: string
+                  description: Name of the newly created file
+              required:
+              - file
+              - filename
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/{isheetid}/items/{itemid}/externalreference/{externalid}:
+    put:
+      tags:
+      - ISheet Module
+      summary: To set the external id for an existing iSheet item
+      description: This API call is used to update the external ID for an existing iSheet item.
+      operationId: updateExternalIDToISheetItemID
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: externalid
+        in: path
+        description: External id of the iSheet
+        required: true
+        schema:
+          type: string
+      - name: itemid
+        in: path
+        description: Id of the iSheet item
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/{isheetid}/search:
+    post:
+      tags:
+      - ISheet Module
+      summary: iSheet advanced search
+      description: This API call is used for iSheet advanced search.
+      operationId: sheetItemSearch
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: The maximum number of records to show per request
+        required: false
+        schema:
+          type: string
+          default: '100'
+      - name: offset
+        in: query
+        description: Offset allows us to specify which row to start from retrieving data
+        required: false
+        schema:
+          type: string
+          default: '0'
+      - name: sheetviewid
+        in: query
+        description: Id of the iSheet view
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 'Will return a dynamic XML/JSON Object. i.e. JSON - { "totalRecords": {taotalCount} } Or XML - <totalRecords>{taotalCount}</totalRecords>'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetItemSearchDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetItemSearchDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetItemSearchDBO'
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    QaDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    choice:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        score:
+          type: string
+        color:
+          type: string
+        imageid:
+          type: integer
+          format: int32
+      xml:
+        name: choice
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    LookupsDBO:
+      type: object
+      properties:
+        lookup:
+          type: array
+          items:
+            xml:
+              name: lookup
+            $ref: '#/components/schemas/LookupDBO'
+      xml:
+        name: lookups
+    BidderSiteDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+        advancedqapermission:
+          type: string
+    IntegrationUserDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        userid:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        lastname:
+          type: string
+        practicegroup:
+          type: string
+        langcode:
+          type: string
+        localeID:
+          type: string
+        publicprofile:
+          type: string
+        pwpid:
+          type: string
+        usertypeid:
+          type: string
+        systemuser:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        address:
+          $ref: '#/components/schemas/Address'
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        img:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        externalid:
+          type: string
+        jobtitle:
+          type: string
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        specialities:
+          type: string
+        title:
+          type: string
+        goesby:
+          type: string
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        bio:
+          type: string
+        dateOfBirth:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+        sourcetype:
+          type: string
+        orgid:
+          type: string
+        ifpartner:
+          type: string
+        emaildomain:
+          type: string
+        invitationsent:
+          type: string
+        createdby:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        lastlogindate:
+          type: string
+        invalidlogins:
+          type: string
+        publicwebsiteprofileid:
+          type: string
+        resetpassworddate:
+          type: string
+        avatar:
+          type: string
+        followingcount:
+          type: integer
+          format: int32
+        followercount:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        sites:
+          $ref: '#/components/schemas/sites'
+        role:
+          type: string
+        orgName:
+          type: string
+      xml:
+        name: user
+    site:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sitename:
+          type: string
+        sitetemplateID:
+          type: integer
+          format: int32
+          xml:
+            name: sitetemplateid
+        role:
+          type: string
+        sitedescription:
+          type: string
+        enabledmodules:
+          type: string
+        sitefolderID:
+          type: string
+        folder:
+          $ref: '#/components/schemas/Folder'
+        sitefolderpermission:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        adminnote:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+        createddate:
+          type: string
+        archiveddate:
+          type: string
+        clientno:
+          type: string
+        matterno:
+          type: string
+        landingpage:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        maxpagecount:
+          type: string
+        siteowner:
+          $ref: '#/components/schemas/UserDBO'
+        sitehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModule'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        csvSiteCategory:
+          type: string
+        biddersite:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        sitenametranslations:
+          $ref: '#/components/schemas/translations'
+        siteNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        siteLogoName:
+          type: string
+        siteLogoFileSize:
+          type: integer
+          format: int64
+        siteLogoHeight:
+          type: integer
+          format: int32
+        siteLogoWidth:
+          type: integer
+          format: int32
+        siteStatus:
+          type: integer
+          format: int32
+        applySiteTerms:
+          type: integer
+          format: int32
+        siteTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        nextLoginSiteTerms:
+          type: integer
+          format: int32
+        defaultSiteTermsEnable:
+          type: integer
+          format: int32
+        advancedQAPermission:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        siteLabelDisplay:
+          type: string
+        allowSiteAdministration:
+          type: integer
+          format: int32
+        siteLevelPasswordEnable:
+          type: integer
+          format: int32
+        siteLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        sitePassword:
+          type: string
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        applySiteHomePage:
+          type: integer
+          format: int32
+        siteHomePage:
+          type: string
+        siteHomePageType:
+          type: integer
+          format: int32
+        nextLoginSiteHomePage:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        siteCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        siteModuleID:
+          type: integer
+          format: int32
+        icalSecurity:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        announcementMLJSON:
+          type: string
+        siteRestrictionType:
+          $ref: '#/components/schemas/SiteRestrictionType'
+        enableDocumentRedaction:
+          type: boolean
+          xml:
+            name: enabledocumentredaction
+        mysite:
+          type: boolean
+    IntegrationResponseDBO:
+      type: object
+      properties:
+        integrationResponseUsersObject:
+          $ref: '#/components/schemas/IntegrationResponseUsersObject'
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+    Inbox:
+      type: object
+      properties:
+        enable:
+          type: string
+        accountname:
+          type: string
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDBO'
+    FileModule:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showsitemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    JoinConditionsDBO:
+      type: object
+      properties:
+        joincondition:
+          type: array
+          items:
+            $ref: '#/components/schemas/JoinConditionDBO'
+      xml:
+        name: joinconditions
+    ColumnErrorsDBO:
+      type: object
+      properties:
+        column:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnErrorDBO'
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+      xml:
+        name: columns
+    Folder:
+      type: object
+      required:
+      - foldername
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        dmsfolderid:
+          type: string
+          xml:
+            attribute: true
+        permission:
+          type: string
+          xml:
+            attribute: true
+        foldername:
+          type: string
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/Folder'
+        child:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: folder
+    ContactUSDBO:
+      type: object
+      properties:
+        value:
+          type: string
+      xml:
+        name: values
+    Attachment:
+      type: object
+      properties:
+        file:
+          type: string
+        name:
+          type: string
+        order:
+          type: string
+        id:
+          type: integer
+          format: int32
+        extension:
+          type: string
+        parentfolderid:
+          type: integer
+          format: int32
+        filehttplink:
+          type: string
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+        displayname:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+      xml:
+        name: attachment
+    ModuleDBO:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeDBO'
+        activity:
+          $ref: '#/components/schemas/ActivityDBO'
+        document:
+          $ref: '#/components/schemas/DocumentDBO'
+        blog:
+          $ref: '#/components/schemas/BlogDBO'
+        wiki:
+          $ref: '#/components/schemas/WikiDBO'
+        task:
+          $ref: '#/components/schemas/TaskDBO'
+        event:
+          $ref: '#/components/schemas/EventDBO'
+        isheet:
+          $ref: '#/components/schemas/ISheetDBO'
+        qa:
+          $ref: '#/components/schemas/QaDBO'
+        people:
+          $ref: '#/components/schemas/PeopleDBO'
+    columns:
+      type: object
+      properties:
+        column:
+          type: array
+          items:
+            $ref: '#/components/schemas/columnDBO'
+      xml:
+        name: columns
+    sites:
+      type: object
+      properties:
+        site:
+          type: array
+          items:
+            $ref: '#/components/schemas/site'
+    DMSDocumentDBO:
+      type: object
+      properties:
+        dmsdocid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmseditdate:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmsversion:
+          type: string
+      xml:
+        name: dms
+    rawDataDBO:
+      type: object
+      properties:
+        text:
+          type: array
+          items:
+            type: string
+        linkDisplayName:
+          type: string
+        linkDisplayURL:
+          type: string
+      xml:
+        name: rawData
+    column:
+      type: object
+      properties:
+        sequence:
+          type: string
+          xml:
+            attribute: true
+        rawData:
+          $ref: '#/components/schemas/rawDataDBO'
+        title:
+          type: string
+        type:
+          type: string
+        mendatory:
+          type: boolean
+        columnID:
+          type: integer
+          format: int32
+      xml:
+        name: column
+    MetadataListDBO:
+      type: object
+      properties:
+        metadataname:
+          type: array
+          items:
+            type: string
+        metadatavalue:
+          type: array
+          items:
+            type: string
+    ItemErrorDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        columns:
+          $ref: '#/components/schemas/ColumnErrorsDBO'
+        itemid:
+          type: string
+        externalid:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+        successdeletedcount:
+          type: integer
+          format: int32
+        failurecount:
+          type: integer
+          format: int32
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+      xml:
+        name: item
+    ISheetDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    DocumentDBO:
+      type: object
+      properties:
+        documentname:
+          type: string
+          xml:
+            name: filename
+        dmsVersion:
+          type: string
+        notification:
+          type: string
+          example: E.g. 1/2/3
+        folderID:
+          type: string
+        documentID:
+          type: string
+          xml:
+            name: fileid
+        batchID:
+          type: string
+        status:
+          type: string
+        documentKey:
+          type: string
+        dmsDocumentDBO:
+          xml:
+            name: dms
+          $ref: '#/components/schemas/DMSDocumentDBO'
+        enable:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        versionid:
+          type: integer
+          format: int32
+        versionnote:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        type:
+          type: string
+        originaltype:
+          type: string
+        icon:
+          type: string
+        commentscount:
+          type: integer
+          format: int32
+        likescount:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/TagsDBO'
+        location:
+          type: string
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        siteid:
+          type: integer
+          format: int32
+        parentfolderid:
+          type: integer
+          format: int32
+        error:
+          type: string
+        size:
+          type: integer
+          format: int64
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: file
+    DataDBO:
+      type: object
+      properties:
+        item:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemDBO'
+      xml:
+        name: data
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    GroupsDBO:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            type: string
+    ExperiencesDBO:
+      type: object
+      properties:
+        experience:
+          type: array
+          items:
+            type: string
+    Emailmetadata:
+      type: object
+      properties:
+        enable:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailmetadataallfolder:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailfrom:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailto:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailcc:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailsent:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailreceived:
+          type: string
+          enum:
+          - TRUE/FALSE
+    FoldersDBO:
+      type: object
+      properties:
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/FolderDBO'
+      xml:
+        name: folders
+    Address:
+      type: object
+      properties:
+        addressid:
+          type: string
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postCode:
+          type: string
+        knownas:
+          type: string
+    ProgressiveKeyDBO:
+      type: object
+      properties:
+        progressivekey:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+        progressivekeystatus:
+          type: string
+        userid:
+          type: integer
+          format: int32
+        responsebody:
+          type: string
+        message:
+          type: string
+        messagecode:
+          type: string
+        integrationResponseDBO:
+          $ref: '#/components/schemas/IntegrationResponseDBO'
+        columns:
+          $ref: '#/components/schemas/ColumnErrorsDBO'
+        items:
+          $ref: '#/components/schemas/ItemErrorsDBO'
+        importisheettemplate:
+          $ref: '#/components/schemas/importISheetTemplateDBO'
+        error:
+          $ref: '#/components/schemas/ErrorDBO'
+        contentType:
+          type: string
+        failedEntities:
+          type: integer
+          format: int32
+        downloadlink:
+          type: string
+        attachment:
+          $ref: '#/components/schemas/Attachment'
+        link:
+          type: string
+      xml:
+        name: progressivekeyresponse
+    LocationDBO:
+      type: object
+      properties:
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postcode:
+          type: string
+    TaskDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        timelineview:
+          type: string
+    HeadDBO:
+      type: object
+      properties:
+        headColumn:
+          type: array
+          items:
+            $ref: '#/components/schemas/HeadColumnDBO'
+      xml:
+        name: headColumn
+    DocumentsDBO:
+      type: object
+      properties:
+        document:
+          type: array
+          items:
+            xml:
+              name: document
+            $ref: '#/components/schemas/DocumentDBO'
+      xml:
+        name: documents
+    ISheetTemplateParameterGroup:
+      type: object
+      properties:
+        templateruleid:
+          type: integer
+          format: int32
+          xml:
+            attribute: true
+        templateparameter:
+          type: array
+          items:
+            xml:
+              name: templateparameter
+            $ref: '#/components/schemas/ISheetTemplateParameter'
+      xml:
+        name: templateparametergroup
+    CategoryDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: CategoryDBO
+    HeadColumnDBO:
+      type: object
+      properties:
+        columnValue:
+          type: string
+        sequence:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: headcolumn
+    TagsDBO:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            type: string
+    SiteRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedsite:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    WikiDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ContactUS:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactUSDBO'
+        type:
+          type: string
+      xml:
+        name: contactus
+    ActivityDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        microblog:
+          type: string
+    FilterRow:
+      type: object
+      properties:
+        rowid:
+          type: integer
+          format: int32
+        columnid:
+          type: integer
+          format: int32
+        operatorid:
+          type: integer
+          format: int32
+        oprand:
+          type: string
+        logicaltype:
+          type: string
+        sheetfiltervaluetypeid:
+          type: string
+        displaytype:
+          type: string
+        sourceColumnId:
+          type: integer
+          format: int32
+        scoreConditionTypeid:
+          type: integer
+          format: int32
+      xml:
+        name: row
+    isheetDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        accesstype:
+          type: string
+        type:
+          type: string
+        viewlink:
+          type: string
+        allowsections:
+          type: string
+        allowlookup:
+          type: string
+        displayisheet:
+          type: string
+        searchasdefaultview:
+          type: string
+        enableversion:
+          type: string
+        enablesheetalerter:
+          type: string
+        alertercondition:
+          type: string
+        overrideitemmodifieddate:
+          type: string
+        enablebulkinsertupdate:
+          type: string
+        fielddescriptions:
+          type: string
+        enablerowlocking:
+          type: string
+        setcharlimittruncatemultilinetextenabled:
+          type: string
+        setcharlimittruncatemultilinetextval:
+          type: string
+        allowchoicelistvaluesforreuse:
+          type: string
+        allowscorelistvaluesforreuse:
+          type: string
+        columns:
+          $ref: '#/components/schemas/columns'
+        recordcount:
+          type: string
+          xml:
+            attribute: true
+        metadata:
+          $ref: '#/components/schemas/MetaDataDBO'
+        head:
+          $ref: '#/components/schemas/HeadDBO'
+        data:
+          $ref: '#/components/schemas/DataDBO'
+      xml:
+        name: isheet
+    ItemDBO:
+      type: object
+      properties:
+        externalID:
+          type: string
+          xml:
+            attribute: true
+        itemID:
+          type: string
+          xml:
+            attribute: true
+        column:
+          type: array
+          items:
+            $ref: '#/components/schemas/column'
+      xml:
+        name: item
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    columnDBO:
+      type: object
+      required:
+      - name
+      - type
+      properties:
+        columnid:
+          type: integer
+          format: int32
+        name:
+          type: string
+          example: test
+          description: any valid name
+        type:
+          type: integer
+          format: int32
+          example: Type of the column, column types are obtained from a call to the column types API(api/3/isheets/columntypes)
+          description: '1'
+        systemgeneratedtype:
+          type: string
+        section:
+          type: integer
+          format: int32
+        description:
+          type: string
+        addtodefaultview:
+          type: string
+        columnconditionstate:
+          type: string
+        columnconditions:
+          $ref: '#/components/schemas/columnConditions'
+        columnspecificdetail:
+          $ref: '#/components/schemas/columnSpecificDetail'
+        sequence:
+          type: string
+          xml:
+            attribute: true
+        attributecolumnid:
+          type: string
+          xml:
+            attribute: true
+        rawdata:
+          $ref: '#/components/schemas/rawData'
+        colViewPosition:
+          type: integer
+          format: int32
+        columntype:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        modifiedDate:
+          type: string
+          format: date-time
+        injectReferenceColumn:
+          type: integer
+          format: int32
+        parentColumnID:
+          type: integer
+          format: int32
+        reusecolumnidfromisheet:
+          type: integer
+          format: int32
+          example: '{instance}/api/8/isheets/admin/{isheetid}/choicecolumnoptions'
+          description: The id of the isheet column (Optional). This param is only for add/update isheet column API. A user can set the choice/score column id for which s(he) wants the items to set into the specified iSheet column in the request body. A user can get the id of column using API.
+        choicelistid:
+          type: integer
+          format: int32
+          example: '{instance}/api/8/isheets/admin/choicelists?columntype=3 or 17'
+          description: The id of the choice list (Optional). This param is only for add/update isheet column API. Using the choice list id a user can fetch the choice/score items to save it into the specified iSheet column in the request body. A user can get the id of choice list using API.
+        sourceSheetID:
+          type: integer
+          format: int32
+      xml:
+        name: column
+    isheetItemSearchDBO:
+      type: object
+      properties:
+        allofthesewords:
+          type: string
+        anyofthesewords:
+          type: string
+        excludethesewords:
+          type: string
+        data:
+          $ref: '#/components/schemas/DataDBO'
+      xml:
+        name: filterdata
+    ISheetTemplateParameterGroups:
+      type: object
+      properties:
+        templateparametergroup:
+          type: array
+          items:
+            xml:
+              name: templateparametergroup
+            $ref: '#/components/schemas/ISheetTemplateParameterGroup'
+      xml:
+        name: templateparametergroups
+    IntegrationResponseUsersObject:
+      type: object
+      properties:
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationUserDBO'
+      xml:
+        name: users
+    PeopleDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ItemErrorsDBO:
+      type: object
+      properties:
+        item:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemErrorDBO'
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+      xml:
+        name: items
+    HomeDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ISheetTemplateParameter:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        data:
+          type: string
+      xml:
+        name: templateparameter
+    AuditDBO:
+      type: object
+      properties:
+        auditid:
+          type: string
+          xml:
+            attribute: true
+        itemid:
+          type: integer
+          format: int32
+        actionuser:
+          type: string
+        actionname:
+          type: string
+        actionalias:
+          type: string
+        version:
+          type: integer
+          format: int32
+        date:
+          type: string
+        ipaddress:
+          type: string
+      xml:
+        name: audit
+    ColumnErrorDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        columnid:
+          type: integer
+          format: int32
+        name:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+      xml:
+        name: column
+    AuditsDBO:
+      type: object
+      properties:
+        nextauditid:
+          type: string
+        audit:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditDBO'
+      xml:
+        name: audits
+    columnConditions:
+      type: object
+      properties:
+        row:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterRow'
+      xml:
+        name: columnconditions
+    NameValueLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    rawData:
+      type: object
+      properties:
+        value:
+          type: string
+        choices:
+          $ref: '#/components/schemas/choices'
+        date:
+          type: string
+        time:
+          type: string
+        linkdisplayname:
+          type: string
+        linkdisplayurl:
+          type: string
+        lookups:
+          $ref: '#/components/schemas/LookupsDBO'
+        folders:
+          $ref: '#/components/schemas/FoldersDBO'
+        documents:
+          $ref: '#/components/schemas/DocumentsDBO'
+        fromdate:
+          type: string
+        todate:
+          type: string
+        attachments:
+          $ref: '#/components/schemas/AttachmentsDBO'
+        isheetitems:
+          $ref: '#/components/schemas/ISheetItemsDBO'
+      xml:
+        name: rawdata
+    PermissionDBO:
+      type: object
+      properties:
+        view:
+          type: integer
+          format: int32
+        edit:
+          type: integer
+          format: int32
+        delete:
+          type: integer
+          format: int32
+        addEditAllFiles:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
+        viewAllFiles:
+          type: integer
+          format: int32
+    FolderDBO:
+      type: object
+      properties:
+        folderid:
+          type: string
+      xml:
+        name: folder
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    downloadAttachmentParamDBO:
+      type: object
+      required:
+      - viewid
+      properties:
+        viewid:
+          type: string
+        itemidcsv:
+          type: string
+      xml:
+        name: downloadattachmentparam
+    JoinConditionDBO:
+      type: object
+      properties:
+        currentsheetcolumnid:
+          type: integer
+          format: int32
+        targetsheetcolumnid:
+          type: integer
+          format: int32
+      xml:
+        name: joincondition
+    choices:
+      type: object
+      properties:
+        choice:
+          type: array
+          items:
+            $ref: '#/components/schemas/choice'
+      xml:
+        name: choices
+    LookupDBO:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+      xml:
+        name: lookup
+    columnSpecificDetail:
+      type: object
+      properties:
+        defaultvalue:
+          type: string
+        columnwidth:
+          type: string
+        sheetname:
+          type: string
+        sitename:
+          type: string
+        mandatory:
+          type: string
+        allowsearch:
+          type: string
+        maxchars:
+          type: integer
+          format: int32
+        allowfieldfromanotherisheet:
+          type: string
+        allowrichhtmltext:
+          type: string
+        numberoflines:
+          type: integer
+          format: int32
+        displaymethod:
+          type: string
+        includeotheroption:
+          type: string
+        singleormultileselectioninsearch:
+          type: string
+        choices:
+          $ref: '#/components/schemas/choices'
+        includeinalertpreferences:
+          type: string
+        min:
+          type: string
+        max:
+          type: string
+        decimalplaces:
+          type: integer
+          format: int32
+        showthousandseparators:
+          type: string
+        showaspercentage:
+          type: string
+        formattype:
+          type: string
+        dateformat:
+          type: string
+        defaultdateandtime:
+          type: string
+        sheetlookup:
+          type: string
+        fielddisplay:
+          type: string
+        allowmultipleusers:
+          type: string
+        methodtype:
+          type: string
+        sheetids:
+          type: string
+        allowuserstorenamelinks:
+          type: string
+        sheetid:
+          type: integer
+          format: int32
+        columnids:
+          type: string
+        viewid:
+          type: integer
+          format: int32
+        allowmultiplevalues:
+          type: string
+        restrictdelete:
+          type: string
+        displaycolumnnameprefix:
+          type: string
+        linkname:
+          type: string
+        joinconditions:
+          $ref: '#/components/schemas/JoinConditionsDBO'
+        formula:
+          type: string
+        startvalue:
+          type: integer
+          format: int32
+        prefix:
+          type: string
+        postfix:
+          type: string
+        minlength:
+          type: integer
+          format: int32
+        lookupglossarysheetid:
+          type: integer
+          format: int32
+        lookupglossarysheetviewid:
+          type: integer
+          format: int32
+        width:
+          type: integer
+          format: int32
+        otherscorevalue:
+          type: string
+        importdatafromexternalsource:
+          type: string
+        analysisengine:
+          type: string
+        allowInlineEditing:
+          type: string
+      xml:
+        name: columnspecificdetail
+    ISheetItemsDBO:
+      type: object
+      properties:
+        isheetitem:
+          type: array
+          items:
+            xml:
+              name: isheetitem
+            $ref: '#/components/schemas/ISheetItemDBO'
+      xml:
+        name: isheetitems
+    Link:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValueLink'
+    AttachmentsDBO:
+      type: object
+      properties:
+        attachment:
+          type: array
+          items:
+            xml:
+              name: attachment
+            $ref: '#/components/schemas/Attachment'
+      xml:
+        name: attachments
+    RawSiteSize:
+      type: object
+      properties:
+        activedocumentsize:
+          type: integer
+          format: int64
+        deleteddocumentsize:
+          type: integer
+          format: int64
+        totalsize:
+          type: integer
+          format: int64
+    importISheetTemplateDBO:
+      type: object
+      properties:
+        linkedtemplateid:
+          type: integer
+          format: int32
+        aliasname:
+          type: string
+        linkedisheet:
+          type: string
+        importdata:
+          type: string
+        appendisheetname:
+          type: string
+        templateparametergroups:
+          $ref: '#/components/schemas/ISheetTemplateParameterGroups'
+        templateSheetIdMap:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        templateId:
+          type: integer
+          format: int32
+        templateTitle:
+          type: string
+      xml:
+        name: importisheettemplate
+    categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+      xml:
+        name: categories
+    ISheetItemDBO:
+      type: object
+      properties:
+        recordid:
+          type: string
+        linkname:
+          type: string
+        apilink:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: isheetitem
+    MetaDataDBO:
+      type: object
+      properties:
+        siteName:
+          type: string
+        sheetName:
+          type: string
+        siteid:
+          type: string
+        sheetid:
+          type: string
+      xml:
+        name: metaData
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,379 @@
+openapi: 3.2.0
+info:
+  version: v1/v2
+  title: GoSystem E-file E-file Document Lifecycle V2 API
+  description: A RESTful API to provide access to the GoSystem E-file functionality.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/e-files
+security:
+- Authorization: []
+tags:
+- name: E-file Document Lifecycle V2
+paths:
+  /v2/e-file-validations:
+    post:
+      tags:
+      - E-file Document Lifecycle V2
+      summary: Validate e-file
+      description: This endpoint validates e-file for a tax return across jurisdictions.
+      operationId: ValidatesE-fileV2
+      parameters:
+      - name: Account
+        in: header
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        required: true
+        schema:
+          type: string
+      - name: DeviceId
+        in: header
+        required: true
+        description: A 40-character alphanumeric string (case-sensitive, no separators) consisting of characters A–F and 0–9. This value must be generated using the SHA-1 hash algorithm and should include unique machine identifiers such as hardware serial number and UUID. Refer to the IRS publication at https://www.irs.gov/pub/irs-pdf/p1345.pdf for more details.
+        schema:
+          type: string
+        example: B495E04BA84A47AE2FAB21346A7BDAA6A3275EAA
+      - name: IpAddress
+        in: header
+        required: true
+        description: Valid IPv4 or IPv6 address.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileRequestV2'
+            examples:
+              Return-Example:
+                $ref: '#/components/examples/return-V2-Example'
+              Estimate-Example:
+                $ref: '#/components/examples/estimate-V2-Example'
+              Extension-Example:
+                $ref: '#/components/examples/extension-V2-Example'
+        required: true
+      responses:
+        '200':
+          description: Success. The e-file validation is complete.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusWrapper'
+              examples:
+                efile-validation-failed-example:
+                  $ref: '#/components/examples/efile-validation-failed-example'
+                efile-validation-queued-example:
+                  $ref: '#/components/examples/efile-validation-queued-example'
+        '400':
+          description: 'Types of error in message:
+
+            - Missing account header: Message: "Please specify account information in header."
+
+            - Invalid IP address: Message: ipAddressErrorMessage.
+
+            - Invalid device ID: Message: deviceIdErrorMessage.
+
+            - Invalid tax type: Message: "Invalid Tax Return Type."
+
+            - Invalid jurisdiction: Message: "Invalid Jurisdiction(s) {wrongJurisdictions}."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - Invalid EFile Request Type for jurisdiction: Message: "Invalid EFile Request Type for {errorJurisdiction}."
+
+            - Locator doesn''t exist: Message: "Locator not found."
+
+            - Exception during processing: Message: "Invalid Input {exception message}."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: Validates e-file V2
+  /v2/e-files:
+    post:
+      tags:
+      - E-file Document Lifecycle V2
+      summary: Create e-file
+      description: This endpoint triggers e-file creation for a tax return across jurisdictions.
+      operationId: TriggersE-fileCreationV2
+      parameters:
+      - name: Account
+        in: header
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        required: true
+        schema:
+          type: string
+      - name: DeviceId
+        in: header
+        required: true
+        description: A 40-character alphanumeric string (case-sensitive, no separators) consisting of characters A–F and 0–9. This value must be generated using the SHA-1 hash algorithm and should include unique machine identifiers such as hardware serial number and UUID. Refer to the IRS publication at https://www.irs.gov/pub/irs-pdf/p1345.pdf for more details.
+        schema:
+          type: string
+        example: B495E04BA84A47AE2FAB21346A7BDAA6A3275EAA
+      - name: IpAddress
+        in: header
+        required: true
+        description: Valid IPv4 or IPv6 address.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/EFileRequestV2'
+            examples:
+              Returns-Example:
+                $ref: '#/components/examples/returns-V2-Example'
+              Estimates-Example:
+                $ref: '#/components/examples/estimates-V2-Example'
+              Extensions-Example:
+                $ref: '#/components/examples/extensions-V2-Example'
+        description: E-file will be generated for a given account, year, taxType, returnId, jurisdiction, and eFileRequestType.
+        required: true
+      responses:
+        '200':
+          description: Success. The e-file creation is triggered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFilesGenerationResponse'
+              examples:
+                efile-creation-success-example:
+                  $ref: '#/components/examples/efile-creation-success-V2-example'
+                efile-creation-failed-example:
+                  $ref: '#/components/examples/efile-creation-failed-V2-example'
+        '400':
+          description: 'Types of error in message:
+
+            - Missing account header: Message: "Please specify account information in header."
+
+            - Missing IP address: Message: "Please specify IpAddress information in header."
+
+            - Invalid IP address: Message: "Invalid IP address."
+
+            - Missing device ID: Message: "Please specify DeviceId information in header."
+
+            - Invalid device ID format: Message: "Invalid Device ID format. Length of Device ID should be 40 characters. Allowed characters are A-F, a-f and 0-9."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - Invalid tax type: Message: "Invalid Tax Return Type."
+
+            - Invalid jurisdiction: Message: "Invalid Jurisdiction(s) {wrongjurisdictions}."
+
+            - Invalid EFile Request Type for jurisdiction: Message: "Invalid EFile Request Type for {errorJurisdiction}."
+
+            - Locator doesn''t exist: Message: "file.TaxReturnID + Locator not found."
+
+            - Locator is super locked: Message: "file.TaxReturnID + Locator is superlocked, Efile Creation restricted."
+
+            - Exception during processing: Message: "Invalid Input {exp message}."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: Triggers e-file creation V2
+components:
+  examples:
+    extensions-V2-Example:
+      value:
+      - Year: 2020
+        TaxType: '1065'
+        TaxReturnID: 1234AC
+        Jurisdiction: IN
+        EFileRequestType: EXT
+    efile-validation-queued-example:
+      value:
+        Status:
+          Error: '0'
+          Code: '0'
+          Ident: 20211029\07\08\12345-123456-3445-1245
+          Desc: EFile Validation Queued
+          Size: 0
+          JobId: 20211029\07\08\12345-123456-3445-1245
+    efile-creation-failed-V2-example:
+      value:
+        EFileSubmissions:
+        - BatchId: null
+          IsSubmitted: true
+          IsBatchComplete: false
+          ErrorDetail: 'CreateEFile Submission Failed. Exception: Object reference not set to an instance of an object.'
+          FileInfo: null
+          Account: ACCT
+          Year: 2020
+          TaxType: _1120
+          TaxReturnID: '123456'
+          Jurisdiction: FED
+          EFileRequestType: REG
+        FailedSubmissionCount: 1
+    returns-V2-Example:
+      value:
+      - Year: 2020
+        TaxType: '1040'
+        TaxReturnID: 1234AB
+        Jurisdiction: TX
+        EFileRequestType: REG
+    efile-creation-success-V2-example:
+      value:
+        EFileSubmissions:
+        - BatchId: 12345-123456-3445-1245
+          IsSubmitted: true
+          IsBatchComplete: false
+          ErrorDetail: null
+          FileInfo: null
+          Account: ACCT
+          Year: 2020
+          TaxType: _1120
+          TaxReturnID: '123456'
+          Jurisdiction: FED
+          EFileRequestType: REG
+        FailedSubmissionCount: 0
+    estimate-V2-Example:
+      value:
+        Year: 2020
+        TaxType: '1120'
+        TaxReturnID: 1234AD
+        Jurisdiction: CA
+        EFileRequestType: EST
+    return-V2-Example:
+      value:
+        Year: 2020
+        TaxType: '1040'
+        TaxReturnID: 1234AB
+        Jurisdiction: TX
+        EFileRequestType: REG
+    efile-validation-failed-example:
+      value:
+        Status:
+          Error: '0'
+          Code: '0'
+          Desc: EFile Validation Failed
+          Info: Locator unavailable
+          Size: 0
+    estimates-V2-Example:
+      value:
+      - Year: 2020
+        TaxType: '1120'
+        TaxReturnID: 1234AD
+        Jurisdiction: CA
+        EFileRequestType: EST
+    extension-V2-Example:
+      value:
+        Year: 2020
+        TaxType: '1065'
+        TaxReturnID: 1234AC
+        Jurisdiction: IN
+        EFileRequestType: EXT
+  schemas:
+    EFileStatusWrapper:
+      type: object
+      properties:
+        Status:
+          $ref: '#/components/schemas/EFileStatuses'
+    EFilesGenerationResponse:
+      type: object
+      properties:
+        EFileSubmissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionResponse'
+        FailedSubmissionCount:
+          format: int32
+          type: integer
+    EFileRequestV2:
+      type: object
+      properties:
+        Year:
+          format: int32
+          type: integer
+          description: The tax year for which the e-file is being processed. Must be a valid 4-digit year (e.g., 2024).
+        TaxType:
+          type: string
+          description: Specifies the type of tax return being processed. 1040, 1041, 1065, 1120, 990, 5500, 709.
+        TaxReturnID:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the specific tax return. This is also referred to as the Locator ID.
+        Jurisdiction:
+          type: string
+          description: 'The state or local jurisdiction code where the tax is being filed. Example: AL for Alabama. Use the /v2/e-file-jurisdictions endpoint to retrieve valid codes.'
+        EFileRequestType:
+          type: string
+          description: 'Indicates the type of e-file request. This value is predefined for each jurisdiction. Example: REG, REG2. Use the /v2/e-file-jurisdictions endpoint to retrieve valid request types for each jurisdiction.'
+          enum:
+          - REG
+          - REG2
+          - REG3
+          - EXT
+          - EXT2
+          - EXT3
+          - EXT4
+          - EST
+          - EST2
+          - EST3
+    EFileStatuses:
+      type: object
+      properties:
+        Error:
+          type: string
+        Code:
+          type: string
+        Ident:
+          type: string
+        Desc:
+          type: string
+        Info:
+          type: string
+        ErrorDesc:
+          type: string
+        Size:
+          format: int64
+          type: integer
+        Data:
+          format: byte
+          type: string
+        JobId:
+          type: string
+        FileIds:
+          type: string
+    EFileSubmissionResponse:
+      type: object
+      properties:
+        BatchId:
+          type:
+          - string
+          - 'null'
+        IsSubmitted:
+          type: boolean
+        IsBatchComplete:
+          type: boolean
+        ErrorDetail:
+          type:
+          - string
+          - 'null'
+        FileInfo:
+          type:
+          - string
+          - 'null'
+        Account:
+          type: string
+        Year:
+          format: int32
+          type: integer
+        TaxType:
+          type: string
+        TaxReturnID:
+          type: string
+        Jurisdiction:
+          type: string
+        EFileRequestType:
+          type: string
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

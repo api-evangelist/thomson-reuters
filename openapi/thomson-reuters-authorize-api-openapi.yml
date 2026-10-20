@@ -1,0 +1,70 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Authorize API
+  version: v1
+  termsOfService: https://developerportal.thomsonreuters.com/content/terms-use
+  description: 'Operations tagged Authorize across 2 of this provider''s published API definitions: thomson-reuters-oauth2-for-onesource-apis-openapi.json, thomson-reuters-oauth2-for-onesource-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/oauth2/v1
+  description: ONESOURCE AMER region
+- url: https://api-emea.onesourcetax.com/oauth2/v1
+  description: ONESOURCE EMEA region
+- url: https://api-apac.onesourcetax.com/oauth2/v1
+  description: ONESOURCE APAC region
+tags:
+- name: Authorize
+paths:
+  /authorize:
+    get:
+      summary: Issues an authorization code, that can later be used in OAuth token generation
+      description: This endpoint is used to get a code for OAuth2.0 Autorization Code grant. It redirects the user to the pre-registered login page. After a successful login by a ONESOURCE user it redirects the user to the callback url set for the calling application and an authorization code is passed as a query parameter. This aurhorization code is later used to call /token endpoint to obtain an access token. Authorization code expires after 1 minute.
+      parameters:
+      - in: query
+        name: client_id
+        schema:
+          type: string
+        required: true
+        description: Consumer Key found in Developer Portal.
+      - in: query
+        name: response_type
+        schema:
+          type: string
+          enum:
+          - code
+        required: true
+        description: Constant value; indicating that you want an Authorization Code as response.
+      - in: query
+        name: state
+        schema:
+          type: string
+        required: false
+        description: Random string that can be used as  1. Session key or identifier that can be used to identify the user you want to persist data for;  2. CSRF protection mechanism, double check the value to ensure the response is legit.
+      - in: query
+        name: redirect_url
+        schema:
+          type: string
+        required: false
+        description: Url the user should be redirected back along with the Authorization Code after being authorized; if provided, it will be validated against the Callback URL that''s configured when creating an app in API Admin tile.
+      responses:
+        '302':
+          description: "<b>OK</b>  <ul>\n  <li>\n  Redirects user to the ONESOURCETAX login page. Browser will automatically handle 302 response and do the redirection, so what you will see as response should be 200 with the login page.\n  </li>\n</ul>  "
+        '400':
+          description: "<b>Bad Request</b> <ul>\n  <li>\n   client_id is missing - client_id parameter has not been added to the request url.\n  </li>\n  <li>\n    client_id contains spaces only - client_id parameter value contains spaces only.\n  </li>\n  <li>\n    Invalid client_id - client_id parameter value contains\n  </li>\n  <li>\n    Response type must be code - response_type parameter value must be code.\n  </li>\n</ul>"
+      tags:
+      - Authorize
+      operationId: getAuthorize
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/oauth2/v1
+      description: ONESOURCE AMER region
+    - url: https://api-emea.onesourcetax.com/oauth2/v1
+      description: ONESOURCE EMEA region
+    - url: https://api-apac.onesourcetax.com/oauth2/v1
+      description: ONESOURCE APAC region
+externalDocs:
+  description: External user's guide documentaton for OAUTH2 endpoints
+  url: https://8o0y42ycsacwxt4k23aooi8ha9sqq5u4jlttdxwbxee0yoa6ia.mcoutput.com/36636/Content/01%20-%20ONESOURCE%20APIs/General/Introduction.htm
+x-refined-from:
+- thomson-reuters-oauth2-for-onesource-apis-openapi.json
+- thomson-reuters-oauth2-for-onesource-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

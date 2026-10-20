@@ -1,0 +1,382 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Certificate Service API
+  version: 1.0.0
+  contact:
+    name: Team ONESOURCE
+  license:
+    name: ''
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: 'Operations tagged Certificate Service across 2 of this provider''s published API definitions: thomson-reuters-cloud-determination-rest-apis-openapi.json, thomson-reuters-cloud-determination-rest-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-uat.onesourcetax.com/indirect-tax-determination/beta
+tags:
+- name: Certificate Service
+paths:
+  /certificates:
+    get:
+      tags:
+      - Certificate Service
+      summary: Finds the list of Certificates
+      description: Fetches the list of certificates for which the logged In User has access.
+      operationId: findCertificates_1
+      parameters:
+      - name: pageSize
+        in: query
+        description: The Page Size
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageIndex
+        in: query
+        description: The Page Index
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: sortBy
+        in: query
+        description: The Sort By Criteria
+        required: false
+        schema:
+          type: string
+      - name: sortDescending
+        in: query
+        description: The Sort Descending Flag
+        required: false
+        schema:
+          type: boolean
+      - name: contains
+        in: query
+        description: The contains flag for the filter
+        required: false
+        schema:
+          type: boolean
+      - name: companyName
+        in: query
+        description: The Certificate Company Name
+        required: false
+        schema:
+          type: string
+      - name: customerNumber
+        in: query
+        description: The Certificate Customer Number
+        required: false
+        schema:
+          type: string
+      - name: certificateNumber
+        in: query
+        description: The Certificate Number
+        required: false
+        schema:
+          type: string
+      - name: effectiveDate
+        in: query
+        description: The Certificate Effective Date
+        required: false
+        schema:
+          type: string
+      - name: expirationDate
+        in: query
+        description: The Certificate Expiration Date
+        required: false
+        schema:
+          type: string
+      - name: state
+        in: query
+        description: The Certificate State
+        required: false
+        schema:
+          type: string
+      - name: customerName
+        in: query
+        description: The Certificate Customer Name
+        required: false
+        schema:
+          type: string
+      - name: createdDate
+        in: query
+        description: The Certificate Create Date
+        required: false
+        schema:
+          type: string
+      - name: modifiedDate
+        in: query
+        description: The Certificate Modified Date
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/UiCertificates'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not available
+        '500':
+          description: Server error. For more details check the logs.
+    servers:
+    - url: https://api-uat.onesourcetax.com/indirect-tax-determination/beta
+components:
+  schemas:
+    UiCertificateOptional:
+      type: object
+      required:
+      - hasDelete
+      properties:
+        certificateExemptionRate:
+          $ref: '#/components/schemas/UiCertificateExemptionRate'
+        certificateZones:
+          type: array
+          items:
+            $ref: '#/components/schemas/UiCertificateZone'
+        criteriaElements:
+          type: array
+          items:
+            $ref: '#/components/schemas/UiCertificateCriteriaElement'
+        hasDelete:
+          type: boolean
+        productCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/UiCertificateProductCode'
+        commodityCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/UiCertificateCommodityCode'
+    UiCertificateCriteriaElement:
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          type: string
+          minLength: 1
+          maxLength: 200
+        element:
+          type: string
+        delete:
+          type: boolean
+        useCriteriaId:
+          type: integer
+          format: int64
+    UiCertificates:
+      type: object
+      properties:
+        basicCertificate:
+          $ref: '#/components/schemas/UiBasicCertificate'
+        customerName:
+          type: string
+        fullyExempt:
+          type: string
+        customerId:
+          type: integer
+          format: int64
+        inherited:
+          type: boolean
+        merchantId:
+          type: integer
+          format: int64
+        customerGroupId:
+          type: integer
+          format: int64
+        entityAudit:
+          $ref: '#/components/schemas/UiEntityAudit'
+        customerNumber:
+          type: string
+        companyName:
+          type: string
+        stateCountry:
+          type: string
+    UiCertificateAuthority:
+      type: object
+      properties:
+        certificateAuthorityId:
+          type: integer
+          format: int64
+        authorityExempt:
+          type: boolean
+        authorityId:
+          type: integer
+          format: int64
+    UiExemptReason:
+      type: object
+      required:
+      - longCode
+      - shortCode
+      properties:
+        exemptReasonId:
+          type: integer
+          format: int64
+          minimum: 1
+        shortCode:
+          type: string
+          minLength: 1
+          maxLength: 2
+        longCode:
+          type: string
+          minLength: 1
+          maxLength: 20
+        description:
+          type: string
+          minLength: 0
+          maxLength: 200
+        defaultExemptReasonUS:
+          type: boolean
+        defaultExemptReasonINTL:
+          type: boolean
+    UiCertificateExemptionRate:
+      type: object
+      properties:
+        basisPercentage:
+          type: number
+        fullyExempt:
+          type: boolean
+        exemptAmount:
+          type: number
+        currencyId:
+          type: integer
+          format: int64
+    UiCertificateAuthorityType:
+      type: object
+      properties:
+        certificateAuthorityTypeId:
+          type: integer
+          format: int64
+        authorityTypeExempt:
+          type: boolean
+        authorityTypeId:
+          type: integer
+          format: int64
+        certificateAuthorities:
+          type: array
+          items:
+            $ref: '#/components/schemas/UiCertificateAuthority'
+    UiCertificateZone:
+      type: object
+      required:
+      - delete
+      properties:
+        certificateZoneId:
+          type: integer
+          format: int64
+        delete:
+          type: boolean
+        zoneExempt:
+          type: boolean
+        certificateAuthorityTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/UiCertificateAuthorityType'
+        zoneId:
+          type: integer
+          format: int64
+    UiBasicCertificate:
+      type: object
+      required:
+      - active
+      - certificateNumber
+      - status
+      - taxDataType
+      - useCriteria
+      properties:
+        status:
+          type: string
+          minLength: 1
+          maxLength: 1
+        active:
+          type: boolean
+        certificateNote:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        optionalCertificate:
+          $ref: '#/components/schemas/UiCertificateOptional'
+        exemptReason:
+          $ref: '#/components/schemas/UiExemptReason'
+        certificateNumber:
+          type: string
+          minLength: 1
+          maxLength: 100
+        useCriteria:
+          type: string
+          minLength: 1
+          maxLength: 1
+        effectiveDate:
+          type: string
+          minLength: 1
+          maxLength: 20
+        certificateId:
+          type: integer
+          format: int64
+          minimum: 1
+        taxDataType:
+          type: string
+        stateCountry:
+          type: integer
+          format: int64
+        expirationDate:
+          type: string
+    UiCertificateProductCode:
+      type: object
+      required:
+      - productCode
+      properties:
+        certificateProductId:
+          type: integer
+          format: int64
+        productCode:
+          type: string
+          minLength: 1
+          maxLength: 100
+        delete:
+          type: boolean
+    UiEntityAudit:
+      type: object
+      properties:
+        createdBy:
+          type: string
+        createdByEmail:
+          type: string
+        modifiedByEmail:
+          type: string
+        createdByPhone:
+          type: string
+        modifiedByPhone:
+          type: string
+        createdDate:
+          type: string
+        modifiedBy:
+          type: string
+        modifiedDate:
+          type: string
+    UiCertificateCommodityCode:
+      type: object
+      required:
+      - commodityCode
+      properties:
+        certificateCommodityId:
+          type: integer
+          format: int64
+        commodityCode:
+          type: string
+          minLength: 1
+          maxLength: 100
+        delete:
+          type: boolean
+  securitySchemes:
+    token:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-cloud-determination-rest-apis-openapi.json
+- thomson-reuters-cloud-determination-rest-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

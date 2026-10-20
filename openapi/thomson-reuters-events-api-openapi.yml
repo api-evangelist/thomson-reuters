@@ -1,0 +1,538 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Events API
+  version: '1.9'
+  description: 'Operations tagged Events across 2 of this provider''s published API definitions: thomson-reuters-matters-api-1-9-openapi.json, thomson-reuters-matters-api-1-9-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+tags:
+- name: Events
+  description: Use the Events API to retrive events of a matter.
+paths:
+  /matters/{id}/events:
+    get:
+      tags:
+      - Events
+      summary: Find events by matter ID
+      description: Retrieves all the existing events for matter by the matter ID.
+      operationId: MatterEvents_GetEventsForMatter
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of matter.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '200':
+          description: MatterEventsModel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatterEventsModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    post:
+      tags:
+      - Events
+      summary: Create a new event record
+      description: Create a new event record.
+      operationId: MatterEvents_PostEvent
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of matter.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.
+
+          '
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        x-name: postModel
+        description: Upload model
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreationModel'
+        x-position: 2
+      responses:
+        '201':
+          description: EventObjectModel
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventObjectModel'
+        '204':
+          description: Record was created successfully
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+  /matters/events/{id}:
+    get:
+      tags:
+      - Events
+      summary: Find an event by ID
+      description: Retrieves information about event by ID.
+      operationId: MatterEvents_GetEvent
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of event.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '200':
+          description: EventObjectModel
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventObjectModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    patch:
+      tags:
+      - Events
+      summary: Update an event by ID
+      description: Update field values for an event identified by the event ID.
+      operationId: MatterEvents_PatchEvent
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of event.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: If-Match
+        in: header
+        required: true
+        description: The ETag for the record to perform a concurrency check
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.
+
+          '
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        x-name: patchModel
+        description: upload model
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/EventUploadModel'
+        x-position: 2
+      responses:
+        '200':
+          description: EventObjectModel
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventObjectModel'
+        '204':
+          description: Record was patched successfully
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '412':
+          description: ETag provided in the If-Match header is out of date
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '415':
+          description: Unsupported format type is included in "Content-Type" header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '428':
+          description: Missing the "If-Match" header
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+components:
+  schemas:
+    StandardEventType:
+      type: string
+      description: ''
+      x-enumNames:
+      - Other
+      - TrialDate
+      - DiscoveryCutoff
+      - Deposition
+      - CaseAnalysis30
+      - CaseAnalysis90
+      enum:
+      - Other
+      - TrialDate
+      - DiscoveryCutoff
+      - Deposition
+      - 30DayCaseAnalysisDue
+      - 90DayCaseAnalysisDue
+    BaseEventType:
+      type: string
+      description: ''
+      x-enumNames:
+      - Standard
+      - Matter
+      - Contract
+      - Other
+      - Sop
+      - Document
+      enum:
+      - Standard
+      - Matter
+      - Contract
+      - Other
+      - Sop
+      - Document
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    AccessType:
+      type: string
+      description: ''
+      x-enumNames:
+      - 'Null'
+      - Public
+      - RestrictedFirm
+      - RestrictedLead
+      - Private
+      enum:
+      - 'Null'
+      - AllMatterParticipants
+      - CompanyAndSubmittingFirmMatterParticipants
+      - CompanyAndLeadFirmMatterParticipants
+      - CompanyMatterParticipantsOnly
+    MatterEventsModel:
+      type: object
+      additionalProperties: false
+      properties:
+        events:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EventObjectModel'
+    EventObjectModel:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        attachmentUrl:
+          type:
+          - string
+          - 'null'
+        submittedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        eventTypeName:
+          type:
+          - string
+          - 'null'
+        eventType:
+          $ref: '#/components/schemas/BaseEventType'
+        description:
+          type:
+          - string
+          - 'null'
+        personResponsibleID:
+          type: integer
+          format: int32
+        personResponsibleName:
+          type:
+          - string
+          - 'null'
+        matterId:
+          type: integer
+          format: int32
+        access:
+          $ref: '#/components/schemas/AccessType'
+    EventCreationModel:
+      type: object
+      additionalProperties: false
+      required:
+      - submittedDate
+      - eventType
+      - access
+      - personResponsibleID
+      properties:
+        submittedDate:
+          type: string
+          format: date-time
+          minLength: 1
+        eventTypeName:
+          type:
+          - string
+          - 'null'
+        eventType:
+          $ref: '#/components/schemas/StandardEventType'
+        description:
+          type:
+          - string
+          - 'null'
+        access:
+          $ref: '#/components/schemas/AccessType'
+        personResponsibleID:
+          type: integer
+          format: int32
+    EventUploadModel:
+      type: object
+      additionalProperties: false
+      properties:
+        submittedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        eventTypeName:
+          type:
+          - string
+          - 'null'
+        eventType:
+          $ref: '#/components/schemas/StandardEventType'
+        description:
+          type:
+          - string
+          - 'null'
+        access:
+          $ref: '#/components/schemas/AccessType'
+        personResponsibleID:
+          type:
+          - integer
+          - 'null'
+          format: int32
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-matters-api-1-9-openapi.json
+- thomson-reuters-matters-api-1-9-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

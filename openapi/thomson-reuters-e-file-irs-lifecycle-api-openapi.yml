@@ -1,0 +1,772 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters E-file IRS Lifecycle API
+  version: v1
+  termsOfService: None
+  description: 'Operations tagged E-file IRS Lifecycle across 2 of this provider''s published API definitions: thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.json, thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/income-tax/e-file
+security:
+- Authorization: []
+tags:
+- name: E-file IRS Lifecycle
+paths:
+  /v1/years/{year}/event-status:
+    get:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to retrieve a list of E-file status events occurring within a specific year.
+      operationId: RetrievesAYearlyE-fileStatusEventList
+      parameters:
+      - name: year
+        in: path
+        description: 4 Digit Year
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusesRepresentation'
+              examples:
+                E-File Statuses by Year:
+                  $ref: '#/components/examples/E-File_Statuses_by_Year'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves a Yearly E-file Status Event List
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+  /v1/binders/{binderId}/event-status:
+    get:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to retrieve a list of E-file status events for a specific binder
+      operationId: RetrievesAnE-fileStatusEventList
+      parameters:
+      - name: binderId
+        in: path
+        description: 16 Character Binder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusesRepresentation'
+              examples:
+                E-File Statuses by Binder:
+                  $ref: '#/components/examples/E-File_Statuses_by_Binder'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves an E-file Status Event List
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+  /v1/jurisdictions/{jurisdictionId}/binders/{binderId}/types/{eFileTypeId}/acknowledgements:
+    get:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Retrieve a list of E-file acknowledgement details for a specific binder and…
+      operationId: RetrievesE-fileAcknowledgementEvents
+      parameters:
+      - name: jurisdictionId
+        in: path
+        description: Jurisdiction ID
+        required: true
+        schema:
+          type: string
+      - name: binderId
+        in: path
+        description: 16 Character Binder ID
+        required: true
+        schema:
+          type: string
+      - name: eFileTypeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusAcknowledgementRepresentation'
+              examples:
+                E-File Acknowledgements Response:
+                  $ref: '#/components/examples/E-File_Acknowledgements'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves E-file Acknowledgement Events
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+  /v1/year/{year}/binder-types/{binderType}/e-filing-types/{efilingType}/e-file-submissions:
+    post:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to trigger multiple E-file Submissions for a given collection of binder ids…
+      operationId: TriggersMultipleE-filesE-filesSubmissions
+      parameters:
+      - name: year
+        in: path
+        description: Year
+        required: true
+        schema:
+          type: string
+        example: '2023'
+      - name: binderType
+        in: path
+        description: Binder Type
+        required: true
+        schema:
+          type: string
+        example: IncomeTax/Partnership
+      - name: efilingType
+        in: path
+        description: EFile Type
+        required: true
+        schema:
+          type: string
+        example: FedOnly/StateOnly/FedState
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileBatchBinderDetails'
+            examples:
+              e-file-submission-example:
+                $ref: '#/components/examples/e-file-submission-example'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewEfileSubmissionResponseRepresentation'
+              examples:
+                E-File Successfull Submission:
+                  $ref: '#/components/examples/e-file-submission-ok-response'
+        '400':
+          description: Request failed. This is usually due to validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewEfileSubmissionResponseRepresentation'
+              examples:
+                E-File Submission Invalid Data:
+                  $ref: '#/components/examples/e-file-submission-bad-request'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Triggers multiple E-files E-files Submissions
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+  /v1/years/{year}/e-file-submissions:
+    post:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to trigger multiple E-file Submissions for a given collection of binders…
+      operationId: TriggersMultipleE-filesSubmissions
+      parameters:
+      - name: year
+        in: path
+        description: 4 Digit Year
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: '2023'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileSubmissionDetails'
+            examples:
+              e-file-submission-example:
+                $ref: '#/components/examples/e-file-submission-details-example'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileSubmissionResponseRepresentation'
+              examples:
+                E-File Successfull Submission:
+                  $ref: '#/components/examples/e-file-submission-success-response'
+        '400':
+          description: Request failed. This is usually due to validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileSubmissionResponseRepresentation'
+              examples:
+                E-File Submission Invalid Data:
+                  $ref: '#/components/examples/e-file-submission-error-response'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Triggers multiple E-files Submissions
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+  /v1/binders/{binderId}/jurisdictions/{jurisdictionId}/e-file-types/{eFileTypeId}/e-file-status-details:
+    get:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to retrieve the E-file status details for a specific binder with…
+      operationId: RetrievesAnE-fileStatusDetails
+      parameters:
+      - name: binderId
+        in: path
+        description: 16 Character Binder ID
+        required: true
+        schema:
+          type: string
+      - name: jurisdictionId
+        in: path
+        description: Jurisdiction ID
+        required: true
+        schema:
+          type: string
+      - name: eFileTypeId
+        in: path
+        description: EFile Type ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusDetailsRepresentation'
+              examples:
+                E-File Status Details Response:
+                  $ref: '#/components/examples/E-File_Status_Details_Response'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves an E-file Status Details
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+components:
+  schemas:
+    NewSubmissionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        data:
+          type: object
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewSubmissionResponse_errors'
+    EFileSubmissionDetails:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionDetailsRequest'
+    NewSubmissionResponse_errors:
+      properties:
+        propertyName:
+          type: string
+        errorMessage:
+          type: string
+    EFileSubmissionResponseRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionResponse'
+    EFileSubmissionDetailsRequest:
+      type: object
+      properties:
+        binderId:
+          type: string
+          description: 16 characters, identifies a unique binder
+        jurisdictionId:
+          type: string
+        eFileTypeId:
+          type: string
+    EFileSubmissionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        processId:
+          type: string
+        data:
+          $ref: '#/components/schemas/EFileSubmissionResponse_data'
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewSubmissionResponse_errors'
+    EFileBatchBinderDetails:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionRequest'
+    EFileStatusDetailsRepresentation:
+      type: object
+      properties:
+        account:
+          type: string
+        entityNumber:
+          type: string
+        entityOrBinderName:
+          type: string
+          description: user defined name for a binder/entity
+        federalOrState:
+          type: string
+        status:
+          type: string
+        message:
+          type: array
+          items:
+            type: string
+    EFileStatusAcknowledgementRepresentation:
+      type: object
+      properties:
+        eFileReturnId:
+          type: string
+        taxYear:
+          type: string
+        taxPayer:
+          type: string
+        efin:
+          type: string
+        taxReturnType:
+          type: string
+          description: IRS defined type of tax return
+        taxReturnTypeName:
+          type: string
+        filingTypeDescription:
+          type: string
+        taxPeriodBeginDateTime:
+          type: string
+          format: date-time
+        taxPeriodEndDateTime:
+          type: string
+          format: date-time
+        returnStatus:
+          type: string
+        irsReceivedDateTime:
+          type: string
+          format: date-time
+        irsProcessedDateTime:
+          type: string
+          format: date-time
+        electronicPostmarkDateTime:
+          type: string
+          format: date-time
+        taxableIncome:
+          type: string
+        totalTax:
+          type: string
+        paymentIndicator:
+          type: string
+        embeddedCr32:
+          type: string
+        computedCr32:
+          type: string
+        acceptedWithAlerts:
+          type: boolean
+        completedValidation:
+          type: boolean
+    EFileSubmissionRequest:
+      type: object
+      properties:
+        binderId:
+          type: string
+        fileName:
+          type: string
+    EFileSubmissionResponse_data:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionDetails'
+    NewEfileSubmissionResponseRepresentation:
+      type: array
+      items:
+        $ref: '#/components/schemas/NewSubmissionResponse'
+    EFileStatusesRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileStatusRepresentation'
+    EFileStatusRepresentation:
+      type: object
+      properties:
+        binderId:
+          type: string
+          description: 16 characters, identifies a unique binder
+        binderName:
+          type: string
+          description: user defined name for a unique binder
+        eFileReturnId:
+          type: string
+        year:
+          type: integer
+          description: tax year
+          format: int32
+        entityId:
+          type: string
+          description: system generated unique identifier for an entity
+        entityNumber:
+          type: string
+        entityName:
+          type: string
+          description: user defined description for an entity
+        returnName:
+          type: string
+        statusId:
+          type: integer
+          format: int32
+        status:
+          type: string
+        jurisidictionId:
+          type: string
+        jurisdictionName:
+          type: string
+        user:
+          type: string
+        eFileTypeId:
+          type: string
+        eFileType:
+          type: string
+        eFileExtension:
+          type: string
+        formName:
+          type: string
+        requestDateTime:
+          type: string
+          format: date-time
+        transmissionDateTime:
+          type: string
+          format: date-time
+        acknowledgeDateTime:
+          type: string
+          format: date-time
+        acceptRejectDateTime:
+          type: string
+          format: date-time
+        acceptedWithAlerts:
+          type: boolean
+        superseded:
+          type: boolean
+  examples:
+    E-File_Status_Details_Response:
+      value:
+        account: 518K
+        entityNumber: TopCon
+        entityOrBinderName: The Incredibles/MJ_Efile_03_25_2022_03_04
+        federalOrState: CA Return
+        status: Error Not Submitted
+        message:
+        - This return was rejected because it did not have a EIN for the corporation within the electronic file.1.Please enter a valid EIN.If Ein is present complete Steps 2-5 as below2.Open this specific Return.3.Perform a Full recompute4.Recreate the Electronic File.5.Resubmit the return.Should you have any questions please call RIA Tax Support.
+        - Invalid EIN\SSN number
+    E-File_Statuses_by_Binder:
+      value:
+        resourceList:
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test Entity
+          taxReturnType: '1120'
+          returnName: Test Return
+          statusId: 11
+          status: Not qualified
+          jurisidictionId: FED
+          jurisdictionName: Federal
+          eFileTypeId: REG
+          eFileType: Regular
+          eFileExtension: XML
+          formName: Federal Return
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test EntityR
+          taxReturnType: '1065'
+          returnName: CA Extension
+          statusId: 2
+          status: Qualified
+          jurisidictionId: CA
+          jurisdictionName: California
+          eFileTypeId: EXT
+          eFileType: Extension
+          eFileExtension: ICA
+          formName: CA 8453-BE PMT
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test Entity
+          taxReturnType: '1065'
+          returnName: Test Return
+          statusId: 2
+          status: Qualified
+          jurisidictionId: CO
+          jurisdictionName: Colorado
+          eFileTypeId: REG
+          eFileType: Regular
+          eFileExtension: XCO
+          formName: CO Return
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+    e-file-submission-error-response:
+      value:
+        status: 400
+        message: Bad Request
+        processId: 0
+        data:
+        - binderId: 518K0101HX006SPZ
+          jurisdictionId: AL
+          eFileTypeId: REG
+        - binderId: 518K0101HX006OJZ
+          jurisdictionId: FED
+          eFileTypeId: EXT
+        errors:
+        - propertyName: File
+          errorMessage: 'XML should be available and have qualified status for submitting the E-file for binderId: [518K0101HX006SPZ].'
+        - propertyName: File
+          errorMessage: 'XML should be available and have qualified status for submitting the E-file for binderId: [518K0101HX006OJZ].'
+    E-File_Acknowledgements:
+      value:
+        eFileReturnId: '00000000000000000000'
+        taxYear: '2015'
+        taxPayer: 1120 CSE - e-File/1120 e-Fle
+        efin: '123456'
+        taxReturnType: 1120C
+        taxReturnTypeName: '1120'
+        filingTypeDescription: Federal Extension
+        taxPeriodBeginDateTime: '2015-01-01T00:00:00'
+        taxPeriodEndDateTime: '2015-12-31T00:00:00'
+        returnStatus: Rejected
+        irsReceivedDateTime: null
+        irsProcessedDateTime: '2020-08-18T00:00:00'
+        electronicPostmarkDateTime: '2020-08-18T04:11:53'
+        taxableIncome: '0'
+        totalTax: '0'
+        paymentIndicator: ' '
+        embeddedCr32: '0'
+        computedCr32: '0'
+        acceptedWithAlerts: false
+        completedValidation: false
+        _links: []
+        _embedded: null
+    e-file-submission-details-example:
+      value:
+      - binderId: 518K0101HX006SPZ
+        jurisdictionId: AL
+        eFileTypeId: REG
+      - binderId: 518K0101HX006OJZ
+        jurisdictionId: FED
+        eFileTypeId: EXT
+    E-File_Statuses_by_Year:
+      value:
+        resourceList:
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test Entity
+          taxReturnType: '1120'
+          returnName: Test Return
+          statusId: 11
+          status: Not qualified
+          jurisidictionId: FED
+          jurisdictionName: Federal
+          eFileTypeId: REG
+          eFileType: Regular
+          eFileExtension: XML
+          formName: Federal Return
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test EntityR
+          taxReturnType: '1065'
+          returnName: CA Extension
+          statusId: 2
+          status: Qualified
+          jurisidictionId: CA
+          jurisdictionName: California
+          eFileTypeId: EXT
+          eFileType: Extension
+          eFileExtension: ICA
+          formName: CA 8453-BE PMT
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test Entity
+          taxReturnType: '1065'
+          returnName: Test Return
+          statusId: 2
+          status: Qualified
+          jurisidictionId: CO
+          jurisdictionName: Colorado
+          eFileTypeId: REG
+          eFileType: Regular
+          eFileExtension: XCO
+          formName: CO Return
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+    e-file-submission-bad-request:
+      value:
+        status: 400
+        message: Bad Request
+        data:
+          id: 0
+          eFileBatchBinderDetails:
+          - binderId: 621R0101P40043Z5
+            fileName: abc.txt
+        errors:
+        - propertyName: EFileBatchBinderDetails
+          errorMessage: Combination of BinderId [621R0101P40043Z5] and FileName [abc.txt] does not exists.
+    e-file-submission-success-response:
+      value:
+        status: 200
+        message: Success
+        processId: 6014
+        data:
+        - binderId: 518K0101HX006OJZ
+          jurisdictionId: FED
+          eFileTypeId: EXT
+        errors: []
+    e-file-submission-example:
+      value:
+        eFileBatchBinderDetails:
+        - binderId: 518K0101HX006SPZ
+          fileName: C006SPZ3.IS7
+    e-file-submission-ok-response:
+      value:
+        status: 200
+        message: Success
+        data:
+          id: 0
+          eFileBatchBinderDetails:
+          - binderId: 621R0101P40043Z5
+            fileName: abc.txt
+        errors: []
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.json
+- thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

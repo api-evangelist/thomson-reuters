@@ -1,0 +1,514 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters OData Service (adheres to OData 4.0) API
+  version: '1.0'
+  description: 'Operations tagged OData Service (adheres to OData 4.0) across 2 of this provider''s published API definitions: thomson-reuters-datahub-query-service-1-0-openapi.json, thomson-reuters-datahub-query-service-1-0-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+tags:
+- name: OData Service  (adheres to OData 4.0)
+paths:
+  /query/odata/collectionservice:
+    get:
+      description: Retrieves all the available, published collections along with all of its versions that are associated with OData. This API also includes all aggregations and all breakdowns for the corresponding collections.
+      operationId: getOdataCollections
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OData default response.
+      security:
+      - bearerAuth: []
+      summary: Get all the versions of collections along with aggregations and breakdowns
+      tags:
+      - OData Service  (adheres to OData 4.0)
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/{collection-name}:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the records of the specific version of collection
+      description: Retrieves all the records of the specific version of the collection (collection name has version number as suffix).
+      operationId: getOdataCollectionsName
+      parameters:
+      - name: collection-name
+        in: path
+        description: Name of the collection name to be queried.
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/_Metadata:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get the metadata of all latest versions of both available and hidden…
+      description: Retrieves the collection ID, collection name, number of record set, status, latest version, year, period, blueprint name, blueprint type, creation date time, number of records, custom view ID, custom view name for each collection.
+      operationId: getOdataCollectionsWithMetadata
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/collections:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the versions of collections
+      description: 'Retrieves all the versions of collections.
+
+        For the latest version - <Collection Name>
+
+        For specific versions - <Collection Name>_v<Version Number>'
+      operationId: getODataCollections
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/collections/{collection-name}:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the records of specific version of the collection
+      description: Retrieves all the records of the specific version of the collection. If a collection has more than one version, then the collection name includes the specific version.
+      operationId: getODataCollectionsEntity
+      parameters:
+      - name: collection-name
+        in: path
+        description: Name of the collection name to be queried.
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/collections/_Metadata:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the metadata of latest versions of all collections
+      description: Retrieves the collection ID, collection name, number of record set, status, latest version, year, period, blueprint name, blueprint type, creation date time, number of records for each collection.
+      operationId: getODataCollectionsMetadata
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /odata/collections:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Refactored End point to get all the versions of collections
+      description: 'Retrieves all the versions of collections.
+
+        For the latest version - <Collection Name>
+
+        For specific versions - <Collection Name>_v<Version Number>'
+      operationId: getODatacollections
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /odata/collections/{name}:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Refactored End point to get all the records of specific version of the…
+      description: Retrieves all the records of the specific version of the collection. If a collection has more than one version, then the collection name includes the specific version.
+      operationId: getOdataCollectionsEntity
+      parameters:
+      - name: name
+        in: path
+        description: Name of the collection name to be queried.
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /odata/collections/_Metadata:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Refactored End point to get all the metadata of latest versions of all…
+      description: Retrieves the collection ID, collection name, number of record set, status, latest version, year, period, blueprint name, blueprint type, creation date time, number of records for each collection.
+      operationId: getODatacollectionsMetadata
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /odata/collections/latest:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the latest versions of collections
+      description: Retrieves all the latest versions of collections.
+      operationId: getODatalatestCollections
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /odata/collections/latest/{name}:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the records of specific version of the collection
+      description: Retrieves all the records of the latest version of the collection.
+      operationId: getODatalatestCollectionsEntity
+      parameters:
+      - name: name
+        in: path
+        description: Name of the collection name to be queried.
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /odata/collections/latest/_Metadata:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the metadata of latest versions of all collections
+      description: Retrieves the collection ID, collection name, number of record set, status, latest version, year, period, blueprint name, blueprint type, creation date time, number of records for each collection.
+      operationId: getODatalatestCollectionsMetadata
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/aggregations:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the aggregations of all collections
+      description: 'Retrieves all the aggregations of all collections versions.
+
+        For specific aggregations - <Collection Name>_v<Version Number>_<Aggregation Name>'
+      operationId: getODataaggregations
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/aggregations/{aggregation-name}:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the results of specific aggregation of the version of the collection
+      description: Retrieves all the results of the specific aggregation of the version of the collection.
+      operationId: getODataaggregationsEntity
+      parameters:
+      - name: aggregation-name
+        in: path
+        description: Name of the collection name to be queried.
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/aggregations/_Metadata:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the aggregations metadata
+      description: Retrieves all the metadata of the all aggregations.
+      operationId: getODataaggregationsMetadata
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/breakdown:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Access Datahub OData collection breakdowns data (adheres to OData 4.0)
+      description: Retrieves all the breakdowns (custom views with only rollups) of all collections versions.
+      operationId: getBreakdownOdataCollections
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/breakdown/{breakdown-name}:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the specific breakdown records
+      description: Retrieves all the records of the specific version of collection breakdown (custom views with only rollups).
+      operationId: getBreakdownOdataCollectionsEntity
+      parameters:
+      - name: breakdown-name
+        in: path
+        description: Name of the collection name to be queried.
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/odata/collectionservice/breakdown/_Metadata:
+    get:
+      tags:
+      - OData Service  (adheres to OData 4.0)
+      summary: Get all the breakdowns metadata
+      description: Retrieves all the metadata of the all breakdowns.
+      operationId: getBreakdownOdataCollectionsMetadata
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-datahub-query-service-1-0-openapi.json
+- thomson-reuters-datahub-query-service-1-0-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

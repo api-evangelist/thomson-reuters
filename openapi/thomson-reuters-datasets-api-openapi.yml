@@ -1,0 +1,2431 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Data Sets API
+  version: '1.0'
+  description: 'Operations tagged DataSets across 3 of this provider''s published API definitions: thomson-reuters-datasets-api-v1-openapi.json, thomson-reuters-onesource-indirect-tax-compliance-configuration-api-openapi.json, thomson-reuters-datasets-api-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+  description: UAT server for trusts datasets
+- url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+  description: APAC server for trusts datasets
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: DataSets
+paths:
+  /:
+    get:
+      tags:
+      - DataSets
+      summary: List all datasets
+      description: Retrieves detailed information about all datasets including period, entities, templates, and associated users.
+      operationId: DataSets_GetDatasetsForApi
+      parameters:
+      - name: offset
+        in: query
+        description: The number of items to skip before starting to collect the result set.
+        schema:
+          type: integer
+          format: int32
+      - name: take
+        in: query
+        description: The number of items to return in the response.
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse'
+    post:
+      tags:
+      - DataSets
+      summary: Create a dataset
+      description: Creates a dataset with the specified parameters in the request payload.
+      operationId: DataSets_PerformDatasetOperationForApi
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The dataset information required to create a dataset.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+      x-codegen-request-body-name: datasetRequest
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /{id}:
+    get:
+      tags:
+      - DataSets
+      summary: Get dataset details
+      description: Retrieves detailed information of a dataset by its unique ID, including entities, period, and return details.
+      operationId: DataSets_GetDatasetDetailsById
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail'
+    put:
+      tags:
+      - DataSets
+      summary: Edit a dataset
+      description: Updates a dataset with the provided payload parameters.
+      operationId: DataSets_PerformEditDatasetOperationForApi
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request object containing the updated dataset information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.EditDataset'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.EditDataset'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.EditDataset'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.EditDataset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.EditDataset'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus'
+      x-codegen-request-body-name: editModel
+    delete:
+      tags:
+      - DataSets
+      summary: Delete a dataset
+      description: Deletes a dataset using its unique identifier.
+      operationId: DataSets_DeleteDataSet
+      parameters:
+      - name: id
+        in: path
+        description: DatasetId.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: archive
+        in: query
+        description: Archive parameter with yes or no value.
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+        '404':
+          description: NotFound
+          content: {}
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /operations/{id}:
+    get:
+      tags:
+      - DataSets
+      summary: Get dataset operation status
+      description: Retrieves the overall status of all operations initiated on a dataset with an ID.
+      operationId: DataSets_GetStatusForDataset
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the operation.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /returns/e-file-return-search:
+    post:
+      tags:
+      - DataSets
+      summary: Get e-filing information for calculations
+      description: Retrieves calculations' e-filing details within a specified period.
+      operationId: DataSets_getCalculationandefiledData
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The period information for accessing EFiled data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.EfiledJsonModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.EfiledJsonModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.EfiledJsonModel'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.EfiledJsonModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.EfiledJsonModel'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.EfiledCalculationResult'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.EfiledCalculationResult'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.EfiledCalculationResult'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.EfiledCalculationResult'
+      x-codegen-request-body-name: searchrequest
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /{datasetid}/entities/{entityid}/sheet-data:
+    post:
+      tags:
+      - DataSets
+      summary: Export calculation data as JSON
+      description: Exports return data of a specific entity within a dataset to JSON format.
+      operationId: DataSets_GetCalculationSheetData
+      parameters:
+      - name: datasetid
+        in: path
+        description: Unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: entityid
+        in: path
+        description: Unique identifier of the entity.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request object containing sheet names to be exported.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationDataRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationDataRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationDataRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationDataRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationDataRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationSheetdataResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationSheetdataResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationSheetdataResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationSheetdataResponse'
+      x-codegen-request-body-name: calculationDataRequest
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /{datasetid}/entities/{entityid}/export-return:
+    get:
+      tags:
+      - DataSets
+      summary: Export calculation as Excel
+      description: Exports return data of a specific entity within a dataset to Excel format.
+      operationId: DataSets_GetExport
+      parameters:
+      - name: datasetid
+        in: path
+        description: Unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: entityid
+        in: path
+        description: Unique identifier of the entity.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /operations/delete/{id}:
+    get:
+      tags:
+      - DataSets
+      summary: Get delete operation status
+      description: Retrieves the status of a dataset delete operation by its ID.
+      operationId: DataSets_GetStatusForDeleteDataset
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the delete operation.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse'
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /{datasetid}/entities/{entityid}/sheets/{sheetid}/notes:
+    post:
+      tags:
+      - DataSets
+      summary: Add a note
+      description: Adds a note to a specific sheet or cell in a calculation.
+      operationId: DataSets_AddNote
+      parameters:
+      - name: datasetid
+        in: path
+        description: Unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: entityid
+        in: path
+        description: Unique identifier of the entity.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheetid
+        in: path
+        description: Unique identifier of the sheet.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request object containing the notes information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+      x-codegen-request-body-name: notesRequest
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /{datasetid}/entities/{entityid}/sheets/{sheetid}/query:
+    post:
+      tags:
+      - DataSets
+      summary: Add a query
+      description: Adds a query to a specific sheet or cell in a calculation.
+      operationId: DataSets_AddQuery
+      parameters:
+      - name: datasetid
+        in: path
+        description: Unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: entityid
+        in: path
+        description: Unique identifier of the entity.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheetid
+        in: path
+        description: Unique identifier of the sheet.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request object containing the query information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.NotesRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+      x-codegen-request-body-name: notesRequest
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /{workbookId}/statuses:
+    put:
+      tags:
+      - DataSets
+      summary: Update calculation status
+      description: Updates the status of a calculation.
+      operationId: DataSets_Status
+      parameters:
+      - name: workbookId
+        in: path
+        description: Unique identifier of the workbook.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request object containing the status name to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.UpdateReturnStatusRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.UpdateReturnStatusRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.UpdateReturnStatusRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.UpdateReturnStatusRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.UpdateReturnStatusRequest'
+        required: true
+      responses:
+        '204':
+          description: NoContent
+          content: {}
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.UpdateWorkbookStatusResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.UpdateWorkbookStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.UpdateWorkbookStatusResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.UpdateWorkbookStatusResponse'
+        '404':
+          description: NotFound
+          content: {}
+      x-codegen-request-body-name: request
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /statuses:
+    get:
+      tags:
+      - DataSets
+      summary: Get all calculation statuses
+      description: Retrieves all calculation statuses defined in the system.
+      operationId: getStatuses
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationStatusResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationStatusResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalculationStatusResponse'
+      x-operation-id-source: normalized
+      x-operation-id-original: DataSets_Status
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /efiling-form-codes-list/{workbookId}:
+    get:
+      tags:
+      - DataSets
+      summary: Get e-filing form codes
+      description: Retrieves all applicable form codes of a calculation.
+      operationId: DataSets_GetFormCodes
+      parameters:
+      - name: workbookId
+        in: path
+        description: Unique identifier of the workbook.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.FormCodesEfilerModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.FormCodesEfilerModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.FormCodesEfilerModel'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.FormCodesEfilerModel'
+        '404':
+          description: Form codes not found
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /queue-a-package:
+    post:
+      tags:
+      - DataSets
+      summary: Queue an e-filing package
+      description: Generates an e-filing package based on the selected calculation and form type, then queues the return for submission.
+      operationId: DataSets_SendQueuedFiling
+      parameters:
+      - name: workbookId
+        in: path
+        description: The unique identifier of the dataset.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request object containing the e-filing package data.
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: string
+                  description: JSON string containing formCode and displayName.
+                  example: '{"formCode":"","testInLive":"","AccountIdentifier":"","enableDebug":"",displayName":""}'
+                  required: true
+                accounts:
+                  type: string
+                  format: binary
+                  description: Accounts file to upload.
+                  required: false
+                other:
+                  type: string
+                  format: binary
+                  description: Other file to upload.
+                  required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+      x-codegen-request-body-name: datasetRequest
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /getinsertablesheets:
+    get:
+      tags:
+      - DataSets
+      summary: Get insertable sheets
+      description: Retrieves insertable sheets for a given template.
+      operationId: DataSets_GetInsertableSheets
+      parameters:
+      - name: templateId
+        in: query
+        description: Unique identifier of the template.
+        required: true
+        schema:
+          type: string
+      - name: templateName
+        in: query
+        description: Name of the template.
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.GetInsertSheet'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.GetInsertSheet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.GetInsertSheet'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.GetInsertSheet'
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /sheets:
+    post:
+      tags:
+      - DataSets
+      summary: Add sheets to a calculation
+      description: Adds one or more sheets to the specified calculation.
+      operationId: DataSets_AddSheets
+      parameters:
+      - name: workbookId
+        in: path
+        description: Unique identifier of the workbook.
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: The authorization token.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: List of sheets to add.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  OriginalLongName:
+                    type: string
+                    description: The original long name of the sheet.
+                  ParentSheetOriginalLongName:
+                    type: string
+                    description: The original long name of the parent sheet.
+                  ParentSheetContext:
+                    type: string
+                    description: Context of the parent sheet.
+                  ParentSheetBlockContext:
+                    type: string
+                    description: Block context of the parent sheet.
+                  MatchingString:
+                    type: string
+                    description: A string used for matching.
+                  MatchingXmlName:
+                    type: string
+                    description: The XML name used for matching.
+                  DisplayName:
+                    type: string
+                    description: The display name of the sheet.
+      responses:
+        '200':
+          description: Successfully added the sheet data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    OriginalLongName:
+                      type: string
+                      description: A descriptive name for the operation.
+                    Message:
+                      type: string
+                      description: Details about the operation performed.
+                    Status:
+                      type: string
+                      description: The status of the operation.
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /datasets/rollforward/{datasetId}:
+    post:
+      tags:
+      - DataSets
+      summary: Roll forward a dataset
+      description: Rolls forward a dataset.
+      operationId: rollforwardDataset
+      parameters:
+      - name: datasetId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the dataset to roll forward.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Queries.RollforwardRequest'
+      responses:
+        '200':
+          description: Successful rollforward
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Queries.RollforwardResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Dataset not found
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /sheet-exists:
+    post:
+      tags:
+      - DataSets
+      summary: Check if a sheet exists
+      description: Checks if a sheet exists in a workbook based on original long name and optional display name.
+      operationId: CheckSheetExists
+      parameters:
+      - name: workbookId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The workbook identifier.
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                originalLongName:
+                  type: string
+                  description: The original long name of the sheet (case insensitive comparison).
+                displayName:
+                  type: string
+                  description: The display name of the sheet (used for non-unique sheets).
+      responses:
+        '200':
+          description: Response indicating whether the sheet exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SheetExistsResponse'
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /sheet-types:
+    post:
+      tags:
+      - DataSets
+      summary: Update sheet types
+      description: Updates the sheet types for multiple sheets in a workbook.
+      operationId: UpdateSheetTypes
+      parameters:
+      - name: workbookId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The workbook identifier.
+      - name: Authorization
+        in: header
+        required: true
+        type: string
+        description: Authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SheetTypeUpdateRequest'
+              description: The sheet type update request containing sheet names and their target types.
+      responses:
+        '200':
+          description: All sheets updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SheetTypeUpdateResponse'
+        '206':
+          description: Some sheets updated, others skipped (same type)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SheetTypeUpdateResponse'
+        '207':
+          description: Mixed success/failure results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiStatusResponse'
+        '400':
+          description: All sheets are already the target type OR validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SheetTypeUpdateResponse'
+        '403':
+          description: Unauthorized access
+        '404':
+          description: All sheet references are invalid
+    servers:
+    - url: https://api-uat.onesourcetax.com/trusts/v1/datasets
+      description: UAT server for trusts datasets
+    - url: https://api-apac.onesourcetax.com/trusts/v1/datasets
+      description: APAC server for trusts datasets
+  /datasets:
+    get:
+      tags:
+      - DataSets
+      summary: This endpoint is used to fetch the list of all datasets present including…
+      operationId: getDatasets
+      parameters:
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: take
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse_2'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse_2'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse_2'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: DataSets_GetDatasetsForApi
+    post:
+      tags:
+      - DataSets
+      summary: This endpoint is used to create a new dataset with the given payload parameters
+      operationId: postDatasets
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus_2'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus_2'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus_2'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus_2'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus_2'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus_2'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus_2'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus_2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset_2'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset_2'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset_2'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset_2'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Dataset_2'
+        required: true
+      x-operation-id-source: normalized
+      x-operation-id-original: DataSets_PerformDatasetOperationForApi
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+  /datasets/{id}:
+    get:
+      tags:
+      - DataSets
+      summary: This endpoint is used to fetch the information like Entities, Period, Start and…
+      operationId: getDatasetsById
+      parameters:
+      - name: id
+        in: path
+        description: Unique Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail_2'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail_2'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail_2'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: DataSets_GetDatasetDetailsById
+    delete:
+      tags:
+      - DataSets
+      summary: Delete Dataset by id
+      operationId: deleteDatasetsById
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+        '404':
+          description: NotFound
+      x-operation-id-source: normalized
+      x-operation-id-original: DataSets_DeleteDataSet
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+  /datasets/operations/{id}:
+    get:
+      tags:
+      - DataSets
+      summary: This endpoint is used to fetch the status (Pass/Fail/InProgress) of created…
+      operationId: getDatasetsOperationsById
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: DataSets_GetStatusForDataset
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+  /datasets/operations/delete/{id}:
+    get:
+      tags:
+      - DataSets
+      summary: This endpoint is used to fetch the status (InProgress/Failed/Deleted) of delete…
+      operationId: getDatasetsOperationsDeleteById
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: DataSets_GetStatusForDeleteDataset
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.Datasets.Entity:
+      type: object
+      description: Represents an entity within a dataset.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the entity.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: Entity name.
+        shortName:
+          type: string
+          description: Entity short name.
+    TRTA.Athena.Models.Api.V4.Calculations.CalculationSheetdataResponse:
+      type: object
+      description: Response containing sheet data for a calculation, including dataset and calculation identifiers.
+      properties:
+        sheetData:
+          type: array
+          description: List of sheet data items.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.SheetData'
+        datsetId:
+          type: string
+          format: uuid
+          description: Unique identifier of the dataset.
+          example: 00000000-0000-0000-0000-000000000000
+        calculationName:
+          type: string
+          description: Name of the calculation.
+        calculationId:
+          type: string
+          format: uuid
+          description: Unique identifier of the calculation.
+          example: 00000000-0000-0000-0000-000000000000
+        entity:
+          type: string
+          description: Entity associated with the calculation.
+        error:
+          type: string
+          description: Error message, if any, related to the calculation data retrieval.
+    TRTA.Athena.Models.Api.V4.Calculations.EfiledCalculationResult:
+      type: object
+      description: Represents the result of an e-filed calculation, including return details and dataset information.
+      properties:
+        returnName:
+          type: string
+          description: Name of the return.
+        isAmendedReturn:
+          type: string
+          description: Yes/No if return is amended.
+        clientTemplateName:
+          type: string
+          description: Name of client template from which return is created (if any).
+        datasetName:
+          type: string
+          description: Name of dataset.
+        datasetPurpose:
+          type: string
+          description: Purpose of dataset.
+        datasetType:
+          type: string
+          description: Type of dataset.
+        datasetYear:
+          type: integer
+          description: Year of dataset.
+          format: int32
+        datasetStartDate:
+          type: string
+          description: Start date of dataset.
+        datasetEndDate:
+          type: string
+          description: End date of dataset.
+        createdBy:
+          type: string
+          description: Name of user who created dataset.
+        createDate:
+          type: string
+          description: Date of dataset creation.
+        entityName:
+          type: string
+          description: Name of the entity.
+        entityShortName:
+          type: string
+          description: Short name of entity.
+        legalEntityType:
+          type: string
+          description: Type of entity.
+        entityTaxType:
+          type: string
+          description: Tax type of entity.
+        efileQueuedBy:
+          type: string
+          description: Name of user who queued return.
+        efileQueuedDate:
+          type: string
+          description: Date when return is queued.
+        efileSubmittedBy:
+          type: string
+          description: Name of user who submitted the return.
+        efileSubmittedDate:
+          type: string
+          description: Date when return is submitted.
+        efileValidated:
+          type: string
+          description: Calculation is validated or not (Yes/No).
+        efilingStatus:
+          type: string
+          description: Current efiling status.
+        efileTan:
+          type: string
+          description: Efile TAN of return.
+    TRTA.Athena.Models.Api.V4.Calculations.EfiledJsonModel:
+      type: object
+      description: JSON model for e-filing, including period dates and purpose.
+      properties:
+        startDate:
+          type: string
+          description: Start date of period.
+        endDate:
+          type: string
+          description: End date of period.
+        purpose:
+          type: string
+          description: Purpose.
+    TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse:
+      type: object
+      description: Response from an operation, indicating the status and resource location.
+      properties:
+        status:
+          type: string
+          description: Status of the operation.
+        resourceLocation:
+          type: string
+          description: Location of the resource affected by the operation.
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse:
+      type: object
+      description: Represents the response for a request to retrieve multiple datasets, including a list of dataset details and the total count.
+      properties:
+        items:
+          type: array
+          description: List of datasets.
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail'
+        count:
+          type: integer
+          format: int32
+          description: Total count of datasets.
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.Calculations.GetInsertSheet:
+      type: object
+      description: Returns detailed information of a sheet.
+      properties:
+        sheetReference:
+          type: string
+          description: Reference identifier of the sheet.
+        originalLongName:
+          type: string
+          description: The original long name of the sheet.
+        fixedSheetReference:
+          type: string
+          description: Indicates if the sheet reference is fixed.
+        uniqueSheet:
+          type: string
+          description: Indicates if the sheet is unique.
+        parentUniqueSheet:
+          type: string
+          description: Indicates if the parent sheet is unique.
+        supportSheet:
+          type: string
+          description: Indicates if this is a support sheet.
+        parentSheetName:
+          type: string
+          description: Name of the parent sheet.
+        parentSheetReference:
+          type: string
+          description: Reference identifier of the parent sheet.
+        parentSheetBlockContexts:
+          type: string
+          description: Context blocks of the parent sheet.
+    TRTA.Athena.Models.Api.V4.Calculations.SheetData:
+      type: object
+      description: Represents data for a specific sheet, including its name, identifier, and row data.
+      properties:
+        name:
+          type: string
+          description: Name of the sheet.
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the sheet.
+          example: 00000000-0000-0000-0000-000000000000
+        description:
+          type: string
+          description: Description of the sheet.
+        rowData:
+          type: array
+          description: List of row data items within the sheet.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.RowData'
+    ReturnRemove:
+      type: object
+      properties:
+        ENTITYID:
+          type: string
+          format: uuid
+          description: Entity ID to remove.
+    TRTA.Athena.Models.Api.V4.Calculations.UpdateWorkbookStatusResponse:
+      type: object
+      description: Response containing information about errors that occurred during the return status update.
+      properties:
+        error:
+          type: string
+          description: Information about any error that occurred during the status update.
+    TRTA.Athena.Models.Api.V4.Calculations.CalculationDataRequest:
+      type: object
+      properties:
+        sheetNames:
+          type: array
+          description: List of sheet names for which data is requested.
+          items:
+            type: string
+    TRTA.Athena.Models.Api.V4.Calculations.UpdateReturnStatusRequest:
+      type: object
+      description: Request to update the status of a return.
+      properties:
+        status:
+          type: string
+          description: Name of the new status to be set for the return.
+    TRTA.Athena.Models.Api.V4.Datasets.ReturnDetails:
+      type: object
+      description: Detailed information for a return to be created within a dataset.
+      properties:
+        entityId:
+          type: string
+          description: Unique identifier for the entity.
+        templateId:
+          type: string
+          description: Unique identifier for the template.
+        templateFamilyName:
+          type: string
+          description: Template family name.
+        returnName:
+          type: string
+          description: Name of return.
+    TRTA.Athena.Models.Api.V4.Calculations.ColumnData:
+      type: object
+      description: Represents data for a specific column within a row, including its index, identifier, and value.
+      properties:
+        index:
+          type: integer
+          format: int32
+          description: Index of the column within the row.
+        columnId:
+          type: string
+          format: uuid
+          description: Unique identifier of the column.
+          example: 00000000-0000-0000-0000-000000000000
+        value:
+          type: string
+          description: Value of the column data.
+    TRTA.Athena.Models.Api.V4.Datasets.ReturnDetail:
+      type: object
+      description: Contains details of returns, including entities to add or remove.
+      properties:
+        add:
+          type: array
+          description: List of entities to be added to the return.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.AddEntity'
+        remove:
+          type: array
+          description: List of entities to be removed from the return.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.RemoveEntity'
+    SheetTypeUpdateRequest:
+      type: object
+      properties:
+        SheetReference:
+          type: string
+          description: Reference name of the sheet.
+        SheetType:
+          type: integer
+      description: Target sheet type.
+    TRTA.Athena.Models.Api.V4.Queries.RollforwardRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the rollforward operation.
+        period:
+          type: object
+          properties:
+            startDate:
+              type: string
+              description: Start date of the period (DD/MM/YYYY).
+            endDate:
+              type: string
+              description: End date of the period (DD/MM/YYYY).
+        purpose:
+          type: string
+          description: Purpose of the rollforward.
+        RETURNDETAILS:
+          type: object
+          properties:
+            ADD:
+              type: array
+              description: List of returns to add.
+              items:
+                $ref: '#/components/schemas/ReturnAdd'
+            UPDATE:
+              type: array
+              description: List of returns to update.
+              items:
+                $ref: '#/components/schemas/ReturnUpdate'
+            REMOVE:
+              type: array
+              description: List of returns to remove.
+              items:
+                $ref: '#/components/schemas/ReturnRemove'
+    TRTA.Athena.Models.Api.V4.Jurisdictions.Jurisdiction:
+      type: object
+      description: Represents the jurisdiction details associated with a dataset or return.
+      properties:
+        id:
+          type: string
+          description: ID of jurisdiction.
+        name:
+          type: string
+          description: Name of jurisdiction.
+    Error:
+      type: object
+      description: Details about an individual error.
+      properties:
+        id:
+          type: integer
+          description: The ID of the error.
+          example: 0
+        description:
+          type: string
+          description: A description of the error.
+          example: string
+    UpdateStatus:
+      type: object
+      properties:
+        sheetName:
+          type: string
+          description: The name of the sheet.
+        status:
+          type: string
+          description: The status of the update operation.
+        message:
+          type: string
+          description: The name of the sheet.
+    TRTA.Athena.Models.Api.V4.Calculations.Status:
+      type: object
+      description: Represents a status item, including its identifier and name.
+      properties:
+        id:
+          type: int
+          description: Unique identifier of the status.
+        name:
+          type: string
+          description: Name of the status.
+    TRTA.Athena.Models.Api.V4.Datasets.AddEntity:
+      type: object
+      description: Details of an entity to be added to a return, including template identifiers and return name.
+      properties:
+        entityId:
+          type: string
+          description: Unique identifier of the entity.
+        templateId:
+          type: string
+          description: Unique identifier of the template.
+        templateFamilyName:
+          type: string
+          description: Template family name.
+        returnName:
+          type: string
+          description: Name of return.
+    TRTA.Athena.Models.Api.V4.Datasets.NotesRequest:
+      type: object
+      description: Represents a request to add notes or queries to a cell or sheet within a dataset entity.
+      properties:
+        text:
+          type: string
+          description: The text content of the note or query.
+        shouldRollForward:
+          type: boolean
+          description: Indicates whether the note should be rolled forward.
+        location:
+          type: string
+          description: The location of the note, specifying whether it's associated with a cell or sheet.
+        rowId:
+          type: string
+          description: The row identifier for the cell where the note or query is located.
+        columnId:
+          type: string
+          description: The column identifier for the cell where the note or query is located.
+    TRTA.Athena.Models.Api.V4.Datasets.Dataset:
+      type: object
+      description: Represents a dataset in the system, including its name, year, period, purpose, type, and details of returns to be created.
+      properties:
+        name:
+          type: string
+          description: Name of dataset.
+        year:
+          type: integer
+          description: Year of dataset.
+          format: int32
+        period:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Period'
+          description: Time period of the dataset.
+        purpose:
+          type: string
+          description: Purpose of dataset.
+        type:
+          type: string
+          description: Type of dataset.
+        returnDetails:
+          type: array
+          description: List of details for each return to be created as part of the dataset.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.ReturnDetails'
+    TRTA.Athena.Models.Api.V4.Datasets.Template:
+      type: object
+      description: Represents a template used within a dataset.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the template.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        version:
+          type: string
+          description: Version of the template.
+        family:
+          type: string
+          description: Template family name.
+    TRTA.Athena.Models.Api.V4.Datasets.RemoveEntity:
+      type: object
+      description: Details of an entity to be removed from a return.
+      properties:
+        entityId:
+          type: string
+          description: Unique identifier of the entity.
+    TRTA.Athena.Models.Api.V4.Calculations.CalculationStatusResponse:
+      type: object
+      description: Response containing a list of status items for a calculation.
+      properties:
+        items:
+          type: array
+          description: List of status items.
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.Status'
+    TRTA.Athena.Models.Api.V4.Calculations.FormCodesEfilerModel:
+      type: object
+      description: Represents a form code used in e-filing, including its code and display name.
+      properties:
+        formCode:
+          type: string
+          description: Form code of the dataset.
+        displayName:
+          type: string
+          description: Display name of the dataset.
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail:
+      type: object
+      description: Represents detailed information about a specific dataset.
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the dataset.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: Name of dataset.
+        startDate:
+          type: string
+          description: Start date of dataset.
+        endDate:
+          type: string
+          description: End date of dataset.
+        year:
+          type: integer
+          description: Year of dataset.
+          format: int32
+        purpose:
+          type: string
+          description: Purpose of dataset.
+        periodType:
+          type: string
+          description: Period type of dataset.
+          readOnly: true
+        returnType:
+          type: string
+          description: Return type of dataset.
+        returns:
+          type: array
+          description: List of returns or calculations within the dataset.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Return'
+    TRTA.Athena.Models.Api.V4.Common.Errors:
+      type: object
+      description: Represents an error encountered during processing.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the error.
+          format: int32
+        description:
+          type: string
+          description: Descriptive message explaining the error.
+    TRTA.Athena.Models.Api.V4.Datasets.Period:
+      type: object
+      properties:
+        startDate:
+          type: string
+          description: Start date of period.
+        endDate:
+          type: string
+          description: End date of period.
+        type:
+          type: string
+          description: Type of period.
+      description: Period of dataset.
+    MultiStatusResponse:
+      type: object
+      properties:
+        successfulUpdates:
+          type: array
+          description: A list of successfully updated sheets.
+          items:
+            $ref: '#/components/schemas/UpdateStatus'
+        failedUpdates:
+          type: array
+          description: A list of updates that failed.
+          items:
+            $ref: '#/components/schemas/UpdateStatus'
+        skippedUpdates:
+          type: array
+          description: A list of updates that were skipped.
+          items:
+            $ref: '#/components/schemas/UpdateStatus'
+        overallMessage:
+          type: string
+          description: A general message about the overall update process.
+        totalProcessed:
+          type: integer
+          description: The total number of sheets processed.
+        successCount:
+          type: integer
+          description: The number of successfully updated sheets.
+        failureCount:
+          type: integer
+          description: The number of updates that failed.
+        skippedCount:
+          type: integer
+          description: The number of updates that were skipped.
+    SheetExistsResponse:
+      type: object
+      properties:
+        sheetExists:
+          type: string
+          description: Indicates whether the sheet exists.
+        error:
+          type: string
+          description: Error message.
+    TRTA.Athena.Models.Api.V4.Queries.RollforwardResponse:
+      type: object
+      description: The response object for the example endpoint.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier in UUID format.
+        status:
+          type: string
+          description: The status of the response.
+          example: string
+        errors:
+          type: array
+          description: A list of errors encountered during the request.
+          items:
+            $ref: '#/components/schemas/Error'
+    ReturnAdd:
+      type: object
+      properties:
+        ENTITYID:
+          type: string
+          format: uuid
+          description: Entity ID to add.
+        TEMPLATEID:
+          type: string
+          format: uuid
+          description: Template ID for the return.
+        TEMPLATEFAMILYNAME:
+          type: string
+          description: Name of the template family.
+        RETURNNAME:
+          type: string
+          description: Name of the return.
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of dataset.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        status:
+          type: string
+          description: Current status of dataset.
+        errors:
+          type: array
+          description: Errors if any.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.Errors'
+      description: Represents the status of a dataset, including its ID, current status, and any errors.
+    TRTA.Athena.Models.Api.V4.Calculations.RowData:
+      type: object
+      description: Represents a row of data within a sheet, including its index, identifier, and column data.
+      properties:
+        index:
+          type: integer
+          format: int32
+          description: Index of the row within the sheet.
+        rowId:
+          type: string
+          format: uuid
+          description: Unique identifier of the row.
+          example: 00000000-0000-0000-0000-000000000000
+        columnData:
+          type: array
+          description: List of column data items within the row.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.ColumnData'
+    SheetTypeUpdateResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message providing additional context or information.
+        results:
+          type: array
+          description: A list of sheet operation results.
+          items:
+            type: object
+            properties:
+              sheetName:
+                type: string
+                description: The name of the sheet.
+              status:
+                type: string
+                description: The status of the operation on the sheet.
+              message:
+                type: string
+                description: A message related to the sheet operation.
+        overallStatus:
+          type: string
+          description: Overall status of the operation.
+    TRTA.Athena.Models.Api.V4.Datasets.EditDataset:
+      type: object
+      description: Represents the editable details of a dataset, including its name, purpose, and return details.
+      properties:
+        name:
+          type: string
+          description: Name of the dataset.
+        purpose:
+          type: string
+          description: Purpose of the dataset.
+        returnDetails:
+          type: array
+          description: List of return details.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.ReturnDetail'
+    TRTA.Athena.Models.Api.V4.Datasets.Return:
+      type: object
+      description: Represents a return within a dataset.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the return.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        workbookId:
+          type: string
+          description: Unique identifier for the workbook associated with the return.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: Name of the return.
+        status:
+          type: string
+          description: Current status of the return.
+        efilingStatus:
+          type: string
+          description: E-filing status of the return.
+        year:
+          type: string
+          description: Year of return.
+        jurisdiction:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Jurisdictions.Jurisdiction'
+          description: Jurisdiction details for the return.
+        startDate:
+          type: string
+          description: Start date of return.
+        endDate:
+          type: string
+          description: End date of return.
+        entity:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Entity'
+          description: Entity details associated with the return.
+        template:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Template'
+          description: Template details used for the return.
+        createdBy:
+          type: string
+          description: User who created the return.
+        lastUpdatedBy:
+          type: string
+          description: User who last updated the return.
+        createdDate:
+          type: string
+          description: Date when the return was created.
+        lastUpdateDate:
+          type: string
+          description: Date when the return was last updated.
+    ReturnUpdate:
+      type: object
+      properties:
+        ENTITYID:
+          type: string
+          format: uuid
+          description: Entity ID to update.
+        TEMPLATEID:
+          type: string
+          format: uuid
+          description: Template ID for the return (optional).
+        TEMPLATEFAMILYNAME:
+          type: string
+          description: Name of the template family.
+        RETURNNAME:
+          type: string
+          description: Name of the return.
+    TRTA.Athena.Models.Api.V4.Datasets.ReturnDetails_2:
+      type: object
+      properties:
+        entityId:
+          format: uuid
+          description: Entity id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        templateId:
+          format: uuid
+          description: Template id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        templateFamilyName:
+          description: Template family name
+          type: string
+        clientTemplateName:
+          description: Name of dataset
+          type: string
+        returnName:
+          description: Name of return
+          type: string
+    TRTA.Athena.Models.Api.V4.Datasets.Entity_2:
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Entity id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          description: Entity name
+          type: string
+        shortName:
+          description: Entity short name
+          type: string
+    TRTA.Athena.Models.Api.V4.Datasets.Period_2:
+      description: Period
+      type: object
+      properties:
+        startDate:
+          description: Start date of period
+          type: string
+        endDate:
+          description: End date of period
+          type: string
+        type:
+          description: Type of  period
+          type: string
+    TRTA.Athena.Models.Api.V4.Datasets.Dataset_2:
+      type: object
+      properties:
+        name:
+          description: Name of dataset
+          type: string
+        year:
+          format: int32
+          description: Year of dataset
+          type: integer
+        period:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Period_2'
+          description: Period of dataset
+        purpose:
+          description: Purpose of dataset
+          type: string
+        type:
+          description: Type of dataset
+          type: string
+        returnDetails:
+          description: Details of returns to be created.
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.ReturnDetails_2'
+    TRTA.Athena.Models.Api.V4.Datasets.Template_2:
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Template id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        version:
+          description: Template version
+          type: string
+        family:
+          description: Template family name
+          type: string
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus_2:
+      description: 'TODO: This is actually DataSetStatus Model'
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Id of dataset
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        status:
+          description: Current status of dataset
+          type: string
+        errors:
+          description: Errors if any
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.Errors_2'
+    TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse_2:
+      type: object
+      properties:
+        status:
+          type: string
+        resourceLocation:
+          type: string
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse_2:
+      type: object
+      properties:
+        items:
+          description: Datasets
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail_2'
+          readOnly: true
+        count:
+          format: int32
+          type: integer
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.Jurisdictions.Jurisdiction_2:
+      type: object
+      properties:
+        id:
+          description: Id of jurisdiction
+          type: string
+        name:
+          description: Name of jurisdiction
+          type: string
+    TRTA.Athena.Models.Api.V4.Datasets.Return_2:
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Id of return
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          description: Name of return
+          type: string
+        status:
+          description: Status of return
+          type: string
+        efilingStatus:
+          description: Efiling status of return
+          type: string
+        year:
+          description: Year of return
+          type: string
+        jurisdiction:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Jurisdictions.Jurisdiction_2'
+          description: Jurisdiction of return
+        startDate:
+          description: Start date  of return
+          type: string
+        endDate:
+          description: End date of return
+          type: string
+        entity:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Entity_2'
+          description: entity information
+        template:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Template_2'
+          description: Template information
+        createdBy:
+          description: Created by
+          type: string
+        lastUpdatedBy:
+          description: Last updated by
+          type: string
+        createdDate:
+          description: Created date
+          type: string
+        lastUpdateDate:
+          description: Last update date
+          type: string
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail_2:
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Id of dataset
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          description: Name of dataset
+          type: string
+        startDate:
+          description: Start date of dataset
+          type: string
+        endDate:
+          description: End  date of dataset
+          type: string
+        year:
+          format: int32
+          description: Year of dataset
+          type: integer
+        purpose:
+          description: Purpose of dataset
+          type: string
+        periodType:
+          description: Period type of dataset
+          type: string
+          readOnly: true
+        returnType:
+          description: Return type of dataset
+          type: string
+        returns:
+          description: Returns or calculations
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Return_2'
+    TRTA.Athena.Models.Api.V4.Common.Errors_2:
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Error id
+          type: integer
+        description:
+          description: Error message
+          type: string
+x-refined-from:
+- thomson-reuters-datasets-api-v1-openapi.json
+- thomson-reuters-onesource-indirect-tax-compliance-configuration-api-openapi.json
+- thomson-reuters-datasets-api-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

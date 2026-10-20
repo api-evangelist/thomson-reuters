@@ -1,0 +1,4861 @@
+# x-archived-from: thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.1.1
+info:
+  title: ONESOURCE™ Tax Provision OData APIs
+  description: Tax Provision OData endpoints provide access to the OData and offer APIs to interact with data for various OneSource TaxProvision reports.
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+  description: AMERS endpoints
+- url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+  description: EMEA endpoints
+security:
+- Basic: []
+tags:
+- name: On-Demand Data Refersh
+  description: Provides data refresh capabilities for the ONESOURCE™ Tax Provision Data Query-Reporting tile and OData, allowing users to access the most current data without having to wait for scheduled updates.
+- name: Componentdetail
+  description: Retrives line-items details from the Tax Provision & Trial Balance reports for component-detail and State Tax Provision for component-detail-state.
+- name: Deferredbalances
+  description: Provides APIs to retrieve various types of deferred balances data including Pretax, Federal, State, FBOS, and Tax-Effected balances.
+- name: Deferredworkpaper
+  description: Retrieves temporary difference beginning and ending balances.
+- name: Payable
+  description: Retrieves taxes payable for units configured for datsets within an instance.
+- name: Questionnaire
+  description: Retrieves questions and answers associated with various questionnaires configured for datasets within a specific instance.
+- name: Rollups
+  description: Retrieves rollups defining how the data should be tiered.
+- name: SignOffStatus
+  description: 'Retrieves Sign-Off Status for user across three distinct views: Sign-Off, Unit and Status.'
+- name: StateProvision
+  description: Retrieves state tax provision broken out by states.
+- name: Subconsolidation
+  description: Retrieves subconsolidations assigned within a specific instance.
+- name: TaxProvision
+  description: Retrieves provision calculations and includes supporting calculations.
+paths:
+  /odata/v1/component-detail:
+    get:
+      tags:
+      - Componentdetail
+      description: Retrieves all component details based on the provided OData query options.
+      summary: Gets all component details
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of component details.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComponentDetail'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching component details.
+  /odata/v1/component-detail-state:
+    get:
+      tags:
+      - Componentdetail
+      description: Retrieves all component detail state based on the provided OData query options.
+      summary: Gets all component detail state
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of component detail state.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComponentDetailState'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching component details.
+  /odata/v1/deferred-balances-pretax:
+    get:
+      tags:
+      - Deferredbalances
+      description: Retrieves all deferred balances pretax.
+      summary: Gets all deferred balances pretax
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of deferred balances pretax.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeferredBalances'
+        '401':
+          description: Unauthorized access due to invalid token.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error while fetching data.
+  /odata/v1/deferred-balances-federal:
+    get:
+      tags:
+      - Deferredbalances
+      description: Retrieves all deferred balances federal.
+      summary: Gets all deferred balances federal
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of deferred balances federal.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeferredBalances'
+        '401':
+          description: Unauthorized access due to invalid token.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error while fetching data.
+  /odata/v1/deferred-balances-state:
+    get:
+      tags:
+      - Deferredbalances
+      description: Retrieves all deferred balances state.
+      summary: Gets all deferred balances state
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of deferred balances state.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeferredBalancesState'
+        '401':
+          description: Unauthorized access due to invalid token.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error while fetching data.
+  /odata/v1/deferred-balances-fbos:
+    get:
+      tags:
+      - Deferredbalances
+      description: Retrieves all deferred balances FBOS.
+      summary: Gets all deferred balances FBOS
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of deferred balances FBOS.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeferredBalances'
+        '401':
+          description: Unauthorized access due to invalid token.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error while fetching data.
+  /odata/v1/deferred-balances:
+    get:
+      tags:
+      - Deferredbalances
+      description: Retrieves all deferred balances tax effected.
+      summary: Gets all deferred balances tax effected
+      parameters:
+      - name: $top
+        in: query
+        description: The maximum number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of deferred balances tax effected.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeferredBalances'
+        '401':
+          description: Unauthorized access due to invalid token.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error while fetching data.
+  /odata/v1/deferred-workpaper:
+    get:
+      tags:
+      - Deferredworkpaper
+      description: Retrieves all deferred workpaper details based on the provided OData query options.
+      summary: Gets all deferred workpaper details
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of deferred workpaper details.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeferredWP'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error while fetching deferred workpaper details.
+  /odata/v1/EffectiveTaxRate:
+    get:
+      tags:
+      - EffectiveTaxRate
+      description: Retrieves profit for the period and adjustments to arrive at the total.
+      summary: Gets profit and adjustments for the period total
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of Effective Tax Rate records.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EffectiveTaxRate'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching Effective Tax Rate records.
+  /odata/v1:
+    get:
+      tags:
+      - Metadata
+      operationId: odata/v1/
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ODataServiceDocument'
+  /odata/v1/get-last-sync-info:
+    get:
+      tags:
+      - On-Demand Data Refersh
+      description: Returns the details of the most recently completed sync for the authenticated user's default instance, including its status, timestamp, triggered by user or automatic refresh, and when the next sync is scheduled.
+      summary: Gets the Last Sync Information
+      responses:
+        '200':
+          description: Returns the last sync information including last sync time, current status, next scheduled sync, and submitted by user.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/SyncInfoDTO'
+        '401':
+          description: Unauthorized if the user is not authenticated or the token is invalid.
+        '404':
+          description: Not Found if the user does not have an OTP schema or no sync history is found.
+        '500':
+          description: Internal Server Error if an exception occurs while fetching the last sync details.
+  /odata/v1/trigger-sync:
+    post:
+      tags:
+      - On-Demand Data Refersh
+      description: Triggers a sync for the default instance associated with the authenticated user. Use this endpoint to refresh data for the ONESOURCE Tax Provision Data Query — Reporting tile and OData, enabling access to the most current data without waiting for scheduled updates. .
+      summary: Trigger OTP Datalake Sync
+      responses:
+        '200':
+          description: Returns the sync details including last sync time and current status.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/SyncInfoDTO'
+        '401':
+          description: Unauthorized if the authentication token is invalid or missing.
+        '500':
+          description: Internal Server Error if an exception occurs while triggering the sync.
+  /odata/v1/get-sync-history:
+    get:
+      tags:
+      - On-Demand Data Refersh
+      description: The sync history returns a list of all sync runs — both manual and scheduled — for the default instance, ordered from most recent to oldest. Each entry in the list represents a single sync run.
+      summary: Gets User Sync History
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns a list of DagRun objects representing the sync history.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DagRun'
+        '401':
+          description: Unauthorized if the authentication token is invalid or missing.
+        '500':
+          description: Internal Server Error if an exception occurs while fetching the sync history.
+  /odata/v1/Payable:
+    get:
+      tags:
+      - Payable
+      description: Retrieves all payable details based on the provided OData query options.
+      summary: Gets all payable details
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of payable details.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payable'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching payable details.
+  /odata/v1/Questionnaire:
+    get:
+      tags:
+      - Questionnaire
+      description: Retrieves all Questionnaire records based on the provided OData query options.
+      summary: Gets all questionnaire records
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of Questionnaire records.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Questionnaire'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching Questionnaire records.
+  /odata/v1/rollup:
+    get:
+      tags:
+      - Rollups
+      description: Retrieves all rollup details based on the provided OData query options.
+      summary: Gets all rollup details
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of rollup details.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rollup'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error while fetching rollup details.
+  /odata/v1/SignOffStatus:
+    get:
+      tags:
+      - SignOffStatus
+      description: Retrieves all sign-off status records based on the provided OData query options.
+      summary: Gets all status records
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of sign-off status records.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SignOffStatus'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching sign-off status records.
+  /odata/v1/StateProvision:
+    get:
+      tags:
+      - StateProvision
+      description: Retrieves all state provisions based on the provided OData query options.
+      summary: Gets all state provisions
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of state provisions.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StateProvision'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching state provisions.
+  /odata/v1/StateProvisionDetail:
+    get:
+      tags:
+      - StateProvision
+      description: Retrieves state provision details based on the provided OData query options.
+      summary: Gets all state provision details
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of state provision details.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StateProvisionDetail'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching state provision details.
+  /odata/v1/Subconsolidation:
+    get:
+      tags:
+      - Subconsolidation
+      description: Retrieves all Subconsolidation records based on the provided OData query options.
+      summary: Gets all subconsolidation records
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of Subconsolidation records.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subconsolidation'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching Subconsolidation records.
+  /odata/v1/TaxProvision:
+    get:
+      tags:
+      - TaxProvision
+      description: Retrieves all tax provisions based on the provided OData query options.
+      summary: Gets all tax provisions
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of tax provisions.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxProvision'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching tax provisions.
+  /odata/v1/TaxProvisionDetail:
+    get:
+      tags:
+      - TaxProvision
+      summary: Retrieves tax provision details based on the provided OData query options.
+      description: Gets tax provision details
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of tax provision details.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxProvisionDetail'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching tax provision details.
+components:
+  schemas:
+    Assembly:
+      type: object
+      properties:
+        definedTypes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TypeInfo'
+        exportedTypes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Type'
+        codeBase:
+          type: string
+          nullable: true
+          readOnly: true
+          deprecated: true
+        entryPoint:
+          $ref: '#/components/schemas/MethodInfo'
+        fullName:
+          type: string
+          nullable: true
+          readOnly: true
+        imageRuntimeVersion:
+          type: string
+          nullable: true
+          readOnly: true
+        isDynamic:
+          type: boolean
+          readOnly: true
+        location:
+          type: string
+          nullable: true
+          readOnly: true
+        reflectionOnly:
+          type: boolean
+          readOnly: true
+        isCollectible:
+          type: boolean
+          readOnly: true
+        isFullyTrusted:
+          type: boolean
+          readOnly: true
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        escapedCodeBase:
+          type: string
+          nullable: true
+          readOnly: true
+          deprecated: true
+        manifestModule:
+          $ref: '#/components/schemas/Module'
+        modules:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Module'
+        globalAssemblyCache:
+          type: boolean
+          readOnly: true
+          deprecated: true
+        hostContext:
+          type: integer
+          format: int64
+          readOnly: true
+        securityRuleSet:
+          $ref: '#/components/schemas/SecurityRuleSet'
+      additionalProperties: false
+    CallingConventions:
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 32
+      - 64
+    ComponentDetail:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        countrycode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        component:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        currency:
+          type: string
+          nullable: true
+        localcurrencyamount:
+          type: string
+          nullable: true
+        reportingcurrencyamount:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ComponentDetailETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    ComponentDetailState:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        jurisdiction:
+          type: string
+          nullable: true
+        jurisdictionname:
+          type: string
+          nullable: true
+        component:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        currency:
+          type: string
+          nullable: true
+        localcurrencyamount:
+          type: string
+          nullable: true
+        reportingcurrencyamount:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ComponentDetailStateETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    ConstructorInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        declaringType:
+          $ref: '#/components/schemas/Type'
+        reflectedType:
+          $ref: '#/components/schemas/Type'
+        module:
+          $ref: '#/components/schemas/Module'
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        isCollectible:
+          type: boolean
+          readOnly: true
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+        attributes:
+          $ref: '#/components/schemas/MethodAttributes'
+        methodImplementationFlags:
+          $ref: '#/components/schemas/MethodImplAttributes'
+        callingConvention:
+          $ref: '#/components/schemas/CallingConventions'
+        isAbstract:
+          type: boolean
+          readOnly: true
+        isConstructor:
+          type: boolean
+          readOnly: true
+        isFinal:
+          type: boolean
+          readOnly: true
+        isHideBySig:
+          type: boolean
+          readOnly: true
+        isSpecialName:
+          type: boolean
+          readOnly: true
+        isStatic:
+          type: boolean
+          readOnly: true
+        isVirtual:
+          type: boolean
+          readOnly: true
+        isAssembly:
+          type: boolean
+          readOnly: true
+        isFamily:
+          type: boolean
+          readOnly: true
+        isFamilyAndAssembly:
+          type: boolean
+          readOnly: true
+        isFamilyOrAssembly:
+          type: boolean
+          readOnly: true
+        isPrivate:
+          type: boolean
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        isConstructedGenericMethod:
+          type: boolean
+          readOnly: true
+        isGenericMethod:
+          type: boolean
+          readOnly: true
+        isGenericMethodDefinition:
+          type: boolean
+          readOnly: true
+        containsGenericParameters:
+          type: boolean
+          readOnly: true
+        methodHandle:
+          $ref: '#/components/schemas/RuntimeMethodHandle'
+        isSecurityCritical:
+          type: boolean
+          readOnly: true
+        isSecuritySafeCritical:
+          type: boolean
+          readOnly: true
+        isSecurityTransparent:
+          type: boolean
+          readOnly: true
+        memberType:
+          $ref: '#/components/schemas/MemberTypes'
+      additionalProperties: false
+    CustomAttributeData:
+      type: object
+      properties:
+        attributeType:
+          $ref: '#/components/schemas/Type'
+        constructor:
+          $ref: '#/components/schemas/ConstructorInfo'
+        constructorArguments:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeTypedArgument'
+        namedArguments:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeNamedArgument'
+      additionalProperties: false
+    CustomAttributeNamedArgument:
+      type: object
+      properties:
+        memberInfo:
+          $ref: '#/components/schemas/MemberInfo'
+        typedValue:
+          $ref: '#/components/schemas/CustomAttributeTypedArgument'
+        memberName:
+          type: string
+          nullable: true
+          readOnly: true
+        isField:
+          type: boolean
+          readOnly: true
+      additionalProperties: false
+    CustomAttributeTypedArgument:
+      type: object
+      properties:
+        argumentType:
+          $ref: '#/components/schemas/Type'
+        value:
+          nullable: true
+      additionalProperties: false
+    DagRun:
+      type: object
+      properties:
+        dagRunId:
+          type: string
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        externalTrigger:
+          type: boolean
+        dateSubmitted:
+          type: string
+          format: date-time
+        note:
+          type: string
+          nullable: true
+        runType:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        userAccount:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DagRunETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    DeferredBalances:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        position:
+          type: string
+          nullable: true
+        rollforward:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        currency:
+          type: string
+          nullable: true
+        localcurrencyamount:
+          type: string
+          nullable: true
+        reportingcurrencyamount:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeferredBalancesETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    DeferredBalancesState:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        jurisdiction:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        position:
+          type: string
+          nullable: true
+        rollforward:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        currency:
+          type: string
+          nullable: true
+        localcurrencyamount:
+          type: string
+          nullable: true
+        reportingcurrencyamount:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeferredBalancesStateETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    DeferredWP:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        countrycode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        jurisdiction:
+          type: string
+          nullable: true
+        jurisdictionname:
+          type: string
+          nullable: true
+        component:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        position:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        currency:
+          type: string
+          nullable: true
+        localcurrencyamount:
+          type: string
+          nullable: true
+        reportingcurrencyamount:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeferredWPETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    EffectiveTaxRate:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        grouptaxrate:
+          type: number
+          format: double
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        unittaxrate:
+          type: number
+          format: double
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        countrycode:
+          type: string
+          nullable: true
+        countryname:
+          type: string
+          nullable: true
+        jurisdiction:
+          type: string
+          nullable: true
+        jurisdictionname:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        ptbilocal:
+          type: number
+          format: double
+          nullable: true
+        grouprateamountlocal:
+          type: number
+          format: double
+          nullable: true
+        unitrateamountlocal:
+          type: number
+          format: double
+          nullable: true
+        ptbireporting:
+          type: number
+          format: double
+          nullable: true
+        grouprateamountreporting:
+          type: number
+          format: double
+          nullable: true
+        unitrateamountreporting:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    EffectiveTaxRateETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    EventAttributes:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 512
+      - 1024
+    EventInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        declaringType:
+          $ref: '#/components/schemas/Type'
+        reflectedType:
+          $ref: '#/components/schemas/Type'
+        module:
+          $ref: '#/components/schemas/Module'
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        isCollectible:
+          type: boolean
+          readOnly: true
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+        memberType:
+          $ref: '#/components/schemas/MemberTypes'
+        attributes:
+          $ref: '#/components/schemas/EventAttributes'
+        isSpecialName:
+          type: boolean
+          readOnly: true
+        addMethod:
+          $ref: '#/components/schemas/MethodInfo'
+        removeMethod:
+          $ref: '#/components/schemas/MethodInfo'
+        raiseMethod:
+          $ref: '#/components/schemas/MethodInfo'
+        isMulticast:
+          type: boolean
+          readOnly: true
+        eventHandlerType:
+          $ref: '#/components/schemas/Type'
+      additionalProperties: false
+    FieldAttributes:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 16
+      - 32
+      - 64
+      - 128
+      - 256
+      - 512
+      - 1024
+      - 4096
+      - 8192
+      - 32768
+      - 38144
+    FieldInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        declaringType:
+          $ref: '#/components/schemas/Type'
+        reflectedType:
+          $ref: '#/components/schemas/Type'
+        module:
+          $ref: '#/components/schemas/Module'
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        isCollectible:
+          type: boolean
+          readOnly: true
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+        memberType:
+          $ref: '#/components/schemas/MemberTypes'
+        attributes:
+          $ref: '#/components/schemas/FieldAttributes'
+        fieldType:
+          $ref: '#/components/schemas/Type'
+        isInitOnly:
+          type: boolean
+          readOnly: true
+        isLiteral:
+          type: boolean
+          readOnly: true
+        isNotSerialized:
+          type: boolean
+          readOnly: true
+          deprecated: true
+        isPinvokeImpl:
+          type: boolean
+          readOnly: true
+        isSpecialName:
+          type: boolean
+          readOnly: true
+        isStatic:
+          type: boolean
+          readOnly: true
+        isAssembly:
+          type: boolean
+          readOnly: true
+        isFamily:
+          type: boolean
+          readOnly: true
+        isFamilyAndAssembly:
+          type: boolean
+          readOnly: true
+        isFamilyOrAssembly:
+          type: boolean
+          readOnly: true
+        isPrivate:
+          type: boolean
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        isSecurityCritical:
+          type: boolean
+          readOnly: true
+        isSecuritySafeCritical:
+          type: boolean
+          readOnly: true
+        isSecurityTransparent:
+          type: boolean
+          readOnly: true
+        fieldHandle:
+          $ref: '#/components/schemas/RuntimeFieldHandle'
+      additionalProperties: false
+    GenericParameterAttributes:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 8
+      - 16
+      - 28
+    ICustomAttributeProvider:
+      type: object
+      additionalProperties: false
+    IntPtr:
+      type: object
+      additionalProperties: false
+    LayoutKind:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 2
+      - 3
+    MemberInfo:
+      type: object
+      properties:
+        memberType:
+          $ref: '#/components/schemas/MemberTypes'
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        declaringType:
+          $ref: '#/components/schemas/Type'
+        reflectedType:
+          $ref: '#/components/schemas/Type'
+        module:
+          $ref: '#/components/schemas/Module'
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        isCollectible:
+          type: boolean
+          readOnly: true
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+      additionalProperties: false
+    MemberTypes:
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+      - 128
+      - 191
+    MethodAttributes:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 16
+      - 32
+      - 64
+      - 128
+      - 256
+      - 512
+      - 1024
+      - 2048
+      - 4096
+      - 8192
+      - 16384
+      - 32768
+      - 53248
+    MethodBase:
+      type: object
+      properties:
+        memberType:
+          $ref: '#/components/schemas/MemberTypes'
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        declaringType:
+          $ref: '#/components/schemas/Type'
+        reflectedType:
+          $ref: '#/components/schemas/Type'
+        module:
+          $ref: '#/components/schemas/Module'
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        isCollectible:
+          type: boolean
+          readOnly: true
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+        attributes:
+          $ref: '#/components/schemas/MethodAttributes'
+        methodImplementationFlags:
+          $ref: '#/components/schemas/MethodImplAttributes'
+        callingConvention:
+          $ref: '#/components/schemas/CallingConventions'
+        isAbstract:
+          type: boolean
+          readOnly: true
+        isConstructor:
+          type: boolean
+          readOnly: true
+        isFinal:
+          type: boolean
+          readOnly: true
+        isHideBySig:
+          type: boolean
+          readOnly: true
+        isSpecialName:
+          type: boolean
+          readOnly: true
+        isStatic:
+          type: boolean
+          readOnly: true
+        isVirtual:
+          type: boolean
+          readOnly: true
+        isAssembly:
+          type: boolean
+          readOnly: true
+        isFamily:
+          type: boolean
+          readOnly: true
+        isFamilyAndAssembly:
+          type: boolean
+          readOnly: true
+        isFamilyOrAssembly:
+          type: boolean
+          readOnly: true
+        isPrivate:
+          type: boolean
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        isConstructedGenericMethod:
+          type: boolean
+          readOnly: true
+        isGenericMethod:
+          type: boolean
+          readOnly: true
+        isGenericMethodDefinition:
+          type: boolean
+          readOnly: true
+        containsGenericParameters:
+          type: boolean
+          readOnly: true
+        methodHandle:
+          $ref: '#/components/schemas/RuntimeMethodHandle'
+        isSecurityCritical:
+          type: boolean
+          readOnly: true
+        isSecuritySafeCritical:
+          type: boolean
+          readOnly: true
+        isSecurityTransparent:
+          type: boolean
+          readOnly: true
+      additionalProperties: false
+    MethodImplAttributes:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+      - 128
+      - 256
+      - 512
+      - 4096
+      - 65535
+    MethodInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        declaringType:
+          $ref: '#/components/schemas/Type'
+        reflectedType:
+          $ref: '#/components/schemas/Type'
+        module:
+          $ref: '#/components/schemas/Module'
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        isCollectible:
+          type: boolean
+          readOnly: true
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+        attributes:
+          $ref: '#/components/schemas/MethodAttributes'
+        methodImplementationFlags:
+          $ref: '#/components/schemas/MethodImplAttributes'
+        callingConvention:
+          $ref: '#/components/schemas/CallingConventions'
+        isAbstract:
+          type: boolean
+          readOnly: true
+        isConstructor:
+          type: boolean
+          readOnly: true
+        isFinal:
+          type: boolean
+          readOnly: true
+        isHideBySig:
+          type: boolean
+          readOnly: true
+        isSpecialName:
+          type: boolean
+          readOnly: true
+        isStatic:
+          type: boolean
+          readOnly: true
+        isVirtual:
+          type: boolean
+          readOnly: true
+        isAssembly:
+          type: boolean
+          readOnly: true
+        isFamily:
+          type: boolean
+          readOnly: true
+        isFamilyAndAssembly:
+          type: boolean
+          readOnly: true
+        isFamilyOrAssembly:
+          type: boolean
+          readOnly: true
+        isPrivate:
+          type: boolean
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        isConstructedGenericMethod:
+          type: boolean
+          readOnly: true
+        isGenericMethod:
+          type: boolean
+          readOnly: true
+        isGenericMethodDefinition:
+          type: boolean
+          readOnly: true
+        containsGenericParameters:
+          type: boolean
+          readOnly: true
+        methodHandle:
+          $ref: '#/components/schemas/RuntimeMethodHandle'
+        isSecurityCritical:
+          type: boolean
+          readOnly: true
+        isSecuritySafeCritical:
+          type: boolean
+          readOnly: true
+        isSecurityTransparent:
+          type: boolean
+          readOnly: true
+        memberType:
+          $ref: '#/components/schemas/MemberTypes'
+        returnParameter:
+          $ref: '#/components/schemas/ParameterInfo'
+        returnType:
+          $ref: '#/components/schemas/Type'
+        returnTypeCustomAttributes:
+          $ref: '#/components/schemas/ICustomAttributeProvider'
+      additionalProperties: false
+    Module:
+      type: object
+      properties:
+        assembly:
+          $ref: '#/components/schemas/Assembly'
+        fullyQualifiedName:
+          type: string
+          nullable: true
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        mdStreamVersion:
+          type: integer
+          format: int32
+          readOnly: true
+        moduleVersionId:
+          type: string
+          format: uuid
+          readOnly: true
+        scopeName:
+          type: string
+          nullable: true
+          readOnly: true
+        moduleHandle:
+          $ref: '#/components/schemas/ModuleHandle'
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+      additionalProperties: false
+    ModuleHandle:
+      type: object
+      properties:
+        mdStreamVersion:
+          type: integer
+          format: int32
+          readOnly: true
+      additionalProperties: false
+    ODataEntitySetInfo:
+      type: object
+      properties:
+        typeAnnotation:
+          $ref: '#/components/schemas/ODataTypeAnnotation'
+        url:
+          type: string
+          format: uri
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ODataFunctionImportInfo:
+      type: object
+      properties:
+        typeAnnotation:
+          $ref: '#/components/schemas/ODataTypeAnnotation'
+        url:
+          type: string
+          format: uri
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ODataServiceDocument:
+      type: object
+      properties:
+        typeAnnotation:
+          $ref: '#/components/schemas/ODataTypeAnnotation'
+        entitySets:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ODataEntitySetInfo'
+        singletons:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ODataSingletonInfo'
+        functionImports:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ODataFunctionImportInfo'
+      additionalProperties: false
+    ODataSingletonInfo:
+      type: object
+      properties:
+        typeAnnotation:
+          $ref: '#/components/schemas/ODataTypeAnnotation'
+        url:
+          type: string
+          format: uri
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ODataTypeAnnotation:
+      type: object
+      properties:
+        typeName:
+          type: string
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    ParameterAttributes:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 4096
+      - 8192
+      - 16384
+      - 32768
+      - 61440
+    ParameterInfo:
+      type: object
+      properties:
+        attributes:
+          $ref: '#/components/schemas/ParameterAttributes'
+        member:
+          $ref: '#/components/schemas/MemberInfo'
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        parameterType:
+          $ref: '#/components/schemas/Type'
+        position:
+          type: integer
+          format: int32
+          readOnly: true
+        isIn:
+          type: boolean
+          readOnly: true
+        isLcid:
+          type: boolean
+          readOnly: true
+        isOptional:
+          type: boolean
+          readOnly: true
+        isOut:
+          type: boolean
+          readOnly: true
+        isRetval:
+          type: boolean
+          readOnly: true
+        defaultValue:
+          nullable: true
+          readOnly: true
+        rawDefaultValue:
+          nullable: true
+          readOnly: true
+        hasDefaultValue:
+          type: boolean
+          readOnly: true
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+      additionalProperties: false
+    Payable:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        countryfilingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        jurisdiction:
+          type: string
+          nullable: true
+        jurisdictionfilingunit:
+          type: string
+          nullable: true
+        fiscalyear:
+          type: string
+          nullable: true
+        txncode:
+          type: string
+          nullable: true
+        transactiontype:
+          type: string
+          nullable: true
+        rollupcode:
+          type: string
+          nullable: true
+        rollupname:
+          type: string
+          nullable: true
+        bucketcode:
+          type: string
+          nullable: true
+        bucketname:
+          type: string
+          nullable: true
+        classgroup:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        date:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        spotfxrate:
+          type: string
+          nullable: true
+        endingfxrate:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        amountlocal:
+          type: string
+          nullable: true
+        amountrptg:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PayableETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: {}
+    PropertyAttributes:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 512
+      - 1024
+      - 4096
+      - 8192
+      - 16384
+      - 32768
+      - 62464
+    PropertyInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        declaringType:
+          $ref: '#/components/schemas/Type'
+        reflectedType:
+          $ref: '#/components/schemas/Type'
+        module:
+          $ref: '#/components/schemas/Module'
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        isCollectible:
+          type: boolean
+          readOnly: true
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+        memberType:
+          $ref: '#/components/schemas/MemberTypes'
+        propertyType:
+          $ref: '#/components/schemas/Type'
+        attributes:
+          $ref: '#/components/schemas/PropertyAttributes'
+        isSpecialName:
+          type: boolean
+          readOnly: true
+        canRead:
+          type: boolean
+          readOnly: true
+        canWrite:
+          type: boolean
+          readOnly: true
+        getMethod:
+          $ref: '#/components/schemas/MethodInfo'
+        setMethod:
+          $ref: '#/components/schemas/MethodInfo'
+      additionalProperties: false
+    Questionnaire:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        question_code:
+          type: string
+          nullable: true
+        display_order:
+          type: integer
+          format: int64
+          nullable: true
+        questionnaire:
+          type: string
+          nullable: true
+        question:
+          type: string
+          nullable: true
+        response_type:
+          type: string
+          nullable: true
+        is_required:
+          type: integer
+          format: int64
+          nullable: true
+        is_verification_required:
+          type: integer
+          format: int64
+          nullable: true
+        b_res:
+          type: integer
+          format: int64
+          nullable: true
+        c_res:
+          type: string
+          nullable: true
+        d_res:
+          type: string
+          nullable: true
+        is_verified:
+          type: integer
+          format: int64
+          nullable: true
+        n_res:
+          type: number
+          format: double
+          nullable: true
+        s_res:
+          type: string
+          nullable: true
+      additionalProperties: false
+    QuestionnaireETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    Rollup:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        rolluptype:
+          type: string
+          nullable: true
+        rollup:
+          type: string
+          nullable: true
+        rollupcode:
+          type: string
+          nullable: true
+        rollupname:
+          type: string
+          nullable: true
+        component:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RollupETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    RuntimeFieldHandle:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/IntPtr'
+      additionalProperties: false
+    RuntimeMethodHandle:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/IntPtr'
+      additionalProperties: false
+    RuntimeTypeHandle:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/IntPtr'
+      additionalProperties: false
+    SecurityRuleSet:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+    SignOffStatus:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        userid:
+          type: string
+          nullable: true
+        username:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        priorstatus:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        timestamp:
+          type: string
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SignOffStatusETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    StateProvision:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        jurisdictionname:
+          type: string
+          nullable: true
+        jurisdiction:
+          type: string
+          nullable: true
+        currencytype:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        pretaxbookincome:
+          type: number
+          format: double
+          nullable: true
+        rounding:
+          type: number
+          format: double
+          nullable: true
+        roundedptbi:
+          type: number
+          format: double
+          nullable: true
+        forecastrate:
+          type: number
+          format: double
+          nullable: true
+        trueupamount:
+          type: number
+          format: double
+          nullable: true
+        forecastptbi:
+          type: number
+          format: double
+          nullable: true
+        fedpermsi4s:
+          type: number
+          format: double
+          nullable: true
+        fedpermsni4s:
+          type: number
+          format: double
+          nullable: true
+        modifications:
+          type: number
+          format: double
+          nullable: true
+        fedtempsi4s:
+          type: number
+          format: double
+          nullable: true
+        fedtempsni4s:
+          type: number
+          format: double
+          nullable: true
+        statetemporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        allocableincome:
+          type: number
+          format: double
+          nullable: true
+        stateapprate:
+          type: number
+          format: double
+          nullable: true
+        appincomeprenols:
+          type: number
+          format: double
+          nullable: true
+        apportionableincome:
+          type: number
+          format: double
+          nullable: true
+        statetaxrate:
+          type: number
+          format: double
+          nullable: true
+        taxbeforecredits:
+          type: number
+          format: double
+          nullable: true
+        taxcredits:
+          type: number
+          format: double
+          nullable: true
+        stateaftertaxtempdifferences:
+          type: number
+          format: double
+          nullable: true
+        cashstateprovision:
+          type: number
+          format: double
+          nullable: true
+        trueup:
+          type: number
+          format: double
+          nullable: true
+        currentstatetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        beginapportionmentpct:
+          type: number
+          format: double
+          nullable: true
+        endapportionmentpct:
+          type: number
+          format: double
+          nullable: true
+        beginstatedeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        endstatedeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        statedeferredtaxprovision:
+          type: number
+          format: double
+          nullable: true
+        totalstatetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        nols:
+          type: number
+          format: double
+          nullable: true
+        federaltaxableincome:
+          type: number
+          format: double
+          nullable: true
+        noncashtaxcredits:
+          type: number
+          format: double
+          nullable: true
+        balsheetonlyadj:
+          type: number
+          format: double
+          nullable: true
+        ctataxbs:
+          type: number
+          format: double
+          nullable: true
+        equityadjustment:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        tempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        attempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        utilizationrate:
+          type: number
+          format: double
+          nullable: true
+        basenolallowance:
+          type: number
+          format: double
+          nullable: true
+        nolreclass:
+          type: number
+          format: double
+          nullable: true
+        nolbalanceavailable:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        noltempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        oci:
+          type: number
+          format: double
+          nullable: true
+        ctacurrentside:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    StateProvisionDetail:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        jurisdictionname:
+          type: string
+          nullable: true
+        jurisdiction:
+          type: string
+          nullable: true
+        currencytype:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        classgroup:
+          type: string
+          nullable: true
+        pretaxbookincome:
+          type: number
+          format: double
+          nullable: true
+        rounding:
+          type: number
+          format: double
+          nullable: true
+        roundedptbi:
+          type: number
+          format: double
+          nullable: true
+        forecastrate:
+          type: number
+          format: double
+          nullable: true
+        trueupamount:
+          type: number
+          format: double
+          nullable: true
+        forecastptbi:
+          type: number
+          format: double
+          nullable: true
+        fedpermsi4s:
+          type: number
+          format: double
+          nullable: true
+        fedpermsni4s:
+          type: number
+          format: double
+          nullable: true
+        modifications:
+          type: number
+          format: double
+          nullable: true
+        fedtempsi4s:
+          type: number
+          format: double
+          nullable: true
+        fedtempsni4s:
+          type: number
+          format: double
+          nullable: true
+        statetemporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        allocableincome:
+          type: number
+          format: double
+          nullable: true
+        stateapprate:
+          type: number
+          format: double
+          nullable: true
+        appincomeprenols:
+          type: number
+          format: double
+          nullable: true
+        apportionableincome:
+          type: number
+          format: double
+          nullable: true
+        statetaxrate:
+          type: number
+          format: double
+          nullable: true
+        taxbeforecredits:
+          type: number
+          format: double
+          nullable: true
+        taxcredits:
+          type: number
+          format: double
+          nullable: true
+        stateaftertaxtempdifferences:
+          type: number
+          format: double
+          nullable: true
+        cashstateprovision:
+          type: number
+          format: double
+          nullable: true
+        trueup:
+          type: number
+          format: double
+          nullable: true
+        currentstatetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        beginapportionmentpct:
+          type: number
+          format: double
+          nullable: true
+        endapportionmentpct:
+          type: number
+          format: double
+          nullable: true
+        beginstatedeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        endstatedeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        statedeferredtaxprovision:
+          type: number
+          format: double
+          nullable: true
+        totalstatetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        nols:
+          type: number
+          format: double
+          nullable: true
+        federaltaxableincome:
+          type: number
+          format: double
+          nullable: true
+        noncashtaxcredits:
+          type: number
+          format: double
+          nullable: true
+        balsheetonlyadj:
+          type: number
+          format: double
+          nullable: true
+        ctataxbs:
+          type: number
+          format: double
+          nullable: true
+        equityadjustment:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        tempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        attempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        utilizationrate:
+          type: number
+          format: double
+          nullable: true
+        basenolallowance:
+          type: number
+          format: double
+          nullable: true
+        nolreclass:
+          type: number
+          format: double
+          nullable: true
+        nolbalanceavailable:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        noltempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        oci:
+          type: number
+          format: double
+          nullable: true
+        ctacurrentside:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    StateProvisionDetailETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    StateProvisionETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    StructLayoutAttribute:
+      type: object
+      properties:
+        typeId:
+          nullable: true
+          readOnly: true
+        value:
+          $ref: '#/components/schemas/LayoutKind'
+      additionalProperties: false
+    Subconsolidation:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        sc:
+          type: string
+          nullable: true
+        subconsolidation:
+          type: string
+          nullable: true
+        csc:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SubconsolidationETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    SyncInfoDTO:
+      type: object
+      properties:
+        currentStatus:
+          type: string
+          nullable: true
+        lastSync:
+          type: string
+          format: date-time
+          nullable: true
+        submittedBy:
+          type: string
+          nullable: true
+        nextScheduledSync:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    SyncInfoDTOETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    TaxProvision:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        countrycode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        currencytype:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        pretaxbookincome:
+          type: number
+          format: double
+          nullable: true
+        rounding:
+          type: number
+          format: double
+          nullable: true
+        roundedptbi:
+          type: number
+          format: double
+          nullable: true
+        forecastrate:
+          type: number
+          format: double
+          nullable: true
+        trueupamount:
+          type: number
+          format: double
+          nullable: true
+        forecastptbi:
+          type: number
+          format: double
+          nullable: true
+        ptbilocalstat:
+          type: string
+          nullable: true
+        deductiblestatetax:
+          type: number
+          format: double
+          nullable: true
+        permanentdifferences:
+          type: number
+          format: double
+          nullable: true
+        financialtaxableincome:
+          type: number
+          format: double
+          nullable: true
+        temporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        ftiprenols:
+          type: number
+          format: double
+          nullable: true
+        nols:
+          type: number
+          format: double
+          nullable: true
+        federaltaxableincome:
+          type: number
+          format: double
+          nullable: true
+        endtaxrate:
+          type: number
+          format: double
+          nullable: true
+        foreigntaxcurrent:
+          type: number
+          format: double
+          nullable: true
+        aftertaxtemporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        taxadjustments:
+          type: number
+          format: double
+          nullable: true
+        cashfedprovision:
+          type: number
+          format: double
+          nullable: true
+        trueup:
+          type: number
+          format: double
+          nullable: true
+        noncashtaxcredits:
+          type: number
+          format: double
+          nullable: true
+        totalcurrentfedprovision:
+          type: number
+          format: double
+          nullable: true
+        begindeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        balsheetonlyadj:
+          type: number
+          format: double
+          nullable: true
+        enddeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        ctataxbs:
+          type: number
+          format: double
+          nullable: true
+        deferredtaxprovision:
+          type: number
+          format: double
+          nullable: true
+        equityadjustment:
+          type: number
+          format: double
+          nullable: true
+        totalcurrenttaxprovision:
+          type: number
+          format: double
+          nullable: true
+        statecurrentprovision:
+          type: number
+          format: double
+          nullable: true
+        statedeferredprovision:
+          type: number
+          format: double
+          nullable: true
+        statetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        totaltaxprovisionwp:
+          type: number
+          format: double
+          nullable: true
+        effectivetaxrate:
+          type: number
+          format: double
+          nullable: true
+        edtbs_c_te_a:
+          type: number
+          format: double
+          nullable: true
+        edtbs_nc_te_a:
+          type: number
+          format: double
+          nullable: true
+        edtbs_c_te_l:
+          type: number
+          format: double
+          nullable: true
+        edtbs_nc_te_l:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        tempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_te:
+          type: number
+          format: double
+          nullable: true
+        attempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        utilizationrate:
+          type: number
+          format: double
+          nullable: true
+        basenolallowance:
+          type: number
+          format: double
+          nullable: true
+        nolreclass:
+          type: number
+          format: double
+          nullable: true
+        nolbalanceavailable:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        noltempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_te:
+          type: number
+          format: double
+          nullable: true
+        payablebbl:
+          type: number
+          format: double
+          nullable: true
+        liabilitybeginbalance:
+          type: number
+          format: double
+          nullable: true
+        payableactivity:
+          type: number
+          format: double
+          nullable: true
+        liabilitypayments:
+          type: number
+          format: double
+          nullable: true
+        liabilityadjustments:
+          type: number
+          format: double
+          nullable: true
+        liabilityrefunds:
+          type: number
+          format: double
+          nullable: true
+        liabilityendbalance:
+          type: number
+          format: double
+          nullable: true
+        currenttaxprovision:
+          type: number
+          format: double
+          nullable: true
+        liabilitycurradj:
+          type: number
+          format: double
+          nullable: true
+        oci:
+          type: number
+          format: double
+          nullable: true
+        totaltaxprovisionfs:
+          type: number
+          format: double
+          nullable: true
+        stateequityadjustment:
+          type: number
+          format: double
+          nullable: true
+        ctacurrentside:
+          type: number
+          format: double
+          nullable: true
+        effectratechange:
+          type: number
+          format: double
+          nullable: true
+        ratediffcurrentdeferred:
+          type: number
+          format: double
+          nullable: true
+        intercopermdiffs:
+          type: number
+          format: double
+          nullable: true
+        intercotaxadjs:
+          type: number
+          format: double
+          nullable: true
+        amt:
+          type: number
+          format: double
+          nullable: true
+        amtreclass:
+          type: number
+          format: double
+          nullable: true
+        aftertaxothertempamounttotal:
+          type: number
+          format: double
+          nullable: true
+        othertempamounttotal:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    TaxProvisionDetail:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        countrycode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        currencytype:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        pretaxbookincome:
+          type: number
+          format: double
+          nullable: true
+        rounding:
+          type: number
+          format: double
+          nullable: true
+        roundedptbi:
+          type: number
+          format: double
+          nullable: true
+        forecastrate:
+          type: number
+          format: double
+          nullable: true
+        trueupamount:
+          type: number
+          format: double
+          nullable: true
+        forecastptbi:
+          type: number
+          format: double
+          nullable: true
+        ptbilocalstat:
+          type: string
+          nullable: true
+        deductiblestatetax:
+          type: number
+          format: double
+          nullable: true
+        permanentdifferences:
+          type: number
+          format: double
+          nullable: true
+        financialtaxableincome:
+          type: number
+          format: double
+          nullable: true
+        temporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        ftiprenols:
+          type: number
+          format: double
+          nullable: true
+        nols:
+          type: number
+          format: double
+          nullable: true
+        federaltaxableincome:
+          type: number
+          format: double
+          nullable: true
+        endtaxrate:
+          type: number
+          format: double
+          nullable: true
+        foreigntaxcurrent:
+          type: number
+          format: double
+          nullable: true
+        aftertaxtemporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        taxadjustments:
+          type: number
+          format: double
+          nullable: true
+        cashfedprovision:
+          type: number
+          format: double
+          nullable: true
+        trueup:
+          type: number
+          format: double
+          nullable: true
+        noncashtaxcredits:
+          type: number
+          format: double
+          nullable: true
+        totalcurrentfedprovision:
+          type: number
+          format: double
+          nullable: true
+        begindeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        balsheetonlyadj:
+          type: number
+          format: double
+          nullable: true
+        enddeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        ctataxbs:
+          type: number
+          format: double
+          nullable: true
+        deferredtaxprovision:
+          type: number
+          format: double
+          nullable: true
+        equityadjustment:
+          type: number
+          format: double
+          nullable: true
+        totalcurrenttaxprovision:
+          type: number
+          format: double
+          nullable: true
+        statecurrentprovision:
+          type: number
+          format: double
+          nullable: true
+        statedeferredprovision:
+          type: number
+          format: double
+          nullable: true
+        statetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        totaltaxprovisionwp:
+          type: number
+          format: double
+          nullable: true
+        effectivetaxrate:
+          type: number
+          format: double
+          nullable: true
+        edtbs_c_te_a:
+          type: number
+          format: double
+          nullable: true
+        edtbs_nc_te_a:
+          type: number
+          format: double
+          nullable: true
+        edtbs_c_te_l:
+          type: number
+          format: double
+          nullable: true
+        edtbs_nc_te_l:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        tempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_te:
+          type: number
+          format: double
+          nullable: true
+        attempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        utilizationrate:
+          type: number
+          format: double
+          nullable: true
+        basenolallowance:
+          type: number
+          format: double
+          nullable: true
+        nolreclass:
+          type: number
+          format: double
+          nullable: true
+        nolbalanceavailable:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        noltempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_te:
+          type: number
+          format: double
+          nullable: true
+        payablebbl:
+          type: number
+          format: double
+          nullable: true
+        liabilitybeginbalance:
+          type: number
+          format: double
+          nullable: true
+        payableactivity:
+          type: number
+          format: double
+          nullable: true
+        liabilitypayments:
+          type: number
+          format: double
+          nullable: true
+        liabilityadjustments:
+          type: number
+          format: double
+          nullable: true
+        liabilityrefunds:
+          type: number
+          format: double
+          nullable: true
+        liabilityendbalance:
+          type: number
+          format: double
+          nullable: true
+        currenttaxprovision:
+          type: number
+          format: double
+          nullable: true
+        liabilitycurradj:
+          type: number
+          format: double
+          nullable: true
+        oci:
+          type: number
+          format: double
+          nullable: true
+        totaltaxprovisionfs:
+          type: number
+          format: double
+          nullable: true
+        stateequityadjustment:
+          type: number
+          format: double
+          nullable: true
+        ctacurrentside:
+          type: number
+          format: double
+          nullable: true
+        effectratechange:
+          type: number
+          format: double
+          nullable: true
+        ratediffcurrentdeferred:
+          type: number
+          format: double
+          nullable: true
+        intercopermdiffs:
+          type: number
+          format: double
+          nullable: true
+        intercotaxadjs:
+          type: number
+          format: double
+          nullable: true
+        amt:
+          type: number
+          format: double
+          nullable: true
+        amtreclass:
+          type: number
+          format: double
+          nullable: true
+        aftertaxothertempamounttotal:
+          type: number
+          format: double
+          nullable: true
+        othertempamounttotal:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    TaxProvisionDetailETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    TaxProvisionETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+    Type:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        isCollectible:
+          type: boolean
+          readOnly: true
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+        isInterface:
+          type: boolean
+          readOnly: true
+        memberType:
+          $ref: '#/components/schemas/MemberTypes'
+        namespace:
+          type: string
+          nullable: true
+          readOnly: true
+        assemblyQualifiedName:
+          type: string
+          nullable: true
+          readOnly: true
+        fullName:
+          type: string
+          nullable: true
+          readOnly: true
+        assembly:
+          $ref: '#/components/schemas/Assembly'
+        module:
+          $ref: '#/components/schemas/Module'
+        isNested:
+          type: boolean
+          readOnly: true
+        declaringType:
+          $ref: '#/components/schemas/Type'
+        declaringMethod:
+          $ref: '#/components/schemas/MethodBase'
+        reflectedType:
+          $ref: '#/components/schemas/Type'
+        underlyingSystemType:
+          $ref: '#/components/schemas/Type'
+        isTypeDefinition:
+          type: boolean
+          readOnly: true
+        isArray:
+          type: boolean
+          readOnly: true
+        isByRef:
+          type: boolean
+          readOnly: true
+        isPointer:
+          type: boolean
+          readOnly: true
+        isConstructedGenericType:
+          type: boolean
+          readOnly: true
+        isGenericParameter:
+          type: boolean
+          readOnly: true
+        isGenericTypeParameter:
+          type: boolean
+          readOnly: true
+        isGenericMethodParameter:
+          type: boolean
+          readOnly: true
+        isGenericType:
+          type: boolean
+          readOnly: true
+        isGenericTypeDefinition:
+          type: boolean
+          readOnly: true
+        isSZArray:
+          type: boolean
+          readOnly: true
+        isVariableBoundArray:
+          type: boolean
+          readOnly: true
+        isByRefLike:
+          type: boolean
+          readOnly: true
+        isFunctionPointer:
+          type: boolean
+          readOnly: true
+        isUnmanagedFunctionPointer:
+          type: boolean
+          readOnly: true
+        hasElementType:
+          type: boolean
+          readOnly: true
+        genericTypeArguments:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Type'
+        genericParameterPosition:
+          type: integer
+          format: int32
+          readOnly: true
+        genericParameterAttributes:
+          $ref: '#/components/schemas/GenericParameterAttributes'
+        attributes:
+          $ref: '#/components/schemas/TypeAttributes'
+        isAbstract:
+          type: boolean
+          readOnly: true
+        isImport:
+          type: boolean
+          readOnly: true
+        isSealed:
+          type: boolean
+          readOnly: true
+        isSpecialName:
+          type: boolean
+          readOnly: true
+        isClass:
+          type: boolean
+          readOnly: true
+        isNestedAssembly:
+          type: boolean
+          readOnly: true
+        isNestedFamANDAssem:
+          type: boolean
+          readOnly: true
+        isNestedFamily:
+          type: boolean
+          readOnly: true
+        isNestedFamORAssem:
+          type: boolean
+          readOnly: true
+        isNestedPrivate:
+          type: boolean
+          readOnly: true
+        isNestedPublic:
+          type: boolean
+          readOnly: true
+        isNotPublic:
+          type: boolean
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        isAutoLayout:
+          type: boolean
+          readOnly: true
+        isExplicitLayout:
+          type: boolean
+          readOnly: true
+        isLayoutSequential:
+          type: boolean
+          readOnly: true
+        isAnsiClass:
+          type: boolean
+          readOnly: true
+        isAutoClass:
+          type: boolean
+          readOnly: true
+        isUnicodeClass:
+          type: boolean
+          readOnly: true
+        isCOMObject:
+          type: boolean
+          readOnly: true
+        isContextful:
+          type: boolean
+          readOnly: true
+        isEnum:
+          type: boolean
+          readOnly: true
+        isMarshalByRef:
+          type: boolean
+          readOnly: true
+        isPrimitive:
+          type: boolean
+          readOnly: true
+        isValueType:
+          type: boolean
+          readOnly: true
+        isSignatureType:
+          type: boolean
+          readOnly: true
+        isSecurityCritical:
+          type: boolean
+          readOnly: true
+        isSecuritySafeCritical:
+          type: boolean
+          readOnly: true
+        isSecurityTransparent:
+          type: boolean
+          readOnly: true
+        structLayoutAttribute:
+          $ref: '#/components/schemas/StructLayoutAttribute'
+        typeInitializer:
+          $ref: '#/components/schemas/ConstructorInfo'
+        typeHandle:
+          $ref: '#/components/schemas/RuntimeTypeHandle'
+        guid:
+          type: string
+          format: uuid
+          readOnly: true
+        baseType:
+          $ref: '#/components/schemas/Type'
+        isSerializable:
+          type: boolean
+          readOnly: true
+          deprecated: true
+        containsGenericParameters:
+          type: boolean
+          readOnly: true
+        isVisible:
+          type: boolean
+          readOnly: true
+      additionalProperties: false
+    TypeAttributes:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 16
+      - 24
+      - 32
+      - 128
+      - 256
+      - 1024
+      - 2048
+      - 4096
+      - 8192
+      - 16384
+      - 65536
+      - 131072
+      - 196608
+      - 262144
+      - 264192
+      - 1048576
+      - 12582912
+    TypeInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        customAttributes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomAttributeData'
+        isCollectible:
+          type: boolean
+          readOnly: true
+        metadataToken:
+          type: integer
+          format: int32
+          readOnly: true
+        isInterface:
+          type: boolean
+          readOnly: true
+        memberType:
+          $ref: '#/components/schemas/MemberTypes'
+        namespace:
+          type: string
+          nullable: true
+          readOnly: true
+        assemblyQualifiedName:
+          type: string
+          nullable: true
+          readOnly: true
+        fullName:
+          type: string
+          nullable: true
+          readOnly: true
+        assembly:
+          $ref: '#/components/schemas/Assembly'
+        module:
+          $ref: '#/components/schemas/Module'
+        isNested:
+          type: boolean
+          readOnly: true
+        declaringType:
+          $ref: '#/components/schemas/Type'
+        declaringMethod:
+          $ref: '#/components/schemas/MethodBase'
+        reflectedType:
+          $ref: '#/components/schemas/Type'
+        underlyingSystemType:
+          $ref: '#/components/schemas/Type'
+        isTypeDefinition:
+          type: boolean
+          readOnly: true
+        isArray:
+          type: boolean
+          readOnly: true
+        isByRef:
+          type: boolean
+          readOnly: true
+        isPointer:
+          type: boolean
+          readOnly: true
+        isConstructedGenericType:
+          type: boolean
+          readOnly: true
+        isGenericParameter:
+          type: boolean
+          readOnly: true
+        isGenericTypeParameter:
+          type: boolean
+          readOnly: true
+        isGenericMethodParameter:
+          type: boolean
+          readOnly: true
+        isGenericType:
+          type: boolean
+          readOnly: true
+        isGenericTypeDefinition:
+          type: boolean
+          readOnly: true
+        isSZArray:
+          type: boolean
+          readOnly: true
+        isVariableBoundArray:
+          type: boolean
+          readOnly: true
+        isByRefLike:
+          type: boolean
+          readOnly: true
+        isFunctionPointer:
+          type: boolean
+          readOnly: true
+        isUnmanagedFunctionPointer:
+          type: boolean
+          readOnly: true
+        hasElementType:
+          type: boolean
+          readOnly: true
+        genericTypeArguments:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Type'
+        genericParameterPosition:
+          type: integer
+          format: int32
+          readOnly: true
+        genericParameterAttributes:
+          $ref: '#/components/schemas/GenericParameterAttributes'
+        attributes:
+          $ref: '#/components/schemas/TypeAttributes'
+        isAbstract:
+          type: boolean
+          readOnly: true
+        isImport:
+          type: boolean
+          readOnly: true
+        isSealed:
+          type: boolean
+          readOnly: true
+        isSpecialName:
+          type: boolean
+          readOnly: true
+        isClass:
+          type: boolean
+          readOnly: true
+        isNestedAssembly:
+          type: boolean
+          readOnly: true
+        isNestedFamANDAssem:
+          type: boolean
+          readOnly: true
+        isNestedFamily:
+          type: boolean
+          readOnly: true
+        isNestedFamORAssem:
+          type: boolean
+          readOnly: true
+        isNestedPrivate:
+          type: boolean
+          readOnly: true
+        isNestedPublic:
+          type: boolean
+          readOnly: true
+        isNotPublic:
+          type: boolean
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        isAutoLayout:
+          type: boolean
+          readOnly: true
+        isExplicitLayout:
+          type: boolean
+          readOnly: true
+        isLayoutSequential:
+          type: boolean
+          readOnly: true
+        isAnsiClass:
+          type: boolean
+          readOnly: true
+        isAutoClass:
+          type: boolean
+          readOnly: true
+        isUnicodeClass:
+          type: boolean
+          readOnly: true
+        isCOMObject:
+          type: boolean
+          readOnly: true
+        isContextful:
+          type: boolean
+          readOnly: true
+        isEnum:
+          type: boolean
+          readOnly: true
+        isMarshalByRef:
+          type: boolean
+          readOnly: true
+        isPrimitive:
+          type: boolean
+          readOnly: true
+        isValueType:
+          type: boolean
+          readOnly: true
+        isSignatureType:
+          type: boolean
+          readOnly: true
+        isSecurityCritical:
+          type: boolean
+          readOnly: true
+        isSecuritySafeCritical:
+          type: boolean
+          readOnly: true
+        isSecurityTransparent:
+          type: boolean
+          readOnly: true
+        structLayoutAttribute:
+          $ref: '#/components/schemas/StructLayoutAttribute'
+        typeInitializer:
+          $ref: '#/components/schemas/ConstructorInfo'
+        typeHandle:
+          $ref: '#/components/schemas/RuntimeTypeHandle'
+        guid:
+          type: string
+          format: uuid
+          readOnly: true
+        baseType:
+          $ref: '#/components/schemas/Type'
+        isSerializable:
+          type: boolean
+          readOnly: true
+          deprecated: true
+        containsGenericParameters:
+          type: boolean
+          readOnly: true
+        isVisible:
+          type: boolean
+          readOnly: true
+        genericTypeParameters:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Type'
+        declaredConstructors:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ConstructorInfo'
+        declaredEvents:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/EventInfo'
+        declaredFields:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/FieldInfo'
+        declaredMembers:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/MemberInfo'
+        declaredMethods:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/MethodInfo'
+        declaredNestedTypes:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TypeInfo'
+        declaredProperties:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/PropertyInfo'
+        implementedInterfaces:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Type'
+      additionalProperties: false
+    UserDetailsDTOETag:
+      type: object
+      properties:
+        isWellFormed:
+          type: boolean
+        entityType:
+          $ref: '#/components/schemas/Type'
+        isAny:
+          type: boolean
+        isIfNoneMatch:
+          type: boolean
+      additionalProperties: false
+  securitySchemes:
+    Basic:
+      type: http
+      scheme: basic

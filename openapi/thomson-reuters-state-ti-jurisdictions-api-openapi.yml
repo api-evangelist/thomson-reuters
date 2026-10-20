@@ -1,0 +1,124 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts State Ti Jurisdictions API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: State Ti Jurisdictions
+paths:
+  /v1/state-ti-jurisdictions/{year}:
+    get:
+      tags:
+      - State Ti Jurisdictions
+      summary: Returns the list of state Ti Jurisdictions based on the year.
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiJurisdictionsRepresentation'
+              examples:
+                state-ti-jurisdictions:
+                  $ref: '#/components/examples/state-ti-jurisdictions'
+        '204':
+          description: Indicates no data found with given year. Check year.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      operationId: getV1StateTiJurisdictionsByYear
+      x-operation-id-source: derived
+components:
+  schemas:
+    StateTiJurisdictionRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          description: Chart year.
+        jurisdictionCode:
+          type: string
+          description: Jurisdiction code.
+        jurisdictionName:
+          type: string
+          description: Jurisdiction name.
+        isSelected:
+          type: boolean
+        isIncomeReturnEnabled:
+          type: boolean
+          description: Indicates whether return type Income is enabled for a jurisdiction.
+        isFinancialReturnEnabled:
+          type: boolean
+          description: Indicates whether return type Financial is enabled for a jurisdiction.
+        isInsuranceReturnEnabled:
+          type: boolean
+          description: Indicates whether return type Insurance is enabled for a jurisdiction.
+        isUsedByBinders:
+          type: boolean
+          description: Indicates whether the jurisdiction is used by a binder.
+    StateTiJurisdictionsRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Chart year.
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateTiJurisdictionRepresentation'
+  examples:
+    state-ti-jurisdictions:
+      value:
+        year: '2020'
+        resourceList:
+        - year: 2020
+          jurisdictionCode: AL
+          jurisdictionName: Alabama
+          isSelected: true
+          isIncomeReturnEnabled: true
+          isFinancialReturnEnabled: true
+          isInsuranceReturnEnabled: false
+          isUsedByBinders: true
+        - year: 2020
+          jurisdictionCode: AK
+          jurisdictionName: Alaska
+          isSelected: true
+          isIncomeReturnEnabled: true
+          isFinancialReturnEnabled: false
+          isInsuranceReturnEnabled: false
+          isUsedByBinders: true
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

@@ -1,0 +1,1510 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Query Service API
+  version: '1.0'
+  description: 'Operations tagged Query Service across 5 of this provider''s published API definitions: thomson-reuters-datahub-query-service-1-0-openapi.json, thomson-reuters-general-ledger-manager-openapi.json, thomson-reuters-datahub-query-service-1-0-openapi.yml, thomson-reuters-datahub-query-service-openapi.yml, thomson-reuters-general-ledger-manager-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+- url: https://api.onesourcetax.com/general-ledger-manager/v1
+security:
+- bearerAuth: []
+tags:
+- name: Query Service
+paths:
+  /query/collections:
+    get:
+      tags:
+      - Query Service
+      summary: Get a paginated list of published collections
+      description: 'Returns a list of published collections with their metadata.
+
+
+        Potential values for ontology:
+
+
+        idname
+
+
+        1financial-hierarchy-position
+
+
+        2chart of accounts
+
+
+        3entity
+
+
+        4account
+
+
+        5balance'
+      operationId: getCollections
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionCollectionDTO'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Query Service
+      summary: Query a paginated list of collections based on the query request body
+      description: Returns a list of collections with their metadata.
+      operationId: queryCollections
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        description: Query paginated list of collection based on filter condition.
+        content:
+          application/json:
+            schema:
+              type: string
+              example:
+                filter:
+                  eq:
+                  - index[3]
+                  - e123
+      responses:
+        '200':
+          description: Collection query successful.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionCollectionItem'
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}:
+    get:
+      tags:
+      - Query Service
+      summary: Get a published collection by ID
+      description: 'Returns collection metadata for the specified collection ID.
+
+
+        Potential values for ontology:
+
+
+        idname
+
+
+        1financial-hierarchy-position
+
+
+        2chart of accounts
+
+
+        3entity
+
+
+        4account
+
+
+        5balance'
+      operationId: getCollection
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/versions/{version}/results:
+    get:
+      tags:
+      - Query Service
+      summary: Get the aggregated result from a specific version of the collection
+      description: Returns the aggregated result from a list of records in a specific version of the collection as structured in the blueprints.
+      operationId: getCollectionVersionResults
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        description: Filter trial balance results to a specific financial hierarchy node. A filter is required when querying records from a trial balance collection.
+        required: false
+        schema:
+          type: string
+          default: ''
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultsDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/versions/{version}/results/download:
+    get:
+      tags:
+      - Query Service
+      summary: Get the presigned URL from S3 to download aggregated result from the specific…
+      description: Returns the presigned URL from S3.
+      operationId: getCollectionLatestVersionResultsdownload
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultsDownloadDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/versions/{version}/records:
+    get:
+      tags:
+      - Query Service
+      summary: Get a paginated list of records in a specific version of the collection
+      description: Returns a paginated list of records in a specific version of the collection as structured in the blueprints.
+      operationId: getCollectionVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        description: Filter trial balance results to a specific financial hierarchy node. A filter is required when querying records from a trial balance collection.
+        required: false
+        schema:
+          type: string
+          default: ''
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/versions/{version}/custom-views/{customViewId}/results:
+    get:
+      tags:
+      - Query Service
+      summary: Get the aggregated result based on custom view from the specific version of the…
+      description: Returns the presigned URL from S3.
+      operationId: getCollectionLatestVersionResults
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: customViewId
+        in: path
+        description: ID of the custom view.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: all_columns
+        in: query
+        description: Get the results in the blueprint columns order.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultsDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/versions/{version}/custom-views/{customViewId}/results/download:
+    get:
+      tags:
+      - Query Service
+      summary: Get the presigned URL from S3 to download aggregated result from the specific…
+      description: Returns the presigned URL from S3.
+      operationId: getCollectionLatestVersionResultsDownload
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: customViewId
+        in: path
+        description: ID of the custom view.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: all_columns
+        in: query
+        description: Get the results in the blueprint columns order.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultsDownloadDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/results:
+    get:
+      tags:
+      - Query Service
+      summary: Get the aggregated result from the latest version of the collection
+      description: Returns the aggregated result from a list of records in the latest version of the collection as structured in the blueprints.
+      operationId: getCollectionLatestVersionResults_1
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        description: Filter trial balance results to a specific financial hierarchy node. A filter is required when querying records from a trial balance collection.
+        required: false
+        schema:
+          type: string
+          default: ''
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultsDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/latest/results:
+    get:
+      tags:
+      - Query Service
+      summary: Get the aggregated result from the latest version of the collection
+      description: Returns the aggregated result from a list of records in the latest version of the collection as structured in the blueprints.
+      operationId: getCollectionLatestVersionResults_2
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        description: Filter trial balance results to a specific financial hierarchy node. A filter is required when querying records from a trial balance collection.
+        required: false
+        schema:
+          type: string
+          default: ''
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultsDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/records:
+    get:
+      tags:
+      - Query Service
+      summary: Get a paginated list of records in the latest version of the collection
+      description: Returns a paginated list of records in the latest version of the collection as structured in the blueprints.
+      operationId: getCollectionLatestVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        description: Filter trial balance results to a specific financial hierarchy node. A filter is required when querying records from a trial balance collection.
+        required: false
+        schema:
+          type: string
+          default: ''
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/latest/records:
+    get:
+      tags:
+      - Query Service
+      summary: Get a paginated list of records in the latest version of the collection
+      description: Returns a paginated list of records in the latest version of the collection as structured in the blueprints.
+      operationId: getCollectionLatestVersion_1
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        description: Filter trial balance results to a specific financial hierarchy node. A filter is required when querying records from a trial balance collection.
+        required: false
+        schema:
+          type: string
+          default: ''
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /query/collections/{id}/versions/{version}/custom-views/{customViewId}/columns:
+    get:
+      tags:
+      - Query Service
+      operationId: getCollectionLatestVersionCustomViewColumns
+      summary: Get the columns present in Consolidation from the specific version of the…
+      parameters:
+      - description: Unique identifier of the Master Trial Balance
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - description: Version of the Master Trial Balance
+        in: path
+        name: version
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - description: Id of the Consolidation
+        in: path
+        name: customViewId
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - description: Number of records in a Master Trial Balance to skip before starting the response set
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+      - description: Maximum number of records to return in the result set
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 200
+          format: int32
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ColumnsResultsDTO'
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /query/collections/{id}/versions/{version}/custom-views/{customViewId}/records:
+    get:
+      tags:
+      - Query Service
+      description: Returns the records based on Consolidation
+      summary: Get the records based on Consolidation from the specific version of the Master…
+      operationId: getCollectionLatestVersionCustomViewRecords
+      parameters:
+      - description: Unique identifier of the Master Trial Balance
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - description: Version of the Master Trial Balance
+        in: path
+        name: version
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - description: Id of the Consolidation
+        in: path
+        name: customViewId
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: filter
+        required: false
+        schema:
+          default: ''
+          type: string
+      - description: Number of records in a Master Trial Balance consolidation to skip before starting the response set
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+      - description: Maximum number of records to return in the result set
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 200
+          format: int32
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsDTO_2'
+          description: OK
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /query/odata/collectionservice:
+    get:
+      tags:
+      - Query Service
+      description: OData service to query and retrieve Master Trial Balance data.
+      summary: Allows users to get the list of the Master Trial Balances, this API can be…
+      operationId: getOdataCollections
+      responses:
+        '200':
+          description: OData default response
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+  /query/odata/collectionservice/{entityname}:
+    get:
+      tags:
+      - Query Service
+      description: OData service to query and retrieve the Master Trial Balance based on name.
+      summary: Allows users to get the specifc Master Trial Balance based on the name, this…
+      operationId: getOdataCollectionsByEntityName
+      parameters:
+      - name: entityname
+        in: path
+        description: Name of the entity (Master Trial Balance Name) to be queried
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: $filter
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: $orderby
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: $skiptoken
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: $skip
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: $count
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: top
+        required: false
+        schema:
+          format: int32
+          type: integer
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OData default response
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/general-ledger-manager/v1
+components:
+  schemas:
+    RecordField:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+    ApiCollectionCollectionDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionDTO'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ApiCollectionCollectionItem:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionItem'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ResultsMeta:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+        limit:
+          maximum: 2000
+          type: integer
+          format: int32
+          example: 200
+        count:
+          type: integer
+          format: int64
+    RecordDTO:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordField'
+      example: {}
+    RecordsDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          example:
+          - blueprint_column_1_name: example value
+            blueprint_column_2_name: something else
+            blueprint_column_3_name: 42
+          items:
+            $ref: '#/components/schemas/RecordDTO'
+        _meta:
+          $ref: '#/components/schemas/Meta'
+    Meta:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+        limit:
+          maximum: 2000
+          type: integer
+          format: int32
+          example: 200
+        count:
+          type: integer
+          format: int64
+    CollectionItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the collection.
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the collection.
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the collection.
+          format: int32
+          example: 3
+        year:
+          type: integer
+          description: Relevant year of importance for the data.
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision.
+          format: int32
+          example: 12
+    FieldsDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the column.
+          example: My Column Name
+        type:
+          type: string
+          description: Expected data type of the column values.
+          example: number
+          enum:
+          - currency
+          - date
+          - number
+          - string
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents.
+          format: int32
+          example: 1
+    ResultsDownloadDTO:
+      type: object
+      properties:
+        download_url:
+          type: string
+          description: URL to download the results.
+          example: https://example.thomsonreuters.com/example.csv
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    CollectionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the collection.
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the collection.
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the collection.
+          format: int32
+          example: 3
+        year:
+          type: integer
+          description: Relevant year of importance for the data.
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision.
+          format: int32
+          example: 12
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldsDTO'
+    ResultsDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          example: {}
+          items:
+            $ref: '#/components/schemas/RecordDTO'
+        _meta:
+          $ref: '#/components/schemas/ResultsMeta'
+    ColumnsResultsDTO:
+      properties:
+        _meta:
+          $ref: '#/components/schemas/ResultsMeta'
+        items:
+          example: {}
+          items:
+            $ref: '#/components/schemas/ColumnsDTO'
+          type: array
+      type: object
+    QueryServiceRecordDTO:
+      properties:
+        entries:
+          items:
+            $ref: '#/components/schemas/QueryServiceRecordField'
+          type: array
+      type: object
+    QueryServiceRecordField:
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+      type: object
+    QueryServiceCollectionDTO:
+      properties:
+        columns:
+          items:
+            $ref: '#/components/schemas/FieldsDTO_2'
+          type: array
+        id:
+          description: Unique identifier of the Master Trial Balance
+          example: 6
+          format: int32
+          type: integer
+        name:
+          description: Label of the Master Trial Balance
+          example: My Master Trial Balance Name
+          type: string
+        period:
+          description: Numeric period of no specific precision
+          example: 12
+          format: int32
+          type: integer
+        version:
+          description: Version of the Master Trial Balance
+          example: 3
+          format: int32
+          type: integer
+        year:
+          description: Relevant year of importance for the data
+          example: 2019
+          format: int32
+          type: integer
+      type: object
+    RecordsDTO_2:
+      properties:
+        _meta:
+          $ref: '#/components/schemas/Meta_2'
+        items:
+          example:
+          - blueprint_column_1_name: example value
+            blueprint_column_2_name: something else
+            blueprint_column_3_name: 42
+          items:
+            $ref: '#/components/schemas/QueryServiceRecordDTO'
+          type: array
+      type: object
+    ColumnsDTO:
+      example: {}
+      properties:
+        display_name:
+          type: string
+        name:
+          type: string
+      type: object
+    Meta_2:
+      properties:
+        limit:
+          example: 200
+          format: int32
+          maximum: 2000
+          type: integer
+        offset:
+          format: int32
+          type: integer
+      type: object
+    CollectionItem_2:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Master Trial Balance
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Master Trial Balance
+          example: My Master Trial Balance Name
+        version:
+          type: integer
+          description: Version of the Master Trial Balance
+          format: int32
+          example: 3
+        year:
+          type: integer
+          description: Relevant year of importance for the data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+    FieldsDTO_2:
+      properties:
+        name:
+          description: Label of the column
+          example: My Column Name
+          type: string
+        ontology_id:
+          description: Unique identifier of the ontology this column represents
+          example: 1
+          format: int32
+          type: integer
+        type:
+          description: Expected data type of the column values
+          enum:
+          - currency
+          - date
+          - number
+          - string
+          example: number
+          type: string
+      type: object
+    ResultsDownloadDTO_2:
+      properties:
+        download_url:
+          description: URL to download the results
+          example: https://example.thomsonreuters.com/example.csv
+          type: string
+      type: object
+    ResultsDTO_2:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/ResultsMeta'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryServiceRecordDTO'
+    CollectionItem_3:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Collection
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the Collection
+          format: int32
+          example: 3
+        year:
+          type: integer
+          description: Relevant year of importance for the data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+    FieldsDTO_3:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the column
+          example: My Column Name
+        type:
+          type: string
+          description: Expected data type of the column values
+          example: number
+          enum:
+          - currency
+          - date
+          - number
+          - string
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents
+          format: int32
+          example: 1
+    ResultsDownloadDTO_3:
+      type: object
+      properties:
+        download_url:
+          type: string
+          description: URL to download the results
+          example: https://example.thomsonreuters.com/example.csv
+    CollectionDTO_2:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Collection
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the Collection
+          format: int32
+          example: 3
+        year:
+          type: integer
+          description: Relevant year of importance for the data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldsDTO_3'
+    QueryServiceCollectionDTO_2:
+      properties:
+        columns:
+          items:
+            $ref: '#/components/schemas/FieldsDTO_4'
+          type: array
+        id:
+          description: Unique identifier of the Master Trial Balance
+          example: 6
+          format: int32
+          type: integer
+        name:
+          description: Label of the Master Trial Balance
+          example: My Master Trial Balance Name
+          type: string
+        period:
+          description: Numeric period of no specific precision
+          example: 12
+          format: int32
+          type: integer
+        version:
+          description: Version of the Master Trial Balance
+          example: 3
+          format: int32
+          type: integer
+        year:
+          description: Relevant year of importance for the data
+          example: 2019
+          format: int32
+          type: integer
+      type: object
+    RecordsDTO_3:
+      properties:
+        _meta:
+          $ref: '#/components/schemas/Meta_3'
+        items:
+          example:
+          - blueprint_column_1_name: example value
+            blueprint_column_2_name: something else
+            blueprint_column_3_name: 42
+          items:
+            $ref: '#/components/schemas/QueryServiceRecordDTO'
+          type: array
+      type: object
+    Meta_3:
+      properties:
+        limit:
+          example: 200
+          format: int32
+          maximum: 2000
+          type: integer
+        offset:
+          format: int32
+          type: integer
+      type: object
+    CollectionItem_4:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Master Trial Balance
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Master Trial Balance
+          example: My Master Trial Balance Name
+        version:
+          type: integer
+          description: Version of the Master Trial Balance
+          format: int32
+          example: 3
+        year:
+          type: integer
+          description: Relevant year of importance for the data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+    FieldsDTO_4:
+      properties:
+        name:
+          description: Label of the column
+          example: My Column Name
+          type: string
+        ontology_id:
+          description: Unique identifier of the ontology this column represents
+          example: 1
+          format: int32
+          type: integer
+        type:
+          description: Expected data type of the column values
+          enum:
+          - currency
+          - date
+          - number
+          - string
+          example: number
+          type: string
+      type: object
+    ResultsDownloadDTO_4:
+      properties:
+        download_url:
+          description: URL to download the results
+          example: https://example.thomsonreuters.com/example.csv
+          type: string
+      type: object
+    ResultsDTO_3:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/ResultsMeta'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryServiceRecordDTO'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-datahub-query-service-1-0-openapi.json
+- thomson-reuters-general-ledger-manager-openapi.json
+- thomson-reuters-datahub-query-service-1-0-openapi.yml
+- thomson-reuters-datahub-query-service-openapi.yml
+- thomson-reuters-general-ledger-manager-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

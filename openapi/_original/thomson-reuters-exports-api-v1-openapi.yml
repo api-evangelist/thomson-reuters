@@ -1,0 +1,420 @@
+# x-archived-from: thomson-reuters-exports-api-v1-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Exports API
+  version: v1
+  description: This API provides endpoints for exporting notes, queries, and calculation cells source data. It allows users to retrieve detailed information about notes and queries based on specified filters. The API also supports exporting source data for calculation cells.
+servers:
+- url: https://api-uat.onesourcetax.com/trusts/v1/exports
+  description: UAT server for trusts datasets
+- url: https://api-apac.onesourcetax.com/trusts/v1/exports
+  description: APAC server for trusts datasets
+paths:
+  /notes:
+    post:
+      tags:
+      - Exports
+      summary: Fetch list of notes.
+      description: This endpoint retrieves a list of notes for the user based on the specified offset and take parameters.
+      operationId: Exports_GetUserNotesDetails
+      parameters:
+      - name: offset
+        in: query
+        description: The number of items to skip before starting to collect the result set.
+        schema:
+          type: integer
+          format: int32
+      - name: take
+        in: query
+        description: The number of items to retrieve in the result set.
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request body containing the filters for fetching notes.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully retrieved the list of notes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse'
+      x-codegen-request-body-name: exportNotesRequest
+  /queries:
+    post:
+      tags:
+      - Exports
+      summary: Fetch list of queries.
+      description: This endpoint retrieves a list of queries for the user based on the specified offset and take parameters.
+      operationId: Exports_GetUserQueriesDetails
+      parameters:
+      - name: offset
+        in: query
+        description: The number of items to skip before starting to collect the result set.
+        schema:
+          type: integer
+          format: int32
+      - name: take
+        in: query
+        description: The number of items to retrieve in the result set.
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request body containing the filters for fetching queries.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully retrieved the list of queries.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse'
+      x-codegen-request-body-name: exportNotesRequest
+  /source:
+    post:
+      tags:
+      - Exports
+      summary: Fetch Cells Source data.
+      description: This endpoint retrieves the source data for calculation cells based on the provided filters.
+      operationId: Exports_GetCalcCellsSourcFieldDetails
+      parameters:
+      - name: offset
+        in: query
+        description: The number of items to skip before starting to collect the result set.
+        schema:
+          type: integer
+          format: int32
+      - name: take
+        in: query
+        description: The number of items to retrieve in the result set.
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request body containing the filters for fetching source data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CellSourceValueExportRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CellSourceValueExportRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CellSourceValueExportRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CellSourceValueExportRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CellSourceValueExportRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully retrieved the source data for calculation cells.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalcSourceFieldDataResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalcSourceFieldDataResponse'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalcSourceFieldDataResponse'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.CalcSourceFieldDataResponse'
+      x-codegen-request-body-name: CellSourceValueExportRequest
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest:
+      type: object
+      description: Represents the request body for exporting notes.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the note.
+          example: 00000000-0000-0000-0000-000000000000
+        dataSetName:
+          type: string
+          description: The name of the dataset.
+        entityName:
+          type: string
+          description: The name of the entity.
+        entityShortName:
+          type: string
+          description: The short name of the entity.
+        entityIdentifier:
+          type: string
+          description: The identifier of the entity.
+        returnId:
+          type: string
+          format: uuid
+          description: The unique identifier of the return.
+          example: 00000000-0000-0000-0000-000000000000
+        returnName:
+          type: string
+          description: The name of the return.
+        description:
+          type: string
+          description: The description of the note.
+        status:
+          type: string
+          description: The status of the note.
+        sheetName:
+          type: string
+          description: The name of the sheet.
+        location:
+          type: string
+          description: The location of the note.
+        cellAddress:
+          type: string
+          description: The address of the cell.
+        cellValue:
+          type: string
+          description: The value of the cell.
+        rollForward:
+          type: boolean
+          description: Indicates whether the note is roll-forwarded.
+        createdBy:
+          type: string
+          description: The user who created the note.
+        createdDate:
+          type: string
+          description: The date when the note was created.
+        lastUpdatedBy:
+          type: string
+          description: The user who last updated the note.
+        lastUpdatedDate:
+          type: string
+          description: The date when the note was last updated.
+    TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse:
+      type: object
+      description: Represents the response for exporting notes.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the note.
+          example: 00000000-0000-0000-0000-000000000000
+        datasetId:
+          type: string
+          format: uuid
+          description: The unique identifier of the dataset.
+          example: 00000000-0000-0000-0000-000000000000
+        datasetName:
+          type: string
+          description: The name of the dataset.
+        entityId:
+          type: string
+          format: uuid
+          description: The unique identifier of the entity.
+          example: 00000000-0000-0000-0000-000000000000
+        entityName:
+          type: string
+          description: The name of the entity.
+        entityShortName:
+          type: string
+          description: The short name of the entity.
+        entityIdentifier:
+          type: string
+          description: The identifier of the entity.
+        returnId:
+          type: string
+          format: uuid
+          description: The unique identifier of the return.
+          example: 00000000-0000-0000-0000-000000000000
+        returnName:
+          type: string
+          description: The name of the return.
+        description:
+          type: string
+          description: The description of the note.
+        type:
+          type: string
+          description: The type of the note.
+        status:
+          type: string
+          description: The status of the note.
+        sheetName:
+          type: string
+          description: The name of the sheet.
+        location:
+          type: string
+          description: The location of the note.
+        cellValue:
+          type: string
+          description: The value of the cell.
+        cellAddress:
+          type: string
+          description: The address of the cell.
+        rowGuid:
+          type: string
+          format: uuid
+          description: The unique identifier of the row.
+          example: 00000000-0000-0000-0000-000000000000
+        columnGuid:
+          type: string
+          format: uuid
+          description: The unique identifier of the column.
+          example: 00000000-0000-0000-0000-000000000000
+        isRollForward:
+          type: boolean
+          description: Indicates whether the note is roll-forwarded.
+        createdBy:
+          type: string
+          description: The user who created the note.
+        createdDate:
+          type: string
+          description: The date when the note was created.
+          format: date-time
+        lastUpdatedBy:
+          type: string
+          description: The user who last updated the note.
+        lastUpdatedDate:
+          type: string
+          format: date-time
+          description: The date when the note was last updated.
+    TRTA.Athena.Models.Api.V4.Calculations.CellSourceValueExportRequest:
+      type: object
+      description: Represents the request body for exporting cell source values.
+      properties:
+        datasetid:
+          type: string
+          format: uuid
+          description: The unique identifier of the dataset.
+          example: 00000000-0000-0000-0000-000000000000
+        entityid:
+          type: string
+          format: uuid
+          description: The unique identifier of the entity.
+          example: 00000000-0000-0000-0000-000000000000
+    TRTA.Athena.Models.Api.V4.Calculations.CalcSourceFieldDataResponse:
+      type: object
+      description: Represents the response for exporting calculation source field data.
+      properties:
+        datasetid:
+          type: string
+          description: The unique identifier of the dataset.
+        entityid:
+          type: string
+          description: The unique identifier of the entity.
+        sourceData:
+          type: array
+          description: A list of source field data.
+          items: null
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.SourceFieldDataResponse'
+    TRTA.Athena.Models.Api.V4.Calculations.SourceFieldDataResponse:
+      type: object
+      description: Represents an individual source field data.
+      properties:
+        sheet:
+          type: string
+          description: The name of the sheet.
+        cell:
+          type: string
+          description: The address of the cell.
+        amount:
+          type: string
+          description: The amount in the cell.
+        source:
+          type: string
+          description: The source of the data.
+x-original-swagger-version: '2.0'

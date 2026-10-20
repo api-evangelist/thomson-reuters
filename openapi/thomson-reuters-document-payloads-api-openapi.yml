@@ -1,0 +1,200 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Document payloads API
+  version: 0.7.0
+  description: 'Operations tagged Document payloads across 4 of this provider''s published API definitions: thomson-reuters-onesource-e-invoicing-get-target-document-openapi.json, thomson-reuters-onesource-e-invoicing-get-document-presentation-openapi.yml, thomson-reuters-onesource-e-invoicing-get-source-document-openapi.yml, thomson-reuters-onesource-e-invoicing-get-target-document-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-uat.onesourcetax.com/einvoicing/document/v1
+- url: https://api-emea.onesourcetax.com/einvoicing/document/v1
+tags:
+- name: Document payloads
+  description: Operations on document payloads
+paths:
+  /documents/{id}/target-document':
+    get:
+      tags:
+      - Document payloads
+      summary: Get target document
+      description: Get target document for `Document`, if available. A target document will only be available if document `status` is `Done`.
+      parameters:
+      - name: id
+        in: path
+        description: Id of `Document`
+        required: true
+        schema:
+          type: string
+          example: d6912b66-5f21-4a73-ac76-95cb3c8a2a81
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/xml:
+              schema:
+                type: string
+                format: byte
+            text/plain:
+              schema:
+                type: string
+                format: byte
+            application/pdf:
+              schema:
+                type: string
+                format: byte
+            application/json:
+              schema:
+                type: string
+                format: byte
+            application/octet-stream:
+              schema:
+                type: string
+                format: byte
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      operationId: getDocumentsByIdTargetDocument'
+      x-operation-id-source: derived
+    servers:
+    - url: https://api-uat.onesourcetax.com/einvoicing/document/v1
+    - url: https://api-emea.onesourcetax.com/einvoicing/document/v1
+  /documents/{id}/presentation:
+    get:
+      tags:
+      - Document payloads
+      summary: Get document presentation
+      description: Get presentation for a `Document`, if available. A presentation will always be available if document `status`is `Done`. It may also be available for documents with `status` `Error` depending on what the error is.
+      parameters:
+      - name: id
+        in: path
+        description: Id of `Document`
+        required: true
+        schema:
+          type: string
+          example: 56ce666b-5409-4a8d-813d-5882e90276a5
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: byte
+            image/tiff:
+              schema:
+                type: string
+                format: byte
+            application/octet-stream:
+              schema:
+                type: string
+                format: byte
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      operationId: getDocumentsByIdPresentation
+      x-operation-id-source: derived
+    servers:
+    - url: https://api-uat.onesourcetax.com/einvoicing/document/v1
+    - url: https://api-emea.onesourcetax.com/einvoicing/document/v1
+  /documents/{id}/source-document:
+    get:
+      tags:
+      - Document payloads
+      summary: Get source document
+      description: Get source document for `Document`. This should always be available.
+      parameters:
+      - name: id
+        in: path
+        description: Id of `Document`
+        required: true
+        schema:
+          type: string
+          example: 0f57671d-5487-40be-8bfc-2a6ec62e8d53
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/xml:
+              schema:
+                type: string
+                format: byte
+            text/plain:
+              schema:
+                type: string
+                format: byte
+            application/pdf:
+              schema:
+                type: string
+                format: byte
+            application/json:
+              schema:
+                type: string
+                format: byte
+            application/octet-stream:
+              schema:
+                type: string
+                format: byte
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      operationId: getDocumentsByIdSourceDocument
+      x-operation-id-source: derived
+    servers:
+    - url: https://api-uat.onesourcetax.com/einvoicing/document/v1
+    - url: https://api-emea.onesourcetax.com/einvoicing/document/v1
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'
+  schemas:
+    description:
+      type: string
+      example: error message
+    documentResponse:
+      type: object
+      properties:
+        descriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/description'
+x-refined-from:
+- thomson-reuters-onesource-e-invoicing-get-target-document-openapi.json
+- thomson-reuters-onesource-e-invoicing-get-document-presentation-openapi.yml
+- thomson-reuters-onesource-e-invoicing-get-source-document-openapi.yml
+- thomson-reuters-onesource-e-invoicing-get-target-document-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

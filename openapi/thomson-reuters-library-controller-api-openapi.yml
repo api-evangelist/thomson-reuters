@@ -1,0 +1,91 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Library Controller API
+  version: '1.0'
+  description: 'Operations tagged library-controller across 2 of this provider''s published API definitions: thomson-reuters-eap-uat-trri-api-research-openapi.json, thomson-reuters-eap-uat-trri-api-research-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/regulatory-intelligence
+tags:
+- name: library-controller
+  description: Library Controller
+paths:
+  /v2/library:
+    get:
+      tags:
+      - library-controller
+      summary: Returns the high level library content to which the user have access to
+      operationId: getLibraryUsingGET
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/LibraryDto'
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Rulebooks outside subscriptions
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+components:
+  schemas:
+    LibraryDto:
+      title: LibraryDto
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/LibraryCategoryDto'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LibraryItemDto'
+        label:
+          type: string
+    LibraryItemDto:
+      title: LibraryItemDto
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+    LibraryCategoryDto:
+      title: LibraryCategoryDto
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/LibraryCategoryDto'
+        id:
+          type: string
+        isSection:
+          type: boolean
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LibraryItemDto'
+        label:
+          type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: To generate Access Token, please use the steps described in <a href='/regulatory-intelligence/swagger_openapi_document/eap-trri-api-access-token/100?from=api&id=9296' rel='noopener noreferrer' target='_blank'>TRRI API Access Token</a> section, ex. 'Bearer {access_token}'.
+x-refined-from:
+- thomson-reuters-eap-uat-trri-api-research-openapi.json
+- thomson-reuters-eap-uat-trri-api-research-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

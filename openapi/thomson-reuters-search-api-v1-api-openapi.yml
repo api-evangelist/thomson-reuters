@@ -1,0 +1,167 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Search API V1 API
+  version: '1.0'
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+  termsOfService: urn:tos
+  description: 'Operations tagged Search API V1 across 2 of this provider''s published API definitions: thomson-reuters-api-documentation-openapi.json, thomson-reuters-api-documentation-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/checkpoint
+tags:
+- name: Search API V1
+  description: Execute searches across the extensive collection of tax and accounting content offered by Checkpoint.
+paths:
+  /v1/search:
+    get:
+      tags:
+      - Search API V1
+      summary: Run search query
+      operationId: searchUsingGET_1
+      parameters:
+      - name: category
+        in: query
+        description: This is equivalent to categories(wgldictionary, orientation, quicktax and wgltreatises) under the checkpoint practice area such as federal, state & local etc..,.
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: 'The number of search results to return in the response. The default is 10 and the maximum value that you may specify is 100. The actual number delivered may be less than requested.
+
+
+          Use this parameter along with the offset parameter to page results.
+
+
+          For example, if your user interface presents 10 search results per page, you would set count to 10 and offset to 0 to get the first page of results. For each subsequent page, you would increment offset by 10 (for example, 0, 10, 20). It is possible for multiple pages to include some overlap in results.'
+        schema:
+          maximum: 100
+          minimum: 0
+          type: integer
+          format: int32
+        example: 10
+      - name: offset
+        in: query
+        description: 'The zero-based offset that indicates the number of search results to skip before returning results. The default is 0.
+
+
+          Use this parameter along with the count parameter to page results. For example, if your user interface presents 10 search results per page, you would set count to 10 and offset to 0 to get the first page of results. For each subsequent page, you would increment offset by 10 (for example, 0, 10, 20). It is possible for multiple pages to include some overlap in results.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 0
+      - name: practiceArea
+        in: query
+        description: This is equivalent to checkpoint practice area such as federal, state & local etc..,.
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: The user's search query string. The query string must not be empty.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      deprecated: true
+      security:
+      - CheckpointAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/checkpoint
+components:
+  schemas:
+    SearchAnswer:
+      title: SearchAnswer
+      type: object
+      properties:
+        searchUrl:
+          type: string
+          description: The URL to the Checkpoint website that contains the search results for the user's query. The results include content that is not limited to your custom view of the web, and may include other types of content.
+        totalEstimatedMatches:
+          type: integer
+          description: The estimated number of webpages that are relevant to the query. Use this number along with the count and offset query parameters to page through the results.
+          format: int64
+        value:
+          type: array
+          description: A list of documents that are relevant to the query.
+          items:
+            $ref: '#/components/schemas/DocumentSearchResult'
+      description: Defines a list of relevant documents found.
+    DocumentSearchResult:
+      title: DocumentSearchResult
+      type: object
+      properties:
+        chapter:
+          type: string
+          description: The chapter title for IRS Response Library documents.
+        contentCategory:
+          type: string
+          description: Content category such as quick tax amounts, wg&l treaties etc.,.
+        id:
+          type: string
+          description: An identifier.
+        publishedDate:
+          type: string
+          description: The Published date of the document.
+        snippet:
+          type: string
+          description: 'A snippet of text from the webpage that describes its contents.
+
+
+            The snippet may contain special characters that highlight the search term found in the document.'
+        title:
+          type: string
+          description: 'The title of the document.
+
+
+            Use this title along with url to create a hyperlink that when clicked takes the user to the document''s webpage on Checkpoint.'
+        url:
+          type: string
+          description: 'The URL to the document''s webpage on Checkpoint.
+
+
+            Use this URL along with name to create a hyperlink that when clicked takes the user to the document''s webpage on Checkpoint.'
+      description: Defines a list of relevant documents found.
+    SearchResponse:
+      title: SearchResponse
+      type: object
+      properties:
+        queryContext:
+          $ref: '#/components/schemas/QueryContext'
+        searchAnswer:
+          $ref: '#/components/schemas/SearchAnswer'
+      description: The response's top-level object for search requests.
+    QueryContext:
+      title: QueryContext
+      type: object
+      properties:
+        originalQuery:
+          type: string
+          description: The query string as specified in the request.
+      description: Defines the query string that Checkpoint used for the request.
+  securitySchemes:
+    CheckpointAuth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/checkpoint/oauth2/token
+          scopes: {}
+x-refined-from:
+- thomson-reuters-api-documentation-openapi.json
+- thomson-reuters-api-documentation-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

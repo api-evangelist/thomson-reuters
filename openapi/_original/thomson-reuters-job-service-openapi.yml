@@ -1,0 +1,218 @@
+# x-archived-from: thomson-reuters-job-service-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Job Service
+  description: Allows management of jobs which process ingests
+  version: '1.0'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+paths:
+  /jobs:
+    get:
+      tags:
+      - Job Service
+      summary: Get a paginated list of available Jobs
+      description: Returns a list of Jobs with their metadata
+      operationId: getJobs
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionJobResponse'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Job Service
+      summary: Create a new Job
+      description: Adds Job with any fields and default 'STAGED' status. To start a Job right away, include all of the parameters with the status 'STARTED'.
+      operationId: createJob
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdateJobRequest'
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+      security:
+      - bearerAuth: []
+  /jobs/{id}:
+    get:
+      tags:
+      - Job Service
+      summary: Get Job by ID
+      description: Returns Job metadata for the specified Job ID
+      operationId: getJob
+      parameters:
+      - name: id
+        in: path
+        description: Description
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Job Service
+      summary: Updates an existing Job
+      description: Updates values about a Job. The job must be in 'STAGED' status.
+      operationId: updateJob
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdateJobRequest'
+      responses:
+        '200':
+          description: default response
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ApiCollectionJobResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    JobResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+          - STAGED
+          - STARTED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+        ingest_id:
+          type: string
+        template_id:
+          type: string
+        topic_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        started_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        template_revision_id:
+          type: integer
+          format: int64
+    CreateOrUpdateJobRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+          - STAGED
+          - STARTED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+        year:
+          type: integer
+          format: int32
+        period:
+          type: integer
+          format: int32
+        template_id:
+          maxLength: 24
+          minLength: 24
+          type: string
+        ingest_id:
+          maxLength: 24
+          minLength: 24
+          type: string
+    IdResponseString:
+      type: object
+      properties:
+        id:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

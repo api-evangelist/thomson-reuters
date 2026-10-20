@@ -1,0 +1,89 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Toc Novus Controller API
+  version: '1.0'
+  description: 'Operations tagged toc-novus-controller across 2 of this provider''s published API definitions: thomson-reuters-eap-uat-trri-api-research-openapi.json, thomson-reuters-eap-uat-trri-api-research-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/regulatory-intelligence
+tags:
+- name: toc-novus-controller
+  description: Toc Novus Controller
+paths:
+  /v2/rulebook-nodes/{nodeId}:
+    get:
+      tags:
+      - toc-novus-controller
+      summary: Returns an object that will contain the TOC tree starting with the node…
+      operationId: getRulebookTocTreeUsingGET
+      parameters:
+      - name: depth
+        in: query
+        description: number of child levels
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: nodeId
+        in: path
+        description: NortGuid or TOCGuid
+        required: true
+        schema:
+          type: string
+        example: I1030c5aeb39c420db4d2b35643af5d1b
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RulebookNodeResponseDto'
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get TOC tree from Novus
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+components:
+  schemas:
+    RulebookNodePathDto:
+      title: RulebookNodePathDto
+      type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/RulebookNodePathDto'
+        hasChildren:
+          type: boolean
+        label:
+          type: string
+        nodeId:
+          type: string
+        parentNodeId:
+          type: string
+    RulebookNodeResponseDto:
+      title: RulebookNodeResponseDto
+      type: object
+      properties:
+        rulebookNode:
+          $ref: '#/components/schemas/RulebookNodePathDto'
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: To generate Access Token, please use the steps described in <a href='/regulatory-intelligence/swagger_openapi_document/eap-trri-api-access-token/100?from=api&id=9296' rel='noopener noreferrer' target='_blank'>TRRI API Access Token</a> section, ex. 'Bearer {access_token}'.
+x-refined-from:
+- thomson-reuters-eap-uat-trri-api-research-openapi.json
+- thomson-reuters-eap-uat-trri-api-research-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

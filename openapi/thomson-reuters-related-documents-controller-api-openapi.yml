@@ -1,0 +1,103 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Related Documents Controller API
+  version: '1.0'
+  description: 'Operations tagged related-documents-controller across 2 of this provider''s published API definitions: thomson-reuters-eap-uat-trri-api-research-openapi.json, thomson-reuters-eap-uat-trri-api-research-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/regulatory-intelligence
+tags:
+- name: related-documents-controller
+  description: Related Documents Controller
+paths:
+  /v1/related-documents-view:
+    post:
+      tags:
+      - related-documents-controller
+      summary: Returns related documents from NORM by GUID
+      operationId: getRelatedDocumentsUsingPOST
+      requestBody:
+        description: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentListRequestDto'
+        required: true
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ListRelatedDocumentsResponseDto'
+        '201':
+          description: Created
+          content: {}
+        '400':
+          description: Request related documents list should be > 0 && <= 100
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: request
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+components:
+  schemas:
+    RelatedDocumentDto:
+      title: RelatedDocumentDto
+      type: object
+      properties:
+        citation:
+          type: string
+        documentId:
+          type: string
+        documentRootId:
+          type: string
+        relationshipType:
+          type: string
+        title:
+          type: string
+    RelatedDocumentsDto:
+      title: RelatedDocumentsDto
+      type: object
+      properties:
+        documentId:
+          type: string
+        relatedDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatedDocumentDto'
+    ListRelatedDocumentsResponseDto:
+      title: ListRelatedDocumentsResponseDto
+      type: object
+      properties:
+        relatedDocumentsView:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatedDocumentsDto'
+    DocumentListRequestDto:
+      title: DocumentListRequestDto
+      type: object
+      properties:
+        documentIds:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: To generate Access Token, please use the steps described in <a href='/regulatory-intelligence/swagger_openapi_document/eap-trri-api-access-token/100?from=api&id=9296' rel='noopener noreferrer' target='_blank'>TRRI API Access Token</a> section, ex. 'Bearer {access_token}'.
+x-refined-from:
+- thomson-reuters-eap-uat-trri-api-research-openapi.json
+- thomson-reuters-eap-uat-trri-api-research-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

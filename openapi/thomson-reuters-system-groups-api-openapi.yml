@@ -1,0 +1,2033 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters System Groups API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged System Groups across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: System Groups
+paths:
+  /{version}/groups/{id_Name}:
+    get:
+      tags:
+      - System Groups
+      summary: Get system group
+      description: 'This API call is used to get a system group object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        Group id is required
+
+
+        125
+
+        125
+
+
+        Group id is not in proper format
+
+
+        124
+
+        124
+
+
+        The group does not exist within the system
+
+
+        126
+
+        126
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65839'
+      operationId: getGroup
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: id_Name
+        in: path
+        description: The ID of the system group
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/group'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/groups/{groupid}/users/{userid}:
+    get:
+      tags:
+      - System Groups
+      summary: Get users of a group
+      description: API method to get users from a group. Please note that this method only gets users of an AD group, and not the system groups.
+      operationId: getUser
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: groupid
+        in: path
+        description: group id
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: path
+        description: user id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IntegrationResponseUsersObject'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationResponseUsersObject'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    delete:
+      tags:
+      - System Groups
+      summary: Remove user from system group
+      description: 'This API call is used to remove multiple users in a system group.
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        The following users do not exist within the system:
+
+
+        110
+
+        110
+
+
+        The group does not exist within the system
+
+
+        126
+
+        126
+
+
+        Group id is not in proper format
+
+
+        124
+
+        124
+
+
+        The User ids are not in a given group:
+
+
+        N/A
+
+        259
+
+
+        Users cannot be removed from an auto-created group
+
+
+        N/A
+
+        306
+
+
+        User id is not in proper format
+
+
+        113
+
+        113
+
+
+        The User''s id length cannot exceeds 50 characters
+
+
+        N/A
+
+        304
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-66707'
+      operationId: removeUserFromSystemGroup
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: groupid
+        in: path
+        description: The ID of the system group
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: path
+        description: The IDs of the users to be removed from system group.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/groups/{groupid}/users:
+    get:
+      tags:
+      - System Groups
+      summary: Get users of a group
+      description: API method to get users from a group. Please note that this method only gets users of an AD group, and not the system groups.
+      operationId: getAllUser
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: groupid
+        in: path
+        description: group id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IntegrationResponseUsersObject'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationResponseUsersObject'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - System Groups
+      summary: Add user to a system group
+      description: 'This API call is used to add users in a system group.
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        The following users do not exist within the system:
+
+
+        110
+
+        110
+
+
+        The group does not exist within the system
+
+
+        126
+
+        126
+
+
+        The Group id is not in the proper format
+
+
+        124
+
+        124
+
+
+        A User id is required
+
+
+        109
+
+        109
+
+
+        Archived user(s) cannot be added to the system group:
+
+
+        N/A
+
+        394
+
+
+        A user cannot be added to an auto-created group
+
+
+        N/A
+
+        299
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65908'
+      operationId: addUserInSystemGroup
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: groupid
+        in: path
+        description: The ID of the system group
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/UserIDListDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserIDListDBO'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserIDListDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/groups:
+    get:
+      tags:
+      - System Groups
+      summary: System group list
+      description: 'This API call is used to get a list of system groups.Note:
+
+        The following changes have been made to this API endpoint
+
+        Introduced sorting
+
+        Added following additional items to the return object createddate, totalcount, total, nooforganisation
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        Invalid value provided in type, valid values are org, system or synced
+
+
+        146
+
+        146
+
+
+        The ordertype is invalid. createddate is supported ordertype
+
+
+        150
+
+        150
+
+
+        The orderby value is invalid. asc and desc are supported orderby values.
+
+
+        151
+
+        151
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65896
+
+
+        Parameters
+
+        Description
+
+
+        type
+
+
+        org (Organisation Auto created groups)
+
+
+        synced (Groups imported from an external system like Active Directory)
+
+
+        system (System groups)
+
+
+        sort
+
+
+        Allow ascending and descending sorting of a single field.
+
+
+        GET /api/3/groups?ordertype=createddate
+
+
+        This returns a list of groups sorted by createddate in ascending order.
+
+
+        possible fields: createddate
+
+
+        order by
+
+
+        Allow ascending and descending sorting of a single field.
+
+
+        GET /api/3/groups?orderby=desc
+
+
+        possible fields: asc,desc'
+      operationId: getAllGroup
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: type
+        in: header
+        description: type
+        required: false
+        schema:
+          type: string
+          enum:
+          - org
+          - synced
+          - system
+      - name: sort
+        in: header
+        description: sort
+        required: false
+        x-example: 'Allow ascending and descending sorting of a single field.<br>GET /api/3/groups?ordertype=createddate<br>This returns a list of groups sorted by createddate in ascending order.<br>possible fields: createddate'
+        schema:
+          type: string
+      - name: order by
+        in: header
+        description: order by
+        required: false
+        x-example: 'Allow ascending and descending sorting of a single field.<br>GET /api/3/groups?orderby=desc<br>possible fields: asc,desc'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK [<br> Where "total" represents the total no of system groups in the system and "totalcount" is the no of groups returned in the response based on the filter criteria.]
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IntegrationResponseGroupsObject'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationResponseGroupsObject'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - System Groups
+      summary: add system group
+      description: 'This API call is used to add a new system group object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+
+        Ref code (before v4)
+
+
+        Ref code (v4)
+
+
+        System group name required
+
+
+        N/A
+
+
+        258
+
+
+        Invalid input. Please remove ''>'' OR ''<'' from given input : name
+
+
+        N/A
+
+
+        390
+
+
+        Invalid input. Please remove ''>'' OR ''<'' from given input : description
+
+
+        N/A
+
+
+        391
+
+
+        Invalid input for sourcetype. Valid values are Active Directory or System.
+
+
+        N/A
+
+
+        359
+
+
+        The group name cannot be empty
+
+
+        121
+
+
+        121
+
+
+        The system group name ''Highq'' already exists within the system
+
+
+        122
+
+
+        122
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-67587'
+      operationId: createSystemGroup
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '201':
+          description: OK [groupID,link are used in response]
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/group'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/group'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/group'
+    servers:
+    - url: /monumentuat/api
+  /{version}/groups/{groupid}:
+    delete:
+      tags:
+      - System Groups
+      summary: Delete system group
+      description: 'This API call is used to delete a system group.
+
+        NOTE : This API now can be used to delete system as well as active directory groups.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (before V4)
+
+        Ref Code (V4)
+
+
+        Group id must be required
+
+
+        125
+
+        125
+
+
+        Group id is not in proper format
+
+
+        124
+
+        124
+
+
+        An auto-created group cannot be deleted
+
+
+        N/A
+
+        311
+
+
+        The group does not exist within the system
+
+
+        126
+
+        126
+
+
+        This system group name is associated with one or more sites
+
+
+        N/A
+
+        310
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65905'
+      operationId: removeSystemGroup
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: groupid
+        in: path
+        description: The ID of the System group to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/groups/{id}:
+    put:
+      tags:
+      - System Groups
+      summary: Update system group
+      description: 'This API call is used to change a system group.Note:
+
+        1. In the previous version of this API all fields were mandatory, with the new version individual fields that can be updated
+
+        2. This API endpoint only supported "Active directory" system groups, now any system group can be updated
+
+
+        Error Codes
+
+
+        Summary
+
+
+        Ref code (before v4)
+
+
+        Ref code (v4)
+
+
+        The group name cannot be empty
+
+
+        121
+
+
+        121
+
+
+        The system group name ''Highq'' already exists within the system
+
+
+        122
+
+
+        122
+
+
+        Group id is not in the proper format
+
+
+        124
+
+
+        124
+
+
+        Group id must be required
+
+
+        125
+
+        125
+
+
+        The group does not exist within the system
+
+
+        126
+
+
+        126
+
+
+        Invalid input. Please remove ''>'' OR ''<'' from given input : name
+
+
+        142
+
+
+        390
+
+
+        Invalid input. Please remove ''>'' OR ''<'' from given input : description
+
+
+        142
+
+
+        391
+
+
+        An auto-created group cannot be updated
+
+
+        N/A
+
+        320
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65905'
+      operationId: updateSystemGroup
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: id
+        in: path
+        description: The ID of the system group
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/group'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/group'
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    TagsDBO:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            type: string
+    SiteRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedsite:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    QaDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    MetadataListDBO:
+      type: object
+      properties:
+        metadataname:
+          type: array
+          items:
+            type: string
+        metadatavalue:
+          type: array
+          items:
+            type: string
+    BidderSiteDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+        advancedqapermission:
+          type: string
+    IntegrationUserDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        userid:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        lastname:
+          type: string
+        practicegroup:
+          type: string
+        langcode:
+          type: string
+        localeID:
+          type: string
+        publicprofile:
+          type: string
+        pwpid:
+          type: string
+        usertypeid:
+          type: string
+        systemuser:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        address:
+          $ref: '#/components/schemas/Address'
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        img:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        externalid:
+          type: string
+        jobtitle:
+          type: string
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        specialities:
+          type: string
+        title:
+          type: string
+        goesby:
+          type: string
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        bio:
+          type: string
+        dateOfBirth:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+        sourcetype:
+          type: string
+        orgid:
+          type: string
+        ifpartner:
+          type: string
+        emaildomain:
+          type: string
+        invitationsent:
+          type: string
+        createdby:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        lastlogindate:
+          type: string
+        invalidlogins:
+          type: string
+        publicwebsiteprofileid:
+          type: string
+        resetpassworddate:
+          type: string
+        avatar:
+          type: string
+        followingcount:
+          type: integer
+          format: int32
+        followercount:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        sites:
+          $ref: '#/components/schemas/sites'
+        role:
+          type: string
+        orgName:
+          type: string
+      xml:
+        name: user
+    NameValueLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    WikiDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    site:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sitename:
+          type: string
+        sitetemplateID:
+          type: integer
+          format: int32
+          xml:
+            name: sitetemplateid
+        role:
+          type: string
+        sitedescription:
+          type: string
+        enabledmodules:
+          type: string
+        sitefolderID:
+          type: string
+        folder:
+          $ref: '#/components/schemas/Folder'
+        sitefolderpermission:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        adminnote:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+        createddate:
+          type: string
+        archiveddate:
+          type: string
+        clientno:
+          type: string
+        matterno:
+          type: string
+        landingpage:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        maxpagecount:
+          type: string
+        siteowner:
+          $ref: '#/components/schemas/UserDBO'
+        sitehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModule'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        csvSiteCategory:
+          type: string
+        biddersite:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        sitenametranslations:
+          $ref: '#/components/schemas/translations'
+        siteNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        siteLogoName:
+          type: string
+        siteLogoFileSize:
+          type: integer
+          format: int64
+        siteLogoHeight:
+          type: integer
+          format: int32
+        siteLogoWidth:
+          type: integer
+          format: int32
+        siteStatus:
+          type: integer
+          format: int32
+        applySiteTerms:
+          type: integer
+          format: int32
+        siteTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        nextLoginSiteTerms:
+          type: integer
+          format: int32
+        defaultSiteTermsEnable:
+          type: integer
+          format: int32
+        advancedQAPermission:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        siteLabelDisplay:
+          type: string
+        allowSiteAdministration:
+          type: integer
+          format: int32
+        siteLevelPasswordEnable:
+          type: integer
+          format: int32
+        siteLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        sitePassword:
+          type: string
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        applySiteHomePage:
+          type: integer
+          format: int32
+        siteHomePage:
+          type: string
+        siteHomePageType:
+          type: integer
+          format: int32
+        nextLoginSiteHomePage:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        siteCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        siteModuleID:
+          type: integer
+          format: int32
+        icalSecurity:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        announcementMLJSON:
+          type: string
+        siteRestrictionType:
+          $ref: '#/components/schemas/SiteRestrictionType'
+        enableDocumentRedaction:
+          type: boolean
+          xml:
+            name: enabledocumentredaction
+        mysite:
+          type: boolean
+    Inbox:
+      type: object
+      properties:
+        enable:
+          type: string
+        accountname:
+          type: string
+    ContactUS:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactUSDBO'
+        type:
+          type: string
+      xml:
+        name: contactus
+    ActivityDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        microblog:
+          type: string
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ISheetDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    Categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDBO'
+    FileModule:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showsitemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    group:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: name of group
+        description:
+          type: string
+        guid:
+          type: string
+        groupID:
+          type: integer
+          format: int32
+        link:
+          type: string
+        sourcetype:
+          type: string
+        message:
+          type: string
+        scope:
+          type: string
+        numberofusers:
+          type: string
+        id:
+          type: string
+        type:
+          type: string
+        createddate:
+          type: string
+        nooforganisation:
+          type: integer
+          format: int32
+      xml:
+        name: group
+    DocumentDBO:
+      type: object
+      properties:
+        documentname:
+          type: string
+          xml:
+            name: filename
+        dmsVersion:
+          type: string
+        notification:
+          type: string
+          example: E.g. 1/2/3
+        folderID:
+          type: string
+        documentID:
+          type: string
+          xml:
+            name: fileid
+        batchID:
+          type: string
+        status:
+          type: string
+        documentKey:
+          type: string
+        dmsDocumentDBO:
+          xml:
+            name: dms
+          $ref: '#/components/schemas/DMSDocumentDBO'
+        enable:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        versionid:
+          type: integer
+          format: int32
+        versionnote:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        type:
+          type: string
+        originaltype:
+          type: string
+        icon:
+          type: string
+        commentscount:
+          type: integer
+          format: int32
+        likescount:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/TagsDBO'
+        location:
+          type: string
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        siteid:
+          type: integer
+          format: int32
+        parentfolderid:
+          type: integer
+          format: int32
+        error:
+          type: string
+        size:
+          type: integer
+          format: int64
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: file
+    Folder:
+      type: object
+      required:
+      - foldername
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        dmsfolderid:
+          type: string
+          xml:
+            attribute: true
+        permission:
+          type: string
+          xml:
+            attribute: true
+        foldername:
+          type: string
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/Folder'
+        child:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: folder
+    ContactUSDBO:
+      type: object
+      properties:
+        value:
+          type: string
+      xml:
+        name: values
+    IntegrationResponseUsersObject:
+      type: object
+      properties:
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationUserDBO'
+      xml:
+        name: users
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    PermissionDBO:
+      type: object
+      properties:
+        view:
+          type: integer
+          format: int32
+        edit:
+          type: integer
+          format: int32
+        delete:
+          type: integer
+          format: int32
+        addEditAllFiles:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
+        viewAllFiles:
+          type: integer
+          format: int32
+    GroupsDBO:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            type: string
+    ExperiencesDBO:
+      type: object
+      properties:
+        experience:
+          type: array
+          items:
+            type: string
+    Emailmetadata:
+      type: object
+      properties:
+        enable:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailmetadataallfolder:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailfrom:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailto:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailcc:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailsent:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailreceived:
+          type: string
+          enum:
+          - TRUE/FALSE
+    UserIDListDBO:
+      type: object
+      properties:
+        userid:
+          type: array
+          items:
+            type: string
+      xml:
+        name: user
+    PeopleDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    HomeDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Address:
+      type: object
+      properties:
+        addressid:
+          type: string
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postCode:
+          type: string
+        knownas:
+          type: string
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    ModuleDBO:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeDBO'
+        activity:
+          $ref: '#/components/schemas/ActivityDBO'
+        document:
+          $ref: '#/components/schemas/DocumentDBO'
+        blog:
+          $ref: '#/components/schemas/BlogDBO'
+        wiki:
+          $ref: '#/components/schemas/WikiDBO'
+        task:
+          $ref: '#/components/schemas/TaskDBO'
+        event:
+          $ref: '#/components/schemas/EventDBO'
+        isheet:
+          $ref: '#/components/schemas/ISheetDBO'
+        qa:
+          $ref: '#/components/schemas/QaDBO'
+        people:
+          $ref: '#/components/schemas/PeopleDBO'
+    LocationDBO:
+      type: object
+      properties:
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postcode:
+          type: string
+    TaskDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        timelineview:
+          type: string
+    Link:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValueLink'
+    IntegrationResponseGroupsObject:
+      type: object
+      properties:
+        total:
+          type: string
+        totalcount:
+          type: string
+        group:
+          type: array
+          items:
+            $ref: '#/components/schemas/group'
+      xml:
+        name: groups
+    sites:
+      type: object
+      properties:
+        site:
+          type: array
+          items:
+            $ref: '#/components/schemas/site'
+    RawSiteSize:
+      type: object
+      properties:
+        activedocumentsize:
+          type: integer
+          format: int64
+        deleteddocumentsize:
+          type: integer
+          format: int64
+        totalsize:
+          type: integer
+          format: int64
+    DMSDocumentDBO:
+      type: object
+      properties:
+        dmsdocid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmseditdate:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmsversion:
+          type: string
+      xml:
+        name: dms
+    categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+      xml:
+        name: categories
+    CategoryDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: CategoryDBO
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

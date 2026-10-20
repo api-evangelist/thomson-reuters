@@ -1,0 +1,395 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Task Code Alerts API
+  version: '1.9'
+  description: 'Operations tagged TaskCodeAlerts across 2 of this provider''s published API definitions: thomson-reuters-matters-api-1-9-openapi.json, thomson-reuters-matters-api-1-9-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+tags:
+- name: TaskCodeAlerts
+paths:
+  /matters/{matterId}/firms/{firmId}/taskcodealerts:
+    get:
+      tags:
+      - TaskCodeAlerts
+      summary: Gets Task Code Alerts for specific matter
+      operationId: Matters_GetTaskCodeAlerts
+      parameters:
+      - name: matterId
+        in: path
+        description: Matter identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: firmId
+        in: path
+        description: Firm identifier. Input to target Additional Firms/Vendors.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource has changed).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns Task Code Alerts for specific firm in a matter.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCodeAlertsView'
+        '304':
+          description: Returns a not modified response with empty body.
+        '400':
+          description: 'Identifier: matterId or firmId is invalid.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Current user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Matter or firm was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+      - TaskCodeAlerts
+      summary: Patches Task Code Alerts for specific firm in a matter
+      operationId: Matters_PatchTaskCodeAlerts
+      parameters:
+      - name: matterId
+        in: path
+        description: Matter identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: firmId
+        in: path
+        description: Firm identifier. Input '0' to target Additional Firms/Vendors.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-Match
+        in: header
+        description: Executes a request only if the passed ETag equals the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 200 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.'
+        schema:
+          type: string
+        example: return=representation
+      requestBody:
+        description: The model containing Task Code Alerts to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchTaskCodeAlertsModel'
+      responses:
+        '200':
+          description: Returns Patched Task Code Alerts for specific firm in a matter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCodeAlertsView'
+        '204':
+          description: Task Code Alerts got patched but will not be provided in the response body.
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Current user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Matter or firm was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '412':
+          description: ETag provided in the If-Match header is out of date.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    TaskCodeAlertsPhase:
+      required:
+      - phase
+      type: object
+      properties:
+        phase:
+          type: string
+          description: Alphanumeric representation of the Phase.
+          example: PA3
+        shortName:
+          type:
+          - string
+          - 'null'
+          description: Gets or Sets ShortName
+          readOnly: true
+          example: Domestic Preparation
+        amountTotalPerMatter:
+          type:
+          - number
+          - 'null'
+          description: Gets or Sets Total AmountPerMatter
+          format: double
+        amountSpentPerMatter:
+          type:
+          - number
+          - 'null'
+          description: Gets or Sets Spent AmountPerMatter
+          format: double
+          readOnly: true
+        taskCodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaskCodeAlertsTaskCode'
+          description: Gets or Sets TaskCodes
+      additionalProperties: false
+    TaskCodeAlertsView:
+      title: TaskCodeAlertsModel
+      type: object
+      properties:
+        updateDate:
+          type:
+          - string
+          - 'null'
+          description: Update Date
+        comment:
+          type:
+          - string
+          - 'null'
+          description: Revision comment.
+        priorComment:
+          type:
+          - string
+          - 'null'
+          description: Previous revision comment.
+        approvalStatus:
+          $ref: '#/components/schemas/ApprovalStatus'
+        isLocked:
+          type:
+          - boolean
+          - 'null'
+          description: Specifies whether the task code alerts for the firm is locked or not.
+          example: false
+        value:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaskCodeAlertsCodeSet'
+          description: Gets or Sets Value
+      additionalProperties: false
+    PatchTaskCodeAlertsModel:
+      title: UpdateTaskCodeAlertsModel
+      required:
+      - comment
+      type: object
+      properties:
+        comment:
+          type: string
+          description: Revision comment.
+        value:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaskCodeAlertsCodeSet'
+          description: Gets or Sets Value
+      additionalProperties: false
+    ApprovalStatus:
+      enum:
+      - PendingCo
+      - Acknowledged
+      - Approved
+      - Rejected
+      - Modified
+      - PendingFirm
+      - PreAcknowledged
+      type: string
+      description: The approval status of the task code alerts.
+    TaskCodeAlertsCodeSet:
+      required:
+      - codeSet
+      type: object
+      properties:
+        codeSet:
+          type: string
+          description: Alphabetic representation of the Code Set.
+          example: PA
+        shortName:
+          type:
+          - string
+          - 'null'
+          description: Gets or Sets ShortName
+          readOnly: true
+          example: Patent
+        amountTotalPerMatter:
+          type:
+          - number
+          - 'null'
+          description: Gets or Sets Total AmountPerMatter
+          format: double
+        amountSpentPerMatter:
+          type:
+          - number
+          - 'null'
+          description: Gets or Sets Spent AmountPerMatter
+          format: double
+          readOnly: true
+        phases:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaskCodeAlertsPhase'
+          description: Gets or Sets Phases
+      additionalProperties: false
+    TaskCodeAlertsTaskCode:
+      required:
+      - taskCode
+      type: object
+      properties:
+        taskCode:
+          type: string
+          description: Alphanumeric representation of the Task Code.
+          example: PA310
+        shortName:
+          type:
+          - string
+          - 'null'
+          description: Gets or Sets ShortName
+          readOnly: true
+          example: Provisional Application Prep.-Domestic
+        amountPerMatter:
+          type:
+          - number
+          - 'null'
+          description: Gets or Sets AmountPerMatter
+          format: double
+        amountPerLine:
+          type:
+          - number
+          - 'null'
+          description: Gets or Sets AmountPerLine
+          format: double
+      additionalProperties: false
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-matters-api-1-9-openapi.json
+- thomson-reuters-matters-api-1-9-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,818 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts State Ti Forms Mapping Charts…
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: State Ti Forms Mapping Charts
+paths:
+  /v1/state-ti-forms-mapping-charts/{year}:
+    get:
+      tags:
+      - State Ti Forms Mapping Charts
+      summary: Returns the list of State Ti Forms Mapping Charts based on year.
+      operationId: RetrievesStateTiFormsMappingCharts
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: returnType
+        in: query
+        description: Tax Return Type
+        required: false
+        schema:
+          type: string
+      - name: companyType
+        in: query
+        description: Company Type
+        required: false
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiChartsRepresentation'
+              examples:
+                state-ti-forms-mapping-charts:
+                  $ref: '#/components/examples/state-ti-forms-mapping-charts'
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves State Ti Forms Mapping Charts
+    patch:
+      tags:
+      - State Ti Forms Mapping Charts
+      summary: Maps or unmaps tax form lines to state TI chart.
+      operationId: mapOrUnmapMultipleStateTiFormMappingCharts
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocumentStateTiFormsLineMappingRepresentation'
+            examples:
+              state-ti-forms-line-mapping-parent-category-map:
+                $ref: '#/components/examples/state-ti-forms-line-mapping-parent-category-map'
+              state-ti-forms-line-mapping-parent-category-unmap:
+                $ref: '#/components/examples/state-ti-forms-line-mapping-parent-category-unmap'
+              state-ti-forms-line-mapping-child-category-map:
+                $ref: '#/components/examples/state-ti-forms-line-mapping-child-category-map'
+              state-ti-forms-line-mapping-child-category-unmap:
+                $ref: '#/components/examples/state-ti-forms-line-mapping-child-category-unmap'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiFormsLineMappingMultipleResponseRepresentations'
+              examples:
+                state-ti-forms-mapping-charts-success-responses:
+                  $ref: '#/components/examples/state-ti-forms-mapping-charts-success-responses'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiFormsLineMappingMultipleResponseRepresentations'
+              examples:
+                state-ti-forms-mapping-charts-multiple-responses:
+                  $ref: '#/components/examples/state-ti-forms-mapping-charts-multiple-responses'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: map or unmap Multiple State Ti Form Mapping Charts
+  /v1/state-ti-forms-mapping-charts/{year}/jurisdictions/{jurisdictionCode}/return-types/{returnType}:
+    get:
+      tags:
+      - State Ti Forms Mapping Charts
+      summary: Returns the list of State Ti Forms Mapping Charts based on year, jurisdiction…
+      operationId: RetrievesStateTiFormsMappingChartsByJurisdictionCodeAndReturnType
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: jurisdictionCode
+        in: path
+        description: Jurisdiction Code
+        required: true
+        schema:
+          type: string
+      - name: returnType
+        in: path
+        description: Tax Return Type
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiChartsRepresentation'
+              examples:
+                state-ti-forms-mapping-charts:
+                  $ref: '#/components/examples/state-ti-forms-mapping-charts-by-jurisdiction-code'
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves State Ti Forms Mapping Charts By Jurisdiction code and return type
+  /v1/state-ti-forms-mapping-charts/{year}/tax-lines:
+    get:
+      tags:
+      - State Ti Forms Mapping Charts
+      summary: Returns the matching Tax Return Lines of corresponding Forms Mapping Charts…
+      operationId: RetrievesMatchingTaxReturnLinesForTheRequestedFormsMappingCharts
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: chartIds
+        in: query
+        description: Multiple Chart IDs delimited by comma (,) either as inclusion or exclusion list.
+        required: false
+        schema:
+          type: string
+      - name: includeAll
+        in: query
+        description: Set to true to include all charts.
+        required: false
+        schema:
+          type: string
+          default: ''
+          enum:
+          - true
+          - false
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiFormsMappingChartTaxlines'
+              examples:
+                state-ti-forms-mapping-charts-taxlines:
+                  $ref: '#/components/examples/state-ti-forms-mapping-charts-taxlines'
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves matching Tax Return Lines for the requested Forms Mapping Charts
+  /v1/state-ti-forms-mapping-charts:
+    post:
+      tags:
+      - State Ti Forms Mapping Charts
+      summary: Creates a new State TI Forms Mapping Chart
+      operationId: createsNewFormsMappingChart
+      parameters:
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: StateTiFormsMappingChart Representation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StateTIFormsMappingChartRepresentation'
+            examples:
+              Create-State-TI-Forms-Mapping-Chart:
+                $ref: '#/components/examples/state-ti-forms-mapping-chart'
+      responses:
+        '200':
+          description: StateTiFormsMapping chart created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiChartRepresentation'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: creates new forms mapping chart
+  /v1/state-ti-forms-mapping-charts/{chartId}/copies:
+    post:
+      tags:
+      - State Ti Forms Mapping Charts
+      summary: Creates a copy of an existing State Ti Forms Mapping Chart.
+      operationId: CreatesACopyOfAExistingChart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: StateTiFormsMappingChart Representation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StateTIFormsMappingChartRepresentation'
+            examples:
+              Create-State-TI-Forms-Mapping-Chart:
+                $ref: '#/components/examples/state-ti-forms-mapping-chart'
+      responses:
+        '200':
+          description: StateTiFormsMapping chart created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiChartRepresentation'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates a copy of a existing chart.
+components:
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    StateTIFormsMappingChartRepresentation:
+      type: object
+      properties:
+        year:
+          format: int32
+          type: integer
+          description: Chart year.
+        chartName:
+          type: string
+          description: Chart name.
+        jurisdictionCode:
+          type: string
+          description: Jurisdiction code.
+        returnType:
+          enum:
+          - Income
+          - Financial
+          - Insurance
+          type: string
+          description: Tax return type description.
+        mappingStatus:
+          enum:
+          - InProcess
+          - Complete
+          type: string
+          description: Mapping status information.
+        hasBinder:
+          type: boolean
+          description: Indicates whether this is used by binders.
+    StateTiFormsLineMappingMultipleResponseRepresentation:
+      type: object
+      properties:
+        op:
+          type: string
+        path:
+          type: string
+        value:
+          $ref: '#/components/schemas/StateTiCategoryRepresentation'
+        statuCode:
+          type: integer
+        detail:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    StateTiCategoryRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        id:
+          type: integer
+          description: System-generated ID for State TI category group.
+          format: int32
+        type:
+          type: string
+          description: State TI category type.
+          enum:
+          - Additions
+          - Subtractions
+          - Adjustments
+        code:
+          type: string
+          description: Code.
+        description:
+          type: string
+          description: Description.
+        isUsedByBinders:
+          type: boolean
+          description: Indicates whether this is used by binders.
+        isAvailable:
+          type: boolean
+          description: Indicates whether this is available.
+        parent:
+          $ref: '#/components/schemas/StateTiCategoryRepresentation'
+        parentCategoryCode:
+          type: string
+          description: Parent category code.
+        subCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateTiCategoryRepresentation'
+        rowNumber:
+          type: integer
+          description: Row number.
+          format: int32
+    StateTiChartRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          description: Tax year.
+        chartId:
+          type: string
+          description: 16-character chart ID.
+        chartName:
+          type: string
+          description: Chart name.
+        jurisdictionCode:
+          type: string
+          description: Jurisdiction code.
+        jurisdictionName:
+          type: string
+          description: Jurisdiction name.
+        returnType:
+          enum:
+          - income
+          - Financial
+          - Insurance
+          type: string
+          description: Tax return type.
+        mappingStatus:
+          enum:
+          - InProcess
+          - Complete
+          type: string
+          description: Mapping status information.
+        mappingStatusDesc:
+          type: string
+          description: ''
+        hasBinder:
+          type: boolean
+          description: Indicates whether this is used in a binder.
+    StateTiFormsMappingChartTaxline:
+      type: object
+      properties:
+        chartId:
+          type: string
+          description: 16-character chart ID.
+        jurisdictionCode:
+          type: string
+          description: Jurisdiction code.
+        jurisdictionName:
+          type: string
+          description: Jurisdiction name.
+        parentCatType:
+          type: string
+          description: Parent category type.
+        subCategoryCode:
+          type: string
+          description: Subcategory type.
+        subCategoryDescription:
+          type: string
+          description: Subcategory description.
+        parentTaxReturnLineCode:
+          type: string
+          description: Parent tax return line code.
+        parentTaxReturnLineDesc:
+          type: string
+          description: Parent tax return line description.
+        childTaxReturnLineCode:
+          type: string
+          description: Child tax return line code.
+        childTaxReturnLineDesc:
+          type: string
+          description: Child tax return line description.
+    OperationStateTiFormsLineMappingRepresentation:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/StateTiFormsLineMappingRepresentation'
+        op:
+          type: string
+          description: Specifies the CRUD operation.
+        from:
+          type: string
+        path:
+          type: string
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    StateTiFormsLineMappingMultipleResponseRepresentations:
+      type: array
+      items:
+        $ref: '#/components/schemas/StateTiFormsLineMappingMultipleResponseRepresentation'
+    StateTiFormsLineMappingRepresentation:
+      type: object
+      properties:
+        chartId:
+          type: string
+          description: 16-character chart ID.
+        chartName:
+          type: string
+          description: Chart name.
+        subCategoryCode:
+          type: string
+          description: Subcategory type.
+        subCategoryDescription:
+          type: string
+          description: Subcategory description.
+        parentTaxReturnLineCode:
+          type: string
+          description: Parent tax return line code.
+        parentTaxReturnLineDesc:
+          type: string
+          description: Parent tax return line description.
+        childTaxReturnLineCode:
+          type: string
+          description: Child tax return line code.
+        childTaxReturnLineDesc:
+          type: string
+          description: Child tax return line description.
+    StateTiChartsRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateTiChartRepresentation'
+    StateTiFormsMappingChartTaxlines:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateTiFormsMappingChartTaxline'
+    JsonPatchDocumentStateTiFormsLineMappingRepresentation:
+      type: array
+      items:
+        $ref: '#/components/schemas/OperationStateTiFormsLineMappingRepresentation'
+  examples:
+    state-ti-forms-mapping-charts-multiple-responses:
+      value:
+      - op: Add
+        path: stateTiFormsMappingCharts
+        value:
+          chartId: E45V01010000000S
+          subCategoryCode: '90101'
+          parentTaxReturnLineCode: J.110.2
+          parentTaxReturnLineDesc: ' sec 1231 gain (loss)'
+          childTaxReturnLineCode: null
+          childTaxReturnLineDesc: null
+        statusCode: 400
+        detail: Error Details
+        fieldErrors:
+        - fieldName: CategoryType
+          messages:
+          - Error Message
+          errorCode: 0
+      - op: Add
+        path: stateTiFormsMappingCharts
+        value:
+          chartId: E45V01010000000S
+          subCategoryCode: '90101'
+          parentTaxReturnLineCode: J.110.2
+          parentTaxReturnLineDesc: ' sec 1231 gain (loss)'
+          childTaxReturnLineCode: null
+          childTaxReturnLineDesc: null
+        statusCode: 400
+        detail: Error Details
+        fieldErrors:
+        - fieldName: CategoryType
+          messages:
+          - Error Message
+          errorCode: 0
+      - op: Add
+        path: stateTiFormsMappingCharts
+        value:
+          chartId: E45V01010000000S
+          subCategoryCode: '90101'
+          parentTaxReturnLineCode: J.110.2
+          parentTaxReturnLineDesc: ' sec 1231 gain (loss)'
+          childTaxReturnLineCode: null
+          childTaxReturnLineDesc: null
+        statusCode: 400
+        detail: Error Details
+        fieldErrors:
+        - fieldName: CategoryType
+          messages:
+          - Error Message
+          errorCode: 0
+    state-ti-forms-line-mapping-child-category-unmap:
+      value:
+      - value:
+          chartID: ABCV01010000440Z
+          subCategoryCode: '123459893'
+          parentTaxReturnLineCode: AL.I.A.020.1
+          parentTaxReturnLineDesc: 20C Sch A, ln 02 - Test
+          childTaxReturnLineCode: AL.I.A.08A.2
+          childTaxReturnLineDesc: test
+        path: stateTiFormsMappingCharts
+        op: remove
+    state-ti-forms-line-mapping-parent-category-map:
+      value:
+      - value:
+          chartID: ABCV01010000440Z
+          subCategoryCode: '10000902'
+          parentTaxReturnLineCode: AL.I.S.010.2
+          parentTaxReturnLineDesc: 20C Sch A, ln 12 - Test
+        path: stateTiFormsMappingCharts
+        op: add
+    state-ti-forms-mapping-chart:
+      value:
+        year: 2020
+        chartName: TestChart
+        jurisdictionCode: AL
+        returnType: Income
+    state-ti-forms-line-mapping-child-category-map:
+      value:
+      - value:
+          chartID: ABCV01010000440Z
+          subCategoryCode: '123459893'
+          parentTaxReturnLineCode: AL.I.A.020.1
+          parentTaxReturnLineDesc: 20C Sch A, ln 02 - Test
+          childTaxReturnLineCode: AL.I.A.08A.2
+          childTaxReturnLineDesc: test
+        path: stateTiFormsMappingCharts
+        op: add
+    state-ti-forms-mapping-charts-by-jurisdiction-code:
+      value:
+        resourceList:
+        - year: 2020
+          chartId: ACCT0101000045DF
+          chartName: Alabama_Form_Mapping_Chart_1
+          jurisdictionCode: AL
+          jurisdictionName: Alabama
+          returnType: Income
+          mappingStatus: 'No'
+          hasBinder: false
+          mappingStatusDesc: In Process
+        - year: 2020
+          chartId: ACCT0101000045EF
+          chartName: Alabama_Form_Mapping_Chart_2
+          jurisdictionCode: AL
+          jurisdictionName: Alabama
+          returnType: Income
+          mappingStatus: 'No'
+          hasBinder: false
+          mappingStatusDesc: In Process
+    state-ti-forms-mapping-charts:
+      value:
+        resourceList:
+        - year: 2020
+          chartId: ACCT0101000045DF
+          chartName: Alabama_Form_Mapping_Chart
+          jurisdictionCode: AL
+          jurisdictionName: Alabama
+          returnType: Income
+          mappingStatus: 'No'
+          hasBinder: false
+          mappingStatusDesc: In Process
+        - year: 2020
+          chartId: ACCT0101000045EF
+          chartName: Arizona_Form_Mapping_Chart
+          jurisdictionCode: AZ
+          jurisdictionName: Arizona
+          returnType: Income
+          mappingStatus: 'No'
+          hasBinder: false
+          mappingStatusDesc: In Process
+    state-ti-forms-line-mapping-parent-category-unmap:
+      value:
+      - value:
+          chartID: ABCV01010000440Z
+          subCategoryCode: '10000902'
+          parentTaxReturnLineCode: AL.I.S.010.2
+          parentTaxReturnLineDesc: 20C Sch A, ln 12 - Test
+        path: stateTiFormsMappingCharts
+        op: remove
+    state-ti-forms-mapping-charts-taxlines:
+      value:
+        resourceList:
+        - chartId: E45V0101000031EE
+          jurisdictionCode: AL
+          jurisdictionName: Alabama
+          chartName: Test_Ram
+          parentCatType: Additions
+          parentTaxReturnLineCode: AL.I.A.010.2
+          parentTaxReturnLineDesc: 20C Sch A, ln 01 - State
+          childTaxReturnLineCode: null
+          childTaxReturnLineDesc: null
+          subCategoryCode: '1003002'
+          subCategoryDescription: null
+        - chartId: E45V0101000031EE
+          jurisdictionCode: AZ
+          jurisdictionName: Arizona
+          chartName: Test_Ram
+          parentCatType: Subtractions
+          parentTaxReturnLineCode: AL.I.A.020.1
+          parentTaxReturnLineDesc: 20C Sch A, ln 02 - Federal
+          childTaxReturnLineCode: null
+          childTaxReturnLineDesc: null
+          subCategoryCode: '1003301'
+          subCategoryDescription: null
+        - chartID: E45V0101000031EE
+          jurisdictionCode: AK
+          jurisdictionName: Alaska
+          chartName: Test_Ram
+          parentCatType: ApportionedIncomeAdjustments
+          parentTaxReturnLineCode: AL.I.A.020.1
+          parentTaxReturnLineDesc: 20C Sch A, ln 02 - Federa
+          childTaxReturnLineCode: null
+          childTaxReturnLineDesc: null
+          subCategoryCode: 100wr01
+          subCategoryDescription: null
+    state-ti-forms-mapping-charts-success-responses:
+      value:
+      - op: Add
+        path: stateTiFormsMappingCharts
+        value:
+          chartId: E45V01010000000S
+          subCategoryCode: '90101'
+          parentTaxReturnLineCode: J.110.2
+          parentTaxReturnLineDesc: ' sec 1231 gain (loss)'
+          childTaxReturnLineCode: null
+          childTaxReturnLineDesc: null
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+      - op: Add
+        path: stateTiFormsMappingCharts
+        value:
+          chartId: E45V01010000000S
+          subCategoryCode: '90101'
+          parentTaxReturnLineCode: J.110.2
+          parentTaxReturnLineDesc: ' sec 1231 gain (loss)'
+          childTaxReturnLineCode: null
+          childTaxReturnLineDesc: null
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

@@ -1,0 +1,829 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Events APIs API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Events APIs across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Events APIs
+paths:
+  /{version}/event:
+    post:
+      tags:
+      - Events APIs
+      summary: Add Event
+      description: 'Method to Add Event
+
+        This method is supported in version 5 of the API and above'
+      operationId: addEvent
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: siteid
+        in: query
+        description: site id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Event Added successfully
+        '201':
+          description: Event Added successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Event'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Problem with parameters in add event
+        '401':
+          description: Unauthorised in add event
+        '403':
+          description: Validation failed | Forbidden in add event
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while adding event
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Event'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Event'
+    servers:
+    - url: /monumentuat/api
+  /{version}/event/create:
+    post:
+      tags:
+      - Events APIs
+      summary: Create Event
+      description: 'Method to Create Event
+
+        This method is supported in version 1 of the API and above'
+      operationId: createEvent
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: query
+        description: site id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Event created successfully
+        '201':
+          description: Event Created successfully
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '400':
+          description: Problem with parameters in create event
+        '401':
+          description: Unauthorised in create event
+        '403':
+          description: Validation failed | Forbidden in create event
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while creating event
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/EventListDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/event/category:
+    post:
+      tags:
+      - Events APIs
+      summary: Get Site Categories
+      description: 'Method to get site categories
+
+        This method is supported in version 1 of the API and above'
+      operationId: siteCategories_1
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: Site Category get successfully
+        '201':
+          description: Site Category get successfully
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '400':
+          description: Problem with parameters in site categories
+        '401':
+          description: Unauthorised in site categories
+        '403':
+          description: Validation failed | Forbidden in site categories
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting site category
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/category'
+    servers:
+    - url: /monumentuat/api
+  /{version}/event/categorylist:
+    get:
+      tags:
+      - Events APIs
+      summary: Get Event Category List
+      description: 'Method to get event categories list
+
+        This method is supported in version 5 of the API and above'
+      operationId: eventCategoriesList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: siteid
+        in: query
+        description: site id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Event Category list get successfully
+        '201':
+          description: Event Category list get successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '400':
+          description: Problem with parameters in event category list
+        '401':
+          description: Unauthorised in event category list
+        '403':
+          description: Validation failed | Forbidden in event category list
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting event category list
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/event/reSynchronisationFlag:
+    get:
+      tags:
+      - Events APIs
+      summary: Get Re-syncronization flag
+      description: 'Method to get resynchronization flag
+
+        This method is supported in version 1 of the API and above'
+      operationId: reSynchronisationFlag_1
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: lastSynkDate
+        in: query
+        description: last synk date
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: resynchronization flag get successfully
+        '201':
+          description: resynchronization flag get successfully
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting resynchronization flag
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    StatusType:
+      type: object
+      properties:
+        family:
+          type: string
+          enum:
+          - INFORMATIONAL
+          - SUCCESSFUL
+          - REDIRECTION
+          - CLIENT_ERROR
+          - SERVER_ERROR
+          - OTHER
+        reasonPhrase:
+          type: string
+        statusCode:
+          type: integer
+          format: int32
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardSubtype:
+          type: boolean
+        wildcardType:
+          type: boolean
+    SiteCategoryListDBO:
+      type: object
+      properties:
+        siteCategory:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    EventAttachment:
+      type: object
+      properties:
+        attachmentname:
+          type: string
+        attachmenturl:
+          type: string
+        fileid:
+          type: string
+      xml:
+        name: attachment
+    NameValueLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    EventContact:
+      type: object
+      properties:
+        contactid:
+          type: integer
+          format: int32
+        contactname:
+          type: string
+      xml:
+        name: contact
+    Locale:
+      type: object
+      properties:
+        language:
+          type: string
+        script:
+          type: string
+        country:
+          type: string
+        variant:
+          type: string
+        extensionKeys:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        unicodeLocaleAttributes:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        unicodeLocaleKeys:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        iso3Language:
+          type: string
+        iso3Country:
+          type: string
+        displayLanguage:
+          type: string
+        displayScript:
+          type: string
+        displayCountry:
+          type: string
+        displayVariant:
+          type: string
+        displayName:
+          type: string
+    EventCategoriesList:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventCategory'
+      xml:
+        name: categories
+    EventAttachments:
+      type: object
+      properties:
+        attachment:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventAttachment'
+      xml:
+        name: attachments
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ResponseDBO:
+      type: object
+      properties:
+        error:
+          type: string
+          xml:
+            name: Error
+        externalIDs:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+        blogResynchronisationFlag:
+          type: string
+        eventResynchronisationFlag:
+          type: string
+        response:
+          type: array
+          xml:
+            name: item
+          items:
+            xml:
+              name: item
+            $ref: '#/components/schemas/ResultDBO'
+        blogResponse:
+          type: array
+          xml:
+            name: blogs
+          items:
+            xml:
+              name: blogs
+            $ref: '#/components/schemas/BlogDBO'
+        eventResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventDBO'
+        categories:
+          $ref: '#/components/schemas/SiteCategoryListDBO'
+      xml:
+        name: Items
+    Response:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+        language:
+          $ref: '#/components/schemas/Locale'
+        location:
+          type: string
+          format: uri
+        date:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+        headers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+        cookies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NewCookie'
+        statusInfo:
+          $ref: '#/components/schemas/StatusType'
+        metadata:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+        status:
+          type: integer
+          format: int32
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        allowedMethods:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        links:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/Link'
+        entityTag:
+          $ref: '#/components/schemas/EntityTag'
+        stringHeaders:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        entity:
+          type: object
+    EventTag:
+      type: object
+      properties:
+        tagname:
+          type: string
+      xml:
+        name: tag
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ResultDBO:
+      type: object
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        text:
+          type: string
+        errorcolumnname:
+          type: string
+    NewCookie:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        version:
+          type: integer
+          format: int32
+        path:
+          type: string
+        domain:
+          type: string
+        comment:
+          type: string
+        maxAge:
+          type: integer
+          format: int32
+        expiry:
+          type: string
+          format: date-time
+        secure:
+          type: boolean
+        httpOnly:
+          type: boolean
+    EventTags:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventTag'
+      xml:
+        name: tags
+    EntityTag:
+      type: object
+      properties:
+        value:
+          type: string
+        weak:
+          type: boolean
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    Event:
+      type: object
+      properties:
+        eventtitle:
+          type: string
+        eventcontent:
+          type: string
+        showcomment:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/EventTags'
+        status:
+          type: integer
+          format: int32
+        siteid:
+          type: integer
+          format: int32
+        categories:
+          $ref: '#/components/schemas/EventCategoriesList'
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        startdate:
+          type: string
+        enddate:
+          type: string
+        starttime:
+          type: string
+        endtime:
+          type: string
+        location:
+          type: string
+        createdBy:
+          type: string
+        processtype:
+          type: string
+        eventID:
+          type: string
+        attachments:
+          $ref: '#/components/schemas/EventAttachments'
+        contacts:
+          $ref: '#/components/schemas/EventContacts'
+        alldayevent:
+          type: string
+      xml:
+        name: event
+    EventCategory:
+      type: object
+      properties:
+        categoryid:
+          type: string
+      xml:
+        name: category
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    Link:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValueLink'
+    EventContacts:
+      type: object
+      properties:
+        contact:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventContact'
+      xml:
+        name: contacts
+    EventListDBO:
+      type: object
+      properties:
+        events:
+          type: array
+          xml:
+            name: event
+          items:
+            xml:
+              name: event
+            $ref: '#/components/schemas/EventDBO'
+        event:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventDBO'
+      xml:
+        name: events
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

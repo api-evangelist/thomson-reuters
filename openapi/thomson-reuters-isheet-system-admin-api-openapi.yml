@@ -1,0 +1,158 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters ISheet System Admin API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged ISheet System Admin across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: ISheet System Admin
+paths:
+  /{version}/isheet/system/templates:
+    get:
+      tags:
+      - ISheet System Admin
+      summary: To get the list of the iSheet template
+      description: 'This API call is used to get iSheet templates.
+
+
+        Note :
+
+
+        A site admin user in any single site can access this API
+
+
+        The request will return only ''active'' iSheet templates'
+      operationId: getISheetTemplates
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: API will return the list of iSheet templates
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetTemplatesDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetTemplatesDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetTemplatesDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    ISheetTemplatesDBO:
+      type: object
+      properties:
+        template:
+          type: array
+          items:
+            xml:
+              name: template
+            $ref: '#/components/schemas/ISheetTemplateDBO'
+      xml:
+        name: templates
+    ISheetTemplateParameter:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        data:
+          type: string
+      xml:
+        name: templateparameter
+    ISheetTemplateParameterGroup:
+      type: object
+      properties:
+        templateruleid:
+          type: integer
+          format: int32
+          xml:
+            attribute: true
+        templateparameter:
+          type: array
+          items:
+            xml:
+              name: templateparameter
+            $ref: '#/components/schemas/ISheetTemplateParameter'
+      xml:
+        name: templateparametergroup
+    ISheetTemplateParameterGroups:
+      type: object
+      properties:
+        templateparametergroup:
+          type: array
+          items:
+            xml:
+              name: templateparametergroup
+            $ref: '#/components/schemas/ISheetTemplateParameterGroup'
+      xml:
+        name: templateparametergroups
+    ISheetTemplateDBO:
+      type: object
+      properties:
+        templateid:
+          type: integer
+          format: int32
+        title:
+          type: string
+        status:
+          type: string
+        templateparametergroups:
+          $ref: '#/components/schemas/ISheetTemplateParameterGroups'
+      xml:
+        name: template
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

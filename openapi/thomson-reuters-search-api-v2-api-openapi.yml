@@ -1,0 +1,823 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Search API V2 API
+  version: '1.0'
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+  termsOfService: urn:tos
+  description: 'Operations tagged Search API V2 across 2 of this provider''s published API definitions: thomson-reuters-api-documentation-openapi.json, thomson-reuters-api-documentation-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/checkpoint
+tags:
+- name: Search API V2
+  description: The Search API for Checkpoint Edge provides the most accurate and up-to-date guidance about the ever-changing tax law and accounting standards. The API is powered by AI and machine-learning tools, to get targeted search results in less time.
+paths:
+  /v2/search:
+    post:
+      tags:
+      - Search API V2
+      summary: Execute a Checkpoint search in a Single Practice Area
+      description: This API allows executing a search in a single practice area using a single searchTerm and a list of sources. The response will include the total count, the corresponding search result identifier (searchId) and a list of documents found by the search.
+      operationId: searchUsingPOST
+      parameters:
+      - name: limit
+        in: query
+        description: 'maximum number of documents to return in response
+
+          *Default value : 10*
+
+          *Maximum value : 100*'
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int64
+        example: 10
+      requestBody:
+        description: "Search request parameters: searchTerm, practiceArea, sources, internationalParameters, and stateOptions.<br> 1.The 'searchTerm' parameter[Required] is the string of text to use for searching.<br>2.The 'practiceArea' parameter[Required] is the practice area to search.\n Allowed values are:\n\n - federal\n - state-and-local\n - international-tax\n - pension-and-benefits\n - estate-planning\n - payroll\n - aacf\n\n3.The 'sources'[Required] parameter is the list of Checkpoint sources to search (sourceIds from Sources API).<br>4.The 'internationalParameters' parameter[Optional] is the list of country codes for International-Tax search only.<br>5.The 'stateOptions' parameter[Optional] is the list of state codes , tax types and document types for state-and-local search only.\n\nNote: To find list of valid country codes for international-tax search. Please check 'Search API v2 - Country Code for \nInternational Search' under 'Getting Started' section."
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchSinglePaQuery'
+            examples:
+              Basic Search:
+                $ref: '#/components/examples/BasicSearch'
+              International Search:
+                $ref: '#/components/examples/InternationalSearch'
+              State and Local Search:
+                $ref: '#/components/examples/StateAndLocalSearch'
+        required: true
+      responses:
+        '200':
+          description: Successful Response with list of individual search result in JSON format. The search response will include the total count, the corresponding search result identifier (searchId) and a list of documents found by the search.The list of documents returned by this API is limited to the number in the 'limit' url parameter. The default value will be returned when no limit is included in the request (see limit parameter description for default and maximum values). The documentList includes the unique document identifier (documentId), document title (title), Checkpoint Edge link (url), source label (source), source identifier (sourceId), sub source name (subSourceName), category (contentType),  document rank score (rankScore), snippet with search term (tagged under span with 'hit'class), state code (state), list of countries (countries) and the date when the document was published - if available (publishedDate).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchSinglePaResponse'
+        '201':
+          description: Created
+          content: {}
+        '400':
+          description: 'Bad Request: ''Invalid Practice Area Value'', ''Practice Area Value Is Required'', ''Sources do not belong to the selected Practice Area'', ''Selected Sources are Invalid'', ''Invalid Country value(s)'', ''Invalid State value(s).'', ''Invalid Tax Type value(s)'', ''Invalid Tax Types, do not belong to State(s)'', ''Invalid Document Type value(s)'''
+          content: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401ErrorResponse'
+        '403':
+          description: Selected Sources are Outside your Subscription
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - CheckpointAuth: []
+      x-codegen-request-body-name: body
+    servers:
+    - url: https://api.thomsonreuters.com/checkpoint
+  /v2/search/country-parameters/countries-by-region:
+    get:
+      tags:
+      - Search API V2
+      summary: Retrieve the list of All Checkpoint supported countries by region
+      description: This API allows retrieving the list of countries (countryIds) used in Checkpoint.
+      operationId: getCountriesByRegionUsingGET
+      parameters:
+      - name: regions
+        in: query
+        description: "List of regions  to retrieve countries from. Multiple  regions values can be provided separated by commas.\nExample: ?regions=AFRI,ASPA,CARI \n\n"
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - AFRI
+            - ASPA
+            - CARI
+            - EURO
+            - LATA
+            - MIEA
+            - NOAM
+          enum:
+          - AFRI
+          - ASPA
+          - CARI
+          - EURO
+          - LATA
+          - MIEA
+          - NOAM
+      responses:
+        '200':
+          description: Successful Response with list of sources in JSON format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionCountries'
+        '400':
+          description: 'Bad Request: ''Invalid Region Value'''
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - CheckpointAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/checkpoint
+  /v2/search/federated-search:
+    post:
+      tags:
+      - Search API V2
+      summary: Trigger a Checkpoint search across Multiple Practice Areas
+      description: This API provides the convenience of triggering multiple single Checkpoint searches at once, across each selected practice areas, using a single searchTerm and a list of sources. The response will include the total count per practice area and the corresponding search result identifier (searchId), that allows retrieving each result set using the Search Results API
+      operationId: federatedSearchUsingPOST
+      requestBody:
+        description: "Search request parameters: searchTerm, practiceAreas, sources, internationalParameters, and stateOptions.<br>1.The 'searchTerm' parameter[Required] is the string of text to use for searching.<br>2.The 'practiceAreas' parameter[Required] is the list of practice areas to search.\nAllowed values are:\n\n - federal\n - state-and-local\n - international-tax\n - pension-and-benefits\n - estate-planning\n - payroll\n - aacf\n\n3.The 'sources' parameter[Required] is the list of Checkpoint sources to search (sourceIds from Sources API).\nThere is no need to separate the sources by practice area. The API will map each sourceId to the corresponding practice area.<br>4.The 'internationalParameters' parameter[Optional] is the list of country codes for International-Tax search only.<br>5.The 'stateOptions' parameter[Optional] is the list of state codes , tax types and document types for state-and-local search only.\n\nNote: To find list of valid country codes for international-tax search. Please check 'Search API v2 - Country Code for \nInternational Search' under 'Getting Started' section."
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MultiSearchCriteria'
+        required: true
+      responses:
+        '200':
+          description: Successful Response with list of individual search result by Practice Area in JSON format.The response will include the totalCount of all practice areas combined, a searchUrl that allows the execution of the same search across multiple practice areas on Checkpoint Edge,and a list of results per practice area. The results include the total count per practice area, a searchUrl that allows the execution of the same search for that practice area in Checkpoint Edge, and the corresponding search result identifier (searchId), that allows retrieving each result set using the Search Results API
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FederatedSearchResponse'
+        '201':
+          description: Created
+          content: {}
+        '400':
+          description: 'Bad Request: ''Invalid Practice Area Value'', ''Practice Area Value Is Required'',''Sources do not belong to the selected Practice Area'', ''Selected Sources are Invalid'', ''Invalid Country value(s)'', ''Invalid State value(s).'', ''Invalid Tax Type value(s)'', ''Invalid Tax Types, do not belong to State(s)'', ''Invalid Document Type value(s)'''
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Selected Sources are Outside your Subscription
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - CheckpointAuth: []
+      x-codegen-request-body-name: body
+    servers:
+    - url: https://api.thomsonreuters.com/checkpoint
+  /v2/search/sources:
+    get:
+      tags:
+      - Search API V2
+      summary: Retrieve the list of All Checkpoint Sources by Practice Area
+      description: This API allows retrieving the list of sources (sourceIds) to be used as an input when searching Checkpoint content using the Federated or Single search APIs.
+      operationId: getSourcesUsingGET
+      parameters:
+      - name: practiceAreas
+        in: query
+        description: "List of Practice Areas to retrieve sources from. Multiple practice areas values can be provided separated by commas.\nExample: ?practiceAreas=federal,state-and-local,payroll \n\n"
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - federal
+            - state-and-local
+            - international-tax
+            - pension-and-benefits
+            - estate-planning
+            - payroll
+            - aacf
+          enum:
+          - federal
+          - state-and-local
+          - international-tax
+          - pension-and-benefits
+          - estate-planning
+          - payroll
+          - aacf
+      responses:
+        '200':
+          description: Successful Response with list of sources in JSON format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticeAreaSources'
+        '400':
+          description: 'Bad Request: ''Invalid Practice Area Value'', ''Practice Area Value Is Required'''
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - CheckpointAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/checkpoint
+  /v2/search/state-parameters/document-types:
+    get:
+      tags:
+      - Search API V2
+      summary: Retrieve the list of All Checkpoint document types
+      description: This API allows retrieving the list of document types used in Checkpoint.
+      operationId: getStateParametersDocumentTypesUsingGET
+      responses:
+        '200':
+          description: Successful Response with list of document types in JSON format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentTypesResponse'
+        '400':
+          description: 'Bad Request: ''Exception while retrieving document types'''
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - CheckpointAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/checkpoint
+  /v2/search/state-parameters/states:
+    get:
+      tags:
+      - Search API V2
+      summary: Retrieve the list of all user subscribed states
+      description: This API allows retrieving the list of states to be used as an input when searching Checkpoint content using the Federated or Single search APIs.
+      operationId: getStatesUsingGET
+      responses:
+        '200':
+          description: Successful Response with list of states in JSON format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatesResponse'
+        '400':
+          description: 'Bad Request: ''Unable to get user subscribed states.'''
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - CheckpointAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/checkpoint
+  /v2/search/state-parameters/tax-types:
+    get:
+      tags:
+      - Search API V2
+      summary: Retrieve the list of All Checkpoint tax types for a given state
+      description: This API allows retrieving the list of tax types used in Checkpoint.
+      operationId: getStateParametersTaxTypesUsingGET
+      parameters:
+      - name: states
+        in: query
+        description: "List of states to retrieve tax types. Multiple  state values can be provided separated by commas.\nExample: ?states=CA,CO,MN \n\n"
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful Response with list of sources in JSON format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxTypesResponse'
+        '400':
+          description: 'Bad Request: ''Invalid State Id'''
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - CheckpointAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/checkpoint
+  /v2/search/{searchId}:
+    get:
+      tags:
+      - Search API V2
+      summary: Paginate through Individual Search Results by ID
+      description: This API allows retrieving and paginating through a previously executed search against a single practice area
+      operationId: searchByIdUsingGET
+      parameters:
+      - name: limit
+        in: query
+        description: "maximum number of documents to return in response \n*Default value : 10*\n*Maximum value : 100*"
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int64
+        example: 10
+      - name: offset
+        in: query
+        description: "offset results (for pagination). The offset is the starting point in the results. It is the desired\nstarting point in the array of documents in the search result. Limit is required when offset is present.\n\nExample:\n limit=20&offset=0 : returns items 0-19\n limit=20&offset=20 : returns items 20-39\n\n"
+        schema:
+          maximum: 100
+          minimum: 0
+          type: integer
+          format: int64
+          default: 0
+        example: 0
+      - name: searchId
+        in: path
+        description: ID of search result to be retrieved (searchId)
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful Response with list of individual search result in JSON format. The search response will include the total count, the corresponding search result identifier (searchId) and a list of documents found by the search. The number of documents returned by this API is limited to the number in the 'limit' url parameter, however the client can paginate through the results using the offset parameter (see limit and offset parameter description for default and maximum values). The documentList includes the unique document identifier (documentId), document title (title), Checkpoint Edge link (url), source label (source), document rank score (rankScore), source identifier (sourceId), sub source name (subSourceName), category (contentType), snippet with search term (tagged under span with 'hit'class), state code (state), tax types , document types ,list of countries (countries) and the date when the document was published - if available (publishedDate).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchByIdResponse'
+        '400':
+          description: Invalid searchId supplied
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: SearchId not found
+          content: {}
+      deprecated: false
+      security:
+      - CheckpointAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/checkpoint
+components:
+  schemas:
+    SearchSinglePaQuery:
+      title: SearchSinglePaQuery
+      type: object
+      properties:
+        internationalParameters:
+          $ref: '#/components/schemas/InternationalParameters'
+        practiceArea:
+          type: string
+          enum:
+          - federal
+          - state-and-local
+          - international-tax
+          - pension-and-benefits
+          - estate-planning
+          - payroll
+          - aacf
+        searchTerm:
+          type: string
+        sources:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        stateOptions:
+          $ref: '#/components/schemas/StateOptions'
+      required:
+      - practiceArea
+      - searchTerm
+      - sources
+    MultiSearchResponse:
+      title: MultiSearchResponse
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MultiSearchResults'
+        searchUrl:
+          type: string
+        totalCount:
+          type: string
+    CountryResponse:
+      title: CountryResponse
+      type: object
+      properties:
+        countryId:
+          type: string
+        countryName:
+          type: string
+    DocumentType:
+      title: DocumentType
+      type: object
+      properties:
+        documentTypeId:
+          type: string
+          description: documentTypeId
+        documentTypeName:
+          type: string
+          description: documentTypeName
+      description: Response object for a Document type
+    DocumentSearchSinglePaResult:
+      title: DocumentSearchSinglePaResult
+      type: object
+      properties:
+        chapter:
+          type: string
+          description: The chapter title for IRS Response Library documents.
+        contentType:
+          type: string
+          description: content Type such as Editorial Materials
+        countries:
+          type: array
+          description: list of countries
+          items:
+            $ref: '#/components/schemas/CountryResponse'
+        documentId:
+          type: string
+          description: An identifier.
+        documentType:
+          type: string
+          description: documentTypes of the documents such as CASE and AGENCYDOCUMENT.
+        publishedDate:
+          type: string
+          description: The Published date of the document.
+        rankScore:
+          type: integer
+          description: ranks of the documents such as 4 and 5.
+          format: int32
+        snippet:
+          type: string
+          description: 'A snippet of text from the webpage that describes its contents.
+
+
+            The snippet may contain special characters that highlight the search term found in the document.'
+        source:
+          type: string
+          description: sources names such as NLSS20CAT101
+        sourceId:
+          type: string
+          description: sources ids such as 991 and 105.
+        state:
+          type: string
+          description: state name Two-Letter State Abbreviations (eg MN, CO, CA)
+        subSourceName:
+          type: string
+          description: sub Source Names such as Arizona
+        taxTypes:
+          type: array
+          description: taxtypes of the documents such as 2006 and 2016.
+          items:
+            $ref: '#/components/schemas/TaxType'
+        title:
+          type: string
+          description: 'The title of the document.
+
+
+            Use this title along with url to create a hyperlink that when clicked takes the user to the document''s webpage on Checkpoint.'
+        url:
+          type: string
+          description: 'The URL to the document''s webpage on Checkpoint.
+
+
+            Use this URL along with name to create a hyperlink that when clicked takes the user to the document''s webpage on Checkpoint.'
+      description: Defines a list of relevant documents found.
+    MultiSearchCriteria:
+      title: MultiSearchCriteria
+      type: object
+      properties:
+        internationalParameters:
+          $ref: '#/components/schemas/InternationalParameters'
+        practiceAreas:
+          type: array
+          items:
+            type: string
+        searchTerm:
+          type: string
+        sources:
+          type: array
+          items:
+            type: string
+        stateOptions:
+          $ref: '#/components/schemas/StateOptions'
+    DocumentTypesResponse:
+      title: DocumentTypesResponse
+      type: object
+      properties:
+        documentTypes:
+          type: array
+          description: A list of document types
+          items:
+            $ref: '#/components/schemas/DocumentType'
+      description: Response object for DocumentTypes
+    Category:
+      title: Category
+      type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        description:
+          type: string
+        label:
+          type: string
+        practiceArea:
+          type: string
+        sourceId:
+          type: string
+    UserState:
+      title: UserState
+      type: object
+      properties:
+        stateId:
+          type: string
+          description: id
+        stateName:
+          type: string
+          description: name
+      description: Response object for a UserState
+    RegionResponse:
+      title: RegionResponse
+      type: object
+      properties:
+        countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryResponse'
+        regionId:
+          type: string
+        regionName:
+          type: string
+    StatesResponse:
+      title: StatesResponse
+      type: object
+      properties:
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserState'
+    SearchByIdQuery:
+      title: SearchByIdQuery
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        searchId:
+          type: string
+    TaxTypesResponse:
+      title: TaxTypesResponse
+      type: object
+      properties:
+        taxTypes:
+          type: array
+          description: A list of tax types
+          items:
+            $ref: '#/components/schemas/TaxType'
+      description: Response object for TaxTypes by state
+    SearchSinglePaResponse:
+      title: SearchSinglePaResponse
+      type: object
+      properties:
+        searchRequest:
+          $ref: '#/components/schemas/SearchSinglePaQuery'
+        searchResponse:
+          $ref: '#/components/schemas/SearchSinglePaAnswer'
+      description: The response's top-level object for search requests.
+    PracticeAreaSources:
+      title: PracticeAreaSources
+      type: object
+      properties:
+        practiceAreas:
+          type: array
+          items:
+            type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    SearchSinglePaAnswer:
+      title: SearchSinglePaAnswer
+      type: object
+      properties:
+        count:
+          type: integer
+          description: The estimated number of webpages that are relevant to the query. Use this number along with the count and offset query parameters to page through the results.
+          format: int32
+        documentList:
+          type: array
+          description: A list of documents that are relevant to the query.
+          items:
+            $ref: '#/components/schemas/DocumentSearchSinglePaResult'
+        searchId:
+          type: string
+          description: The URL to the Checkpoint website that contains the search results for the user's query. The results include content that is not limited to your custom view of the web, and may include other types of content.
+        searchUrl:
+          type: string
+          description: The URL to the Checkpoint website that contains the search results for the user's query. The results include content that is not limited to your custom view of the web, and may include other types of content.
+        totalCount:
+          type: integer
+          description: The estimated number of webpages that are relevant to the query. Use this number along with the count and offset query parameters to page through the results.
+          format: int64
+      description: Defines a list of relevant documents found.
+    SearchByIdResponse:
+      title: SearchByIdResponse
+      type: object
+      properties:
+        searchRequest:
+          $ref: '#/components/schemas/SearchByIdQuery'
+        searchResponse:
+          $ref: '#/components/schemas/SearchSinglePaAnswer'
+      description: The response's top-level object for search requests.
+    MultiSearchResults:
+      title: MultiSearchResults
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+        practiceArea:
+          type: string
+        searchId:
+          type: string
+        searchUrl:
+          type: string
+    InternationalParameters:
+      title: InternationalParameters
+      type: object
+      properties:
+        countries:
+          type: array
+          items:
+            type: string
+          minItems: 1
+      required:
+      - countries
+    TaxType:
+      title: TaxType
+      type: object
+      properties:
+        taxTypeId:
+          type: string
+          description: taxTypeId
+        taxTypeName:
+          type: string
+          description: taxTypeName
+      description: Response object for a tax type
+    FederatedSearchResponse:
+      title: FederatedSearchResponse
+      type: object
+      properties:
+        searchCriteria:
+          $ref: '#/components/schemas/MultiSearchCriteria'
+        searchResponse:
+          $ref: '#/components/schemas/MultiSearchResponse'
+    StateOptions:
+      title: StateOptions
+      type: object
+      properties:
+        documentTypes:
+          type: array
+          items:
+            type: string
+        states:
+          type: array
+          items:
+            type: string
+        taxTypes:
+          type: array
+          items:
+            type: string
+          minItems: 1
+      required:
+      - states
+    401ErrorResponse:
+      title: 401ErrorResponse
+      type: object
+      properties:
+        error:
+          type: string
+          description: The type of error message.
+          example: https://developers.thomsonreuters.com/errors/#oauth.v2.invalidaccesstoken
+        title:
+          type: string
+          description: The title of the error message.
+          example: Invalid Access Token
+        details:
+          type: string
+          description: The details of the error message.
+          example: Invalid Access Token
+        status:
+          type: integer
+          description: The status code of the error message.
+          example: 401
+        instance:
+          type: string
+          description: The instance of the error message.
+          example: /checkpoint/v2/search/sources?practiceAreas=international-tax
+        api_requestId:
+          type: string
+          description: The request id of the error message.
+          example: rrt-06e451e2bf23caf2f-d-ea-20237-32816308-1
+    RegionCountries:
+      title: RegionCountries
+      type: object
+      properties:
+        countriesByRegion:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegionResponse'
+  examples:
+    BasicSearch:
+      value:
+        practiceArea: federal
+        searchTerm: tax rates
+        sources:
+        - '991'
+        - '105'
+        - '580'
+    StateAndLocalSearch:
+      value:
+        practiceArea: state-and-local
+        searchTerm: tax rates
+        sources:
+        - '524'
+        - '525'
+        - '92'
+        stateOptions:
+          states:
+          - CA
+          - NY
+          - TX
+          taxTypes:
+          - '2014'
+          documentTypes:
+          - RATES
+    InternationalSearch:
+      value:
+        practiceArea: international-tax
+        searchTerm: tax rates
+        sources:
+        - '70400'
+        - '678'
+        internationalParameters:
+          countries:
+          - USA
+          - CAN
+          - MEX
+  securitySchemes:
+    CheckpointAuth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/checkpoint/oauth2/token
+          scopes: {}
+x-refined-from:
+- thomson-reuters-api-documentation-openapi.json
+- thomson-reuters-api-documentation-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

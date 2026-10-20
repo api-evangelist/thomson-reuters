@@ -1,0 +1,371 @@
+# x-archived-from: thomson-reuters-open-banking-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Open banking
+  version: '1.0'
+servers:
+- url: https://api-uat.thomsonreuters.com/openbanking/v1
+  description: Sandbox server
+- url: https://api.thomsonreuters.com/openbanking/v1
+  description: Production server
+tags:
+- name: Requester
+  description: Seeks to validate/get information about the client.
+- name: Responder
+  description: Supplies the requested information about the client.
+- name: Consent
+  description: The consent the client gives to share their information.
+paths:
+  /clients:
+    get:
+      summary: Gets information about clients.
+      tags:
+      - Requester
+      responses:
+        '200':
+          description: A succesful response from API, was able to get the clients.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+  /clients/{clientId}/consents:
+    get:
+      summary: Gets a list of consents that have been generated for the specific client.
+      tags:
+      - Consent
+      parameters:
+      - in: path
+        name: clientId
+        schema:
+          type: string
+        required: true
+        description: Get the list of consents for the given client.
+      responses:
+        '200':
+          description: A succesful response from API, was able to get the consents for the given client.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+  /clients/consents:
+    get:
+      summary: Gets a list of consents that have been generated for all clients.
+      tags:
+      - Consent
+      responses:
+        '200':
+          description: A succesful response from API, was able to get the consents for all clients.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+  /callbacks:
+    post:
+      summary: Sets the callbacks URL for the requester
+      tags:
+      - Requester
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallbacksRequest'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+      callbacks:
+        callbacks:
+          NotifyUrl:
+            description: The URL to notify change of status for a consent.
+            post:
+              requestBody:
+                description: This URL will be the one set by POST callbacks
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/NotifyUrlRequest'
+              responses:
+                '200':
+                  description: OK
+  /transactions/download/{consentId}:
+    get:
+      summary: Download transaction data for a consent.
+      tags:
+      - Requester
+      parameters:
+      - in: path
+        name: consentId
+        schema:
+          type: string
+        required: true
+        description: The consent ID to download the data for
+      responses:
+        '200':
+          description: A succesful response from API, was able to get the transactions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DownloadResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    BadRequestResponse:
+      description: Indicates that the server cannot process the request due to a user error.
+      allOf:
+      - type: object
+        properties:
+          title:
+            type: string
+            description: The title of the error.
+          status:
+            type: integer
+            description: The status code of the error.
+          detail:
+            type: string
+            description: The detail of the error.
+    ForbiddenResponse:
+      description: Indicates that the server understands the request but refuses to authorize it.
+      allOf:
+      - type: object
+        properties:
+          title:
+            type: string
+            description: The title of the error.
+          status:
+            type: integer
+            description: The status code of the error.
+          detail:
+            type: string
+            description: The detail of the error.
+    ClientsResponse:
+      description: Response from Open banking with the list of clients.
+      allOf:
+      - type: object
+        properties:
+          clients:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: The unique identifier of the client.
+                name:
+                  type: string
+                  description: The name of the client.
+                email:
+                  type: string
+                  description: The email of the client.
+    DownloadResponse:
+      description: Response from Open banking with the transactions for the given consent.
+      allOf:
+      - type: object
+        properties:
+          consents:
+            type: array
+            items:
+              type: object
+              properties:
+                consentId:
+                  type: string
+                  description: The consent ID.
+                transactions:
+                  type: array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The unique identifier of the transaction.
+                        mode:
+                          type: string
+                          enum:
+                          - normal
+                          - fee
+                          - transfer
+                          description: The mode of the transaction.
+                        extra:
+                          type: object
+                          description: The extra information of the transaction.
+                        amount:
+                          type: number
+                          description: The amount of the transaction.
+                        status:
+                          type: string
+                          enum:
+                          - posted
+                          - pending
+                          description: The status of the transaction.
+                        made_on:
+                          type: string
+                          format: date
+                          description: The date the transaction was made.
+                        category:
+                          type: string
+                          description: The category of the transaction.
+                        account_id:
+                          type: string
+                          description: The id of the account the transaction belongs to
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Date and Time when the transaction was imported.
+                        duplicated:
+                          type: boolean
+                          description: Whether the transaction is duplicated.
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: The last time when the transaction’s attributes (duplicated flag set, category learned applied) were changed by the client.
+                        description:
+                          type: string
+                          description: The description of the transaction.
+                        currency_code:
+                          type: string
+                          description: The currency code of the transaction.
+    ConsentsResponse:
+      description: Response from Open banking with the list of consents.
+      allOf:
+      - type: object
+        properties:
+          clients:
+            type: array
+            items:
+              type: object
+              properties:
+                clientId:
+                  type: string
+                consents:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The unique identifier of the consent.
+                      status:
+                        type: string
+                        enum:
+                        - Pending
+                        - Error
+                        - Ready
+                        - Updated
+                        description: The status of the consent.
+                      statusDetail:
+                        type: string
+                        description: The detail of the status of the consent.
+                      humandryFliendlyId:
+                        type: string
+                        description: The human-friendly id description of the consent.
+    CallbacksRequest:
+      description: A notify request is used to set the endpoint that will be called whenever status change for a consent.
+      allOf:
+      - required:
+        - NotifyURL
+        type: object
+        properties:
+          notifyURL:
+            type: string
+            description: The URL to notify the requester.
+    NotifyUrlRequest:
+      description: A notify URL is used to send updates about status changes for consents.
+      allOf:
+      - type: object
+        properties:
+          consentId:
+            type: string
+            format: uuid
+            description: The ID of the consent.
+          clientId:
+            type: string
+            format: uuid
+            description: The client ID.
+          status:
+            type: string
+            enum:
+            - Pending
+            - Error
+            - Ready
+            - Updated
+            description: The status of the consent.
+          statusDetail:
+            type: string
+            description: The detail of the status of the consent.
+          meta:
+            type: object
+            description: The meta information of the consent.
+            properties:
+              version:
+                type: string
+                description: The version of the open banking API.
+              time:
+                type: string
+                format: date-time
+                description: The time the notify was sent.

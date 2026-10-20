@@ -1,0 +1,315 @@
+# x-archived-from: thomson-reuters-locations-api-1-0-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Locations API
+  description: The Locations API provides read-only endpoint to expose Countries and States details
+  contact:
+    name: devportal
+  version: '1.0'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/locations-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/locations-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/locations-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/locations-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/locations-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/locations-api/v1
+paths:
+  /countries:
+    get:
+      tags:
+      - Countries
+      summary: Query for countries based on an OData filter query.
+      operationId: Locations_GetCountries
+      parameters:
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      - name: $top
+        in: query
+        description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          default: 50
+        example: 50
+      - name: $skip
+        in: query
+        description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+        example: 0
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, isoCode
+        schema:
+          type: string
+          nullable: true
+        example: id eq 111222
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - name
+            - isoCode
+            - id desc
+            - name desc
+            - isoCode desc
+            type: string
+      - name: $count
+        in: query
+        description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Returns the country or countries that match the OData query.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountryCollection'
+        '304':
+          description: Returns a not modified response with empty body.
+        '400':
+          description: If the OData filter is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: If the user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: If the current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: If a server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /countries/{isoCode}/states:
+    get:
+      tags:
+      - Countries
+      summary: Query for states based on an OData filter query.
+      operationId: Locations_GetStates
+      parameters:
+      - name: isoCode
+        in: path
+        description: The ISO code of the country to get states for.
+        required: true
+        schema:
+          type: string
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      - name: $top
+        in: query
+        description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          default: 50
+        example: 50
+      - name: $skip
+        in: query
+        description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+        example: 0
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, abbreviation
+        schema:
+          type: string
+          nullable: true
+        example: id eq 111222
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - name
+            - abbreviation
+            - id desc
+            - name desc
+            - abbreviation desc
+            type: string
+      - name: $count
+        in: query
+        description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Returns the state or states that match the OData query.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateCollection'
+        '304':
+          description: Returns a not modified response with empty body.
+        '400':
+          description: If the OData filter is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: If the user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: If the current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: If a server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Country:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        isoCode:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CountryCollection:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Country'
+          nullable: true
+      additionalProperties: false
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+        details:
+          type: array
+          items:
+            required:
+            - code
+            - message
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              target:
+                type: string
+        innerError:
+          required:
+          - code
+          - message
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      additionalProperties: false
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    State:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        abbreviation:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StateCollection:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/State'
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes: {}
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+security:
+- OAuth2: []
+- Token: []
+tags:
+- name: Countries
+  description: Use the Countries endpoint to get countries details.

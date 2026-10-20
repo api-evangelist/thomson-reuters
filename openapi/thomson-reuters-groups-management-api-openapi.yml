@@ -1,0 +1,574 @@
+openapi: 3.2.0
+info:
+  version: v1
+  title: GoSystem User Management Groups Management API
+  description: A RESTful API that provides access to GoSystem User Management functionality.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: Groups Management
+paths:
+  /v1/users/{center}/{loginId}/groups:
+    post:
+      tags:
+      - Groups Management
+      summary: Assign or update group memberships for a user
+      operationId: TriggerCreateGroup
+      description: 'This endpoint assigns or updates group memberships for a specified user.
+
+        The endpoint requires the target user''s center (location) and login ID. The request body should include an array of group memberships with group IDs and optional group manager flags. You must have the EDITGROUPS admin right to perform this action.'
+      parameters:
+      - name: center
+        in: path
+        description: Target user location.
+        required: true
+        schema:
+          type: string
+      - name: loginId
+        in: path
+        description: Target user login ID.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUserGroupsRequestWrapper'
+            examples:
+              Assign groups to a user:
+                value:
+                  memberships:
+                  - groupID: 11
+                    grpManager: true
+                  - groupID: 43965
+                    grpManager: false
+                  - groupID: 43965
+              Assign groups to a user who should be an administrator:
+                value:
+                  memberships:
+                  - groupID: 43965
+                    grpManager: true
+              Assign groups to a user who shouldn't be an administrator:
+                value:
+                  memberships:
+                  - groupID: 11
+                  - groupID: 43965
+                    grpManager: false
+              Try to assign a group that doesn't exist for your firm:
+                value:
+                  memberships:
+                  - groupID: 123321123
+              Try to assign a group with an unexpected format:
+                value:
+                  memberships:
+                  - groupID: 0
+                  - groupID: -1
+                  - groupID: 999
+                  - groupID: 888
+              Try to assign the same group in the same request:
+                value:
+                  memberships:
+                  - groupID: 11
+                    grpManager: false
+                  - groupID: 11
+                    grpManager: true
+                  - groupID: 43965
+                    grpManager: true
+                  - groupID: 43965
+                    grpManager: false
+        required: true
+      responses:
+        '200':
+          description: Success. Groups are assigned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignGroupResponse'
+              examples:
+                Success response:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: 3 Groups added/updated successfully
+                    groups:
+                      succeeded:
+                      - 43965
+                      - 11
+                      - 44064
+                      failed: []
+        '207':
+          description: Some groups are assigned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignGroupResponse'
+              examples:
+                Partial success response:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: 3 Group(s) added/updated successfully. 3 Groups could not be posted.
+                    groups:
+                      succeeded:
+                      - 43965
+                      - 11
+                      - 44064
+                      failed:
+                      - groupID: 11
+                        error:
+                          detail: 11 Group was already requested.
+                          code: GROUP_DUPLICATED
+                      - groupID: 123
+                        error:
+                          detail: Group not found for the specified firm.
+                          code: GROUP_NOT_FOUND_FIRM
+                      - groupID: -1
+                        error:
+                          detail: -1 GroupId must be a valid positive integer.
+                          code: GROUP_MUST_BE_INTEGER
+                Try to assign the same group in the same request:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: 2 Group(s) added/updated successfully. 2 Groups could not be posted.
+                    groups:
+                      succeeded:
+                      - 11
+                      - 43965
+                      failed:
+                      - groupID: 11
+                        error:
+                          detail: 11 Group was already requested.
+                          code: GROUP_DUPLICATED
+                      - groupID: 43965
+                        error:
+                          detail: 43965 Group was already requested.
+                          code: GROUP_DUPLICATED
+        '400':
+          description: All groups failed to be assigned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignGroupResponse'
+              examples:
+                Not a single success:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: All items failed
+                    groups:
+                      succeeded: []
+                      failed:
+                      - groupID: 89898
+                        error:
+                          detail: Group not found for the specified firm.
+                          code: GROUP_NOT_FOUND_FIRM
+                      - groupID: -1
+                        error:
+                          detail: -1 GroupId must be a valid positive integer
+                          code: GROUP_MUST_BE_INTEGER
+                Try to self-assign groups:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    error:
+                      detail: You cannot modify your own information.
+                      code: UPDATE_SELF
+                Try to assign groups to a user from different location:
+                  value:
+                    userDetails:
+                      Location: DIFFLOC
+                      LoginId: TestUser001
+                    error:
+                      detail: You cannot update a user with a different location than the one you are currently logged in to.
+                      code: UPDATE_DIFFERENT_LOCATION
+                Try to assign a group that doesn't exist for your firm:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: All items failed
+                    groups:
+                      succeeded: []
+                      failed:
+                      - groupID: 123321123
+                        error:
+                          detail: Group not found for the specified firm.
+                          code: GROUP_NOT_FOUND_FIRM
+                Try to assign a group with an unexpected format:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: All items failed
+                    groups:
+                      succeeded: []
+                      failed:
+                      - groupID: 0
+                        error:
+                          detail: Group not found for the specified firm.
+                          code: GROUP_NOT_FOUND_FIRM
+                      - groupID: -1
+                        error:
+                          detail: -1 GroupId must be a valid positive integer.
+                          code: GROUP_MUST_BE_INTEGER
+                      - groupID: 0
+                        error:
+                          detail: 0 Group was already requested.
+                          code: GROUP_NOT_FOUND_FIRM
+                      - groupID: 0
+                        error:
+                          detail: 0 Group was already requested.
+                          code: GROUP_NOT_FOUND_FIRM
+        '403':
+          description: Attempted to assign groups without the EDITGROUPS admin right.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteGroupResponse'
+              examples:
+                Try to assign groups without the EDITGROUPS admin right:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    error:
+                      detail: You do not have the required permission 'Edit Groups' to perform this action.
+                      code: PERMISSION_REQUIRED
+        '404':
+          description: The user doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignGroupResponse'
+              examples:
+                User not found in the provided location:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: RandomUser343
+                    error:
+                      detail: User not found or has been deleted.
+                      code: NOT_FOUND_USER
+      x-operation-id-source: normalized
+      x-operation-id-original: Trigger Create Group
+    delete:
+      tags:
+      - Groups Management
+      summary: Remove group membership from user
+      operationId: TriggerDeleteGroup
+      description: 'This endpoint removes group memberships from a specified user.
+
+        The endpoint requires the target user''s center (location) and login ID. You can optionally provide a list of group IDs to remove. You must have the EDITGROUPS admin right to perform this action.'
+      parameters:
+      - name: center
+        in: path
+        description: Target user location.
+        required: true
+        schema:
+          type: string
+      - name: loginId
+        in: path
+        description: Target user login ID.
+        required: true
+        schema:
+          type: string
+      - name: groupIds
+        in: query
+        required: false
+        description: Group IDs list.
+        schema:
+          type: array
+          items:
+            type: integer
+        style: form
+        explode: false
+      responses:
+        '200':
+          description: Success. Groups are deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteGroupResponse'
+              examples:
+                Success response:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: 3 Groups deleted successfully
+                    groups:
+                      succeeded:
+                      - 43965
+                      - 11
+                      - 44064
+                      failed: []
+        '207':
+          description: Some groups are deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteGroupResponse'
+              examples:
+                Partial success response:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: 3 Groups deleted successfully. 3 Groups could not be deleted.
+                    groups:
+                      succeeded:
+                      - 43965
+                      - 11
+                      - 44064
+                      failed:
+                      - groupID: 11
+                        error:
+                          detail: 11 Group was already requested.
+                          code: GROUP_DUPLICATED
+                      - groupID: 123
+                        error:
+                          detail: Group not found for the specified firm.
+                          code: GROUP_NOT_FOUND_FIRM
+                      - groupID: -1
+                        error:
+                          detail: -1 GroupId must be a valid positive integer.
+                          code: GROUP_MUST_BE_INTEGER
+        '400':
+          description: All groups failed to be deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteGroupResponse'
+              examples:
+                Common failures:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: All items failed
+                    groups:
+                      succeeded: []
+                      failed:
+                      - groupID: 89898
+                        error:
+                          detail: Group not found for the specified firm.
+                          code: GROUP_NOT_FOUND_FIRM
+                      - groupID: -1
+                        error:
+                          detail: -1 GroupId must be a valid positive integer
+                          code: GROUP_MUST_BE_INTEGER
+                Self-assign groups:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    message: All items failed
+                    error:
+                      detail: You cannot modify your own information.
+                      code: UPDATE_SELF
+                Assign groups to a user from different location:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    error:
+                      detail: You cannot update a user with a different location than the one you are currently logged in to.
+                      code: UPDATE_DIFFERENT_LOCATION
+        '403':
+          description: Attempted to delete groups without the EDITGROUPS admin right.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteGroupResponse'
+              examples:
+                Try to delete groups without the EDITGROUPS admin right:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: TestUser001
+                    error:
+                      detail: You do not have the required permission 'Edit Groups' to perform this action.
+                      code: PERMISSION_REQUIRED
+        '404':
+          description: The user doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignGroupResponse'
+              examples:
+                User not found in the provided location:
+                  value:
+                    userDetails:
+                      Location: FTSUPPORT
+                      LoginId: RandomUser343
+                    error:
+                      detail: User not found or has been deleted.
+                      code: NOT_FOUND_USER
+      x-operation-id-source: normalized
+      x-operation-id-original: Trigger Delete Group
+    get:
+      tags:
+      - Groups Management
+      summary: Get group memberships by user
+      operationId: GetGroupsByUser
+      description: This endpoint retrieves all group memberships for a specified user.
+      parameters:
+      - name: center
+        in: path
+        description: Target user location.
+        required: true
+        schema:
+          type: string
+      - name: loginId
+        in: path
+        description: Target user login ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success. All group details are retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserGroupResponseWraper'
+              examples:
+                Success response:
+                  value:
+                  - id: 11
+                    groupName: FT_ADMIN
+                    grpManager: false
+                    canAddLocators: true
+                    canDeleteLocators: true
+                    canAssignLocators: true
+                    canSetPasswords: true
+                    canBypassBatchPrintPwd: false
+                  - id: 16
+                    groupName: RS DEVELOPMENT
+                    grpManager: false
+                    canAddLocators: true
+                    canDeleteLocators: true
+                    canAssignLocators: true
+                    canSetPasswords: true
+                    canBypassBatchPrintPwd: false
+        '403':
+          description: Required authorization.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '"User must have same location as logged-In user(''TestUser001'') location"'
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Groups by user
+components:
+  schemas:
+    GetUserGroupResponseWraper:
+      type: array
+      items:
+        $ref: '#/components/schemas/GetUserGroupResponse'
+    DeleteGroupResponse:
+      type: object
+      properties:
+        userDetails:
+          $ref: '#/components/schemas/UserID'
+        message:
+          type: string
+        groups:
+          $ref: '#/components/schemas/GroupsResult'
+    PostUserGroupsRequestWrapper:
+      type: object
+      required:
+      - memberships
+      properties:
+        memberships:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostUserGroupsRequest'
+    PostUserGroupsRequest:
+      type: object
+      required:
+      - groupID
+      properties:
+        groupID:
+          type: integer
+        grpManager:
+          type: boolean
+    GroupsResult:
+      type: object
+      properties:
+        succeeded:
+          type: array
+          items:
+            type: integer
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedGroupItem'
+    GetUserGroupResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        groupName:
+          type: string
+        grpManager:
+          type: boolean
+        canAddLocators:
+          type: boolean
+        canDeleteLocators:
+          type: boolean
+        canAssignLocators:
+          type: boolean
+        canSetPasswords:
+          type: boolean
+        canBypassBatchPrintPwd:
+          type: boolean
+    FailedGroupItem:
+      type: object
+      required:
+      - groupID
+      - error
+      properties:
+        groupID:
+          type: integer
+        error:
+          type: object
+          properties:
+            detail:
+              type: string
+            code:
+              type: string
+    AssignGroupResponse:
+      type: object
+      properties:
+        userDetails:
+          $ref: '#/components/schemas/UserID'
+        message:
+          type: string
+        groups:
+          $ref: '#/components/schemas/GroupsResult'
+    UserID:
+      type: object
+      required:
+      - LoginId
+      - Location
+      properties:
+        Location:
+          type: string
+        LoginId:
+          type: string
+        Firm:
+          type: string
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

@@ -1,0 +1,282 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Configuration Entity…
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: EntityMappings
+paths:
+  /master-data/allocations/{allocationId}/entity-maps:
+    get:
+      tags:
+      - EntityMappings
+      summary: This endpoint is used to fetch the entity map information in the given…
+      operationId: EntityMappings_GetEntityMapInfoById
+      parameters:
+      - name: allocationId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+    post:
+      tags:
+      - EntityMappings
+      summary: This endpoint is used for creating entity maps
+      operationId: EntityMappings_CreateEntityMaps
+      parameters:
+      - name: allocationId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationRequest'
+        required: true
+  /master-data/allocations/{allocationId}/entity-maps/{entityMapId}:
+    put:
+      tags:
+      - EntityMappings
+      summary: This endpoint is used to Update the entity map in the given allocation…
+      operationId: EntityMappings_UpdateEntityMap
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: entityMapId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsRequestModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsRequestModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsRequestModel'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsRequestModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsRequestModel'
+        required: true
+    delete:
+      tags:
+      - EntityMappings
+      summary: This endpoint is used to delete the entity map in the given allocation…
+      operationId: EntityMappings_DeleteEntityMap
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: entityMapId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsRequestModel:
+      description: EntityDeletionModel
+      type: object
+      properties:
+        sourceEntityName:
+          description: sourceEntityName
+          type: string
+        targetEntityId:
+          format: uuid
+          description: targetEntityCLID
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsResponseModel:
+      description: Entity Maps Response
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Id
+          type: integer
+        sourceEntityName:
+          description: SourceEntityName
+          type: string
+        targetEntityName:
+          description: targetEntityName
+          type: string
+        targetEntityId:
+          format: uuid
+          description: target Entity -Id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationModel:
+      description: Entity
+      required:
+      - sourceEntityName
+      - targetEntityId
+      type: object
+      properties:
+        sourceEntityName:
+          description: SourceEntity
+          type: string
+        targetEntityId:
+          format: uuid
+          description: TargetEntityName
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse:
+      description: Entity List API Response
+      type: object
+      properties:
+        items:
+          description: items
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsResponseModel'
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationRequest:
+      type: object
+      properties:
+        items:
+          description: items
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationModel'

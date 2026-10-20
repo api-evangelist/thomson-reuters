@@ -1,0 +1,272 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters External API
+  version: '1'
+  description: 'Operations tagged External across 2 of this provider''s published API definitions: thomson-reuters-onesource-api-administration-openapi.json, thomson-reuters-onesource-api-administration-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/api-administration/v1
+  description: ONESOURCE AMER region
+- url: https://api-emea.onesourcetax.com/api-administration/v1
+  description: ONESOURCE EMEA region
+- url: https://api-apac.onesourcetax.com/api-administration/v1
+  description: ONESOURCE APAC region
+tags:
+- name: External
+paths:
+  /applications:
+    get:
+      tags:
+      - External
+      summary: Gets applications
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalApiApplicationResponseList'
+      security:
+      - Bearer: []
+      operationId: getApplications
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/api-administration/v1
+      description: ONESOURCE AMER region
+    - url: https://api-emea.onesourcetax.com/api-administration/v1
+      description: ONESOURCE EMEA region
+    - url: https://api-apac.onesourcetax.com/api-administration/v1
+      description: ONESOURCE APAC region
+  /applications/{applicationName}:
+    get:
+      tags:
+      - External
+      summary: Get application details
+      parameters:
+      - name: applicationName
+        in: path
+        description: Application name.
+        required: true
+        schema:
+          maxLength: 100
+          minLength: 0
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalApiApplicationDetails'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpError'
+      security:
+      - Bearer: []
+      operationId: getApplicationsByApplicationName
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - External
+      summary: 'Patch application: generate new consumer key and secret with supplied name and…'
+      parameters:
+      - name: applicationName
+        in: path
+        description: Application name. Supplied from route.
+        required: true
+        schema:
+          maxLength: 100
+          minLength: 0
+          type: string
+      requestBody:
+        description: Patch request body.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PatchApplicationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchApplicationRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PatchApplicationRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PatchApplicationRequest'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - Bearer: []
+      operationId: patchApplicationsByApplicationName
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/api-administration/v1
+      description: ONESOURCE AMER region
+    - url: https://api-emea.onesourcetax.com/api-administration/v1
+      description: ONESOURCE EMEA region
+    - url: https://api-apac.onesourcetax.com/api-administration/v1
+      description: ONESOURCE APAC region
+components:
+  schemas:
+    ExternalApiApplicationDetails:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/ApiApplicationCredentials'
+        applicationName:
+          type:
+          - string
+          - 'null'
+        applicationType:
+          $ref: '#/components/schemas/ApplicationTypes'
+        authenticationType:
+          $ref: '#/components/schemas/ApplicationAuthenticationTypes'
+        flowTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FlowType'
+      additionalProperties: false
+    ExternalApiApplication:
+      type: object
+      properties:
+        applicationName:
+          type:
+          - string
+          - 'null'
+        applicationType:
+          $ref: '#/components/schemas/ApplicationTypes'
+        authenticationType:
+          $ref: '#/components/schemas/ApplicationAuthenticationTypes'
+        flowTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FlowType'
+      additionalProperties: false
+    PatchApplicationCredentialsStatus:
+      enum:
+      - Renew
+      type: string
+    HttpError:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ApplicationTypes:
+      enum:
+      - User
+      - Machine
+      type: string
+    PatchApplicationRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/PatchApplicationCredentials'
+      additionalProperties: false
+    FlowType:
+      enum:
+      - Client Credentials
+      - Authorization Code
+      - Implicit
+      type: string
+    ExternalApiApplicationResponseList:
+      type: object
+      properties:
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalApiApplication'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    PatchApplicationCredentials:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/PatchApplicationCredentialsStatus'
+      additionalProperties: false
+    ApplicationAuthenticationTypes:
+      enum:
+      - ClientSecret
+      - ClientAssertion
+      type: string
+    ApiApplicationCredentials:
+      type: object
+      properties:
+        consumerKey:
+          type:
+          - string
+          - 'null'
+        consumerSecret:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: JWT Authorization header using the Bearer scheme and ONESOURCE Opaque Token.
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-onesource-api-administration-openapi.json
+- thomson-reuters-onesource-api-administration-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

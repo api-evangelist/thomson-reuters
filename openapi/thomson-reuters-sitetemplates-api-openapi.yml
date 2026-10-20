@@ -1,0 +1,984 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Sitetemplates API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Sitetemplates across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Sitetemplates
+paths:
+  /{version}/sitetemplates:
+    get:
+      tags:
+      - Sitetemplates
+      summary: Get site templates
+      description: API method to obtain site templates
+      operationId: getSiteTemplates
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: filterby
+        in: query
+        description: 'Possible values are {recent|favourite|category|all} Default for this field is ''recent''<br>By default any filter will send back the first 20 sites if pagination is false '
+        required: false
+        schema:
+          type: string
+          enum:
+          - recent
+          - favourite
+          - category
+          - all
+      - name: returncount
+        in: query
+        description: The no of site templates returned. Default is 20. This option does not apply if filterBy property is set to all
+        required: false
+        schema:
+          type: string
+      - name: categoryid
+        in: query
+        description: This parameter is used to get the site template list based on the site category ID, please provide site template categoryid in addition to setting the filterby property to category. <br>example = /api/1/sitetemplates?filterby=category&categoryid=1
+        required: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: 'This parameter is used to search site template by name. The site template is included in the search result if the string appears  in the title of the site (The results are returned in ascending order)<br>example: Retrieve sites having "HighQ" word in their name : /api/1/sitetemplates?name=''HighQ''<br>This will return all sites having "HighQ" word in their site template name.'
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: One of the two site template status available in the system<br>{archived|preparation}<br>Default -> {preparation}<br>if filterBy={all}  is set then all status become applicable.
+        required: false
+        schema:
+          type: string
+      - name: includefolderpermission
+        in: query
+        description: '{true|false} default is false'
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/sitetemplates'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sitetemplates'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/templates:
+    get:
+      tags:
+      - Sitetemplates
+      summary: Get template list
+      description: API method to obtain site templates
+      operationId: getSiteTemplates_1
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: filterby
+        in: query
+        description: 'Possible values are {recent|favourite|category|all} Default for this field is ''recent''<br>By default any filter will send back the first 20 sites if pagination is false '
+        required: false
+        schema:
+          type: string
+          enum:
+          - recent
+          - favourite
+          - category
+          - all
+      - name: returncount
+        in: query
+        description: The no of site templates returned. Default is 20. This option does not apply if filterBy property is set to all
+        required: false
+        schema:
+          type: string
+      - name: categoryid
+        in: query
+        description: This parameter is used to get the site template list based on the site category ID, please provide site template categoryid in addition to setting the filterby property to category. <br>example = /api/1/sitetemplates?filterby=category&categoryid=1
+        required: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: 'This parameter is used to search site template by name. The site template is included in the search result if the string appears  in the title of the site (The results are returned in ascending order)<br>example: Retrieve sites having "HighQ" word in their name : /api/1/sitetemplates?name=''HighQ''<br>This will return all sites having "HighQ" word in their site template name.'
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: One of the two site template status available in the system<br>{archived|preparation}<br>Default -> {preparation}<br>if filterBy={all}  is set then all status become applicable.
+        required: false
+        schema:
+          type: string
+      - name: includefolderpermission
+        in: query
+        description: '{true|false} default is false'
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/sitetemplates'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sitetemplates'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    TagsDBO:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            type: string
+    SiteRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedsite:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    QaDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    BidderSiteDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+        advancedqapermission:
+          type: string
+    WikiDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    site:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sitename:
+          type: string
+        sitetemplateID:
+          type: integer
+          format: int32
+          xml:
+            name: sitetemplateid
+        role:
+          type: string
+        sitedescription:
+          type: string
+        enabledmodules:
+          type: string
+        sitefolderID:
+          type: string
+        folder:
+          $ref: '#/components/schemas/Folder'
+        sitefolderpermission:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        adminnote:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+        createddate:
+          type: string
+        archiveddate:
+          type: string
+        clientno:
+          type: string
+        matterno:
+          type: string
+        landingpage:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        maxpagecount:
+          type: string
+        siteowner:
+          $ref: '#/components/schemas/UserDBO'
+        sitehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModule'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        csvSiteCategory:
+          type: string
+        biddersite:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        sitenametranslations:
+          $ref: '#/components/schemas/translations'
+        siteNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        siteLogoName:
+          type: string
+        siteLogoFileSize:
+          type: integer
+          format: int64
+        siteLogoHeight:
+          type: integer
+          format: int32
+        siteLogoWidth:
+          type: integer
+          format: int32
+        siteStatus:
+          type: integer
+          format: int32
+        applySiteTerms:
+          type: integer
+          format: int32
+        siteTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        nextLoginSiteTerms:
+          type: integer
+          format: int32
+        defaultSiteTermsEnable:
+          type: integer
+          format: int32
+        advancedQAPermission:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        siteLabelDisplay:
+          type: string
+        allowSiteAdministration:
+          type: integer
+          format: int32
+        siteLevelPasswordEnable:
+          type: integer
+          format: int32
+        siteLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        sitePassword:
+          type: string
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        applySiteHomePage:
+          type: integer
+          format: int32
+        siteHomePage:
+          type: string
+        siteHomePageType:
+          type: integer
+          format: int32
+        nextLoginSiteHomePage:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        siteCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        siteModuleID:
+          type: integer
+          format: int32
+        icalSecurity:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        announcementMLJSON:
+          type: string
+        siteRestrictionType:
+          $ref: '#/components/schemas/SiteRestrictionType'
+        enableDocumentRedaction:
+          type: boolean
+          xml:
+            name: enabledocumentredaction
+        mysite:
+          type: boolean
+    Inbox:
+      type: object
+      properties:
+        enable:
+          type: string
+        accountname:
+          type: string
+    ContactUS:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactUSDBO'
+        type:
+          type: string
+      xml:
+        name: contactus
+    ActivityDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        microblog:
+          type: string
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ISheetDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    Categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDBO'
+    sitetemplates:
+      type: object
+      properties:
+        siteTemplate:
+          type: array
+          items:
+            $ref: '#/components/schemas/site'
+    FileModule:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showsitemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    DocumentDBO:
+      type: object
+      properties:
+        documentname:
+          type: string
+          xml:
+            name: filename
+        dmsVersion:
+          type: string
+        notification:
+          type: string
+          example: E.g. 1/2/3
+        folderID:
+          type: string
+        documentID:
+          type: string
+          xml:
+            name: fileid
+        batchID:
+          type: string
+        status:
+          type: string
+        documentKey:
+          type: string
+        dmsDocumentDBO:
+          xml:
+            name: dms
+          $ref: '#/components/schemas/DMSDocumentDBO'
+        enable:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        versionid:
+          type: integer
+          format: int32
+        versionnote:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        type:
+          type: string
+        originaltype:
+          type: string
+        icon:
+          type: string
+        commentscount:
+          type: integer
+          format: int32
+        likescount:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/TagsDBO'
+        location:
+          type: string
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        siteid:
+          type: integer
+          format: int32
+        parentfolderid:
+          type: integer
+          format: int32
+        error:
+          type: string
+        size:
+          type: integer
+          format: int64
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: file
+    Folder:
+      type: object
+      required:
+      - foldername
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        dmsfolderid:
+          type: string
+          xml:
+            attribute: true
+        permission:
+          type: string
+          xml:
+            attribute: true
+        foldername:
+          type: string
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/Folder'
+        child:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: folder
+    ContactUSDBO:
+      type: object
+      properties:
+        value:
+          type: string
+      xml:
+        name: values
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    PermissionDBO:
+      type: object
+      properties:
+        view:
+          type: integer
+          format: int32
+        edit:
+          type: integer
+          format: int32
+        delete:
+          type: integer
+          format: int32
+        addEditAllFiles:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
+        viewAllFiles:
+          type: integer
+          format: int32
+    Emailmetadata:
+      type: object
+      properties:
+        enable:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailmetadataallfolder:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailfrom:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailto:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailcc:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailsent:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailreceived:
+          type: string
+          enum:
+          - TRUE/FALSE
+    PeopleDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    HomeDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    ModuleDBO:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeDBO'
+        activity:
+          $ref: '#/components/schemas/ActivityDBO'
+        document:
+          $ref: '#/components/schemas/DocumentDBO'
+        blog:
+          $ref: '#/components/schemas/BlogDBO'
+        wiki:
+          $ref: '#/components/schemas/WikiDBO'
+        task:
+          $ref: '#/components/schemas/TaskDBO'
+        event:
+          $ref: '#/components/schemas/EventDBO'
+        isheet:
+          $ref: '#/components/schemas/ISheetDBO'
+        qa:
+          $ref: '#/components/schemas/QaDBO'
+        people:
+          $ref: '#/components/schemas/PeopleDBO'
+    TaskDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        timelineview:
+          type: string
+    RawSiteSize:
+      type: object
+      properties:
+        activedocumentsize:
+          type: integer
+          format: int64
+        deleteddocumentsize:
+          type: integer
+          format: int64
+        totalsize:
+          type: integer
+          format: int64
+    DMSDocumentDBO:
+      type: object
+      properties:
+        dmsdocid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmseditdate:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmsversion:
+          type: string
+      xml:
+        name: dms
+    categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+      xml:
+        name: categories
+    CategoryDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: CategoryDBO
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

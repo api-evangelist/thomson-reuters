@@ -1,0 +1,195 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Ten99 Controls API
+  version: '1.0'
+  description: 'Operations tagged Ten99 Controls across 2 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-administration-openapi.json, thomson-reuters-onesource-trust-tax-administration-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax/administration
+security:
+- bearerAuth: []
+tags:
+- name: Ten99 Controls
+paths:
+  /v1/pans/{pan}/ten99controls:
+    get:
+      tags:
+      - Ten99 Controls
+      summary: Returns Paid To/For details for the particular PAN
+      description: Allows authenticated users to access Ten99Control data
+      operationId: AllowsAuthenticatedUsersToAccessTen99ControlData
+      parameters:
+      - name: pan
+        in: path
+        description: ''
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: ''
+      - name: $select
+        in: query
+        description: Limits the properties returned in the result.
+        schema:
+          type: string
+      - name: $expand
+        in: query
+        description: Indicates the related entities to be represented inline. The maximum depth is 2.
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: 'Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.'
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Specifies the order in which items are returned. The maximum number of expressions is 5.
+        schema:
+          type: string
+      - name: $top
+        in: query
+        description: Limits the number of items returned from a collection.
+        schema:
+          type: integer
+          format: int32
+      - name: $skip
+        in: query
+        description: Excludes the specified number of items of the queried collection from the result.
+        schema:
+          type: integer
+          format: int32
+      - name: $count
+        in: query
+        description: Indicates whether the total count of items within a collection are returned in the result.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ten99Control'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Allows authenticated users to access Ten99Control data
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax/administration
+components:
+  schemas:
+    ChangeType:
+      enum:
+      - No_Change
+      - Add
+      - Change
+      - Delete
+      type: integer
+      format: int32
+    Ten99Control:
+      type: object
+      properties:
+        pan:
+          type:
+          - string
+          - 'null'
+          description: PAN
+        year:
+          type: integer
+          description: Year
+          format: int32
+        paid_to_for:
+          $ref: '#/components/schemas/PaidToFor'
+        added_ini:
+          type:
+          - string
+          - 'null'
+          description: Initials of person added
+        added_date:
+          type:
+          - string
+          - 'null'
+          description: Date when it was added
+          format: date-time
+        change_ini:
+          type:
+          - string
+          - 'null'
+          description: Who last changed
+        changed_date:
+          type:
+          - string
+          - 'null'
+          description: Date of last change
+          format: date-time
+        change_type:
+          $ref: '#/components/schemas/ChangeType'
+      additionalProperties: false
+    PaidToFor:
+      enum:
+      - Paid_To
+      - Paid_For
+      type: integer
+      format: int32
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-administration-openapi.json
+- thomson-reuters-onesource-trust-tax-administration-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,253 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Letter Generation API
+  version: v1
+  description: 'Operations tagged Letter Generation across 2 of this provider''s published API definitions: thomson-reuters-fbt-customer-api-v1-openapi.json, thomson-reuters-fbt-customer-api-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+tags:
+- name: Letter Generation
+paths:
+  /letters:
+    post:
+      tags:
+      - Letter Generation
+      summary: Generate letter for an employee
+      operationId: LetterGeneration_GenerateLetterByEmployeeId
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Generate letter for an employee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationResponseForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationResponseForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationResponseForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationResponseForCustomerApi'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationRequestForCustomerApi'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationRequestForCustomerApi'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationRequestForCustomerApi'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationRequestForCustomerApi'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationRequestForCustomerApi'
+        description: Letter request
+        required: true
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+  /letters/operations/{operation-id}:
+    get:
+      tags:
+      - Letter Generation
+      summary: Get letter status
+      operationId: LetterGeneration_GetLetterPolling
+      parameters:
+      - name: operation-id
+        in: path
+        description: Operation id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get letter status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+        '201':
+          description: Letter created for an employee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+        '404':
+          description: Invalid operation id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+  /letters/{letter-id}/contents:
+    get:
+      tags:
+      - Letter Generation
+      summary: Download letters
+      operationId: LetterGeneration_DownloadLetter
+      parameters:
+      - name: letter-id
+        in: path
+        description: Letter id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Download letter by id
+          content:
+            application/pdf:
+              schema:
+                type: object
+        '404':
+          description: Invalid input id
+          content:
+            application/pdf:
+              schema:
+                type: array
+                items:
+                  type: string
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+components:
+  schemas:
+    Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationRequestForCustomerApi:
+      description: Letter generation request model
+      type: object
+      properties:
+        period-id:
+          format: uuid
+          description: Period id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        client-id:
+          format: uuid
+          description: Client id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        reporting-entity-id:
+          format: uuid
+          description: Reporting entity id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        employee-id:
+          format: uuid
+          description: Employee id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        type:
+          description: Letter type
+          type: string
+        subType:
+          description: Declaration type
+          type: string
+    Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi:
+      description: Letter polling response model
+      type: object
+      properties:
+        status:
+          description: Letter export status
+          type: string
+        letterId:
+          format: uuid
+          description: Letter id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+    Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationResponseForCustomerApi:
+      description: Letter generation response model
+      type: object
+      properties:
+        operationId:
+          format: uuid
+          description: Letter export transaction id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+x-refined-from:
+- thomson-reuters-fbt-customer-api-v1-openapi.json
+- thomson-reuters-fbt-customer-api-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

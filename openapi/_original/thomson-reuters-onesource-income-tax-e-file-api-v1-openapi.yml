@@ -1,0 +1,1803 @@
+# x-archived-from: thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: ONESOURCE Income Tax E-file API
+  description: A RESTful API to provide access to the ONESOURCE Income Tax E-file functionality.
+  termsOfService: None
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/e-file
+security:
+- Authorization: []
+paths:
+  /v1/e-file-jurisdictions:
+    get:
+      tags:
+      - E-file Reference
+      summary: Use to retrieve a list of E-file jurisdictions
+      operationId: Retrieves E-file Jurisdictions
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileJurisdictionsRepresentation'
+              examples:
+                Jurisdictions-Subset:
+                  $ref: '#/components/examples/Jurisdiction-Subset'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/years/{year}/event-status:
+    get:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to retrieve a list of E-file status events occurring within a specific year. Enter a year in the URL.
+      operationId: Retrieves a Yearly E-file Status Event List
+      parameters:
+      - name: year
+        in: path
+        description: 4 Digit Year
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusesRepresentation'
+              examples:
+                E-File Statuses by Year:
+                  $ref: '#/components/examples/E-File_Statuses_by_Year'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/binders/{binderId}/event-status:
+    get:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to retrieve a list of E-file status events for a specific binder.
+      operationId: Retrieves an E-file Status Event List
+      parameters:
+      - name: binderId
+        in: path
+        description: 16 Character Binder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusesRepresentation'
+              examples:
+                E-File Statuses by Binder:
+                  $ref: '#/components/examples/E-File_Statuses_by_Binder'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/e-file-types:
+    get:
+      tags:
+      - E-file Reference
+      summary: Use to retrieve a list of E-file types
+      operationId: Retrieves E-file types
+      parameters:
+      - name: year
+        in: query
+        description: 4 Digit Year
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: '2023'
+      - name: taxReturnType
+        in: query
+        description: IRS defined type of tax return
+        required: true
+        schema:
+          type: string
+        example: '1065'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileTypesRepresentation'
+              examples:
+                Types-Subset:
+                  $ref: '#/components/examples/Types-Subset'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/jurisdictions/{jurisdictionId}/binders/{binderId}/types/{eFileTypeId}/acknowledgements:
+    get:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Retrieve a list of E-file acknowledgement details for a specific binder and E-file type. Enter the jurisdictionID, binderID and eFileTypeID in the URL.
+      operationId: Retrieves E-file Acknowledgement Events
+      parameters:
+      - name: jurisdictionId
+        in: path
+        description: Jurisdiction ID
+        required: true
+        schema:
+          type: string
+      - name: binderId
+        in: path
+        description: 16 Character Binder ID
+        required: true
+        schema:
+          type: string
+      - name: eFileTypeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusAcknowledgementRepresentation'
+              examples:
+                E-File Acknowledgements Response:
+                  $ref: '#/components/examples/E-File_Acknowledgements'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/binders/{binderId}/e-files:
+    get:
+      tags:
+      - E-file Documents
+      summary: Use to retrieve a list of E-file for a given binder
+      operationId: Retrieve a list of E-file
+      parameters:
+      - name: binderId
+        in: path
+        description: 16 Character Binder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eFileDocumentCategories'
+              examples:
+                E-Files List:
+                  $ref: '#/components/examples/Efile_List'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+    post:
+      tags:
+      - E-file Document Lifecycle
+      summary: Use to create an E-file document for a given binder id.
+      operationId: Creates an E-file document for a given binder id
+      parameters:
+      - name: binderId
+        in: path
+        description: Binder Id
+        required: true
+        schema:
+          type: string
+      - name: DeviceId
+        in: header
+        description: A 40-digit alphanumeric value that is case sensitive with no separators, consists of characters A-F and 0-9 and run through hash algorithm SHA-1 that should include unique information such as the hardware serial number and UUID together of the machine that created the E-file. Reference the E-file Glossary section in this document published by the IRS - https://www.irs.gov/pub/irs-pdf/p1345.pdf
+        required: true
+        schema:
+          type: string
+        example: 1BFD53D7AAC2EB3F192D0F117C8B19815ECD6A30
+      requestBody:
+        description: '<b>Note:</b> CommandId parameter is <b>required</b> only for TopCon binders with e-file members. Please provide one of the following and keep in mind that e-file generation should be completed in the below order: <ul><li>FE_CreateInternationalXITFile</li> <li>FE_CreateDomesticXDMFile</li> <li>FE_CreateAggregatedEfile</li></ul>'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileRepresentation'
+            examples:
+              e-file-single-jurisdiction-example:
+                $ref: '#/components/examples/e-file-single-jurisdiction-example'
+              e-file-multiple-jurisdiction-example:
+                $ref: '#/components/examples/e-file-multiple-jurisdiction-example'
+              e-file-single-jurisdiction-commandid-example:
+                $ref: '#/components/examples/e-file-single-jurisdiction-commandid-example'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptedMessage'
+              examples:
+                E-File Accepted:
+                  $ref: '#/components/examples/E-File_Accepted'
+        '201':
+          description: Created
+        '400':
+          description: Request failed. This is usually due to validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessStatusRepresentation'
+              examples:
+                Invalid Binder:
+                  $ref: '#/components/examples/ProcessStatusRepresentation_Invalid_Binder'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v2/binders/{binderId}/e-files:
+    post:
+      tags:
+      - E-file Document Lifecycle
+      summary: Use to create an E-file document for a given binder id for each designated efileType and Jurisdiction combination.
+      description: 'Available Efile Types: <ul><li>Return</li> <li>Return2</li> <li>Return3</li> <li>Return4</li> <li>Extension1</li> <li>Extension2</li> <li>Extension3</li> <li>Extension4</li> <li>Estimate</li> <li>Estimate2</li> <li>Estimate3</li></ul>'
+      operationId: Triggers multiple E-files for a given binder id
+      parameters:
+      - name: binderId
+        in: path
+        description: Binder Id
+        required: true
+        schema:
+          type: string
+      - name: DeviceId
+        in: header
+        description: A 40-digit alphanumeric value that is case sensitive with no separators, consists of characters A-F and 0-9 and run through hash algorithm SHA-1 that should include unique information such as the hardware serial number and UUID together of the machine that created the E-file. Reference the E-file Glossary section in this document published by the IRS - https://www.irs.gov/pub/irs-pdf/p1345.pdf
+        required: true
+        schema:
+          type: string
+        example: 1BFD53D7AAC2EB3F192D0F117C8B19815ECD6A30
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileRepresentations'
+            examples:
+              e-file-example:
+                $ref: '#/components/examples/e-file-example'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+              examples:
+                E-File Accepted:
+                  $ref: '#/components/examples/E-File_Success'
+        '201':
+          description: Created
+        '400':
+          description: Request failed. This is usually due to validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfileValidationsRepresentation'
+              examples:
+                Invalid Jurisdiction:
+                  $ref: '#/components/examples/Efile_Invalid_Jurisdiction'
+                Invalid EfileType:
+                  $ref: '#/components/examples/Efile_Invalid_EfileType'
+                Invalid EfileType Jurisdiction Combination:
+                  $ref: '#/components/examples/Efile_Invalid_EfileType_Jurisdiction_Combination'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v3/binders/{binderId}/e-files:
+    post:
+      tags:
+      - E-file Document Lifecycle
+      summary: Use to create an E-file document for a given binder id for each designated efileTypeId and jurisdictionId combination.
+      description: 'Please refer to the <i><b> GET /v1/e-file-types</i></b> endpoint to retrieve details about eFileTypeId and jurisdictionId required as input in the request body.<br><br><b>Note: </b>The E-file documents for <b>International Top Consolidation</b> binders should be created with the <b><i>POST  /v1/binders/{binderId}/e-files</i></b> endpoint listed above using the required CommandId.'
+      operationId: Triggers multiple E-files for a given binder id based on efileTypeId and jurisdictionId
+      parameters:
+      - name: binderId
+        in: path
+        description: Binder Id
+        required: true
+        schema:
+          type: string
+      - name: DeviceId
+        in: header
+        description: A 40-digit alphanumeric value that is case sensitive with no separators, consists of characters A-F and 0-9 and run through hash algorithm SHA-1 that should include unique information such as the hardware serial number and UUID together of the machine that created the E-file. Reference the E-file Glossary section in this document published by the IRS - https://www.irs.gov/pub/irs-pdf/p1345.pdf
+        required: true
+        schema:
+          type: string
+        example: 1BFD53D7AAC2EB3F192D0F117C8B19815ECD6A30
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileV3Representations'
+            examples:
+              e-file-example:
+                $ref: '#/components/examples/e-file-v3-example'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileCreateResponseRepresentation'
+              examples:
+                E-File Accepted:
+                  $ref: '#/components/examples/E-File-V3_Success'
+        '201':
+          description: Created
+        '400':
+          description: Request failed. This is usually due to validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileCreateResponseRepresentation'
+              examples:
+                Invalid JurisdictionId:
+                  $ref: '#/components/examples/Efile_V3_Invalid_Jurisdiction'
+                Invalid EfileTypeId JurisdictionId Combination:
+                  $ref: '#/components/examples/Efile_Invalid_EfileType_Jurisdiction_V3_Combination'
+                Invalid BinderId:
+                  $ref: '#/components/examples/Efile_Invalid_BinderId'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/binders/{binderId}/e-file-validations:
+    get:
+      tags:
+      - E-file Document Lifecycle
+      summary: Use to retrieve a zip file with E-file validations for a given binder.  There is a prerequisite that the E-file validation must originally be triggered by the API Post call listed above.
+      operationId: Retrieve a zip file with E-file validations
+      parameters:
+      - name: binderId
+        in: path
+        description: 16 Character Binder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/zip: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+    post:
+      tags:
+      - E-file Document Lifecycle
+      summary: Use to create an E-file validation for a given binder id.
+      operationId: Creates an E-file validation for a given binder id
+      parameters:
+      - name: binderId
+        in: path
+        description: Binder Id
+        required: true
+        schema:
+          type: string
+      - name: DeviceId
+        in: header
+        description: A 40-digit alphanumeric value that is case sensitive with no separators, consists of characters A-F and 0-9 and run through hash algorithm SHA-1 that should include unique information such as the hardware serial number and UUID together of the machine that created the E-file. Reference the E-file Glossary section in this document published by the IRS - https://www.irs.gov/pub/irs-pdf/p1345.pdf
+        required: true
+        schema:
+          type: string
+        example: 1BFD53D7AAC2EB3F192D0F117C8B19815ECD6A30
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileValidationRepresentation'
+            examples:
+              e-file-single-jurisdiction-example:
+                $ref: '#/components/examples/e-file-single-jurisdiction-example'
+              e-file-multiple-jurisdiction-example:
+                $ref: '#/components/examples/e-file-multiple-jurisdiction-example'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptedMessage'
+              examples:
+                E-File Validations Accepted:
+                  $ref: '#/components/examples/E-File_Validations_Accepted'
+        '201':
+          description: Created
+        '400':
+          description: Request failed. This is usually due to validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                Invalid Binder:
+                  $ref: '#/components/examples/ProcessStatusRepresentation_Invalid_Binder'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/binders/{binderId}/e-files/{eFileId}:
+    get:
+      tags:
+      - E-file Documents
+      summary: Use to retrieve an E-file document for a given binder
+      operationId: Retrieve an E-file document
+      parameters:
+      - name: binderId
+        in: path
+        description: Binder Id
+        required: true
+        schema:
+          type: string
+      - name: eFileId
+        in: path
+        description: eFileId in format of C000AU92.XML
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/xml: {}
+            application/pdf: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/binders/{binderId}/e-file/operations:
+    get:
+      tags:
+      - E-file Document Lifecycle
+      summary: Use to retrieve status of an E-file document creation process by binderId and processId
+      operationId: Check status of an E-file creation process by binderId and processId
+      parameters:
+      - name: binderId
+        in: path
+        description: Binder Id
+        required: true
+        schema:
+          type: string
+      - name: processId
+        in: query
+        description: The id of the document creation process
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/processStatuses'
+              examples:
+                ProcessStatus E-file Validate Computing:
+                  $ref: '#/components/examples/ProcessStatus_EfileValidate_Computing'
+                ProcessStatus E-file Validate Pending:
+                  $ref: '#/components/examples/ProcessStatus_EfileValidate_Pending'
+                ProcessStatus E-file Validate Qualified:
+                  $ref: '#/components/examples/ProcessStatus_EfileValidate_Qualified'
+                ProcessStatus E-file Create Computing:
+                  $ref: '#/components/examples/ProcessStatus_EfileCreate_Computing'
+                ProcessStatus E-file Create Pending:
+                  $ref: '#/components/examples/ProcessStatus_EfileCreate_Pending'
+                ProcessStatus E-file Create Qualified:
+                  $ref: '#/components/examples/ProcessStatus_EfileCreate_Qualified'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/year/{year}/binder-types/{binderType}/e-filing-types/{efilingType}/e-file-submissions:
+    post:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to trigger multiple E-file Submissions for a given collection of binder ids and file names.
+      operationId: Triggers multiple E-files E-files Submissions
+      parameters:
+      - name: year
+        in: path
+        description: Year
+        required: true
+        schema:
+          type: string
+        example: '2023'
+      - name: binderType
+        in: path
+        description: Binder Type
+        required: true
+        schema:
+          type: string
+        example: IncomeTax/Partnership
+      - name: efilingType
+        in: path
+        description: EFile Type
+        required: true
+        schema:
+          type: string
+        example: FedOnly/StateOnly/FedState
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileBatchBinderDetails'
+            examples:
+              e-file-submission-example:
+                $ref: '#/components/examples/e-file-submission-example'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewEfileSubmissionResponseRepresentation'
+              examples:
+                E-File Successfull Submission:
+                  $ref: '#/components/examples/e-file-submission-ok-response'
+        '400':
+          description: Request failed. This is usually due to validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewEfileSubmissionResponseRepresentation'
+              examples:
+                E-File Submission Invalid Data:
+                  $ref: '#/components/examples/e-file-submission-bad-request'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/years/{year}/e-file-submissions:
+    post:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to trigger multiple E-file Submissions for a given collection of binders across jurisdictions within a specific year. Enter a year in the URL.
+      operationId: Triggers multiple E-files Submissions
+      parameters:
+      - name: year
+        in: path
+        description: 4 Digit Year
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: '2023'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileSubmissionDetails'
+            examples:
+              e-file-submission-example:
+                $ref: '#/components/examples/e-file-submission-details-example'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileSubmissionResponseRepresentation'
+              examples:
+                E-File Successfull Submission:
+                  $ref: '#/components/examples/e-file-submission-success-response'
+        '400':
+          description: Request failed. This is usually due to validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileSubmissionResponseRepresentation'
+              examples:
+                E-File Submission Invalid Data:
+                  $ref: '#/components/examples/e-file-submission-error-response'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+  /v1/binders/{binderId}/jurisdictions/{jurisdictionId}/e-file-types/{eFileTypeId}/e-file-status-details:
+    get:
+      tags:
+      - E-file IRS Lifecycle
+      summary: Use to retrieve the E-file status details for a specific binder with jurisdictionId and efileTypeId. Enter the binderID, jurisdictionID and eFileTypeID in the URL.
+      operationId: Retrieves an E-file Status Details
+      parameters:
+      - name: binderId
+        in: path
+        description: 16 Character Binder ID
+        required: true
+        schema:
+          type: string
+      - name: jurisdictionId
+        in: path
+        description: Jurisdiction ID
+        required: true
+        schema:
+          type: string
+      - name: eFileTypeId
+        in: path
+        description: EFile Type ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusDetailsRepresentation'
+              examples:
+                E-File Status Details Response:
+                  $ref: '#/components/examples/E-File_Status_Details_Response'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+components:
+  schemas:
+    EFileBatchBinderDetails:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionRequest'
+    EFileSubmissionRequest:
+      type: object
+      properties:
+        binderId:
+          type: string
+        fileName:
+          type: string
+    EFileSubmissionDetails:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionDetailsRequest'
+    EFileSubmissionDetailsRequest:
+      type: object
+      properties:
+        binderId:
+          type: string
+          description: 16 characters, identifies a unique binder
+        jurisdictionId:
+          type: string
+        eFileTypeId:
+          type: string
+    EFileStatusesRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileStatusRepresentation'
+    EFileStatusRepresentation:
+      type: object
+      properties:
+        binderId:
+          type: string
+          description: 16 characters, identifies a unique binder
+        binderName:
+          type: string
+          description: user defined name for a unique binder
+        eFileReturnId:
+          type: string
+        year:
+          type: integer
+          description: tax year
+          format: int32
+        entityId:
+          type: string
+          description: system generated unique identifier for an entity
+        entityNumber:
+          type: string
+        entityName:
+          type: string
+          description: user defined description for an entity
+        returnName:
+          type: string
+        statusId:
+          type: integer
+          format: int32
+        status:
+          type: string
+        jurisidictionId:
+          type: string
+        jurisdictionName:
+          type: string
+        user:
+          type: string
+        eFileTypeId:
+          type: string
+        eFileType:
+          type: string
+        eFileExtension:
+          type: string
+        formName:
+          type: string
+        requestDateTime:
+          type: string
+          format: date-time
+        transmissionDateTime:
+          type: string
+          format: date-time
+        acknowledgeDateTime:
+          type: string
+          format: date-time
+        acceptRejectDateTime:
+          type: string
+          format: date-time
+        acceptedWithAlerts:
+          type: boolean
+        superseded:
+          type: boolean
+    EFileTypesRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileTypeRepresentation'
+    EFileTypeRepresentation:
+      type: object
+      properties:
+        eFileXrefId:
+          type: string
+        year:
+          type: string
+        taxReturnType:
+          type: string
+        jurisdictionId:
+          type: string
+        eFileTypeId:
+          type: string
+        displayName:
+          type: string
+        formName:
+          type: string
+    EFileJurisdictionsRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileJurisdictionRepresentation'
+    EFileJurisdictionRepresentation:
+      type: object
+      properties:
+        jurisdictionID:
+          type: string
+        jurisdictionName:
+          type: string
+    EFileStatusAcknowledgementRepresentation:
+      type: object
+      properties:
+        eFileReturnId:
+          type: string
+        taxYear:
+          type: string
+        taxPayer:
+          type: string
+        efin:
+          type: string
+        taxReturnType:
+          type: string
+          description: IRS defined type of tax return
+        taxReturnTypeName:
+          type: string
+        filingTypeDescription:
+          type: string
+        taxPeriodBeginDateTime:
+          type: string
+          format: date-time
+        taxPeriodEndDateTime:
+          type: string
+          format: date-time
+        returnStatus:
+          type: string
+        irsReceivedDateTime:
+          type: string
+          format: date-time
+        irsProcessedDateTime:
+          type: string
+          format: date-time
+        electronicPostmarkDateTime:
+          type: string
+          format: date-time
+        taxableIncome:
+          type: string
+        totalTax:
+          type: string
+        paymentIndicator:
+          type: string
+        embeddedCr32:
+          type: string
+        computedCr32:
+          type: string
+        acceptedWithAlerts:
+          type: boolean
+        completedValidation:
+          type: boolean
+    eFileDocumentCategories:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/resourceList'
+    resourceList:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        eFileDocumentTypeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/eFileDocumentTypeList'
+    eFileDocumentTypeList:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        eFileDocumentMetadataList:
+          type: array
+          example:
+          - description: PDF
+            pdfGeneratedOn: '2016-05-09T02:09:46.833'
+            eFileDocumentId: C000V7B5.ISS
+            pdfSize: '1700'
+            eFileStatus: ErrorNotSubmitted
+          - description: Full XML
+            eFileCreatedOn: '2016-05-09T02:09:38.133'
+            eFileDocumentId: C000V7B5.ISS
+            eFileSize: '1162'
+            eFileStatus: ErrorNotSubmitted
+          items:
+            $ref: '#/components/schemas/EFileDocumentMetadataList'
+    EFileDocumentMetadataList:
+      type: array
+      items: {}
+    processStatuses:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/processStatus'
+    processStatus:
+      type: object
+      properties:
+        processId:
+          type: string
+        actionType:
+          type: string
+        entityNumber:
+          type: string
+        entityName:
+          type: string
+        binderName:
+          type: string
+        locatorName:
+          type: string
+        taxReturnType:
+          type: string
+        statusMessage:
+          type: string
+        binderId:
+          type: string
+        statusCode:
+          type: string
+        submitTime:
+          type: string
+          format: date-time
+        userId:
+          type: string
+        userName:
+          type: string
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    NewEfileSubmissionResponseRepresentation:
+      type: array
+      items:
+        $ref: '#/components/schemas/NewSubmissionResponse'
+    NewSubmissionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        data:
+          type: object
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewSubmissionResponse_errors'
+    EFileSubmissionResponseRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionResponse'
+    EFileSubmissionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        processId:
+          type: string
+        data:
+          $ref: '#/components/schemas/EFileSubmissionResponse_data'
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewSubmissionResponse_errors'
+    EFileCreateResponseRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileCreateResponse'
+    EFileCreateResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        processId:
+          type: string
+        data:
+          $ref: '#/components/schemas/EFileCreateResponse_data'
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewSubmissionResponse_errors'
+    AcceptedMessage:
+      type: object
+      properties:
+        message:
+          type: string
+        processId:
+          type: string
+    SuccessMessage:
+      type: object
+      properties:
+        message:
+          type: string
+        processId:
+          type: string
+        status:
+          type: string
+    EmptyRepresentation:
+      type: object
+      properties: {}
+    ProcessStatusRepresentation:
+      type: object
+      properties:
+        message:
+          type: string
+    EfileValidationsRepresentation:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileRequest'
+        message:
+          type: string
+        processId:
+          type: string
+        status:
+          type: string
+    EFileRepresentation:
+      required:
+      - jurisdictions
+      type: object
+      properties:
+        jurisdictions:
+          type: array
+          items:
+            type: string
+        commandId:
+          type: string
+    EFileValidationRepresentation:
+      type: object
+      properties:
+        jurisdictions:
+          type: array
+          items:
+            type: string
+    EFileRequest:
+      type: object
+      properties:
+        jurisdiction:
+          type: string
+        efileType:
+          type: string
+    EFileV3Request:
+      type: object
+      properties:
+        jurisdictionId:
+          type: string
+        efileTypeId:
+          type: string
+    EFileV3Representations:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileV3Request'
+    EFileRepresentations:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileRequest'
+    NewSubmissionResponse_errors:
+      properties:
+        propertyName:
+          type: string
+        errorMessage:
+          type: string
+    EFileSubmissionResponse_data:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionDetails'
+    EFileCreateResponse_data:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileV3Representations'
+    EFileStatusDetailsRepresentation:
+      type: object
+      properties:
+        account:
+          type: string
+        entityNumber:
+          type: string
+        entityOrBinderName:
+          type: string
+          description: user defined name for a binder/entity
+        federalOrState:
+          type: string
+        status:
+          type: string
+        message:
+          type: array
+          items:
+            type: string
+  examples:
+    e-file-single-jurisdiction-example:
+      value:
+        jurisdictions:
+        - AL
+    e-file-v3-example:
+      value:
+      - jurisdictionId: FED
+        efileTypeId: EXT1
+      - jurisdictionId: AL
+        efileTypeId: REG
+    e-file-example:
+      value:
+      - jurisdiction: FED
+        efileType: Extension1
+      - jurisdiction: AK
+        efileType: Return
+    e-file-multiple-jurisdiction-example:
+      value:
+        jurisdictions:
+        - AL
+        - CA
+        - VA
+        - AZ
+    e-file-single-jurisdiction-commandid-example:
+      value:
+        jurisdictions:
+        - AL
+        commandId: FE_CreateInternationalXITFile
+    Jurisdiction-Subset:
+      value:
+      - jurisdictionId: AL
+        jurisdictionName: Alabama
+      - jurisdictionId: AK
+        jurisdictionName: Alaska
+      - jurisdictionId: AZ
+        jurisdictionName: Arizona
+      - jurisdictionId: AR
+        jurisdictionName: Arkansas
+      - jurisdictionId: CA
+        jurisdictionName: California
+    Types-Subset:
+      value:
+      - eFileXrefId: 195765
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: AL
+        eFileTypeId: REG
+        name: Alabama Return
+        formName: AL Return
+        _embedded: null
+      - eFileXrefId: 195766
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: AL
+        eFileTypeId: REG2
+        name: Alabama PTEC Return
+        formName: AL PTEC
+        _embedded: null
+      - eFileXrefId: 195767
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: AL
+        eFileTypeId: REG4
+        name: Alabama PPT Return
+        formName: AL PPT
+        _embedded: null
+      - eFileXrefId: 195791
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: FED
+        eFileTypeId: REG
+        name: Federal Return
+        formName: Federal Return
+        _embedded: null
+      - eFileXrefId: 195792
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: FED
+        eFileTypeId: EXT
+        name: Federal Extension
+        formName: Federal Extension
+        _embedded: null
+      - eFileXrefId: 195793
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: FED
+        eFileTypeId: REG4
+        name: Federal Additional Return
+        formName: Form 114 FinCen
+        _embedded: null
+    E-File_Statuses_by_Year:
+      value:
+        resourceList:
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test Entity
+          taxReturnType: '1120'
+          returnName: Test Return
+          statusId: 11
+          status: Not qualified
+          jurisidictionId: FED
+          jurisdictionName: Federal
+          eFileTypeId: REG
+          eFileType: Regular
+          eFileExtension: XML
+          formName: Federal Return
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test EntityR
+          taxReturnType: '1065'
+          returnName: CA Extension
+          statusId: 2
+          status: Qualified
+          jurisidictionId: CA
+          jurisdictionName: California
+          eFileTypeId: EXT
+          eFileType: Extension
+          eFileExtension: ICA
+          formName: CA 8453-BE PMT
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test Entity
+          taxReturnType: '1065'
+          returnName: Test Return
+          statusId: 2
+          status: Qualified
+          jurisidictionId: CO
+          jurisdictionName: Colorado
+          eFileTypeId: REG
+          eFileType: Regular
+          eFileExtension: XCO
+          formName: CO Return
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+    E-File_Statuses_by_Binder:
+      value:
+        resourceList:
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test Entity
+          taxReturnType: '1120'
+          returnName: Test Return
+          statusId: 11
+          status: Not qualified
+          jurisidictionId: FED
+          jurisdictionName: Federal
+          eFileTypeId: REG
+          eFileType: Regular
+          eFileExtension: XML
+          formName: Federal Return
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test EntityR
+          taxReturnType: '1065'
+          returnName: CA Extension
+          statusId: 2
+          status: Qualified
+          jurisidictionId: CA
+          jurisdictionName: California
+          eFileTypeId: EXT
+          eFileType: Extension
+          eFileExtension: ICA
+          formName: CA 8453-BE PMT
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+        - binderId: 1234123421234AB0
+          binderName: Test Binder
+          eFileReturnId: null
+          year: 2017
+          entityId: 1234123421234AB0
+          entityNumber: ABCD1234AB
+          entityName: Test Entity
+          taxReturnType: '1065'
+          returnName: Test Return
+          statusId: 2
+          status: Qualified
+          jurisidictionId: CO
+          jurisdictionName: Colorado
+          eFileTypeId: REG
+          eFileType: Regular
+          eFileExtension: XCO
+          formName: CO Return
+          requestDateTime: null
+          transmissionDateTime: null
+          acknowledgeDateTime: null
+          acceptRejectDateTime: null
+          acceptedWithAlerts: null
+          superseded: false
+          _links: []
+          _embedded: null
+    E-File_Acknowledgements:
+      value:
+        eFileReturnId: '00000000000000000000'
+        taxYear: '2015'
+        taxPayer: 1120 CSE - e-File/1120 e-Fle
+        efin: '123456'
+        taxReturnType: 1120C
+        taxReturnTypeName: '1120'
+        filingTypeDescription: Federal Extension
+        taxPeriodBeginDateTime: '2015-01-01T00:00:00'
+        taxPeriodEndDateTime: '2015-12-31T00:00:00'
+        returnStatus: Rejected
+        irsReceivedDateTime: null
+        irsProcessedDateTime: '2020-08-18T00:00:00'
+        electronicPostmarkDateTime: '2020-08-18T04:11:53'
+        taxableIncome: '0'
+        totalTax: '0'
+        paymentIndicator: ' '
+        embeddedCr32: '0'
+        computedCr32: '0'
+        acceptedWithAlerts: false
+        completedValidation: false
+        _links: []
+        _embedded: null
+    E-File_Accepted:
+      value:
+        message: Efile generation submitted for binder 1234123421234AB0.
+        processId: 7ed102cb-6939-4175-8297-cca443e317cc
+    E-File_Success:
+      value:
+        message: Efile generation submitted for binder 518K0101RT006OSQ.
+        processId: 946b2e9b-f143-4226-9e9d-ded47ded3fcc
+        status: Success
+    E-File-V3_Success:
+      value:
+        status: 200
+        message: Success
+        processId: 98227b37-6941-4cb6-b702-1fb0892ab38b
+        data:
+        - jurisdictionId: AL
+          efileTypeId: REG
+        errors: []
+    E-File_Validations_Accepted:
+      value:
+        message: Efile validations triggered for binder 1234123421234AB0.
+        processId: 6f6cdfb2-cef7-49b4-ba17-f0e2bd8fc90f
+    ProcessStatusRepresentation_Invalid_Binder:
+      value:
+        message: Invalid binderId
+    Efile_Invalid_Jurisdiction:
+      value:
+        value:
+          jurisdiction: F
+          efileType: Return
+        message: Invalid Jurisdiction.
+        processId: null
+        status: Failed
+    Efile_V3_Invalid_Jurisdiction:
+      value:
+        status: 400
+        message: Bad Request
+        processId: '0'
+        data:
+        - jurisdictionId: A
+          efileTypeId: REG
+        errors:
+        - propertyName: JurisdictionId
+          errorMessage: 'Invalid JurisdictionId: [A].'
+    Efile_Invalid_BinderId:
+      value:
+        status: 400
+        message: Bad Request
+        processId: '0'
+        data:
+        - jurisdictionId: AL
+          efileTypeId: REG
+        errors:
+        - propertyName: binderId
+          errorMessage: 'Invalid binderId: [E45V0101VS0041N].'
+    Efile_Invalid_EfileType:
+      value:
+        value:
+          jurisdiction: FED
+          efileType: Return
+        message: Invalid EfileType.
+        processId: null
+        status: Failed
+    Efile_Invalid_EfileType_Jurisdiction_Combination:
+      value:
+        value:
+          jurisdiction: FED
+          efileType: Extension4
+        message: EfileType not applicable to Jurisdiction.
+        processId: null
+        status: Failed
+    Efile_Invalid_EfileType_Jurisdiction_V3_Combination:
+      value:
+        status: 400
+        message: Bad Request
+        processId: '0'
+        data:
+        - jurisdictionId: AL
+          efileTypeId: RE
+        errors:
+        - propertyName: EfileTypeId
+          errorMessage: EfileTypeId of [RE] is not applicable to JurisdictionId [AL].
+    ProcessStatus_EfileValidate_Computing:
+      value:
+        resourceList:
+        - processId: f773aca8-29e2-40be-a8f3-d444663d633e
+          actionType: ValidateEFile
+          entityNumber: EntityNum
+          entityName: Test Entity
+          binderName: Test Binder
+          locatorName: 1234AB
+          taxReturnType: '1120'
+          statusMessage: Computing
+          binderId: 1234123421234AB0
+          statusCode: '6'
+          submitTime: 11/10/2020 1:23:55 PM
+          userId: 1234123421234AB0
+          userName: TESTUSER
+          _links: []
+          _embedded: null
+        _links: []
+        _embedded: null
+    ProcessStatus_EfileValidate_Pending:
+      value:
+        resourceList:
+        - processId: f773aca8-29e2-40be-a8f3-d444663d633e
+          actionType: ValidateEFile
+          entityNumber: EntityNum
+          entityName: Test Entity
+          binderName: Test Binder
+          locatorName: 1234AB
+          taxReturnType: '1120'
+          statusMessage: Pending
+          binderId: 1234123421234AB0
+          statusCode: '0'
+          submitTime: 11/10/2020 1:23:55 PM
+          userId: 1234123421234AB0
+          userName: TESTUSER
+          _links: []
+          _embedded: null
+        _links: []
+        _embedded: null
+    ProcessStatus_EfileValidate_Qualified:
+      value:
+        resourceList:
+        - processId: f773aca8-29e2-40be-a8f3-d444663d633e
+          actionType: ValidateEFile
+          entityNumber: EntityNum
+          entityName: Test Entity
+          binderName: Test Binder
+          locatorName: 1234AB
+          taxReturnType: '1120'
+          statusMessage: Qualified
+          binderId: 1234123421234AB0
+          statusCode: '2'
+          submitTime: 11/10/2020 1:23:55 PM
+          userId: 1234123421234AB0
+          userName: TESTUSER
+          _links: []
+          _embedded: null
+        _links: []
+        _embedded: null
+    ProcessStatus_EfileCreate_Computing:
+      value:
+        resourceList:
+        - processId: f773aca8-29e2-40be-a8f3-d444663d633e
+          actionType: CreateEFile
+          entityNumber: EntityNum
+          entityName: Test Entity
+          binderName: Test Binder
+          locatorName: 1234AB
+          taxReturnType: '1120'
+          statusMessage: Computing
+          binderId: 1234123421234AB0
+          statusCode: '6'
+          submitTime: 11/10/2020 1:23:55 PM
+          userId: 1234123421234AB0
+          userName: TESTUSER
+          _links: []
+          _embedded: null
+        _links: []
+        _embedded: null
+    ProcessStatus_EfileCreate_Pending:
+      value:
+        resourceList:
+        - processId: f773aca8-29e2-40be-a8f3-d444663d633e
+          actionType: CreateEFile
+          entityNumber: EntityNum
+          entityName: Test Entity
+          binderName: Test Binder
+          locatorName: 1234AB
+          taxReturnType: '1120'
+          statusMessage: Pending
+          binderId: 1234123421234AB0
+          statusCode: '0'
+          submitTime: 11/10/2020 1:23:55 PM
+          userId: 1234123421234AB0
+          userName: TESTUSER
+          _links: []
+          _embedded: null
+        _links: []
+        _embedded: null
+    ProcessStatus_EfileCreate_Qualified:
+      value:
+        resourceList:
+        - processId: f773aca8-29e2-40be-a8f3-d444663d633e
+          actionType: CreateEFile
+          entityNumber: EntityNum
+          entityName: Test Entity
+          binderName: Test Binder
+          locatorName: 1234AB
+          taxReturnType: '1120'
+          statusMessage: Qualified
+          binderId: 1234123421234AB0
+          statusCode: '2'
+          submitTime: 11/10/2020 1:23:55 PM
+          userId: 1234123421234AB0
+          userName: TESTUSER
+          _links: []
+          _embedded: null
+        _links: []
+        _embedded: null
+    Efile_List:
+      value:
+        resourceList:
+        - id: ID_Federal
+          description: Federal
+          eFileDocumentTypeList:
+          - id: FED
+            description: Extension
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:09:46.833'
+              eFileDocumentId: C1234AB5.ISS
+              pdfSize: 1700
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T02:09:38.133'
+              eFileDocumentId: C1234AB5.ISS
+              eFileSize: 1162
+              eFileStatus: Qualified
+          - id: FED
+            description: Return
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:08:43.613'
+              eFileDocumentId: C1234AB5.XML
+              pdfSize: 103948
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T02:08:22.553'
+              eFileDocumentId: C1234AB5.XML
+              eFileSize: 37009
+              eFileStatus: Qualified
+          _links: []
+          _embedded: null
+        - id: ID_States
+          description: States
+          eFileDocumentTypeList:
+          - id: AL
+            description: AL Return
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:09:46.82'
+              eFileDocumentId: C1234AB5.XAL
+              pdfSize: 35958
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T01:53:15.523'
+              eFileDocumentId: C1234AB5.XAL
+              eFileSize: 4837
+              eFileStatus: Qualified
+          - id: AR
+            description: AR 1100CT
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:09:46.833'
+              eFileDocumentId: C1234AB5.XAR
+              pdfSize: 14497
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T01:56:54.313'
+              eFileDocumentId: C1234AB5.XAR
+              eFileSize: 8262
+              eFileStatus: Qualified
+          - id: DE
+            description: DE Return
+            eFileDocumentMetadataList:
+            - description: PDF
+              pdfGeneratedOn: '2016-05-09T02:09:46.833'
+              eFileDocumentId: C1234AB5.XDE
+              pdfSize: 11165
+              eFileStatus: Qualified
+            - description: Full XML
+              eFileCreatedOn: '2016-05-09T01:58:15.693'
+              eFileDocumentId: C1234AB5.XDE
+              eFileSize: 5653
+              eFileStatus: Qualified
+          _links: []
+          _embedded: null
+        _links: []
+        _embedded: null
+    e-file-submission-example:
+      value:
+        eFileBatchBinderDetails:
+        - binderId: 518K0101HX006SPZ
+          fileName: C006SPZ3.IS7
+    e-file-submission-details-example:
+      value:
+      - binderId: 518K0101HX006SPZ
+        jurisdictionId: AL
+        eFileTypeId: REG
+      - binderId: 518K0101HX006OJZ
+        jurisdictionId: FED
+        eFileTypeId: EXT
+    e-file-submission-ok-response:
+      value:
+        status: 200
+        message: Success
+        data:
+          id: 0
+          eFileBatchBinderDetails:
+          - binderId: 621R0101P40043Z5
+            fileName: abc.txt
+        errors: []
+    e-file-submission-success-response:
+      value:
+        status: 200
+        message: Success
+        processId: 6014
+        data:
+        - binderId: 518K0101HX006OJZ
+          jurisdictionId: FED
+          eFileTypeId: EXT
+        errors: []
+    e-file-submission-error-response:
+      value:
+        status: 400
+        message: Bad Request
+        processId: 0
+        data:
+        - binderId: 518K0101HX006SPZ
+          jurisdictionId: AL
+          eFileTypeId: REG
+        - binderId: 518K0101HX006OJZ
+          jurisdictionId: FED
+          eFileTypeId: EXT
+        errors:
+        - propertyName: File
+          errorMessage: 'XML should be available and have qualified status for submitting the E-file for binderId: [518K0101HX006SPZ].'
+        - propertyName: File
+          errorMessage: 'XML should be available and have qualified status for submitting the E-file for binderId: [518K0101HX006OJZ].'
+    e-file-submission-bad-request:
+      value:
+        status: 400
+        message: Bad Request
+        data:
+          id: 0
+          eFileBatchBinderDetails:
+          - binderId: 621R0101P40043Z5
+            fileName: abc.txt
+        errors:
+        - propertyName: EFileBatchBinderDetails
+          errorMessage: Combination of BinderId [621R0101P40043Z5] and FileName [abc.txt] does not exists.
+    E-File_Status_Details_Response:
+      value:
+        account: 518K
+        entityNumber: TopCon
+        entityOrBinderName: The Incredibles/MJ_Efile_03_25_2022_03_04
+        federalOrState: CA Return
+        status: Error Not Submitted
+        message:
+        - This return was rejected because it did not have a EIN for the corporation within the electronic file.1.Please enter a valid EIN.If Ein is present complete Steps 2-5 as below2.Open this specific Return.3.Perform a Full recompute4.Recreate the Electronic File.5.Resubmit the return.Should you have any questions please call RIA Tax Support.
+        - Invalid EIN\SSN number
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

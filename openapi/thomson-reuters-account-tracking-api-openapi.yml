@@ -1,0 +1,176 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Account Tracking API
+  version: '2.0'
+  description: 'Operations tagged Account Tracking across 2 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-services-v1-openapi.json, thomson-reuters-onesource-trust-tax-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax
+security:
+- bearerAuth: []
+tags:
+- name: Account Tracking
+paths:
+  /v1/pans/{pan}/accounts/{acctNo}/status:
+    patch:
+      tags:
+      - Account Tracking
+      summary: Allows authenticated users to access the account status data
+      operationId: AllowsAuthenticatedUsersToAccessTheAccountStatusData
+      parameters:
+      - name: pan
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: acctNo
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/AccountStatus'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountStatus'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AccountStatus'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AccountStatus'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Allows authenticated users to access the account status data
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+components:
+  schemas:
+    OperationsStatus:
+      enum:
+      - NotStarted
+      - Running
+      - Succeeded
+      - Failed
+      - Cancelled
+      - PartiallySucceeded
+      - Rejected
+      type: string
+    OperationModel:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/OperationsStatus'
+        location:
+          type:
+          - string
+          - 'null'
+        created_date_time:
+          type: string
+          format: date-time
+        last_action_date_time:
+          type: string
+          format: date-time
+      additionalProperties: false
+    AccountStatus:
+      type: object
+      properties:
+        yr_seq:
+          type: integer
+          description: Tax year and sequence
+          format: int32
+        status:
+          type:
+          - string
+          - 'null'
+          description: Status
+        return_type_enum:
+          $ref: '#/components/schemas/FedStatusType'
+      additionalProperties: false
+      description: Status type
+    FedStatusType:
+      enum:
+      - _1041_990
+      - _5227
+      - _1099
+      - _5498
+      - _1098
+      - _1099_MISC
+      - _990
+      - _1041
+      type: integer
+      format: int32
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer { token }"'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.json
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

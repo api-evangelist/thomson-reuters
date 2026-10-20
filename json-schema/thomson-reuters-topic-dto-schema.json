@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-topic-dto-schema.json",
+  "title": "TopicDTO",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-topic-service-openapi.yml#/components/schemas/TopicDTO",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the Topic"
+    },
+    "name": {
+      "type": "string",
+      "description": "Label of the Topic"
+    },
+    "records": {
+      "$ref": "#/$defs/TopicRecordCountDTO"
+    },
+    "blueprint": {
+      "$ref": "#/$defs/TopicBlueprintDTO"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current state of the Topic",
+      "enum": [
+        "PUBLISHING",
+        "PROCESSING",
+        "COMPLETED",
+        "FAILED",
+        "REPROCESSING",
+        "STAGED"
+      ]
+    },
+    "year": {
+      "type": "integer",
+      "description": "Relevant year of importance for the file data",
+      "format": "int32"
+    },
+    "period": {
+      "type": "integer",
+      "description": "Numeric period of no specific precision",
+      "format": "int32"
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Unique identifier of the Template"
+    },
+    "is_hidden": {
+      "type": "boolean",
+      "description": "Visibility of the Topic"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Topic created at by"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "Topic created at time",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "TopicBlueprintDTO": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type_id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "TopicRecordCountDTO": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "description": "Number of records published to the stream. Sum of \n`ready`, `unavailable`, 'invalid 'and `ignored` records equals `total`",
+          "format": "int64"
+        },
+        "ready": {
+          "type": "integer",
+          "description": "Number of records with no errors and ready for consumption",
+          "format": "int64"
+        },
+        "unavailable": {
+          "type": "integer",
+          "description": "Number of records that contain values that failed an \nexternal validation check. These records can be recovered by\nreprocessing once the external system is Updated",
+          "format": "int64"
+        },
+        "invalid": {
+          "type": "integer",
+          "description": "Number of records that contain unrecoverable errors. any\nexplicitly filtered rows also end up here. For example, rows \nremoved by the offset operator",
+          "format": "int64"
+        },
+        "ignored": {
+          "type": "integer",
+          "description": "Number of records that are ignored during file import",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,194 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters E-file Reference API
+  version: v1
+  termsOfService: None
+  description: 'Operations tagged E-file Reference across 2 of this provider''s published API definitions: thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.json, thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/income-tax/e-file
+security:
+- Authorization: []
+tags:
+- name: E-file Reference
+paths:
+  /v1/e-file-jurisdictions:
+    get:
+      tags:
+      - E-file Reference
+      summary: Use to retrieve a list of E-file jurisdictions
+      operationId: RetrievesE-fileJurisdictions
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileJurisdictionsRepresentation'
+              examples:
+                Jurisdictions-Subset:
+                  $ref: '#/components/examples/Jurisdiction-Subset'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves E-file Jurisdictions
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+  /v1/e-file-types:
+    get:
+      tags:
+      - E-file Reference
+      summary: Use to retrieve a list of E-file types
+      operationId: RetrievesE-fileTypes
+      parameters:
+      - name: year
+        in: query
+        description: 4 Digit Year
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: '2023'
+      - name: taxReturnType
+        in: query
+        description: IRS defined type of tax return
+        required: true
+        schema:
+          type: string
+        example: '1065'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileTypesRepresentation'
+              examples:
+                Types-Subset:
+                  $ref: '#/components/examples/Types-Subset'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact ONESOURCE Technical Support.
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves E-file types
+    servers:
+    - url: https://api.onesourcetax.com/income-tax/e-file
+components:
+  schemas:
+    EFileTypesRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileTypeRepresentation'
+    EFileJurisdictionRepresentation:
+      type: object
+      properties:
+        jurisdictionID:
+          type: string
+        jurisdictionName:
+          type: string
+    EFileTypeRepresentation:
+      type: object
+      properties:
+        eFileXrefId:
+          type: string
+        year:
+          type: string
+        taxReturnType:
+          type: string
+        jurisdictionId:
+          type: string
+        eFileTypeId:
+          type: string
+        displayName:
+          type: string
+        formName:
+          type: string
+    EFileJurisdictionsRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileJurisdictionRepresentation'
+  examples:
+    Types-Subset:
+      value:
+      - eFileXrefId: 195765
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: AL
+        eFileTypeId: REG
+        name: Alabama Return
+        formName: AL Return
+        _embedded: null
+      - eFileXrefId: 195766
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: AL
+        eFileTypeId: REG2
+        name: Alabama PTEC Return
+        formName: AL PTEC
+        _embedded: null
+      - eFileXrefId: 195767
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: AL
+        eFileTypeId: REG4
+        name: Alabama PPT Return
+        formName: AL PPT
+        _embedded: null
+      - eFileXrefId: 195791
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: FED
+        eFileTypeId: REG
+        name: Federal Return
+        formName: Federal Return
+        _embedded: null
+      - eFileXrefId: 195792
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: FED
+        eFileTypeId: EXT
+        name: Federal Extension
+        formName: Federal Extension
+        _embedded: null
+      - eFileXrefId: 195793
+        year: 2023
+        taxReturnType: '1065'
+        jurisdictionId: FED
+        eFileTypeId: REG4
+        name: Federal Additional Return
+        formName: Form 114 FinCen
+        _embedded: null
+    Jurisdiction-Subset:
+      value:
+      - jurisdictionId: AL
+        jurisdictionName: Alabama
+      - jurisdictionId: AK
+        jurisdictionName: Alaska
+      - jurisdictionId: AZ
+        jurisdictionName: Arizona
+      - jurisdictionId: AR
+        jurisdictionName: Arkansas
+      - jurisdictionId: CA
+        jurisdictionName: California
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.json
+- thomson-reuters-onesource-income-tax-e-file-api-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

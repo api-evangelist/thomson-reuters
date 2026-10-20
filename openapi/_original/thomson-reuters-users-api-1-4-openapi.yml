@@ -1,0 +1,959 @@
+# x-archived-from: thomson-reuters-users-api-1-4-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Users API
+  description: The Users API provides access to Users metadata and roles in the Tracker Company and TrackerMaster databases
+  contact:
+    name: devportal
+  version: '1.4'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/users-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/users-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/users-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/users-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/users-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/users-api/v1
+paths:
+  /users/{id}:
+    get:
+      tags:
+      - Users
+      summary: Look up and retrieve a company user by the provided identifier.
+      operationId: Users_GetOne
+      parameters:
+      - name: id
+        in: path
+        description: Represents an identifier of a company user.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns a company user with the specified identifier.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '304':
+          description: Returns a not modified response with empty body.
+        '400':
+          description: If an identifier is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: If the current user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: If the current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: If a company user is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: If a server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+      - Users
+      summary: Update a company user with the provided identifier.
+      operationId: Users_Update
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of a company user to be updated.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-Match
+        in: header
+        description: Executes a request only if the passed ETag equals the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 200 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.'
+        schema:
+          type: string
+        example: return=representation
+      requestBody:
+        description: The model containing a company user to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserModel'
+      responses:
+        '200':
+          description: Returns the user that was updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '204':
+          description: User was updated but will not be provided in response.
+        '400':
+          description: If the request parameters were invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: If the current user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: If the current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: If a company user is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '412':
+          description: ETag provided in the If-Match header is out of date.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: If a server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /users:
+    get:
+      tags:
+      - Users
+      summary: Retrieve all users in the current company.
+      operationId: Users_GetAll
+      parameters:
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      - name: $top
+        in: query
+        description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          default: 50
+        example: 50
+      - name: $skip
+        in: query
+        description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+        example: 0
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, userId, eMail, createdDateTime, userType, loginAttempts, loginTempLockoutExpirationDateTime, masterUserStatus, firstName, lastName, deactivatedDateTime, companyId, firmOfficeId, companyOfficeId, roles, masterCompanyId, lastLoginDateTime, recipientContactPrimaryUserId, recipientContactSecondaryUserId, onePassIdentifier, onePassRegistrationKey, azureObjectId, b2cObjectId, uid, primaryAddress, primaryPhone, companyUser, profile, roles/capacity, roles/count, roles/item, primaryAddress/id, primaryAddress/street1, primaryAddress/street2, primaryAddress/city, primaryAddress/country, primaryAddress/state, primaryAddress/provinceRegion,
+          primaryAddress/zip, primaryAddress/addressType, primaryAddress/country/id, primaryAddress/country/name, primaryAddress/country/iSOCode, primaryAddress/state/id, primaryAddress/state/name, primaryAddress/state/iSOCode, primaryPhone/id, primaryPhone/phoneNumber, primaryPhone/phoneType, companyUser/companyUserStatus, companyUser/deactivatedDateTime, companyUser/notes, companyUser/reqTimeEntryStartDateTime, companyUser/employeeId, companyUser/annualEmployeeCost, companyUser/avgHours, companyUser/lastInvoicePostMethod, companyUser/securityRoleVersionDateTime, companyUser/specialMatterAccess, companyUser/specialMatterAccess/organizationalUnitIds, companyUser/specialMatterAccess/practiceGroupIds, companyUser/specialMatterAccess/organizationalUnitIds/capacity, companyUser/specialMatterAccess/organizationalUnitIds/count, companyUser/specialMatterAccess/organizationalUnitIds/item, companyUser/specialMatterAccess/practiceGroupIds/capacity, companyUser/specialMatterAccess/practiceGroupIds/count,
+          companyUser/specialMatterAccess/practiceGroupIds/item, profile/id, profile/dateFormat, profile/browseItemsPerPage, profile/notifyMaterialChange, profile/notifyPendingInvoice, profile/notifyBudgetChange, profile/notifyStatusDue, profile/notifyDocumentReview, profile/notifyMatterClosed, profile/notifyTKRateReview, profile/currency, profile/budgetDueNoticeDays
+        schema:
+          type: string
+          nullable: true
+        example: id eq 111222
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - name
+            - userId
+            - eMail
+            - createdDateTime
+            - userType
+            - loginAttempts
+            - loginTempLockoutExpirationDateTime
+            - masterUserStatus
+            - firstName
+            - lastName
+            - deactivatedDateTime
+            - companyId
+            - firmOfficeId
+            - companyOfficeId
+            - roles
+            - masterCompanyId
+            - lastLoginDateTime
+            - recipientContactPrimaryUserId
+            - recipientContactSecondaryUserId
+            - onePassIdentifier
+            - onePassRegistrationKey
+            - azureObjectId
+            - b2cObjectId
+            - uid
+            - primaryAddress
+            - primaryPhone
+            - companyUser
+            - profile
+            type: string
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - name
+            - userId
+            - eMail
+            - createdDateTime
+            - userType
+            - loginAttempts
+            - loginTempLockoutExpirationDateTime
+            - masterUserStatus
+            - firstName
+            - lastName
+            - deactivatedDateTime
+            - companyId
+            - firmOfficeId
+            - companyOfficeId
+            - masterCompanyId
+            - lastLoginDateTime
+            - recipientContactPrimaryUserId
+            - recipientContactSecondaryUserId
+            - onePassIdentifier
+            - onePassRegistrationKey
+            - azureObjectId
+            - b2cObjectId
+            - uid
+            - id desc
+            - name desc
+            - userId desc
+            - eMail desc
+            - createdDateTime desc
+            - userType desc
+            - loginAttempts desc
+            - loginTempLockoutExpirationDateTime desc
+            - masterUserStatus desc
+            - firstName desc
+            - lastName desc
+            - deactivatedDateTime desc
+            - companyId desc
+            - firmOfficeId desc
+            - companyOfficeId desc
+            - masterCompanyId desc
+            - lastLoginDateTime desc
+            - recipientContactPrimaryUserId desc
+            - recipientContactSecondaryUserId desc
+            - onePassIdentifier desc
+            - onePassRegistrationKey desc
+            - azureObjectId desc
+            - b2cObjectId desc
+            - uid desc
+            type: string
+      - name: $expand
+        in: query
+        description: Expand a complex property, see [Expand](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionexpand)
+        schema:
+          type: string
+      - name: $count
+        in: query
+        description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Returns all users in the current company.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCollection'
+        '304':
+          description: Returns a not modified response with empty body.
+        '400':
+          description: If the OData filter is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: If the current user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: If the current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: If a server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Users
+      summary: Creates a new company user.
+      operationId: Users_Create
+      parameters:
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.'
+        schema:
+          type: string
+        example: return=representation
+      requestBody:
+        description: Represents a new user details information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserModel'
+      responses:
+        '201':
+          description: Returns a created company user identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserIdModel'
+        '204':
+          description: Company user was created but identifier will not be provided in response.
+        '400':
+          description: If body is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: If the current user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: If the current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: If a server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    AddressType:
+      enum:
+      - Work
+      - Home
+      - Other
+      type: string
+    CompanyUser:
+      type: object
+      properties:
+        companyUserStatus:
+          $ref: '#/components/schemas/UserStatus'
+        deactivatedDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        reqTimeEntryStartDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        employeeId:
+          type: string
+          nullable: true
+        annualEmployeeCost:
+          type: number
+          format: double
+          nullable: true
+        avgHours:
+          type: integer
+          format: int32
+          nullable: true
+        lastInvoicePostMethod:
+          $ref: '#/components/schemas/InvoiceEditContext'
+        securityRoleVersionDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        specialMatterAccess:
+          $ref: '#/components/schemas/SpecialMatterAccess'
+      additionalProperties: false
+    ContactAddress:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        street1:
+          type: string
+          nullable: true
+        street2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        country:
+          $ref: '#/components/schemas/Country'
+        state:
+          $ref: '#/components/schemas/State'
+        provinceRegion:
+          type: string
+          nullable: true
+        zip:
+          type: string
+          nullable: true
+        addressType:
+          $ref: '#/components/schemas/AddressType'
+      additionalProperties: false
+    ContactPhone:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        phoneNumber:
+          type: string
+          nullable: true
+        phoneType:
+          $ref: '#/components/schemas/PhoneType'
+      additionalProperties: false
+    Country:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        isoCode:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CreateUserModel:
+      required:
+      - companyOfficeId
+      - eMail
+      - firstName
+      - lastName
+      - primaryAddress
+      - primaryPhone
+      - roles
+      type: object
+      properties:
+        companyUser:
+          $ref: '#/components/schemas/UploadCompanyUserModel'
+        eMail:
+          maxLength: 150
+          type: string
+          description: Primary contact email.
+          format: email
+        firstName:
+          maxLength: 50
+          type: string
+          description: First name.
+        lastName:
+          maxLength: 150
+          type: string
+          description: Last name.
+        roles:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRoles'
+          description: User roles.
+        companyOfficeId:
+          type: integer
+          description: Company office identifier.
+          format: int32
+        primaryAddress:
+          $ref: '#/components/schemas/UploadAddressModel'
+        primaryPhone:
+          $ref: '#/components/schemas/UploadPhoneModel'
+      additionalProperties: false
+    DateFormat:
+      enum:
+      - mmddyyyy
+      - ddmmyyyy
+      type: string
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+        details:
+          type: array
+          items:
+            required:
+            - code
+            - message
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              target:
+                type: string
+        innerError:
+          required:
+          - code
+          - message
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      additionalProperties: false
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    InvoiceEditContext:
+      enum:
+      - SpeedPost
+      - ManualLedes
+      - ManualOther
+      - LedesGenerator
+      - Accounting
+      - Move
+      type: string
+    PhoneType:
+      enum:
+      - Work
+      - Home
+      - Fax
+      - Mobile
+      - Other
+      type: string
+    Profile:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        dateFormat:
+          $ref: '#/components/schemas/DateFormat'
+        browseItemsPerPage:
+          type: integer
+          format: int32
+        notifyMaterialChange:
+          type: boolean
+        notifyPendingInvoice:
+          type: boolean
+        notifyBudgetChange:
+          type: boolean
+        notifyStatusDue:
+          type: boolean
+        notifyDocumentReview:
+          type: boolean
+        notifyMatterClosed:
+          type: boolean
+        notifyTKRateReview:
+          type: boolean
+        currency:
+          type: string
+          nullable: true
+        budgetDueNoticeDays:
+          type: integer
+          format: int32
+      additionalProperties: false
+    SpecialMatterAccess:
+      type: object
+      properties:
+        organizationalUnitIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+        practiceGroupIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+      additionalProperties: false
+    State:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        isoCode:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UpdateUserModel:
+      type: object
+      properties:
+        eMail:
+          maxLength: 150
+          type: string
+          description: Primary contact email.
+          format: email
+          nullable: true
+        firstName:
+          maxLength: 50
+          type: string
+          description: First name.
+          nullable: true
+        lastName:
+          maxLength: 150
+          type: string
+          description: Last name.
+          nullable: true
+        roles:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRoles'
+          description: User roles.
+          nullable: true
+        companyOfficeId:
+          type: integer
+          description: Company office identifier.
+          format: int32
+          nullable: true
+        primaryAddress:
+          $ref: '#/components/schemas/UploadAddressModel'
+        primaryPhone:
+          $ref: '#/components/schemas/UploadPhoneModel'
+        companyUser:
+          $ref: '#/components/schemas/UploadCompanyUserModel'
+      additionalProperties: false
+    UploadAddressModel:
+      required:
+      - addressType
+      - city
+      - country
+      - state
+      - street1
+      - zip
+      type: object
+      properties:
+        street1:
+          maxLength: 150
+          type: string
+          description: Address line 1.
+        street2:
+          maxLength: 150
+          type: string
+          description: Address line 2.
+          nullable: true
+        city:
+          maxLength: 65
+          type: string
+          description: City.
+        provinceRegion:
+          maxLength: 100
+          type: string
+          description: Province or region.
+          nullable: true
+        state:
+          $ref: '#/components/schemas/UploadStateModel'
+        zip:
+          maxLength: 25
+          type: string
+          description: Postal code.
+        addressType:
+          $ref: '#/components/schemas/AddressType'
+        country:
+          $ref: '#/components/schemas/UploadCountryModel'
+      additionalProperties: false
+    UploadCompanyUserModel:
+      type: object
+      properties:
+        notes:
+          maxLength: 1000
+          type: string
+          description: Notes.
+          nullable: true
+        employeeId:
+          maxLength: 50
+          type: string
+          description: Employee ID.
+          nullable: true
+        companyUserStatus:
+          $ref: '#/components/schemas/UserStatus'
+        specialMatterAccess:
+          $ref: '#/components/schemas/SpecialMatterAccess'
+      additionalProperties: false
+    UploadCountryModel:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Country identifier.
+          format: int32
+      additionalProperties: false
+    UploadPhoneModel:
+      required:
+      - phoneNumber
+      - phoneType
+      type: object
+      properties:
+        phoneNumber:
+          maxLength: 25
+          type: string
+          description: Phone number.
+        phoneType:
+          $ref: '#/components/schemas/PhoneType'
+      additionalProperties: false
+    UploadStateModel:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: State identifier.
+          format: int32
+      additionalProperties: false
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        userId:
+          type: string
+          nullable: true
+        eMail:
+          type: string
+          nullable: true
+        createdDateTime:
+          type: string
+          format: date-time
+        userType:
+          $ref: '#/components/schemas/UserType'
+        loginAttempts:
+          type: integer
+          format: int32
+        loginTempLockoutExpirationDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        masterUserStatus:
+          $ref: '#/components/schemas/UserStatus'
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        deactivatedDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        companyId:
+          type: integer
+          format: int32
+        firmOfficeId:
+          type: integer
+          format: int32
+        companyOfficeId:
+          type: integer
+          format: int32
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRoles'
+          nullable: true
+        masterCompanyId:
+          type: integer
+          format: int32
+        lastLoginDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        recipientContactPrimaryUserId:
+          type: integer
+          format: int32
+        recipientContactSecondaryUserId:
+          type: integer
+          format: int32
+        onePassIdentifier:
+          type: string
+          nullable: true
+        onePassRegistrationKey:
+          type: string
+          nullable: true
+        azureObjectId:
+          type: string
+          nullable: true
+        b2cObjectId:
+          type: string
+          nullable: true
+        uid:
+          type: string
+          format: uuid
+        primaryAddress:
+          $ref: '#/components/schemas/ContactAddress'
+        primaryPhone:
+          $ref: '#/components/schemas/ContactPhone'
+        companyUser:
+          $ref: '#/components/schemas/CompanyUser'
+        profile:
+          $ref: '#/components/schemas/Profile'
+      additionalProperties: false
+    UserCollection:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          nullable: true
+      additionalProperties: false
+    UserIdModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+      additionalProperties: false
+    UserRoles:
+      enum:
+      - WebServicesAccess
+      - CanPostToAllMatters
+      - FirmInvoiceAttachmentAccessAllInvoices
+      - FirmInvoiceAttachmentAccessInvoicesInUsersOfficeOnly
+      - SerengetiAdmin
+      - ConcourseAlertUser
+      - SerengetiIM
+      - ThirdPartyBiller
+      - GeneralCounsel
+      - TKRateReviewer
+      - InvoiceReportAccess
+      - BudgetReportAccess
+      - OtherReportAccess
+      - InvoiceAccessProfileAndAttachmentForReports
+      - InvoiceAccessProfileOnlyForReports
+      - AnalyticsAccess
+      - MatterUploadAccess
+      - APDataExchangeAccess
+      - ReportsAPIAccess
+      - CanPreApproveAllocationsOnUpdate
+      - ScheduledReportsAccess
+      - FirmMatterDataUpload
+      - InvoiceRejector
+      - LegalHoldsReportCreation
+      - SOPAccess
+      - PowerBIDashboardsAccess
+      - PowerBIDashboardManagerEditAccess
+      - PowerBIDashboardManagerViewAccess
+      - CompanyBilling
+      - CompanyReporter
+      - CompanyReader
+      - CompanyEditor
+      - CompanyAdmin
+      - SystemReader
+      - SystemEditor
+      - SystemOfficeAdmin
+      - SystemAdmin
+      type: string
+      description: <li>'WebServicesAccess' - Web Services Account for API-based data exchange</li><li>'CanPostToAllMatters' - Can edit all matters</li><li>'FirmInvoiceAttachmentAccessAllInvoices' - Can access all invoices</li><li>'FirmInvoiceAttachmentAccessInvoicesInUsersOfficeOnly' - Can access all invoices in user's office only</li><li>'SerengetiAdmin' - Master company Serengeti administrator</li><li>'ConcourseAlertUser' - Concourse alert user</li><li>'SerengetiIM' - Master company Serengeti client relationship manager</li><li>'ThirdPartyBiller' - Third party biller user</li><li>'GeneralCounsel' - General counsel user</li><li>'TKRateReviewer' - Timekeeper rate reviewer</li><li>'InvoiceReportAccess' - Can access invoice reports</li><li>'BudgetReportAccess' - Can access budget reports</li><li>'OtherReportAccess' - Can access other reports</li><li>'InvoiceAccessProfileAndAttachmentForReports' - Can access invoice profile and attachment for reports</li><li>'InvoiceAccessProfileOnlyForReports'
+        - Can access invoice profile only for reports</li><li>'AnalyticsAccess' - Can access company analytics</li><li>'MatterUploadAccess' - Can access matter upload</li><li>'APDataExchangeAccess' - Can access Accounts Payable (AP) data exchange</li><li>'ReportsAPIAccess' - Can access reports API</li><li>'CanPreApproveAllocationsOnUpdate' - Can use pre approved allocations with matter upload API</li><li>'ScheduledReportsAccess' - Can schedule reports</li><li>'FirmMatterDataUpload' - Can access firm matter data upload</li><li>'InvoiceRejector' - Can reject invoices</li><li>'LegalHoldsReportCreation' - Can create legal hold reports</li><li>'SOPAccess' - Can access Service of Process (SOP)</li><li>'PowerBIDashboardsAccess' - Can access Power BI dashboards</li><li>'PowerBIDashboardManagerEditAccess' - Can edit Power BI dashboard manager</li><li>'PowerBIDashboardManagerViewAccess' - Can view Power BI dashboard manager</li><li>'CompanyBilling' - Can access company as a biller</li><li>'CompanyReporter'
+        - Can access company for reports only</li><li>'CompanyReader' - Can access company as a reader</li><li>'CompanyEditor' - Can access company as an editor</li><li>'CompanyAdmin' - Can access company as an administrator</li><li>'SystemReader' - Can access system as a reader</li><li>'SystemEditor' - Can access system as an editor</li><li>'SystemOfficeAdmin' - Can access system as an office administrator</li><li>'SystemAdmin' - Can access system as an administrator</li>
+    UserStatus:
+      enum:
+      - Active
+      - InactiveImplicit
+      - InactiveExplicit
+      type: string
+    UserType:
+      enum:
+      - Company
+      - Firm
+      type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes: {}
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+security:
+- OAuth2: []
+- Token: []
+tags:
+- name: Users
+  description: Use the Users endpoint to get and manage user details.
+x-tr-streaming-enabled: true

@@ -1,0 +1,339 @@
+# x-archived-from: thomson-reuters-reports-openapi.yml
+# x-archived-on: 2026-10-20
+swagger: '2.0'
+info:
+  version: v3
+  title: Reports
+host: api-emea.onesourcetax.com
+basePath: /indirect-tax-compliance/v1/reports
+schemes:
+- https
+paths:
+  /definitions:
+    get:
+      tags:
+      - Reports
+      summary: This endpoint is used to fetch the list of all Reports (Both Standard and Custom).
+      operationId: Reports_GetReports
+      consumes: []
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ReportListResponse'
+  /definitions/{id}:
+    get:
+      tags:
+      - Reports
+      summary: This endpoint fetches the input parameters required to run a specific Report and also lists output fields.
+      operationId: Reports_GetReportMetdata
+      consumes: []
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: id
+        in: path
+        description: Report-definition-header id
+        required: true
+        type: integer
+        format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ReportMetadata'
+  /:
+    post:
+      tags:
+      - Reports
+      summary: This endpoint is used to Queue reports for execution, based on the input parameters and to fetch the matching data.
+      operationId: Reports_GetData
+      consumes:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: input
+        in: body
+        description: ''
+        required: true
+        schema:
+          $ref: '#/definitions/ReportInput'
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '202':
+          description: Accepted
+          schema:
+            $ref: '#/definitions/ReportOutput'
+  /operations/{id}:
+    get:
+      tags:
+      - Reports
+      summary: This endpoint is used to fetch the status of the report basing on the input parameters from the Queue reports API.
+      operationId: Reports_GetOperationStatusFromCache
+      consumes: []
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        type: string
+        format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/OpertaionsResponse'
+        '404':
+          description: NotFound
+          schema:
+            $ref: '#/definitions/NotFoundResult'
+  /{id}:
+    get:
+      tags:
+      - Reports
+      summary: This endpoint is used to fetch the data basing on the input parameters from the Queue reports API.
+      operationId: Reports_GetDataFromCache
+      consumes: []
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        type: string
+        format: uuid
+      - name: offset
+        in: query
+        description: ''
+        required: false
+        type: integer
+        format: int32
+      - name: limit
+        in: query
+        description: ''
+        required: false
+        type: integer
+        format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ReportOutput'
+        '404':
+          description: NotFound
+          schema:
+            $ref: '#/definitions/NotFoundResult'
+definitions:
+  ReportListResponse:
+    type: object
+    properties:
+      items:
+        description: Reports
+        type: array
+        items:
+          $ref: '#/definitions/Report'
+  Report:
+    type: object
+    properties:
+      Id:
+        format: int32
+        description: Report id value
+        type: integer
+      name:
+        description: Name of report
+        type: string
+      description:
+        description: Detailed description of report
+        type: string
+  ReportMetadata:
+    type: object
+    properties:
+      id:
+        format: int32
+        description: Report Id
+        type: integer
+      name:
+        description: Report name
+        type: string
+      parameters:
+        description: Input Parameters
+        type: array
+        items:
+          $ref: '#/definitions/ReportParameter'
+      result-fields:
+        description: Result columns
+        type: array
+        items:
+          $ref: '#/definitions/ReportField'
+  ReportParameter:
+    type: object
+    properties:
+      name:
+        description: Name of parameter
+        type: string
+      description:
+        description: Detailed description of parameter
+        type: string
+      data-type:
+        description: 'Datatype of parameter(ex: string, date)'
+        type: string
+      format:
+        description: 'Format of value (ex: for date it is yyyy-mm-dd)'
+        type: string
+      accept-multiple:
+        description: Indicate that value of parameter accepts multiple values to be passed together.
+        type: boolean
+  ReportField:
+    type: object
+    properties:
+      name:
+        description: Name of the column
+        type: string
+      caption:
+        description: Display property of the column
+        type: string
+      data-type:
+        description: Datatype of the column
+        type: string
+  ReportInput:
+    type: object
+    properties:
+      id:
+        format: int32
+        description: Report-definition id
+        type: integer
+      parameters:
+        description: Report parameter
+        type: array
+        items:
+          $ref: '#/definitions/ReportParameterInput'
+  ReportParameterInput:
+    type: object
+    properties:
+      name:
+        description: Name of parameter
+        type: string
+      value:
+        description: Value of parameter
+        type: string
+  ReportOutput:
+    type: object
+    properties:
+      id:
+        format: int32
+        description: Report Id
+        type: integer
+      name:
+        description: Report Name
+        type: string
+      run-id:
+        format: uuid
+        description: Runid of report.
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+      parameters:
+        description: Parameter supplied as input for the report
+        type: array
+        items:
+          $ref: '#/definitions/ReportParameterInput'
+      status:
+        description: Status of report (In-Progress/Ready/Invalid)
+        type: string
+      items:
+        description: Report data, It will only have data when status is Ready.
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: string
+      count:
+        format: int32
+        type: integer
+  OpertaionsResponse:
+    type: object
+    properties:
+      status:
+        type: string
+      resource-location:
+        type: string
+  NotFoundResult:
+    type: object
+    properties:
+      Request:
+        type: object
+        readOnly: true
+x-tr-streaming-enabled: true
+x-tr-shared-flows:
+- AddXFH
+x-tr-identity-provider: ONESOURCE
+x-tr-proxy-name: ONESOURCE-Reports
+x-tr-api-version: beta
+x-tr-asset-insight-id: '204253'
+x-tr-apigee-base-path: /indirect-tax-compliance/beta/reports
+x-tr-logging-provider:
+- DataDog
+x-tr-servers:
+  default:
+    onesourceZuulServer: true
+    basePath: /oic/api/api/v3/reports
+    regions:
+    - amer
+    - apac
+    - emea
+    connectionTimeout: 180000
+x-onesource-max-request-limit: 30ps
+x-onesource-throttle-category: ITC_MetadataRequests_Limit
+x-tr-deploy-permissions:
+- dc-A8bQzXjSn1fRCWeFxc4J1j
+x-tr-promote-permissions:
+- dc-A8bQzXjSn1fRCWeFxc4J1j

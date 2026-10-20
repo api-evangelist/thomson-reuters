@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-comparisons-response-schema.json",
+  "title": "ComparisonsResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-datahub-query-comparisons-service-openapi.yml#/components/schemas/ComparisonsResponse",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the Comparison"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the comparison process",
+      "enum": [
+        "STAGED",
+        "STARTED",
+        "PROCESSING",
+        "COMPLETE"
+      ]
+    },
+    "selected": {
+      "$ref": "#/$defs/DatasetDTO"
+    },
+    "compared": {
+      "$ref": "#/$defs/DatasetDTO"
+    },
+    "records": {
+      "$ref": "#/$defs/Records"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "Time when comparison status is set to STAGED or STARTED",
+      "format": "date-time"
+    },
+    "started_at": {
+      "type": "string",
+      "description": "Time when comparison status is set to PROCESSING",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "description": "Time when comparison process got COMPLETED status",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "DatasetDTO": {
+      "required": [
+        "key",
+        "name",
+        "source"
+      ],
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Source of the details of this dataset",
+          "enum": [
+            "DATAHUB_TOPIC",
+            "DATAHUB_COLLECTION_VERSION"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the dataset"
+        },
+        "key": {
+          "type": "string",
+          "description": "Unique identifier of the dataset from SOURCE"
+        },
+        "index_columns": {
+          "type": "array",
+          "description": "Array of column indexes that match selected and compared dataset",
+          "items": {
+            "type": "integer",
+            "description": "Array of column indexes that match selected and compared dataset",
+            "format": "int32"
+          }
+        },
+        "compare_columns": {
+          "type": "array",
+          "description": "Array of column indexes on which comparison is performed",
+          "items": {
+            "type": "integer",
+            "description": "Array of column indexes on which comparison is performed",
+            "format": "int32"
+          }
+        },
+        "context_columns": {
+          "type": "array",
+          "description": "Array of column indexes which provides additional information to the comparison data",
+          "items": {
+            "type": "integer",
+            "description": "Array of column indexes which provides additional information to the comparison data",
+            "format": "int32"
+          }
+        }
+      }
+    },
+    "Records": {
+      "type": "object",
+      "properties": {
+        "exact": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "modified": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "added": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "removed": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}

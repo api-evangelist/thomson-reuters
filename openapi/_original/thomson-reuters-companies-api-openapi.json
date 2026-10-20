@@ -1,0 +1,1898 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Companies API",
+    "description": "The Companies API provides access to offices, organizational units and practice groups in the Tracker Company database.",
+    "contact": {
+      "name": "devportal"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.thomsonreuters.com/legal-tracker/companies-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.co.uk/legal-tracker/companies-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.ca/legal-tracker/companies-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.com.au/legal-tracker/companies-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.de/legal-tracker/companies-api/v1"
+    },
+    {
+      "url": "https://api.thomsonreuters.ae/legal-tracker/companies-api/v1"
+    }
+  ],
+  "paths": {
+    "/offices/{id}": {
+      "get": {
+        "tags": [
+          "Offices"
+        ],
+        "summary": "Get a company office with the provided identifier.",
+        "operationId": "Companies_GetCompanyOffice",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The company office identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "description": "Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "isActive",
+                  "address",
+                  "mailingAddress",
+                  "phone",
+                  "fax",
+                  "coordinator",
+                  "backupCoordinator",
+                  "defaultLocale",
+                  "auditInformation"
+                ],
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A company office is successfully returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyOffice"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Company office is not modified."
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Company office is not found."
+          }
+        }
+      }
+    },
+    "/offices": {
+      "get": {
+        "tags": [
+          "Offices"
+        ],
+        "summary": "Query for company offices based on an OData filter query.",
+        "operationId": "Companies_GetCompanyOffices",
+        "parameters": [
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "description": "Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)",
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "default": 50
+            },
+            "example": 50
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)",
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, isActive, address, mailingAddress, phone, fax, coordinator, backupCoordinator, defaultLocale, auditInformation, address/street1, address/street2, address/city, address/state, address/provinceRegion, address/zip, address/country, address/state/id, address/state/name, address/state/abbreviation, address/country/id, address/country/name, address/country/isoCode, mailingAddress/street1, mailingAddress/street2, mailingAddress/city, mailingAddress/state, mailingAddress/provinceRegion, mailingAddress/zip, mailingAddress/country, mailingAddress/state/id, mailingAddress/state/name, mailingAddress/state/abbreviation, mailingAddress/country/id, mailingAddress/country/name, mailingAddress/country/isoCode, coordinator/id, coordinator/name, coordinator/email, backupCoordinator/id, backupCoordinator/name, backupCoordinator/email, auditInformation/createdDateTime, auditInformation/createdBy, auditInformation/changedDateTime, auditInformation/changedBy, auditInformation/createdBy/id, auditInformation/createdBy/name, auditInformation/createdBy/email, auditInformation/changedBy/id, auditInformation/changedBy/name, auditInformation/changedBy/email",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "examples": {
+              "Filter name": {
+                "value": "name eq 'office1'"
+              },
+              "Filter address/city": {
+                "value": "address/city in ('Toronto', 'London')"
+              },
+              "StartsWith Function": {
+                "value": "startswith(phone, '416')"
+              },
+              "IndexOf Function": {
+                "value": "indexof(name, 'office1') eq 2"
+              },
+              "Mixed Filter": {
+                "value": "contains(name, 'office1') and address/zip eq 'M2L3W9'"
+              }
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "isActive",
+                  "address",
+                  "mailingAddress",
+                  "phone",
+                  "fax",
+                  "coordinator",
+                  "backupCoordinator",
+                  "defaultLocale",
+                  "auditInformation"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "isActive",
+                  "phone",
+                  "fax",
+                  "defaultLocale",
+                  "id desc",
+                  "name desc",
+                  "isActive desc",
+                  "phone desc",
+                  "fax desc",
+                  "defaultLocale desc"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "description": "Expand a complex property, see [Expand](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionexpand)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the company office or offices that match the OData query.",
+            "headers": {
+              "ETag": {
+                "description": "Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.",
+                "schema": {
+                  "type": "string",
+                  "description": "Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control."
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyOfficeCollection"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Returns a not modified response with empty body."
+          },
+          "400": {
+            "description": "If the OData filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizational-units": {
+      "get": {
+        "tags": [
+          "OrganizationalUnits"
+        ],
+        "summary": "Query for organizational units based on an OData filter query.",
+        "operationId": "Companies_GetOrgUnits",
+        "parameters": [
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "description": "Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)",
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "default": 50
+            },
+            "example": 50
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)",
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, isActive, parentId",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "examples": {
+              "Filter name": {
+                "value": "name eq 'All Org Units'"
+              },
+              "Filter parentId": {
+                "value": "parentId eq '100'"
+              },
+              "Filter isActive": {
+                "value": "isActive eq '1'"
+              },
+              "StartsWith Function": {
+                "value": "startswith(name, 'All')"
+              },
+              "Mixed Filter": {
+                "value": "contains(name, 'All') and parentId eq '0'"
+              }
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "isActive",
+                  "parentId"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "isActive",
+                  "parentId",
+                  "id desc",
+                  "name desc",
+                  "isActive desc",
+                  "parentId desc"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the GetOrgUnits that match the OData query.",
+            "headers": {
+              "ETag": {
+                "description": "Entity tag is a part of HTTP provided for web cache validation problems but is also used for optimistic concurrency control.",
+                "schema": {
+                  "type": "string",
+                  "description": "Entity tag is a part of HTTP provided for web cache validation problems but is also used for optimistic concurrency control."
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationalUnitCollection"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Returns a not-modified response with an empty body."
+          },
+          "400": {
+            "description": "If the OData filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "OrganizationalUnits"
+        ],
+        "summary": "Create a new organizational unit.",
+        "operationId": "Companies_CreateOrgUnit",
+        "parameters": [
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.\n* return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "return=representation"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrganizationalUnitModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the created organizational unit.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationalUnit"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Organizational unit was created but identifier will not be provided in response."
+          },
+          "400": {
+            "description": "If the OData filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizational-units/{id}": {
+      "get": {
+        "tags": [
+          "OrganizationalUnits"
+        ],
+        "summary": "Get an organizational unit with the provided identifier.",
+        "operationId": "Companies_GetOrgUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The organizational unit identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "description": "Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "isActive",
+                  "parentId"
+                ],
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organizational unit is successfully returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationalUnit"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Organizational unit is not modified."
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Organizational unit is not found."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "OrganizationalUnits"
+        ],
+        "summary": "Update an organizational unit with the provided identifier.",
+        "operationId": "Companies_UpdateOrgUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of an organizational unit to be updated.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "Executes a request only if the passed ETag equals the current resource ETag (i.e. resource hasn't changed).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 200 would be returned.\n* return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "return=representation"
+          }
+        ],
+        "requestBody": {
+          "description": "The model containing an organizational unit to be updated.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrganizationalUnitModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the organizational unit that was updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationalUnit"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Organizational unit was updated but will not be provided in response."
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the organizational unit is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "ETag provided in the If-Match header is out of date.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "OrganizationalUnits"
+        ],
+        "summary": "Delete an organizational unit with the provided identifier.",
+        "operationId": "Companies_DeleteOrgUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of an organizational unit to be deleted.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Organizational unit was deleted."
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the organizational unit is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/practice-groups/{id}": {
+      "get": {
+        "tags": [
+          "PracticeGroups"
+        ],
+        "summary": "Get a practice group with the provided identifier.",
+        "operationId": "Companies_GetPracticeGroup",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The practice group identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "description": "Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "isActive",
+                  "parentId"
+                ],
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A practice group is successfully returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeGroup"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Practice Group is not modified."
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Practice Group is not found."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "PracticeGroups"
+        ],
+        "summary": "Update a practice group with the provided identifier.",
+        "operationId": "Companies_UpdatePracticeGroup",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of a practice group to be updated.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "Executes a request only if the passed ETag equals the current resource ETag (i.e. resource hasn't changed).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 200 would be returned.\n* return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "return=representation"
+          }
+        ],
+        "requestBody": {
+          "description": "The model containing a practice group to be updated.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePracticeGroupModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the practice group that was updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeGroup"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Practice Group was updated but will not be provided in response."
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the practice group is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "ETag provided in the If-Match header is out of date.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "PracticeGroups"
+        ],
+        "summary": "Delete a practice group with the provided identifier.",
+        "operationId": "Companies_DeletePracticeGroup",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of a practice group to be updated.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Practice Group was deleted."
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the practice group is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/practice-groups": {
+      "get": {
+        "tags": [
+          "PracticeGroups"
+        ],
+        "summary": "Query for practice groups based on an OData filter query.",
+        "operationId": "Companies_GetPracticeGroups",
+        "parameters": [
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "description": "Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)",
+            "schema": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer",
+              "default": 50
+            },
+            "example": 50
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)",
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, name, isActive, parentId",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "examples": {
+              "Filter name": {
+                "value": "name eq 'All Practice Group'"
+              },
+              "Filter parentId": {
+                "value": "parentId eq '100'"
+              },
+              "Filter isActive": {
+                "value": "isActive eq '1'"
+              },
+              "StartsWith Function": {
+                "value": "startswith(name, 'All')"
+              },
+              "Mixed Filter": {
+                "value": "contains(name, 'All') and parentId eq '0'"
+              }
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "isActive",
+                  "parentId"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "name",
+                  "isActive",
+                  "parentId",
+                  "id desc",
+                  "name desc",
+                  "isActive desc",
+                  "parentId desc"
+                ],
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the GetPracticeGroups that match the OData query.",
+            "headers": {
+              "ETag": {
+                "description": "Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.",
+                "schema": {
+                  "type": "string",
+                  "description": "Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control."
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeGroupCollection"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Returns a not modified response with empty body."
+          },
+          "400": {
+            "description": "If the OData filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PracticeGroups"
+        ],
+        "summary": "Create a new practice group.",
+        "operationId": "Companies_CreatePracticeGroup",
+        "parameters": [
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.\n* return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "return=representation"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePracticeGroupModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the created practice group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeGroup"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Practice Group was created but identifier will not be provided in response."
+          },
+          "400": {
+            "description": "If the OData filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Caller must authenticate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller does not have necessary permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Address": {
+        "type": "object",
+        "properties": {
+          "street1": {
+            "type": "string",
+            "nullable": true
+          },
+          "street2": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "$ref": "#/components/schemas/State"
+          },
+          "provinceRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "zip": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuditInformation": {
+        "type": "object",
+        "properties": {
+          "createdDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "changedDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changedBy": {
+            "$ref": "#/components/schemas/Contact"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CompanyOffice": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "mailingAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "fax": {
+            "type": "string",
+            "nullable": true
+          },
+          "coordinator": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "backupCoordinator": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "defaultLocale": {
+            "type": "string",
+            "nullable": true
+          },
+          "auditInformation": {
+            "$ref": "#/components/schemas/AuditInformation"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CompanyOfficeCollection": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompanyOffice"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isoCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateOrganizationalUnitModel": {
+        "required": [
+          "isActive",
+          "name",
+          "parentId"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "Organizational unit name."
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Is organizational unit active."
+          },
+          "parentId": {
+            "type": "integer",
+            "description": "Organizational unit parent identifier.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreatePracticeGroupModel": {
+        "required": [
+          "isActive",
+          "name",
+          "parentId"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "Practice Group name."
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Is practice group active."
+          },
+          "parentId": {
+            "type": "integer",
+            "description": "Practice Group parent identifier.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Error": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "required": [
+                "code",
+                "message"
+              ],
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "innerError": {
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "required": [
+          "error"
+        ],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationalUnit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "parentId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationalUnitCollection": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationalUnit"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PracticeGroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "parentId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PracticeGroupCollection": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PracticeGroup"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "State": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "abbreviation": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateOrganizationalUnitModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "Organizational unit name",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Is organizational unit active.",
+            "nullable": true
+          },
+          "parentId": {
+            "type": "integer",
+            "description": "Organizational unit parent identifier.",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdatePracticeGroupModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "Practice Group name.",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Is practice group active.",
+            "nullable": true
+          },
+          "parentId": {
+            "type": "integer",
+            "description": "Practice Group parent identifier.",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "OAuth2": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Offices",
+      "description": "Use the Offices endpoint to get company offices details."
+    },
+    {
+      "name": "OrganizationalUnits",
+      "description": "Use the organizational-units endpoint to get and manage organizational units details."
+    },
+    {
+      "name": "PracticeGroups",
+      "description": "Use the practice-groups endpoint to get and manage practice groups details."
+    }
+  ]
+}

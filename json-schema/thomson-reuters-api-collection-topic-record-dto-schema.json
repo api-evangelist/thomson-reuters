@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-api-collection-topic-record-dto-schema.json",
+  "title": "ApiCollectionTopicRecordDTO",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-topic-service-openapi.yml#/components/schemas/ApiCollectionTopicRecordDTO",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/TopicRecordDTO"
+      }
+    },
+    "_meta": {
+      "$ref": "#/$defs/ApiMeta"
+    }
+  },
+  "$defs": {
+    "ApiMeta": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "filter": {
+          "type": "string"
+        },
+        "extra": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          },
+          "writeOnly": true
+        }
+      }
+    },
+    "TopicRecordDTO": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "description": "Record's position in the published sequence of records",
+          "format": "int64"
+        },
+        "status": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TopicRecordFieldDTO"
+          }
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "TopicRecordFieldDTO": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "object",
+          "description": "Value of the field"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

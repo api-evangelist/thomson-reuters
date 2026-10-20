@@ -1,0 +1,310 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Process Workbook…
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance
+tags:
+- name: WorkbookImports
+paths:
+  /v2/datasets/returns/{returnId}/import-types:
+    get:
+      tags:
+      - WorkbookImports
+      summary: This endpoint is used to list all the supported import types for a specific…
+      operationId: WorkbookImports_GetSupportedImports
+      parameters:
+      - name: returnId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeListReponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeListReponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeListReponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeListReponse'
+  /v2/datasets/returns/{returnId}/import-types/{name}/metadata:
+    get:
+      tags:
+      - WorkbookImports
+      summary: This endpoint is used to retrieve the input parameters for a specific import…
+      operationId: WorkbookImports_GetImportMedata
+      parameters:
+      - name: returnId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: name
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeMetadata'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeMetadata'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeMetadata'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeMetadata'
+  /v2/datasets/returns/{returnId}/{importType}:
+    get:
+      tags:
+      - WorkbookImports
+      operationId: WorkbookImports_GetImportData
+      parameters:
+      - name: returnId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: importType
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportDataResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportDataResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportDataResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportDataResponse'
+      summary: Workbook imports get import data
+      x-summary-source: derived
+    patch:
+      tags:
+      - WorkbookImports
+      summary: This endpoint is used to import data into calculations.
+      operationId: WorkbookImports_ImportData
+      parameters:
+      - name: returnId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: importType
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: isAppend
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: roundToWholeNumbers
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.ImportResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.ImportResponse'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+  /v2/datasets/returns/{returnId}/operations/{id}:
+    get:
+      tags:
+      - WorkbookImports
+      operationId: WorkbookImports_GetStatusForImport
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: returnId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.ImportResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.ImportResponse'
+      summary: Workbook imports get status for import
+      x-summary-source: derived
+components:
+  schemas:
+    TRTA.Athena.Imports.Models.Api.V4.ImportResponse:
+      type: object
+      properties:
+        importId:
+          format: uuid
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        importStatusId:
+          type: string
+        importStatus:
+          type: string
+        errorMessage:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Imports.Models.ImportError'
+    TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportField:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        isRequired:
+          type: boolean
+        selectorItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.SelectorItem'
+        sheetContext:
+          type: string
+        blockContext:
+          type: string
+    TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeListReponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportType'
+    TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportType:
+      type: object
+      properties:
+        name:
+          type: string
+    TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportDataResponse:
+      type: object
+      properties:
+        lineItems:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    TRTA.Athena.Imports.Models.ImportError:
+      type: object
+      properties:
+        value:
+          type: string
+        error:
+          type: string
+        errorMessage:
+          type: string
+    TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportTypeMetadata:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Imports.Workbook.ImportField'
+    TRTA.Athena.Api.Models.V4.Imports.Workbook.SelectorItem:
+      type: object
+      properties:
+        key:
+          type: string
+        description:
+          type: string

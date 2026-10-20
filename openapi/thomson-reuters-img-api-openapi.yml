@@ -1,0 +1,88 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Img API
+  version: v1
+  termsOfService: https://developerportal.thomsonreuters.com/content/terms-use
+  description: 'Operations tagged Img across 2 of this provider''s published API definitions: thomson-reuters-container-images-auth-service-apis-openapi.json, thomson-reuters-container-images-auth-service-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/da/v1
+  description: ONESOURCE AMER region
+- url: https://api-emea.onesourcetax.com/da/v1
+  description: ONESOURCE EMEA region
+- url: https://api-apac.onesourcetax.com/da/v1
+  description: ONESOURCE APAC region
+tags:
+- name: Img
+paths:
+  /img/auth:
+    get:
+      security:
+      - ls2: []
+      responses:
+        '401':
+          description: The request is not properly authorized
+        '403':
+          description: Caller has no permission to access the resource
+        2XX:
+          $ref: '#/components/schemas/AuthTokenResponse'
+        5XX:
+          description: Invernal server error, try again later
+      tags:
+      - Img
+      summary: Get img auth
+      x-summary-source: derived
+      operationId: getImgAuth
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/da/v1
+      description: ONESOURCE AMER region
+    - url: https://api-emea.onesourcetax.com/da/v1
+      description: ONESOURCE EMEA region
+    - url: https://api-apac.onesourcetax.com/da/v1
+      description: ONESOURCE APAC region
+components:
+  schemas:
+    auth:
+      properties:
+        registry:
+          description: Container registry host
+          type: string
+        user:
+          type: string
+        token:
+          type: string
+        created:
+          description: Seconds since Epoch
+          type: integer
+        validUntil:
+          description: Seconds since Epoch
+          type: integer
+      required:
+      - registry
+      - user
+      - token
+      - created
+      - validUntil
+    AuthTokenResponse:
+      description: Container Image Auth Service API - Response
+      oneOf:
+      - $ref: '#/components/schemas/auth'
+      - $ref: '#/components/schemas/error'
+    error:
+      properties:
+        refId:
+          description: Error reference for support context
+          type: string
+        error:
+          type: string
+      required:
+      - error
+  securitySchemes:
+    ls2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-container-images-auth-service-apis-openapi.json
+- thomson-reuters-container-images-auth-service-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

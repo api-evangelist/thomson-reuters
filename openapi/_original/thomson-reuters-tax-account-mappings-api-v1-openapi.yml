@@ -1,0 +1,269 @@
+# x-archived-from: thomson-reuters-tax-account-mappings-api-v1-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Tax Account Mappings API
+  version: v1
+  description: This API provides endpoints to manage tax account mappings, including creating, retrieving, and updating mappings.
+servers:
+- url: https://api-uat.onesourcetax.com/trusts/v1/tax-account-mappings
+  description: UAT server for trusts datasets
+- url: https://api-apac.onesourcetax.com/trusts/v1/tax-account-mappings
+  description: APAC server for trusts datasets
+paths:
+  /:
+    get:
+      tags:
+      - Mappings
+      summary: Retrieve Tax Account Mappings
+      description: This endpoint retrieves a list of all tax account mappings available in the system. The response includes details such as mapping name, year, map type, dataset ID, and other metadata.
+      operationId: Mappings_Get
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved the list of mappings.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.Mapping'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.Mapping'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.Mapping'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.Mapping'
+    post:
+      tags:
+      - Mappings
+      summary: Create Tax Account Mapping
+      description: This endpoint allows users to create a new tax account mapping by providing the required details such as name, year, map type, dataset ID, and other relevant information.
+      operationId: Mappings_Create
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingCreateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingCreateRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingCreateRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingCreateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully created the mapping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.Mapping'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.Mapping'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.Mapping'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.Mapping'
+        '400':
+          description: Bad request due to invalid input.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.Errors'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.Errors'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.Errors'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Models.Api.Errors'
+      x-codegen-request-body-name: mapping
+  /{id}:
+    put:
+      tags:
+      - Mappings
+      summary: Update Tax Account Mapping Entries.
+      description: This endpoint allows users to update entries in an existing tax account mapping by providing the mapping ID and the new entries.
+      operationId: Mappings_Put
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the mapping to update.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: Bearer token for authorization.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingPutRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingPutRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingPutRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingPutRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MappingPutRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully updated the mapping.
+          content: {}
+      x-codegen-request-body-name: mappingPutRequest
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.Mappings.Mapping:
+      type: object
+      description: Represents a tax account mapping.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the mapping.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The name of the mapping.
+        year:
+          type: integer
+          description: The year associated with the chart of accounts.
+          format: int32
+        mapType:
+          type: string
+          description: The type of mapping.
+        datasetId:
+          type: string
+          description: The unique identifier of the dataset.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        chartOfAccountId:
+          type: string
+          description: The unique identifier of the chart of accounts.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        importType:
+          type: string
+          description: The type of import associated with the mapping.
+        templateId:
+          type: string
+          description: The unique identifier of the template.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+    TRTA.Athena.Models.Api.V4.Mappings.MappingCreateRequest:
+      type: object
+      description: Represents the request to create a new tax account mapping.
+      properties:
+        name:
+          type: string
+          description: The name of the mapping.
+        year:
+          type: integer
+          description: The year associated with the chart of accounts.
+          format: int32
+        mapType:
+          type: string
+          description: The type of mapping.
+        datasetId:
+          type: string
+          description: Dataset id
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        chartOfAccounId:
+          type: string
+          description: The unique identifier of the dataset.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        importType:
+          type: string
+          description: The type of import associated with the mapping.
+        templateId:
+          type: string
+          description: The unique identifier of the template.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+    TRTA.Athena.Models.Api.Errors:
+      type: object
+      description: Represents an error response.
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the error.
+          format: int32
+        description:
+          type: string
+          description: A detailed error message.
+    TRTA.Athena.Models.Api.V4.Mappings.MappingPutRequest:
+      type: object
+      description: Represents the request to add or update entries in an existing mapping.
+      properties:
+        items:
+          type: array
+          description: A list of map entries to add or update.
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MapEntry'
+    TRTA.Athena.Models.Api.V4.Mappings.MapEntry:
+      type: object
+      description: Represents an individual map entry.
+      properties:
+        mapTarget:
+          type: string
+          description: The tax account code to map to.
+        accountCode:
+          type: array
+          description: A list of chart of accounts account codes to map from.
+          items:
+            type: string

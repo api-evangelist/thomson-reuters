@@ -1,0 +1,263 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters RFBA Figure API
+  version: v1
+  description: 'Operations tagged RFBA Figure across 2 of this provider''s published API definitions: thomson-reuters-fbt-customer-api-v1-openapi.json, thomson-reuters-fbt-customer-api-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+tags:
+- name: RFBA Figure
+paths:
+  ? /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/employees/{employee-id}/reportable-amounts
+  : get:
+      tags:
+      - RFBA Figure
+      summary: Get RFBA listing all details
+      operationId: RFBAFigure_GetRFBAListingAllDetails
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: employee-id
+        in: path
+        description: Employee id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: type2-amount
+        in: query
+        description: Type2 amount
+        required: false
+        schema:
+          type: number
+          format: double
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get RFBA listing all details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+  ? /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/employees/{employee-id}/reportable-amount-summaries
+  : get:
+      tags:
+      - RFBA Figure
+      summary: Get RFBA listing all summary
+      operationId: RFBAFigure_GetRFBAListingAllSummary
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: employee-id
+        in: path
+        description: Employee id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: type2-amount
+        in: query
+        description: Type2 amount
+        required: false
+        schema:
+          type: number
+          format: double
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get RFBA listing all summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingSummaryModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingSummaryModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingSummaryModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingSummaryModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+components:
+  schemas:
+    Fbt.Models.CustomerApi.RFBAFigure.RFBAListingModelForCustomerApi:
+      description: RFBA listing model
+      type: object
+      properties:
+        benefitValueId:
+          format: uuid
+          description: Benefit value id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        costCenterId:
+          format: uuid
+          description: Cost center id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        standardCategoryId:
+          format: uuid
+          description: Standard category
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        description:
+          description: Description
+          type: string
+        provideDate:
+          description: Provide date
+          type: string
+        reportableAmount:
+          format: double
+          description: Reportable amount
+          type: number
+        reportableTaxableAmount:
+          format: double
+          description: Reportable taxable amount
+          type: number
+        returnType:
+          description: Benefit return type
+          type: string
+        state:
+          description: State
+          type: string
+        taxableAmount:
+          format: double
+          description: Taxable amount
+          type: number
+        uncappedAmount:
+          format: double
+          description: Uncapped amount
+          type: number
+    Fbt.Models.CustomerApi.RFBAFigure.RFBAListingSummaryModelForCustomerApi:
+      type: object
+      properties:
+        exemptionType:
+          description: Exemption type
+          type: string
+        reportableAmount:
+          format: double
+          description: Reportable amount
+          type: number
+        reportableTaxableAmount:
+          format: double
+          description: Reportable taxable amount
+          type: number
+        taxableAmount:
+          format: double
+          description: Taxable amount
+          type: number
+        uncappedAmount:
+          format: double
+          description: Uncapped amount
+          type: number
+x-refined-from:
+- thomson-reuters-fbt-customer-api-v1-openapi.json
+- thomson-reuters-fbt-customer-api-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

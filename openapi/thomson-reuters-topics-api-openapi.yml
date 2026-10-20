@@ -1,0 +1,721 @@
+openapi: 3.2.0
+info:
+  title: Topic Service Topics API
+  description: A set of records that have gone through processing and are divided into three levels of usability (ready, unavailable, invalid)
+  version: '1.0'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+tags:
+- name: Topics
+paths:
+  /topics:
+    get:
+      tags:
+      - Topics
+      summary: Get a paginated list of Topics
+      description: Returns a list of Topics with their metadata
+      operationId: getTopics
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionTopicDTO'
+      security:
+      - bearerAuth: []
+  /topics/{id}:
+    get:
+      tags:
+      - Topics
+      summary: Get a Topic by ID
+      description: Returns Topic metadata for the specified Topic ID
+      operationId: getTopic
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TopicDTO'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Topics
+      summary: Update Topic by ID
+      description: Updates Topic metadata for the specified Topic ID
+      operationId: updateTopic
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicPatchRequestDTO'
+      responses:
+        '204':
+          description: default response
+      security:
+      - bearerAuth: []
+  /topics/{id}/columns:
+    get:
+      tags:
+      - Topics
+      summary: Get a list of record columns by Topic ID
+      description: 'Returns a list of record columns for the specified Topic ID
+
+
+        Potential values for ontology:
+
+        -------------------------------
+
+        id | name
+
+        -------------------------------
+
+        1 | financial-hierarchy-position
+
+        2 | chart of accounts
+
+        3 | entity
+
+        4 | account
+
+        5 | balance'
+      operationId: getColumns
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicColumnsDTO'
+      security:
+      - bearerAuth: []
+  /topics/{id}/records:
+    get:
+      tags:
+      - Topics
+      summary: Get a paginated list of records by Topic ID
+      description: Returns a list of records for the specified Topic ID
+      operationId: getRecordsFromType
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCollectionTopicRecordDTO'
+      security:
+      - bearerAuth: []
+  /topics/{id}/records/unavailable-values:
+    get:
+      tags:
+      - Topics
+      summary: Get a paginated list of summaries of unavailable records by Topic ID
+      description: 'Returns a list of summaries of records with unavailable information for the specified Topic ID
+
+
+        Potential values for ontology:
+
+        -------------------------------
+
+        id | name
+
+        -------------------------------
+
+        1 | financial-hierarchy-position
+
+        2 | chart of accounts
+
+        3 | entity
+
+        4 | account
+
+        5 | balance'
+      operationId: getUnavailableValues
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicRecordValuesDTO'
+      security:
+      - bearerAuth: []
+  /topics/{id}/reprocess:
+    post:
+      tags:
+      - Topics
+      summary: Initiate a reprocess of certain records by Topic ID
+      description: Creates an asynchronous task to reprocess particular records for the specified Topic ID
+      operationId: reprocess
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReprocessRequestDTO'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdDTO'
+      security:
+      - bearerAuth: []
+  /topics/{id}/tasks/download:
+    get:
+      tags:
+      - Topics
+      summary: Get a paginated list of download tasks by Topic ID
+      description: Returns a list of download tasks for the specified Topic ID
+      operationId: getTopicDownload
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicDownloadListDTO'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Topics
+      summary: Initiate a download of the Topic by ID
+      description: Creates an asynchronous task to prepare a download for the specified Topic ID
+      operationId: createDownloadTask
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: A request payload for download task for specified topic id includes 'in' operator with supported field name [status] and list of supported fields values [READY,UNAVAILABLE,INVALID IGNORED]
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DownloadRequestDTO'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdDTO'
+      security:
+      - bearerAuth: []
+  /topics/{id}/tasks/download/{task_id}:
+    get:
+      tags:
+      - Topics
+      summary: Get a download task by Topic ID and task ID
+      description: Returns a download task with the task ID for the specified Topic ID
+      operationId: getTopicDownload_1
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Topic
+        required: true
+        schema:
+          type: string
+      - name: task_id
+        in: path
+        description: Unique identifier of the download task
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicDownloadDTO'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    DownloadRequestDTO:
+      type: object
+      properties:
+        query:
+          $ref: '#/components/schemas/DownloadQuery'
+    TopicRecordFieldDTO:
+      type: object
+      properties:
+        value:
+          type: object
+          description: Value of the field
+          example: a234
+        errors:
+          type: array
+          items:
+            type: string
+    TopicDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Topic
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Topic
+          example: My Topic Name
+        records:
+          $ref: '#/components/schemas/TopicRecordCountDTO'
+        blueprint:
+          $ref: '#/components/schemas/TopicBlueprintDTO'
+        status:
+          type: string
+          description: Current state of the Topic
+          enum:
+          - PUBLISHING
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - REPROCESSING
+          - STAGED
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        template_id:
+          type: string
+          description: Unique identifier of the Template
+          example: 5ec57f677456242950884996
+        is_hidden:
+          type: boolean
+          description: Visibility of the Topic
+          example: false
+        created_by:
+          type: string
+          description: Topic created at by
+          example: UserA
+        created_at:
+          type: string
+          description: Topic created at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    ReprocessRequestDTO:
+      type: object
+      properties:
+        records:
+          type: string
+          description: Comma-separated list of record numbers or ranges
+          example: 4,6,24,25-30
+    TopicRecordValue:
+      type: object
+      properties:
+        value:
+          type: string
+          description: Value of the field(s)
+          example: a234
+        count:
+          type: integer
+          description: Number of fields affected
+          format: int64
+          example: 5
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents
+          format: int32
+          example: 1
+    TopicBlueprintDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 123
+        version:
+          type: integer
+          format: int32
+          example: 1
+        type_id:
+          type: integer
+          format: int32
+          example: 2
+    ApiCollectionTopicDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicDTO'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    TopicColumnDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the column
+          example: My Column Name
+        type:
+          type: string
+          description: Expected data type of the column values
+          example: number
+          enum:
+          - currency
+          - date
+          - number
+          - string
+        format:
+          type: string
+          description: Representation of numeric column values
+          example: -###,###.##
+        parameters:
+          type: array
+          example:
+          - chart_of_accounts_id: 7b624759-9e17-4c7b-b17c-4fd9a926c777
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              example:
+              - chart_of_accounts_id: 7b624759-9e17-4c7b-b17c-4fd9a926c777
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents
+          format: int32
+          example: 1
+    TopicRecordDTO:
+      type: object
+      properties:
+        number:
+          type: integer
+          description: Record's position in the published sequence of records
+          format: int64
+          example: 2
+        status:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicRecordFieldDTO'
+        errors:
+          type: array
+          items:
+            type: string
+    TopicDownloadShortDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the created task
+          example: 5ef0b23a4671a35b735922e1
+        status:
+          type: string
+          description: Current state of the download task
+          enum:
+          - CREATED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+        time_created:
+          type: string
+          description: Time in which this task was initialized
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    TopicDownloadListDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicDownloadShortDTO'
+        _meta:
+          $ref: '#/components/schemas/Meta'
+    Meta:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+          example: 0
+        limit:
+          type: integer
+          format: int32
+          example: 200
+        count:
+          type: integer
+          format: int64
+          example: 1000
+    TopicRecordValuesDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicRecordValue'
+        _meta:
+          $ref: '#/components/schemas/Meta'
+    DownloadQuery:
+      type: object
+      properties:
+        in:
+          type: array
+          description: Comma-separated list which contain field name and list of field values
+          example:
+          - status
+          - - READY
+            - UNAVAILABLE
+            - INVALID
+            - IGNORED
+          items:
+            type: object
+            description: Comma-separated list which contain field name and list of field values
+            example:
+            - status
+            - - READY
+              - UNAVAILABLE
+              - INVALID
+              - IGNORED
+    TopicPatchRequestDTO:
+      type: object
+      properties:
+        is_hidden:
+          type: boolean
+          description: Visibility of the Topic
+          example: false
+    TopicRecordCountDTO:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: "Number of records published to the stream. Sum of \n`ready`, `unavailable`, 'invalid 'and `ignored` records equals `total`"
+          format: int64
+          example: 1000
+        ready:
+          type: integer
+          description: Number of records with no errors and ready for consumption
+          format: int64
+          example: 988
+        unavailable:
+          type: integer
+          description: "Number of records that contain values that failed an \nexternal validation check. These records can be recovered by\nreprocessing once the external system is Updated"
+          format: int64
+          example: 10
+        invalid:
+          type: integer
+          description: "Number of records that contain unrecoverable errors. any\nexplicitly filtered rows also end up here. For example, rows \nremoved by the offset operator"
+          format: int64
+          example: 2
+        ignored:
+          type: integer
+          description: Number of records that are ignored during file import
+          format: int64
+          example: 5
+    TopicDownloadDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the created task
+          example: 5ef0b23a4671a35b735922e1
+        status:
+          type: string
+          description: Current state of the download task
+          enum:
+          - CREATED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+        time_created:
+          type: string
+          description: Time in which this task was initialized
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        download_url:
+          type: string
+          description: URL to download the Topic
+          example: https://example.thomsonreuters.com/example.csv
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    IdDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: 5eed28cee5d5882c0bbefe5c
+    TopicColumnsDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicColumnDTO'
+    ApiCollectionTopicRecordDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicRecordDTO'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

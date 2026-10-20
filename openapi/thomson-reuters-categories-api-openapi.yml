@@ -1,0 +1,302 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Categories API
+  version: v1
+  contact:
+    name: API Support
+    url: https://www.onesourcetax.com/support
+    email: api-support@onesourcetax.com
+  license:
+    name: Proprietary License
+    url: https://www.onesourcetax.com/licenses/proprietary
+  description: 'Operations tagged Categories across 2 of this provider''s published API definitions: thomson-reuters-statutory-reporting-period-setup-apis-openapi.json, thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server providing global access to reporting entities
+- url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server providing global access to template entities
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the EMEA region
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the EMEA region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the APAC region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the APAC region.
+security:
+- Token: []
+tags:
+- name: Categories
+  description: Categories endpoints for statutory reporting. Retrieve categories and their entries.
+paths:
+  /{entity-id}/financial-periods/{financial-period-id}/categories:
+    get:
+      summary: Get Categories
+      tags:
+      - Categories
+      description: Use this operation to return a list of the root categories existing in the financial period passed in the params.
+      operationId: GetCategories
+      parameters:
+      - name: entity-id
+        in: path
+        required: true
+        description: The entity id in which the financial period is created. To obtain a reporting entity ID, refer to the [Get Reporting Entities API](#tag/reporting-entities/get/) documentation. For guidance on obtaining a template entity ID, see the [Get Template Entities API](#tag/template-entities/get/) documentation.
+        schema:
+          type: string
+          format: uuid
+        example: 90eb7c21-8d0d-46b9-8079-b38d004dd6a0
+      - name: financial-period-id
+        in: path
+        required: true
+        description: The identifier of the financial period from which category details are retrieved. Obtain this ID using the [Get Financial Periods API](#tag/financial-periods/get{entity-id}/financial-periods).
+        schema:
+          type: string
+          format: uuid
+        example: 0f4252ee-8f46-4ba5-a8e4-b39c00881c11
+      - name: level
+        in: query
+        schema:
+          type: integer
+          format: int32
+        description: The hierarchical level of the category. Root categories are at the top level.
+        example: 1
+      responses:
+        '200':
+          description: Successfully retrieved a list of root categories.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RootCategoriesData'
+              examples:
+                listOfCategories:
+                  summary: Example of a successful root categories response
+                  value:
+                    items:
+                    - id: 4105e6da-c6b2-11f0-9ce5-0e0af77c40c5
+                      name: Balance
+                      code: Balance
+                      secondaryCategoryCode: null
+                      lastModified: '2025-11-20T09:35:56'
+                      parentCategoryId: null
+                      level: 1
+                    - id: 41b92614-c6b2-11f0-a165-0e0af77c40c5
+                      name: Changes in equity
+                      code: SOCIE
+                      secondaryCategoryCode: null
+                      lastModified: '2025-11-20T09:35:59'
+                      parentCategoryId: null
+                      level: 1
+                    - id: 41b94216-c6b2-11f0-a166-0e0af77c40c5
+                      name: Expenses by function
+                      code: Function
+                      secondaryCategoryCode: null
+                      lastModified: '2025-11-20T09:35:59'
+                      parentCategoryId: null
+                      level: 1
+                    - id: 41b9a990-c6b2-11f0-a168-0e0af77c40c5
+                      name: Expenses by nature
+                      code: Nature
+                      secondaryCategoryCode: null
+                      lastModified: '2025-11-20T09:35:59'
+                      parentCategoryId: null
+                      level: 1
+                    - id: 415e1292-c6b2-11f0-9f5a-0e0af77c40c5
+                      name: Analysis
+                      code: Analysis
+                      secondaryCategoryCode: null
+                      lastModified: '2025-11-20T09:35:57'
+                      parentCategoryId: null
+                      level: 1
+                    - id: 41b9e1bc-c6b2-11f0-a169-0e0af77c40c5
+                      name: iXBRL detailed P&L account format 1
+                      code: iXBRL detailed P&L account format 1
+                      secondaryCategoryCode: null
+                      lastModified: '2025-11-20T09:35:59'
+                      parentCategoryId: null
+                      level: 1
+                    - id: 41b976b4-c6b2-11f0-a167-0e0af77c40c5
+                      name: iXBRL detailed P&L account format 2
+                      code: iXBRL detailed P&L account format 2
+                      secondaryCategoryCode: null
+                      lastModified: '2025-11-20T09:35:59'
+                      parentCategoryId: null
+                      level: 1
+                    - id: 41774ba4-c6b2-11f0-9feb-0e0af77c40c5
+                      name: Tax
+                      code: Tax
+                      secondaryCategoryCode: null
+                      lastModified: '2025-11-20T09:35:57'
+                      parentCategoryId: null
+                      level: 1
+                    count: 8
+        '400':
+          description: Bad Request. Occurs when the server cannot process the request due to invalid parameters or a malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidParameter:
+                  summary: Example invalid level category error
+                  value:
+                    statusCode: 400
+                    message: Level 1 category structure must be provided
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: https://developers.onesourcetax.com/errors/#keymanagement.service.invalid_access_token
+                  title:
+                    type: string
+                    example: Invalid Access Token
+                  detail:
+                    type: string
+                    example: Invalid Access Token
+                  status:
+                    type: integer
+                    example: 401
+                  instance:
+                    type: string
+                    example: /statutory-reporting/v1/reporting-entities/92abcd47-4e56-4961-b9b6-b30e00f46ba8/financial-periods/a5d4f2f3-5250-494d-b773-b30e00f46d48/categories
+                  api_requestId:
+                    type: string
+                    example: rrt-0080bd6edb6a51c07-c-ea-1408325-2337761-1
+        '403':
+          description: 'Forbidden: The request was understood, but the server refuses to authorize it. The client does not have the necessary permissions to access the resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbiddenAccessDenied:
+                  summary: Example forbidden error - Insufficient permissions
+                  value:
+                    StatusCode: 403
+                    Message: 'Access Denied: User does not have the required role or permissions to perform this action.'
+        '404':
+          description: Not Found. The requested entity does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFoundError:
+                  summary: Example not found error
+                  value:
+                    StatusCode: 404
+                    Message: financial-period-id is not found
+        '500':
+          description: Internal Server Error. An unexpected error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                serverError:
+                  summary: Example server error
+                  value:
+                    StatusCode: 500
+                    Message: An unexpected error occurred.
+      security:
+      - Token: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Categories
+    servers:
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server providing global access to reporting entities
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server providing global access to template entities
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the EMEA region
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the EMEA region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the APAC region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the APAC region.
+components:
+  schemas:
+    CategoryDescendants:
+      type: object
+      description: Represents a category, potentially with its descendant information.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the category.
+        name:
+          type: string
+          nullable: true
+          description: Display name of the category.
+        code:
+          type: string
+          nullable: true
+          description: Unique short code for the category.
+        secondaryCategoryCode:
+          type: string
+          nullable: true
+          description: An optional secondary code for the category.
+        lastModified:
+          type: string
+          format: date-time
+          description: Timestamp of the last modification.
+        parentCategoryId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the parent category, if applicable. Null for root categories.
+        level:
+          type: integer
+          format: int32
+          description: Hierarchical level of the category.
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      description: Standard error response object containing HTTP status code and a descriptive message.
+      properties:
+        StatusCode:
+          type: integer
+          format: int32
+          description: HTTP status code of the error (for example, 400, 404, 500).
+          minimum: 100
+          maximum: 599
+        Message:
+          type: string
+          nullable: true
+          description: A human-readable message providing details about the error.
+          minLength: 1
+          maxLength: 512
+      additionalProperties: false
+      example:
+        StatusCode: 400
+        Message: Invalid request parameters.
+    RootCategoriesData:
+      type: object
+      description: Container for a list of root categories and their total count.
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDescendants'
+          nullable: true
+          description: Array of root category objects.
+        count:
+          type: integer
+          format: int32
+          description: Total number of root categories.
+      additionalProperties: false
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: 'Authorization header. Provide a valid Access token for authentication  Example: `Authorization: Bearer <<Access Token>>`. You can find Authentication process in ''API Access'' Section'
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.json
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

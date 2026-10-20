@@ -1,0 +1,254 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Download Links API
+  version: '1.4'
+  contact:
+    name: devportal
+  description: 'Operations tagged DownloadLinks across 2 of this provider''s published API definitions: thomson-reuters-document-management-api-1-4-openapi.json, thomson-reuters-document-management-api-1-4-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/documents-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/documents-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/documents-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/documents-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/documents-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/documents-api/v1
+security:
+- OAuth2: []
+- Token: []
+tags:
+- name: DownloadLinks
+  description: Use the DownloadLinks endpoint to get a link to download an existing document.
+paths:
+  /download-links:
+    post:
+      tags:
+      - DownloadLinks
+      summary: Post a model with a Document Id to retrieve a link to download the Document's…
+      requestBody:
+        description: The model containing the Document Id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DownloadLinkPostModel'
+      responses:
+        '200':
+          description: Returns a link to download document content with the specified identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DownloadLinkModel'
+        '400':
+          description: If an identifier is not an allowed value.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: If the user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: If the current user is not authorized to perform this action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: If a document is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: If a server error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postDownloadLinks
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/documents-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/documents-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/documents-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/documents-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/documents-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/documents-api/v1
+components:
+  schemas:
+    DocumentModel:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The identifier for the Document record.
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the Document record.
+        documentType:
+          $ref: '#/components/schemas/DocumentType'
+        accessType:
+          $ref: '#/components/schemas/AccessType'
+        userId:
+          type: integer
+          description: The user identifier for the owner of the Document record.
+          format: int32
+        createdAtDateTime:
+          type: string
+          description: The date when the Document record was created.
+          format: date-time
+        modifiedAtDateTime:
+          type: string
+          description: The date when the Document record was modified.
+          format: date-time
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of the Document record.
+        url:
+          type:
+          - string
+          - 'null'
+          description: The network location for file retrieval of the Document record.
+        folderId:
+          type:
+          - integer
+          - 'null'
+          description: The folder identifier (if any) of the Document record.
+          format: int32
+        relatedEntityType:
+          $ref: '#/components/schemas/RelatedEntityType'
+        relatedEntityId:
+          type:
+          - integer
+          - 'null'
+          description: The identifier for the related entity of the Document record.
+          format: int32
+        author:
+          type:
+          - string
+          - 'null'
+          description: The name of the author of the document.
+      additionalProperties: false
+    RelatedEntityType:
+      enum:
+      - Matter
+      type: string
+      description: The type of entity that the Document record is related to (e.g. Matter).
+    DocumentType:
+      enum:
+      - 'Null'
+      - Document
+      - Contract
+      - Secondary
+      - Sop
+      - Email
+      type: string
+      description: The type of the Document record.
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    AccessType:
+      enum:
+      - 'Null'
+      - Public
+      - RestrictedFirm
+      - RestrictedLead
+      - Private
+      type: string
+      description: The level of access that determines how other users can interact with this document.
+    DownloadLinkPostModel:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The identifier for the Document record.
+          format: int32
+      additionalProperties: false
+    DownloadLinkModel:
+      required:
+      - link
+      type: object
+      properties:
+        link:
+          type: string
+          description: The URL to the document.
+        fileSizeInBytes:
+          type: integer
+          description: The size of the document in bytes.
+          format: int32
+        mD5Hash:
+          type:
+          - string
+          - 'null'
+          description: The MD5 Hash of the document.
+        documentModel:
+          $ref: '#/components/schemas/DocumentModel'
+      additionalProperties: false
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+        details:
+          type: array
+          items:
+            required:
+            - code
+            - message
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              target:
+                type: string
+        innerError:
+          required:
+          - code
+          - message
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      additionalProperties: false
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes: {}
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-document-management-api-1-4-openapi.json
+- thomson-reuters-document-management-api-1-4-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

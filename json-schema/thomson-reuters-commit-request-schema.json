@@ -1,0 +1,1304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-commit-request-schema.json",
+  "title": "CommitRequest",
+  "description": "The request entity for Tax Calculation and commit.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-indirect-tax-determination-rest-tax-service-openapi.yml#/components/schemas/CommitRequest",
+  "allOf": [
+    {
+      "$ref": "#/$defs/TaxRequest"
+    },
+    {
+      "type": "object",
+      "required": [
+        "documents"
+      ],
+      "properties": {
+        "callingSystemNumber": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "A pass-through element that contains a descriptor of the calling system sending the transaction. Determination uses as cobmination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database."
+        },
+        "hostSystem": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The name of the Source System instance sending the transaction. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database."
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CommitDocumentRequest"
+          },
+          "minItems": 1,
+          "description": "The documents block serves as the container for an individual document. Each payload can have one or more documents."
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "description": "Address for the document for line. Address at Document are required for document level charges.",
+      "required": [
+        "type",
+        "country"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of address.",
+          "enum": [
+            "billTo",
+            "shipTo",
+            "shipFrom",
+            "orderAcceptance",
+            "orderOrigin",
+            "supply",
+            "sellerPrimary",
+            "buyerPrimary",
+            "middleMan"
+          ]
+        },
+        "country": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Country."
+        },
+        "region": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Province, or non-US state."
+        },
+        "county": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "County"
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "City"
+        },
+        "district": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "District"
+        },
+        "postcode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "The Postal or Zip Code For US ZIP Codes, the first five digits."
+        },
+        "geocode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Geocode (the most granular geographic division) For US ZIP Codes, the +4 portion of the code."
+        },
+        "isBonded": {
+          "type": "string",
+          "description": "If set to (Y)es, indicates that this is a Bonded Warehouse. This status can then be used as a rule qualifier during rule selection."
+        },
+        "locationTaxCategory": {
+          "type": "string",
+          "description": "Indicates the type of location for this address, for example, Refinery. This value can then be used as a rule qualifier during rule selection."
+        },
+        "companyBranchId": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "The branch ID of a company, passed with registration numbers for VAT Returns in several countries. For example, in the UK, companies must file their VAT Returns with Branch ID information included."
+        },
+        "address1": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Street Address 1, not used in calculation."
+        },
+        "address2": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Street Address 2, not used in calculation."
+        },
+        "address3": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Street Address 3, not used in calculation."
+        },
+        "bulkStorageFacility": {
+          "type": "boolean",
+          "description": ""
+        },
+        "facilityId": {
+          "type": "string",
+          "description": ""
+        },
+        "irsRegisteredFacility": {
+          "type": "boolean",
+          "description": ""
+        },
+        "latitude": {
+          "type": "string",
+          "pattern": "^-?[0-9]{1,3}(?:\\.[0-9]{1,10})?$",
+          "description": "Latitude of the location based on type, value range -90 to 90"
+        },
+        "longitude": {
+          "type": "string",
+          "pattern": "^-?[0-9]{1,3}(?:\\.[0-9]{1,10})?$",
+          "description": "Longitude of the location based on type, value range -180 to 180"
+        },
+        "localTaxCategory": {
+          "type": "string",
+          "description": ""
+        },
+        "addressValidationMode": {
+          "type": "string",
+          "description": ""
+        },
+        "defaultAddressValidationMode": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "AddressFlagForExempt": {
+      "type": "object",
+      "description": "Forces exemption from tax for a line in the specified jurisdictions. Exemption is different from zero tax for VAT authorities, as exemption completely excludes the transaction from VAT accounting. In the case of a sale, VAT paid to make the supply cannot be recovered if the supply is exempt. In Sales Tax countries such as the US, the exempt indicator prevents tax from being charged. If false is explicitly passed the exemption certificate lookup is suppressed; tax will be charged even though an apparently valid certificate may exist in Determination.",
+      "properties": {
+        "all": {
+          "type": "boolean",
+          "description": "Forces exemption override from tax for all jurisdictions.",
+          "enum": [
+            false
+          ]
+        },
+        "country": {
+          "type": "boolean",
+          "description": "Exemption override status at Country zone level.",
+          "enum": [
+            false
+          ]
+        },
+        "region": {
+          "type": "boolean",
+          "description": "Exemption override status at Province or State zone level.",
+          "enum": [
+            false
+          ]
+        },
+        "county": {
+          "type": "boolean",
+          "description": "Exemption override status at County zone level.",
+          "enum": [
+            false
+          ]
+        },
+        "city": {
+          "type": "boolean",
+          "description": "Exemption override status at City zone level.",
+          "enum": [
+            false
+          ]
+        },
+        "postcode": {
+          "type": "boolean",
+          "description": "Exemption override status at Postcode zone level.",
+          "enum": [
+            false
+          ]
+        },
+        "geocode": {
+          "type": "boolean",
+          "description": "Exemption override status at Geocode zone level.",
+          "enum": [
+            false
+          ]
+        }
+      }
+    },
+    "BillOfLanding": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "number": {
+          "type": "number",
+          "description": "Bill of lading number."
+        },
+        "dateTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Bill of lading date"
+        }
+      }
+    },
+    "Charge": {
+      "type": "object",
+      "required": [
+        "type",
+        "amount"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Must be unique (each charge type can only exist once in the structure for a given line). For example, the structure could contain charge types of Freight, Insurance, and Handling, but not two instances of Freight. If there is a desire or need to use multiple freights then they must be sent uniquely, for example, Freight 1, Freight 2, etc. or Freight UPS, Freight FedEx, etc."
+        },
+        "amount": {
+          "type": "number",
+          "description": "Amount of the specific charge"
+        },
+        "productCode": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Product Code for the charge, required if chargeCommodityCode is null. See productCode at line level for details."
+        },
+        "commodityCode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Commodity Code for the charge, required if chargeProductCode is null. See commodityCode at line level for details."
+        }
+      }
+    },
+    "ClassificationCode": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "classificationCodeId": {
+          "type": "string",
+          "description": ""
+        },
+        "classificationCodeType": {
+          "type": "string",
+          "description": "",
+          "enum": [
+            "INDUSTRY PRODUCT CODE",
+            "INDUSTRY CODE",
+            "CNAE CODE"
+          ]
+        }
+      }
+    },
+    "CommitDocumentRequest": {
+      "description": "A commit document request is used to determine which tax types are relevant and to calculate the amount of tax due on a business transaction document. Tax results are also persisted in the Determination/'s Audit database for reporting purposes.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/DocumentRequest"
+        },
+        {
+          "type": "object",
+          "required": [
+            "documentNumber",
+            "lines"
+          ],
+          "properties": {
+            "callingSystemNumber": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "A pass-through element that contains a descriptor of the calling system sending the transaction. Determination uses as cobmination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database."
+            },
+            "fiscalDate": {
+              "type": "string",
+              "format": "date",
+              "description": "Stores a transaction by a fiscal date in addition to the invoice date. For example, you can use fiscalDate to indicate when revenue was recognized."
+            },
+            "hostSystem": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "The name of the Source System instance sending the transaction. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database."
+            },
+            "documentNumber": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "This number is passed through to the Audit database and acts as a reference for all document types. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database. Required for Commit."
+            },
+            "isAuditUpdate": {
+              "type": "boolean",
+              "description": "Indicates whether or not to permit Audit database update instead of overwrite. Updates provide for 'Line at a Time' document submissions. The effect is that a duplicate document submission updates the document level record and replaces any matching line and tax level as determined by the lineNumber. Any new line numbers that are submitted will be added to the existing document in the audit tables. Valid values are <B>true</B> and <B>false</B>."
+            },
+            "originalDocumentId": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "The original document id as shown on the document in the Source system. Not used in calculations."
+            },
+            "originalDocumentNumber": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "This number enables an adjustment to an existing document to be associated with an original document in the Audit database for reporting purposes."
+            },
+            "uniqueDocumentNumber": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "The unique identifier for this document, as assigned by the Source System. ONESOURCE Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed. If Source system does not provide this value (both for commit and reverse endpoints), ONESOURCE determination will auto generate this value based on concatenated value of externalCompanyID|documentNumber|companyRole. If Source system provided a value for the document in the commit call, same value must be passed when reversing the document, otherwise, reversal will fail."
+            },
+            "lines": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/CommitLineRequest"
+              },
+              "description": "The line block serves as the container for an individual line. Each document can have 1 or more lines."
+            }
+          }
+        }
+      ]
+    },
+    "CommitLineRequest": {
+      "description": "A commit line request is used to determine which tax types are relevant and to calculate the amount of tax due on one or more lines in the business transaction document. Tax results are also persisted in the Determination's Audit database for reporting purposes.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/LineRequest"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "uniqueLineNumber": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "The Source System's primary key for this line number."
+            },
+            "originalDocumentLine": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "The original document item as shown on the document in the Source System. Not used in calculations."
+            }
+          }
+        }
+      ]
+    },
+    "DeliveryTerm": {
+      "type": "object",
+      "description": "Indicates how goods were shipped and where title was transferred. if using Incoterms, Valid values include Incoterms 2000 codes and any other customer-defined codes. If using The Point of Title Transfer (POTT) location. Valid values are: D: Destination.O: Origin.I: In transit. If deliveryTerm element is passed in at either the document or line level, the default for the document is set to In Transit.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "maxLength": 10,
+          "description": "Type of delivery term, Possible value:  'Incoterms', 'POTT' or null",
+          "enum": [
+            "Incoterms",
+            "POTT",
+            "null"
+          ]
+        },
+        "term": {
+          "type": "string",
+          "maxLength": 10,
+          "description": "Delivery Term or Point of Title Transfer"
+        }
+      }
+    },
+    "DocumentRequest": {
+      "type": "object",
+      "required": [
+        "currencyCode",
+        "documentDate"
+      ],
+      "properties": {
+        "basisPercent": {
+          "type": "number",
+          "description": "A percentage amount that is used to adjust the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on. If this element is provided, it overrides any data found on an authority rule or exemption certificate applied to the transaction."
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Address"
+          },
+          "description": "List of address type"
+        },
+        "companyRole": {
+          "type": "string",
+          "maxLength": 20,
+          "description": "The role the company plays in a given transaction: Buyer (<B>B</B>), Middleman (<B>M</B>) or Seller (<B>S</B>). Each role results in different transaction tax and reporting requirements. Currently only Seller(<B>S</B>) role is supported by the API."
+        },
+        "countryOfOrigin": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The country where the goods were manufactured. Used in Intrastat reporting."
+        },
+        "currencyCode": {
+          "type": "string",
+          "maxLength": 3,
+          "description": "The currency associated with this transaction."
+        },
+        "customerName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The customer's name as passed in from the Source System. Used in the calculation of US Sales Tax when Exemption Certificates are evaluted for applicability to the transaction. Customer Name is also used in evaluating VAT Registration Group member, and in the case where Licenses are defined to match based on a customerName. For Exemption Certificate and License customer lookups, this element is no longer used by default; use customerNumber instead. To use customerName as well, set the Company Configuration parameter STRICT_CUSTOMER_LOOKUP to N. See Configuration for more information. For VAT Registration Group member evaluation, this element is used as a fall-back if a match cannot be made using externalCompanyId or customerNumber."
+        },
+        "customerNumber": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The customer number as passed in by the Source System. This element's value is used by Determination when searching for US Sales Tax Exemption Certificates or with the lookup of a License that are relevant to a transaction. Optionally, Determination may use the value in this element to auto-create a customer or an associated certificate. This element's value can also be used to match VAT Registration Group members if no match is found using externalCompanyId."
+        },
+        "deliveryTerm": {
+          "$ref": "#/$defs/DeliveryTerm",
+          "description": "Indicates how goods were shipped and where title was transferred. if using Incoterms, Valid values include Incoterms 2000 codes and any other customer-defined codes. If using The Point of Title Transfer (POTT) location. Valid values are:D: Destination.O: Origin.I: In transit.If deliveryTerm element is passed in at either the document or line level, the default for the document is set to In Transit."
+        },
+        "deptOfConsign": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Department of consignment. Used in Intrastat reporting."
+        },
+        "documentType": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Document Type references a virtual or a physical document created and managed by the Source System. Examples include document, order, or credit memo. The document type represents the type of transaction to be processed, including defining the types of entities in the transaction. For example, a sales quote will have different attributes than a document for purchased goods."
+        },
+        "endUserName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Identifier of the user who made a change to the document in the calling Source system."
+        },
+        "externalCompanyId": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the batch level or with each document, and is passed through to the Determination response, and to the Audit database."
+        },
+        "inclusiveTaxIndicator": {
+          "$ref": "#/$defs/InclusiveTaxIndicator",
+          "description": "Contains information on whether to treat some or all authority taxes for this invoice as inclusive, regardless of the selected rule."
+        },
+        "documentDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date as stored on this document. This is used for comparison to configurations throughout Determination and is also used to query transaction data in reporting. Required."
+        },
+        "isBusinessSupply": {
+          "type": "boolean",
+          "description": "Indicates whether a supply is being used for business. In Brazilian ICMS and IPI transactions, whether a supply is being used for business or not impacts the tax and reporting requirements of the buyer and the seller. Valid values are true and false."
+        },
+        "isCredit": {
+          "type": "boolean",
+          "description": "Indicates whether the current document is a credit as identified by your Source System. A true value in this elements indicates a credit for both auditing and reporting purposes. When set to true, any amount on the document should be passed in as a negative value. Valid values are <B>true</B> and <B>false</B>.",
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "isExempt": {
+          "$ref": "#/$defs/AddressFlagForExempt"
+        },
+        "isSimplification": {
+          "type": "boolean",
+          "description": "Indicates an override to any triangulation simplification determinations. Valid values are true and false. If set to true, you must pass registrations in for the Buyer, Seller, and Middleman in the transaction or a warning message will be returned."
+        },
+        "modeOfTransport": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The method of transport. Used for Intrastat reporting in the EU."
+        },
+        "movementDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Indicates the date of a movement of goods, such as via a pipeline, or the data of issue. Used in rule qualifiers and in date determination rules."
+        },
+        "movementType": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Indicates the type of movement, such as a pipeline. Used in rule qualifiers and in date determination rules."
+        },
+        "natureOfTransactionCode": {
+          "type": "string",
+          "maxLength": 2,
+          "description": "Used in Intrastat reports in all countries in the EU."
+        },
+        "originalDocumentDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date of the original document. Can be used in Date Determination Rules."
+        },
+        "portOfEntry": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The Port of Entry, used for Intrastat reporting in the EU."
+        },
+        "portOfLoading": {
+          "type": "string",
+          "maxLength": 5,
+          "description": "The Port or Airport of Departure; used for Intrastat reporting in the EU."
+        },
+        "regime": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The Regime, used for French Intrastat reports."
+        },
+        "registrations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Registrations"
+          },
+          "description": "List of registrations for role."
+        },
+        "statisticalProcedure": {
+          "type": "string",
+          "maxLength": 6,
+          "description": "A statistical indicator used for large shipments. Used for Intrastat filing purposes in the EU."
+        },
+        "titleTransferLocation": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "A pass-through element indicating where the location where title transferred for the associated delivery term."
+        },
+        "taxCode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "An optional value which can be specified in the transaction to be compared to a Tax Code specified on a Rule."
+        },
+        "taxDeterminationDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date used in selecting all applicable system configuration including tax rates and rules. Overrides any system-determined date."
+        },
+        "charges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Charge"
+          },
+          "description": "List of charges associated with the line. The Charge functionality is limited to the CompanyRole=Seller only. Seller-type roles are allowed to use the Charges structure, buyer type transactions cannot due to vendor charge and accrual logic."
+        },
+        "userAttributes": {
+          "type": "array",
+          "maxItems": 50,
+          "description": "The userAttributes block enables companies to submit, and have returned, user-defined elements that are not directly supported in Determination. These elements can be used in conjunction with TransEditors to enable tax calculations, and may be stored in the Audit database for reporting purposes. Each userAttribute block contains a single name/value pair. <B>TR reserves ATTRIBUTE41 to ATTRIBUTE50 for internal PS use</B>.",
+          "items": {
+            "$ref": "#/$defs/UserAttribute"
+          }
+        },
+        "vatGroupRegistration": {
+          "type": "string",
+          "maxLength": 25,
+          "description": "The value of the VAT Group registration number for the invoice. Used as the primary way of looking up VAT Registration Groups during calculation."
+        },
+        "vendorName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The vendor's name. If this is a B2B transaction and the Company is the buyer, the Company becomes the Customer and the Vendor becomes the Company for the transaction."
+        },
+        "vendorNumber": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The vendor's number. If this is a B2B transaction and the Company is the buyer, the Company becomes the Customer and the Vendor becomes the Company for the transaction."
+        },
+        "billOfLading": {
+          "$ref": "#/$defs/BillOfLanding"
+        },
+        "isExchange": {
+          "type": "boolean",
+          "description": ""
+        },
+        "licenses": {
+          "$ref": "#/$defs/LicenseType"
+        },
+        "operatingLicenses": {
+          "$ref": "#/$defs/OperatingLicenses"
+        },
+        "vendorGroupName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": ""
+        },
+        "vendorGroupOwner": {
+          "type": "string",
+          "maxLength": 100,
+          "description": ""
+        },
+        "userAmountAttributes": {
+          "type": "array",
+          "description": "",
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/UserAttributeAmount"
+          }
+        },
+        "userDateAttributes": {
+          "type": "array",
+          "description": "",
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/UserAttributeDate"
+          }
+        },
+        "processingOptions": {
+          "$ref": "#/$defs/ProcessingOption"
+        },
+        "allocationGroupName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Name of the Allocation Group to use for this transaction. Named Allocations will be looked up in this group."
+        },
+        "allocationGroupOwner": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Name of the Company owning the Allocation Group to use for this transaction. The named Allocation Group will be looked up in this company's data."
+        },
+        "allocationName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Name of the Allocation to use for this transaction. Named Allocations will be looked up in the specified group owned by the specified company (see above). Company default owner and group will be used if not specified in the transaction. Allocations are dated, so the named version active as of the <INVOICE_DATE> will be used. If none match, a message will be added to output indicating an active named Allocation was not found. Allocation processing can be overridden at the line level. See LINE.IS_ALLOCATABLE."
+        },
+        "vendorChargeTax": {
+          "$ref": "#/$defs/VendorChargeTaxDocumentRequest"
+        },
+        "businessLocation": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "The business location."
+        },
+        "relatedLineAmounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RelatedLineAmount"
+          },
+          "description": "The related line amounts"
+        }
+      }
+    },
+    "InclusiveTaxIndicator": {
+      "type": "object",
+      "description": "Contains information on whether to treat some or all authority taxes for this invoice as inclusive, regardless of the selected rule.",
+      "properties": {
+        "fullyInclusive": {
+          "type": "boolean",
+          "description": "If set to true, indicates that all authorities that Determination will select for taxing will be considered as Inclusive Tax. This element overrides the calculation method set for the selected rule by forcing inclusive tax."
+        },
+        "authorityType": {
+          "type": "array",
+          "description": "If the authority selected for a transaction matches the type indicated here, all taxes for that authority are considered as inclusive. You can have multiple authorityType.",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      }
+    },
+    "License": {
+      "type": "object",
+      "description": "Contains data pertaining to a single license, consisting of a number-type pair.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Type of license."
+        },
+        "number": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "License number."
+        }
+      }
+    },
+    "LicenseType": {
+      "type": "object",
+      "description": "One or more licenses applicable for the transaction.",
+      "properties": {
+        "customerLicense": {
+          "$ref": "#/$defs/License"
+        }
+      }
+    },
+    "LineRequest": {
+      "type": "object",
+      "required": [
+        "lineNumber",
+        "quantities",
+        "amount"
+      ],
+      "properties": {
+        "accountingCode": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The Accounting Code (or GL Code) passed in by the Source System."
+        },
+        "basisPercent": {
+          "type": "number",
+          "description": "A percentage amount that is used to adjust the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on. If this element is provided, it overrides any data found on an authority rule or exemption certificate applied to the transaction."
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Address"
+          },
+          "description": "List of addresses"
+        },
+        "commodityCode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "A code that defines the a product (good or service) that is passed in from the Source System/ERP. A government subscribes to a specific product assoication such as the UNSPSC in the United States, or the Harmonized System which is used in many countries around the world that defines the classification of traded goods or services. When a value is passed in from the ERP, Determination evaluates this code against the standard and custom products in search of a match to an existing commodity code assigned to a specific product in Determination. If a match occurs, Determination uses the product to ensure the accuracy of the tax result in the jurisdiction for where the tax result occurs."
+        },
+        "countryOfOrigin": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The country where the goods were manufactured. Used in Intrastat reporting."
+        },
+        "customerName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The customer's name as passed in from the Source System. Used in the calculation of US Sales Tax when Exemption Certificates are evaluted for applicability to the transaction. Customer Name is also used in evaluating VAT Registration Group member, and in the case where Licenses are defined to match based on a customerName. For Exemption Certificate and License customer lookups, this element is no longer used by default; use customerNumber instead. To use customerName as well, set the Company Configuration parameter STRICT_CUSTOMER_LOOKUP to N. See Configuration for more information. For VAT Registration Group member evaluation, this element is used as a fall-back if a match cannot be made using externalCompanyId or customerNumber."
+        },
+        "customerNumber": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The customer number as passed in by the Source System. This element's value is used by Determination when searching for US Sales Tax Exemption Certificates or with the lookup of a License that are relevant to a transaction. Optionally, Determination may use the value in this element to auto-create a customer or an associated certificate. This element's value can also be used to match VAT Registration Group members if no match is found using externalCompanyId."
+        },
+        "deliveryTerm": {
+          "$ref": "#/$defs/DeliveryTerm",
+          "description": "Indicates how goods were shipped and where title was transferred. if using Incoterms, Valid values include Incoterms 2000 codes and any other customer-defined codes. If using The Point of Title Transfer (POTT) location. Valid values are:D: Destination.O: Origin.I: In transit.If deliveryTerm element is passed in at either the document or line level, the default for the document is set to In Transit."
+        },
+        "deptOfConsign": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Department of consignment. Used in Intrastat reporting."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "A description of a particular product. This data is primarily used to reference records from the audit data and when reconciling tax results to the financial transaction."
+        },
+        "discountAmount": {
+          "type": "number",
+          "description": "In some situations volume or other discounts must be taken into account when calculating tax. For these situations, DiscountAmount is used to indicate that amount. When DiscountAmount is provided, Determination will reduce the Taxable Basis by that amount. For example, if the Gross Amount is $100 and a Discount Amount of $20 is provided, Determination adjusts the Taxable Basis to $80."
+        },
+        "endUse": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "End use of the product. Intended for use by Rule Qualifiers to govern the applicability of a rule."
+        },
+        "inclusiveTaxIndicator": {
+          "$ref": "#/$defs/InclusiveTaxIndicator",
+          "description": "Contains information on whether to treat some or all authority taxes for this invoice as inclusive, regardless of the selected rule."
+        },
+        "inputRecoveryAmount": {
+          "type": "number",
+          "description": "Overrides any Input Recovery Amount specified by the transaction's rule."
+        },
+        "inputRecoveryPercent": {
+          "type": "number",
+          "description": "Overrides the Input Recovery Percentage specified by the transaction's rule."
+        },
+        "inputRecoveryType": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "A pass-through element which has been deprecated in favor of enhanced VAT calculation logic. See <INPUT_RECOVERY_AMOUNT/PERCENT> and VAT Recoverability and Rules for more information."
+        },
+        "documentDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date of the document as stored on this line. This is used for comparison to configurations throughout Determination and is also used to query transaction data in reporting."
+        },
+        "isBusinessSupply": {
+          "type": "boolean",
+          "description": "Indicates whether a supply is being used for business. For some transaction types, whether a supply is being used for business or not impacts the tax and reporting requirements of the buyer and the seller. Valid values are true and false."
+        },
+        "isCredit": {
+          "type": "boolean",
+          "description": "Indicates whether the current line is a credit as identified by your Source System. A true value in this elements indicates a credit for both auditing and reporting purposes. When set to true, any amount on the document should be passed in as a negative value. Valid values are <B>true</B> and <B>false</B>.",
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "isExempt": {
+          "$ref": "#/$defs/AddressFlagForExempt"
+        },
+        "isManufacturing": {
+          "type": "boolean",
+          "description": "Indicates that the goods or services are for manufacturing purposes."
+        },
+        "isSimplification": {
+          "type": "boolean",
+          "description": "Indicates an override to any triangulation simplification determinations. Valid values are true and false. If set to true, you must pass registrations in for the Buyer, Seller, and Middleman in the transaction or a warning message will be returned."
+        },
+        "itemValue": {
+          "type": "number",
+          "description": "The total value of all items on this line. This is distinct from the gross amount because it does not contain costs such as landed costs, insurance, freight and other associated costs that gross amount does contain. If an item value is present in a transaction, it is used instead of taxable basis. Item value is used in many VAT and EU Intrastat reports."
+        },
+        "licenses": {
+          "$ref": "#/$defs/LicenseType",
+          "description": "Contains data for one or more licenses applying to the document."
+        },
+        "lineNumber": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "lineNumber is a required element for each line. Used in combination with documentNumber, it is used to specify and reference a particular line on a specific document."
+        },
+        "mass": {
+          "type": "number",
+          "description": "The Mass of a supply. Used for Intrastat reporting purposes in the EU."
+        },
+        "modeOfTransport": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "The method of transport. Used for Intrastat reporting in the EU."
+        },
+        "movementDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Indicates the date of a movement of goods, such as via a pipeline, or the data of issue. Used in rule qualifiers and in date determination rules."
+        },
+        "movementType": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Indicates the type of movement, such as a pipeline. Used in rule qualifiers and in date determination rules."
+        },
+        "originalDocumentDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date of the original document. Can be used in Date Determination Rules."
+        },
+        "partNumber": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The part number used by your Source System. This element is stored in the audit tables and does not affect calculation."
+        },
+        "portOfEntry": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The Port of Entry, used for Intrastat reporting in the EU."
+        },
+        "portOfLoading": {
+          "type": "string",
+          "maxLength": 5,
+          "description": "The Port or Airport of Departure; used for Intrastat reporting in the EU."
+        },
+        "productCode": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Your Source System's product code for the product on this line. Product Codes are mapped to a Product using Product Mappings."
+        },
+        "quantities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Quantity"
+          },
+          "description": "The quantities block contains a list of analogous quantity elements that may differ in their units of measure."
+        },
+        "regime": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The Regime, used for French Intrastat reports."
+        },
+        "registrations": {
+          "type": "array",
+          "description": "List of registrations for role.",
+          "items": {
+            "$ref": "#/$defs/Registrations"
+          }
+        },
+        "charges": {
+          "type": "array",
+          "description": "List of charges associated with the line. The Charge functionality is limited to the CompanyRole=<B>S</B>eller only. Seller-type roles are allowed to use the Charges structure, buyer type transactions cannot due to vendor charge and accrual logic.",
+          "items": {
+            "$ref": "#/$defs/Charge"
+          }
+        },
+        "supplementaryUnit": {
+          "type": "string",
+          "maxLength": 5,
+          "description": "The size of a supply. For Intrastat reports in the EU, some commodities require an additional measuring unit other than or in addition to mass for reporting purposes. EU rules determine the unit to be used for various supplies."
+        },
+        "taxCode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "An optional value which can be specified in the transaction to be compared to a Tax Code specified on a Rule."
+        },
+        "taxDeterminationDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date used in selecting all applicable system configuration including tax rates and rules. Overrides any Determination-calculated date."
+        },
+        "taxPointDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date the signifies when the liability for tax arises. Overrides any Determination-calculated date."
+        },
+        "taxTreatment": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The flag that indicates alternative tax treatment after Determination performs its calculation:D: Deferred.DI: Deferred Invoice. DP: Deferred Payment."
+        },
+        "titleTransferLocation": {
+          "type": "string",
+          "maxLength": 1,
+          "description": "A pass-through element used in conjunction with the deliveryTerms element to enable meeting the 'named place' requirement for the point of title transfer as defined by ICC Incoterms."
+        },
+        "unitOfMeasure": {
+          "type": "string",
+          "maxLength": 25,
+          "description": "A description of the unit of measure used to match a Rule's specified Unit of Measure. The ampersand character (&) cannot be used in a unit of measure."
+        },
+        "amount": {
+          "type": "number",
+          "description": "The amount for the line. This amount can be gross, gross plus tax, or tax amount. This configuration is setup via the processingOptions."
+        },
+        "userAttributes": {
+          "type": "array",
+          "maxItems": 50,
+          "description": "The userAttributes block enables companies to submit, and have returned, user-defined elements that are not directly supported in Determination. These elements can be used in conjunction with TransEditors to enable tax calculations, and may be stored in the Audit database for reporting purposes. Each userAttribute block contains a single name/value pair. <B>TR reserves ATTRIBUTE41 to ATTRIBUTE50 for internal PS use</B>.",
+          "items": {
+            "$ref": "#/$defs/UserAttribute"
+          }
+        },
+        "vatGroupRegistration": {
+          "type": "string",
+          "maxLength": 25,
+          "description": "The value of the VAT Group registration number for the line. Used as the primary way of looking up VAT Registration Groups during calculation."
+        },
+        "vendorName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The vendor's name. If this is a B2B transaction and the Company is the buyer, the Company becomes the Customer and the Vendor becomes the Company for the transaction."
+        },
+        "vendorNumber": {
+          "type": "string",
+          "maxLength": 20,
+          "description": "The vendor's number. If this is a B2B transaction and the Company is the buyer, the Company becomes the Customer and the Vendor becomes the Company for the transaction."
+        },
+        "billOfLading": {
+          "$ref": "#/$defs/BillOfLanding",
+          "description": ""
+        },
+        "isExchange": {
+          "type": "boolean",
+          "description": ""
+        },
+        "isBlended": {
+          "type": "boolean",
+          "description": ""
+        },
+        "operatingLicenses": {
+          "$ref": "#/$defs/OperatingLicenses"
+        },
+        "vendorGroupName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": ""
+        },
+        "vendorGroupOwner": {
+          "type": "string",
+          "maxLength": 100,
+          "description": ""
+        },
+        "userAmountAttributes": {
+          "type": "array",
+          "description": "",
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/UserAttributeAmount"
+          }
+        },
+        "userDateAttributes": {
+          "type": "array",
+          "description": "",
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/UserAttributeDate"
+          }
+        },
+        "productCodeType": {
+          "type": "string",
+          "maxLength": 100,
+          "description": ""
+        },
+        "prices": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/$defs/Price"
+          }
+        },
+        "classificationCodes": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/$defs/ClassificationCode"
+          }
+        },
+        "allocationGroupName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Name of the Allocation Group to use for this line. Named Allocations will be looked up in this group."
+        },
+        "allocationGroupOwner": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Name of the company owning the Allocation Group to use for this line. The named Allocation Group will be looked up in this company's data."
+        },
+        "allocationName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Name of the Allocation to use for this line. Named Allocations will be looked up in the specified group owned by the specified company (see above). Company default owner and group will be used if not specified in the transaction. Allocations are dated, so the named version active as of the <INVOICE_DATE> will be used. If none match, a message will be added to output indicating an active named Allocation was not found. Allocation processing can be overridden at the line level. See <LINE>.<IS_ALLOCATABLE>."
+        },
+        "isAllocatable": {
+          "type": "boolean",
+          "description": "If set to false, no allocation will be applied to the line, even if one is specified by name for the Line or at the Invoice level. The default behavior (null) is true.",
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "businessLocation": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "The business location."
+        },
+        "relatedLineAmounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RelatedLineAmount"
+          },
+          "description": "The related line amounts"
+        }
+      }
+    },
+    "OperatingLicenses": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "assumeBuyerFullyLicensed": {
+          "type": "boolean",
+          "description": "True of False, assume buyer is fully licensed"
+        },
+        "buyer": {
+          "$ref": "#/$defs/License"
+        },
+        "assumeSellerFullyLicensed": {
+          "type": "boolean",
+          "description": "True or False, assume seller is fully licensed "
+        },
+        "seller": {
+          "$ref": "#/$defs/License"
+        }
+      }
+    },
+    "Price": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": ""
+        },
+        "priceType": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "",
+          "enum": [
+            "PF",
+            "PMC",
+            "PMVG"
+          ]
+        }
+      }
+    },
+    "ProcessingOption": {
+      "type": "object",
+      "description": "Configurable options available for request and response.",
+      "properties": {
+        "chargeIncludedInAmounts": {
+          "type": "boolean",
+          "description": "For charges defined at Line Item Level:<BR><B>true:</B> Charge amount is included in the item amount and needs to be negated to get correct tax amount for a line vs a charge.<BR><B>false (Default):</B>Charge amount is independent of the item amount.",
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "chargeResponse": {
+          "type": "string",
+          "description": "When using Charges, use one of the following:<BR><B>SeparateAuthority (Default):</B> Returns a separate line for the product and each charge entry.<BR><B>CombineWithLine:</B> Combines all tax blocks and charge details into the item line.",
+          "enum": [
+            "SeparateAuthority",
+            "CombineWithLine"
+          ]
+        },
+        "responseSummary": {
+          "type": "string",
+          "description": "Tax Results setting for summarization, use one of the following:<BR><B>SummaryByErpCode:</B> Tax results are summarized based on ERP Tax Codes configured in Determination.<BR><B>SummaryByAuthorityAndZone:</B> The results are summarized based on Tax Authority and Effective Zone Level.<BR><B>FullDetails (Default):</B> No summarization is performed, Integration or Source system must summarize tax results as per customer requirements.",
+          "enum": [
+            "SummaryByErpCode",
+            "SummaryByAuthorityAndZone",
+            "FullDetails"
+          ]
+        },
+        "documentAmountType": {
+          "type": "string",
+          "description": "If the Calculation Direction of Forward, Reverse from Tax, or Reverse from Total are used, then use the following:<BR><B>GrossAmount (Default):</B> Engine calculates tax based on the provided amount for each line item. (Forward)<BR><B>TaxAmount: If you are providing the precalculated tax amount, the engine calculates grossAmount. (Reverse from Tax)<BR><B>GrossPlusTaxAmount:</B> If you are providing amount that is inclusive of tax, the engine will calculate the appropriate tax and grossAmount.(Reverse from Total)",
+          "enum": [
+            "GrossAmount",
+            "TaxAmount",
+            "GrossPlusTaxAmount"
+          ]
+        }
+      }
+    },
+    "Quantity": {
+      "type": "object",
+      "description": "The quantity block contains a analogous quantity elements that may differ in their units of measure.",
+      "required": [
+        "amount"
+      ],
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": "The number of the quantity (for example, 50 for 50 L)."
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "Indicates that this quantity should be used as the default quantity in the transaction when multiple quantities are specified."
+        },
+        "type": {
+          "type": "string",
+          "description": "",
+          "maxLength": 50
+        },
+        "uom": {
+          "type": "string",
+          "maxLength": 25,
+          "description": "The unit of measure for the quantity (for example, EA, Each, KG or 50L)."
+        }
+      }
+    },
+    "Registrations": {
+      "type": "object",
+      "description": "List of registrations for role.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of registration number.",
+          "enum": [
+            "BuyerRole",
+            "SellerRole",
+            "MiddleManRole"
+          ]
+        },
+        "registrationNumber": {
+          "type": "array",
+          "description": "One or more registration numbers for the role",
+          "items": {
+            "type": "string",
+            "description": "Registration number.",
+            "maxLength": 25
+          }
+        }
+      }
+    },
+    "RelatedLineAmount": {
+      "type": "object",
+      "description": "The related line amount",
+      "required": [
+        "lineNumber",
+        "splitAmount"
+      ],
+      "properties": {
+        "lineNumber": {
+          "type": "string",
+          "description": "lineNumber is a required element for each line. Used in combination with documentNumber, it is used to specify and reference a particular line on a specific document."
+        },
+        "splitAmount": {
+          "type": "number",
+          "description": "Amount splitted"
+        }
+      }
+    },
+    "TaxRequest": {
+      "type": "object",
+      "properties": {
+        "companyRole": {
+          "type": "string",
+          "maxLength": 20,
+          "description": "The role the company plays in a given transaction: Buyer(<B>B</B>), Middleman (<B>M</B>), or Seller (<B>S</B>). Each role results in different transaction tax and reporting requirement."
+        },
+        "externalCompanyId": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the request level or with each document, and is passed through to the Determination response, and to the Audit database."
+        },
+        "hostRequestLogId": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "A pass-through element used to identify the originating request from the Source System in log files."
+        },
+        "processingOptions": {
+          "$ref": "#/$defs/ProcessingOption"
+        }
+      }
+    },
+    "UserAttribute": {
+      "type": "object",
+      "description": "The userAttribute block enables companies to submit, and have returned, user-defined elements that are not directly supported in Determination. These elements can be used in conjunction with TransEditors to enable tax calculations, and may be stored in the Audit database for reporting purposes. Each userAttribute block contains a single name/value pair. <B>TR reserves ATTRIBUTE41 to ATTRIBUTE50 for internal PS use.</B>",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(ATTRIBUTE([1-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|(200)))$",
+          "description": "The name of the user attribute. Currently restricted to the case-sensitive values ATTRIBUTE1 through ATTRIBUTE50."
+        },
+        "value": {
+          "type": "string",
+          "description": "The value to be passed into Determination's audit tables and returned to your business application."
+        }
+      }
+    },
+    "UserAttributeAmount": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(AMOUNT_ATTRIBUTE[1-5])$",
+          "description": "The name of the user amount attribute. Currently restricted to the case-sensitive values AMOUNT_ATTRIBUTE1 through AMOUNT_ATTRIBUTE5."
+        },
+        "value": {
+          "type": "number",
+          "description": "The value to be passed into Determination's audit tables and returned to your business application."
+        }
+      }
+    },
+    "UserAttributeDate": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(DATE_ATTRIBUTE[1-5])$",
+          "description": "The name of the user date attribute. Currently restricted to the case-sensitive values DATE_ATTRIBUTE1 through DATE_ATTRIBUTE5."
+        },
+        "value": {
+          "type": "string",
+          "format": "date",
+          "description": "The value to be passed into Determination's audit tables and returned to your business application."
+        }
+      }
+    },
+    "VendorChargeTaxDocumentRequest": {
+      "type": "object",
+      "properties": {
+        "isVendorTrusted": {
+          "type": "boolean",
+          "description": "An indicator if the specified vendor is a trusted vendor. This can be overridden through request."
+        },
+        "accrualMethod": {
+          "type": "string",
+          "description": "An option to override the configured accrual method in request."
+        },
+        "vendorTax": {
+          "type": "number",
+          "description": "The amount of tax charged by Vendor."
+        },
+        "useTaxConfig": {
+          "type": "boolean",
+          "description": "Determines whether the tax is calculated as buyer or seller – \"Yes\" means the transaction was run as buyer."
+        },
+        "isVctEnabled": {
+          "type": "boolean",
+          "description": "An indicator if VCT should be applied to the tax calculation"
+        },
+        "vctToleranceAmount": {
+          "type": "string",
+          "description": "VCT Tolerance Amount"
+        },
+        "vctTolerancePercentage": {
+          "type": "string",
+          "description": "VCT Tolerance Percentage"
+        }
+      }
+    }
+  }
+}

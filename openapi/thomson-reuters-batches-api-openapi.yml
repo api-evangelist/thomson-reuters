@@ -1,0 +1,371 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Batches API
+  version: '1.9'
+  description: 'Operations tagged Batches across 2 of this provider''s published API definitions: thomson-reuters-matters-api-1-9-openapi.json, thomson-reuters-matters-api-1-9-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+tags:
+- name: Batches
+  description: Use the Batch API to create batch request and check batch status.
+paths:
+  /operations/{id}:
+    get:
+      tags:
+      - Batches
+      summary: Status monitor for asynchronous requests
+      description: 'The operations endpoint returns whether an asynchronous request is:
+
+        * Running, HTTP Status Code 202
+
+        * Completed, HTTP Status Code 200 with the response containing individual request responses'
+      operationId: MattersBatch_GetBatchStatus
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '200':
+          description: The batch request is completed with the response containing the individual request responses.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchResponsesModel'
+              examples:
+                Example Batch Response with completed requests:
+                  value: "{\n  \"responses\": [\n    {\n      \"id\": \"1\",\n      \"status\": 200,\n      \"headers\": {\n        \"pragma\": \"no-cache\",\n        \"preference-Applied\": \"return=representation\",\n        \"rootGuid\": \"i682a7d1ad59a424489b0c72489caa2e3\",\n        \"api-supported-versions\": \"1, 2\",\n        \"cache-Control\": \"no-cache\",\n        \"date\": \"Fri, 21 Feb 2020 14:28:43 GMT\",\n        \"eTag\": \"\\\"637178633236770000\\\"\",\n        \"location\": \"https://api.thomsonreuters.com/legal-tracker/matters-api/v1/matters/121429\",\n        \"server\": \"\"\n      },\n      \"body\": {\n        \"id\": 121429,\n        \"matterType\": \"Litigation/Dispute > validation\",\n        \"fullNameAndPartiesInvolved\": \"eewet\",\n        \"shortName\": \"qwerty/3\",\n        \"leadCompanyPersonEmail\": \"ARLevel1@oxy.com\",\n        \"numberTwoCompanyPersonEmail\": \"ARLevel2Delegate@oxy.com\",\n        \"organizationalUnit\": \"UT Org Unit 3\",\n        \"practiceGroup\": \"Legal Department\",\n        \"countryOrRegion\": \"United States\",\n        \"matterGroup\": null,\n        \"businessManager\": \"\",\n        \"associatedMatterId\": \"\",\n        \"associatedMatterUrl\": \"\",\n        \"associatedMatterData\": \"\",\n        \"clientMatterNumber\": \"\",\n        \"invoiceApprovalRoute\": \"AR4\",\n        \"apRoute\": \"APRoutingNoMembers\",\n        \"billedToEntityName\": \"\",\n        \"taxConfiguration\": null,\n        \"preconfiguredAllocations\": null,\n        \"matterAllocations\": [],\n        \"leadOutsideCounselEmail\": \"AccrualFirmSysAdmin@oxy.com\",\n        \"leadFirmFeeArrangement\": \"\",\n        \"leadFirmFeeComment\": \"\",\n        \"currencyID\": \"USD\",\n        \"firmAccess\": \"LEAD_COUNSEL\",\n        \"substantiveLaw\": \"Banking/Financial Services\",\n        \"startDate\": \"2019-12-03T08:00:00Z\",\n        \"description\": \"Description -2–\",\n        \"keyIssues\": \"\",\n        \"adverseFirmInfo\": \"\",\n        \"affidavitOfUseFilingDate\": null,\n        \"dateOfLoss\": null,\n        \"dateOfNoticeOfLoss\": null,\n        \"disclosureDate\": null,\n        \"filingDate\": null,\n        \"registrationDate\": null,\n        \"renewalExpirationDate\": null,\n        \"serviceReceivedDate\": null,\n        \"trialDate\": null,\n        \"auditSummary\": \"\",\n        \"caseApplicationNumber\": \"\",\n        \"claims\": \"\",\n        \"classesOfGoods\": \"\",\n        \"serialReelNumber\": \"\",\n        \"ownerRecordTitleHolder\": \"\",\n        \"inventor\": \"\",\n        \"state\": \"\",\n        \"provinceRegion\": \"\",\n        \"status\": \"\",\n        \"registrationNumber\": \"\",\n        \"patentTitle\": \"\",\n        \"patentType\": \"\",\n        \"court\": \"fhfdhdh\",\n        \"courtAdditionalInfo\": \"\",\n        \"financialOnly\": \"No\",\n        \"billingOnlyRole\": \"\",\n        \"consolidatedBilling\": \"No\",\n        \"preconfiguredTaskCodeAlerts\": \"\",\n        \"localFirmOrAgent\": \"\",\n        \"matterAdminRole\": \"CoSysAdmin@oxy.com,ARLevel1@oxy.com,ARLevel2Delegate@oxy.com,AccrualFirmSysAdmin@oxy.com\",\n        \"matterEditorRole\": \"\",\n        \"matterReaderRole\": \"\",\n        \"noMatterOrReportAccessRole\": \"\",\n        \"preApprovedAllocations\": \"No\",\n        \"renewalExpirationDateSendNoticeEmail\": null,\n        \"reportAccessOnlyRole\": \"\",\n        \"reviewInvoiceAllocations\": \"CHANGED_ONLY\",\n        \"taxesIncludedInTCAAmounts\": \"Yes\",\n        \"timekeeperAuditState\": \"Enabled\",\n        \"trialDateSendNoticeEmail\": null,\n        \"customDropdownField1\": \"\",\n        \"customDropdownField2\": \"\",\n        \"customDropdownField3\": \"\",\n        \"customDropdownField4\": \"\",\n        \"customDropdownField5\": \"\",\n        \"customDropdownField6\": \"\",\n        \"customDropdownField7\": \"\",\n        \"customDropdownField8\": \"\",\n        \"customDropdownField9\": \"\",\n        \"customDropdownField10\": \"\",\n        \"customDropdownField11\": \"\",\n        \"customDropdownField12\": \"\",\n        \"customDropdownField13\": \"\",\n        \"customDropdownField14\": \"\",\n        \"customDropdownField15\": \"\",\n        \"customDropdownField16\": \"\",\n        \"customDropdownField17\": \"\",\n        \"customDropdownField18\": \"\",\n        \"customDropdownField19\": \"\",\n        \"customDropdownField20\": \"\",\n        \"customDropdownField21\": \"\",\n        \"customDropdownField22\": \"\",\n        \"customDropdownField23\": \"\",\n        \"customDropdownField24\": \"\",\n        \"customDropdownField25\": \"\",\n        \"customDropdownField26\": \"\",\n        \"customDropdownField27\": \"\",\n        \"customDropdownField28\": \"\",\n        \"customDropdownField29\": \"\",\n        \"customDropdownField30\": \"\",\n        \"customDropdownField31\": \"\",\n        \"customDropdownField32\": \"\",\n        \"customDropdownField33\": \"\",\n        \"customDropdownField34\": \"\",\n        \"customDropdownField35\": \"\",\n        \"customDropdownField36\": \"\",\n        \"customDropdownField37\": \"\",\n        \"customDropdownField38\": \"\",\n        \"customDropdownField39\": \"\",\n        \"customDropdownField40\": \"\",\n        \"customDropdownField41\": \"\",\n        \"customCurrencyField1\": null,\n        \"customCurrencyField2\": null,\n        \"customCurrencyField3\": null,\n        \"customCurrencyField4\": null,\n        \"customCurrencyField5\": null,\n        \"customCurrencyField6\": null,\n        \"customCurrencyField7\": null,\n        \"customCurrencyField8\": null,\n        \"customCurrencyField9\": null,\n        \"customCurrencyField10\": null,\n        \"customCurrencyField11\": null,\n        \"customCurrencyField12\": null,\n        \"customCurrencyField13\": null,\n        \"customCurrencyField14\": null,\n        \"customCurrencyField15\": null,\n        \"customCurrencyField16\": null,\n        \"customCurrencyField17\": null,\n        \"customCurrencyField18\": null,\n        \"customCurrencyField19\": null,\n        \"customCurrencyField20\": null,\n        \"customCurrencyField21\": null,\n        \"customCurrencyField22\": null,\n        \"customCurrencyField23\": null,\n        \"customCurrencyField24\": null,\n        \"customCurrencyField25\": null,\n        \"customCurrencyField26\": null,\n        \"customCurrencyField27\": null,\n        \"customCurrencyField28\": null,\n        \"customCurrencyField29\": null,\n        \"customCurrencyField30\": null,\n        \"customCurrencyField31\": null,\n        \"customCurrencyField32\": null,\n        \"customCurrencyField33\": null,\n        \"customCurrencyField34\": null,\n        \"customCurrencyField35\": null,\n        \"customCurrencyField36\": null,\n        \"customCurrencyField37\": null,\n        \"customCurrencyField38\": null,\n        \"customCurrencyField39\": null,\n        \"customCurrencyField40\": null,\n        \"customCurrencyField41\": null,\n        \"customDateField1\": null,\n        \"customDateField2\": null,\n        \"customDateField3\": null,\n        \"customDateField4\": null,\n        \"customDateField5\": null,\n        \"customDateField6\": null,\n        \"customDateField7\": null,\n        \"customDateField8\": null,\n        \"customDateField9\": null,\n        \"customDateField10\": null,\n        \"customDateField11\": null,\n        \"customDateField12\": null,\n        \"customDateField13\": null,\n        \"customDateField14\": null,\n        \"customDateField15\": null,\n        \"customDateField16\": null,\n        \"customDateField17\": null,\n        \"customDateField18\": null,\n        \"customDateField19\": null,\n        \"customDateField20\": null,\n        \"customDateField21\": null,\n        \"customTextField1\": \"\",\n        \"customTextField2\": \"\",\n        \"customTextField3\": \"\",\n        \"customTextField4\": \"\",\n        \"customTextField5\": \"\",\n        \"customTextField6\": \"\",\n        \"customTextField7\": \"\",\n        \"customTextField8\": \"\",\n        \"customTextField9\": \"\",\n        \"customTextField10\": \"\",\n        \"customTextField11\": \"\",\n        \"customTextField12\": \"\",\n        \"customTextField13\": \"\",\n        \"customTextField14\": \"\",\n        \"customTextField15\": \"\",\n        \"customTextField16\": \"\",\n        \"customTextField17\": \"\",\n        \"customTextField18\": \"\",\n        \"customTextField19\": \"\",\n        \"customTextField20\": \"\",\n        \"customTextField21\": \"\",\n        \"customTextAreaField1\": \"\",\n        \"customTextAreaField2\": \"\",\n        \"customTextAreaField3\": \"\",\n        \"customTextAreaField4\": \"\",\n        \"customTextAreaField5\": \"\",\n        \"customTextAreaField6\": \"\",\n        \"customTextAreaField7\": \"\",\n        \"customTextAreaField8\": \"\",\n        \"customTextAreaField9\": \"\",\n        \"customTextAreaField10\": \"\",\n        \"customTextAreaField11\": \"\",\n        \"customTextAreaField12\": \"\",\n        \"customTextAreaField13\": \"\",\n        \"customRichTextAreaField1\": \"\",\n        \"customRichTextAreaField2\": \"\",\n        \"customRichTextAreaField3\": \"\",\n        \"customRichTextAreaField4\": \"\",\n        \"customRichTextAreaField5\": \"\",\n        \"customRichTextAreaField6\": \"\",\n        \"customRichTextAreaField7\": \"\",\n        \"customRichTextAreaField8\": \"\",\n        \"customRichTextAreaField9\": \"\",\n        \"customRichTextAreaField10\": \"\",\n        \"customRichTextAreaField11\": \"\",\n        \"customNumberField1\": null,\n        \"customNumberField2\": null,\n        \"customNumberField3\": null,\n        \"customNumberField4\": null,\n        \"customNumberField5\": null,\n        \"customNumberField6\": null,\n        \"customNumberField7\": null,\n        \"customNumberField8\": null,\n        \"customNumberField9\": null,\n        \"customNumberField10\": null,\n        \"customNumberField11\": null,\n        \"customMultiPickList1\": \"\",\n        \"customMultiPickList2\": \"\",\n        \"customMultiPickList3\": \"\",\n        \"customMultiPickList4\": \"\",\n        \"customMultiPickList5\": \"\",\n        \"customMultiPickList6\": \"\",\n        \"customMultiPickList7\": \"\",\n        \"customMultiPickList8\": \"\",\n        \"customMultiPickList9\": \"\",\n        \"customMultiPickList10\": \"\",\n        \"customMultiPickList11\": \"\",\n        \"customMultiPickList12\": \"\",\n        \"customMultiPickList13\": \"\",\n        \"customMultiPickList14\": \"\",\n        \"customMultiPickList15\": \"\",\n        \"customMultiPickList16\": \"\",\n        \"customMultiPickList17\": \"\",\n        \"customMultiPickList18\": \"\",\n        \"customMultiPickList19\": \"\",\n        \"customMultiPickList20\": \"\",\n        \"customMultiPickList21\": \"\",\n        \"customTieredPickList1\": \"\",\n        \"customTieredPickList2\": \"\",\n        \"customTieredPickList3\": \"\",\n        \"customTieredPickList4\": \"\",\n        \"customTieredPickList5\": \"\",\n        \"notes\": \"\",\n        \"amountClaimed\": null,\n        \"companyExposure\": null,\n        \"companyMaximumExposure\": null,\n        \"likelihoodOfLiability\": \"\",\n        \"liabilityIsEstimable\": \"\",\n        \"descriptionOfAssetExposure\": \"\",\n        \"exposureSettlementAuthority\": null,\n        \"reserveAmount\": null,\n        \"insurerReinsurer\": \"\",\n        \"amountCounterClaimed\": null,\n        \"companyRecoveryEstimate\": null,\n        \"companyMaximumRecovery\": null,\n        \"descriptionOfAssetRecovery\": \"\",\n        \"recoverySettlementAuthority\": null,\n        \"estimateTimingOfResolution\": \"\",\n        \"estimatedResolutionDate\": null,\n        \"resolutionDate\": null,\n        \"amountPaid\": null,\n        \"amountReceived\": null,\n        \"daysToEditMatter\": null,\n        \"daysToPostFinalInvoice\": null,\n        \"formOfResolution\": \"\",\n        \"lessonsLearned\": \"\",\n        \"matterComplexity\": \"\",\n        \"otherAssetsLost\": \"\",\n        \"otherAssetsReceived\": \"\",\n        \"paperFileLocation\": \"\",\n        \"timingOfResolution\": \"\",\n        \"resolutionDescription\": \"\",\n        \"requiredTaskCodeIds\": []\n      }\n    },\n    {\n      \"id\": \"2\",\n      \"status\": 200,\n      \"headers\": {\n        \"pragma\": \"no-cache\",\n        \"preference-Applied\": \"return=representation\",\n        \"rootGuid\": \"ia207bb3019bd463b89b012ade4cb01ef\",\n        \"api-supported-versions\": \"1, 2\",\n        \"cache-Control\": \"no-cache\",\n        \"date\": \"Fri, 21 Feb 2020 14:28:43 GMT\",\n        \"eTag\": \"\\\"637178632969170000\\\"\",\n        \"location\": \"https://api.thomsonreuters.com/legal-tracker/matters-api/v1/matters/121429\",\n        \"server\": \"\"\n      },\n      \"body\": {\n        \"id\": 121429,\n        \"matterType\": \"Litigation/Dispute > validation\",\n        \"fullNameAndPartiesInvolved\": \"eewet\",\n        \"shortName\": \"qwerty/3\",\n        \"leadCompanyPersonEmail\": \"ARLevel1@oxy.com\",\n        \"numberTwoCompanyPersonEmail\": \"ARLevel2Delegate@oxy.com\",\n        \"organizationalUnit\": \"UT Org Unit 3\",\n        \"practiceGroup\": \"Legal Department\",\n        \"countryOrRegion\": \"United States\",\n        \"matterGroup\": null,\n        \"businessManager\": \"\",\n        \"associatedMatterId\": \"\",\n        \"associatedMatterUrl\": \"\",\n        \"associatedMatterData\": \"\",\n        \"clientMatterNumber\": \"\",\n        \"invoiceApprovalRoute\": \"AR4\",\n        \"apRoute\": \"APRoutingNoMembers\",\n        \"billedToEntityName\": \"\",\n        \"taxConfiguration\": null,\n        \"preconfiguredAllocations\": null,\n        \"matterAllocations\": [],\n        \"leadOutsideCounselEmail\": \"AccrualFirmSysAdmin@oxy.com\",\n        \"leadFirmFeeArrangement\": \"\",\n        \"leadFirmFeeComment\": \"\",\n        \"currencyID\": \"USD\",\n        \"firmAccess\": \"LEAD_COUNSEL\",\n        \"substantiveLaw\": \"Banking/Financial Services\",\n        \"startDate\": \"2019-12-03T08:00:00Z\",\n        \"description\": \"Description 2\",\n        \"keyIssues\": \"\",\n        \"adverseFirmInfo\": \"\",\n        \"affidavitOfUseFilingDate\": null,\n        \"dateOfLoss\": null,\n        \"dateOfNoticeOfLoss\": null,\n        \"disclosureDate\": null,\n        \"filingDate\": null,\n        \"registrationDate\": null,\n        \"renewalExpirationDate\": null,\n        \"serviceReceivedDate\": null,\n        \"trialDate\": null,\n        \"auditSummary\": \"\",\n        \"caseApplicationNumber\": \"\",\n        \"claims\": \"\",\n        \"classesOfGoods\": \"\",\n        \"serialReelNumber\": \"\",\n        \"ownerRecordTitleHolder\": \"\",\n        \"inventor\": \"\",\n        \"state\": \"\",\n        \"provinceRegion\": \"\",\n        \"status\": \"\",\n        \"registrationNumber\": \"\",\n        \"patentTitle\": \"\",\n        \"patentType\": \"\",\n        \"court\": \"fhfdhdh\",\n        \"courtAdditionalInfo\": \"\",\n        \"financialOnly\": \"No\",\n        \"billingOnlyRole\": \"\",\n        \"consolidatedBilling\": \"No\",\n        \"preconfiguredTaskCodeAlerts\": \"\",\n        \"localFirmOrAgent\": \"\",\n        \"matterAdminRole\": \"CoSysAdmin@oxy.com,ARLevel1@oxy.com,ARLevel2Delegate@oxy.com,AccrualFirmSysAdmin@oxy.com\",\n        \"matterEditorRole\": \"\",\n        \"matterReaderRole\": \"\",\n        \"noMatterOrReportAccessRole\": \"\",\n        \"preApprovedAllocations\": \"No\",\n        \"renewalExpirationDateSendNoticeEmail\": null,\n        \"reportAccessOnlyRole\": \"\",\n        \"reviewInvoiceAllocations\": \"CHANGED_ONLY\",\n        \"taxesIncludedInTCAAmounts\": \"Yes\",\n        \"timekeeperAuditState\": \"Enabled\",\n        \"trialDateSendNoticeEmail\": null,\n        \"customDropdownField1\": \"\",\n        \"customDropdownField2\": \"\",\n        \"customDropdownField3\": \"\",\n        \"customDropdownField4\": \"\",\n        \"customDropdownField5\": \"\",\n        \"customDropdownField6\": \"\",\n        \"customDropdownField7\": \"\",\n        \"customDropdownField8\": \"\",\n        \"customDropdownField9\": \"\",\n        \"customDropdownField10\": \"\",\n        \"customDropdownField11\": \"\",\n        \"customDropdownField12\": \"\",\n        \"customDropdownField13\": \"\",\n        \"customDropdownField14\": \"\",\n        \"customDropdownField15\": \"\",\n        \"customDropdownField16\": \"\",\n        \"customDropdownField17\": \"\",\n        \"customDropdownField18\": \"\",\n        \"customDropdownField19\": \"\",\n        \"customDropdownField20\": \"\",\n        \"customDropdownField21\": \"\",\n        \"customDropdownField22\": \"\",\n        \"customDropdownField23\": \"\",\n        \"customDropdownField24\": \"\",\n        \"customDropdownField25\": \"\",\n        \"customDropdownField26\": \"\",\n        \"customDropdownField27\": \"\",\n        \"customDropdownField28\": \"\",\n        \"customDropdownField29\": \"\",\n        \"customDropdownField30\": \"\",\n        \"customDropdownField31\": \"\",\n        \"customDropdownField32\": \"\",\n        \"customDropdownField33\": \"\",\n        \"customDropdownField34\": \"\",\n        \"customDropdownField35\": \"\",\n        \"customDropdownField36\": \"\",\n        \"customDropdownField37\": \"\",\n        \"customDropdownField38\": \"\",\n        \"customDropdownField39\": \"\",\n        \"customDropdownField40\": \"\",\n        \"customDropdownField41\": \"\",\n        \"customCurrencyField1\": null,\n        \"customCurrencyField2\": null,\n        \"customCurrencyField3\": null,\n        \"customCurrencyField4\": null,\n        \"customCurrencyField5\": null,\n        \"customCurrencyField6\": null,\n        \"customCurrencyField7\": null,\n        \"customCurrencyField8\": null,\n        \"customCurrencyField9\": null,\n        \"customCurrencyField10\": null,\n        \"customCurrencyField11\": null,\n        \"customCurrencyField12\": null,\n        \"customCurrencyField13\": null,\n        \"customCurrencyField14\": null,\n        \"customCurrencyField15\": null,\n        \"customCurrencyField16\": null,\n        \"customCurrencyField17\": null,\n        \"customCurrencyField18\": null,\n        \"customCurrencyField19\": null,\n        \"customCurrencyField20\": null,\n        \"customCurrencyField21\": null,\n        \"customCurrencyField22\": null,\n        \"customCurrencyField23\": null,\n        \"customCurrencyField24\": null,\n        \"customCurrencyField25\": null,\n        \"customCurrencyField26\": null,\n        \"customCurrencyField27\": null,\n        \"customCurrencyField28\": null,\n        \"customCurrencyField29\": null,\n        \"customCurrencyField30\": null,\n        \"customCurrencyField31\": null,\n        \"customCurrencyField32\": null,\n        \"customCurrencyField33\": null,\n        \"customCurrencyField34\": null,\n        \"customCurrencyField35\": null,\n        \"customCurrencyField36\": null,\n        \"customCurrencyField37\": null,\n        \"customCurrencyField38\": null,\n        \"customCurrencyField39\": null,\n        \"customCurrencyField40\": null,\n        \"customCurrencyField41\": null,\n        \"customDateField1\": null,\n        \"customDateField2\": null,\n        \"customDateField3\": null,\n        \"customDateField4\": null,\n        \"customDateField5\": null,\n        \"customDateField6\": null,\n        \"customDateField7\": null,\n        \"customDateField8\": null,\n        \"customDateField9\": null,\n        \"customDateField10\": null,\n        \"customDateField11\": null,\n        \"customDateField12\": null,\n        \"customDateField13\": null,\n        \"customDateField14\": null,\n        \"customDateField15\": null,\n        \"customDateField16\": null,\n        \"customDateField17\": null,\n        \"customDateField18\": null,\n        \"customDateField19\": null,\n        \"customDateField20\": null,\n        \"customDateField21\": null,\n        \"customTextField1\": \"\",\n        \"customTextField2\": \"\",\n        \"customTextField3\": \"\",\n        \"customTextField4\": \"\",\n        \"customTextField5\": \"\",\n        \"customTextField6\": \"\",\n        \"customTextField7\": \"\",\n        \"customTextField8\": \"\",\n        \"customTextField9\": \"\",\n        \"customTextField10\": \"\",\n        \"customTextField11\": \"\",\n        \"customTextField12\": \"\",\n        \"customTextField13\": \"\",\n        \"customTextField14\": \"\",\n        \"customTextField15\": \"\",\n        \"customTextField16\": \"\",\n        \"customTextField17\": \"\",\n        \"customTextField18\": \"\",\n        \"customTextField19\": \"\",\n        \"customTextField20\": \"\",\n        \"customTextField21\": \"\",\n        \"customTextAreaField1\": \"\",\n        \"customTextAreaField2\": \"\",\n        \"customTextAreaField3\": \"\",\n        \"customTextAreaField4\": \"\",\n        \"customTextAreaField5\": \"\",\n        \"customTextAreaField6\": \"\",\n        \"customTextAreaField7\": \"\",\n        \"customTextAreaField8\": \"\",\n        \"customTextAreaField9\": \"\",\n        \"customTextAreaField10\": \"\",\n        \"customTextAreaField11\": \"\",\n        \"customTextAreaField12\": \"\",\n        \"customTextAreaField13\": \"\",\n        \"customRichTextAreaField1\": \"\",\n        \"customRichTextAreaField2\": \"\",\n        \"customRichTextAreaField3\": \"\",\n        \"customRichTextAreaField4\": \"\",\n        \"customRichTextAreaField5\": \"\",\n        \"customRichTextAreaField6\": \"\",\n        \"customRichTextAreaField7\": \"\",\n        \"customRichTextAreaField8\": \"\",\n        \"customRichTextAreaField9\": \"\",\n        \"customRichTextAreaField10\": \"\",\n        \"customRichTextAreaField11\": \"\",\n        \"customNumberField1\": null,\n        \"customNumberField2\": null,\n        \"customNumberField3\": null,\n        \"customNumberField4\": null,\n        \"customNumberField5\": null,\n        \"customNumberField6\": null,\n        \"customNumberField7\": null,\n        \"customNumberField8\": null,\n        \"customNumberField9\": null,\n        \"customNumberField10\": null,\n        \"customNumberField11\": null,\n        \"customMultiPickList1\": \"\",\n        \"customMultiPickList2\": \"\",\n        \"customMultiPickList3\": \"\",\n        \"customMultiPickList4\": \"\",\n        \"customMultiPickList5\": \"\",\n        \"customMultiPickList6\": \"\",\n        \"customMultiPickList7\": \"\",\n        \"customMultiPickList8\": \"\",\n        \"customMultiPickList9\": \"\",\n        \"customMultiPickList10\": \"\",\n        \"customMultiPickList11\": \"\",\n        \"customMultiPickList12\": \"\",\n        \"customMultiPickList13\": \"\",\n        \"customMultiPickList14\": \"\",\n        \"customMultiPickList15\": \"\",\n        \"customMultiPickList16\": \"\",\n        \"customMultiPickList17\": \"\",\n        \"customMultiPickList18\": \"\",\n        \"customMultiPickList19\": \"\",\n        \"customMultiPickList20\": \"\",\n        \"customMultiPickList21\": \"\",\n        \"customTieredPickList1\": \"\",\n        \"customTieredPickList2\": \"\",\n        \"customTieredPickList3\": \"\",\n        \"customTieredPickList4\": \"\",\n        \"customTieredPickList5\": \"\",\n        \"notes\": \"\",\n        \"amountClaimed\": null,\n        \"companyExposure\": null,\n        \"companyMaximumExposure\": null,\n        \"likelihoodOfLiability\": \"\",\n        \"liabilityIsEstimable\": \"\",\n        \"descriptionOfAssetExposure\": \"\",\n        \"exposureSettlementAuthority\": null,\n        \"reserveAmount\": null,\n        \"insurerReinsurer\": \"\",\n        \"amountCounterClaimed\": null,\n        \"companyRecoveryEstimate\": null,\n        \"companyMaximumRecovery\": null,\n        \"descriptionOfAssetRecovery\": \"\",\n        \"recoverySettlementAuthority\": null,\n        \"estimateTimingOfResolution\": \"\",\n        \"estimatedResolutionDate\": null,\n        \"resolutionDate\": null,\n        \"amountPaid\": null,\n        \"amountReceived\": null,\n        \"daysToEditMatter\": null,\n        \"daysToPostFinalInvoice\": null,\n        \"formOfResolution\": \"\",\n        \"lessonsLearned\": \"\",\n        \"matterComplexity\": \"\",\n        \"otherAssetsLost\": \"\",\n        \"otherAssetsReceived\": \"\",\n        \"paperFileLocation\": \"\",\n        \"timingOfResolution\": \"\",\n        \"resolutionDescription\": \"\",\n        \"requiredTaskCodeIds\": [ \"Litigation\" ]\n      }\n    },\n    {\n      \"id\": \"3\",\n      \"status\": 200,\n      \"headers\": {\n        \"pragma\": \"no-cache\",\n        \"rootGuid\": \"i1343ecc73d5e47c2b9546ebb8015e409\",\n        \"api-supported-versions\": \"1, 2\",\n        \"cache-Control\": \"no-cache\",\n        \"date\": \"Fri, 21 Feb 2020 14:28:43 GMT\",\n        \"eTag\": \"\\\"637178632969170000\\\"\",\n        \"server\": \"\"\n      },\n      \"body\": {\n        \"id\": 121429,\n        \"matterType\": \"Litigation/Dispute > validation\",\n        \"fullNameAndPartiesInvolved\": \"eewet\",\n        \"shortName\": \"qwerty/3\",\n        \"leadCompanyPersonEmail\": \"ARLevel1@oxy.com\",\n        \"numberTwoCompanyPersonEmail\": \"ARLevel2Delegate@oxy.com\",\n        \"organizationalUnit\": \"UT Org Unit 3\",\n        \"practiceGroup\": \"Legal Department\",\n        \"countryOrRegion\": \"United States\",\n        \"matterGroup\": null,\n        \"businessManager\": \"\",\n        \"associatedMatterId\": \"\",\n        \"associatedMatterUrl\": \"\",\n        \"associatedMatterData\": \"\",\n        \"clientMatterNumber\": \"\",\n        \"invoiceApprovalRoute\": \"AR4\",\n        \"apRoute\": \"APRoutingNoMembers\",\n        \"billedToEntityName\": \"\",\n        \"taxConfiguration\": null,\n        \"preconfiguredAllocations\": null,\n        \"matterAllocations\": [],\n        \"leadOutsideCounselEmail\": \"AccrualFirmSysAdmin@oxy.com\",\n        \"leadFirmFeeArrangement\": \"\",\n        \"leadFirmFeeComment\": \"\",\n        \"currencyID\": \"USD\",\n        \"firmAccess\": \"LEAD_COUNSEL\",\n        \"substantiveLaw\": \"Banking/Financial Services\",\n        \"startDate\": \"2019-12-03T08:00:00Z\",\n        \"description\": \"Description 2\",\n        \"keyIssues\": \"\",\n        \"adverseFirmInfo\": \"\",\n        \"affidavitOfUseFilingDate\": null,\n        \"dateOfLoss\": null,\n        \"dateOfNoticeOfLoss\": null,\n        \"disclosureDate\": null,\n        \"filingDate\": null,\n        \"registrationDate\": null,\n        \"renewalExpirationDate\": null,\n        \"serviceReceivedDate\": null,\n        \"trialDate\": null,\n        \"auditSummary\": \"\",\n        \"caseApplicationNumber\": \"\",\n        \"claims\": \"\",\n        \"classesOfGoods\": \"\",\n        \"serialReelNumber\": \"\",\n        \"ownerRecordTitleHolder\": \"\",\n        \"inventor\": \"\",\n        \"state\": \"\",\n        \"provinceRegion\": \"\",\n        \"status\": \"\",\n        \"registrationNumber\": \"\",\n        \"patentTitle\": \"\",\n        \"patentType\": \"\",\n        \"court\": \"fhfdhdh\",\n        \"courtAdditionalInfo\": \"\",\n        \"financialOnly\": \"No\",\n        \"billingOnlyRole\": \"\",\n        \"consolidatedBilling\": \"No\",\n        \"preconfiguredTaskCodeAlerts\": \"\",\n        \"localFirmOrAgent\": \"\",\n        \"matterAdminRole\": \"CoSysAdmin@oxy.com,ARLevel1@oxy.com,ARLevel2Delegate@oxy.com,AccrualFirmSysAdmin@oxy.com\",\n        \"matterEditorRole\": \"\",\n        \"matterReaderRole\": \"\",\n        \"noMatterOrReportAccessRole\": \"\",\n        \"preApprovedAllocations\": \"No\",\n        \"renewalExpirationDateSendNoticeEmail\": null,\n        \"reportAccessOnlyRole\": \"\",\n        \"reviewInvoiceAllocations\": \"CHANGED_ONLY\",\n        \"taxesIncludedInTCAAmounts\": \"Yes\",\n        \"timekeeperAuditState\": \"Enabled\",\n        \"trialDateSendNoticeEmail\": null,\n        \"customDropdownField1\": \"\",\n        \"customDropdownField2\": \"\",\n        \"customDropdownField3\": \"\",\n        \"customDropdownField4\": \"\",\n        \"customDropdownField5\": \"\",\n        \"customDropdownField6\": \"\",\n        \"customDropdownField7\": \"\",\n        \"customDropdownField8\": \"\",\n        \"customDropdownField9\": \"\",\n        \"customDropdownField10\": \"\",\n        \"customDropdownField11\": \"\",\n        \"customDropdownField12\": \"\",\n        \"customDropdownField13\": \"\",\n        \"customDropdownField14\": \"\",\n        \"customDropdownField15\": \"\",\n        \"customDropdownField16\": \"\",\n        \"customDropdownField17\": \"\",\n        \"customDropdownField18\": \"\",\n        \"customDropdownField19\": \"\",\n        \"customDropdownField20\": \"\",\n        \"customDropdownField21\": \"\",\n        \"customDropdownField22\": \"\",\n        \"customDropdownField23\": \"\",\n        \"customDropdownField24\": \"\",\n        \"customDropdownField25\": \"\",\n        \"customDropdownField26\": \"\",\n        \"customDropdownField27\": \"\",\n        \"customDropdownField28\": \"\",\n        \"customDropdownField29\": \"\",\n        \"customDropdownField30\": \"\",\n        \"customDropdownField31\": \"\",\n        \"customDropdownField32\": \"\",\n        \"customDropdownField33\": \"\",\n        \"customDropdownField34\": \"\",\n        \"customDropdownField35\": \"\",\n        \"customDropdownField36\": \"\",\n        \"customDropdownField37\": \"\",\n        \"customDropdownField38\": \"\",\n        \"customDropdownField39\": \"\",\n        \"customDropdownField40\": \"\",\n        \"customDropdownField41\": \"\",\n        \"customCurrencyField1\": null,\n        \"customCurrencyField2\": null,\n        \"customCurrencyField3\": null,\n        \"customCurrencyField4\": null,\n        \"customCurrencyField5\": null,\n        \"customCurrencyField6\": null,\n        \"customCurrencyField7\": null,\n        \"customCurrencyField8\": null,\n        \"customCurrencyField9\": null,\n        \"customCurrencyField10\": null,\n        \"customCurrencyField11\": null,\n        \"customCurrencyField12\": null,\n        \"customCurrencyField13\": null,\n        \"customCurrencyField14\": null,\n        \"customCurrencyField15\": null,\n        \"customCurrencyField16\": null,\n        \"customCurrencyField17\": null,\n        \"customCurrencyField18\": null,\n        \"customCurrencyField19\": null,\n        \"customCurrencyField20\": null,\n        \"customCurrencyField21\": null,\n        \"customCurrencyField22\": null,\n        \"customCurrencyField23\": null,\n        \"customCurrencyField24\": null,\n        \"customCurrencyField25\": null,\n        \"customCurrencyField26\": null,\n        \"customCurrencyField27\": null,\n        \"customCurrencyField28\": null,\n        \"customCurrencyField29\": null,\n        \"customCurrencyField30\": null,\n        \"customCurrencyField31\": null,\n        \"customCurrencyField32\": null,\n        \"customCurrencyField33\": null,\n        \"customCurrencyField34\": null,\n        \"customCurrencyField35\": null,\n        \"customCurrencyField36\": null,\n        \"customCurrencyField37\": null,\n        \"customCurrencyField38\": null,\n        \"customCurrencyField39\": null,\n        \"customCurrencyField40\": null,\n        \"customCurrencyField41\": null,\n        \"customDateField1\": null,\n        \"customDateField2\": null,\n        \"customDateField3\": null,\n        \"customDateField4\": null,\n        \"customDateField5\": null,\n        \"customDateField6\": null,\n        \"customDateField7\": null,\n        \"customDateField8\": null,\n        \"customDateField9\": null,\n        \"customDateField10\": null,\n        \"customDateField11\": null,\n        \"customDateField12\": null,\n        \"customDateField13\": null,\n        \"customDateField14\": null,\n        \"customDateField15\": null,\n        \"customDateField16\": null,\n        \"customDateField17\": null,\n        \"customDateField18\": null,\n        \"customDateField19\": null,\n        \"customDateField20\": null,\n        \"customDateField21\": null,\n        \"customTextField1\": \"\",\n        \"customTextField2\": \"\",\n        \"customTextField3\": \"\",\n        \"customTextField4\": \"\",\n        \"customTextField5\": \"\",\n        \"customTextField6\": \"\",\n        \"customTextField7\": \"\",\n        \"customTextField8\": \"\",\n        \"customTextField9\": \"\",\n        \"customTextField10\": \"\",\n        \"customTextField11\": \"\",\n        \"customTextField12\": \"\",\n        \"customTextField13\": \"\",\n        \"customTextField14\": \"\",\n        \"customTextField15\": \"\",\n        \"customTextField16\": \"\",\n        \"customTextField17\": \"\",\n        \"customTextField18\": \"\",\n        \"customTextField19\": \"\",\n        \"customTextField20\": \"\",\n        \"customTextField21\": \"\",\n        \"customTextAreaField1\": \"\",\n        \"customTextAreaField2\": \"\",\n        \"customTextAreaField3\": \"\",\n        \"customTextAreaField4\": \"\",\n        \"customTextAreaField5\": \"\",\n        \"customTextAreaField6\": \"\",\n        \"customTextAreaField7\": \"\",\n        \"customTextAreaField8\": \"\",\n        \"customTextAreaField9\": \"\",\n        \"customTextAreaField10\": \"\",\n        \"customTextAreaField11\": \"\",\n        \"customTextAreaField12\": \"\",\n        \"customTextAreaField13\": \"\",\n        \"customRichTextAreaField1\": \"\",\n        \"customRichTextAreaField2\": \"\",\n        \"customRichTextAreaField3\": \"\",\n        \"customRichTextAreaField4\": \"\",\n        \"customRichTextAreaField5\": \"\",\n        \"customRichTextAreaField6\": \"\",\n        \"customRichTextAreaField7\": \"\",\n        \"customRichTextAreaField8\": \"\",\n        \"customRichTextAreaField9\": \"\",\n        \"customRichTextAreaField10\": \"\",\n        \"customRichTextAreaField11\": \"\",\n        \"customNumberField1\": null,\n        \"customNumberField2\": null,\n        \"customNumberField3\": null,\n        \"customNumberField4\": null,\n        \"customNumberField5\": null,\n        \"customNumberField6\": null,\n        \"customNumberField7\": null,\n        \"customNumberField8\": null,\n        \"customNumberField9\": null,\n        \"customNumberField10\": null,\n        \"customNumberField11\": null,\n        \"customMultiPickList1\": \"\",\n        \"customMultiPickList2\": \"\",\n        \"customMultiPickList3\": \"\",\n        \"customMultiPickList4\": \"\",\n        \"customMultiPickList5\": \"\",\n        \"customMultiPickList6\": \"\",\n        \"customMultiPickList7\": \"\",\n        \"customMultiPickList8\": \"\",\n        \"customMultiPickList9\": \"\",\n        \"customMultiPickList10\": \"\",\n        \"customMultiPickList11\": \"\",\n        \"customMultiPickList12\": \"\",\n        \"customMultiPickList13\": \"\",\n        \"customMultiPickList14\": \"\",\n        \"customMultiPickList15\": \"\",\n        \"customMultiPickList16\": \"\",\n        \"customMultiPickList17\": \"\",\n        \"customMultiPickList18\": \"\",\n        \"customMultiPickList19\": \"\",\n        \"customMultiPickList20\": \"\",\n        \"customMultiPickList21\": \"\",\n        \"customTieredPickList1\": \"\",\n        \"customTieredPickList2\": \"\",\n        \"customTieredPickList3\": \"\",\n        \"customTieredPickList4\": \"\",\n        \"customTieredPickList5\": \"\",\n        \"notes\": \"\",\n        \"amountClaimed\": null,\n        \"companyExposure\": null,\n        \"companyMaximumExposure\": null,\n        \"likelihoodOfLiability\": \"\",\n        \"liabilityIsEstimable\": \"\",\n        \"descriptionOfAssetExposure\": \"\",\n        \"exposureSettlementAuthority\": null,\n        \"reserveAmount\": null,\n        \"insurerReinsurer\": \"\",\n        \"amountCounterClaimed\": null,\n        \"companyRecoveryEstimate\": null,\n        \"companyMaximumRecovery\": null,\n        \"descriptionOfAssetRecovery\": \"\",\n        \"recoverySettlementAuthority\": null,\n        \"estimateTimingOfResolution\": \"\",\n        \"estimatedResolutionDate\": null,\n        \"resolutionDate\": null,\n        \"amountPaid\": null,\n        \"amountReceived\": null,\n        \"daysToEditMatter\": null,\n        \"daysToPostFinalInvoice\": null,\n        \"formOfResolution\": \"\",\n        \"lessonsLearned\": \"\",\n        \"matterComplexity\": \"\",\n        \"otherAssetsLost\": \"\",\n        \"otherAssetsReceived\": \"\",\n        \"paperFileLocation\": \"\",\n        \"timingOfResolution\": \"\",\n        \"resolutionDescription\": \"\",\n        \"requiredTaskCodeIds\": [ \"Counseling\", \"Patent\"]\n      }\n    },\n    {\n      \"id\": \"4\",\n      \"status\": 201,\n      \"headers\": {\n        \"pragma\": \"no-cache\",\n        \"preference-Applied\": \"return=representation\",\n        \"rootGuid\": \"i3eb5a1ecc231433d9ef795b11759e55d\",\n        \"api-supported-versions\": \"1, 2\",\n        \"cache-Control\": \"no-cache\",\n        \"date\": \"Fri, 21 Feb 2020 14:28:46 GMT\",\n        \"eTag\": \"\\\"637178633253830000\\\"\",\n        \"location\": \"https://api.thomsonreuters.com/legal-tracker/matters-api/v1/matters/344519\",\n        \"server\": \"\"\n      },\n      \"body\": {\n        \"id\": 344519,\n        \"matterType\": \"Miscellaneous > Other\",\n        \"fullNameAndPartiesInvolved\": \"FullName\",\n        \"shortName\": \"147\",\n        \"leadCompanyPersonEmail\": \"ARLevel1@oxy.com\",\n        \"numberTwoCompanyPersonEmail\": \"\",\n        \"organizationalUnit\": \"UT Org Unit 3\",\n        \"practiceGroup\": \"Legal Department\",\n        \"countryOrRegion\": \"United States\",\n        \"matterGroup\": null,\n        \"businessManager\": \"\",\n        \"associatedMatterId\": \"579\",\n        \"associatedMatterUrl\": \"\",\n        \"associatedMatterData\": \"\",\n        \"clientMatterNumber\": \"202009354\",\n        \"invoiceApprovalRoute\": \"AR1\",\n        \"apRoute\": \"AP Route\",\n        \"billedToEntityName\": \"\",\n        \"taxConfiguration\": null,\n        \"preconfiguredAllocations\": null,\n        \"matterAllocations\": [],\n        \"leadOutsideCounselEmail\": \"\",\n        \"leadFirmFeeArrangement\": \"\",\n        \"leadFirmFeeComment\": \"\",\n        \"currencyID\": \"USD\",\n        \"firmAccess\": \"LEAD_COUNSEL\",\n        \"substantiveLaw\": \"Bankruptcy\",\n        \"startDate\": \"2019-08-12T19:00:00Z\",\n        \"description\": \"Description\",\n        \"keyIssues\": \"\",\n        \"adverseFirmInfo\": \"\",\n        \"affidavitOfUseFilingDate\": null,\n        \"dateOfLoss\": null,\n        \"dateOfNoticeOfLoss\": null,\n        \"disclosureDate\": null,\n        \"filingDate\": null,\n        \"registrationDate\": null,\n        \"renewalExpirationDate\": null,\n        \"serviceReceivedDate\": null,\n        \"trialDate\": null,\n        \"auditSummary\": \"\",\n        \"caseApplicationNumber\": \"\",\n        \"claims\": \"\",\n        \"classesOfGoods\": \"\",\n        \"serialReelNumber\": \"\",\n        \"ownerRecordTitleHolder\": \"\",\n        \"inventor\": \"\",\n        \"state\": \"\",\n        \"provinceRegion\": \"\",\n        \"status\": \"\",\n        \"registrationNumber\": \"\",\n        \"patentTitle\": \"\",\n        \"patentType\": \"\",\n        \"court\": \"\",\n        \"courtAdditionalInfo\": \"\",\n        \"financialOnly\": \"No\",\n        \"billingOnlyRole\": \"\",\n        \"consolidatedBilling\": \"No\",\n        \"preconfiguredTaskCodeAlerts\": \"\",\n        \"localFirmOrAgent\": \"\",\n        \"matterAdminRole\": \"ARLevel1@oxy.com\",\n        \"matterEditorRole\": \"\",\n        \"matterReaderRole\": \"\",\n        \"noMatterOrReportAccessRole\": \"\",\n        \"preApprovedAllocations\": \"No\",\n        \"renewalExpirationDateSendNoticeEmail\": null,\n        \"reportAccessOnlyRole\": \"\",\n        \"reviewInvoiceAllocations\": \"CHANGED_ONLY\",\n        \"taxesIncludedInTCAAmounts\": \"Yes\",\n        \"timekeeperAuditState\": \"Enabled\",\n        \"trialDateSendNoticeEmail\": null,\n        \"customDropdownField1\": \"\",\n        \"customDropdownField2\": \"\",\n        \"customDropdownField3\": \"\",\n        \"customDropdownField4\": \"\",\n        \"customDropdownField5\": \"\",\n        \"customDropdownField6\": \"\",\n        \"customDropdownField7\": \"\",\n        \"customDropdownField8\": \"\",\n        \"customDropdownField9\": \"\",\n        \"customDropdownField10\": \"\",\n        \"customDropdownField11\": \"\",\n        \"customDropdownField12\": \"\",\n        \"customDropdownField13\": \"\",\n        \"customDropdownField14\": \"\",\n        \"customDropdownField15\": \"\",\n        \"customDropdownField16\": \"\",\n        \"customDropdownField17\": \"\",\n        \"customDropdownField18\": \"\",\n        \"customDropdownField19\": \"\",\n        \"customDropdownField20\": \"\",\n        \"customDropdownField21\": \"\",\n        \"customDropdownField22\": \"\",\n        \"customDropdownField23\": \"\",\n        \"customDropdownField24\": \"\",\n        \"customDropdownField25\": \"\",\n        \"customDropdownField26\": \"\",\n        \"customDropdownField27\": \"\",\n        \"customDropdownField28\": \"\",\n        \"customDropdownField29\": \"\",\n        \"customDropdownField30\": \"\",\n        \"customDropdownField31\": \"\",\n        \"customDropdownField32\": \"\",\n        \"customDropdownField33\": \"\",\n        \"customDropdownField34\": \"\",\n        \"customDropdownField35\": \"\",\n        \"customDropdownField36\": \"\",\n        \"customDropdownField37\": \"\",\n        \"customDropdownField38\": \"\",\n        \"customDropdownField39\": \"\",\n        \"customDropdownField40\": \"\",\n        \"customDropdownField41\": \"\",\n        \"customCurrencyField1\": null,\n        \"customCurrencyField2\": null,\n        \"customCurrencyField3\": null,\n        \"customCurrencyField4\": null,\n        \"customCurrencyField5\": null,\n        \"customCurrencyField6\": null,\n        \"customCurrencyField7\": null,\n        \"customCurrencyField8\": null,\n        \"customCurrencyField9\": null,\n        \"customCurrencyField10\": null,\n        \"customCurrencyField11\": null,\n        \"customCurrencyField12\": null,\n        \"customCurrencyField13\": null,\n        \"customCurrencyField14\": null,\n        \"customCurrencyField15\": null,\n        \"customCurrencyField16\": null,\n        \"customCurrencyField17\": null,\n        \"customCurrencyField18\": null,\n        \"customCurrencyField19\": null,\n        \"customCurrencyField20\": null,\n        \"customCurrencyField21\": null,\n        \"customCurrencyField22\": null,\n        \"customCurrencyField23\": null,\n        \"customCurrencyField24\": null,\n        \"customCurrencyField25\": null,\n        \"customCurrencyField26\": null,\n        \"customCurrencyField27\": null,\n        \"customCurrencyField28\": null,\n        \"customCurrencyField29\": null,\n        \"customCurrencyField30\": null,\n        \"customCurrencyField31\": null,\n        \"customCurrencyField32\": null,\n        \"customCurrencyField33\": null,\n        \"customCurrencyField34\": null,\n        \"customCurrencyField35\": null,\n        \"customCurrencyField36\": null,\n        \"customCurrencyField37\": null,\n        \"customCurrencyField38\": null,\n        \"customCurrencyField39\": null,\n        \"customCurrencyField40\": null,\n        \"customCurrencyField41\": null,\n        \"customDateField1\": null,\n        \"customDateField2\": null,\n        \"customDateField3\": null,\n        \"customDateField4\": null,\n        \"customDateField5\": null,\n        \"customDateField6\": null,\n        \"customDateField7\": null,\n        \"customDateField8\": null,\n        \"customDateField9\": null,\n        \"customDateField10\": null,\n        \"customDateField11\": null,\n        \"customDateField12\": null,\n        \"customDateField13\": null,\n        \"customDateField14\": null,\n        \"customDateField15\": null,\n        \"customDateField16\": null,\n        \"customDateField17\": null,\n        \"customDateField18\": null,\n        \"customDateField19\": null,\n        \"customDateField20\": null,\n        \"customDateField21\": null,\n        \"customTextField1\": \"\",\n        \"customTextField2\": \"\",\n        \"customTextField3\": \"\",\n        \"customTextField4\": \"\",\n        \"customTextField5\": \"\",\n        \"customTextField6\": \"\",\n        \"customTextField7\": \"\",\n        \"customTextField8\": \"\",\n        \"customTextField9\": \"\",\n        \"customTextField10\": \"\",\n        \"customTextField11\": \"\",\n        \"customTextField12\": \"\",\n        \"customTextField13\": \"\",\n        \"customTextField14\": \"\",\n        \"customTextField15\": \"\",\n        \"customTextField16\": \"\",\n        \"customTextField17\": \"\",\n        \"customTextField18\": \"\",\n        \"customTextField19\": \"\",\n        \"customTextField20\": \"\",\n        \"customTextField21\": \"\",\n        \"customTextAreaField1\": \"\",\n        \"customTextAreaField2\": \"\",\n        \"customTextAreaField3\": \"\",\n        \"customTextAreaField4\": \"\",\n        \"customTextAreaField5\": \"\",\n        \"customTextAreaField6\": \"\",\n        \"customTextAreaField7\": \"\",\n        \"customTextAreaField8\": \"\",\n        \"customTextAreaField9\": \"\",\n        \"customTextAreaField10\": \"\",\n        \"customTextAreaField11\": \"\",\n        \"customTextAreaField12\": \"\",\n        \"customTextAreaField13\": \"\",\n        \"customRichTextAreaField1\": \"\",\n        \"customRichTextAreaField2\": \"\",\n        \"customRichTextAreaField3\": \"\",\n        \"customRichTextAreaField4\": \"\",\n        \"customRichTextAreaField5\": \"\",\n        \"customRichTextAreaField6\": \"\",\n        \"customRichTextAreaField7\": \"\",\n        \"customRichTextAreaField8\": \"\",\n        \"customRichTextAreaField9\": \"\",\n        \"customRichTextAreaField10\": \"\",\n        \"customRichTextAreaField11\": \"\",\n        \"customNumberField1\": null,\n        \"customNumberField2\": null,\n        \"customNumberField3\": null,\n        \"customNumberField4\": null,\n        \"customNumberField5\": null,\n        \"customNumberField6\": null,\n        \"customNumberField7\": null,\n        \"customNumberField8\": null,\n        \"customNumberField9\": null,\n        \"customNumberField10\": null,\n        \"customNumberField11\": null,\n        \"customMultiPickList1\": \"\",\n        \"customMultiPickList2\": \"\",\n        \"customMultiPickList3\": \"\",\n        \"customMultiPickList4\": \"\",\n        \"customMultiPickList5\": \"\",\n        \"customMultiPickList6\": \"\",\n        \"customMultiPickList7\": \"\",\n        \"customMultiPickList8\": \"\",\n        \"customMultiPickList9\": \"\",\n        \"customMultiPickList10\": \"\",\n        \"customMultiPickList11\": \"\",\n        \"customMultiPickList12\": \"\",\n        \"customMultiPickList13\": \"\",\n        \"customMultiPickList14\": \"\",\n        \"customMultiPickList15\": \"\",\n        \"customMultiPickList16\": \"\",\n        \"customMultiPickList17\": \"\",\n        \"customMultiPickList18\": \"\",\n        \"customMultiPickList19\": \"\",\n        \"customMultiPickList20\": \"\",\n        \"customMultiPickList21\": \"\",\n        \"customTieredPickList1\": \"\",\n        \"customTieredPickList2\": \"\",\n        \"customTieredPickList3\": \"\",\n        \"customTieredPickList4\": \"\",\n        \"customTieredPickList5\": \"\",\n        \"notes\": \"\",\n        \"amountClaimed\": null,\n        \"companyExposure\": null,\n        \"companyMaximumExposure\": null,\n        \"likelihoodOfLiability\": \"\",\n        \"liabilityIsEstimable\": \"\",\n        \"descriptionOfAssetExposure\": \"\",\n        \"exposureSettlementAuthority\": null,\n        \"reserveAmount\": null,\n        \"insurerReinsurer\": \"\",\n        \"amountCounterClaimed\": null,\n        \"companyRecoveryEstimate\": null,\n        \"companyMaximumRecovery\": null,\n        \"descriptionOfAssetRecovery\": \"\",\n        \"recoverySettlementAuthority\": null,\n        \"estimateTimingOfResolution\": \"\",\n        \"estimatedResolutionDate\": null,\n        \"resolutionDate\": null,\n        \"amountPaid\": null,\n        \"amountReceived\": null,\n        \"daysToEditMatter\": null,\n        \"daysToPostFinalInvoice\": null,\n        \"formOfResolution\": \"\",\n        \"lessonsLearned\": \"\",\n        \"matterComplexity\": \"\",\n        \"otherAssetsLost\": \"\",\n        \"otherAssetsReceived\": \"\",\n        \"paperFileLocation\": \"\",\n        \"timingOfResolution\": \"\",\n        \"resolutionDescription\": \"\",\n        \"requiredTaskCodeIds\": []\n      }\n    }\n  ]\n}\n"
+        '202':
+          description: The batch request is currently being processed.
+          headers:
+            Location:
+              description: URL to check batch status
+              schema:
+                type: string
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Insufficient permissions response:
+                  value:
+                    error:
+                      code: InsufficientPermission
+                      message: Only web service users with appropriate permissions are allowed to access this api method.
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                No request found example:
+                  value:
+                    error:
+                      code: RecordNotFound
+                      message: No record found for id 344306
+      security:
+      - OAuth2: []
+      - Token: []
+    delete:
+      tags:
+      - Batches
+      operationId: MattersBatch_CancelBatch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '202':
+          description: The cancellation is being processed asynchronously. To monitor the status of the asynchronous request use the URL in returned in the Location header.
+          headers:
+            Location:
+              description: URL  for batch cancellation
+              schema:
+                type: string
+        '204':
+          description: The asynchronous processing has been successfully canceled.
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                No request found example:
+                  value:
+                    error:
+                      code: RecordNotFound
+                      message: No record found for id 344306
+        '405':
+          description: Request is not supported by the service.
+      security:
+      - OAuth2: []
+      - Token: []
+      summary: Matters batch cancel batch
+      x-summary-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+  /$batch:
+    post:
+      tags:
+      - Batches
+      summary: Combine multiple matter requests into a single batch request
+      description: '$batch follows theOData 4.01 JSON standard for batching multiple single requests into one request. Currently the $batch endpoint supports the following:
+
+        * Asynchronous request processing for the entire batch, the resulting status code of 202 contains the status monitor URL to the operations endpoint where status and results of the request can be retrieved
+
+        * GET, POST and PATCH operations for the matters endpoint
+
+        * The ability to control the processing of requests if one or more requests fail(continue-on-error Prefer header value)
+
+        * Processing multiple requests in parallel is supported if the continue-on-error Prefer header value is set to true'
+      operationId: MattersBatch_CreateBatch
+      parameters:
+      - name: Prefer
+        in: header
+        description: '* continue-on-error=true: **This is the default.** Requests will be processed in parallel and will continue if errors are encountered. The return response will include all requests including successful and unsuccessful requests.
+
+          * continue-on-error=false: Batch processing will be halted if an individual request returns an HTTP error code.
+
+          '
+        schema:
+          type: string
+          example: continue-on-error=true
+      requestBody:
+        x-name: model
+        description: A batch request consists of a collection of single requests that specify an endpoint URL, a unique Id and a body.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchRequestsModel'
+            examples:
+              Batch request example with GET, PATCH and POST:
+                value: "{\n  \"requests\": [\n    {\n      \"id\": \"1\",\n      \"method\": \"patch\",\n      \"url\": \"/matters/121429\",\n      \"headers\": {\n        \"Content-Type\": \"application/merge-patch+json\",\n        \"If-Match\": \"*\",\n        \"Prefer\": \"return=representation\"\n      },\n      \"body\": {\n        \"Description\": \"Description 1\"\n      }\n    },\n    {\n      \"id\": \"2\",\n      \"method\": \"patch\",\n      \"url\": \"/matters/121429\",\n      \"headers\": {\n        \"Content-Type\": \"application/merge-patch+json\",\n        \"If-Match\": \"*\",\n        \"Prefer\": \"return=representation\"\n      },\n      \"body\": {\n        \"Description\": \"Description 2\"\n      }\n    },\n    {\n      \"id\": \"3\",\n      \"method\": \"get\",\n      \"url\": \"/matters/121429\",\n      \"headers\": {\n        \"Content-Type\": \"application/json\"\n      }\n    },\n    {\n      \"id\": \"4\",\n      \"method\": \"post\",\n      \"url\": \"/matters\",\n      \"headers\": {\n        \"Content-Type\": \"application/json\",\n        \"Prefer\": \"return=representation\"\n      },\n      \"body\": {\n        \"FullNameAndPartiesInvolved\": \"FullName\",\n        \"ShortName\": \"ShortName\",\n        \"LeadCompanyPersonEmail\": \"lead.company.person@email.com\",\n        \"OrganizationalUnit\": \"orgUnit\",\n        \"PracticeGroup\": \"practiceGroup\",\n        \"MatterType\": \"Miscellaneous > Other\",\n        \"SubstantiveLaw\": \"Bankruptcy\",\n        \"StartDate\": \"2019-08-12T12:00:00\",\n        \"Description\": \"Description\",\n        \"CountryOrRegion\": \"USA\",\n        \"InvoiceApprovalRoute\": \"AR1\",\n        \"APRoute\": \"AP Route\",\n        \"AssociatedMatterID\": \"matter012\"\n      }\n    }\n  ]\n}"
+        x-position: 1
+      responses:
+        '202':
+          description: The batch request has been accepted and will be processed asynchronously. To monitor the status of the asynchronous request use the URL in returned in the Location header.
+          headers:
+            Location:
+              description: URL  for the status monitor
+              schema:
+                type: string
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Request missing the required url field response:
+                  value:
+                    error:
+                      code: InvalidInput
+                      message: An invalid input was detected.  See the error details for more information.
+                      details:
+                      - code: InvalidInput
+                        target: JsonDeserializationModelException
+                        message: Required property 'url' not found in JSON. Path 'requests[0]', line 14, position 9.
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Insufficient permissions response:
+                  value:
+                    error:
+                      code: InsufficientPermission
+                      message: Only web service users with appropriate permissions are allowed to access this api method.
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+components:
+  schemas:
+    RequestModel:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - method
+      - url
+      properties:
+        id:
+          type: string
+          description: 'The request identifier is case-sensitive string, MUST be the combination of alphabet, digit, "-", ".", "_" and "~".
+
+            It consists of at least one and at most 128 Unicode characters'
+        method:
+          description: The value of method is a string that MUST contain one of the literals delete, get, patch, post, or put. These literals are case-insensitive.
+          $ref: '#/components/schemas/RequestMethod'
+        url:
+          type: string
+          description: 'The value of url is a string containing the individual request URL.
+
+            The URL MAY be an absolute path (starting with a forward slash /) which is appended to scheme, host, and port of the batch request URL, or a relative path (not starting with a forward slash /)'
+        headers:
+          type: object
+          description: "The value of headers is an object whose name/value pairs represent request headers. \nThe name of each pair MUST be the lower-case header name; the value is a string containing the header-encoded value of the header. \nThe headers object MUST contain a name/value pair with the name content-type whose value is the media type."
+          additionalProperties:
+            type: string
+        body:
+          type: object
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    BatchRequestsModel:
+      type: object
+      additionalProperties: false
+      properties:
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestModel'
+    RequestMethod:
+      type: string
+      description: ''
+      x-enumNames:
+      - Get
+      - Post
+      - Patch
+      enum:
+      - get
+      - post
+      - patch
+    BatchResponsesModel:
+      type: object
+      additionalProperties: false
+      properties:
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseModel'
+    ResponseModel:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+        status:
+          type: integer
+          format: int32
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        body:
+          type: object
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-matters-api-1-9-openapi.json
+- thomson-reuters-matters-api-1-9-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

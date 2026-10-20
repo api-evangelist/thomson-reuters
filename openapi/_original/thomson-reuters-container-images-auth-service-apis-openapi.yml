@@ -1,0 +1,71 @@
+# x-archived-from: thomson-reuters-container-images-auth-service-apis-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.0
+info:
+  title: Container Images Auth Service APIs
+  description: Retrieve or provision an Auth Token for a given DA tenant. Having received a successful reply, the caller may proceed with logging in into the container registry and pulling the images.
+  termsOfService: https://developerportal.thomsonreuters.com/content/terms-use
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/da/v1
+  description: ONESOURCE AMER region
+- url: https://api-emea.onesourcetax.com/da/v1
+  description: ONESOURCE EMEA region
+- url: https://api-apac.onesourcetax.com/da/v1
+  description: ONESOURCE APAC region
+paths:
+  /img/auth:
+    get:
+      security:
+      - ls2: []
+      responses:
+        '401':
+          description: The request is not properly authorized
+        '403':
+          description: Caller has no permission to access the resource
+        2XX:
+          $ref: '#/components/schemas/AuthTokenResponse'
+        5XX:
+          description: Invernal server error, try again later
+components:
+  securitySchemes:
+    ls2:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AuthTokenResponse:
+      description: Container Image Auth Service API - Response
+      oneOf:
+      - $ref: '#/components/schemas/auth'
+      - $ref: '#/components/schemas/error'
+    auth:
+      properties:
+        registry:
+          description: Container registry host
+          type: string
+        user:
+          type: string
+        token:
+          type: string
+        created:
+          description: Seconds since Epoch
+          type: integer
+        validUntil:
+          description: Seconds since Epoch
+          type: integer
+      required:
+      - registry
+      - user
+      - token
+      - created
+      - validUntil
+    error:
+      properties:
+        refId:
+          description: Error reference for support context
+          type: string
+        error:
+          type: string
+      required:
+      - error

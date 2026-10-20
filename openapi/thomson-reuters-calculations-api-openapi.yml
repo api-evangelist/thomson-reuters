@@ -1,0 +1,482 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Process Calculations API
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance
+tags:
+- name: Calculations
+paths:
+  /v2/datasets/{datasetId}/returns/{returnId}/form-codes:
+    get:
+      tags:
+      - Calculations
+      summary: Gets the form codes associated with a specific return id
+      operationId: Calculations_GetFormCodeAsync
+      parameters:
+      - name: datasetId
+        in: path
+        description: Dataset Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: returnId
+        in: path
+        description: Return Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.FormCodeResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.FormCodeResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.FormCodeResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.FormCodeResponse'
+        '404':
+          description: NotFound
+  /v2/datasets/returns/{returnId}/print:
+    post:
+      tags:
+      - Calculations
+      operationId: Calculations_Print
+      parameters:
+      - name: returnId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintResponse'
+        '400':
+          description: BadRequest
+        '404':
+          description: NotFound
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintModelRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintModelRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintModelRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintModelRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintModelRequest'
+        required: true
+      summary: Calculations print
+      x-summary-source: derived
+  /v2/datasets/returns/print/operations/status:
+    get:
+      tags:
+      - Calculations
+      operationId: Calculations_PrintStatus
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintStatusResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintStatusResponse'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintStatusResponse'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.PrintStatusResponse'
+      summary: Calculations print status
+      x-summary-source: derived
+  /v2/datasets/returns/print/operations/{id}/file:
+    get:
+      tags:
+      - Calculations
+      operationId: Calculations_DownloadPdf
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.FileStreamResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.FileStreamResult'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.FileStreamResult'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.FileStreamResult'
+        '404':
+          description: NotFound
+      summary: Calculations download pdf
+      x-summary-source: derived
+  /v2/datasets/returns/{returnId}/statuses:
+    put:
+      tags:
+      - Calculations
+      summary: This endpoint is used to update return status
+      operationId: Calculations_Status
+      parameters:
+      - name: returnId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusResponse'
+        '404':
+          description: NotFound
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusRequest'
+        description: cell id, sheet name, cell data to update
+        required: true
+  /v2/datasets/returns/statuses:
+    get:
+      tags:
+      - Calculations
+      summary: This endpoint is used to get clients return status
+      operationId: getV2DatasetsReturnsStatuses
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.CalculationStatusResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.CalculationStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.CalculationStatusResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.CalculationStatusResponse'
+      x-operation-id-source: normalized
+      x-operation-id-original: Calculations_Status
+components:
+  schemas:
+    Microsoft.Extensions.Primitives.StringSegment:
+      type: object
+      properties:
+        Buffer:
+          type: string
+          readOnly: true
+        Offset:
+          format: int32
+          type: integer
+          readOnly: true
+        Length:
+          format: int32
+          type: integer
+          readOnly: true
+        Value:
+          type: string
+          readOnly: true
+        HasValue:
+          type: boolean
+          readOnly: true
+    TRTA.Athena.Api.Models.V4.Calculations.FormCodeModel:
+      type: object
+      properties:
+        formCode:
+          type: string
+        displayName:
+          type: string
+        efilingOperation:
+          type: array
+          items:
+            enum:
+            - EXPORT
+            - VALIDATE
+            - FILE
+            - CHECKSTATUS
+            type: string
+    TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusResponse:
+      type: object
+      properties:
+        error:
+          type: string
+    TRTA.Athena.Api.Models.V4.Calculations.PrintModelRequest:
+      type: object
+      properties:
+        printWhat:
+          enum:
+          - Selected
+          - Review
+          - InUseOnly
+          - SavedSheets
+          - AllSheets
+          - TaxCodes
+          - SourceData
+          - Return
+          - ReturnOverprint
+          - Computation
+          - ComputationAndReturn
+          - OnlineFilingComputationAndReturn
+          type: string
+        printStyle:
+          type: string
+        printType:
+          enum:
+          - DataEntry
+          - Review
+          - Final
+          - Draft
+          type: string
+        language:
+          type: string
+        selectedSheets:
+          type: array
+          items:
+            type: string
+        showDataEntryCells:
+          type: boolean
+        formsWithoutBackground:
+          type: boolean
+        enableDebugPrint:
+          type: boolean
+        includeNotes:
+          type: boolean
+        includeNoteDetails:
+          type: boolean
+        includeOpenQueries:
+          type: boolean
+        includeQueryDetails:
+          type: boolean
+        includeClosedQueries:
+          type: boolean
+    TRTA.Athena.Api.Models.V4.Calculations.PrintResponse:
+      type: object
+      properties:
+        id:
+          format: uuid
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        statusId:
+          enum:
+          - Pending
+          - InProgress
+          - Completed
+          - Fail
+          - PrintedWithErrors
+          - Skipped
+          - Requeued
+          - NotFound
+          type: string
+        status:
+          type: string
+    TRTA.Athena.Api.Models.V4.Calculations.PrintStatusResponse:
+      type: object
+      properties:
+        fileLocation:
+          type: string
+        id:
+          format: uuid
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        statusId:
+          enum:
+          - Pending
+          - InProgress
+          - Completed
+          - Fail
+          - PrintedWithErrors
+          - Skipped
+          - Requeued
+          - NotFound
+          type: string
+        status:
+          type: string
+    Microsoft.Net.Http.Headers.EntityTagHeaderValue:
+      type: object
+      properties:
+        Tag:
+          $ref: '#/components/schemas/Microsoft.Extensions.Primitives.StringSegment'
+          readOnly: true
+        IsWeak:
+          type: boolean
+          readOnly: true
+    TRTA.Athena.Api.Models.V4.Calculations.CalculationStatusResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.Status'
+    TRTA.Athena.Api.Models.V4.Calculations.Status:
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+    TRTA.Athena.Api.Models.V4.Calculations.UpdateReturnStatusRequest:
+      type: object
+      properties:
+        status:
+          pattern: ^[a-zA-Z]{3,250}$
+          type: string
+    TRTA.Athena.Api.Models.V4.Calculations.FormCodeResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Api.Models.V4.Calculations.FormCodeModel'
+          readOnly: true
+    System.IO.Stream:
+      type: object
+      properties:
+        __identity:
+          type: object
+    Microsoft.AspNetCore.Mvc.FileStreamResult:
+      type: object
+      properties:
+        FileStream:
+          $ref: '#/components/schemas/System.IO.Stream'
+        ContentType:
+          type: string
+          readOnly: true
+        FileDownloadName:
+          type: string
+        LastModified:
+          format: date-time
+          type: string
+        EntityTag:
+          $ref: '#/components/schemas/Microsoft.Net.Http.Headers.EntityTagHeaderValue'
+        EnableRangeProcessing:
+          type: boolean

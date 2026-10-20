@@ -1,0 +1,321 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Blueprint CustomViews API
+  version: '1.0'
+  description: 'Operations tagged Blueprint CustomViews across 2 of this provider''s published API definitions: thomson-reuters-blueprint-service-openapi.json, thomson-reuters-blueprint-service-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+tags:
+- name: Blueprint CustomViews
+paths:
+  /blueprints/{id}/custom-views:
+    get:
+      tags:
+      - Blueprint CustomViews
+      summary: Get a paginated list of available Blueprint Custom views
+      description: Returns a list of Blueprint Custom views
+      operationId: getBlueprintCustomViews
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: id
+        in: path
+        description: Unique identifier of the Blueprint
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionBlueprintMeta'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Blueprint CustomViews
+      summary: Create a new Custom View
+      description: Adds Custom View with required minimum criteria of name and can have additional information around aggregation & group by definition
+      operationId: createCustomView
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Blueprint
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomViewDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/customViewId'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /blueprints/{id}/custom-views/{CustomViewId}:
+    get:
+      tags:
+      - Blueprint CustomViews
+      summary: Get a Blueprint Custom view by Id
+      description: Returns a Blueprint Custom view
+      operationId: getBlueprintCustomViewsById
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Blueprint
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: CustomViewId
+        in: path
+        description: Unique identifier of the Blueprint Custom View
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomViewResponseDTO'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+components:
+  schemas:
+    AggregationDTO:
+      required:
+      - name
+      - operator
+      - source_column
+      type: object
+      properties:
+        source_column:
+          type: string
+          description: identifier of the column Id
+          example: '149114'
+        name:
+          type: string
+          description: Output Name
+          example: Output Name
+        operator:
+          type: string
+          description: operator
+          example: MAX
+        config:
+          $ref: '#/components/schemas/ConfigDTOAggregation'
+    CustomViewGroupBy:
+      type: object
+      properties:
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/ConfigDTO'
+        source_column:
+          type: string
+        display_name:
+          type: string
+        ontology_id:
+          type: integer
+          format: int32
+      description: list of custom view group by
+    GroupByDTO:
+      required:
+      - source_column
+      type: object
+      properties:
+        source_column:
+          type: string
+          description: identifier of the column name
+          example: onesource_account_code
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/ConfigDTO'
+    CustomViewAggregation:
+      type: object
+      properties:
+        operator:
+          type: string
+        config:
+          $ref: '#/components/schemas/ConfigDTOAggregation'
+        display_name:
+          type: string
+        name:
+          type: string
+        source_column:
+          type: string
+      description: list of custom view aggregation
+    ConfigDTOAggregation:
+      type: object
+      properties:
+        weighted_on:
+          type: string
+    ApiCollectionBlueprintMeta:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlueprintMeta'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    CustomViewResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: custom view id
+          format: int32
+          example: 12
+        name:
+          type: string
+          description: name of the custom view
+          example: name
+        blueprint_id:
+          type: integer
+          description: blueprint id of the custom view
+          format: int32
+          example: 1
+        aggregation:
+          type: array
+          description: list of custom view aggregation
+          items:
+            $ref: '#/components/schemas/CustomViewAggregation'
+        group_by:
+          type: array
+          description: list of custom view group by
+          items:
+            $ref: '#/components/schemas/CustomViewGroupBy'
+    CustomViewDTO:
+      required:
+      - aggregation
+      - group_by
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the Custom View
+          example: My Custom View Name
+        aggregation:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregationDTO'
+        group_by:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupByDTO'
+    BlueprintMeta:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Blueprint
+          format: int32
+          example: 46
+        version:
+          type: integer
+          description: Version of the Blueprint
+          format: int32
+          example: 5
+        name:
+          type: string
+          description: Label of the Blueprint
+          example: My Blueprint Name
+        type_id:
+          type: integer
+          description: Unique identifier of the Blueprint type
+          format: int32
+          example: 2
+        is_hidden:
+          type: boolean
+          description: Visibility of the Blueprint
+          example: false
+    ConfigDTO:
+      type: object
+      properties:
+        rollup_id:
+          type: integer
+          format: int32
+        root_entity_column:
+          type: string
+        allocation_column:
+          type: string
+    customViewId:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the CustomView
+          format: int32
+          example: 6
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-blueprint-service-openapi.json
+- thomson-reuters-blueprint-service-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

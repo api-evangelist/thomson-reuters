@@ -1,0 +1,956 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts Federal Chart of Accounts…
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: Federal Chart of Accounts (FCOA)
+paths:
+  /v1/fcoa:
+    get:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Returns a list of all Federal Charts of Accounts
+      operationId: RetrievesAFederalChartOfAccountsList
+      parameters:
+      - name: tccChartId
+        in: query
+        description: A 16-character Chart of TCC ID associated with the Federal Chart of Accounts.
+        schema:
+          type: string
+      - name: year
+        in: query
+        description: Four-digit year.
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FederalChartOfAccountsListRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves a Federal Chart of Accounts List
+    post:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Creates a new Federal Chart of Accounts (FCOA)
+      description: Create charts that contain general ledger accounts at a reporting level to support their tax return and provision filings. Assign a TRC/TCC code and description to each account in their Chart of Accounts (COA).
+      operationId: CreatesNewFederalChartOfAccounts
+      parameters:
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the request content media type.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: Federal Chart of Accounts (FCOA).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FederalChartOfAccountsRepresentation'
+            examples:
+              Add_FCOA:
+                $ref: '#/components/examples/Add_FCOA'
+        required: false
+      responses:
+        '201':
+          description: Created.
+          content: {}
+        '400':
+          description: The request failed. This failure is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found. Check the URL.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: fcoaChartRepresentation
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates New Federal Chart of Accounts
+  /v1/fcoa/{chartId}:
+    get:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Returns information for a specific Federal Chart of Accounts.
+      operationId: RetrievesFCOAInformation
+      parameters:
+      - name: chartId
+        in: path
+        description: A 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves FCOA Information
+    put:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Updates a Federal Chart of Accounts (FCOA) name and master chart option.
+      operationId: UpdatesFCOANameAndMasterchartOption
+      parameters:
+      - name: chartId
+        in: path
+        description: A system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the request content media type.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: Federal Chart of Account object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FederalChartOfAccountsRepresentation'
+        required: false
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '400':
+          description: The request failed. This failure is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: fcoaChartRepresentation
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates FCOA Name and Masterchart Option
+    delete:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Deletes a specific Federal Chart of Accounts. Enter the chartId in the URL
+      operationId: DeleteASpecificFederalChartOfAccounts
+      parameters:
+      - name: chartId
+        in: path
+        description: A system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the request content media type.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Delete a specific Federal Chart of Accounts
+  /v1/fcoa/{chartId}/accounts:
+    get:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Returns accounts for a Federal Chart of Accounts.
+      operationId: RetrievesAccountsAssociatedWithTheFederalChartOfAccounts
+      parameters:
+      - name: chartId
+        in: path
+        description: A 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FederalAccountsRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Accounts associated with the Federal Chart of Accounts
+  /v2/fcoa/{chartId}/accounts:
+    post:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Creates a new account for a Federal Chart of Accounts.
+      operationId: CreatesANewAccountForAFederalChartOfAccounts
+      parameters:
+      - name: chartId
+        in: path
+        description: A system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the request content media type.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: A list of accounts.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/FederalAccountRepresentation'
+        required: false
+      responses:
+        '201':
+          description: Created.
+          content: {}
+        '207':
+          description: Multiple statuses are returned. Evaluate the response for a status per item.
+          content: {}
+        '400':
+          description: The request failed. This failure is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: fcoaChartAccountResources
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates a New Account for a Federal Chart of Accounts
+  /v1/fcoa/{chartId}/accounts/{accountId}:
+    get:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Returns an account in a Federal Chart of Accounts. Enter the chartId in the URL
+      operationId: RetrievesAnAccountInFederalChartOfAccounts
+      parameters:
+      - name: chartId
+        in: path
+        description: A system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        description: A system-generated ID for an account number in the Chart of Accounts.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves an Account in Federal Chart of Accounts
+    put:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Updates an account for an FCOA.
+      operationId: UpdatesAccountInFederalChartOfAccounts
+      parameters:
+      - name: chartId
+        in: path
+        description: A 16-character chart ID, a system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        description: A system-generated ID for an account number in the Chart of Accounts.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the request content media type.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: An account object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FederalAccountRepresentation'
+        required: false
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '400':
+          description: The request failed. This failure is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: fcoaChartAccountResource
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates Account in Federal Chart of Accounts
+    delete:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Deletes an account in the FCOA.
+      operationId: DeletesAnAccountInAFederalChartOfAccount
+      parameters:
+      - name: chartId
+        in: path
+        description: A 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        description: A system-generated ID for an account number in the Chart of Accounts.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the request content media type.
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success.
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: An unexpected error was encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Deletes an Account in a Federal Chart of Account
+  /v1/fcoa/{chartId}/closing-rounding-options:
+    get:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Returns the closing and rounding options for a specific chart.
+      parameters:
+      - name: chartId
+        in: path
+        required: true
+        description: 16-character chart ID.
+        schema:
+          type: string
+          format: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChartClosingRoundingOptions'
+              examples:
+                chart-closing-rounding-options-example:
+                  $ref: '#/components/examples/chart-closing-rounding-options-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      operationId: getV1FcoaByChartIdClosingRoundingOptions
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Federal Chart of Accounts (FCOA)
+      summary: Updates the closing and rounding options for a specific chart.
+      parameters:
+      - name: chartId
+        in: path
+        required: true
+        description: Chart ID.
+        schema:
+          type: string
+          format: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChartClosingRoundingOptionsUpdateRepresentation'
+            examples:
+              chart-closing-rounding-options-request-example:
+                $ref: '#/components/examples/chart-closing-rounding-options-example'
+              chart-closing-rounding-options-request-with-optional-fields-example:
+                $ref: '#/components/examples/chart-closing-rounding-options-with-optional-fields-example'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChartClosingRoundingOptions'
+              examples:
+                chart-closing-rounding-options-response-example:
+                  $ref: '#/components/examples/chart-closing-rounding-options-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1FcoaByChartIdClosingRoundingOptions
+      x-operation-id-source: derived
+components:
+  schemas:
+    FederalAccountsRepresentation:
+      type: object
+      properties:
+        xlsxFile:
+          pattern: ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
+          type: string
+          format: byte
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederalAccountRepresentation'
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FederalChartOfAccountsOptionRepresentation:
+      type: object
+      properties:
+        chartId:
+          type: string
+        closeBooksToRetainedEarningsAccount:
+          $ref: '#/components/schemas/FederalAccountSummaryRepresentation'
+        postRoundingDifferenceToBalanceSheetAccount:
+          $ref: '#/components/schemas/FederalAccountSummaryRepresentation'
+        postTranslationGainLossToRetainedEarningsAccount:
+          $ref: '#/components/schemas/FederalAccountSummaryRepresentation'
+        transferTcc001Detail:
+          type: boolean
+          description: Indicates whether to transfer TCC 001 description.
+        roundingAmount:
+          type: number
+          description: Amount of tolerance for out-of-balance conditions.
+          format: double
+    FederalAccountSummaryRepresentation:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          description: System-generated ID for an account number in the chart of accounts.
+          format: int32
+        accountCode:
+          type: string
+          description: Account number in the chart of accounts.
+        accountDescription:
+          type: string
+          description: Account description in the chart of accounts.
+        accountType:
+          type: string
+          description: Account code associated with either income or balance sheet (mutually exclusive).
+        tccId:
+          type: integer
+          description: System-generated ID code used to combine accounts into subcategories within a single TRC.
+          format: int32
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        trcDescription:
+          type: string
+          description: System-defined description for a TRC.
+        tccNumber:
+          type: string
+          description: User-defined code used to combine accounts into subcategories within a single TRC.
+        tccDescription:
+          type: string
+          description: User-defined description used to combine accounts into subcategories within a single TRC (tax return code).
+        trcFormattedNumber:
+          type: string
+          description: System-defined number for a TRC.
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    FederalChartOfAccountsRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        tccChartId:
+          type: string
+          description: System-generated ID for a TCC chart.
+        tccChartName:
+          type: string
+          description: User-defined TCC chart name.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        chartDescription:
+          type: string
+          description: Chart description.
+        isIncomeTax:
+          type: boolean
+          description: Indicates whether this is a master income tax chart.
+        isProvision:
+          type: boolean
+          description: Indicates whether this is a master provision chart.
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be deleted.
+        priorYearChartId:
+          type: string
+          description: Chart ID that the existing chart was rolled from.
+        priorYearChartName:
+          type: string
+          description: Chart name from the prior year.
+        taxReturnType:
+          type: string
+          description: IRS-defined type of tax return.
+        taxReturnTypeDescription:
+          type: string
+        isAvailableForRollover:
+          type: boolean
+          description: Indicates whether the chart is available for rollover.
+        applicableAdjustments:
+          type: array
+          description: Adjustments that can be applied to a particular adjustment chart type.
+          items:
+            type: string
+        option:
+          $ref: '#/components/schemas/FederalChartOfAccountsOptionRepresentation'
+        federalAccountRepresentationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederalAccountRepresentation'
+        rolloverStatus:
+          $ref: '#/components/schemas/RolloverStatus'
+        tccRolloverStatus:
+          $ref: '#/components/schemas/RolloverStatus'
+    ChartClosingRoundingOptions:
+      type: object
+      properties:
+        closingAccountId:
+          type: integer
+          description: Unique ID for a close books to retained earnings account.
+          format: int32
+        closingAccountNumber:
+          type: string
+          description: Account number for a close books to retained earnings account.
+        closingAccountDescription:
+          type: string
+          description: Account name for a close books to retained earnings account.
+        roundingAccountId:
+          type: integer
+          description: Unique ID for a post rounding difference to balance sheet account.
+          format: int32
+        roundingAccountNumber:
+          type: string
+          description: Account number for a post rounding difference to balance sheet account.
+        roundingAccountDescription:
+          type: string
+          description: Account name for a post rounding difference to balance sheet account.
+        gainLossAccountNumber:
+          type: string
+          description: Account number for a post translation gain/loss to retained earnings account not used in any other adjustment or preliminary balance.
+        gainLossAccountDescription:
+          type: string
+          description: Account name for a post translation gain/loss to retained earnings account not used in any other adjustment or preliminary balance.
+        gainLossAccountId:
+          type: integer
+          description: Unique ID for a post translation gain/loss to retained earnings account not used in any other adjustment or preliminary balance.
+          format: int32
+        roundUpAmount:
+          type: integer
+          description: Value to round up the amount.
+        enableTransferTcc001Detail:
+          type: boolean
+          description: Indicates whether to transfer TCC 001 detail.
+    FederalChartOfAccountsListRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FederalChartOfAccountsRepresentation'
+    ChartClosingRoundingOptionsUpdateRepresentation:
+      type: object
+      properties:
+        closingAccountNumber:
+          type: string
+          description: Account number for a close books to retained earnings account.
+        roundingAccountNumber:
+          type: string
+          description: Account number for a post rounding difference to balance sheet account.
+        gainLossAccountNumber:
+          type: string
+          description: Account number for a post translation gain/loss to retained earnings account not used in any other adjustment or preliminary balance.
+        roundUpAmount:
+          type: integer
+          description: Value to round up the amount.
+        enableTransferTcc001Detail:
+          type: boolean
+          description: Indicates whether to transfer TCC 001 detail.
+    FederalAccountRepresentation:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          description: System-generated ID for an account number in the chart of accounts.
+          format: int32
+        accountCode:
+          type: string
+          description: Account number in the chart of accounts.
+        accountDescription:
+          type: string
+          description: Account description in the chart of accounts.
+        accountType:
+          type: string
+          description: Account code associated with either income or balance sheet (mutually exclusive).
+        tccId:
+          type: integer
+          description: System-generated ID code used to combine accounts into subcategories within a single TRC.
+          format: int32
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        trcDescription:
+          type: string
+          description: System-defined description for a TRC.
+        tccNumber:
+          type: string
+          description: User-defined code used to combine accounts into subcategories within a single TRC.
+        tccDescription:
+          type: string
+          description: User-defined description used to combine accounts into subcategories within a single TRC (tax return code).
+        trcFormattedNumber:
+          type: string
+    RolloverStatus:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        description:
+          type: string
+  examples:
+    chart-closing-rounding-options-response:
+      value:
+        closingAccountId: 1747869
+        closingAccountNumber: '223101'
+        closingAccountDescription: RetainedEarningadj
+        roundingAccountId: 1747866
+        roundingAccountNumber: '22300'
+        roundingAccountDescription: RetainedEarning1
+        gainLossAccountNumber: '380003'
+        gainLossAccountDescription: Retained Earnings - Tax Perm Diffs
+        gainLossAccountId: 1706770
+        roundUpAmount: 11
+        enableTransferTcc001Detail: true
+    chart-closing-rounding-options-with-optional-fields-example:
+      value:
+        closingAccountNumber: '223101'
+        roundingAccountNumber: '22300'
+        gainLossAccountNumber: '380003'
+        roundUpAmount: 11
+        enableTransferTcc001Detail: true
+    Add_FCOA:
+      value:
+        year: 0
+        chartId: string
+        tccChartId: string
+        tccChartName: string
+        chartName: string
+        chartDescription: string
+        isIncomeTax: true
+        isProvision: true
+        taxReturnType: GENERIC
+    chart-closing-rounding-options-example:
+      value:
+        closingAccountNumber: '223101'
+        roundingAccountNumber: '22300'
+        roundUpAmount: 11
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

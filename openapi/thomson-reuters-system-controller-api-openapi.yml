@@ -1,0 +1,153 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters System Controller API
+  version: '1.0'
+  contact:
+    name: IDTAWSResourceOwners@thomson.com
+    email: IDT AWS Support
+  description: 'Operations tagged system-controller across 2 of this provider''s published API definitions: thomson-reuters-next-generation-reporting-rest-apis-openapi.json, thomson-reuters-next-generation-reporting-rest-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/indirect-tax-determination/transaction-extracts/v1
+  description: IDT US
+- url: https://api-emea.onesourcetax.com/indirect-tax-determination/transaction-extracts/v1
+  description: IDT EU
+- url: https://api.onesourcetax.com/indirect-tax-determination-iv/transaction-extracts/v1
+  description: IDT-IV US
+- url: https://api-uat.onesourcetax.com/indirect-tax-determination/transaction-extracts/v1
+  description: IDT US UAT
+- url: https://api-uat.onesourcetax.com/indirect-tax-determination-iv/transaction-extracts/v1
+  description: IDT-IV US UAT
+tags:
+- name: system-controller
+paths:
+  /health-check:
+    get:
+      tags:
+      - system-controller
+      description: Health Check Message
+      operationId: getHealthCheck
+      responses:
+        '200':
+          description: Successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: string
+                example:
+                  databaseConnectionHealthy: true
+                  authorizationServiceHealthy: true
+        '404':
+          description: The resource you were trying to reach is not found
+          content:
+            application/json:
+              schema:
+                type: object
+      summary: Get health check
+      x-summary-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/indirect-tax-determination/transaction-extracts/v1
+      description: IDT US
+    - url: https://api-emea.onesourcetax.com/indirect-tax-determination/transaction-extracts/v1
+      description: IDT EU
+    - url: https://api.onesourcetax.com/indirect-tax-determination-iv/transaction-extracts/v1
+      description: IDT-IV US
+    - url: https://api-uat.onesourcetax.com/indirect-tax-determination/transaction-extracts/v1
+      description: IDT US UAT
+    - url: https://api-uat.onesourcetax.com/indirect-tax-determination-iv/transaction-extracts/v1
+      description: IDT-IV US UAT
+  /api-info:
+    get:
+      tags:
+      - system-controller
+      description: Get API Info
+      operationId: getApiInfo
+      responses:
+        '200':
+          description: Successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiInfoResponse'
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The resource you were trying to reach is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      summary: Get api info
+      x-summary-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/indirect-tax-determination/transaction-extracts/v1
+      description: IDT US
+    - url: https://api-emea.onesourcetax.com/indirect-tax-determination/transaction-extracts/v1
+      description: IDT EU
+    - url: https://api.onesourcetax.com/indirect-tax-determination-iv/transaction-extracts/v1
+      description: IDT-IV US
+    - url: https://api-uat.onesourcetax.com/indirect-tax-determination/transaction-extracts/v1
+      description: IDT US UAT
+    - url: https://api-uat.onesourcetax.com/indirect-tax-determination-iv/transaction-extracts/v1
+      description: IDT-IV US UAT
+components:
+  schemas:
+    ApiInfoResponse:
+      type: object
+      properties:
+        version:
+          type: string
+        authorizationHost:
+          type: string
+        dataSourceUrl:
+          type: string
+      example:
+        version: 1.16.0.
+        authorizationHost: onesource-idt-det-sandbox-int.hostedtax.thomsonreuters.com
+        dataSourceUrl: a206447-deal-query-service-use1-dev.tr-tax-nonprod.aws-int.thomsonreuters.com:5439/deal_dev
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      example:
+        error:
+          code: 400 BAD_REQUEST
+          message: 'Unrecognized token ''asd'': was expecting (JSON String, Number, Array, Object or token ''null'', ''true'' or ''false'')'
+          details:
+          - "com.fasterxml.jackson.core.JsonParseException: Unrecognized token 'asd': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')\n at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 4, column: 31]"
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: HTTP error code
+        message:
+          type: string
+          description: Error message
+        details:
+          type: array
+          description: List to include the detail of error message, root cause or possible resolution.
+          items:
+            type: string
+            description: List to include the detail of error message, root cause or possible resolution.
+  securitySchemes:
+    JWT:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-next-generation-reporting-rest-apis-openapi.json
+- thomson-reuters-next-generation-reporting-rest-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

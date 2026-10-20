@@ -1,0 +1,979 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Tax Provision API
+  version: v1
+  description: 'Operations tagged TaxProvision across 2 of this provider''s published API definitions: thomson-reuters-onesource-tax-provision-odata-apis-openapi.json, thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+  description: AMERS endpoints
+- url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+  description: EMEA endpoints
+security:
+- Basic: []
+tags:
+- name: TaxProvision
+  description: Retrieves provision calculations and includes supporting calculations.
+paths:
+  /odata/v1/TaxProvision:
+    get:
+      tags:
+      - TaxProvision
+      description: Retrieves all tax provisions based on the provided OData query options.
+      summary: Gets all tax provisions
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of tax provisions.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxProvision'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching tax provisions.
+      operationId: getOdataV1TaxProvision
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+      description: AMERS endpoints
+    - url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+      description: EMEA endpoints
+  /odata/v1/TaxProvisionDetail:
+    get:
+      tags:
+      - TaxProvision
+      summary: Retrieves tax provision details based on the provided OData query options
+      description: Gets tax provision details
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of tax provision details.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxProvisionDetail'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+        '500':
+          description: Internal server error while fetching tax provision details.
+      operationId: getOdataV1TaxProvisionDetail
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+      description: AMERS endpoints
+    - url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+      description: EMEA endpoints
+components:
+  schemas:
+    TaxProvisionDetail:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        countrycode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        currencytype:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        pretaxbookincome:
+          type: number
+          format: double
+          nullable: true
+        rounding:
+          type: number
+          format: double
+          nullable: true
+        roundedptbi:
+          type: number
+          format: double
+          nullable: true
+        forecastrate:
+          type: number
+          format: double
+          nullable: true
+        trueupamount:
+          type: number
+          format: double
+          nullable: true
+        forecastptbi:
+          type: number
+          format: double
+          nullable: true
+        ptbilocalstat:
+          type: string
+          nullable: true
+        deductiblestatetax:
+          type: number
+          format: double
+          nullable: true
+        permanentdifferences:
+          type: number
+          format: double
+          nullable: true
+        financialtaxableincome:
+          type: number
+          format: double
+          nullable: true
+        temporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        ftiprenols:
+          type: number
+          format: double
+          nullable: true
+        nols:
+          type: number
+          format: double
+          nullable: true
+        federaltaxableincome:
+          type: number
+          format: double
+          nullable: true
+        endtaxrate:
+          type: number
+          format: double
+          nullable: true
+        foreigntaxcurrent:
+          type: number
+          format: double
+          nullable: true
+        aftertaxtemporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        taxadjustments:
+          type: number
+          format: double
+          nullable: true
+        cashfedprovision:
+          type: number
+          format: double
+          nullable: true
+        trueup:
+          type: number
+          format: double
+          nullable: true
+        noncashtaxcredits:
+          type: number
+          format: double
+          nullable: true
+        totalcurrentfedprovision:
+          type: number
+          format: double
+          nullable: true
+        begindeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        balsheetonlyadj:
+          type: number
+          format: double
+          nullable: true
+        enddeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        ctataxbs:
+          type: number
+          format: double
+          nullable: true
+        deferredtaxprovision:
+          type: number
+          format: double
+          nullable: true
+        equityadjustment:
+          type: number
+          format: double
+          nullable: true
+        totalcurrenttaxprovision:
+          type: number
+          format: double
+          nullable: true
+        statecurrentprovision:
+          type: number
+          format: double
+          nullable: true
+        statedeferredprovision:
+          type: number
+          format: double
+          nullable: true
+        statetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        totaltaxprovisionwp:
+          type: number
+          format: double
+          nullable: true
+        effectivetaxrate:
+          type: number
+          format: double
+          nullable: true
+        edtbs_c_te_a:
+          type: number
+          format: double
+          nullable: true
+        edtbs_nc_te_a:
+          type: number
+          format: double
+          nullable: true
+        edtbs_c_te_l:
+          type: number
+          format: double
+          nullable: true
+        edtbs_nc_te_l:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        tempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_te:
+          type: number
+          format: double
+          nullable: true
+        attempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        utilizationrate:
+          type: number
+          format: double
+          nullable: true
+        basenolallowance:
+          type: number
+          format: double
+          nullable: true
+        nolreclass:
+          type: number
+          format: double
+          nullable: true
+        nolbalanceavailable:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        noltempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_te:
+          type: number
+          format: double
+          nullable: true
+        payablebbl:
+          type: number
+          format: double
+          nullable: true
+        liabilitybeginbalance:
+          type: number
+          format: double
+          nullable: true
+        payableactivity:
+          type: number
+          format: double
+          nullable: true
+        liabilitypayments:
+          type: number
+          format: double
+          nullable: true
+        liabilityadjustments:
+          type: number
+          format: double
+          nullable: true
+        liabilityrefunds:
+          type: number
+          format: double
+          nullable: true
+        liabilityendbalance:
+          type: number
+          format: double
+          nullable: true
+        currenttaxprovision:
+          type: number
+          format: double
+          nullable: true
+        liabilitycurradj:
+          type: number
+          format: double
+          nullable: true
+        oci:
+          type: number
+          format: double
+          nullable: true
+        totaltaxprovisionfs:
+          type: number
+          format: double
+          nullable: true
+        stateequityadjustment:
+          type: number
+          format: double
+          nullable: true
+        ctacurrentside:
+          type: number
+          format: double
+          nullable: true
+        effectratechange:
+          type: number
+          format: double
+          nullable: true
+        ratediffcurrentdeferred:
+          type: number
+          format: double
+          nullable: true
+        intercopermdiffs:
+          type: number
+          format: double
+          nullable: true
+        intercotaxadjs:
+          type: number
+          format: double
+          nullable: true
+        amt:
+          type: number
+          format: double
+          nullable: true
+        amtreclass:
+          type: number
+          format: double
+          nullable: true
+        aftertaxothertempamounttotal:
+          type: number
+          format: double
+          nullable: true
+        othertempamounttotal:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    TaxProvision:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        filingunit:
+          type: string
+          nullable: true
+        unittype:
+          type: string
+          nullable: true
+        countrycode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        currencytype:
+          type: string
+          nullable: true
+        unitcurrency:
+          type: string
+          nullable: true
+        pretaxbookincome:
+          type: number
+          format: double
+          nullable: true
+        rounding:
+          type: number
+          format: double
+          nullable: true
+        roundedptbi:
+          type: number
+          format: double
+          nullable: true
+        forecastrate:
+          type: number
+          format: double
+          nullable: true
+        trueupamount:
+          type: number
+          format: double
+          nullable: true
+        forecastptbi:
+          type: number
+          format: double
+          nullable: true
+        ptbilocalstat:
+          type: string
+          nullable: true
+        deductiblestatetax:
+          type: number
+          format: double
+          nullable: true
+        permanentdifferences:
+          type: number
+          format: double
+          nullable: true
+        financialtaxableincome:
+          type: number
+          format: double
+          nullable: true
+        temporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        ftiprenols:
+          type: number
+          format: double
+          nullable: true
+        nols:
+          type: number
+          format: double
+          nullable: true
+        federaltaxableincome:
+          type: number
+          format: double
+          nullable: true
+        endtaxrate:
+          type: number
+          format: double
+          nullable: true
+        foreigntaxcurrent:
+          type: number
+          format: double
+          nullable: true
+        aftertaxtemporarydifferences:
+          type: number
+          format: double
+          nullable: true
+        taxadjustments:
+          type: number
+          format: double
+          nullable: true
+        cashfedprovision:
+          type: number
+          format: double
+          nullable: true
+        trueup:
+          type: number
+          format: double
+          nullable: true
+        noncashtaxcredits:
+          type: number
+          format: double
+          nullable: true
+        totalcurrentfedprovision:
+          type: number
+          format: double
+          nullable: true
+        begindeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        balsheetonlyadj:
+          type: number
+          format: double
+          nullable: true
+        enddeferredtaxbs:
+          type: number
+          format: double
+          nullable: true
+        ctataxbs:
+          type: number
+          format: double
+          nullable: true
+        deferredtaxprovision:
+          type: number
+          format: double
+          nullable: true
+        equityadjustment:
+          type: number
+          format: double
+          nullable: true
+        totalcurrenttaxprovision:
+          type: number
+          format: double
+          nullable: true
+        statecurrentprovision:
+          type: number
+          format: double
+          nullable: true
+        statedeferredprovision:
+          type: number
+          format: double
+          nullable: true
+        statetaxprovision:
+          type: number
+          format: double
+          nullable: true
+        totaltaxprovisionwp:
+          type: number
+          format: double
+          nullable: true
+        effectivetaxrate:
+          type: number
+          format: double
+          nullable: true
+        edtbs_c_te_a:
+          type: number
+          format: double
+          nullable: true
+        edtbs_nc_te_a:
+          type: number
+          format: double
+          nullable: true
+        edtbs_c_te_l:
+          type: number
+          format: double
+          nullable: true
+        edtbs_nc_te_l:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_c_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_pttd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        tempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        va_pttd_c_te:
+          type: number
+          format: double
+          nullable: true
+        attempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_attd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_attd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        utilizationrate:
+          type: number
+          format: double
+          nullable: true
+        basenolallowance:
+          type: number
+          format: double
+          nullable: true
+        nolreclass:
+          type: number
+          format: double
+          nullable: true
+        nolbalanceavailable:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_c_te:
+          type: number
+          format: double
+          nullable: true
+        edtbs_noltd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        noltempdiffvarate:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_adj_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_nc_te:
+          type: number
+          format: double
+          nullable: true
+        va_noltd_c_te:
+          type: number
+          format: double
+          nullable: true
+        payablebbl:
+          type: number
+          format: double
+          nullable: true
+        liabilitybeginbalance:
+          type: number
+          format: double
+          nullable: true
+        payableactivity:
+          type: number
+          format: double
+          nullable: true
+        liabilitypayments:
+          type: number
+          format: double
+          nullable: true
+        liabilityadjustments:
+          type: number
+          format: double
+          nullable: true
+        liabilityrefunds:
+          type: number
+          format: double
+          nullable: true
+        liabilityendbalance:
+          type: number
+          format: double
+          nullable: true
+        currenttaxprovision:
+          type: number
+          format: double
+          nullable: true
+        liabilitycurradj:
+          type: number
+          format: double
+          nullable: true
+        oci:
+          type: number
+          format: double
+          nullable: true
+        totaltaxprovisionfs:
+          type: number
+          format: double
+          nullable: true
+        stateequityadjustment:
+          type: number
+          format: double
+          nullable: true
+        ctacurrentside:
+          type: number
+          format: double
+          nullable: true
+        effectratechange:
+          type: number
+          format: double
+          nullable: true
+        ratediffcurrentdeferred:
+          type: number
+          format: double
+          nullable: true
+        intercopermdiffs:
+          type: number
+          format: double
+          nullable: true
+        intercotaxadjs:
+          type: number
+          format: double
+          nullable: true
+        amt:
+          type: number
+          format: double
+          nullable: true
+        amtreclass:
+          type: number
+          format: double
+          nullable: true
+        aftertaxothertempamounttotal:
+          type: number
+          format: double
+          nullable: true
+        othertempamounttotal:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Basic:
+      type: http
+      scheme: basic
+x-refined-from:
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.json
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

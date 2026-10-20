@@ -1,0 +1,209 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Payroll Tax Figure API
+  version: v1
+  description: 'Operations tagged Payroll Tax Figure across 2 of this provider''s published API definitions: thomson-reuters-fbt-customer-api-v1-openapi.json, thomson-reuters-fbt-customer-api-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+tags:
+- name: Payroll Tax Figure
+paths:
+  /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/payroll-tax:
+    get:
+      tags:
+      - Payroll Tax Figure
+      summary: Get payroll tax details
+      operationId: PayrollTaxFigure_GetPayrollTaxDetails
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get payroll tax eetails
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+  /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/payroll-tax-summaries:
+    get:
+      tags:
+      - Payroll Tax Figure
+      summary: Get payroll tax summary
+      operationId: PayrollTaxFigure_GetPayrollTaxSummary
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: has-cost-centre
+        in: query
+        description: Has cost centre
+        required: false
+        schema:
+          type: boolean
+      - name: has-benefit-return-type
+        in: query
+        description: Has benefit return type
+        required: false
+        schema:
+          type: boolean
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get payroll tax summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+components:
+  schemas:
+    Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi:
+      description: Payroll tax model
+      type: object
+      properties:
+        costCenterId:
+          format: uuid
+          description: Cost center id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        state:
+          description: State
+          type: string
+        returnType:
+          description: Benefit return type
+          type: string
+        taxableValueType1:
+          format: double
+          description: Taxable value type1
+          type: number
+        taxableValueType2:
+          format: double
+          description: Taxable value type2
+          type: number
+        totalTaxableValue:
+          format: double
+          description: Total taxable value
+          type: number
+        grossedUpTaxableValueType2:
+          format: double
+          description: Grossed up taxable value type2
+          type: number
+x-refined-from:
+- thomson-reuters-fbt-customer-api-v1-openapi.json
+- thomson-reuters-fbt-customer-api-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

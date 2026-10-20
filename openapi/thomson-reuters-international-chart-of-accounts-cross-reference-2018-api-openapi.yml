@@ -1,0 +1,391 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts International Chart of Accounts…
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: International Chart of Accounts Cross Reference (2018+)
+paths:
+  /v1/fcoa/{fcoaChartId}/international-summary-chart/{chartId}/mapped-accounts:
+    get:
+      tags:
+      - International Chart of Accounts Cross Reference (2018+)
+      summary: Returns the list of accounts mapped to the International Summary Chart for the…
+      parameters:
+      - name: fcoaChartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalXrefMappedAccounts'
+              examples:
+                success:
+                  $ref: '#/components/examples/international-xref-charts-mapped-accounts'
+        '400':
+          description: Request failed due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1FcoaByFcoaChartIdInternationalSummaryChartByChartIdMappedAccounts
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - International Chart of Accounts Cross Reference (2018+)
+      summary: Adds and removes accounts mapped to the International Summary Chart for the…
+      parameters:
+      - name: fcoaChartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalXrefRequests'
+            examples:
+              international-cross-reference-charts-patch-request:
+                $ref: '#/components/examples/international-cross-reference-charts-patch-request'
+      responses:
+        '200':
+          description: All operations executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalXrefChartMultipleResponses'
+              examples:
+                international-cross-reference-charts-patch-success-response:
+                  $ref: '#/components/examples/international-cross-reference-charts-patch-success-response'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalXrefChartMultipleResponses'
+              examples:
+                international-cross-reference-charts-patch-multiple-responses:
+                  $ref: '#/components/examples/international-cross-reference-charts-patch-multiple-responses'
+        '400':
+          description: Request failed due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: patchV1FcoaByFcoaChartIdInternationalSummaryChartByChartIdMappedAccounts
+      x-operation-id-source: derived
+  /v1/fcoa/{fcoaChartId}/international-summary-chart/{chartId}/unmapped-accounts:
+    get:
+      tags:
+      - International Chart of Accounts Cross Reference (2018+)
+      summary: Returns the list of accounts NOT mapped to the International Summary Chart for…
+      parameters:
+      - name: fcoaChartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: incomeStatement
+        in: query
+        description: Income statement filter
+        schema:
+          type: boolean
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FederalAccounts'
+              examples:
+                success:
+                  $ref: '#/components/examples/international-xref-charts-unmapped-accounts'
+        '400':
+          description: Request failed due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1FcoaByFcoaChartIdInternationalSummaryChartByChartIdUnmappedAccounts
+      x-operation-id-source: derived
+components:
+  schemas:
+    InternationalXrefFederalAccount:
+      type: object
+      properties:
+        AccountId:
+          type: integer
+          format: int32
+        AccountNumber:
+          type: string
+        AccountDescription:
+          type: string
+        TRCNumber:
+          type: string
+        TRCDescription:
+          type: string
+        TCCNumber:
+          type: number
+        TCCDescription:
+          type: string
+    FederalAccounts:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalXrefFederalAccount'
+    InternationalXrefRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalXrefRequest'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    InternationalXrefMappedAccounts:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalXrefMappedAccount'
+    InternationalXrefMappedAccount:
+      type: object
+      properties:
+        IntlAccountId:
+          type: integer
+          format: int32
+        IntlAccountNumber:
+          type: string
+        IntlAccountDescription:
+          type: string
+        IntlAccountType:
+          type: string
+        IntlAccountTypeDescription:
+          type: string
+        FederalAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InternationalXrefFederalAccount'
+    InternationalXrefChartMultipleResponse:
+      type: object
+      properties:
+        op:
+          type: string
+        path:
+          type: string
+        value:
+          type: object
+          $ref: '#/components/schemas/InternationalXrefRepresentation'
+        statusCode:
+          type: integer
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    InternationalXrefChartMultipleResponses:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalXrefChartMultipleResponse'
+    InternationalXrefRepresentation:
+      type: object
+      properties:
+        AccountNumber:
+          type: string
+        IntlAccountNumber:
+          type: string
+    InternationalXrefRequest:
+      type: object
+      properties:
+        value:
+          type: object
+          $ref: '#/components/schemas/InternationalXrefRepresentation'
+        path:
+          type: string
+        op:
+          type: string
+  examples:
+    international-cross-reference-charts-patch-multiple-responses:
+      value:
+      - op: Add
+        path: null
+        value:
+          AccountNumber: '1313131'
+          IntlAccountNumber: A101001008350
+        statusCode: 400
+        detail: Validation Error
+        fieldErrors:
+        - fieldName: AccountNumber
+          messages:
+          - Federal Account Number [1313131] is already cross referenced to International Account Number [A101001008350].
+          errorCode: 0
+      - op: Remove
+        path: null
+        value:
+          AccountNumber: '1313131'
+          IntlAccountNumber: A101001008350
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    international-xref-charts-mapped-accounts:
+      value:
+      - intlAccountId: 1835079
+        intlAccountNumber: A101001008350
+        intlAccountDescription: Cash
+        intlAccountType: '8350'
+        intlAccountTypeDescription: Current Assets Other Than Inventory
+        federalAccounts:
+        - accountId: 1706329
+          accountNumber: '1313131'
+          accountDescription: test
+          trcNumber: 31-520
+          trcDescription: Gross Royalties
+          tccNumber: 1
+          tccDescription: Gross Royalties
+        - accountId: 1706381
+          accountNumber: '31115'
+          accountDescription: 'DIV: Domestic Corporations Subj to 80% Deduction'
+          trcNumber: 31-115
+          trcDescription: 'DIV: 20%-Or-More-Owned Domestic Corporations'
+          tccNumber: 1
+          tccDescription: 'DIV: 20%-Or-More-Owned Domestic Corporations'
+      - intlAccountId: 1835081
+        intlAccountNumber: A102001008350
+        intlAccountDescription: Trade Notes and Accounts Receivable
+        intlAccountType: '8350'
+        intlAccountTypeDescription: Current Assets Other Than Inventory
+    international-xref-charts-unmapped-accounts:
+      value:
+      - accountId: 1706280
+        accountNumber: '10205'
+        accountDescription: Allowance for Bad Debts
+        trcNumber: 10-205
+        trcDescription: Allowance for Bad Debts
+        tccNumber: 1
+        tccDescription: Allowance for Bad Debts
+      - accountId: 1706281
+        accountNumber: '10300'
+        accountDescription: Inventories
+        trcNumber: 10-300
+        trcDescription: Inventories
+        tccNumber: 1
+        tccDescription: Inventories
+      - accountId: 1706282
+        accountNumber: '10400'
+        accountDescription: U.S. Government Obligations
+        trcNumber: 10-400
+        trcDescription: U.S. Government Obligations
+        tccNumber: 1
+        tccDescription: U.S. Government Obligations
+    international-cross-reference-charts-patch-success-response:
+      value:
+      - op: Add
+        path: null
+        value:
+          AccountNumber: '1313131'
+          IntlAccountNumber: A101001008350
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+      - op: Remove
+        path: null
+        value:
+          AccountNumber: '1313131'
+          IntlAccountNumber: A101001008351
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    international-cross-reference-charts-patch-request:
+      value:
+      - value:
+          AccountNumber: '1313131'
+          IntlAccountNumber: A101001008350
+        op: Add
+      - value:
+          AccountNumber: '1313131'
+          IntlAccountNumber: A101001008351
+        op: Remove
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

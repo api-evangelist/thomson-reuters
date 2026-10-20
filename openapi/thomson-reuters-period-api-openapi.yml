@@ -1,0 +1,52 @@
+openapi: 3.2.0
+info:
+  version: v1
+  title: FBT CUSTOMER Period API
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/administration
+tags:
+- name: Period
+paths:
+  /periods:
+    get:
+      tags:
+      - Period
+      summary: Get all licensed FBT periods
+      operationId: Period_GetLicensedPeriods
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get all licensed FBT periods
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Period.PeriodsModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Period.PeriodsModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Period.PeriodsModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Period.PeriodsModelForCustomerApi'
+components:
+  schemas:
+    Fbt.Models.CustomerApi.Period.PeriodsModelForCustomerApi:
+      description: Periods Model
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Period id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        description:
+          description: Period description
+          type: string

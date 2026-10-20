@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-print-locator-request-schema.json",
+  "title": "PrintLocatorRequest",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-gosystem-tax-documents-print-api-openapi.yml#/components/schemas/PrintLocatorRequest",
+  "type": "object",
+  "properties": {
+    "TaxYear": {
+      "type": "string",
+      "description": "The 4-digit tax year."
+    },
+    "TaxReturnId": {
+      "type": "string",
+      "description": "The 6-character locator ID."
+    },
+    "TaxType": {
+      "type": "string",
+      "description": "The tax return type. Valid values are: 1040, 1041, 1065, 1120, 990, 5500, 706, or 709."
+    },
+    "CopyTypes": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "P",
+          "T",
+          "G"
+        ],
+        "description": "The copy types to include in the print job. Multiple copy types can be requested in a single request. For 1120, the value is always P. Valid values are: P (All, applicable for all tax return types), T (Taxpayer), or G (Government)."
+      }
+    },
+    "PrintTreeNode": {
+      "$ref": "#/$defs/PrintTreeNode"
+    },
+    "PdfFileName": {
+      "type": "string",
+      "description": "The file name used to generate the PDF."
+    },
+    "RedactText": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Set to true to redact sensitive data such as EIN and SSN. The default value is false."
+    },
+    "CorpType": {
+      "$ref": "#/$defs/corpType"
+    },
+    "Selection": {
+      "$ref": "#/$defs/selection"
+    },
+    "IncludeEfileAttachments": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Set to true to include e-file attachments in the print job. The default value is false."
+    },
+    "K1SeparatePackage": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Applicable only for 1065 tax return types with a K-1 Package (Selection = K-1). The default value is null. Set to true to print K-1 separate packages. Set to false to print each K-1 package as a separate file and bundle all individual packages into a ZIP file. When set to true, the Accept header must be application/zip because this option produces a ZIP file instead of a PDF."
+    },
+    "IgnoreK1Prefix": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Applicable only for 1065 tax return types with a K-1 Package. The default value is null. Set to true to omit the K-1 prefix from generated document names. Set to false to include the K-1 prefix."
+    },
+    "SeparateK1ByJurisdiction": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Applicable only for 1065 tax return types with a K-1 Package. The default value is null. Set to true to separate K-1 packages by jurisdiction. Set to false to group all K-1 packages together."
+    }
+  },
+  "$defs": {
+    "PrintTreeNode": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string",
+          "description": "The name of the print tree node."
+        },
+        "Child": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/PrintTreeNode"
+            }
+          ],
+          "description": "The child print tree node."
+        }
+      }
+    },
+    "corpType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "",
+        "C",
+        "F",
+        "H",
+        "L",
+        "R",
+        "S",
+        "T",
+        "Y"
+      ],
+      "description": "The corporation type. Applicable only for tax return type 1120. Valid values are: C (1120C), F (1120F), H (1120H), L (1120LIFE), R (1120RIC), S (1120S), T (1120REIT), or Y (1120PC). Leave blank if not applicable."
+    },
+    "selection": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "A",
+        "K-1"
+      ],
+      "description": "The print selection type. The default value is A. Valid values are: A (All, applicable for all tax return types) or K-1 (K-1 Package, applicable only for 1065 tax return types)."
+    }
+  }
+}

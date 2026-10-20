@@ -1,0 +1,430 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Currencies API
+  version: '1.0'
+  description: 'Operations tagged Currencies across 4 of this provider''s published API definitions: thomson-reuters-api-documentation-for-currencies-services-openapi.json, thomson-reuters-statutory-reporting-period-setup-apis-openapi.json, thomson-reuters-api-documentation-for-currencies-services-openapi.yml, thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/administration/v1
+- url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server providing global access to reporting entities
+- url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server providing global access to template entities
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the EMEA region
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the EMEA region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the APAC region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the APAC region.
+tags:
+- name: Currencies
+paths:
+  /currencies:
+    get:
+      tags:
+      - Currencies
+      summary: Retrieve the currencies from core ontology
+      description: Use this operation to retrieve a list of currencies from core ontology
+      operationId: RetrieveTheCurrenciesFromCoreOntology
+      parameters:
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        schema:
+          type: string
+      - name: X-LoneStar-AccountId
+        in: header
+        description: AccountId you want to access if you are a support user
+        schema:
+          type: string
+      - name: clientId
+        in: header
+        description: Client Id of the tenant
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+      security:
+      - Authorization: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve the currencies from core ontology
+    servers:
+    - url: https://api.onesourcetax.com/administration/v1
+  /{entity-id}/financial-periods/{financial-period-id}/currencies:
+    get:
+      tags:
+      - Currencies
+      summary: Get List of Currencies
+      description: Use this operation to return a list of Currencies with its attributes.
+      operationId: GetListOfCurrencies
+      parameters:
+      - name: entity-id
+        in: path
+        required: true
+        description: The entity id in which the financial period is created. To obtain a reporting entity ID, refer to the [Get Reporting Entities API](#tag/reporting-entities/get/) documentation. For guidance on obtaining a template entity ID, see the [Get Template Entities API](#tag/template-entities/get/) documentation.
+        schema:
+          type: string
+          format: uuid
+        example: 81fa8dec-d6b0-454c-bd15-b38a00b479ab
+      - name: financial-period-id
+        in: path
+        required: true
+        description: The identifier of the financial period from which currency details are retrieved. Obtain this ID using the [Get Financial Periods API](#tag/financial-periods/get{entity-id}/financial-periods).
+        schema:
+          type: string
+          format: uuid
+        example: 16378fc4-3147-47d0-a22a-b39f00aab97d
+      responses:
+        '200':
+          description: Successfully retrieved a list of currencies with its parameters.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency_2'
+              examples:
+                listOfCurrencies:
+                  summary: Example of a successful currencies response
+                  value:
+                  - currencyId: cd41e7b0-1e38-4e02-835d-9a91356910c2
+                    currencyName: Indian rupee(INR)
+                    dates:
+                    - '2025-07-09T00:00:00'
+        '400':
+          description: Bad Request. Occurs when the server cannot process the request due to invalid parameters or a malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidParameter:
+                  summary: Example invalid financial-period-id error
+                  value:
+                    statusCode: 400
+                    message: financial-period-id is not valid
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: https://developers.onesourcetax.com/errors/#keymanagement.service.invalid_access_token
+                  title:
+                    type: string
+                    example: Invalid Access Token
+                  detail:
+                    type: string
+                    example: Invalid Access Token
+                  status:
+                    type: integer
+                    example: 401
+                  instance:
+                    type: string
+                    example: /statutory-reporting/v1/reporting-entities/92abcd47-4e56-4961-b9b6-b30e00f46ba8/financial-periods/a5d4f2f3-5250-494d-b773-b30e00f46d48/currencies
+                  api_requestId:
+                    type: string
+                    example: rrt-0080bd6edb6a51c07-c-ea-1408325-2337761-1
+        '403':
+          description: 'Forbidden: The request was understood, but the server refuses to authorize it. The client does not have the necessary permissions to access the resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbiddenAccessDenied:
+                  summary: Example forbidden error - Insufficient permissions
+                  value:
+                    StatusCode: 403
+                    Message: 'Access Denied: User does not have the required role or permissions to perform this action.'
+        '404':
+          description: Not Found. The requested entity does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFoundError:
+                  summary: Example not found error
+                  value:
+                    StatusCode: 404
+                    Message: financial-period-id is not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  StatusCode:
+                    type: integer
+                    example: 500
+                  Message:
+                    type: string
+                    example: An internal server error occurred while processing your request.
+      security:
+      - Token: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Get List of Currencies
+    servers:
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server providing global access to reporting entities
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server providing global access to template entities
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the EMEA region
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the EMEA region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the APAC region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the APAC region.
+components:
+  schemas:
+    FailureDetailV1:
+      type: object
+      properties:
+        cause:
+          type: string
+          description: The cause of a failure. This is used to identify what POJO field may be in error or what DB could not be reached.
+        description:
+          type: string
+          description: A description of the failure. This is used to provide some meaningful description of the failure. The message should be considered internal and not customer facing.
+        error_id:
+          type: string
+          description: The error identifier
+        error_parameters:
+          type: object
+          description: The error parameter keys and values
+          additionalProperties:
+            type: string
+        failure_type:
+          type: string
+          description: The general category of the type of failure.
+          enum:
+          - ERROR
+          - WARNING
+          - VALIDATION
+        message:
+          type: string
+          description: The default message category
+      description: Provides detail information about a failure.
+    ErrorV1:
+      type: object
+      properties:
+        code:
+          type: string
+          description: code
+        message:
+          type: string
+          description: message
+        error_count:
+          type: integer
+          format: int32
+          description: error_count
+        failures:
+          type: array
+          description: failures
+          items:
+            $ref: '#/components/schemas/FailureV1_object'
+    FailureV1_Currency:
+      type: object
+      properties:
+        detail_count:
+          type: integer
+          format: int32
+          description: The number of failures that were encountered.
+        details:
+          type: array
+          description: The collection of failures that were encountered.
+          items:
+            $ref: '#/components/schemas/FailureDetailV1'
+        item:
+          description: The item associated with a failure. Typically this will be the POJO that encountered a failure such as a validation error.
+          $ref: '#/components/schemas/Currency'
+      description: Contains information about a failure.
+    FailureV1_object:
+      type: object
+      properties:
+        detail_count:
+          type: integer
+          format: int32
+          description: The number of failures that were encountered.
+        details:
+          type: array
+          description: The collection of failures that were encountered.
+          items:
+            $ref: '#/components/schemas/FailureDetailV1'
+        item:
+          type: object
+          description: The item associated with a failure. Typically this will be the POJO that encountered a failure such as a validation error.
+      description: Contains information about a failure.
+    Currency:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the Currency instance.
+        jurisdiction:
+          type: string
+          description: The jurisdiction of the Currency instance.
+        label:
+          type: string
+          description: The label of the Currency instance.
+        three_digit_code:
+          type: string
+          description: The three digit code of the Currency instance.
+      description: The details about a Currency instance in ontology.
+    CurrencyResponse:
+      type: object
+      properties:
+        _meta:
+          description: _meta
+          $ref: '#/components/schemas/Meta'
+        items:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/Currency'
+        error:
+          description: error
+          $ref: '#/components/schemas/ErrorV1_Currency'
+    ErrorV1_Currency:
+      type: object
+      properties:
+        code:
+          type: string
+          description: code
+        message:
+          type: string
+          description: message
+        error_count:
+          type: integer
+          format: int32
+          description: error_count
+        failures:
+          type: array
+          description: failures
+          items:
+            $ref: '#/components/schemas/FailureV1_Currency'
+    Meta:
+      type: object
+      properties:
+        data_type:
+          type: string
+          description: data_type
+        total_results:
+          type: integer
+          format: int32
+          description: total_results
+        items_count:
+          type: integer
+          format: int32
+          description: items_count
+    Currency_2:
+      type: object
+      description: Represents a currency with its identifier, name, and associated date information.
+      properties:
+        currencyId:
+          type: string
+          format: uuid
+          description: Unique identifier for the currency.
+        currencyName:
+          type: string
+          nullable: true
+          description: Official name of the currency (e.g., 'US Dollar', 'Euro').
+        dates:
+          type: array
+          items:
+            type: string
+            format: date-time
+          nullable: true
+          description: A list of relevant dates associated with the currency, such as effective dates or historical periods.
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      description: Standard error response object containing HTTP status code and a descriptive message.
+      properties:
+        StatusCode:
+          type: integer
+          format: int32
+          description: HTTP status code of the error (for example, 400, 404, 500).
+          minimum: 100
+          maximum: 599
+        Message:
+          type: string
+          nullable: true
+          description: A human-readable message providing details about the error.
+          minLength: 1
+          maxLength: 512
+      additionalProperties: false
+      example:
+        StatusCode: 400
+        Message: Invalid request parameters.
+    Currency_3:
+      type: object
+      description: Represents a currency with its identifier, name, and associated date information.
+      properties:
+        currencyId:
+          type: string
+          format: uuid
+          description: Unique identifier for the currency.
+        currencyName:
+          type: string
+          nullable: true
+          description: Official name of the currency (e.g., 'US Dollar', 'Euro').
+        dates:
+          type: array
+          items:
+            type: string
+            format: date-time
+          nullable: true
+          description: A list of relevant dates associated with the currency, such as effective dates or historical periods.
+      additionalProperties: false
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      in: header
+      name: Authorization
+    Token:
+      type: apiKey
+      description: 'Authorization header. Provide a valid Access token for authentication  Example: `Authorization: Bearer <<Access Token>>`. You can find Authentication process in ''API Access'' Section'
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-api-documentation-for-currencies-services-openapi.json
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.json
+- thomson-reuters-api-documentation-for-currencies-services-openapi.yml
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

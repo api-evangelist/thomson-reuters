@@ -1,0 +1,402 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Blog API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Blog API across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Blog API
+paths:
+  /{version}/blog/create:
+    post:
+      tags:
+      - Blog API
+      summary: Add/update Blog
+      description: To add or update blog in provided site
+      operationId: createBlog
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: query
+        description: site id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Blog created/updated successfully
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while creating/updating blog
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/BlogListDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/blog/category:
+    post:
+      tags:
+      - Blog API
+      summary: Get sites by blog categories
+      description: 'To get list of sites for given blog categories
+
+
+        Purponse: To get list of blog categories'
+      operationId: siteCategories
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: Site categories successfully returned
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting sitecategories
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/category'
+    servers:
+    - url: /monumentuat/api
+  /{version}/blog/reSynchronisationFlag:
+    get:
+      tags:
+      - Blog API
+      summary: Get Blog Synchronisation Check
+      description: 'Check re-synchronization required or not
+
+        Purponse: To check re-syncrhonization required or not for blogs(will return list of categories/sites for while resynchronization is required)
+
+
+        e.g. ../blog/reSynchronisationFlag?lastSynkDate=2014-04-28%2012:23:40'
+      operationId: reSynchronisationFlag
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: lastSynkDate
+        in: query
+        description: Last synchronisation date of blog
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Conversations returned successfully
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while checking blog synchronisation
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ResponseDBO:
+      type: object
+      properties:
+        error:
+          type: string
+          xml:
+            name: Error
+        externalIDs:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+        blogResynchronisationFlag:
+          type: string
+        eventResynchronisationFlag:
+          type: string
+        response:
+          type: array
+          xml:
+            name: item
+          items:
+            xml:
+              name: item
+            $ref: '#/components/schemas/ResultDBO'
+        blogResponse:
+          type: array
+          xml:
+            name: blogs
+          items:
+            xml:
+              name: blogs
+            $ref: '#/components/schemas/BlogDBO'
+        eventResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventDBO'
+        categories:
+          $ref: '#/components/schemas/SiteCategoryListDBO'
+      xml:
+        name: Items
+    SiteCategoryListDBO:
+      type: object
+      properties:
+        siteCategory:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    BlogListDBO:
+      type: object
+      properties:
+        blogs:
+          type: array
+          xml:
+            name: blog
+          items:
+            xml:
+              name: blog
+            $ref: '#/components/schemas/BlogDBO'
+        blog:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogDBO'
+      xml:
+        name: blogs
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ResultDBO:
+      type: object
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        text:
+          type: string
+        errorcolumnname:
+          type: string
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

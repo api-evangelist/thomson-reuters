@@ -1,0 +1,156 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Consent API
+  version: '1.0'
+  description: 'Operations tagged Consent across 2 of this provider''s published API definitions: thomson-reuters-open-banking-openapi.json, thomson-reuters-open-banking-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-uat.thomsonreuters.com/openbanking/v1
+  description: Sandbox server
+- url: https://api.thomsonreuters.com/openbanking/v1
+  description: Production server
+tags:
+- name: Consent
+  description: The consent the client gives to share their information.
+paths:
+  /clients/{clientId}/consents:
+    get:
+      summary: Gets a list of consents that have been generated for the specific client
+      tags:
+      - Consent
+      parameters:
+      - in: path
+        name: clientId
+        schema:
+          type: string
+        required: true
+        description: Get the list of consents for the given client.
+      responses:
+        '200':
+          description: A succesful response from API, was able to get the consents for the given client.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+      operationId: getClientsByClientIdConsents
+      x-operation-id-source: derived
+    servers:
+    - url: https://api-uat.thomsonreuters.com/openbanking/v1
+      description: Sandbox server
+    - url: https://api.thomsonreuters.com/openbanking/v1
+      description: Production server
+  /clients/consents:
+    get:
+      summary: Gets a list of consents that have been generated for all clients
+      tags:
+      - Consent
+      responses:
+        '200':
+          description: A succesful response from API, was able to get the consents for all clients.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+      operationId: getClientsConsents
+      x-operation-id-source: derived
+    servers:
+    - url: https://api-uat.thomsonreuters.com/openbanking/v1
+      description: Sandbox server
+    - url: https://api.thomsonreuters.com/openbanking/v1
+      description: Production server
+components:
+  schemas:
+    BadRequestResponse:
+      description: Indicates that the server cannot process the request due to a user error.
+      allOf:
+      - type: object
+        properties:
+          title:
+            type: string
+            description: The title of the error.
+          status:
+            type: integer
+            description: The status code of the error.
+          detail:
+            type: string
+            description: The detail of the error.
+    ConsentsResponse:
+      description: Response from Open banking with the list of consents.
+      allOf:
+      - type: object
+        properties:
+          clients:
+            type: array
+            items:
+              type: object
+              properties:
+                clientId:
+                  type: string
+                consents:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The unique identifier of the consent.
+                      status:
+                        type: string
+                        enum:
+                        - Pending
+                        - Error
+                        - Ready
+                        - Updated
+                        description: The status of the consent.
+                      statusDetail:
+                        type: string
+                        description: The detail of the status of the consent.
+                      humandryFliendlyId:
+                        type: string
+                        description: The human-friendly id description of the consent.
+    ForbiddenResponse:
+      description: Indicates that the server understands the request but refuses to authorize it.
+      allOf:
+      - type: object
+        properties:
+          title:
+            type: string
+            description: The title of the error.
+          status:
+            type: integer
+            description: The status code of the error.
+          detail:
+            type: string
+            description: The detail of the error.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-open-banking-openapi.json
+- thomson-reuters-open-banking-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

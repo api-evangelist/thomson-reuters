@@ -1,0 +1,766 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Asset API
+  version: '2.0'
+  description: 'Operations tagged Asset across 2 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-services-v1-openapi.json, thomson-reuters-onesource-trust-tax-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax
+security:
+- bearerAuth: []
+tags:
+- name: Asset
+paths:
+  /v1/pans/{pan}/assets/{assetid}:
+    patch:
+      tags:
+      - Asset
+      summary: Allows an authenticated user to update existing asset for designated PAN/Trust…
+      description: Updates existing Assets Entity data
+      operationId: UpdatesExistingAssetsEntityData
+      parameters:
+      - name: pan
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: assetid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/AssetModel'
+              description: Asset Model
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/AssetModel'
+              description: Asset Model
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/AssetModel'
+              description: Asset Model
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/AssetModel'
+              description: Asset Model
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates existing Assets Entity data
+    get:
+      tags:
+      - Asset
+      summary: Allows an authenticated user to retrieve an asset for a specific PAN and AssetId
+      description: Allows an authenticated user to retrieve an asset for a specific PAN and AssetId.
+      operationId: RetrieveAnAssetForAPANAndAssetId
+      parameters:
+      - name: pan
+        in: path
+        description: Filters the response based on Product Access Number.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Filters the response based on Product Access Number.
+      - name: assetid
+        in: path
+        description: Filters the response based on Asset Id.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Filters the response based on Asset Id.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve an Asset for a PAN and AssetId
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v1/pans/{pan}/assets:
+    get:
+      tags:
+      - Asset
+      summary: Allows an authenticated user to retrieve a paginated list of assets for a…
+      description: Allows an authenticated user to retrieve a paginated list of assets for a specific PAN, in the current tax year and up to four prior tax years.
+      operationId: RetrieveAnAssetListForAPAN
+      parameters:
+      - name: pan
+        in: path
+        description: Filters the response based on Product Access Number.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Filters the response based on Product Access Number.
+      - name: top
+        in: query
+        description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+        schema:
+          type: integer
+          description: The number of items to return per page in the response. The value must be a positive number. A value of blank returns the default number of items.
+          format: int32
+      - name: skip
+        in: query
+        description: The number of items to skip. The value must be a positive number.
+        schema:
+          type: integer
+          description: The number of items to skip. The value must be a positive number.
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve an Asset List for a PAN
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v1/assets/operations/{id}:
+    get:
+      tags:
+      - Asset
+      summary: Allows an authenticated user to retrieve the asset operation status
+      description: Allows an authenticated user to retrieve the asset operation status.
+      operationId: RetrieveAssetUpdateOperationStatus.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve Asset Update Operation status.
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+components:
+  schemas:
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+    OperationsStatus:
+      enum:
+      - NotStarted
+      - Running
+      - Succeeded
+      - Failed
+      - Cancelled
+      - PartiallySucceeded
+      - Rejected
+      type: string
+    AssetType:
+      enum:
+      - Other
+      - Common Fund
+      - Mutual Fund
+      - Rent or Royalty
+      - Schedule C (Business)
+      - Schedule F (Farm)
+      - Partnership (K-1)
+      - Installment Sale
+      - Mineral
+      - Estate/Trust (K-1)
+      - S-Corp (K-1)
+      - Municipal Bond
+      - Foreign Asset
+      - Territorial Bond
+      - US Govt Bond
+      - Small Business Corporation Stock
+      type: string
+      description: Type of the Asset
+    YesBlank:
+      enum:
+      - 'No'
+      - 'Yes'
+      type: string
+      description: Yes or Blank
+    OperationModel:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/OperationsStatus'
+        location:
+          type:
+          - string
+          - 'null'
+        created_date_time:
+          type: string
+          format: date-time
+        last_action_date_time:
+          type: string
+          format: date-time
+      additionalProperties: false
+    OnOff:
+      enum:
+      - 'Off'
+      - 'On'
+      type: integer
+      description: On or Off
+      format: int32
+    SecurityType:
+      enum:
+      - Domestic Common Stock - Qualified
+      - Domestic Common Stock - Non Qualified
+      - Private Stock
+      - Domestic Preferred Stock -Qualified
+      - Domestic Preferred Stock -Non Qualified
+      - Foreign Preferred Stock -Qualified
+      - Foreign Preferred Stock -Non Qualified
+      - Convertible Preferred Stock
+      - Foreign Common Stock - Qualified
+      - Foreign Common Stock - Non Qualified
+      - American Depository Receipts
+      - Equity Mutual Funds
+      - Equity Closed End Funds
+      - Equity Collective Inv. Funds
+      - Equity Unit Trusts (UIT)
+      - Equity Master Trust
+      - Rights & Warrants
+      - Partnerships
+      - Closely Held Partnership
+      - Publicly Traded Partnership
+      - Master Partnership
+      - Family LLC
+      - Limited Liability Corp.
+      - Business Asset - Schedule C
+      - Sub S Corp
+      - Small Business Corporation
+      - Int'l Equity Mutual Funds (Foreign)
+      - Int'l Unit Trusts (UIT)
+      - Int'l Equity Collective Inv. Funds
+      - Balanced Mutual Funds
+      - Mutual Funds
+      - Balanced Closed End Funds
+      - Balanced Collective Inv. Funds
+      - Balanced Unit Trusts (UIT)
+      - Call Option
+      - Put Option
+      - Call Option on futures contract
+      - Put Option on futures contract
+      - Futures contract
+      - Futures contract (foreign-exchange contract)
+      - Written call Option
+      - Written put Option
+      - Written call Option on futures contract
+      - Written put Option on futures contract
+      - Written futures contract
+      - Written forward contract
+      - Open end repurchase (repo) agreement
+      - Closed end repurchase agreement
+      - Master repurchase agreement
+      - Open end reverse repurchase (repo) agreement
+      - Closed end reverse repurchase agreement
+      - Master reverse repurchase agreement
+      - Corporate Bonds
+      - Zero Coupon - Corporate Bonds
+      - Municipal Bonds
+      - Municipal Bonds - AMT
+      - Tax Exempt Bonds
+      - Zero Coupon - Municipal Bonds
+      - Zero Coupon - Tax Exempt Bonds
+      - Foreign Government Bonds
+      - Territorial Bonds
+      - Territorial Bonds - Subject to AMT
+      - Zero Coupon - Foreign Gov't
+      - Foreign Corporate Bonds
+      - Zero Coupon - Foreign Corp.
+      - Negotiable Cert. of Deposit
+      - Corporate CMOs & ABS
+      - Corporate Bond Mutual Funds
+      - Fixed Income Mutual Fund
+      - Corporate Bond Closed End Funds
+      - Convertible Collective Inv Funds
+      - Corporate Bond Collective Inv Funds
+      - Fixed Income Collective Inv Funds
+      - WSC - UIT Corp Bond
+      - Fixed Income Master Trust
+      - Tax-Exempt Mutual Funds
+      - Tax-Exempt Closed End Funds
+      - Tax-Exempt Collective Inv Funds
+      - Tax-Exempt Unit Trusts  (UIT)
+      - Guaranteed Inv. Contracts (GICs)
+      - U.S. Treasury Bills
+      - U.S. Treasury Notes & Bonds
+      - U.S. Savings Bonds
+      - U.S. Savings Bonds - User Priced
+      - U.S. Treasury Strips
+      - U.S. Government Agency mortgage pass-through pools (GMNA, FNMA, FHLMC)
+      - U.S. Government Agency other obligations
+      - Stripped mortgage pass-through
+      - Collateralized mortgage obligation (CMO)
+      - U.S. Government MBS
+      - Real Estate Mortgage Investment Conduit (REMIC)
+      - Asset backed security
+      - U.S. Government Mutual Funds
+      - U.S. Government TIPS
+      - Canadian Treasury Bills
+      - Canada Savings Bonds
+      - Ontario Savings Bonds
+      - Money Market Funds
+      - Money Market Collective Inv. Funds
+      - Tax-Exempt Money Market Funds
+      - Tax-Exempt Money Mkt Collective Funds
+      - Short-Term investment fund
+      - Bank Common Trust Fund
+      - Nonbank Common Trust Fund
+      - PRIME (Prescribed Right to Income and Maximum Equity)
+      - SCORE (Special Claim On Residual Equity)
+      - Auction rate preferred
+      - Commercial Paper (Discount)
+      - Commercial Paper (Par)
+      - Certificates of Deposit-Own Inst.
+      - Certificates of Deposit-Other Inst.
+      - Interest Bearing Acct.-Own Inst.
+      - Interest Bearing Acct.-Other Inst.
+      - Non-Int. Bearing Acct.-Own Inst.
+      - Non-Int. Bearing Acct.-Other Inst.
+      - Rental Real Estate
+      - Non rental real estate - trust owned
+      - Real Estate Investment Trusts
+      - REIT Private
+      - Farm Real Estate
+      - Personal Property
+      - Loans & Notes Receivable
+      - Secured Notes
+      - Unsecured Notes
+      - Participant Loan
+      - Convertible Notes
+      - Mortgage Loan Receivable
+      - Royalty Rights
+      - Mineral Interests
+      - Non-Producing Mineral Interests
+      - Equipment & Leases
+      - Annuities
+      - Insurance Policies
+      - Viaticals  (life ins sale by owner before the policy matures)
+      - Commodities
+      - Other Assets
+      - Broker Portfolio
+      - Miscellaneous
+      - Worthless Securities
+      - Hedge Funds
+      - Loans & Notes Payable
+      - Mortgage Loan Payable
+      - Accrued Expenses
+      - Other Liabilities
+      - Options (Liabilities)
+      - Alternative
+      - Installment Sale
+      - Estate & Trust
+      - Added Asset
+      - CD, Bank Savings
+      - Common Trust Fund
+      - Corp Bond
+      - Corp Bond - C/P
+      - Corp Bond - OID
+      - Currency/Cash/Virtual Currency
+      - Estate/Trust K-1
+      - Farm
+      - FGN Mutual Fund - NQ
+      - FGN Mutual Fund - Q
+      - FNMA/GNMA/TXBL GSE
+      - Foreign Bond
+      - Foreign Bond - OID
+      - Foreign Stock - NQ
+      - Foreign Stock - Q
+      - Life Ins Policy
+      - Muni - Dbl Ex
+      - Muni - Dbl Ex AMT
+      - Muni - Dbl Ex OID
+      - Muni Bond
+      - Muni Bond - AMT
+      - Muni Bond - OID
+      - Muni Mutual Fund
+      - Muni Txbl
+      - Muni Txbl - Ex State
+      - Muni Txbl - OID
+      - Mutual Fund
+      - Mutual Fund - NQ
+      - Needs Review
+      - No Tax Consequence
+      - Options
+      - Other
+      - P-Ship K-1
+      - MLP (PTP)
+      - Prior Trustee Info
+      - Promissory Note Loan
+      - R/E Rental
+      - R/E Non Rental
+      - REIT
+      - REMIC
+      - Rights/Warrrants
+      - Royalty Trust
+      - Royalty Mineral
+      - Stocks Hybrid PFD - NQ
+      - Stocks - Q
+      - Sub S Corp K-1
+      - Territorial
+      - Territorial - OID
+      - Territorial - AMT
+      - US Govt Obligation
+      - US Govt Obligation - OID
+      - USGI Mutual Fund
+      - WSC - Equity Fund NQ
+      - WSC - Equity Fund Q
+      - WSC - Foreign
+      - WSC - Income Fund
+      - WSC - Muni
+      - WSC - Muni State Specific
+      - WSC - Other
+      - WSC - REIT
+      - WSC - USGI
+      - WSC - WHFIT
+      - WSC - WHMT
+      - Undetermined
+      - Unknown
+      - Zero Coupon - Municipal Bonds w/ AMT
+      - Muni Txbl - BAB
+      - Foreign stock - PFIC
+      - Collectible - 28%
+      - WSC - REMIC
+      - WSC - MBS
+      - WSC - UIT
+      - WSC - UIT MUNI
+      - WSC - UIT RIC
+      - Preferred stock interest subject to NRA w/h
+      - Preferred stock interest not subject to NRA w/h
+      - Foreign Bond - C/P
+      - WSC - Money Market
+      - WSC - Muni Money Market
+      - WSC - UIT Foreign
+      type: string
+      description: Security Type
+    AssetModel:
+      type: object
+      properties:
+        pan:
+          type:
+          - string
+          - 'null'
+          description: Product Access Number
+          readOnly: true
+        asset_id:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of asset
+          readOnly: true
+        asset_number:
+          type:
+          - number
+          - 'null'
+          description: Asset Number
+          format: double
+          readOnly: true
+        name:
+          type:
+          - string
+          - 'null'
+          description: Asset Name
+        asset_type:
+          allOf:
+          - $ref: '#/components/schemas/AssetType'
+          description: Asset Type
+        hold_for_begin_year:
+          type:
+          - string
+          - 'null'
+          description: Hold for Begin Year
+        hold_for_beginning_year:
+          type:
+          - string
+          - 'null'
+          description: 'No longer supported.  Use AssetModel.HoldforBeginningYr
+
+            Hold for Begin Year'
+        transactions_factored_flag:
+          allOf:
+          - $ref: '#/components/schemas/YesNo'
+          description: Factored
+        state_or_country_of_origin:
+          type:
+          - string
+          - 'null'
+          description: Origin
+        security_type:
+          allOf:
+          - $ref: '#/components/schemas/SecurityType'
+          description: Security Type
+        stock_or_other_asset_symbol:
+          type:
+          - string
+          - 'null'
+          description: Stock or Other Symbol
+        suppress_sales:
+          allOf:
+          - $ref: '#/components/schemas/YesBlank'
+          description: Suppress Sale
+        wsc_processing_exclude_flag:
+          allOf:
+          - $ref: '#/components/schemas/YesNo'
+          description: WSC Excluded
+        wsc_security_type:
+          allOf:
+          - $ref: '#/components/schemas/WSCSecType'
+          description: WSC Security Type
+        holding_period_90_day_lock:
+          allOf:
+          - $ref: '#/components/schemas/OnOff'
+          description: Lock 90 Day Holding Period
+        double_exempt:
+          allOf:
+          - $ref: '#/components/schemas/YesBlank'
+          description: Double exempt bond
+        nonqualified_asset_flag_lock:
+          allOf:
+          - $ref: '#/components/schemas/OnOff'
+          description: Lock NQ Asset
+        maturity_date:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Maturity Date
+        information:
+          type:
+          - string
+          - 'null'
+          description: CAR Notes And Comments
+      additionalProperties: false
+      description: Asset Model
+    YesNo:
+      enum:
+      - 'No'
+      - 'Yes'
+      type: string
+    WSCSecType:
+      enum:
+      - Non-WSC Asset
+      - IR - Closed End RIC
+      - IR - Depositary Receipt (e.g., ADR, GDR, etc.)
+      - IR - Equity with Reallocation Potential
+      - IR - Plus only - Contingent Pay and Hybrid Investment Units
+      - IR - Plus only - Pure Investment Units
+      - IR - Money Market Fund
+      - IR - Open End Mutual Fund
+      - IR - Auction Rate Preferred Shares of Closed End RICs
+      - IR - Real Estate Investment Trust (REIT)
+      - IR - IR - Variable Annuity Fund
+      - REMIC - REMIC
+      - REMIC - FASIT
+      - REMIC - CMO
+      - REMIC - Single CLass REMIC
+      - REMIC - Mortgage Backed STRIP
+      - REMIC - Other CDO
+      - REMIC - Capital Appreciation, bond units not $1000 orig face
+      - REMIC - Residual Interest
+      - IR - Undetermined
+      - OID - Treasury Bill
+      - OID - Other Short Term Discount Obligation
+      - OID - Federal Strip
+      - OID - Certificate of Deposit
+      - OID - Municipal Obligation
+      - OID - Taxable Debt Obligation
+      - OID - Eurodollar Obligation
+      - OID - Inflation Indexed Obligation
+      - OID - Inflation Indexed Interest Strip
+      - OID - Inflation Indexed Principal Strip
+      - OID - Contingent Payment Obligation
+      - OID - Fixed Rate Capital Security
+      - OID - Mandatory Convertible Security
+      - OID - Unadjustable Security
+      - UIT-Commodities - 100% Collectibles
+      - UIT-Equities
+      - UIT-Federal Bonds
+      - UIT-International
+      - UIT-Muni Bonds
+      - UIT-Others
+      - UIT-REITs/RICs
+      - MBS
+      - IR - Plus only - WHFIT (Royalty and HOLDRS Trusts)
+      - REMIC - Undetermined
+      - REMIC - Undetermined?
+      - REMIC - Combination Class
+      - REMIC - Non-mortgage WHFIT
+      - REMIC - WHMT Multiclass
+      - MBS Pool - WHMT (Widely Held Mortgage Trust)
+      - MBS Pool - NMWHIT - Non Mortgage Widely Held Investment Trust
+      - MBS Pool - Undetermined
+      - OID - Undetermined
+      - MLP
+      - Limited Liability Company
+      - Royalty Trust
+      - Liquidating Trust
+      - Grantor Trusts
+      - UIT-Commodities - Partial Collectibles
+      - REMIC - MBS w/OID
+      - IR - Unit Investment Trust (RIC)
+      - UIT-Foreign Exchange
+      - OID - Variable Rate Debt Instrument
+      - OID - Municipal Obligation with deminimus OID
+      - OID - Convertible Debt
+      - OID - Step-up/Step- down Security
+      - UIT-Undetermined
+      - OID - Short Term Notes with Interest
+      - UIT-Commodities - Cryptocurrency
+      - UIT- Corporate Bonds
+      type: string
+      description: WSC Security Type
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer { token }"'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.json
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

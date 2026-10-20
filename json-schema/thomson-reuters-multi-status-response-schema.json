@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-multi-status-response-schema.json",
+  "title": "MultiStatusResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-datasets-api-v1-openapi.yml#/components/schemas/MultiStatusResponse",
+  "type": "object",
+  "properties": {
+    "successfulUpdates": {
+      "type": "array",
+      "description": "A list of successfully updated sheets.",
+      "items": {
+        "$ref": "#/$defs/UpdateStatus"
+      }
+    },
+    "failedUpdates": {
+      "type": "array",
+      "description": "A list of updates that failed.",
+      "items": {
+        "$ref": "#/$defs/UpdateStatus"
+      }
+    },
+    "skippedUpdates": {
+      "type": "array",
+      "description": "A list of updates that were skipped.",
+      "items": {
+        "$ref": "#/$defs/UpdateStatus"
+      }
+    },
+    "overallMessage": {
+      "type": "string",
+      "description": "A general message about the overall update process."
+    },
+    "totalProcessed": {
+      "type": "integer",
+      "description": "The total number of sheets processed."
+    },
+    "successCount": {
+      "type": "integer",
+      "description": "The number of successfully updated sheets."
+    },
+    "failureCount": {
+      "type": "integer",
+      "description": "The number of updates that failed."
+    },
+    "skippedCount": {
+      "type": "integer",
+      "description": "The number of updates that were skipped."
+    }
+  },
+  "$defs": {
+    "UpdateStatus": {
+      "type": "object",
+      "properties": {
+        "sheetName": {
+          "type": "string",
+          "description": "The name of the sheet."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the update operation."
+        },
+        "message": {
+          "type": "string",
+          "description": "The name of the sheet."
+        }
+      }
+    }
+  }
+}

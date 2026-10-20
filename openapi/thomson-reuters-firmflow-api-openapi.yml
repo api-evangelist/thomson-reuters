@@ -1,0 +1,387 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Firm Flow API
+  version: v1
+  description: 'Operations tagged FirmFlow across 3 of this provider''s published API definitions: thomson-reuters-firmflow-web-api-services-v1-openapi.json, thomson-reuters-firmflow-web-api-services-openapi.yml, thomson-reuters-firmflow-web-api-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: FirmFlow
+paths:
+  /firmflow/api/v1/FirmFlow/RollForward:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - FirmFlow
+      summary: Perform a roll forward operation on a workflow folder
+      description: Rolls forward a folder to create a new folder based on the provided criteria.
+      operationId: Post_RollForward
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkFlowRollForwardData'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WorkFlowRollForwardData'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WorkFlowRollForwardData'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkFlowRollForwardResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkFlowRollForwardResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkFlowRollForwardResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/Firmflow/GetServiceTypeList:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - FirmFlow
+      summary: Get service type list for a drawer
+      description: Retrieves the list of service types for the specified drawer.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: drawerId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FolderTemplateDTO'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FolderTemplateDTO'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FolderTemplateDTO'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+      operationId: getFirmflowApiFirmflowGetServiceTypeList
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/Firmflow/GetFirmFlowPermissionsList:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - FirmFlow
+      summary: Get FirmFlow permissions list
+      description: Retrieves the FirmFlow permissions list for the specified drawer, category, and workflow.
+      parameters:
+      - name: drawerId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: workflow
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/FirmflowPermissionDTO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirmflowPermissionDTO'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/FirmflowPermissionDTO'
+      operationId: getFirmflowApiFirmflowGetFirmFlowPermissionsList
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    NewFolder:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          nullable: true
+        assignedToId:
+          type: string
+          nullable: true
+        workflowName:
+          type: string
+          nullable: true
+        statusName:
+          type: string
+          nullable: true
+        rollForwardOptions:
+          $ref: '#/components/schemas/RollForwardOptions'
+      additionalProperties: false
+    FolderTemplateDTO:
+      type: object
+      properties:
+        Name:
+          type: string
+        Id:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Groups:
+      type: object
+      properties:
+        category:
+          type: string
+        worfkflow:
+          type: string
+        groupName:
+          type: string
+        generalPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneralPermission'
+        workflowPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkFlowPermission'
+        informationFieldsPermissions:
+          type: object
+          additionalProperties:
+            type: boolean
+    WorkFlowRollForwardResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        newWorkFlowName:
+          type: string
+          nullable: true
+        newFilingID:
+          type: string
+          nullable: true
+        errorComment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    WorkFlowRollForwardData:
+      type: object
+      properties:
+        currentFolder:
+          $ref: '#/components/schemas/CurrentFolder'
+        newFolder:
+          $ref: '#/components/schemas/NewFolder'
+    GeneralPermission:
+      type: object
+      properties:
+        createNewFolders:
+          type: boolean
+        assignedToOthers:
+          type: boolean
+        reRouteCompleteWorkflows:
+          type: boolean
+        routeWorkflowToCompleteStep:
+          type: boolean
+        rollForwardFolders:
+          type: boolean
+        editFolderHeader:
+          type: boolean
+        addWorkflows:
+          type: boolean
+        editWorkflows:
+          type: boolean
+        deleteWorkflows:
+          type: boolean
+        maintainDeliverablesList:
+          type: boolean
+        editPreAssignments:
+          type: boolean
+        resetChecklists:
+          type: boolean
+        publishReports:
+          type: boolean
+        firmflowSuperUser:
+          type: boolean
+    Notes:
+      type: object
+      properties:
+        noteTypeNames:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    WorkFlowPermission:
+      type: object
+      properties:
+        addNote:
+          type: boolean
+        editNote:
+          type: boolean
+        deleteNote:
+          type: boolean
+        deleteAllNotes:
+          type: boolean
+        addDeliverables:
+          type: boolean
+        editDeliverables:
+          type: boolean
+        deleteDeliverables:
+          type: boolean
+        editInformation:
+          type: boolean
+        editDelivery:
+          type: boolean
+        editChecklist:
+          type: boolean
+        extendDeliverables:
+          type: boolean
+    FirmflowPermissionDTO:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Groups'
+    RollForwardOptions:
+      type: object
+      properties:
+        deliverables:
+          type: boolean
+        deliveryInstructions:
+          type: boolean
+        informationFields:
+          type: boolean
+        notes:
+          $ref: '#/components/schemas/Notes'
+      additionalProperties: false
+    CurrentFolder:
+      type: object
+      properties:
+        serviceTypeName:
+          type: string
+          nullable: true
+        filingID:
+          type: integer
+          nullable: true
+      additionalProperties: false
+    NewFolder_2:
+      type: object
+      properties:
+        year:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        assignedToId:
+          type:
+          - string
+          - 'null'
+        workflowName:
+          type:
+          - string
+          - 'null'
+        statusName:
+          type:
+          - string
+          - 'null'
+        rollForwardOptions:
+          $ref: '#/components/schemas/RollForwardOptions'
+      additionalProperties: false
+    WorkFlowRollForwardResponse_2:
+      type: object
+      properties:
+        status:
+          type: boolean
+        newWorkFlowName:
+          type:
+          - string
+          - 'null'
+        newFilingID:
+          type:
+          - string
+          - 'null'
+        errorComment:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Notes_2:
+      type: object
+      properties:
+        noteTypeNames:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      additionalProperties: false
+    CurrentFolder_2:
+      type: object
+      properties:
+        serviceTypeName:
+          type:
+          - string
+          - 'null'
+        filingID:
+          type:
+          - integer
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+x-refined-from:
+- thomson-reuters-firmflow-web-api-services-v1-openapi.json
+- thomson-reuters-firmflow-web-api-services-openapi.yml
+- thomson-reuters-firmflow-web-api-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

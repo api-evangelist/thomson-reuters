@@ -1,0 +1,495 @@
+# x-archived-from: thomson-reuters-fbt-customer-api-v1-openapi.yml
+# x-archived-on: 2026-10-20
+swagger: '2.0'
+info:
+  version: v1
+  title: FBT CUSTOMER API
+host: api-apac.onesourcetax.com/fringe-benefits-tax/eap/reports
+schemes:
+- https
+paths:
+  /letters:
+    post:
+      tags:
+      - Letter Generation
+      summary: Generate letter for an employee
+      operationId: LetterGeneration_GenerateLetterByEmployeeId
+      consumes:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: request
+        in: body
+        description: Letter request
+        required: true
+        schema:
+          $ref: '#/definitions/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationRequestForCustomerApi'
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Generate letter for an employee
+          schema:
+            $ref: '#/definitions/Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationResponseForCustomerApi'
+        '400':
+          description: Invalid request data
+          schema:
+            type: array
+            items:
+              type: string
+  /letters/operations/{operation-id}:
+    get:
+      tags:
+      - Letter Generation
+      summary: Get letter status
+      operationId: LetterGeneration_GetLetterPolling
+      consumes: []
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: operation-id
+        in: path
+        description: Operation id
+        required: true
+        type: string
+        format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Get letter status
+          schema:
+            $ref: '#/definitions/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+        '201':
+          description: Letter created for an employee
+          schema:
+            $ref: '#/definitions/Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi'
+        '404':
+          description: Invalid operation id
+          schema:
+            type: array
+            items:
+              type: string
+  /letters/{letter-id}/contents:
+    get:
+      tags:
+      - Letter Generation
+      summary: Download letters
+      operationId: LetterGeneration_DownloadLetter
+      consumes: []
+      produces:
+      - application/pdf
+      parameters:
+      - name: letter-id
+        in: path
+        description: Letter id
+        required: true
+        type: string
+        format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Download letter by id
+          schema:
+            type: object
+        '404':
+          description: Invalid input id
+          schema:
+            type: array
+            items:
+              type: string
+  /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/payroll-tax:
+    get:
+      tags:
+      - Payroll Tax Figure
+      summary: Get payroll tax details
+      operationId: PayrollTaxFigure_GetPayrollTaxDetails
+      consumes: []
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        type: string
+        format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        type: string
+        format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        type: string
+        format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Get payroll tax eetails
+          schema:
+            $ref: '#/definitions/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          schema:
+            type: array
+            items:
+              type: string
+  /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/payroll-tax-summaries:
+    get:
+      tags:
+      - Payroll Tax Figure
+      summary: Get payroll tax summary
+      operationId: PayrollTaxFigure_GetPayrollTaxSummary
+      consumes: []
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        type: string
+        format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        type: string
+        format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        type: string
+        format: uuid
+      - name: has-cost-centre
+        in: query
+        description: Has cost centre
+        required: false
+        type: boolean
+      - name: has-benefit-return-type
+        in: query
+        description: Has benefit return type
+        required: false
+        type: boolean
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Get payroll tax summary
+          schema:
+            $ref: '#/definitions/Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          schema:
+            type: array
+            items:
+              type: string
+  ? /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/employees/{employee-id}/reportable-amounts
+  : get:
+      tags:
+      - RFBA Figure
+      summary: Get RFBA listing all details
+      operationId: RFBAFigure_GetRFBAListingAllDetails
+      consumes: []
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        type: string
+        format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        type: string
+        format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        type: string
+        format: uuid
+      - name: employee-id
+        in: path
+        description: Employee id
+        required: true
+        type: string
+        format: uuid
+      - name: type2-amount
+        in: query
+        description: Type2 amount
+        required: false
+        type: number
+        format: double
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Get RFBA listing all details
+          schema:
+            $ref: '#/definitions/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          schema:
+            type: array
+            items:
+              type: string
+  ? /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/employees/{employee-id}/reportable-amount-summaries
+  : get:
+      tags:
+      - RFBA Figure
+      summary: Get RFBA listing all summary
+      operationId: RFBAFigure_GetRFBAListingAllSummary
+      consumes: []
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        type: string
+        format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        type: string
+        format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        type: string
+        format: uuid
+      - name: employee-id
+        in: path
+        description: Employee id
+        required: true
+        type: string
+        format: uuid
+      - name: type2-amount
+        in: query
+        description: Type2 amount
+        required: false
+        type: number
+        format: double
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Get RFBA listing all summary
+          schema:
+            $ref: '#/definitions/Fbt.Models.CustomerApi.RFBAFigure.RFBAListingSummaryModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          schema:
+            type: array
+            items:
+              type: string
+definitions:
+  Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationRequestForCustomerApi:
+    description: Letter generation request model
+    type: object
+    properties:
+      period-id:
+        format: uuid
+        description: Period id
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+      client-id:
+        format: uuid
+        description: Client id
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+      reporting-entity-id:
+        format: uuid
+        description: Reporting entity id
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+      employee-id:
+        format: uuid
+        description: Employee id
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+      type:
+        description: Letter type
+        type: string
+      subType:
+        description: Declaration type
+        type: string
+  Fbt.Models.CustomerApi.LetterGeneration.LetterGenerationResponseForCustomerApi:
+    description: Letter generation response model
+    type: object
+    properties:
+      operationId:
+        format: uuid
+        description: Letter export transaction id
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+  Fbt.Models.CustomerApi.LetterGeneration.LetterPollingResponseForCustomerApi:
+    description: Letter polling response model
+    type: object
+    properties:
+      status:
+        description: Letter export status
+        type: string
+      letterId:
+        format: uuid
+        description: Letter id
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+  Fbt.Models.CustomerApi.PayrollTaxFigure.PayrollTaxModelForCustomerApi:
+    description: Payroll tax model
+    type: object
+    properties:
+      costCenterId:
+        format: uuid
+        description: Cost center id
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+      state:
+        description: State
+        type: string
+      returnType:
+        description: Benefit return type
+        type: string
+      taxableValueType1:
+        format: double
+        description: Taxable value type1
+        type: number
+      taxableValueType2:
+        format: double
+        description: Taxable value type2
+        type: number
+      totalTaxableValue:
+        format: double
+        description: Total taxable value
+        type: number
+      grossedUpTaxableValueType2:
+        format: double
+        description: Grossed up taxable value type2
+        type: number
+  Fbt.Models.CustomerApi.RFBAFigure.RFBAListingModelForCustomerApi:
+    description: RFBA listing model
+    type: object
+    properties:
+      benefitValueId:
+        format: uuid
+        description: Benefit value id
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+      costCenterId:
+        format: uuid
+        description: Cost center id
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+      standardCategoryId:
+        format: uuid
+        description: Standard category
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+      description:
+        description: Description
+        type: string
+      provideDate:
+        description: Provide date
+        type: string
+      reportableAmount:
+        format: double
+        description: Reportable amount
+        type: number
+      reportableTaxableAmount:
+        format: double
+        description: Reportable taxable amount
+        type: number
+      returnType:
+        description: Benefit return type
+        type: string
+      state:
+        description: State
+        type: string
+      taxableAmount:
+        format: double
+        description: Taxable amount
+        type: number
+      uncappedAmount:
+        format: double
+        description: Uncapped amount
+        type: number
+  Fbt.Models.CustomerApi.RFBAFigure.RFBAListingSummaryModelForCustomerApi:
+    type: object
+    properties:
+      exemptionType:
+        description: Exemption type
+        type: string
+      reportableAmount:
+        format: double
+        description: Reportable amount
+        type: number
+      reportableTaxableAmount:
+        format: double
+        description: Reportable taxable amount
+        type: number
+      taxableAmount:
+        format: double
+        description: Taxable amount
+        type: number
+      uncappedAmount:
+        format: double
+        description: Uncapped amount
+        type: number

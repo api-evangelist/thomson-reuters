@@ -1,0 +1,410 @@
+# x-archived-from: thomson-reuters-indirect-tax-determination-registration-numbers-vat-service-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Indirect Tax Determination - Registration Numbers (VAT) Service
+  description: This service enables you to validate Registration Numbers (VAT) with authorities.
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0-oas3-oas3
+externalDocs:
+  description: Overview Page on  Help Portal
+  url: http://test
+servers:
+- url: https://api-uat.onesourcetax.com/indirect-tax-determination/vat-service/eap
+  description: UAT test environment
+- url: https://api.onesourcetax.com/indirect-tax-determination/vat-service/eap
+  description: AMER region Production environment
+- url: https://api-emea.onesourcetax.com/indirect-tax-determination/vat-service/eap
+  description: EMEA region Production environment
+tags:
+- name: vat-service
+  description: Validate Registration numbers (VAT) with authorities like VIES, eVatR and HMRC.
+security:
+- ApiKeyAuth: []
+paths:
+  /v1/validations:
+    post:
+      tags:
+      - vat-service
+      summary: Creates the registration number validation request.
+      description: Creates the registration number validation request.
+      operationId: vatvalidator_1
+      requestBody:
+        description: The registration numbers to validate.
+        content:
+          application/vnd.tri.onesource.idt+json:
+            schema:
+              $ref: '#/components/schemas/ValidationRequest'
+        required: false
+      responses:
+        '202':
+          description: Success
+          headers:
+            Location:
+              schema:
+                type: string
+              description: The location from where the registration number validation results can be retrieved.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ValidationRequestInfo'
+        '400':
+          description: Bad Request
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '401':
+          description: Unauthorized
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '404':
+          description: Not Found
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '412':
+          description: Precondition Failed
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '500':
+          description: Server Exception
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        default:
+          description: Server Exception
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+      x-codegen-request-body-name: body
+  /v1/operations/{id}:
+    get:
+      tags:
+      - vat-service
+      summary: Retrieve registration number validation request execution status.
+      description: The current status of registration number validation request.
+      operationId: vatvalidator_2
+      parameters:
+      - name: id
+        in: path
+        description: The request ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ValidationStatus'
+        '400':
+          description: Bad Request
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '401':
+          description: Unauthorized
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '404':
+          description: Not Found
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '412':
+          description: Precondition Failed
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '500':
+          description: Server Exception
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        default:
+          description: Server Exception
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+  /v1/validations/{id}:
+    get:
+      tags:
+      - vat-service
+      summary: Retrieve registration number validation request results.
+      description: Retrieve registration number validation request results.
+      operationId: vatvalidator_3
+      parameters:
+      - name: id
+        in: path
+        description: The request ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '401':
+          description: Unauthorized
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '404':
+          description: Not Found
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '412':
+          description: Precondition Failed
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '500':
+          description: Server Exception
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        default:
+          description: Server Exception
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  schemas:
+    GenericError:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+        instance:
+          type: string
+        api_requestId:
+          type: string
+    ApiError:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ValidationRequestInfo:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: the request ID generated for the request.
+    ValidationRequestEntry:
+      type: object
+      required:
+      - companyRegistrationNumber
+      properties:
+        companyRegistrationNumber:
+          maxLength: 100
+          minLength: 5
+          type: string
+          description: the number that needs to be validated.
+        companyName:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: the name of the company that needs to be validated.
+        requesterRegistrationNumber:
+          type: string
+          maxLength: 100
+          minLength: 5
+          description: The registration number of the validating company.
+        companyAddress:
+          $ref: '#/components/schemas/CompanyAddress'
+    CompanyAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          maxLength: 255
+          description: Address line one.
+        postalCode:
+          type: string
+          maxLength: 10
+          description: Postal code of the address.
+        countryCode:
+          type: string
+          maxLength: 2
+          description: Country code of the address.
+        street:
+          type: string
+          maxLength: 255
+          description: Street name of the address.
+        city:
+          type: string
+          maxLength: 255
+          description: City name of the address.
+    ValidationRequest:
+      type: object
+      properties:
+        forceValidation:
+          type: boolean
+          default: false
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationRequestEntry'
+    ValidationMessage:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        relatedField:
+          type: string
+    ValidationStatus:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: The request ID.
+        status:
+          type: string
+          enum:
+          - COMPLETE
+          - IN_PROGRESS
+          - CANCELLED
+        completionDate:
+          type: string
+          description: Date and time when the request prcessing completed.
+        totalCount:
+          type: integer
+          description: Total number of registration numbers supplied with in the request.
+        processedCount:
+          type: integer
+          description: Total number of registration numbers completed verification.
+    ValidationResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationResponseEntry'
+    ValidationResponseEntry:
+      type: object
+      properties:
+        companyRegistrationNumber:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: the registration number that needs to be validated.
+        companyName:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: the name of the company that needs to be validated.
+        companyAddress:
+          $ref: '#/components/schemas/CompanyAddress'
+        status:
+          type: string
+          enum:
+          - VALID
+          - INVALID
+          - AWAITING_VALIDATION
+          - CANCELLED
+          description: the current status of the number to be validated.
+        serviceName:
+          type: string
+          enum:
+          - HMRC
+          - EVATR
+          - VIES
+          description: the government authority with which the details are validated.
+        requesterRegistrationNumber:
+          type: string
+        consultationNumber:
+          type: string
+          description: Validation confirmation ID supplied by the authority, in case qualified validation done by VIES and HMRC authorities.
+        consultationDateTime:
+          type: string
+          description: Date and time when the validation was performed.
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationMessage'

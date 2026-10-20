@@ -1,0 +1,800 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Clients API
+  version: '1.0'
+  description: 'Operations tagged Clients across 3 of this provider''s published API definitions: thomson-reuters-engagement-manager-openapi.json, thomson-reuters-onesource-indirect-tax-compliance-configuration-api-openapi.json, thomson-reuters-engagement-manager-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/us/engagementmanager
+  description: US Production
+- url: https://api.thomsonreuters.com/uk/engagementmanager
+  description: UK Production
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: Clients
+  description: Update list of clients in engagement manager
+paths:
+  /external/v1/clients/load-clients:
+    post:
+      tags:
+      - Clients
+      summary: Retrieve all clients
+      description: '## Purpose
+
+        This endpoint retrieves a paginated list of clients based on filter criteria. It supports two data sources: clients with engagements in the system, or all clients from GoFileRoom (GFR).
+
+
+        ## Why Use This Endpoint
+
+        - Search and browse clients with pagination support
+
+        - Filter clients by name or number using wildcard patterns
+
+        - Choose between clients with engagements or all GFR clients
+
+        - Build client selection interfaces and search functionality
+
+        - Retrieve client details
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Data Source Options
+
+        - `showAllClients: false` - Returns only clients that have associated engagements/binders in the system (faster, filtered)
+
+        - `showAllClients: true` - Returns all clients from GoFileRoom regardless of engagement status (comprehensive)
+
+
+        ## Pagination
+
+        The `pagination.size` field must be one of the following values: **12, 15, 20, 50, 150, 500, 1000, 10000**.
+
+        Any other value will result in a validation error.
+
+
+        ## Filtering
+
+        Supports wildcard filtering (*) for partial matches:
+
+        - Use `*` alone to return all clients
+
+        - Use `ABC*` to find clients starting with "ABC"
+
+        - Use `*Corp` to find clients ending with "Corp"
+
+        - Use `*Corp*` to find clients containing "Corp"
+
+
+        ## Common Use Cases
+
+        1. **Client Search:** Search for specific clients using wildcard patterns
+
+        2. **Client Selection:** Build client selection dropdowns for engagement creation
+
+        3. **Data Export:** Export client lists for reporting purposes
+
+        4. **Integration Status:** Identify clients linked to Onvio platform'
+      operationId: EmMainEndPointsExternalClientLoadClientsEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: ClientRequestDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsEMClientRequestDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Successfully retrieved the paginated list of clients.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsEMPagedDataExternalResponseOfEngagementClientExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 2d17dee3-c26c-4685-ba17-e30289c8993d
+                    dateTime: '2026-04-21T05:50:04.7634318Z'
+                    traceId: f24d41984fcc4e65aa270f2cd7274e5f
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 439e56e9-39c6-4853-806b-32f8eb70fe04
+                    dateTime: '2026-04-21T05:50:04.7634184Z'
+                    traceId: 3141667d96b2447bbb7bb1542f9b0782
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 49e3e499-dc23-4620-ae41-5e4fb6026a6d
+                    dateTime: '2026-04-21T05:50:04.7634295Z'
+                    traceId: fcdb82af7ec04d35871cb8de11dd2dc1
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 50a264ef-fc00-491d-9ef1-c3003d77d73f
+                    dateTime: '2026-04-21T05:50:04.7634337Z'
+                    traceId: 54be4c03ee964c6bb280ccd794bfd2e8
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/clients/create-client:
+    post:
+      tags:
+      - Clients
+      summary: Create a new client in the system
+      description: '## Purpose
+
+        Creates a new client record in the Engagement Manager system and GoFileRoom (GFR), which is required before creating engagements or binders for that client.
+
+
+        ## Why Use This Endpoint
+
+        - Establish a new client entity in the system
+
+        - Enable creation of engagements and binders for the client
+
+        - Maintain client records synchronized with GoFileRoom (GFR)
+
+        - Assign unique client identifiers for organizational purposes
+
+        - Onboard new clients into the engagement management system
+
+        - Bulk client import from external systems
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+        User must have GFR lookup permissions (403 Forbidden if missing).
+
+
+        ## Response Behavior
+
+        This endpoint returns HTTP 200 OK for both successful creation and duplicate detection:
+
+
+        **Success Response (HTTP 200):**
+
+        ```json
+
+        {
+
+        "isCreated": true,
+
+        "message": "2595"
+
+        }
+
+        ```
+
+        The `message` field contains the GFR Record ID (system-generated identifier from GoFileRoom).
+
+
+        **Duplicate Client Response (HTTP 200):**
+
+        ```json
+
+        {
+
+        "isCreated": false,
+
+        "message": "The client already exists"
+
+        }
+
+        ```
+
+        This is NOT an error condition - it indicates the client already exists with the same name AND number (case-insensitive match).
+
+
+        ## Error Responses
+
+        - `400 Bad Request`: Validation errors (missing required fields)
+
+        - `401 Unauthorized`: Invalid or expired token
+
+        - `403 Forbidden`: User lacks required GFR lookup permissions
+
+        - `500 Internal Server Error`: Server or database errors
+
+
+        ## Important Notes
+
+        - Duplicate detection requires both client name AND client number to match exactly (case-insensitive)
+
+        - The client is created in GoFileRoom as part of this operation
+
+        - On success, use the returned GFR Record ID for tracking and reference
+
+
+        ## Common Use Cases
+
+        1. **Client Onboarding:** Create new client records during onboarding process
+
+        2. **Bulk Import:** Import clients from external systems or spreadsheets
+
+        3. **Pre-Engagement Setup:** Create client records before engagement creation
+
+        4. **Data Migration:** Transfer client data from legacy systems'
+      operationId: EmMainEndPointsExternalBinderCreateClientExternalEndpoint
+      parameters:
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      requestBody:
+        x-name: CreateClientRequestDto
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EMMainDataTransferObjectsModelsClientCreateClientRequestDto'
+        required: true
+        x-position: 1
+      responses:
+        '200':
+          description: Client created successfully or already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsClientCreateClientResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: fc2e4208-f9ae-4c16-b54b-4f487e7666ad
+                    dateTime: '2026-04-21T05:50:04.7687452Z'
+                    traceId: f0ac632b0e3b426681ec76e852b48b2c
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: bd19629b-1849-4b43-b10e-00222670775f
+                    dateTime: '2026-04-21T05:50:04.7687319Z'
+                    traceId: 3c1377cee4f14883b3cdcf612adc374c
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 99f12193-c469-43b9-a806-5c74769eea79
+                    dateTime: '2026-04-21T05:50:04.7687431Z'
+                    traceId: fb12f35fa42b46e69cd2f43f90d8eb6c
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 24d77590-e2c5-41b4-a315-9e070898429d
+                    dateTime: '2026-04-21T05:50:04.7687467Z'
+                    traceId: e864d262599a4280a850314648ca37b9
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/clients/{clientId}:
+    get:
+      tags:
+      - Clients
+      summary: Retrieve client details by ID
+      description: '## Purpose
+
+        This endpoint retrieves detailed information for a specific client using their unique client ID.
+
+
+        ## Why Use This Endpoint
+
+        - Get complete details for a specific client
+
+        - Retrieve client information for display in your application
+
+        - Verify client existence before performing operations
+
+
+        ## How to Get Client ID
+
+        First, use the `/clients/load-clients` endpoint to retrieve the list of clients and obtain the `clientId` value.
+
+
+        ## Path Parameter
+
+        - `clientId` (required): The unique identifier of the client. Must be a positive integer greater than 0.
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Data Source
+
+        This endpoint retrieves client information from Advance Flow clients (clients with engagements), not from all GoFileRoom clients.
+
+
+        ## Common Use Cases
+
+        1. **Client Detail View:** Display complete client information in your application
+
+        2. **Client Validation:** Verify a client exists before creating engagements or performing operations
+
+        3. **Client Lookup:** Quick lookup of client details by ID
+
+
+        ## Error Responses
+
+        - `400 Bad Request`: Invalid client ID (must be greater than 0)
+
+        - `401 Unauthorized`: Invalid or expired token
+
+        - `404 Not Found`: Client ID does not exist or client has no engagements
+
+        - `500 Internal Server Error`: Server or database errors'
+      operationId: EmMainEndPointsExternalClientGetClientByIdEndpoint
+      parameters:
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved the client details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsEMEngagementClientExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: f67726ea-be48-4108-90e5-5947c9a9450e
+                    dateTime: '2026-04-21T05:50:04.7615695Z'
+                    traceId: b089b5a097bb40d6a9a5cc7686f3db33
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 79590907-938d-404a-b34e-ab59df9100d1
+                    dateTime: '2026-04-21T05:50:04.7615574Z'
+                    traceId: 728caf7d93ca4bbb8f9e7a3730072f70
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: 5f9b23f4-2762-47a7-95e1-8b92ba882924
+                    dateTime: '2026-04-21T05:50:04.7615673Z'
+                    traceId: aef5aefc1f1c478ca4bc1664a38b739d
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 6c92d538-ece7-459d-9b2d-250a4200dd52
+                    dateTime: '2026-04-21T05:50:04.7615710Z'
+                    traceId: feaf9440726243a9b797ebde66c8db1a
+                    spanId: 358611c48f91f940
+      security:
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /master-data/clients:
+    get:
+      tags:
+      - Clients
+      summary: Fetch all clients
+      operationId: Clients_GetClients
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.ClientListResponse'
+              example:
+              - id: 1
+                number: Client Number 1
+                name: Client Name 1
+              - id: 2
+                number: Client Number 2
+                name: Client Name 2
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.ClientListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.ClientListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.ClientListResponse'
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+components:
+  schemas:
+    EMMainDataTransferObjectsModelsClientCreateClientResponseDto:
+      type: object
+      additionalProperties: false
+      properties:
+        isCreated:
+          type: boolean
+          description: Boolean flag indicating whether the client was successfully created. Returns true if the client was created, false if the client already exists.
+          example: true
+        message:
+          type: string
+          description: System-generated message about the operation result. When IsCreated is true, contains the GFR Record ID (e.g., "2595"). When IsCreated is false, contains "The client already exists".
+          example: '2595'
+    EMMainDataTransferObjectsModelsEMFilterCriteriaDto:
+      type: object
+      additionalProperties: false
+      properties:
+        clientNumber:
+          type: string
+          description: Client number filter. Supports wildcards (*) for partial matching. Use "*" to return all clients.
+          example: CLI-2024-*
+        clientName:
+          type: string
+          description: Client name filter. Supports wildcards (*) for partial matching. Use "*" to return all clients.
+          example: ABC Corporation
+    EmMainExtensionsUtilityErrorExtensions:
+      type: object
+      description: 'Provides extended metadata and diagnostic information for error responses.
+
+        Includes status codes, error codes, timestamps, and distributed tracing identifiers.'
+      additionalProperties: false
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code (e.g., 400, 401, 403, 500)
+          format: int32
+          example: 401
+        code:
+          type: string
+          description: Application-specific error code for programmatic handling
+          example: ERR_AUTH_4010
+        errorId:
+          type: string
+          description: Unique identifier (GUID) for this error occurrence. Use this when reporting issues to support.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        dateTime:
+          type: string
+          description: ISO 8601 timestamp (UTC) when the error occurred
+          example: '2024-03-15T14:30:00Z'
+        traceId:
+          type: string
+          description: Distributed trace ID for correlating requests across microservices (W3C Trace Context format)
+          example: a1b2c3d4e5f67890abcdef1234567890
+        spanId:
+          type: string
+          description: Span ID for this specific operation within the distributed trace (W3C Trace Context format)
+          example: 358611c48f91f940
+    EMMainDataTransferObjectsModelsEMClientRequestDto:
+      type: object
+      additionalProperties: false
+      properties:
+        filters:
+          description: Filter criteria for searching clients by name or number. Use wildcards (*) to match any characters.
+          example:
+            clientName: '*'
+            clientNumber: '*'
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsEMFilterCriteriaDto'
+        pagination:
+          description: Pagination settings to control the number of results and page navigation.
+          example:
+            pageNumber: 1
+            size: 10
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsEMPaginationDto'
+        showAllClients:
+          type: boolean
+          description: Determines the source of client data. When true, retrieves all clients from GoFileRoom (GFR). When false, retrieves only clients that have associated engagements/binders in the system.
+          example: false
+    EMMainDataTransferObjectsModelsEMPagedDataExternalResponseOfEngagementClientExternalDto:
+      type: object
+      additionalProperties: false
+      properties:
+        clients:
+          type: array
+          description: Collection of clients for the current page based on the pagination settings.
+          items:
+            $ref: '#/components/schemas/EMMainDataTransferObjectsModelsEMEngagementClientExternalDto'
+        totalNumberOfClients:
+          type: integer
+          description: Total count of all clients matching the filter criteria across all pages. Use this for pagination controls.
+          format: int32
+          example: 127
+    EmMainExtensionsUtilityErrorDetail:
+      type: object
+      description: Represents detailed information about a specific error that occurred during API request processing.
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          description: Gets or sets the human-readable error message describing what went wrong.
+          example: '"Unauthorized access."
+
+            "Bad request due to invalid input."
+
+            "Resource not found."
+
+            "An unexpected error occurred."'
+        extensions:
+          description: Gets or sets the extended error metadata containing additional diagnostic information.
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsUtilityErrorExtensions'
+    EMMainDataTransferObjectsModelsEMPaginationDto:
+      type: object
+      additionalProperties: false
+      properties:
+        pageNumber:
+          type: integer
+          description: The page number to retrieve (1-based indexing). First page is 1.
+          format: int32
+          example: 1
+          exclusiveMinimum: 0
+        size:
+          type: integer
+          description: 'Number of results per page. Must be one of the following values: 12, 15, 20, 50, 150, 500, 1000, 10000.
+
+            These values correspond to the GfrPageSizeType enum values (XExtraSmall, ExtraSmall, Small, Medium, Large, ExtraLarge, XExtraLarge, XXExtraLarge).'
+          format: int32
+          example: 20
+    EmMainExtensionsUtilityErrorResponse:
+      type: object
+      description: 'Represents a standardized error response structure for API errors.
+
+        Contains a collection of detailed error information.'
+      example:
+        errors:
+        - message: Unauthorized access.
+          extensions:
+            statusCode: 401
+            code: ERR_AUTH_4010
+            errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+            dateTime: '2024-03-15T14:30:00Z'
+            traceId: a1b2c3d4e5f67890abcdef1234567890
+            spanId: 358611c48f91f940
+      additionalProperties: false
+      properties:
+        errors:
+          type: array
+          description: Collection of detailed error information
+          items:
+            $ref: '#/components/schemas/EmMainExtensionsUtilityErrorDetail'
+    EMMainDataTransferObjectsModelsEMEngagementClientExternalDto:
+      type: object
+      additionalProperties: false
+      properties:
+        clientId:
+          type: integer
+          description: Internal system identifier for the client. Unique across the system.
+          format: int32
+          example: 1547
+        clientName:
+          type: string
+          description: Full name of the client as registered in the system.
+          example: ABC Corporation
+        number:
+          type: string
+          description: Unique client number/code assigned to the client for reference and organization.
+          example: CLI-2024-001
+        onvioClientId:
+          type: string
+          description: Onvio client identifier for integration with Thomson Reuters Onvio platform. Empty if not integrated.
+          example: ONV-12345
+    EMMainDataTransferObjectsModelsClientCreateClientRequestDto:
+      type: object
+      additionalProperties: false
+      required:
+      - clientName
+      - clientNumber
+      properties:
+        clientName:
+          type: string
+          description: The client name. Must be provided.
+          minLength: 1
+          example: ABC Corporation
+        clientNumber:
+          type: string
+          description: The client number. Must be provided.
+          minLength: 1
+          example: CLI-2024-001
+    TRTA.Athena.Models.Api.ClientV3:
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Client Id(cmcid)
+          type: integer
+        number:
+          description: Client Number
+          type: string
+        name:
+          description: Client Name
+          type: string
+    TRTA.Athena.Models.Api.ClientListResponse:
+      description: Client API Response
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.ClientV3'
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: Please enter a valid token(M2M or GFR)
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-engagement-manager-openapi.json
+- thomson-reuters-onesource-indirect-tax-compliance-configuration-api-openapi.json
+- thomson-reuters-engagement-manager-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

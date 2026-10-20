@@ -1,0 +1,1193 @@
+# x-archived-from: thomson-reuters-ingest-service-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Ingest Service
+  description: Manage ingests, upload files, extensions, extract data from integrations
+  version: '1.0'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1/ingest
+security:
+- bearerAuth: []
+paths:
+  /ingestions:
+    get:
+      tags:
+      - Ingestions
+      summary: Get a paginated list of available ingestions
+      description: Returns a list of all the ingestions for a particular client based on filter conditions with their metadata
+      operationId: getIngestions
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionIngestionResponse'
+      security:
+      - bearerAuth: []
+  /ingestions/{id}:
+    get:
+      tags:
+      - Ingestions
+      summary: Get an ingestion by ID
+      description: Retrieves details of an ingestion identified by a unique id from ingest Metadata
+      operationId: getIngestionById
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the ingested data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IngestionResponse'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Ingestions
+      summary: Delete Ingest
+      description: Remove Ingest details by ingest id
+      operationId: removeIngestDetails
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the ingest data
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ingest details does not exist
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Ingestions
+      summary: Updates an existing ingest Metadata
+      description: Updates Metadata to change Year, Period & Name
+      operationId: updateMetadata_1
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the ingested data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchIngestionRequest'
+      responses:
+        '204':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponse'
+      security:
+      - bearerAuth: []
+  /files:
+    get:
+      tags:
+      - Files
+      summary: Get a paginated list of available Files
+      description: Returns a list of Files with their metadata
+      operationId: getAllFiles
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionFileResponse'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Files
+      description: 'Adds File with metadata: name (mandatory), delimiter, year, period'
+      operationId: createFile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileRequest'
+      responses:
+        '201':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FileIdResponse'
+      security:
+      - bearerAuth: []
+  /files/{id}:
+    get:
+      tags:
+      - Files
+      summary: Get a File by ID
+      description: Returns File metadata for the specified File ID
+      operationId: getFile
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the File
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FileResponse'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Files
+      summary: Updates an existing ingest file
+      description: Updates ingest files metadata, ingestion parts, and ingestion metadata to change delimiter, year and period
+      operationId: updateMetadata
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the ingested data
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchIngestFileRequest'
+      responses:
+        '204':
+          description: default response
+      security:
+      - bearerAuth: []
+  /files/{id}/upload:
+    post:
+      tags:
+      - Files
+      summary: Initiate an upload of data into a file by ID
+      description: Adds source file ID to initiate the streaming upload
+      operationId: uploadFile
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the file
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FileStatusResponse'
+      security:
+      - bearerAuth: []
+  /integrations:
+    get:
+      tags:
+      - Integrations
+      summary: Gets available integrations
+      description: Gets the available pre-configured application integrations
+      operationId: getIntegrations
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionScriptedIntegrationResponse'
+  /integrations/{id}:
+    get:
+      tags:
+      - Integrations
+      summary: Get an integration by id
+      description: Gets a single pre-configured application integration
+      operationId: getIntegrationById
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the script
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SingleScriptedIntegrationResponse'
+  /extractions:
+    get:
+      tags:
+      - Extractions
+      summary: Get the list of extractions
+      operationId: getExtractions
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionExtractionResponse'
+    post:
+      tags:
+      - Extractions
+      summary: Creates a new Extraction
+      operationId: createMetadata
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostExtractsRequest'
+      responses:
+        '201':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseInteger'
+  /extractions/{id}:
+    get:
+      tags:
+      - Extractions
+      summary: Get the status of an extraction
+      operationId: getScriptExecutionStatus
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the extract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExtractionResponse'
+  /extensions/readers/xlsx-ingestions/{ingestion_id}/previews:
+    post:
+      tags:
+      - Ingest Extension Service
+      summary: Create xlsx file preview by ingestion id
+      description: Returns the preview id for specified Ingestion Id
+      operationId: createPreviewData_1
+      parameters:
+      - name: ingestion_id
+        in: path
+        description: Unique identifier of the ingested data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreviewRequest'
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponse'
+      security:
+      - bearerAuth: []
+  /extensions/readers/xlsx-ingestions/previews/{preview_id}:
+    get:
+      tags:
+      - Ingest Extension Service
+      summary: Get xlsx file preview by preview id
+      description: Returns the file preview for the specified preview id
+      operationId: getPreviewRecord_1
+      parameters:
+      - name: preview_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PreviewByIdResponse'
+      security:
+      - bearerAuth: []
+  /extensions/readers/xlsx-ingestions/previews/{preview_id}/records:
+    get:
+      tags:
+      - Ingest Extension Service
+      summary: Get a preview of the file data
+      description: Returns records parsed from file in S3, given preview id
+      operationId: getPreviewOfRecords
+      parameters:
+      - name: preview_id
+        in: path
+        description: Unique identifier of the file data preveiw
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionString'
+      security:
+      - bearerAuth: []
+  /extensions/readers/delimited-ingestions/{ingestion_id}/records:
+    get:
+      tags:
+      - Ingest Extension Service
+      summary: Get a preview of the ingested data
+      description: Returns records parsed from file from EFS, given ingest id
+      operationId: getIngestRecordsPreview
+      parameters:
+      - name: ingestion_id
+        in: path
+        description: Unique identifier of the ingested data
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionString'
+      security:
+      - bearerAuth: []
+  /extensions/readers/xlsx-ingestions/{ingestion_id}/named-ranges:
+    get:
+      tags:
+      - Ingest Extension Service
+      summary: Get xlsx file named ranges by ingestion id
+      description: Returns the file named ranges for the specified Ingestion Id
+      operationId: getNamedRanges
+      parameters:
+      - name: ingestion_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NamedRangesResponse'
+      security:
+      - bearerAuth: []
+  /extensions/readers/xlsx-ingestions/{ingestion_id}/worksheets:
+    get:
+      tags:
+      - Ingest Extension Service
+      summary: Get xlsx file tab details by ingestion id
+      description: Returns the file worksheets for the specified Ingestion Id
+      operationId: getTabDetails
+      parameters:
+      - name: ingestion_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TabDetailsResponse'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    PostIngestionPartsRequest:
+      required:
+      - type
+      type: object
+      properties:
+        delimiter:
+          type: string
+        type:
+          type: string
+          enum:
+          - UPLOAD
+          - SCRIPT
+          - BATCH
+        ingest_id:
+          type: string
+        completed_at:
+          type: string
+          format: date-time
+    IntegerIdResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+    ApiCollectionPartResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    PartResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Part
+          format: int32
+          example: 46
+        path:
+          type: string
+          description: Resource located at path
+          example: /V9M/-1/5fc64cc/sample.csv
+        delimiter:
+          type: string
+          description: String upon which the row will be split
+          example: ','
+        ingest_id:
+          type: string
+          description: Unique identifier of the Ingestion
+          example: 5eed28cee5d5882c0bbefe5c
+        type:
+          type: string
+          enum:
+          - UPLOAD
+          - SCRIPT
+          - BATCH
+        created_at:
+          type: string
+          description: Time at which this part was created
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        completed_at:
+          type: string
+          description: Time at which this part was completed
+          format: date-time
+          example: '2020-12-21T21:06:22.453Z'
+    PatchIngestionPartsRequest:
+      required:
+      - delimiter
+      type: object
+      properties:
+        delimiter:
+          type: string
+    IngestionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Ingestion
+          example: '46'
+        name:
+          type: string
+          description: Label of the ingestion
+          example: My File Name.csv
+        year:
+          type: integer
+          description: Relevant year of importance for the ingestion
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        provider:
+          type: string
+          description: Source of ingestion
+          example: INTEGRATION, FILE, ALTERYX
+        status:
+          type: string
+          enum:
+          - COMPLETE
+          - AWAITING
+        created_at:
+          type: string
+          description: Time at which this ingestion was created
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        created_by:
+          type: string
+          example: UserA
+        mime_type:
+          type: string
+        content_type:
+          type: string
+    PostIngestionRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the File
+          example: My File Name.csv
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+    IdResponse:
+      type: object
+      properties:
+        id:
+          type: string
+    ApiCollectionString:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    InputStreamResource:
+      type: object
+      properties:
+        inputStream:
+          type: object
+        description:
+          type: string
+        open:
+          type: boolean
+        readable:
+          type: boolean
+        file:
+          type: string
+          format: binary
+        url:
+          type: string
+          format: url
+        uri:
+          type: string
+          format: uri
+        filename:
+          type: string
+    ApiCollectionIngestionResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngestionResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    PatchIngestionRequest:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        name:
+          type: string
+          description: Label of the File
+          example: My File Name.csv
+    FileRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the File
+          example: My File Name.csv
+        delimiter:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: String upon which the row will be split
+          example: ','
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+    FileIdResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the File
+          format: int32
+          example: 102
+    ApiCollectionFileResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    FileResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the File
+          format: int32
+          example: 102
+        name:
+          type: string
+          description: Label of the File
+          example: My File Name.csv
+        status:
+          type: string
+          description: Status of file upload
+          enum:
+          - NEW
+          - UPLOADING
+          - UPLOADED
+          - UPLOAD_FAILED
+        delimiter:
+          type: string
+          description: String upon which the row will be split
+          example: ','
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        ingest_id:
+          type: string
+          description: Unique identifier of the Ingestion
+          example: 5ec57f677456242950884996
+        created_at:
+          type: string
+          description: File created at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        created_by:
+          type: string
+          example: UserA
+        completed_at:
+          type: string
+          description: Process completed at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        upload_started_at:
+          type: string
+          description: File upload started at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        upload_ended_at:
+          type: string
+          description: File upload ended at time
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+        uploaded_bytes:
+          type: integer
+          description: Total file size uploaded
+          format: int64
+          example: 2384298367492834
+        mime_type:
+          type: string
+          description: file Mediatype
+          example: text/csv
+        content_type:
+          type: string
+          description: file ContentType
+          example: csv
+    PatchIngestFileRequest:
+      type: object
+      properties:
+        delimiter:
+          type: string
+          description: String upon which the row will be split
+          example: ','
+        year:
+          type: integer
+          description: Relevant year of importance for the file data
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        name:
+          type: string
+          description: Label of the File
+          example: My File Name.csv
+    FileStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: File Uploaded Successfully
+    PostExtractsRequest:
+      required:
+      - arguments
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        year:
+          type: integer
+          format: int32
+        period:
+          type: integer
+          format: int32
+        arguments:
+          type: object
+          additionalProperties:
+            type: object
+        integration_id:
+          type: integer
+          format: int32
+    IdResponseInteger:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+    ExtractionResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Extraction
+          format: int32
+          example: 102
+        status:
+          type: string
+          description: Status of the Extraction
+          example: COMPLETED
+        arguments:
+          type: object
+          additionalProperties:
+            type: object
+        error:
+          $ref: '#/components/schemas/InvocationError'
+        ingest_id:
+          type: string
+          description: Unique identifier of the Ingestion
+          example: 5ec57f677456242950884996
+        integration_id:
+          type: integer
+          description: Unique identifier of the integration
+          format: int32
+          example: 122
+        name:
+          type: string
+          description: Label of the extraction
+          example: My File Name.csv
+        year:
+          type: integer
+          description: Relevant year of importance for the extraction
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision
+          format: int32
+          example: 12
+        created_at:
+          type: string
+          description: Time at which this extraction was created
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        started_at:
+          type: string
+          format: date-time
+          example: '2020-06-03T13:24:48.476Z'
+        completed_at:
+          type: string
+          format: date-time
+          example: '2020-06-03T13:24:48.476Z'
+    InvocationError:
+      type: object
+      properties:
+        code:
+          type: string
+          description: InvocationError code
+        message:
+          type: string
+          description: InvocationError message
+    ApiCollectionExtractionResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExtractionResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ParameterDTO:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of parameter
+          example: Integer
+          enum:
+          - String
+          - Integer
+          - Decimal
+          - Date
+        key:
+          type: string
+          description: Parameter key for the Script
+          example: Year
+    SingleScriptedIntegrationResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the integration
+          format: int32
+          example: 101
+        name:
+          type: string
+          description: Name of the script
+          example: 'Statutory Reporting: Journal Entries'
+        application:
+          type: string
+          description: Application from which we can pull data into the Data Lake
+          example: ONESOURCE Statutory Reporting
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterDTO'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagDTO'
+        short_code:
+          type: string
+          description: Short id of the script
+          example: sr-je
+    TagDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Tag Name
+          example: source:osr
+    ApiCollectionScriptedIntegrationResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScriptedIntegrationResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ScriptedIntegrationResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the integration
+          format: int32
+          example: 101
+        name:
+          type: string
+          description: Name of the script
+          example: 'Statutory Reporting: Journal Entries'
+        short_code:
+          type: string
+          description: Short id of the script
+          example: sr-je
+    UpdatePreviewRequest:
+      type: object
+      properties:
+        path:
+          type: string
+        status:
+          type: string
+        error:
+          type: string
+        created_date:
+          type: string
+    PreviewByIdResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        ingest_id:
+          type: string
+        preview_parameter:
+          type: object
+          additionalProperties:
+            type: object
+        file_type:
+          type: string
+        path:
+          type: string
+        created_date:
+          type: string
+          description: Time at which this part was created
+          format: date-time
+          example: '2020-12-19T21:06:22.453Z'
+        status:
+          type: string
+        error:
+          type: string
+    PreviewRequest:
+      type: object
+      properties:
+        worksheet_index:
+          type: integer
+          format: int32
+        worksheet_name:
+          type: string
+        named_range:
+          type: string
+        cell_range:
+          type: string
+    NamedRange:
+      type: object
+      properties:
+        name:
+          type: string
+        range:
+          type: string
+    NamedRangesMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+    NamedRangesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedRange'
+        _meta:
+          $ref: '#/components/schemas/NamedRangesMeta'
+    Tab:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        name:
+          type: string
+    TabDetailsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tab'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

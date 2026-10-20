@@ -1,0 +1,159 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Blueprint Types API
+  version: '1.0'
+  description: 'Operations tagged Blueprint Types across 2 of this provider''s published API definitions: thomson-reuters-blueprint-service-openapi.json, thomson-reuters-blueprint-service-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+tags:
+- name: Blueprint Types
+paths:
+  /blueprint-types:
+    get:
+      tags:
+      - Blueprint Types
+      summary: Get a list of Blueprint types
+      description: Returns a list of Blueprints for Blueprint types
+      operationId: getBlueprintTypes
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionDTOBlueprintTypeMeta'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+  /blueprint-types/{id}/columns:
+    get:
+      tags:
+      - Blueprint Types
+      summary: Get the list of columns for a Blueprint type by ID
+      description: 'Returns a list of Blueprints for Blueprint types for IDs with column definitions
+
+
+        Potential values for ontology:
+
+
+        id name
+
+
+        1 financial-hierarchy-position
+
+
+        2 chart of accounts
+
+
+        3 entity
+
+
+        4 account
+
+
+        5 balance'
+      operationId: getBlueprintTypeColumnById
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Blueprint type
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 200
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionDTOBlueprintTypeColumn'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-hub/v1
+components:
+  schemas:
+    BlueprintTypeColumn:
+      type: object
+      properties:
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents
+          format: int32
+          example: 1
+        name:
+          type: string
+          description: Label of the column
+          example: My Column Name
+        type:
+          type: string
+          description: Expected data type of the column values
+          example: number
+          enum:
+          - currency
+          - date
+          - number
+          - string
+        required:
+          type: boolean
+          description: Requires templates to map this column
+          example: true
+    BlueprintTypeMeta:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Blueprint type
+          format: int32
+          example: 2
+        name:
+          type: string
+          description: Label of the Blueprint type
+          example: Trial Balance
+          enum:
+          - Generic
+          - Trial Balance
+          - Apportionment
+    CollectionDTOBlueprintTypeColumn:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlueprintTypeColumn'
+    CollectionDTOBlueprintTypeMeta:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlueprintTypeMeta'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-blueprint-service-openapi.json
+- thomson-reuters-blueprint-service-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

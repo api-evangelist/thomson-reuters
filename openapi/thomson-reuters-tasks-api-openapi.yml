@@ -1,0 +1,280 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Tasks API
+  version: V1.0.0
+  contact:
+    name: OneSource Productivity Suite
+  description: 'Operations tagged Tasks across 2 of this provider''s published API definitions: thomson-reuters-onesource-workflow-openapi.json, thomson-reuters-onesource-workflow-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com
+- url: https://api-apac.onesourcetax.com
+- url: https://api-emea.onesourcetax.com
+security:
+- Bearer: []
+tags:
+- name: Tasks
+paths:
+  /workflow/Tasks/search:
+    post:
+      tags:
+      - Tasks
+      summary: Search workflow tasks
+      description: Search workflow tasks as filtering by template, created Date, variables, etc.
+      operationId: Tasks_POST
+      parameters:
+      - name: limit
+        in: query
+        description: The number of items in the queried collection to be included in the result. 0 to 100.
+        schema:
+          type: integer
+          format: int32
+          default: 25
+        example: 25
+      - name: offset
+        in: query
+        description: The number of items in the queried collection that are to be skipped and not included in the result. 0 or greater.
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        example: 0
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: Search Filters
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.External.TaskSearchRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.External.TaskSearchRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.External.TaskSearchRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.External.TaskSearchRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.External.TaskSearchResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+    servers:
+    - url: https://api.onesourcetax.com
+    - url: https://api-apac.onesourcetax.com
+    - url: https://api-emea.onesourcetax.com
+components:
+  schemas:
+    Workflow.Wrapper.Model.Contract.External.TaskSearchResponse:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.Generic.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.External.TaskResponse'
+      additionalProperties: false
+    Microsoft.AspNetCore.Mvc.ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    Workflow.Wrapper.Model.Contract.External.Operator:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
+      format: int32
+    Workflow.Wrapper.Model.Contract.External.TaskResponse:
+      type: object
+      properties:
+        taskId:
+          type:
+          - string
+          - 'null'
+        taskName:
+          type:
+          - string
+          - 'null'
+        workflowInstanceId:
+          type:
+          - string
+          - 'null'
+        workflowTemplateId:
+          type:
+          - string
+          - 'null'
+        dueDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        createdDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        followUpDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        variables:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        workflowTemplateName:
+          type:
+          - string
+          - 'null'
+        assignedUsers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.External.User'
+      additionalProperties: false
+    Workflow.Wrapper.Model.Contract.External.Variable:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        operator:
+          $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.External.Operator'
+        value: {}
+      additionalProperties: false
+    Workflow.Wrapper.Model.Contract.External.TaskSearchRequest:
+      type: object
+      properties:
+        workflowInstanceId:
+          type:
+          - string
+          - 'null'
+        workflowInstanceIdIn:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        workflowTemplateId:
+          type:
+          - string
+          - 'null'
+        workflowTemplateKey:
+          type:
+          - string
+          - 'null'
+        assignedUser:
+          type:
+          - string
+          - 'null'
+        dueDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dueDateLt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dueDateGt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        state:
+          type:
+          - string
+          - 'null'
+        variables:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Workflow.Wrapper.Model.Contract.External.Variable'
+      additionalProperties: false
+    Workflow.Wrapper.Model.Contract.External.User:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        login:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Workflow.Wrapper.Model.Contract.Generic.Meta:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: 'Enter the authorization token here. Example: Bearer ABC'
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-onesource-workflow-openapi.json
+- thomson-reuters-onesource-workflow-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,611 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Sales API
+  version: '2.0'
+  description: 'Operations tagged Sales across 2 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-services-v1-openapi.json, thomson-reuters-onesource-trust-tax-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax
+security:
+- bearerAuth: []
+tags:
+- name: Sales
+paths:
+  /v1/sales/operations/{id}:
+    get:
+      tags:
+      - Sales
+      summary: Allows an authenticated user to retrieve sales status
+      description: Retrieve the Sale status
+      operationId: RetrieveTheSaleStatus
+      parameters:
+      - name: id
+        in: path
+        description: Operation request identifier
+        required: true
+        schema:
+          type: string
+          description: Operation request identifier
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve the Sale status
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v1/tax-years/{taxYear}/pans/{pan}/accounts/{acctNo}/sales/{saleId}:
+    put:
+      tags:
+      - Sales
+      summary: Allows an authenticated user to update sales for designated PAN/Trust Account…
+      description: Update existing Sale information
+      operationId: UpdateExistingSaleInformation
+      parameters:
+      - name: taxYear
+        in: path
+        description: Tax Year
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Tax Year
+      - name: pan
+        in: path
+        description: Product Access Number
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Product Access Number
+      - name: acctNo
+        in: path
+        description: Trust Account Number
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: Trust Account Number
+      - name: saleId
+        in: path
+        description: Sale ID
+        required: true
+        schema:
+          type: integer
+          description: Sale ID
+          format: int32
+      requestBody:
+        description: Sale Model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/SaleModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SaleModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SaleModel'
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request-The request contained invalid parameters that the server was unable to process. A list of incorrect parameters will be provided in the response. Please edit the request and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Unauthorized-This usually indicates a bad authorization token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Unexpected error encountered. Response has been reported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Update existing Sale information
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v1/tax-years/{tax-year}/sale-tax-codes:
+    get:
+      tags:
+      - Sales
+      summary: Allows an authenticated user to get applicable tax codes for sale
+      description: Retrieves Sale TaxCodes
+      operationId: RetrievesSaleTaxCodes
+      parameters:
+      - name: tax-year
+        in: path
+        description: Tax year
+        required: true
+        schema:
+          type: integer
+          description: Tax year
+          format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxCodeBase'
+        '403':
+          description: Unauthorized-This usually indicates a bad authorization token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Unexpected error encountered. Response has been reported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Sale TaxCodes
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+components:
+  schemas:
+    SalePreparerNotes:
+      required:
+      - explanation
+      - priority
+      type: object
+      properties:
+        priority:
+          $ref: '#/components/schemas/PriorityEnum'
+        explanation:
+          maxLength: 1275
+          minLength: 1
+          type: string
+          description: Explanation
+      additionalProperties: false
+      description: Preparer Notes
+    OperationsStatus:
+      enum:
+      - NotStarted
+      - Running
+      - Succeeded
+      - Failed
+      - Cancelled
+      - PartiallySucceeded
+      - Rejected
+      type: string
+    OperationModel:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/OperationsStatus'
+        location:
+          type:
+          - string
+          - 'null'
+        created_date_time:
+          type: string
+          format: date-time
+        last_action_date_time:
+          type: string
+          format: date-time
+      additionalProperties: false
+    SaleTaxLot:
+      type: object
+      properties:
+        lot_seq_no:
+          type:
+          - integer
+          - 'null'
+          description: Lot Seq No
+          format: int32
+        units:
+          type:
+          - number
+          - 'null'
+          description: '<br>Units
+
+            <br>To clear value pass -0.001'
+          format: double
+        acquisition_date:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: '<br>Acquisition Date
+
+            <br>To clear value pass 01/01/1900
+
+            <br>If Term is set to UndeterminedTerm then Acquisition Date will be set to null
+
+            <br>Modifying Acquisition Date changes Lot Term'
+          example: '2018-12-31'
+        pro_rata_sale_price:
+          type:
+          - number
+          - 'null'
+          description: '<br>Pro Rata Sales Price
+
+            <br>To clear value pass -0.001'
+          format: double
+        cost_or_basis:
+          type:
+          - number
+          - 'null'
+          description: '<br>Cost or Basis
+
+            <br>To clear value pass -0.001'
+          format: double
+        return_of_capital_adjustment:
+          type:
+          - number
+          - 'null'
+          description: Return of Capital Adjustment
+          format: double
+        unknown_cost:
+          type:
+          - boolean
+          - 'null'
+          description: Unknown Cost
+        noncovered_indicator:
+          $ref: '#/components/schemas/NoncoveredIndicator'
+        inherit_property_indicator:
+          type:
+          - boolean
+          - 'null'
+          description: '<br>Inherit Property Indicator
+
+            <br>Modifying Inherit Property Indicator changes Lot Term'
+        wash_sale_indicator:
+          $ref: '#/components/schemas/WashSaleIndicator'
+        fed_wash_sale_loss_disallowed:
+          type:
+          - number
+          - 'null'
+          description: '<br>Fed Wash Sale Loss Disallowed
+
+            <br>To clear value pass -0.001'
+          format: double
+        market_discount:
+          type:
+          - number
+          - 'null'
+          description: '<br>Market Discount
+
+            <br>To clear value pass -0.001'
+          format: double
+        state_basis:
+          type:
+          - number
+          - 'null'
+          description: '<br>State Basis
+
+            <br>To clear value pass -0.001'
+          format: double
+        state_wash_sale_loss_disallowed:
+          type:
+          - number
+          - 'null'
+          description: '<br>State Wash Sale Loss Disallowed
+
+            <br>To clear value pass -0.001'
+          format: double
+        hit_reviewed_indicator:
+          type:
+          - boolean
+          - 'null'
+          description: HIT Reviewed Indicator
+        original_face_value:
+          type:
+          - number
+          - 'null'
+          description: '<br>Original Face Value
+
+            <br>To clear value pass -0.001'
+          format: double
+        for_form_8949:
+          type:
+          - integer
+          - 'null'
+          description: For Form 8949
+          format: int32
+        term:
+          $ref: '#/components/schemas/TaxLotTerm'
+      additionalProperties: false
+    SaleModel:
+      required:
+      - yrseq
+      type: object
+      properties:
+        yrseq:
+          type: integer
+          description: Year seq
+          format: int32
+          example: 20180
+        detail:
+          $ref: '#/components/schemas/SaleDetail'
+        asset_association:
+          $ref: '#/components/schemas/SaleAssetAssociation'
+        tax_lots:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SaleTaxLot'
+          description: Sets TaxLot
+        preparer_notes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SalePreparerNotes'
+          description: Gets or Sets PreparerNotes
+      additionalProperties: false
+      description: Sale Model
+    SaleAssetAssociation:
+      type: object
+      properties:
+        asset_id:
+          type:
+          - string
+          - 'null'
+          description: Asset ID/CUSIP
+      additionalProperties: false
+      description: Asset id associated to this sale
+    ChangeType1:
+      enum:
+      - No Change
+      - Add
+      - Change
+      - Delete
+      type: integer
+      description: Change Type
+      format: int32
+    SaleDetail:
+      type: object
+      properties:
+        trade_date:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Trade Date
+          example: '2018-12-31'
+        explanation:
+          maxLength: 360
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Explanation
+        hit_reviewed_indicator:
+          type:
+          - boolean
+          - 'null'
+          description: HIT Reviewed Indicator
+        taxable_for:
+          $ref: '#/components/schemas/TaxableFor'
+        property_type:
+          $ref: '#/components/schemas/PropertyType'
+        registration_code:
+          type:
+          - integer
+          - 'null'
+          description: Registration Code
+          format: int32
+        on_1099_b:
+          type:
+          - boolean
+          - 'null'
+          description: On 1099-B
+        ordinary_indicator:
+          type:
+          - boolean
+          - 'null'
+          description: Ordinary
+        change_in_control_or_capital_structure:
+          type:
+          - boolean
+          - 'null'
+          description: Change in control or capital structure
+        maturities:
+          type:
+          - boolean
+          - 'null'
+          description: Maturities
+        sale_of_collectibles:
+          type:
+          - boolean
+          - 'null'
+          description: Sale of Collectibles
+        related_party_sale:
+          type:
+          - boolean
+          - 'null'
+          description: Related Party Sale
+        sale_of_sbc_stock:
+          type:
+          - boolean
+          - 'null'
+          description: Sale of SBC Stock
+        free_delivery:
+          type:
+          - boolean
+          - 'null'
+          description: Free Delivery
+        sold_out_of_position:
+          type:
+          - boolean
+          - 'null'
+          description: Sold Out of Position
+        distribution_in_kind_for:
+          type:
+          - boolean
+          - 'null'
+          description: Distribution in kind for
+        recipient_or_beneficiary_id:
+          pattern: 111-11-1111 (SSN) or 11-1111111 (TIN)
+          type:
+          - string
+          - 'null'
+          description: Recipient/Beneficiary ID, either SSN or TIN number
+        book_value:
+          type:
+          - number
+          - 'null'
+          description: Distribution in Kind, Book Value
+          format: double
+        tax_code:
+          type:
+          - integer
+          - 'null'
+          description: Distribution in Kind, Associated Tax Code
+          format: int32
+        change_type:
+          $ref: '#/components/schemas/ChangeType1'
+      additionalProperties: false
+      description: Sale Detail Model
+    TaxCodeBase:
+      type: object
+      properties:
+        tax_code:
+          type: integer
+          format: int32
+        description:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PropertyType:
+      enum:
+      - InvestmentProperty
+      - NonInvestmentProperty
+      - PriorYearShortSale
+      type: integer
+      description: Property Type
+      format: int32
+    WashSaleIndicator:
+      enum:
+      - 'No'
+      - 'Yes'
+      type: integer
+      description: Wash Sale Indicator
+      format: int32
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+    TaxLotTerm:
+      enum:
+      - ShortTerm
+      - UndeterminedTerm
+      - LongTerm28
+      - LongTerm
+      type: integer
+      format: int32
+    PriorityEnum:
+      enum:
+      - Information
+      - Action
+      - Urgent
+      - Private
+      type: integer
+      format: int32
+    TaxableFor:
+      enum:
+      - FederalState
+      - FederalOnly
+      - CaliforniaOnly
+      type: integer
+      description: Taxable For
+      format: int32
+    NoncoveredIndicator:
+      enum:
+      - Undetermined
+      - Noncovered
+      - Covered
+      type: integer
+      description: Noncovered Indicator
+      format: int32
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer { token }"'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.json
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

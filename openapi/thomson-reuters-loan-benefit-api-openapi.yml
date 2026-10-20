@@ -1,0 +1,405 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Loan Benefit API
+  version: v1
+  description: 'Operations tagged Loan Benefit across 2 of this provider''s published API definitions: thomson-reuters-fbt-customer-api-2-openapi.json, thomson-reuters-fbt-customer-api-2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/benefits
+tags:
+- name: Loan Benefit
+paths:
+  /periods/{period-id}/organizations/{organization-id}/reporting-entities/{reporting-entity-id}/loan-benefits:
+    get:
+      tags:
+      - Loan Benefit
+      summary: Get all loan benefits in a reporting entity
+      operationId: LoanBenefit_GetBenefits
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: reporting-entity-id
+        in: path
+        description: Reporting entity id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: offset
+        in: query
+        description: Offset
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Limit
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get all loan benefits in a reporting entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.LoanModelForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.LoanModelForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.LoanModelForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.Benefits.LoanModelForCustomerApi'
+        '404':
+          description: Invalid input id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+    servers:
+    - url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/benefits
+components:
+  schemas:
+    Fbt.Models.CustomerApi.Benefits.LoanModelForCustomerApi:
+      description: Loan model
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Benefit value id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        code:
+          description: Benefit id
+          type: string
+        costCenterId:
+          format: uuid
+          description: Cost center id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        standardCategoryId:
+          format: int32
+          description: Standard category id
+          type: integer
+        employeeId:
+          format: uuid
+          description: Person id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        groupType:
+          description: Group type Code
+          type: string
+        region:
+          description: Region
+          type: string
+        actualInterest:
+          format: double
+          description: Actual interest
+          type: number
+        actualInterestRate:
+          format: double
+          description: Actual interest rate
+          type: number
+        additionsToPrincipal:
+          format: double
+          description: Additions to principal
+          type: number
+        adjustments:
+          format: double
+          description: Adjustments
+          type: number
+        benchmarkInterestRate:
+          format: double
+          description: Benchmark interest rate
+          type: number
+        benefitAmount:
+          format: double
+          description: Benefit amount
+          type: number
+        businessAmount:
+          format: double
+          description: Business amount
+          type: number
+        businessPercent:
+          format: double
+          description: Business percent
+          type: number
+        caption:
+          description: Caption
+          type: string
+        closingBalance:
+          format: double
+          description: Closing balance
+          type: number
+        concessionAmount:
+          format: double
+          description: Concession amount
+          type: number
+        currentYearOpeningBalance:
+          format: double
+          description: Current year opening balance
+          type: number
+        dateProvided:
+          description: Date provided
+          type: string
+        description:
+          description: Description
+          type: string
+        employeeContribution:
+          format: double
+          description: Employee contribution
+          type: number
+        employeeContributionEntered:
+          format: double
+          description: Employee contribution entered
+          type: number
+        excessEmployeeContribution:
+          format: double
+          description: Excess employee contribution
+          type: number
+        exemptBenefits:
+          description: Exempt benefits
+          type: boolean
+        exemptGUTA17000Applied:
+          format: double
+          description: Exempt GUTA 17000 applied
+          type: number
+        exemptGUTA30000Applied:
+          format: double
+          description: Exempt GUTA 30000 applied
+          type: number
+        exPaymentSummary:
+          description: Ex payment summary
+          type: boolean
+        grossedUpTaxableAmount:
+          format: double
+          description: Grossed up taxable amount
+          type: number
+        grossedUpTaxableAmt17000:
+          format: double
+          description: Grossed up taxable Amount 17000
+          type: number
+        grossedUpTaxableAmt30000:
+          format: double
+          description: Grossed up taxable Amount 30000
+          type: number
+        grossedUpTaxableValue:
+          format: double
+          description: Grossed up taxable value
+          type: number
+        grossTaxableAmount:
+          format: double
+          description: Gross taxable amount
+          type: number
+        hasChangedFromUnscheduled:
+          description: Has changed from unscheduled
+          type: boolean
+        ignoreEmpContriAndInHouseFlag:
+          description: Ignore employee contribution and in house flag
+          type: boolean
+        inHouse:
+          description: In house
+          type: boolean
+        inHouseAmtApplied:
+          format: double
+          description: In house amount applied
+          type: number
+        inHouseCalcMethodCode:
+          format: int32
+          description: In house calculation method code
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          type: integer
+        interestAmount:
+          format: double
+          description: Interest amount
+          type: number
+        interestCharged:
+          format: double
+          description: Interest charged
+          type: number
+        interestChargeFrequencyType:
+          format: int32
+          description: Interest charge frequency type
+          type: integer
+        interestChargeScheduleFrequencyType:
+          format: int32
+          description: Interest charge schedule frequency type
+          enum:
+          - 0
+          - 1
+          type: integer
+        interestFrequency:
+          format: int32
+          description: Interest frequency
+          type: integer
+        interestStartDate:
+          description: Interest start date
+          type: string
+        loanAmount:
+          format: double
+          description: Loan amount
+          type: number
+        loanBenefitAmount:
+          format: double
+          description: Loan benefit amount
+          type: number
+        loanEndDate:
+          description: Loan end date
+          type: string
+        loanOriginalStartDate:
+          description: Loan original start date
+          type: string
+        mealOrEFLE:
+          description: Meal or EFLE
+          type: boolean
+        rebateApplied:
+          format: double
+          description: Rebate applied
+          type: number
+        reductionAmount:
+          format: double
+          description: Reduction amount
+          type: number
+        reductionAmountApplied:
+          format: double
+          description: Reduction amount applied
+          type: number
+        remoteAreaBenefitType:
+          format: int32
+          description: Remote area benefit type
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          type: integer
+        repaymentAmount:
+          format: double
+          description: Repayment amount
+          type: number
+        repaymentFrequency:
+          format: int32
+          description: Repayment frequency
+          type: integer
+        repaymentFrequencyType:
+          format: int32
+          description: Repayment frequency type
+          type: integer
+        repayments:
+          format: double
+          description: Repayments
+          type: number
+        repaymentScheduleFrequencyType:
+          format: int32
+          description: Repayment schedule frequency type
+          enum:
+          - 0
+          - 1
+          type: integer
+        repaymentStartDate:
+          description: Repayment start date
+          type: string
+        reportable:
+          description: Reportable
+          type: boolean
+        reportableAmount:
+          format: double
+          description: Reportable amount
+          type: number
+        reportableValue:
+          description: Reportable value
+          type: string
+        rfbaExcluded:
+          description: RFBA excluded
+          type: boolean
+        rfbaExcludedComponent:
+          format: double
+          description: RFBA excluded component
+          type: number
+        schedule:
+          description: Schedule
+          type: boolean
+        state:
+          description: State
+          type: string
+        statutoryInterest:
+          format: double
+          description: Statutory interest
+          type: number
+        taxableAmount:
+          format: double
+          description: Taxable amount
+          type: number
+        taxPayable:
+          format: double
+          description: Tax payable
+          type: number
+        taxPayable17000:
+          format: double
+          description: Tax payable 17000
+          type: number
+        taxPayable30000:
+          format: double
+          description: Tax payable 30000
+          type: number
+        taxPayableRebate:
+          format: double
+          description: Tax payable rebate
+          type: number
+        unCappedRFBA:
+          format: double
+          description: Un capped RFBA
+          type: number
+        valueOfReductions:
+          format: double
+          description: Value of reductions
+          type: number
+x-refined-from:
+- thomson-reuters-fbt-customer-api-2-openapi.json
+- thomson-reuters-fbt-customer-api-2-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

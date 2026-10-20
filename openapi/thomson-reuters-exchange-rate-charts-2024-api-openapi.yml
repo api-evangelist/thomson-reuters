@@ -1,0 +1,1337 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts Exchange Rate Charts (2024+) API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: Exchange Rate Charts (2024+)
+paths:
+  /v1/exchange-rate-charts:
+    get:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Returns a list of Exchange Rate Charts for tax years 2024 and later
+      operationId: RetrievesExchangeRateChartsList
+      parameters:
+      - name: year
+        in: query
+        description: Four-digit year (2024 or later)
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartsRepresentation'
+              examples:
+                exchange-rate-charts:
+                  $ref: '#/components/examples/exchange-rate-charts'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/exchange-rate-charts-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Exchange Rate Charts List
+    post:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Creates a new Exchange Rate Chart for tax years 2024 and later
+      operationId: CreatesNewExchangeRateChart
+      parameters:
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Content-Type header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: Exchange Rate Chart creation request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateChartCreateRequest'
+            examples:
+              create-exchange-rate-chart:
+                $ref: '#/components/examples/create-exchange-rate-chart-request'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartRepresentation'
+              examples:
+                exchange-rate-chart-response:
+                  $ref: '#/components/examples/exchange-rate-chart-response'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/exchange-rate-charts-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates New Exchange Rate Chart
+  /v1/exchange-rate-charts/{chartId}:
+    put:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Renames an existing 2024+ Exchange Rate Chart. Enter the chartId in the URL
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character Exchange Rate Chart ID (2024+)
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateChartRenameRepresentation'
+            examples:
+              rename-exchange-rate-chart:
+                $ref: '#/components/examples/exchange-rate-chart-rename-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartsRepresentation'
+              examples:
+                exchange-rate-charts:
+                  $ref: '#/components/examples/exchange-rate-charts'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1ExchangeRateChartsByChartId
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Deletes an Exchange Rate Chart for tax years 2024 and later
+      operationId: DeletesExchangeRateChart
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Deletes Exchange Rate Chart
+  /v1/exchange-rate-charts/{sourceChartId}/copies:
+    post:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Creates a copy of an existing Exchange Rate Chart for tax years 2024 and later
+      operationId: CopiesExchangeRateChart
+      parameters:
+      - name: sourceChartId
+        in: path
+        description: Source Exchange Rate Chart ID (must be 2024+)
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Content-Type header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: Chart copy request (ChartName required)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateChartRenameRequest'
+            examples:
+              copy-exchange-rate-chart:
+                $ref: '#/components/examples/copy-exchange-rate-chart-request'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartRepresentation'
+              examples:
+                exchange-rate-chart-copy-response:
+                  $ref: '#/components/examples/exchange-rate-chart-copy-response'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Copies Exchange Rate Chart
+  /v1/exchange-rate-charts/{chartId}/input-convention:
+    put:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Updates the input convention of an existing Exchange Rate Chart for tax years…
+      operationId: UpdatesExchangeRateChartInputConvention
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Content-Type header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: Input convention update request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateChartInputConventionUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartRepresentation'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates Exchange Rate Chart Input Convention
+  /v1/exchange-rate-charts/{chartId}/read-only-status:
+    put:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Updates the read-only status of an existing Exchange Rate Chart for tax years…
+      operationId: UpdatesExchangeRateChartRead-OnlyStatus
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Content-Type header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: Read-only status update request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateChartReadOnlyStatusUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartRepresentation'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates Exchange Rate Chart Read-Only Status
+  /v1/years/{year}/valid-currencies:
+    get:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Returns a list of valid currencies for a given year for tax years 2024 and later
+      operationId: RetrievesValidYearCurrencies
+      parameters:
+      - name: year
+        in: path
+        description: Tax year (2024+)
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExchangeRateChartValidYearCurrency'
+              examples:
+                valid-currencies:
+                  $ref: '#/components/examples/valid-currencies'
+        '204':
+          description: No currencies found for the specified year.
+          content: {}
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/exchange-rate-charts-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Valid Year Currencies
+  /v1/exchange-rate-charts/{chartId}/assigned-currencies:
+    get:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Returns the list of currencies already assigned to a specific Exchange Rate…
+      operationId: RetrievesAssignedCurrencies
+      parameters:
+      - name: chartId
+        in: path
+        description: Exchange Rate Chart ID (2024+)
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExchangeRateChartValidYearCurrency'
+              examples:
+                assigned-currencies:
+                  $ref: '#/components/examples/assigned-currencies'
+        '204':
+          description: No assigned currencies found for the specified chart.
+          content: {}
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Assigned Currencies
+    patch:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Adds or removes currencies from a specific Exchange Rate chart for tax years…
+      parameters:
+      - name: chartId
+        in: path
+        description: Exchange Rate Chart ID (2024+)
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateChartUpdateCurrenciesRequests'
+            examples:
+              exchange-rate-chart-update-currencies-patch-request:
+                $ref: '#/components/examples/exchange-rate-chart-update-currencies-patch-request'
+      responses:
+        '200':
+          description: All operations executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartUpdateCurrenciesMultipleResponse'
+              examples:
+                exchange-rate-chart-update-currency-patch-success-response:
+                  $ref: '#/components/examples/exchange-rate-chart-update-currency-patch-success-response'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartUpdateCurrenciesMultipleResponse'
+              examples:
+                exchange-rate-chart-patch-multiple-responses:
+                  $ref: '#/components/examples/exchange-rate-chart-patch-multiple-responses'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: patchV1ExchangeRateChartsByChartIdAssignedCurrencies
+      x-operation-id-source: derived
+  /v1/exchange-rate-charts/{chartId}/unassigned-currencies:
+    get:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Returns the list of currencies NOT assigned to a specific Exchange Rate chart…
+      operationId: RetrievesUnassignedCurrencies
+      parameters:
+      - name: chartId
+        in: path
+        description: Exchange Rate Chart ID (2024+)
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExchangeRateChartValidYearCurrency'
+              examples:
+                unassigned-currencies:
+                  $ref: '#/components/examples/unassigned-currencies'
+        '204':
+          description: No unassigned currencies found for the specified chart.
+          content: {}
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Unassigned Currencies
+  /v1/exchange-rate-charts/{chartId}/exchange-rates:
+    get:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Returns the multiply and divide by rates for a given Exchange Rate Chart along…
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character Exchange Rate Chart ID (2024+)
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartRateInformation'
+              examples:
+                success:
+                  $ref: '#/components/examples/exchangerate-chart-rates'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1ExchangeRateChartsByChartIdExchangeRates
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Updates the beginning, ending, and weighted average rates of the designated…
+      parameters:
+      - name: chartId
+        in: path
+        description: Exchange Rate Chart ID (2024+)
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept header media type
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateChartReplaceRatesRequests'
+            examples:
+              exchange-rate-chart-replace-rates-patch-request:
+                $ref: '#/components/examples/exchange-rate-chart-replace-rates-patch-request'
+      responses:
+        '200':
+          description: All operations executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartUpdateCurrenciesMultipleResponse'
+              examples:
+                exchange-rate-chart-update-currency-patch-success-response:
+                  $ref: '#/components/examples/exchange-rate-chart-update-currency-patch-success-response'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartUpdateCurrenciesMultipleResponse'
+              examples:
+                exchange-rate-chart-patch-multiple-responses:
+                  $ref: '#/components/examples/exchange-rate-chart-patch-multiple-responses'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: patchV1ExchangeRateChartsByChartIdExchangeRates
+      x-operation-id-source: derived
+  /v1/exchange-rate-charts/{chartId}/associated-binders:
+    get:
+      tags:
+      - Exchange Rate Charts (2024+)
+      summary: Returns the list of binders with a given Exchange Rate Chart assigned and view…
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character Exchange Rate Chart ID (2024+)
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateChartBindersInformation'
+              examples:
+                success:
+                  $ref: '#/components/examples/exchangerate-associated-binders'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+              examples:
+                exchange-rate-charts-error:
+                  $ref: '#/components/examples/chart-id-validation-error'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1ExchangeRateChartsByChartIdAssociatedBinders
+      x-operation-id-source: derived
+components:
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    ExchangeRateChartRenameRepresentation:
+      type: object
+      properties:
+        chartName:
+          type: string
+          description: User-defined chart name.
+    ExchangeRateChartUpdateCurrenciesRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExchangeRateChartUpdateCurrenciesRequest'
+    ExchangeRateChartRenameRequest:
+      type: object
+      properties:
+        ChartName:
+          type: string
+          description: User-defined unique chart name.
+      required:
+      - ChartName
+    ExchangeRateChartValidYearCurrency:
+      type: object
+      properties:
+        currencyName:
+          type: string
+          description: Full name of the currency.
+        currencyAbbreviation:
+          type: string
+          description: Standard abbreviation code for the currency.
+    ExchangeRateChartUpdateCurrenciesRequest:
+      type: object
+      properties:
+        value:
+          type: object
+          $ref: '#/components/schemas/ExchangeRateChartUpdateCurrencyRepresentation'
+        path:
+          type: string
+        op:
+          type: string
+    ExchangeRateChartUpdateCurrencyRepresentation:
+      type: object
+      properties:
+        currencyAbbreviation:
+          type: string
+    ExchangeRateChartsRepresentation:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExchangeRateChartRepresentation'
+    ExchangeRateChartBindersInformation:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExchangeRateBinderRepresentation'
+    ExchangeRateChartCreateRequest:
+      type: object
+      properties:
+        Year:
+          type: integer
+          description: Tax year.
+          format: int32
+        ChartName:
+          type: string
+          description: User-defined unique chart name.
+        InputConvention:
+          type: string
+          description: Specifies how exchange rates are applied.
+          enum:
+          - Multiply by Rates
+          - Divide by Rates
+      required:
+      - Year
+      - ChartName
+      - InputConvention
+    CurrencyInformation:
+      type: object
+      properties:
+        currencyName:
+          type: string
+          description: Full name of the currency.
+        currencyAbbreviation:
+          type: string
+          description: Standard abbreviation code for the currency.
+        multiplyByBeginningRate:
+          type: number
+          format: double
+          description: Multiply-by beginning rate for the currency.
+        multiplyByEndingRate:
+          type: number
+          format: double
+          description: Multiply-by ending rate for the currency.
+        multiplyByWeightedAverageRate:
+          type: number
+          format: double
+          description: Multiply-by weighted average rate for the currency.
+        divideByBeginningRate:
+          type: number
+          format: double
+          description: Divide-by beginning rate for the currency.
+        divideByEndingRate:
+          type: number
+          format: double
+          description: Divide-by ending rate for the currency.
+        divideByWeightedAverageRate:
+          type: number
+          format: double
+          description: Divide-by weighted average rate for the currency.
+    ExchangeRateChartInputConventionUpdateRequest:
+      type: object
+      properties:
+        InputConvention:
+          type: string
+          description: Specifies how exchange rates are applied.
+          enum:
+          - Multiply by Rates
+          - Divide by Rates
+      required:
+      - InputConvention
+    ExchangeRateChartReplaceRatesRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExchangeRateChartReplaceRatesRequest'
+    ExchangeRateChartReplaceRatesRequest:
+      type: object
+      properties:
+        value:
+          type: object
+          $ref: '#/components/schemas/ExchangeRateChartReplaceRateRepresentation'
+        path:
+          type: string
+        op:
+          type: string
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    ExchangeRateBinderRepresentation:
+      type: object
+      properties:
+        currencyName:
+          type: string
+          description: Full name of the currency.
+        currencyAbbreviation:
+          type: string
+          description: Standard abbreviation code for the currency.
+        isLocalCurrency:
+          type: boolean
+          description: Indicates whether local currency is assigned for the binder.
+        isFunctionalCurrency:
+          type: boolean
+          description: Indicates whether functional currency is assigned for the binder.
+        isReportingCurrency:
+          type: boolean
+          description: Indicates whether reporting currency is assigned for the binder.
+        companyNumber:
+          type: string
+          description: Number that identifies an entity.
+        entityName:
+          type: string
+          description: User-defined description for an entity.
+        binderName:
+          type: string
+          description: User-defined name for a unique binder.
+        binderId:
+          type: string
+          description: 16-character identifier that identifies a unique binder.
+        workAreaName:
+          type: string
+          description: Work area name where new and modified entity changes are automatically mapped.
+    ExchangeRateChartReadOnlyStatusUpdateRequest:
+      type: object
+      properties:
+        IsReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+      required:
+      - IsReadOnly
+    ExchangeRateChartRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+        inputConvention:
+          type: string
+          description: Specifies how exchange rates are applied.
+          enum:
+          - Multiply by Rates
+          - Divide by Rates
+    ExchangeRateChartReplaceRateRepresentation:
+      type: object
+      properties:
+        currencyAbbreviation:
+          type: string
+          description: Standard abbreviation code for the currency.
+        multiplyByBeginningRate:
+          type: number
+          format: double
+          description: Multiply-by beginning rate for the currency.
+        multiplyByEndingRate:
+          type: number
+          format: double
+          description: Multiply-by ending rate for the currency.
+        multiplyByWeightedAverageRate:
+          type: number
+          format: double
+          description: Multiply-by weighted average rate for the currency.
+        divideByBeginningRate:
+          type: number
+          format: double
+          description: Divide-by beginning rate for the currency.
+        divideByEndingRate:
+          type: number
+          format: double
+          description: Divide-by ending rate for the currency.
+        divideByWeightedAverageRate:
+          type: number
+          format: double
+          description: Divide-by weighted average rate for the currency.
+    ExchangeRateChartUpdateCurrenciesMultipleResponse:
+      type: object
+      properties:
+        op:
+          type: string
+        path:
+          type: string
+        value:
+          type: object
+          $ref: '#/components/schemas/ExchangeRateChartUpdateCurrencyRepresentation'
+        statusCode:
+          type: integer
+        detail:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    ExchangeRateChartRateInformation:
+      type: object
+      properties:
+        Year:
+          type: integer
+          description: Chart year.
+          format: int32
+        InputConvention:
+          type: string
+          description: Specifies how exchange rates are applied.
+          enum:
+          - Multiply by Rates
+          - Divide by Rates
+        Currencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurrencyInformation'
+  examples:
+    exchange-rate-chart-update-currency-patch-success-response:
+      value:
+      - op: add
+        path: null
+        value:
+          CurrencyAbbreviation: AUD
+        statusCode: 200
+        detail: Record(s) successfully processed.
+        fieldErrors: []
+      - op: remove
+        path: null
+        value:
+          CurrencyAbbreviation: AFN
+        statusCode: 200
+        detail: Record(s) successfully processed.
+        fieldErrors: []
+    valid-currencies:
+      value:
+      - currencyName: Afghani
+        currencyAbbreviation: AFN
+      - currencyName: Algerian Dinar
+        currencyAbbreviation: DZD
+      - currencyName: Argentine Peso
+        currencyAbbreviation: ARS
+      - currencyName: Armenian Dram
+        currencyAbbreviation: AMD
+      - currencyName: Aruban Florin
+        currencyAbbreviation: AWG
+    exchange-rate-charts:
+      value:
+      - year: 2025
+        chartId: 5700010100006K6Z
+        chartName: My renamed exchange rate chart
+        isReadOnly: false
+        inputConvention: Multiply by Rates
+      - year: 2025
+        chartId: 5700010100006K4G
+        chartName: My updated exchange rate chart
+        isReadOnly: false
+        inputConvention: Divide by Rates
+    create-exchange-rate-chart-request:
+      value:
+        Year: 2025
+        ChartName: New 2025 Exchange Rate Chart
+        InputConvention: Multiply by Rates
+    exchange-rate-chart-rename-request:
+      value:
+        chartName: My renamed exchange rate chart
+    exchange-rate-chart-copy-response:
+      value:
+        year: 2025
+        chartId: 5700010100006LCM
+        chartName: New Copy of Exchange Rate Chart
+        isReadOnly: false
+        inputConvention: Multiply by Rates
+    unassigned-currencies:
+      value:
+      - currencyName: Afghani
+        currencyAbbreviation: AFN
+      - currencyName: Algerian Dinar
+        currencyAbbreviation: DZD
+    exchangerate-chart-rates:
+      value:
+        year: 2024
+        inputConvention: Multiply by Rates
+        currencies:
+        - currencyName: Euro
+          currencyAbbreviation: EUR
+          multiplyByBeginningRate: 0.2
+          multiplyByEndingRate: 0.2
+          multiplyByWeightedAverageRate: 0.2
+          divideByBeginningRate: 5
+          divideByEndingRate: 5
+          divideByWeightedAverageRate: 5
+        - currencyName: U.S. Dollar
+          currencyAbbreviation: USD
+          multiplyByBeginningRate: 1
+          multiplyByEndingRate: 1
+          multiplyByWeightedAverageRate: 1
+          divideByBeginningRate: 1
+          divideByEndingRate: 1
+          divideByWeightedAverageRate: 1
+    copy-exchange-rate-chart-request:
+      value:
+        ChartName: New Copy of Exchange Rate Chart
+    exchange-rate-charts-error:
+      value:
+        type: Data Validation
+        title: Data validation failed.
+        detail: Error happened during validation, details are provided below.
+        instance: ''
+        fieldErrors:
+        - fieldName: year
+          messages:
+          - Invalid chartYear, year should be between [2024] - [2025].
+          errorCode: 0
+    assigned-currencies:
+      value:
+      - currencyName: U.S. Dollar
+        currencyAbbreviation: USD
+    exchange-rate-chart-response:
+      value:
+        year: 2025
+        chartId: 5700010100006LCL
+        chartName: New 2025 Exchange Rate Chart
+        isReadOnly: false
+        inputConvention: Multiply by Rates
+    exchange-rate-chart-patch-multiple-responses:
+      value:
+      - op: Add
+        path: ''
+        value:
+          currencyAbbreviation: ddd
+        statusCode: 400
+        detail: Validation Error
+        fieldErrors:
+        - fieldName: Currency Abbreviation
+          messages:
+          - Currency Abbreviation [ddd] is not valid for year [2024].
+          errorCode: 0
+      - op: Invalid
+        path: ''
+        value:
+          currencyAbbreviation: amd
+        statusCode: 400
+        detail: Validation Error
+        fieldErrors:
+        - fieldName: Operation
+          messages:
+          - Invalid operation [remooove], valid operations are [Add] and [Remove].
+          errorCode: 0
+    exchange-rate-chart-replace-rates-patch-request:
+      value:
+      - value:
+          CurrencyAbbreviation: AFN
+          multiplyByBeginningRate: 0.2
+          multiplyByEndingRate: 0.2
+          multiplyByWeightedAverageRate: 0.2
+          divideByBeginningRate: 5
+          divideByEndingRate: 5
+          divideByWeightedAverageRate: 5
+        path: ''
+        op: replace
+    exchange-rate-chart-update-currencies-patch-request:
+      value:
+      - value:
+          CurrencyAbbreviation: AUD
+        path: ''
+        op: add
+      - value:
+          CurrencyAbbreviation: AFN
+        path: ''
+        op: remove
+    exchangerate-associated-binders:
+      value:
+      - currencyAbbreviation: EUR
+        currencyName: Euro
+        isLocalCurrency: true
+        isFunctionalCurrency: true
+        isReportingCurrency: false
+        companyNumber: AFAS160924
+        entityName: Abex France SNC
+        binderName: As Filed_TY2023.055
+        binderId: 57000101Q1006FLL
+        workareaName: Bootcamp1
+      - currencyAbbreviation: EUR
+        currencyName: Euro
+        isLocalCurrency: true
+        isFunctionalCurrency: true
+        isReportingCurrency: false
+        companyNumber: AMAS160924
+        entityName: Abex Munich
+        binderName: New Binder
+        binderId: 57000101Q1006FLA
+        workareaName: Bootcamp2
+    chart-id-validation-error:
+      value:
+        type: Data Validation
+        title: Data validation failed.
+        detail: Error happened during validation, details are provided below.
+        instance: ''
+        fieldErrors:
+        - fieldName: chartId
+          messages:
+          - Invalid chartId, chartId is not a valid [2024] or later Exchange Rate Chart.
+          errorCode: 0
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

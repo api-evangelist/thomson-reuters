@@ -1,0 +1,3376 @@
+# x-archived-from: thomson-reuters-onesource-indirect-tax-compliance-imports-api-v2-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: ONESOURCE Indirect Tax Compliance - Imports API
+  version: v2
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/imports
+paths:
+  /:
+    get:
+      tags:
+      - IndirectTaxImports
+      summary: Lists all existing imports in the system
+      operationId: IndirectTaxImports_imports
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListResponse'
+              examples:
+                successResponse:
+                  summary: Successful response with imports
+                  value:
+                    items:
+                    - id: 1
+                      name: Import 1
+                      detailedStatus: Upload Successful
+                      statusId: 7
+                      status: Success
+                      specificationId: 0
+                      specificationName: Allocation Specification 1
+                      importSpecificationName: Import Specification 1
+                      importTypeName: Transactions
+                      lastRunDate: '2025-03-19T10:13:13.643Z'
+                      editCount: 0
+                      errorCount: 0
+                      activeCount: 100
+                      warningCount: 10
+                    - id: 2
+                      name: Import 2
+                      detailedStatus: Allocation Failed
+                      statusId: 4
+                      status: Error
+                      specificationId: 2
+                      specificationName: Allocation Specification 2
+                      importSpecificationName: Import Specification 2
+                      importTypeName: Transactions
+                      lastRunDate: '2025-03-19T10:11:39.083Z'
+                      editCount: 0
+                      errorCount: 4
+                      activeCount: 0
+                      warningCount: 0
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListResponse'
+    post:
+      tags:
+      - IndirectTaxImports
+      summary: Imports tax data
+      operationId: IndirectTaxImports_ImportData
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+              examples:
+                acceptedResponse:
+                  summary: Import queued successfully
+                  value:
+                    id: 1
+                    status: QueuedForImport
+                    errorMessage: null
+                    hasErrors: false
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+  /operations/{id}:
+    get:
+      tags:
+      - IndirectTaxImports
+      summary: Gets the import status
+      operationId: IndirectTaxImports_FetchStatus
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus'
+              examples:
+                validatingStatus:
+                  summary: Import status during validation
+                  value:
+                    id: 1
+                    statusId: 15
+                    status: Validating
+                    errorCount: 0
+                    ruleErrorCount: 0
+                    activeCount: 0
+                    editCount: 0
+                    warningCount: 0
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+  /parts/operations/{id}:
+    get:
+      tags:
+      - IndirectTaxImports
+      summary: Gets the status of an import file upload task that matches the specified parameters
+      operationId: IndirectTaxImports_FetchUploadStatus
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+              examples:
+                inProgressResponse:
+                  summary: Upload in progress
+                  value:
+                    id: 1
+                    status: InProgress
+                    errorMessage: null
+                    hasErrors: false
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+  /{id}:
+    post:
+      tags:
+      - IndirectTaxImports
+      summary: Reruns the import
+      operationId: IndirectTaxImports_ImportRerun
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+              examples:
+                rerunAccepted:
+                  summary: Import rerun accepted
+                  value:
+                    id: 1
+                    status: InProgress
+                    errorMessage: null
+                    hasErrors: false
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+    delete:
+      tags:
+      - IndirectTaxImports
+      summary: Deletes the import task that matches the specified parameters
+      operationId: IndirectTaxImports_DeleteImportData
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+              examples:
+                deletedResponse:
+                  summary: Import deleted successfully
+                  value:
+                    id: 1
+                    status: Deleted
+                    errorMessage: null
+                    hasErrors: false
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportConflictResponse'
+              examples:
+                conflictResponse:
+                  summary: Delete conflict - import in progress
+                  value:
+                    Message: Unable to delete import.
+                    ErrorCode: OIC-API-1014
+                    MessageDetail: Import can't be deleted at the moment as it's still in progress.
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportConflictResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportConflictResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportConflictResponse'
+    patch:
+      tags:
+      - IndirectTaxImports
+      summary: Updates the import status to process the external import files
+      operationId: IndirectTaxImports_ProcessImport
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+      x-codegen-request-body-name: request
+  /{id}/parts:
+    post:
+      tags:
+      - IndirectTaxImports
+      summary: Imports data via API into Returns by using an external file (.CSV)
+      operationId: IndirectTaxImports_uploadData
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.Allocations.AllocationsApiResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The list of allocations
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel'
+    TRTA.Athena.Models.Api.V4.Allocations.AllocationsResponseModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The allocation specification ID
+          format: int32
+        name:
+          type: string
+          description: The allocation specification name
+        useErpCodes:
+          type: boolean
+          description: Indicates whether to use ERP codes
+        useNorwayCodes:
+          type: boolean
+          description: Indicates whether to use Norway codes
+        inUse:
+          type: string
+          description: Indicates whether the allocation is in use
+        createdBy:
+          type: string
+          description: The user who created the allocation
+        createdDate:
+          type: string
+          description: The date the allocation was created
+          format: date-time
+        lastUpdatedBy:
+          type: string
+          description: The user who last updated the allocation
+        lastUpdatedDate:
+          type: string
+          description: The date the allocation was last updated
+          format: date-time
+    TRTA.Athena.Models.Api.V4.Allocations.AllocationsCreateModel:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: The allocation specification name
+        useErpCodes:
+          type: boolean
+          description: Indicates whether to use ERP codes
+        useNorwayCodes:
+          type: boolean
+          description: Indicates whether to use Norway codes
+      example:
+        name: Allocation Specification
+        useErpCodes: true
+        useNorwayCodes: false
+    TRTA.Athena.Models.Api.V4.Allocations.AllocationsUpdateModel:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: The allocation specification name
+        useErpCodes:
+          type: boolean
+          description: Indicates whether to use ERP codes
+        useNorwayCodes:
+          type: boolean
+          description: Indicates whether to use Norway codes
+      example:
+        name: Allocation Specification
+        useErpCodes: true
+        useNorwayCodes: false
+    TRTA.Athena.Models.Api.V4.Calculations.WorkbookSheet:
+      type: object
+      properties:
+        sheetName:
+          type: string
+          description: The workbook sheet name
+        cells:
+          type: array
+          description: The sheet cells
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.WorkbookSheetCell'
+    TRTA.Athena.Models.Api.V4.Calculations.WorkbookSheetCell:
+      type: object
+      properties:
+        address:
+          type: string
+          description: The cell address
+        value:
+          type: string
+          description: The cell value
+    TRTA.Athena.Models.Api.V4.Calculations.WorkbookUpdateResponse:
+      type: object
+      properties:
+        trackingId:
+          type: integer
+          description: The tracking ID for the workbook update status
+          format: int32
+    TRTA.Athena.Models.Api.V4.Calculations.WorkbookUpdateStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The workbook update status (In Progress, Completed, Failed)
+    TRTA.Athena.Models.Api.V4.Calculations.FormCodeResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The form code items
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.FormCodeModel'
+    TRTA.Athena.Models.Api.V4.Calculations.FormCodeModel:
+      type: object
+      properties:
+        formCode:
+          type: string
+          description: The filing name form code
+        displayName:
+          type: string
+          description: The display name of the form code
+        efilingOperation:
+          type: array
+          description: The actions listed for the form code
+          items:
+            type: string
+            enum:
+            - EXPORT
+            - VALIDATE
+            - FILE
+            - CHECKSTATUS
+    TRTA.Athena.Models.Api.V4.Calculations.PrintModelRequest:
+      type: object
+      properties:
+        printWhat:
+          type: string
+          enum:
+          - Selected
+          - Review
+          - InUseOnly
+          - SavedSheets
+          - AllSheets
+          - TaxCodes
+          - SourceData
+          - Return
+          - ReturnOverprint
+          - Computation
+          - ComputationAndReturn
+          - OnlineFilingComputationAndReturn
+        printStyle:
+          type: string
+        printType:
+          type: string
+          enum:
+          - DataEntry
+          - Review
+          - Final
+          - Draft
+        language:
+          type: string
+        selectedSheets:
+          type: array
+          items:
+            type: string
+        showDataEntryCells:
+          type: boolean
+        formsWithoutBackground:
+          type: boolean
+        enableDebugPrint:
+          type: boolean
+        includeNotes:
+          type: boolean
+        includeNoteDetails:
+          type: boolean
+        includeOpenQueries:
+          type: boolean
+        includeQueryDetails:
+          type: boolean
+        includeClosedQueries:
+          type: boolean
+    TRTA.Athena.Models.Api.V4.Calculations.PrintResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The print job ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        statusId:
+          type: string
+          description: The print job status ID
+          enum:
+          - Pending
+          - InProgress
+          - Completed
+          - Fail
+          - PrintedWithErrors
+          - Skipped
+          - Requeued
+          - NotFound
+        status:
+          type: string
+          description: The print job status
+    TRTA.Athena.Models.Api.V4.Calculations.PrintStatusResponse:
+      type: object
+      properties:
+        fileLocation:
+          type: string
+          description: The file location
+        id:
+          type: string
+          description: The print job ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        statusId:
+          type: string
+          description: The print job status ID
+          enum:
+          - Pending
+          - InProgress
+          - Completed
+          - Fail
+          - PrintedWithErrors
+          - Skipped
+          - Requeued
+          - NotFound
+        status:
+          type: string
+          description: The print job status
+    Microsoft.AspNetCore.Mvc.FileStreamResult:
+      type: object
+      properties:
+        FileStream:
+          $ref: '#/components/schemas/System.IO.Stream'
+        ContentType:
+          type: string
+          readOnly: true
+        FileDownloadName:
+          type: string
+        LastModified:
+          type: string
+          format: date-time
+        EntityTag:
+          $ref: '#/components/schemas/Microsoft.Net.Http.Headers.EntityTagHeaderValue'
+        EnableRangeProcessing:
+          type: boolean
+    System.IO.Stream:
+      type: object
+      properties:
+        __identity:
+          type: object
+          properties: {}
+    Microsoft.Net.Http.Headers.EntityTagHeaderValue:
+      type: object
+      properties:
+        Tag:
+          $ref: '#/components/schemas/Microsoft.Extensions.Primitives.StringSegment'
+        IsWeak:
+          type: boolean
+          readOnly: true
+    Microsoft.Extensions.Primitives.StringSegment:
+      type: object
+      properties:
+        Buffer:
+          type: string
+          readOnly: true
+        Offset:
+          type: integer
+          format: int32
+          readOnly: true
+        Length:
+          type: integer
+          format: int32
+          readOnly: true
+        Value:
+          type: string
+          readOnly: true
+        HasValue:
+          type: boolean
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.Calculations.UpdateReturnStatusRequest:
+      type: object
+      properties:
+        status:
+          pattern: ^[a-zA-Z]{3,250}$
+          type: string
+    TRTA.Athena.Models.Api.V4.Calculations.UpdateReturnStatusResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error message
+    TRTA.Athena.Models.Api.V4.Calculations.CalculationStatusResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.Status'
+    TRTA.Athena.Models.Api.V4.Calculations.Status:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    TRTA.Athena.Models.Api.V4.Common.OpertaionsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        resourceLocation:
+          type: string
+    TRTA.Athena.Models.Api.V4.ChartOfAccounts.ChartOfAccountsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The chart of account ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The name of the chart of account
+        year:
+          type: integer
+          description: The year of the chart of account
+          format: int32
+      description: Represents a chart of accounts
+    TRTA.Athena.Models.Api.V4.ChartOfAccounts.ChartOfAccountsCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the chart of account
+        year:
+          type: integer
+          description: The year of the chart of account
+          format: int32
+      description: Represents a chart of accounts
+    TRTA.Athena.Models.Api.V4.Common.Errors:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The error ID
+          format: int32
+        description:
+          type: string
+          description: The error message
+    TRTA.Athena.Models.Api.V4.ChartOfAccounts.ChartOfAccountsPutRequest:
+      type: object
+      properties:
+        accountCode:
+          type: string
+          description: The account number
+        description:
+          type: string
+          description: The description
+      description: Represents a chart of accounts
+    TRTA.Athena.Models.Api.ClientListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.ClientV3'
+      description: Represents the client API response
+    TRTA.Athena.Models.Api.ClientV3:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The client ID (cmcid)
+          format: int32
+        number:
+          type: string
+          description: The client number
+        name:
+          type: string
+          description: The client name
+    TRTA.Athena.Imports.Models.Api.V4.CorporateTax.ImportTypeListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.CorporateTax.ImportType'
+    TRTA.Athena.Imports.Models.Api.V4.CorporateTax.ImportType:
+      type: object
+      properties:
+        name:
+          type: string
+    TRTA.Athena.Imports.Models.Api.V4.CorporateTax.ImportTypeMetaDataListResponse:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.CorporateTax.ImportField'
+    TRTA.Athena.Imports.Models.Api.V4.CorporateTax.ImportField:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        isRequired:
+          type: boolean
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalsListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalData'
+      description: Represents the journals list response
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.JournalData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The journal ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        description:
+          type: string
+        returnId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        datasetName:
+          type: string
+        period:
+          type: string
+        year:
+          type: integer
+          format: int32
+        referenceNumber:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        entityIdentifier:
+          type: string
+        entityName:
+          type: string
+        entityShortName:
+          type: string
+        lineItemsCount:
+          type: integer
+          format: int32
+        importType:
+          type: string
+        isAppended:
+          type: boolean
+        startDate:
+          type: string
+        endDate:
+          type: string
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        lastUpdateDate:
+          type: string
+          format: date-time
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetPurposeResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The dataset purposes
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetPurpose'
+      description: Represents the entity list API response
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetPurpose:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the dataset purpose
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The name of the dataset purpose
+        isActive:
+          type: string
+          description: Indicates whether the purpose is active
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetDetailsForApiResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The datasets
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail'
+        count:
+          type: integer
+          format: int32
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the dataset
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The name of the dataset
+        deleted:
+          type: boolean
+        startDate:
+          type: string
+          description: The start date of the dataset
+        endDate:
+          type: string
+          description: The end date of the dataset
+        year:
+          type: integer
+          description: The year of the dataset
+          format: int32
+        purpose:
+          type: string
+          description: The purpose of the dataset
+        periodType:
+          type: string
+          description: The period type of the dataset
+          readOnly: true
+        returnType:
+          type: string
+          description: The return type of the dataset
+        returns:
+          type: array
+          description: The returns or calculations
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Return'
+    TRTA.Athena.Models.Api.V4.Datasets.Return:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The return ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        workbookId:
+          type: string
+          description: The workbook ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The return name
+        status:
+          type: string
+          description: The return status
+        efilingStatus:
+          type: string
+          description: The e-filing status of the return
+        year:
+          type: string
+          description: The year of the return
+        jurisdiction:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Jurisdictions.Jurisdiction'
+        startDate:
+          type: string
+          description: The start date of the return
+        endDate:
+          type: string
+          description: The end date of the return
+        entity:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Entity'
+        template:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Template'
+        createdBy:
+          type: string
+          description: The user who created the return
+        lastUpdatedBy:
+          type: string
+          description: The user who last updated the return
+        createdDate:
+          type: string
+          description: The date the return was created
+        lastUpdateDate:
+          type: string
+          description: The date the return was last updated
+    TRTA.Athena.Models.Api.V4.Jurisdictions.Jurisdiction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the jurisdiction
+        name:
+          type: string
+          description: The name of the jurisdiction
+    TRTA.Athena.Models.Api.V4.Datasets.Entity:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The entity ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The entity name
+        shortName:
+          type: string
+          description: The entity short name
+    TRTA.Athena.Models.Api.V4.Datasets.Template:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The template ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        version:
+          type: string
+          description: The template version
+        family:
+          type: string
+          description: The template family name
+    TRTA.Athena.Models.Api.V4.Datasets.Dataset:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the dataset
+        year:
+          type: integer
+          description: The year of the dataset
+          format: int32
+        period:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.Period'
+        purpose:
+          type: string
+          description: The purpose of the dataset
+        type:
+          type: string
+          description: The type of the dataset
+        returnDetails:
+          type: array
+          description: The details of the returns to be created
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.ReturnDetails'
+        noAutoRollforward:
+          type: boolean
+          description: Indicates whether the dataset needs to be rolled forward
+    TRTA.Athena.Models.Api.V4.Datasets.Period:
+      type: object
+      properties:
+        startDate:
+          type: string
+          description: The start date of the period
+        endDate:
+          type: string
+          description: The end date of the period
+        type:
+          type: string
+          description: The type of the period
+      description: Represents a period
+    TRTA.Athena.Models.Api.V4.Datasets.ReturnDetails:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: The entity ID
+        templateId:
+          type: string
+          description: The template ID
+        templateFamilyName:
+          type: string
+          description: The template family name
+        returnName:
+          type: string
+          description: The name of the return
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the dataset
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        status:
+          type: string
+          description: The current status of the dataset
+        errors:
+          type: array
+          description: The errors, if any
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Common.Errors'
+      description: Represents the dataset status
+    TRTA.Athena.Models.Api.V4.Datasets.EditDataset:
+      type: object
+      properties:
+        name:
+          type: string
+        purpose:
+          type: string
+        returnDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.ReturnDetail'
+    TRTA.Athena.Models.Api.V4.Datasets.ReturnDetail:
+      type: object
+      properties:
+        add:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.AddEntity'
+        remove:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.RemoveEntity'
+    TRTA.Athena.Models.Api.V4.Datasets.AddEntity:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: The entity ID
+        templateId:
+          type: string
+          description: The template ID
+        templateFamilyName:
+          type: string
+          description: The template family name
+        returnName:
+          type: string
+          description: The name of the return
+    TRTA.Athena.Models.Api.V4.Datasets.RemoveEntity:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: The entity ID
+    TRTA.Athena.Models.Api.V4.Datasets.StatusFilters:
+      type: object
+      properties:
+        username:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+    TRTA.Athena.Models.Api.V4.Datasets.DatasetOperationResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        resourceLocation:
+          type: string
+        details:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.BatchJobsInfo'
+    TRTA.Athena.Models.Api.V4.Datasets.BatchJobsInfo:
+      type: object
+      properties:
+        request:
+          type: string
+        operation:
+          type: string
+        status:
+          type: string
+          readOnly: true
+        entityId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+    TRTA.Athena.Models.Api.V4.Calculations.EfiledJsonModel:
+      type: object
+      properties:
+        startDate:
+          type: string
+          description: The start date of the period
+        endDate:
+          type: string
+          description: The end date of the period
+        purpose:
+          type: string
+          description: The purpose
+    TRTA.Athena.Models.Api.V4.Calculations.EfiledCalculationResult:
+      type: object
+      properties:
+        returnName:
+          type: string
+          description: The name of the return
+        isAmendedReturn:
+          type: string
+          description: Indicates whether the return is amended (Yes/No)
+        clientTemplateName:
+          type: string
+          description: The name of the client template from which the return is created (if any)
+        datasetName:
+          type: string
+          description: The name of the dataset
+        datasetPurpose:
+          type: string
+          description: The purpose of the dataset
+        datasetType:
+          type: string
+          description: The type of the dataset
+        datasetYear:
+          type: integer
+          description: The year of the dataset
+          format: int32
+        datasetStartDate:
+          type: string
+          description: The start date of the dataset
+        datasetEndDate:
+          type: string
+          description: The end date of the dataset
+        createdBy:
+          type: string
+          description: The name of the user who created the dataset
+        createDate:
+          type: string
+          description: The date the dataset was created
+        entityName:
+          type: string
+          description: The name of the entity
+        entityShortName:
+          type: string
+          description: The short name of the entity
+        legalEntityType:
+          type: string
+          description: The type of the entity
+        entityTaxType:
+          type: string
+          description: The tax type of the entity
+        efileQueuedBy:
+          type: string
+          description: The name of the user who queued the return
+        efileQueuedDate:
+          type: string
+          description: The date the return was queued
+        efileSubmittedBy:
+          type: string
+          description: The name of the user who submitted the return
+        efileSubmittedDate:
+          type: string
+          description: The date the return was submitted
+        efileValidated:
+          type: string
+          description: Indicates whether the calculation is validated (Yes/No)
+        efilingStatus:
+          type: string
+          description: The current e-filing status
+        efileTan:
+          type: string
+          description: The e-file TAN of the return
+    TRTA.Athena.Models.Api.V4.Calculations.CalculationDataRequest:
+      type: object
+      properties:
+        sheetNames:
+          type: array
+          items:
+            type: string
+    TRTA.Athena.Models.Api.V4.Calculations.CalculationSheetdataResponse:
+      type: object
+      properties:
+        sheetData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.SheetData'
+        datsetId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        calculationName:
+          type: string
+        calculationId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        entity:
+          type: string
+        error:
+          type: string
+    TRTA.Athena.Models.Api.V4.Calculations.SheetData:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        description:
+          type: string
+        rowData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.RowData'
+    TRTA.Athena.Models.Api.V4.Calculations.RowData:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        rowId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        columnData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Calculations.ColumnData'
+    TRTA.Athena.Models.Api.V4.Calculations.ColumnData:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        columnId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        value:
+          type: string
+    TRTA.Athena.Models.Api.V4.Datasets.EntityList:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Datasets.EntityId'
+    TRTA.Athena.Models.Api.V4.Datasets.EntityId:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: The entity ID
+    TRTA.Athena.Models.Api.V4.Datasets.NotesRequest:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The text content of the note or query
+        shouldRollForward:
+          type: boolean
+          description: Indicates whether the note should be rolled forward
+        location:
+          type: string
+          description: The location of the note, specifying whether it's associated with a cell or sheet
+        rowId:
+          type: string
+          description: The row identifier for the cell where the note or query is located
+        columnId:
+          type: string
+          description: The column identifier for the cell where the note or query is located
+      description: Represents a request object for adding notes or queries to a cell or sheet within a dataset entity
+    TRTA.Athena.Models.Api.V4.notes.NotesResponse:
+      type: object
+      properties:
+        note:
+          type: string
+        location:
+          type: string
+        cellValue:
+          type: string
+        cellAddress:
+          type: string
+        sheetName:
+          type: string
+        isRollForward:
+          type: boolean
+        createdBy:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        lastUpdatedBy:
+          type: string
+        lastUpdatedDate:
+          type: string
+          format: date-time
+    TRTA.Athena.Models.InsertSheetAPI:
+      type: object
+      properties:
+        OriginalLongName:
+          type: string
+        ParentSheetOriginalLongName:
+          type: string
+        ParentSheetContext:
+          type: string
+        ParentSheetBlockContext:
+          type: string
+        MatchingString:
+          type: string
+        MatchingXmlName:
+          type: string
+        DisplayName:
+          type: string
+    TRTA.Athena.Models.Api.V4.Entities.EntityListApiResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The entities
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityModel'
+      description: Represents the entity list API response
+    TRTA.Athena.Models.Api.V4.Entities.EntityModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        entityManagerId:
+          type: string
+          description: The entity manager ID
+        name:
+          type: string
+          description: The name
+        shortName:
+          type: string
+          description: The short name
+        businessSegment:
+          type: string
+          description: The business segment
+        geography:
+          type: string
+          description: The geography
+        active:
+          type: boolean
+          description: Indicates whether the entity is active
+        access:
+          type: string
+          description: The access level
+        legalEntityType:
+          type: string
+          description: The legal entity type
+        managerLogin:
+          type: string
+          description: The manager
+        partnerLogin:
+          type: string
+          description: The partner
+        directorLogin:
+          type: string
+          description: The director
+        type:
+          type: string
+          description: The type
+        identifier:
+          type: string
+          description: The identifier
+        taxId:
+          type: string
+          description: The tax ID
+        team:
+          type: string
+          description: The team
+        city:
+          type: string
+          description: The city
+        service:
+          type: string
+          description: The service
+        jurisdiction:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.Jurisdiction'
+        createdBy:
+          type: string
+          description: The user who created the entity
+        createDate:
+          type: string
+          description: The date the entity was created
+        lastUpdatedBy:
+          type: string
+          description: The user who last updated the entity
+        lastUpdatedDate:
+          type: string
+          description: The date the entity was last updated
+        reportingCompanyName:
+          type: string
+          description: The reporting company name
+        vatGstRegistrationNumber:
+          type: string
+          description: The VAT GST registration number
+      description: Represents an entity
+    TRTA.Athena.Models.Api.Jurisdiction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the jurisdiction
+        name:
+          type: string
+          description: The name of the jurisdiction
+    TRTA.Athena.Models.Api.V4.Entities.EntityCreationRequest:
+      type: object
+      properties:
+        entities:
+          type: array
+          description: The entities
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityCreationModel'
+      example:
+        entities:
+        - name: Entity Name 1
+          shortName: Entity Short Name 1
+          businessSegment: ''
+          geography: ''
+          legalEntityType: Company
+          managerLogin: ''
+          partnerLogin: ''
+          directorLogin: ''
+          type: ''
+          identifier: Entity Identifier 1
+          taxId: HU12345678
+          team: ''
+          city: ''
+          service: ''
+          jurisdictionId: hu
+        - name: Entity Name 2
+          shortName: Entity Short Name 2
+          businessSegment: ''
+          geography: ''
+          legalEntityType: Company
+          managerLogin: ''
+          partnerLogin: ''
+          directorLogin: ''
+          type: ''
+          identifier: Entity Identifier 2
+          taxId: GB123456789
+          team: ''
+          city: ''
+          service: ''
+          jurisdictionId: gb
+    TRTA.Athena.Models.Api.V4.Entities.EntityCreationModel:
+      required:
+      - jurisdictionId
+      - legalEntityType
+      - name
+      - shortName
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name
+        shortName:
+          type: string
+          description: The short name
+        businessSegment:
+          type: string
+          description: The business segment
+        geography:
+          type: string
+          description: The geography
+        legalEntityType:
+          type: string
+          description: The legal entity type
+        managerLogin:
+          type: string
+          description: The manager
+        partnerLogin:
+          type: string
+          description: The partner
+        directorLogin:
+          type: string
+          description: The director
+        type:
+          type: string
+          description: The type
+        identifier:
+          type: string
+          description: The identifier
+        taxId:
+          type: string
+          description: The tax ID
+        team:
+          type: string
+          description: The team
+        city:
+          type: string
+          description: The city
+        service:
+          type: string
+          description: The service
+        jurisdictionId:
+          type: string
+          description: The jurisdiction name
+        reportingCompanyName:
+          type: string
+          description: The reporting company name
+        vatGstRegistrationNumber:
+          type: string
+          description: The VAT GST registration number
+      description: Represents an entity
+    TRTA.Athena.Models.Api.V4.Entities.EntityApiResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        entityManagerId:
+          type: string
+          description: The entity manager ID
+        name:
+          type: string
+          description: The name
+        shortName:
+          type: string
+          description: The short name
+        businessSegment:
+          type: string
+          description: The business segment
+        geography:
+          type: string
+          description: The geography
+        active:
+          type: boolean
+          description: Indicates whether the entity is active
+        access:
+          type: string
+          description: The access level
+        legalEntityType:
+          type: string
+          description: The legal entity type
+        managerLogin:
+          type: string
+          description: The manager
+        partnerLogin:
+          type: string
+          description: The partner
+        directorLogin:
+          type: string
+          description: The director
+        type:
+          type: string
+          description: The type
+        identifier:
+          type: string
+          description: The identifier
+        taxId:
+          type: string
+          description: The tax ID
+        team:
+          type: string
+          description: The team
+        city:
+          type: string
+          description: The city
+        service:
+          type: string
+          description: The service
+        jurisdiction:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.Jurisdiction'
+        createdBy:
+          type: string
+          description: The user who created the entity
+        createDate:
+          type: string
+          description: The date the entity was created
+        lastUpdatedBy:
+          type: string
+          description: The user who last updated the entity
+        lastUpdatedDate:
+          type: string
+          description: The date the entity was last updated
+        reportingCompanyName:
+          type: string
+          description: The reporting company name
+        vatGstRegistrationNumber:
+          type: string
+          description: The VAT GST registration number
+      description: Represents the entity API response
+    TRTA.Athena.Models.Api.V4.Entities.EntityUpdateModel:
+      required:
+      - jurisdictionId
+      - legalEntityType
+      - name
+      - shortName
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name
+        shortName:
+          type: string
+          description: The short name
+        businessSegment:
+          type: string
+          description: The business segment
+        geography:
+          type: string
+          description: The geography
+        legalEntityType:
+          type: string
+          description: The legal entity type
+        managerLogin:
+          type: string
+          description: The manager
+        partnerLogin:
+          type: string
+          description: The partner
+        directorLogin:
+          type: string
+          description: The director
+        type:
+          type: string
+          description: The type
+        identifier:
+          type: string
+          description: The identifier
+        taxId:
+          type: string
+          description: The tax ID
+        team:
+          type: string
+          description: The team
+        city:
+          type: string
+          description: The city
+        service:
+          type: string
+          description: The service
+        jurisdictionId:
+          type: string
+          description: The jurisdiction name
+        reportingCompanyName:
+          type: string
+          description: The reporting company name
+        vatGstRegistrationNumber:
+          type: string
+          description: The VAT GST registration number
+      description: Represents an entity
+      example:
+        name: Entity Name
+        shortName: Entity Short Name
+        businessSegment: ''
+        geography: ''
+        legalEntityType: Company
+        managerLogin: ''
+        partnerLogin: ''
+        directorLogin: ''
+        type: ''
+        identifier: Entity Identifier
+        taxId: HU12345678
+        team: ''
+        city: ''
+        service: ''
+        jurisdictionId: hu
+    TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModelForApiResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The hierarchy
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModelForApi'
+      description: Represents the entity hierarchy
+    TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModelForApi:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The entity ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The entity name
+        shortName:
+          type: string
+          description: The entity short name
+        exitDate:
+          type: string
+          description: The entity exit date
+        entryDate:
+          type: string
+          description: The entity entry date
+        isGroup:
+          type: boolean
+          description: Indicates whether the entity is a group
+          readOnly: true
+        displayOrder:
+          type: integer
+          description: The entity display order
+          format: int32
+        entities:
+          type: array
+          description: The child entities
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModelForApi'
+    TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The groups
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModel'
+    TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModel:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: The parent entity unique identifier
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The parent entity name
+        isGroup:
+          type: boolean
+          description: Indicates whether the entity is a group
+        displayOrder:
+          type: integer
+          description: The display order
+          format: int32
+        entryDate:
+          type: string
+          description: The entry date
+          format: date-time
+        exitDate:
+          type: string
+          description: The exit date
+          format: date-time
+        ownership:
+          type: number
+          description: The ownership
+          format: double
+        entities:
+          type: array
+          description: The child entities
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyModel'
+      description: Represents the entity hierarchy
+    TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyNodeModel:
+      required:
+      - entities
+      - name
+      - operationType
+      type: object
+      properties:
+        name:
+          type: string
+          description: The entity name
+        operationType:
+          type: string
+          description: The operation type
+          enum:
+          - Add
+          - Delete
+        entities:
+          type: array
+          description: The child entities
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyLeafModel'
+      description: Represents the entity hierarchy node
+      example:
+        name: Parent Entity
+        operationType: 1
+        entities:
+        - id: c123456d-7890-123c-a456-789c01e23f4a
+          name: Child Entity 1
+          displayOrder: 0
+        - id: c987654d-3210-987c-a654-321c09e87f6a
+          name: Child Entity 2
+          displayOrder: 1
+    TRTA.Athena.Models.Api.V4.Entities.EntityHierarchyLeafModel:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: The entity unique identifier
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The entity name
+        displayOrder:
+          type: integer
+          description: The display order
+          format: int32
+      description: Represents the entity hierarchy leaf
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The items
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationModel'
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsCreationModel:
+      required:
+      - sourceEntityName
+      - targetEntityId
+      type: object
+      properties:
+        sourceEntityName:
+          type: string
+          description: The source entity
+        targetEntityId:
+          type: string
+          description: The target entity name
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      description: Represents an entity
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsApiResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The items
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsResponseModel'
+      description: Represents the entity list API response
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsResponseModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID
+          format: int32
+        sourceEntityName:
+          type: string
+          description: The source entity name
+        targetEntityName:
+          type: string
+          description: The target entity name
+        targetEntityId:
+          type: string
+          description: The target entity ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      description: Represents the entity maps response
+    TRTA.Athena.Models.Api.V4.EntityMaps.EntityMapsRequestModel:
+      type: object
+      properties:
+        sourceEntityName:
+          type: string
+          description: The source entity name
+        targetEntityId:
+          type: string
+          description: The target entity CLID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      description: Represents the entity deletion model
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The list of exchange rate mappings
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingResponseModel'
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingResponseModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        entityId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        entityName:
+          type: string
+        transactionType:
+          type: string
+          enum:
+          - AP
+          - AR
+        exchangeRateSource:
+          type: string
+        effectiveDateType:
+          type: string
+        dateOffset:
+          type: integer
+          format: int32
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The exchange rate mappings
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequestModel'
+      example:
+        items:
+        - entityId: c123456d-7890-123c-a456-789c01e23f4a
+          transactionType: -1
+          exchangeRateSource: SourceFile
+          effectiveDateType: InvoiceDate
+          dateOffset: 0
+        - entityId: c987654d-3210-987c-a654-321c09e87f6a
+          transactionType: 1
+          exchangeRateSource: ECB
+          effectiveDateType: PostingDate
+          dateOffset: 2
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateMappingRequestModel:
+      required:
+      - effectiveDateType
+      - entityId
+      - exchangeRateSource
+      - transactionType
+      type: object
+      properties:
+        entityId:
+          type: string
+        transactionType:
+          type: string
+          enum:
+          - AP
+          - AR
+        exchangeRateSource:
+          type: string
+        effectiveDateType:
+          type: string
+        dateOffset:
+          type: integer
+          format: int32
+      example:
+        entityId: c123456d-7890-123c-a456-789c01e23f4a
+        transactionType: -1
+        exchangeRateSource: ECB
+        effectiveDateType: InvoiceDate
+        dateOffset: 0
+    TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the import
+        errorMessage:
+          type: string
+          description: The error message
+        hasErrors:
+          type: boolean
+          description: Indicates whether there are errors
+      description: Represents the exchange rates response
+    System.Web.Http.HttpResponseException:
+      type: object
+      properties:
+        Response:
+          type: object
+          properties: {}
+          readOnly: true
+        Message:
+          type: string
+          readOnly: true
+        Data:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        InnerException:
+          type: object
+          properties: {}
+          readOnly: true
+        StackTrace:
+          type: string
+          readOnly: true
+        HelpLink:
+          type: string
+        Source:
+          type: string
+        HResult:
+          type: integer
+          format: int32
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourceListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The list of exchange rate sources
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourcesResponseModel'
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourcesResponseModel:
+      type: object
+      properties:
+        sourceId:
+          type: integer
+          format: int32
+        sourceName:
+          type: string
+        frequency:
+          type: string
+    TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The list of effective date types
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeResponseModel'
+    TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeResponseModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        effectiveDateType:
+          type: string
+    TRTA.Athena.Models.Api.V4.notes.ExportNotesRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        dataSetName:
+          type: string
+        entityName:
+          type: string
+        entityShortName:
+          type: string
+        entityIdentifier:
+          type: string
+        returnId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        returnName:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        sheetName:
+          type: string
+        location:
+          type: string
+        cellAddress:
+          type: string
+        cellValue:
+          type: string
+        rollForward:
+          type: boolean
+        createdBy:
+          type: string
+        createdDate:
+          type: string
+        lastUpdatedBy:
+          type: string
+        lastUpdatedDate:
+          type: string
+    TRTA.Athena.Models.Api.V4.notes.ExportNotesResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        datasetId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        datasetName:
+          type: string
+        isDeletedDataset:
+          type: boolean
+        entityId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        entityName:
+          type: string
+        entityShortName:
+          type: string
+        entityIdentifier:
+          type: string
+        returnId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        returnName:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        sheetName:
+          type: string
+        location:
+          type: string
+        cellValue:
+          type: string
+        cellAddress:
+          type: string
+        rowGuid:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        columnGuid:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        isRollForward:
+          type: boolean
+        createdBy:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        lastUpdatedBy:
+          type: string
+        lastUpdatedDate:
+          type: string
+          format: date-time
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetail'
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        detailedStatus:
+          type: string
+        statusId:
+          type: integer
+          format: int32
+        status:
+          type: string
+        specificationId:
+          type: integer
+          format: int32
+        specificationName:
+          type: string
+        importSpecificationName:
+          type: string
+        importTypeName:
+          type: string
+        lastRunDate:
+          type: string
+          format: date-time
+        editCount:
+          type: integer
+          format: int32
+        errorCount:
+          type: integer
+          format: int64
+        activeCount:
+          type: integer
+          format: int64
+        warningCount:
+          type: integer
+          format: int64
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        status:
+          type: string
+        errorMessage:
+          type: string
+        hasErrors:
+          type: boolean
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        statusId:
+          type: integer
+          format: int32
+        status:
+          type: string
+        errorCount:
+          type: integer
+          format: int64
+        ruleErrorCount:
+          type: integer
+          format: int64
+        activeCount:
+          type: integer
+          format: int64
+        editCount:
+          type: integer
+          format: int64
+        warningCount:
+          type: integer
+          format: int64
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportConflictResponse:
+      type: object
+      properties:
+        Message:
+          type: string
+        ErrorCode:
+          type: string
+        MessageDetail:
+          type: string
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest:
+      type: object
+      properties:
+        isImportData:
+          type: boolean
+    TRTA.Athena.Models.Api.V4.Jurisdictions.JurisdictionListModelApiResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The jurisdictions
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Jurisdictions.Jurisdiction'
+    TRTA.Athena.Models.Api.V4.Mappings.Mapping:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The name
+        year:
+          type: integer
+          description: The year of the chart of account
+          format: int32
+        mapType:
+          type: string
+          description: The type of the map
+        datasetId:
+          type: string
+          description: The dataset ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        chartOfAccountId:
+          type: string
+          description: The chart of account ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        importType:
+          type: string
+          description: The import type
+        templateId:
+          type: string
+          description: The template ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      description: Represents a mapping
+    TRTA.Athena.Models.Api.V4.Mappings.MappingCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name
+        year:
+          type: integer
+          description: The year of the chart of account
+          format: int32
+        mapType:
+          type: string
+          description: The type of the map
+        datasetId:
+          type: string
+          description: The dataset ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        chartOfAccountId:
+          type: string
+          description: The chart of account ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        importType:
+          type: string
+          description: The import type
+        templateId:
+          type: string
+          description: The template ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+      description: Represents a mapping
+    TRTA.Athena.Models.Api.Errors:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The error ID
+          format: int32
+        description:
+          type: string
+          description: The error message
+    TRTA.Athena.Models.Api.V4.Mappings.MappingPutRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The map entries
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Mappings.MapEntry'
+      description: Represents the mapping put request
+    TRTA.Athena.Models.Api.V4.Mappings.MapEntry:
+      type: object
+      properties:
+        mapTarget:
+          type: string
+          description: The tax account code
+        accountCode:
+          type: array
+          description: The chart of accounts account code
+          items:
+            type: string
+      description: Represents a map entry
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.MigrateWorkbookResponse:
+      type: object
+      properties:
+        workbookStatus:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.CorporateTax.WorkbookStatus'
+    TRTA.Athena.Models.Api.V4.Imports.CorporateTax.WorkbookStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The dataset ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        workbookid:
+          type: string
+          description: The workbook ID
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        jobStatusId:
+          type: string
+          description: The job status ID
+        jobStatus:
+          type: string
+          description: The status of the import
+        errorMessage:
+          type: array
+          description: The error messages, if any
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Migrations.ErrorMessage'
+    TRTA.Athena.Models.Migrations.ErrorMessage:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        type:
+          type: string
+          enum:
+          - Config
+          - Matching
+          - Data
+          - DifferentApproach
+    TRTA.Athena.Models.Api.V3.Migration.RFMigrationJsonModel:
+      type: object
+      properties:
+        workbook-id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        sheets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V3.Migration.RFMigrationSheet'
+    TRTA.Athena.Models.Api.V3.Migration.RFMigrationSheet:
+      type: object
+      properties:
+        long-name:
+          type: string
+        insert-sheet:
+          type: boolean
+        is-analysis-sheet:
+          type: boolean
+        parent-sheet:
+          type: string
+        parent-sheet-id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        sheet-id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        block-update:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V3.Migration.RFMigrationBlockUpdate'
+        block-context:
+          type: string
+        row-column:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V3.Migration.RFMigrationRowColumn'
+        cell-update:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V3.Migration.RFMigrationCellUpdate'
+        sheets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V3.Migration.RFMigrationSheet'
+        sheet-migration-id:
+          type: string
+    TRTA.Athena.Models.Api.V3.Migration.RFMigrationBlockUpdate:
+      type: object
+      properties:
+        sheet-long-name:
+          type: string
+        sheet-id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        insert-rows:
+          type: boolean
+        insert-clis:
+          type: boolean
+        create-clis:
+          type: boolean
+        block-context:
+          type: string
+        row-columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V3.Migration.RFMigrationRowColumns'
+        sheets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V3.Migration.RFMigrationSheet'
+        BlockId:
+          type: integer
+          format: int32
+    TRTA.Athena.Models.Api.V3.Migration.RFMigrationRowColumn:
+      type: object
+      properties:
+        identifier:
+          type: string
+        value:
+          type: string
+        dont-protect:
+          type: boolean
+        RowIndex:
+          type: integer
+          format: int32
+        ColIndex:
+          type: integer
+          format: int32
+    TRTA.Athena.Models.Api.V3.Migration.RFMigrationCellUpdate:
+      type: object
+      properties:
+        sheet-long-name:
+          type: string
+        sheet-id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        identifier:
+          type: string
+        identifier-type:
+          type: string
+        value:
+          type: string
+        dont-protect:
+          type: boolean
+    TRTA.Athena.Models.Api.V3.Migration.RFMigrationRowColumns:
+      type: object
+      properties:
+        row-column:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V3.Migration.RFMigrationRowColumn'
+        BlockId:
+          type: integer
+          format: int32
+        RowValue:
+          type: string
+        DuplicateCount:
+          type: integer
+          format: int32
+    TRTA.Athena.Models.Migrations.WorkbookUpdateStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        errormessages:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Migrations.ErrorMessage'
+    TRTA.Athena.Models.Api.V4.Prints.ConfigurationRequestData:
+      type: object
+      properties:
+        datasetId:
+          type: string
+        entityId:
+          type: string
+        bulkPrint:
+          type: boolean
+    TRTA.Athena.Models.Api.V4.Prints.ConfigurationResponseData:
+      type: object
+      properties:
+        sheets:
+          type: array
+          items:
+            type: string
+        printType:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Prints.ApiPrintType'
+        printStyle:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Prints.ApiPrintStyle'
+    TRTA.Athena.Models.Api.V4.Prints.ApiPrintType:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        description:
+          type: string
+    TRTA.Athena.Models.Api.V4.Prints.ApiPrintStyle:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        description:
+          type: string
+    TRTA.Athena.Models.Api.V4.Prints.ExportPrintsRequest:
+      type: object
+      properties:
+        calculationName:
+          type: string
+        dataSetName:
+          type: string
+        entityName:
+          type: string
+        createdDate:
+          type: string
+        printedBy:
+          type: string
+        sheets:
+          type: string
+        printType:
+          type: string
+    TRTA.Athena.Models.Api.V4.Prints.ExportPrintsResponse:
+      type: object
+      properties:
+        calculationName:
+          type: string
+        datasetName:
+          type: string
+        entityIdentifier:
+          type: string
+        entityShortName:
+          type: string
+        entityName:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        printedBy:
+          type: string
+        sheets:
+          type: string
+        printJobId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        printType:
+          type: string
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.Prints.PrintRequest:
+      type: object
+      properties:
+        configuration:
+          $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Prints.Configuration'
+        calculations:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Prints.Calculation'
+    TRTA.Athena.Models.Api.V4.Prints.Configuration:
+      type: object
+      properties:
+        bulkPrint:
+          type: boolean
+        sheets:
+          type: string
+        printType:
+          type: integer
+          format: int32
+        printStyle:
+          type: string
+        showDataEntryCells:
+          type: boolean
+        formsWithoutBackground:
+          type: boolean
+        enableDebugPrint:
+          type: boolean
+    TRTA.Athena.Models.Api.V4.Prints.Calculation:
+      type: object
+      properties:
+        datasetId:
+          type: string
+        entityId:
+          type: string
+    TRTA.Athena.Models.Api.V4.Prints.PrintResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        printJobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Prints.PrintStatus'
+    TRTA.Athena.Models.Api.V4.Prints.PrintStatus:
+      type: object
+      properties:
+        entityId:
+          type: string
+        datasetId:
+          type: string
+        jobId:
+          type: string
+    TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest:
+      type: object
+      properties:
+        printJobIds:
+          type: array
+          items:
+            type: string
+    TRTA.Athena.Models.Api.V4.Prints.PrintStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          readOnly: true
+        calculationName:
+          type: string
+        datasetName:
+          type: string
+        entityIdentifier:
+          type: string
+        entityShortName:
+          type: string
+        entityName:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        printedBy:
+          type: string
+        sheets:
+          type: string
+        printJobId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        printType:
+          type: string
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.Reports.ReportListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The reports
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.Report'
+    TRTA.Athena.Models.Api.V4.Reports.Report:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The report ID value
+          format: int32
+        name:
+          type: string
+          description: The name of the report
+        description:
+          type: string
+          description: The detailed description of the report
+    TRTA.Athena.Models.Api.V4.Reports.ReportMetadata:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The report ID
+          format: int32
+        name:
+          type: string
+          description: The report name
+        parameters:
+          type: array
+          description: The input parameters
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportParameter'
+        resultFields:
+          type: array
+          description: The result columns
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportField'
+    TRTA.Athena.Models.Api.V4.Reports.ReportParameter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the parameter
+        description:
+          type: string
+          description: The detailed description of the parameter
+        dataType:
+          type: string
+          description: The data type of the parameter (for example, string, date)
+        format:
+          type: string
+          description: The format of the value (for example, for date it's yyyy-mm-dd)
+        acceptMultiple:
+          type: boolean
+          description: Indicates whether the parameter accepts multiple values to be passed together
+    TRTA.Athena.Models.Api.V4.Reports.ReportField:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: The name of the column
+        Caption:
+          type: string
+          description: The display property of the column
+        DataType:
+          type: string
+          description: The data type of the column
+    TRTA.Athena.Models.Api.V4.Reports.ReportInput:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The report definition ID
+          format: int32
+        parameters:
+          type: array
+          description: The report parameters
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportParameterInput'
+    TRTA.Athena.Models.Api.V4.Reports.ReportParameterInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the parameter
+        value:
+          type: string
+          description: The value of the parameter
+    TRTA.Athena.Models.Api.V4.Reports.ReportOutput:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The report ID
+          format: int32
+        name:
+          type: string
+          description: The report name
+        runId:
+          type: string
+          description: The run ID of the report
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        parameters:
+          type: array
+          description: The parameters supplied as input for the report
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Reports.ReportParameterInput'
+        status:
+          type: string
+          description: The status of the report (In-Progress/Ready/Invalid)
+        items:
+          type: array
+          description: The report data. It'll only have data when the status is Ready
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        count:
+          type: integer
+          format: int32
+    TRTA.Athena.Models.Api.V4.Reports.ReportStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        resourceLocation:
+          type: string
+        count:
+          type: integer
+          format: int32
+    System.Web.Http.Results.NotFoundResult:
+      type: object
+      properties:
+        Request:
+          type: object
+          properties: {}
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The list of target tax codes
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeModel'
+    TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID
+        description:
+          type: string
+          description: The description
+        taxCodeKey:
+          type: string
+          description: The tax code key
+        taxCodeValue:
+          type: string
+          description: The tax code value
+        createdDate:
+          type: string
+          description: The date the tax code was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date the tax code was last updated
+          format: date-time
+        childTaxCodes:
+          type: array
+          description: The list of child tax codes
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeModel'
+      description: Represents a target tax code
+    TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The tax code mappings
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingResponseModel'
+      description: Represents the tax code mapping list response
+    TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingResponseModel:
+      required:
+      - sourceTaxCode
+      - targetTaxCode
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID
+          format: int32
+        description:
+          type: string
+          description: The tax code description
+        sourceTaxCode:
+          type: string
+          description: The source tax code
+        targetTaxCode:
+          type: string
+          description: The target tax code
+        adjustInvoices:
+          type: boolean
+          description: Indicates whether to adjust invoices
+        adjustCreditNotes:
+          type: boolean
+          description: Indicates whether to adjust credit notes
+        reverseSign:
+          type: boolean
+          description: Indicates whether to reverse the sign
+      description: Represents the tax code mapping response model
+    TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The tax code mappings
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequestModel'
+      description: Represents the tax code mapping request
+    TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequestModel:
+      required:
+      - sourceTaxCode
+      - targetTaxCode
+      type: object
+      properties:
+        sourceTaxCode:
+          type: string
+          description: The source tax code
+        targetTaxCode:
+          type: string
+          description: The target tax code
+        adjustInvoices:
+          type: boolean
+          description: Indicates whether to adjust invoices
+        adjustCreditNotes:
+          type: boolean
+          description: Indicates whether to adjust credit notes
+        reverseSign:
+          type: boolean
+          description: Indicates whether to reverse the sign
+    TRTA.Athena.Models.Api.V4.Templates.TemplateFamilyListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The template families
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateFamily'
+    TRTA.Athena.Models.Api.V4.Templates.TemplateFamily:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the template family
+          format: int32
+        name:
+          type: string
+          description: The name of the template family
+        taxRegime:
+          type: string
+          description: The tax regime of the template
+        taxType:
+          type: string
+          description: The tax type of the template
+    TRTA.Athena.Models.Api.V4.Templates.TemplateListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The templates
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.Template'
+    TRTA.Athena.Models.Api.V4.Templates.Template:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the template
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: The name of the template
+        majorVersion:
+          type: integer
+          description: The major version of the template
+          format: int32
+        minorVersion:
+          type: integer
+          description: The minor version of the template
+          format: int32
+        year:
+          type: integer
+          description: The year of the template
+          format: int32
+        taxRegimeId:
+          type: string
+          description: The tax regime ID of the template
+        taxType:
+          type: string
+          description: The tax type of the template
+        isClientTemplate:
+          type: boolean
+          description: Indicates whether it's a client template
+        sourceReturnIdClid:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        sourceReturnCsid:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        templatestartdate:
+          type: string
+          format: date-time
+        templateenddate:
+          type: string
+          format: date-time
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The items
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeResponseModel'
+      description: Represents the transaction type API response
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeResponseModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID
+          format: int32
+        sourceTransactionType:
+          type: string
+          description: The source transaction type
+        targetTransactionType:
+          type: string
+          description: The target transaction type
+      description: Represents the transaction type response
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The items
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationModel'
+      example:
+        items:
+        - sourceTransactionType: Payable
+          targetTransactionType: -1
+        - sourceTransactionType: Receivable
+          targetTransactionType: 1
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationModel:
+      required:
+      - sourceTransactionType
+      - targetTransactionType
+      type: object
+      properties:
+        sourceTransactionType:
+          type: string
+          description: The source transaction type
+        targetTransactionType:
+          type: string
+          description: The target transaction type
+          enum:
+          - AP
+          - AR
+      description: Represents a transaction type
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeRequestModel:
+      required:
+      - sourceTransactionType
+      - targetTransactionType
+      type: object
+      properties:
+        sourceTransactionType:
+          type: string
+          description: The source transaction type
+        targetTransactionType:
+          type: string
+          description: The target transaction type
+          enum:
+          - AP
+          - AR
+      description: Represents the transaction type deletion model
+      example:
+        sourceTransactionType: Payable
+        targetTransactionType: -1
+    TRTA.Athena.Models.Api.V4.Imports.Workbook.ImportTypeListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: The import types
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.Workbook.ImportType'
+    TRTA.Athena.Models.Api.V4.Imports.Workbook.ImportType:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The import type name
+    TRTA.Athena.Models.Api.V4.Imports.Workbook.ImportTypeMetadata:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: The supported columns for import
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.Workbook.ImportField'
+    TRTA.Athena.Models.Api.V4.Imports.Workbook.ImportField:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The field name
+        description:
+          type: string
+          description: The caption of the field
+        isRequired:
+          type: boolean
+          description: Indicates whether the field is required
+        selectorItems:
+          type: array
+          description: If this field is a selector, the items to select from
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Imports.Workbook.SelectorItem'
+        sheetContext:
+          type: string
+          description: The sheet context to which the field belongs
+        blockContext:
+          type: string
+          description: The block context to which the field belongs
+    TRTA.Athena.Models.Api.V4.Imports.Workbook.SelectorItem:
+      type: object
+      properties:
+        key:
+          type: string
+        description:
+          type: string
+    TRTA.Athena.Imports.Models.Api.V4.ImportResponse:
+      type: object
+      properties:
+        importId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        importStatusId:
+          type: string
+        importStatus:
+          type: string
+        errorMessage:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Imports.Models.ImportError'
+    TRTA.Athena.Imports.Models.ImportError:
+      type: object
+      properties:
+        value:
+          type: string
+        error:
+          type: string
+        errorMessage:
+          type: string
+    TRTA.Athena.Models.Api.V4.Imports.Workbook.ImportDataResponse:
+      type: object
+      properties:
+        lineItems:
+          type: array
+          description: The import types
+          items:
+            type: object
+            additionalProperties:
+              type: string
+x-original-swagger-version: '2.0'

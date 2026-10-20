@@ -1,0 +1,378 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts FCOA Cross Reference API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: FCOA Cross Reference
+paths:
+  /v1/years/{year}/fcoa:
+    get:
+      tags:
+      - FCOA Cross Reference
+      summary: Returns the list of charts for two consecutive years (the specified year and…
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fcoas'
+              examples:
+                chart-list:
+                  $ref: '#/components/examples/fcoa-list'
+        '204':
+          description: No data found for the specified inputs.
+          content: {}
+        '400':
+          description: Request failed. This error is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1YearsByYearFcoa
+      x-operation-id-source: derived
+  /v1/fcoa-prior-year-charts/{priorYearChartId}/fcoa-current-year-charts/{currentYearChartId}/mapped-accounts:
+    get:
+      tags:
+      - FCOA Cross Reference
+      summary: Returns the list of mapped accounts for the specified prior year and current…
+      parameters:
+      - name: priorYearChartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      - name: currentYearChartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FcoaMappedAccounts'
+              examples:
+                mapped-accounts:
+                  $ref: '#/components/examples/mapped-accounts'
+        '204':
+          description: No data found for the specified inputs.
+          content: {}
+        '400':
+          description: Request failed. This error is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1FcoaPriorYearChartsByPriorYearChartIdFcoaCurrentYearChartsByCurrentYearChartIdMappedAccounts
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - FCOA Cross Reference
+      summary: Maps or unmaps accounts between prior year and current year FCOA
+      parameters:
+      - name: priorYearChartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      - name: currentYearChartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FcoaCrossReferenceMultipleResponses'
+        '400':
+          description: Request failed. This error is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FcoaCrossReferencePatchRepresentations'
+            examples:
+              mapping:
+                $ref: '#/components/examples/fcoa-map-operation'
+              un-mapping:
+                $ref: '#/components/examples/fcoa-unmap-operation'
+      operationId: patchV1FcoaPriorYearChartsByPriorYearChartIdFcoaCurrentYearChartsByCurrentYearChartIdMappedAccounts
+      x-operation-id-source: derived
+  /v1/fcoa-prior-year-charts/{priorYearChartId}/fcoa-current-year-charts/{currentYearChartId}/unmapped-accounts:
+    get:
+      tags:
+      - FCOA Cross Reference
+      summary: Returns the list of unmapped accounts for the specified prior year and current…
+      parameters:
+      - name: priorYearChartId
+        in: path
+        required: true
+        description: 16-character chart ID, system-generated unique identifier for a chart.
+        schema:
+          type: string
+      - name: currentYearChartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnmappedAccounts'
+              examples:
+                unmapped-accounts:
+                  $ref: '#/components/examples/unmapped-accounts'
+        '204':
+          description: No data found for the specified inputs.
+          content: {}
+        '400':
+          description: Request failed. This error is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1FcoaPriorYearChartsByPriorYearChartIdFcoaCurrentYearChartsByCurrentYearChartIdUnmappedAccounts
+      x-operation-id-source: derived
+components:
+  schemas:
+    Fcoas:
+      type: object
+      properties:
+        charts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fcoa'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    FcoaCrossReferencePatchRepresentations:
+      type: array
+      items:
+        $ref: '#/components/schemas/FcoaCrossReferencePatchRepresentation'
+    FcoaMappedAccounts:
+      type: array
+      items:
+        $ref: '#/components/schemas/FcoaMappedAccount'
+    fcoaAccount:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        accountId:
+          type: integer
+        accountDescription:
+          type: string
+        taxReturnCode:
+          type: string
+        taxCombinationCode:
+          type: integer
+    UnmappedAccounts:
+      type: array
+      items:
+        $ref: '#/components/schemas/fcoaAccount'
+    FcoaCrossReferenceRepresentation:
+      type: object
+      properties:
+        PriorYearAccountNumber:
+          type: string
+        CurrentYearAccountNumber:
+          type: string
+    FcoaMappedAccount:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        accountId:
+          type: integer
+        accountDescription:
+          type: string
+        taxReturnCode:
+          type: string
+        taxCombinationCode:
+          type: integer
+        priorYearAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/fcoaAccount'
+    FcoaCrossReferenceMultipleResponse:
+      type: object
+      properties:
+        path:
+          type: string
+        op:
+          type: string
+        value:
+          type: object
+          $ref: '#/components/schemas/FcoaCrossReferenceRepresentation'
+        statusCode:
+          type: integer
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FcoaCrossReferencePatchRepresentation:
+      type: object
+      properties:
+        value:
+          type: object
+          $ref: '#/components/schemas/FcoaCrossReferenceRepresentation'
+        path:
+          type: string
+        op:
+          type: string
+    Fcoa:
+      type: object
+      properties:
+        name:
+          type: string
+        chartId:
+          type: string
+        year:
+          type: integer
+    FcoaCrossReferenceMultipleResponses:
+      type: array
+      items:
+        $ref: '#/components/schemas/FcoaCrossReferenceMultipleResponse'
+  examples:
+    fcoa-list:
+      value:
+        charts:
+        - name: '! FCOA Training'
+          chartId: 518K010100006BL5
+          year: 2020
+        - name: '! FCOA Training'
+          chartId: 518K010100006BL7
+          year: 2021
+        - name: '! SD FCOA 5471 A'
+          chartId: 518K0101000068OU
+          year: 2021
+    mapped-accounts:
+      value:
+      - accountNumber: '10'
+        accountId: 1943117
+        accountDescription: Test Cash
+        taxReturnCode: 10-100
+        taxCombinationCode: 100
+        priorYearAccounts:
+        - accountNumber: '106000'
+          accountId: 1956149
+          accountDescription: Inventory - General
+          taxReturnCode: 10-300
+          taxCombinationCode: 1
+      - accountNumber: '10'
+        accountId: 1943117
+        accountDescription: Test Cash
+        taxReturnCode: 10-100
+        taxCombinationCode: 100
+        priorYearAccounts:
+        - accountNumber: '106000'
+          accountId: 1956149
+          accountDescription: Inventory - General
+          taxReturnCode: 10-300
+          taxCombinationCode: 1
+    fcoa-map-operation:
+      value:
+      - value:
+          PriorYearAccountNumber: '106000'
+          CurrentYearAccountNumber: '10'
+        path: ''
+        op: add
+      - value:
+          PriorYearAccountNumber: '106001'
+          CurrentYearAccountNumber: '101'
+        path: ''
+        op: add
+    unmapped-accounts:
+      value:
+      - accountDescription: FAS 115 VALUATION
+        accountNumber: '10401'
+        taxReturnCode: 10-400
+        taxCombinationCode: 115
+        accountId: 1956146
+      - accountDescription: Tax Exempt Securities
+        accountNumber: '10500'
+        taxReturnCode: 10-500
+        taxCombinationCode: 1
+        accountId: 1956147
+    fcoa-unmap-operation:
+      value:
+      - value:
+          PriorYearAccountNumber: '106000'
+          CurrentYearAccountNumber: '10'
+        path: ''
+        op: remove
+      - value:
+          PriorYearAccountNumber: '106001'
+          CurrentYearAccountNumber: '101'
+        path: ''
+        op: remove
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

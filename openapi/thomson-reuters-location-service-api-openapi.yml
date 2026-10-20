@@ -1,0 +1,207 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Location Service API
+  version: 1.0.0
+  contact:
+    name: Team ONESOURCE
+  license:
+    name: ''
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: 'Operations tagged Location Service across 2 of this provider''s published API definitions: thomson-reuters-cloud-determination-rest-apis-1-0-0-openapi.json, thomson-reuters-cloud-determination-rest-apis-1-0-0-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-uat.onesourcetax.com/indirect-tax-determination/beta
+tags:
+- name: Location Service
+paths:
+  /locations:
+    get:
+      tags:
+      - Location Service
+      summary: Finds the list of locations
+      description: Fetches the list of locations for which the logged In User has access.
+      operationId: findLocations_1
+      parameters:
+      - name: pageIndex
+        in: query
+        description: The Page Index
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: The Page Size
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: sortBy
+        in: query
+        description: The Sort By Criteria
+        required: false
+        schema:
+          type: string
+      - name: sortDescending
+        in: query
+        description: The Sort Descending Flag
+        required: false
+        schema:
+          type: boolean
+      - name: contains
+        in: query
+        description: The contains flag for the filter
+        required: false
+        schema:
+          type: boolean
+      - name: merchantName
+        in: query
+        description: The Locations Merchant Name
+        required: false
+        schema:
+          type: string
+      - name: locationName
+        in: query
+        description: The Locations Name
+        required: false
+        schema:
+          type: string
+      - name: countryName
+        in: query
+        description: The Locations Country Name
+        required: false
+        schema:
+          type: string
+      - name: city
+        in: query
+        description: The Locations City
+        required: false
+        schema:
+          type: string
+      - name: latitude
+        in: query
+        description: The Locations Latitude
+        required: false
+        schema:
+          type: string
+      - name: longitude
+        in: query
+        description: The Locations Longitude
+        required: false
+        schema:
+          type: string
+      - name: state
+        in: query
+        description: The Locations State
+        required: false
+        schema:
+          type: string
+      - name: county
+        in: query
+        description: The Locations County
+        required: false
+        schema:
+          type: string
+      - name: district
+        in: query
+        description: The Locations District
+        required: false
+        schema:
+          type: string
+      - name: postalCode
+        in: query
+        description: The Locations Postal Code
+        required: false
+        schema:
+          type: string
+      - name: geoCode
+        in: query
+        description: The Locations Geo Code
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.tri.onesource.idt.v1+json:
+              schema:
+                $ref: '#/components/schemas/UiPaginatedLocationsList'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not available
+        '500':
+          description: Server error. For more details check the logs.
+    servers:
+    - url: https://api-uat.onesourcetax.com/indirect-tax-determination/beta
+components:
+  schemas:
+    UiPaginatedLocations:
+      type: object
+      properties:
+        locationId:
+          type: integer
+          format: int64
+        merchantId:
+          type: integer
+          format: int64
+        merchantName:
+          type: string
+        locationName:
+          type: string
+        countryName:
+          type: string
+        city:
+          type: string
+        locationSetCount:
+          type: integer
+          format: int32
+        latitude:
+          type: string
+        longitude:
+          type: string
+        state:
+          type: string
+        county:
+          type: string
+        district:
+          type: string
+        province:
+          type: string
+        postalCode:
+          type: string
+        geoCode:
+          type: string
+        createdDate:
+          type: string
+        createdBy:
+          type: string
+        createdByEmail:
+          type: string
+        modifiedDate:
+          type: string
+        modifiedBy:
+          type: string
+        modifiedByEmail:
+          type: string
+    UiPaginatedLocationsList:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        uiPaginatedLocationsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/UiPaginatedLocations'
+  securitySchemes:
+    token:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-cloud-determination-rest-apis-1-0-0-openapi.json
+- thomson-reuters-cloud-determination-rest-apis-1-0-0-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

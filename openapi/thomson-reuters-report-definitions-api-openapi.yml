@@ -1,0 +1,324 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Report definitions API
+  version: '2.0'
+  description: 'Operations tagged Report definitions across 3 of this provider''s published API definitions: thomson-reuters-reports-api-2-0-openapi.json, thomson-reuters-reports-api-2-0-openapi.yml, thomson-reuters-reports-api-2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+- url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+tags:
+- name: Report definitions
+paths:
+  /report-definitions/{id}/filters:
+    get:
+      tags:
+      - Report definitions
+      summary: Retrieve all filters that are applied to the report
+      description: Retrieve all filters that are applied to the report.
+      operationId: Report_GetFilters
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Saved report Tracker id.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '200':
+          description: ''
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportFiltersModel'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+      security:
+      - OAuth2: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+  /report-definitions/{id}/filters/{filterId}:
+    patch:
+      tags:
+      - Report definitions
+      summary: Update an existing filter in a report
+      description: Update an existing filter in a report.
+      operationId: Report_UpdateFilter
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Saved report Tracker id.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: filterId
+        in: path
+        required: true
+        description: Filter unique identifier.
+        schema:
+          type: string
+        x-position: 2
+      - name: If-Match
+        in: header
+        required: true
+        description: The ETag for the record to perform a concurrency check
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.
+
+          '
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        x-name: FilterParameters
+        description: Filter parameters to be posted
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            examples:
+              Fiter Invoice.GeneralDateRangeWithDefaults:
+                summary: Example for Invoice.GeneralDateRangeWithDefaults filter
+                description: Represents filter for BillingPeriodEndDate field with custom serach ranges from 1/6/2010 12:00:00 AM to 12/31/2020 11:59:59 PM
+                value:
+                - 1/6/2010 12:00:00 AM
+                - 12/31/2020 11:59:59 PM
+                - '1'
+                - BillingPeriodEndDate
+                - null
+              Fiter for Matter.Name:
+                summary: Example for Matter.Name filter
+                description: Search for values that are started from 'searched value'
+                value:
+                - '2'
+                - searched value
+              Filter Matter.OrgUnit.TreePicklist:
+                summary: Example for Matter.OrgUnit.TreePicklist filter
+                description: Search for Org Units that have Tracker Ids 12345 and 9876
+                value:
+                - '12345'
+                - '9876'
+        required: true
+      responses:
+        '200':
+          description: Updated filter with the list of new parameters
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+      security:
+      - OAuth2: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/reports-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/reports-api/v2
+components:
+  schemas:
+    Filter:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Filter unique Id
+        name:
+          type:
+          - string
+          - 'null'
+          description: Displayed name of the filter
+        type:
+          type: string
+          description: Filter type
+        parent:
+          type:
+          - string
+          - 'null'
+          description: Name or Custom Name of parent. Applicable for column level filters.
+        order:
+          type:
+          - integer
+          - 'null'
+          description: Order on UI. Not applicable for column level filters
+          format: int32
+        filterDefinitionId:
+          type: string
+          description: Unique id of a filter definition (actual Full path to the filter). Can be used to identify available filter parameters
+        params:
+          type: array
+          description: Filter parameters. The list of parameters depends on filter type
+          items:
+            type: string
+    FilterModel:
+      type: object
+      additionalProperties: false
+      required:
+      - filterId
+      - params
+      properties:
+        filterId:
+          type: string
+          description: Filter unique id
+          minLength: 1
+          example: fe044d73d549438fa6017e151f718e0f
+        params:
+          type: array
+          description: "List of updated parameters for filter. \nUse filter-definitions/{id} endpoint in order to find description of each parameter. "
+          example:
+          - 1/6/2010 12:00:00 AM
+          - 12/31/2020 11:59:59 PM
+          - 1
+          - BillingPeriodEndDate
+          - null
+          items:
+            type: string
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    ReportFiltersModel:
+      type: object
+      additionalProperties: false
+      properties:
+        advancedFilter:
+          type:
+          - string
+          - 'null'
+          description: Advanced filter that is specified in the report
+        filters:
+          type:
+          - array
+          - 'null'
+          description: The list of filters that are applied to the report
+          items:
+            $ref: '#/components/schemas/Filter'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-reports-api-2-0-openapi.json
+- thomson-reuters-reports-api-2-0-openapi.yml
+- thomson-reuters-reports-api-2-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

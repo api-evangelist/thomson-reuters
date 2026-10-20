@@ -1,0 +1,106 @@
+openapi: 3.2.0
+info:
+  version: v1
+  title: FBT CUSTOMER Cost Center API
+servers:
+- url: https://api-apac.onesourcetax.com/fringe-benefits-tax/eap/administration
+tags:
+- name: Cost Center
+paths:
+  /periods/{period-id}/organizations/{organization-id}/cost-centers:
+    get:
+      tags:
+      - Cost Center
+      summary: Get all cost centers in an organisation
+      operationId: CostCenter_GetCostCenters
+      parameters:
+      - name: period-id
+        in: path
+        description: Period id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organization-id
+        in: path
+        description: Organization id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: offset
+        in: query
+        description: Offset
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Limit
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get all cost centers in an organisation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.CostCenter.CostCenterForCustomerApi'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.CostCenter.CostCenterForCustomerApi'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.CostCenter.CostCenterForCustomerApi'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Fbt.Models.CustomerApi.CostCenter.CostCenterForCustomerApi'
+        '404':
+          description: Invalid input id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+components:
+  schemas:
+    Fbt.Models.CustomerApi.CostCenter.CostCenterForCustomerApi:
+      description: Cost center model
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Cost center id
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        code:
+          description: Cost center code
+          type: string
+        description:
+          description: Cost center description
+          type: string

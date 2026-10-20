@@ -1,0 +1,1842 @@
+# x-archived-from: thomson-reuters-collection-service-1-0-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.1.1
+info:
+  title: Collection Service
+  description: An aggregated set of records from one or more topics that have columns that map to the required columns of the blueprint used to create the collection.
+  version: '1.0'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+paths:
+  /collections:
+    get:
+      tags:
+      - Collections
+      summary: Get a paginated list of Collections
+      description: 'Returns a list of Collections with their metadata.<br /> <br /><br /> Potential values for published status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>UNPUBLISHED</td> </tr> <tr> <td>2</td> <td>PUBLISHING</td> </tr> <tr> <td>3</td> <td>PUBLISHED</td> </tr> <tr> <td>4</td> <td>UNPUBLISHING</td> </tr> <tr> <td>5</td> <td>ERROR</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for Blueprint type: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Generic</td> </tr> <tr> <td>2</td> <td>Trial Balance</td> </tr> <tr> <td>3</td> <td>Apportionment</td> </tr> <tr> <td>...</td> <td>...</td> </tr> </tbody> </table>'
+      operationId: getCollections
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionResponseDTO'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Collections
+      summary: Create a new Collection
+      description: Adds Collection with name, blueprint metadata and collection description which is an optional field.
+      operationId: createCollection
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCollectionRequest'
+      responses:
+        '201':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdDTO'
+      security:
+      - bearerAuth: []
+  /{collectionId}/versions/{versionNumber}/download/task/{taskId}:
+    get:
+      tags:
+      - Collections
+      summary: Get download URL for a completed task
+      description: Returns the download URL for a completed task.
+      operationId: getCollectionDownloadTaskNewVersion
+      parameters:
+      - name: collectionId
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: taskId
+        in: path
+        description: Task ID of the download job.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+      security:
+      - bearerAuth: []
+  /{collectionId}/versions/{versionNumber}/download/task:
+    post:
+      tags:
+      - Collections
+      summary: Initiate a download of the Collection by ID and Version
+      description: Returns a download task ID for the specified Collection by ID and Version.
+      operationId: getCollectionDownloadTask_NewVersion
+      parameters:
+      - name: collectionId
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: content_type
+        in: query
+        description: 'Type of the file.<br /><br />Potential values for File format: <br />------------------------------- <br />&nbsp;&nbsp;&nbsp;id &nbsp;&nbsp; | &nbsp;&nbsp; name <br />------------------------------- <br />&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp; | &nbsp;&nbsp; csv <br />&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp; | &nbsp;&nbsp; xlsx'
+        required: false
+        schema:
+          type: string
+          default: csv
+        example: csv
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionRecordsColumnDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+      security:
+      - bearerAuth: []
+  /collections/{id}:
+    get:
+      tags:
+      - Collections
+      summary: Return a Collection by ID
+      description: 'Returns Collection metadata for the specified Collection ID.<br /> <br /><br /> Potential values for published status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>UNPUBLISHED</td> </tr> <tr> <td>2</td> <td>PUBLISHING</td> </tr> <tr> <td>3</td> <td>PUBLISHED</td> </tr> <tr> <td>4</td> <td>UNPUBLISHING</td> </tr> <tr> <td>5</td> <td>ERROR</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for Blueprint type: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Generic</td> </tr> <tr> <td>2</td> <td>Trial Balance</td> </tr> <tr> <td>3</td> <td>Apportionment</td> </tr> <tr> <td>...</td> <td>...</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for ontology: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>financial-hierarchy-position</td> </tr> <tr> <td>2</td> <td>chart of accounts</td> </tr> <tr> <td>3</td> <td>entity</td> </tr> <tr> <td>4</td> <td>account</td> </tr> <tr> <td>5</td> <td>balance</td> </tr> </tbody> </table>'
+      operationId: getCollection
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SingleCollectionDTO'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Collections
+      summary: Update Collection by ID
+      description: Updates is_hidden attribute, description for the specified Collection ID.
+      operationId: updateCollection
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionPatchRequestDTO'
+      responses:
+        '204':
+          description: default response
+      security:
+      - bearerAuth: []
+  /collections/{id}/columns:
+    get:
+      tags:
+      - Collections
+      summary: Return Collection columns by ID
+      description: Returns Collection columns for the specified Collection ID.
+      operationId: getCollectionColumns
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: Number of columns in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of columns to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionCollectionColumnDTO'
+      security:
+      - bearerAuth: []
+  /collections/{id}/records:
+    get:
+      tags:
+      - Collections
+      summary: Get a paginated list of records in the latest version of the Collection
+      description: Returns a paginated list of records in the latest version of the Collection as structured in the Blueprints. Can filter down by 'topic_id' property.
+      operationId: getRecords
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsResponse'
+      security:
+      - bearerAuth: []
+  /collections/{id}/publish:
+    post:
+      tags:
+      - Collections
+      summary: Publish a Collection by ID
+      description: 'Publish a Collection. Publishing a collection makes it visible to data consumers through the Query endpoint. It also executes any aggregations that need to be done, as determined by the Blueprint type.<p>Email recipients can be provided in the request body, if specified then an email notification is sent to the recipients post publishing the collection. Note: Email recipients in the request body is optional.<br /><br /><br /> Potential values for published status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>UNPUBLISHED</td> </tr> <tr> <td>2</td> <td>PUBLISHING</td> </tr> <tr> <td>3</td> <td>PUBLISHED</td> </tr> <tr> <td>4</td> <td>UNPUBLISHING</td> </tr> <tr> <td>5</td> <td>ERROR</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for Blueprint type: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Generic</td> </tr> <tr> <td>2</td> <td>Trial Balance</td> </tr> <tr> <td>3</td> <td>Apportionment</td> </tr> <tr> <td>...</td> <td>...</td> </tr> </tbody> </table>'
+      operationId: publish
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionPublishRequest'
+      responses:
+        '204':
+          description: Published Successfully
+      security:
+      - bearerAuth: []
+  /collections/{id}/unpublish:
+    post:
+      tags:
+      - Collections
+      summary: Unpublish a Collection by ID
+      description: 'Unpublish a Collection for the specified Collection ID.<br /><br /><br /> Potential values for published status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>UNPUBLISHED</td> </tr> <tr> <td>2</td> <td>PUBLISHING</td> </tr> <tr> <td>3</td> <td>PUBLISHED</td> </tr> <tr> <td>4</td> <td>UNPUBLISHING</td> </tr> <tr> <td>5</td> <td>ERROR</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for Blueprint type: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Generic</td> </tr> <tr> <td>2</td> <td>Trial Balance</td> </tr> <tr> <td>3</td> <td>Apportionment</td> </tr> <tr> <td>...</td> <td>...</td> </tr> </tbody> </table>'
+      operationId: unpublish
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VersionDTO'
+      security:
+      - bearerAuth: []
+  /collections/{id}/versions:
+    get:
+      tags:
+      - Versions
+      summary: Return a list of metadata for all version of collection
+      description: 'Return a list of metadata for the all version of collection.<br /> <br /><br /> Potential values for published status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>UNPUBLISHED</td> </tr> <tr> <td>2</td> <td>PUBLISHING</td> </tr> <tr> <td>3</td> <td>PUBLISHED</td> </tr> <tr> <td>4</td> <td>UNPUBLISHING</td> </tr> <tr> <td>5</td> <td>ERROR</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for Blueprint type: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Generic</td> </tr> <tr> <td>2</td> <td>Trial Balance</td> </tr> <tr> <td>3</td> <td>Apportionment</td> </tr> <tr> <td>...</td> <td>...</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for ontology: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>financial-hierarchy-position</td> </tr> <tr> <td>2</td> <td>chart of accounts</td> </tr> <tr> <td>3</td> <td>entity</td> </tr> <tr> <td>4</td> <td>account</td> </tr> <tr> <td>5</td> <td>balance</td> </tr> </tbody> </table>'
+      operationId: getCollectionVersions
+      parameters:
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: id
+        in: path
+        description: Unique identifier for a Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionResponseDTO'
+      security:
+      - bearerAuth: []
+  /collections/{id}/versions/latest:
+    delete:
+      tags:
+      - Versions
+      summary: Remove unpublished latest version of a collection
+      description: Removes unpublished latest version with the specified Collection ID.
+      operationId: deleteUnpublishedLatestVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deleted Successfully
+      security:
+      - bearerAuth: []
+  /collections/{id}/versions/{versionNumber}:
+    get:
+      tags:
+      - Versions
+      summary: Return a Version metadata by version number
+      description: 'Returns Version metadata for the specified version number of collection.<br /><br /><br /> Potential values for published status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>UNPUBLISHED</td> </tr> <tr> <td>2</td> <td>PUBLISHING</td> </tr> <tr> <td>3</td> <td>PUBLISHED</td> </tr> <tr> <td>4</td> <td>UNPUBLISHING</td> </tr> <tr> <td>5</td> <td>ERROR</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for Blueprint type: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Generic</td> </tr> <tr> <td>2</td> <td>Trial Balance</td> </tr> <tr> <td>3</td> <td>Apportionment</td> </tr> <tr> <td>...</td> <td>...</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for ontology: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>financial-hierarchy-position</td> </tr> <tr> <td>2</td> <td>chart of accounts</td> </tr> <tr> <td>3</td> <td>entity</td> </tr> <tr> <td>4</td> <td>account</td> </tr> <tr> <td>5</td> <td>balance</td> </tr> </tbody> </table> '
+      operationId: getCollectionByVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for a Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionVersionDTO'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Versions
+      summary: Update Collection Version Description by ID and Version Number
+      description: Updates Collection Version Description attribute for the specified Collection ID and Version.
+      operationId: updateVersionDescription
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for a Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionVersionDescriptionPatchRequestDTO'
+        required: true
+      responses:
+        '204':
+          description: No Content
+      security:
+      - bearerAuth: []
+  /collections/{id}/versions/{versionNumber}/recordsets:
+    get:
+      tags:
+      - Versions
+      summary: Get a paginated list of Recordsets by Collection ID and version number
+      description: 'Returns a list of Recordset IDs for the specified Collection ID and Version number.<br /><br /><br /> Potential values for item status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Pending</td> </tr> <tr> <td>2</td> <td>Processing</td> </tr> <tr> <td>3</td> <td>Complete</td> </tr> <tr> <td>4</td> <td>Removing</td> </tr> <tr> <td>5</td> <td>Error</td> </tr> </tbody> </table>'
+      operationId: getRecordsetsInCollectionByVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsetsResponseDTO'
+      security:
+      - bearerAuth: []
+  /collections/{id}/versions/{versionNumber}/records:
+    get:
+      tags:
+      - Versions
+      summary: Get a paginated list of records in the specific version of the Collection
+      description: Returns a paginated list of records in the specific version of the Collection as structured in the Blueprints. Can filter down by 'topic_id' property.
+      operationId: getRecordsByVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionRecordDTO'
+      security:
+      - bearerAuth: []
+  /collections/collection-versions:
+    get:
+      tags:
+      - Versions
+      summary: Get a paginated list of Collections versions
+      description: 'Returns a list of Collections versions with their metadata.<br /> <br /><br /> Potential values for published status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>UNPUBLISHED</td> </tr> <tr> <td>2</td> <td>PUBLISHING</td> </tr> <tr> <td>3</td> <td>PUBLISHED</td> </tr> <tr> <td>4</td> <td>UNPUBLISHING</td> </tr> <tr> <td>5</td> <td>ERROR</td> </tr> </tbody> </table>
+
+        <br /><br /> Potential values for Blueprint type: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Generic</td> </tr> <tr> <td>2</td> <td>Trial Balance</td> </tr> <tr> <td>3</td> <td>Apportionment</td> </tr> <tr> <td>...</td> <td>...</td> </tr> </tbody> </table>'
+      operationId: getCollectionsVersions
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of records in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of records to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CollectionResponseDTO'
+      security:
+      - bearerAuth: []
+  /collections/{id}/versions/{versionNumber}/columns:
+    get:
+      tags:
+      - Versions
+      summary: Return Collection columns by Collection ID and Version Number
+      description: Returns Collection columns for the specified Collection by Collection ID and Version Number.
+      operationId: getCollectionColumnsByVersion
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: Unique identifier of the Collection with Version.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: Number of columns in a collection to skip before starting the response set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Maximum number of columns to return in the result set.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionCollectionColumnDTO'
+      security:
+      - bearerAuth: []
+  /collections/{id}/versions/{number}/columns:
+    patch:
+      tags:
+      - Collections
+      summary: Update the sort order of column
+      description: 'Update sort order.<br /><br />Potential values for item status: <br /><br /> Potential values for item status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Pending</td> </tr> <tr> <td>2</td> <td>Processing</td> </tr> <tr> <td>3</td> <td>Complete</td> </tr> <tr> <td>4</td> <td>Removing</td> </tr> <tr> <td>5</td> <td>Error</td> </tr> </tbody> </table>'
+      operationId: updateCollectionColumnSortOder
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: number
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollectionColumnRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+      security:
+      - bearerAuth: []
+  /collections/{collectionId}/versions/{versionNumber}/download:
+    get:
+      tags:
+      - Collections
+      summary: Initiate a download of the Collection by ID and Version
+      description: Returns a download url for the specified Collection by ID and Version.
+      operationId: getCollectionDownloadUrl
+      parameters:
+      - name: collectionId
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: content_type
+        in: query
+        description: 'Type of the file.<br /><br />Potential values for File format: <br />------------------------------- <br />&nbsp;&nbsp;&nbsp;id &nbsp;&nbsp; | &nbsp;&nbsp; name <br />------------------------------- <br />&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp; | &nbsp;&nbsp; csv <br />&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp; | &nbsp;&nbsp; xlsx'
+        required: false
+        schema:
+          type: string
+          default: csv
+        example: csv
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DownloadUrlDTO'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Collections
+      summary: Initiate a download of the Collection by ID and Version
+      description: Returns a download url for the specified Collection by ID and Version.
+      operationId: getCollectionRecordsDownloadUrl
+      parameters:
+      - name: collectionId
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The modification number for the resource.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: content_type
+        in: query
+        description: 'Type of the file.<br /><br />Potential values for File format: <br />------------------------------- <br />&nbsp;&nbsp;&nbsp;id &nbsp;&nbsp; | &nbsp;&nbsp; name <br />------------------------------- <br />&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp; | &nbsp;&nbsp; csv <br />&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp; | &nbsp;&nbsp; xlsx'
+        required: false
+        schema:
+          type: string
+          default: csv
+        example: csv
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionRecordsColumnDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DownloadUrlDTO'
+      security:
+      - bearerAuth: []
+  /collections/{id}/versions/{versionNumber}/associations:
+    get:
+      tags:
+      - Versions
+      summary: Return associations
+      description: Returns associations for a specific version of a specific collection.
+      operationId: getAssociations
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: Version number of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionString'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Versions
+      summary: Create an Association
+      description: Creates an association on a collection version.
+      operationId: createAssociation
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: Version number of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAssociationRequest'
+      responses:
+        '201':
+          description: default response
+      security:
+      - bearerAuth: []
+  /collections/{id}/versions/{versionNumber}/associations/{externalId}:
+    delete:
+      tags:
+      - Versions
+      summary: Remove an association
+      description: Remove an association from a collection version.
+      operationId: deleteAssociation
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: versionNumber
+        in: path
+        description: The version number of the collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: externalId
+        in: path
+        description: The association.
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deleted Successfully
+      security:
+      - bearerAuth: []
+  /collections/{id}/recordsets:
+    get:
+      tags:
+      - Recordsets
+      summary: Get a paginated list of Recordsets by Collection ID
+      description: 'Returns a list of Recordset IDs for the specified Collection ID.<br /> <br /><br /> Potential values for item status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Pending</td> </tr> <tr> <td>2</td> <td>Processing</td> </tr> <tr> <td>3</td> <td>Complete</td> </tr> <tr> <td>4</td> <td>Removing</td> </tr> <tr> <td>5</td> <td>Error</td> </tr> </tbody> </table>'
+      operationId: getRecordsetsInCollection
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsetsResponseDTO'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Recordsets
+      summary: Initiate adding a Recordset by Collection ID
+      description: Creates an asynchronous task to add a Recordset for the specified Collection ID.
+      operationId: addRecordsetToCollection
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordsetRequest'
+      responses:
+        '201':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordsetIdResponseDTO'
+      security:
+      - bearerAuth: []
+  /collections/{id}/recordsets/{recordsetId}:
+    patch:
+      tags:
+      - Recordsets
+      summary: Update a collection item
+      description: 'Updates a collection item name.<br /><br /><br /> Potential values for item status: <br /> <table> <thead> <tr> <th>id</th> <th>name</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Pending</td> </tr> <tr> <td>2</td> <td>Processing</td> </tr> <tr> <td>3</td> <td>Complete</td> </tr> <tr> <td>4</td> <td>Removing</td> </tr> <tr> <td>5</td> <td>Error</td> </tr> </tbody> </table>'
+      operationId: updateCollectionRecordset
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: recordsetId
+        in: path
+        description: Item Recordset ID in the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordsetsItemRequest'
+      responses:
+        '200':
+          description: default response
+      security:
+      - bearerAuth: []
+  /collections/{id}/recordsets/{recordset_id}:
+    delete:
+      tags:
+      - Recordsets
+      summary: Remove a Recordset by Collection ID
+      description: Remove a Recordset ID for the specified Collection ID.
+      operationId: deleteRecordset
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the Collection.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: recordset_id
+        in: path
+        description: Unique identifier of the Recordset.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deleted Successfully
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    IdResponseString:
+      type: object
+      properties:
+        id:
+          type: string
+    PublishCollectionBlueprintDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Blueprint.
+          format: int32
+          example: 46
+        version:
+          type: integer
+          description: Version of the Blueprint.
+          format: int32
+          example: 5
+    BlueprintDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Blueprint.
+          format: int32
+          example: 46
+        version:
+          type: integer
+          description: Version of the Blueprint.
+          format: int32
+          example: 5
+        type_id:
+          type: integer
+          description: Unique identifier of the Blueprint type.
+          format: int32
+          example: 2
+    CreateCollectionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the Collection.
+          example: My Collection Name
+        year:
+          type: integer
+          description: Relevant year of importance for the file data.
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision.
+          format: int32
+          example: 12
+        blueprint:
+          $ref: '#/components/schemas/PublishCollectionBlueprintDTO'
+        description:
+          type: string
+          example: This is a collection of data
+    IdDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection.
+          format: int32
+          example: 6
+    RecordsetRequest:
+      required:
+      - name
+      - topic_id
+      type: object
+      properties:
+        topic_id:
+          maxLength: 24
+          minLength: 24
+          pattern: ^[0-9a-fA-F]+$
+          type: string
+          description: Unique identifier of the Topic.
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Topic.
+          example: My Topic Name
+    RecordsetResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Recordset.
+          example: 5ec590d8d5b6082eb48e6a78
+        success:
+          type: boolean
+        error:
+          $ref: '#/components/schemas/TopicErrorDto'
+    TopicErrorDto:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    UpdateRecordsetsItemRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+    Meta:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+          example: 0
+        limit:
+          type: integer
+          format: int32
+          example: 200
+    RecordsetDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Recordset.
+          format: int32
+          example: 123
+        status:
+          type: integer
+          description: Current state of the background job that copies the records into the Collection.
+          format: int32
+          example: 3
+        topic_id:
+          type: string
+          description: Unique identifier of the Topic.
+          example: 5ec590d8d5b6082eb48e6a78
+        name:
+          type: string
+          description: Label of the Topic.
+          example: My Topic Name
+        qualifying_records:
+          type: integer
+          description: Total number of records that are ready.
+          format: int64
+          example: 988
+        ingested_records:
+          type: integer
+          description: Current number of qualifying records that have been ingested.
+          format: int64
+          example: 988
+        created_by:
+          type: string
+          description: Recordset created by.
+          example: testuser.dep
+        created_at:
+          type: string
+          description: Recordset created at time.
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    RecordsetsResponseDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordsetDTO'
+        _meta:
+          $ref: '#/components/schemas/Meta'
+    ApiCollectionRecordDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordDTO'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    RecordDTO:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordField'
+    RecordField:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+    ApiCollectionCollectionColumnDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionColumnDTO'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    CollectionColumnDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Label of the column.
+          example: My Column Name
+        type:
+          type: string
+          description: Expected data type of the column values.
+          enum:
+          - currency
+          - date
+          - number
+          - string
+        index:
+          type: boolean
+        ontology_id:
+          type: integer
+          description: Unique identifier of the ontology this column represents.
+          format: int32
+          example: 1
+        is_required:
+          type: boolean
+          description: Requires templates to map this column.
+          example: true
+        is_system:
+          type: boolean
+          description: Checks for system generated column.
+          example: true
+    UpdateCollectionColumnRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionColumnSortOrderDTO'
+    CollectionColumnSortOrderDTO:
+      required:
+      - name
+      - sort_order
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the column.
+          example: account_code
+        sort_order:
+          type: integer
+          description: Unique sort_order to update.
+          format: int32
+          example: 1
+    CollectionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection.
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Collection.
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the Collection.
+          format: int32
+          example: 3
+        status:
+          type: string
+          description: State of the published status.
+          enum:
+          - UNPUBLISHED
+          - PUBLISHING
+          - PUBLISHED
+          - UNPUBLISHING
+          - ERROR
+        blueprint:
+          $ref: '#/components/schemas/BlueprintDTO'
+        year:
+          type: integer
+          description: Relevant year of importance for the file data.
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision.
+          format: int32
+          example: 12
+        is_hidden:
+          type: boolean
+          description: Visibility of the Collection.
+          example: false
+        recordset_count:
+          type: integer
+          format: int32
+        created_date:
+          type: string
+          description: Version created date and time.
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    CollectionResponseDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionDTO'
+        _meta:
+          $ref: '#/components/schemas/Meta'
+    RecordsetIdResponseDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Recordset.
+          example: 5ec590d8d5b6082eb48e6a78
+    VersionDTO:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: Version of the Collection.
+          format: int32
+          example: 3
+    RecordsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          example:
+          - topic_id: 5f7334cc18938b15ed9efb50
+            blueprint_column_1_name: example value A
+            blueprint_column_2_name: example value 1
+            blueprint_column_3_name: 242.8
+          - topic_id: 602d86494510417ca1d9ccb9
+            blueprint_column_1_name: example value B
+            blueprint_column_2_name: example value 2
+            blueprint_column_3_name: 3389.45
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              example:
+              - topic_id: 5f7334cc18938b15ed9efb50
+                blueprint_column_1_name: example value A
+                blueprint_column_2_name: example value 1
+                blueprint_column_3_name: 242.8
+              - topic_id: 602d86494510417ca1d9ccb9
+                blueprint_column_1_name: example value B
+                blueprint_column_2_name: example value 2
+                blueprint_column_3_name: 3389.45
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    CollectionVersionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection.
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Collection.
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the Collection.
+          format: int32
+          example: 3
+        records_count:
+          type: integer
+          description: Total records exist in collection.
+          format: int64
+          example: 100
+        status:
+          type: string
+          description: State of the published status.
+          enum:
+          - UNPUBLISHED
+          - PUBLISHING
+          - PUBLISHED
+          - UNPUBLISHING
+          - ERROR
+        blueprint:
+          $ref: '#/components/schemas/BlueprintDTO'
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionColumnDTO'
+        year:
+          type: integer
+          description: Relevant year of importance for the file data.
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision.
+          format: int32
+          example: 12
+        created_date:
+          type: string
+          description: Version created date and time.
+          format: date-time
+          example: '2021-03-31T07:46:52.98Z'
+        created_by:
+          type: string
+          example: UserA
+        recordset_count:
+          type: integer
+          format: int32
+    CollectionVersionDescriptionPatchRequestDTO:
+      type: object
+      properties:
+        version_description:
+          type: string
+          description: Collection version Description.
+          example: My First Collection version
+    CollectionRecordsColumnDTO:
+      type: object
+      properties:
+        columns:
+          type: array
+          description: List of the column Name's.
+          example:
+          - onesource_account_code
+          - onesource_entity_code
+          - beginning_balance
+          - onesource_financial_hierarchy_code
+          - ending_balance
+          items:
+            type: string
+            description: List of the column Name's.
+            example: '["onesource_account_code","onesource_entity_code","beginning_balance","onesource_financial_hierarchy_code","ending_balance"]'
+    DownloadUrlDTO:
+      type: object
+      properties:
+        download_url:
+          type: string
+          description: URL to download the Topic.
+          example: https://example.thomsonreuters.com/example.csv
+    CollectionPatchRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New Label of the Collection.
+          example: My Collection Name
+        year:
+          type: integer
+          description: Relevant year of importance for the file data.
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision.
+          format: int32
+          example: 12
+        is_hidden:
+          type: boolean
+          description: Visibility of the Collection.
+          example: false
+        description:
+          type: string
+          description: The Description of the Collection.
+          example: This is a collection of data
+    CreateAssociationRequest:
+      type: object
+      properties:
+        association:
+          type: string
+          description: The value to associate the version with.
+          example: '12345'
+    CollectionPublishRequest:
+      type: object
+      properties:
+        email_recipients:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            description: List of email recipients.
+          example:
+          - user1@thomsonreuters.com
+          - user2@thomsonreuters.com
+    SingleCollectionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Collection.
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Label of the Collection.
+          example: My Collection Name
+        version:
+          type: integer
+          description: Version of the Collection.
+          format: int32
+          example: 3
+        records_count:
+          type: integer
+          description: Total records exist in collection.
+          format: int64
+          example: 100
+        status:
+          type: string
+          description: State of the published status.
+          enum:
+          - UNPUBLISHED
+          - PUBLISHING
+          - PUBLISHED
+          - UNPUBLISHING
+          - ERROR
+        blueprint:
+          $ref: '#/components/schemas/BlueprintDTO'
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionColumnDTO'
+        year:
+          type: integer
+          description: Relevant year of importance for the file data.
+          format: int32
+          example: 2019
+        period:
+          type: integer
+          description: Numeric period of no specific precision.
+          format: int32
+          example: 12
+        is_hidden:
+          type: boolean
+          description: Visibility of the Collection.
+          example: false
+        created_date:
+          type: string
+          description: Version created at time.
+          format: date-time
+          example: '2020-06-19T21:06:22.453Z'
+    ApiCollectionString:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: string
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

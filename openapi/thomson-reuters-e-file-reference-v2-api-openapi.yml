@@ -1,0 +1,117 @@
+openapi: 3.2.0
+info:
+  version: v1/v2
+  title: GoSystem E-file E-file Reference V2 API
+  description: A RESTful API to provide access to the GoSystem E-file functionality.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/e-files
+security:
+- Authorization: []
+tags:
+- name: E-file Reference V2
+paths:
+  /v2/e-file-jurisdictions:
+    get:
+      tags:
+      - E-file Reference V2
+      summary: Get e-file jurisdictions
+      description: This endpoint retrieves the list of e-file jurisdictions.
+      operationId: ListOfE-fileJurisdictionsV2
+      responses:
+        '200':
+          description: Success. The e-file jurisdictions are retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileJurisdictionsWrapperV2'
+              examples:
+                efile-jurisdictions-example:
+                  $ref: '#/components/examples/efile-jurisdictions-V2-Example'
+        '400':
+          description: Invalid input {exp message}.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: List of e-file jurisdictions V2
+components:
+  schemas:
+    EFileJurisdictionsV2:
+      type: object
+      properties:
+        EFileJurisdiction:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileJurisdictionV2'
+    EFileJurisdictionV2:
+      type: object
+      properties:
+        Id:
+          type: string
+        EFileEnabled_1040:
+          type:
+          - string
+          - 'null'
+        EFileEnabled_1041:
+          type:
+          - string
+          - 'null'
+        EFileEnabled_1065:
+          type:
+          - string
+          - 'null'
+        EFileEnabled_1120:
+          type:
+          - string
+          - 'null'
+        EFileEnabled_5500:
+          type:
+          - string
+          - 'null'
+        EFileEnabled_990:
+          type:
+          - string
+          - 'null'
+        Description:
+          type:
+          - string
+          - 'null'
+        EFileRequestType:
+          type:
+          - string
+          - 'null'
+    EFileJurisdictionsWrapperV2:
+      type: object
+      properties:
+        EFileJurisdictions:
+          $ref: '#/components/schemas/EFileJurisdictionsV2'
+  examples:
+    efile-jurisdictions-V2-Example:
+      value:
+        EFileJurisdictions:
+          EFileJurisdiction:
+          - Id: AK
+            EFileEnabled_1040: null
+            EFileEnabled_1041: null
+            EFileEnabled_1065: '1'
+            EFileEnabled_1120: '1'
+            EFileEnabled_5500: null
+            EFileEnabled_990: null
+            Description: Alaska
+            EFileRequestType: REG
+          - Id: AL
+            EFileEnabled_1040: '1'
+            EFileEnabled_1041: '1'
+            EFileEnabled_1065: '1'
+            EFileEnabled_1120: '1'
+            EFileEnabled_5500: null
+            EFileEnabled_990: null
+            Description: Alabama
+            EFileRequestType: REG
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

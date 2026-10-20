@@ -1,0 +1,199 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Route API
+  version: v1
+  description: 'Operations tagged Route across 3 of this provider''s published API definitions: thomson-reuters-firmflow-web-api-services-v1-openapi.json, thomson-reuters-firmflow-web-api-services-openapi.yml, thomson-reuters-firmflow-web-api-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: Route
+paths:
+  /firmflow/api/V2/Route:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Route
+      summary: Route a workflow based on the provided criteria
+      description: Routes a workflow to the specified destination based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteCriteriaV2'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RouteCriteriaV2'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RouteCriteriaV2'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+      operationId: postFirmflowApiV2Route
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    RouteResponse:
+      type: object
+      properties:
+        filingId:
+          type: string
+          nullable: true
+        isRouted:
+          type: boolean
+      additionalProperties: false
+    RouteCriteriaV2:
+      required:
+      - assignedDate
+      - assignedTo
+      - complete
+      - completedDate
+      - filingId
+      - nextstep
+      - priority
+      - status
+      type: object
+      properties:
+        filingId:
+          minLength: 1
+          type: array
+          default:
+          - '73078'
+          items:
+            type: integer
+            format: int32
+        currentStep:
+          type: array
+          items:
+            type: string
+          nullable: true
+          default:
+          - PROJECT SETUP
+          - PREPARATION
+        complete:
+          type: boolean
+          default: true
+        nextstep:
+          type: string
+          default: DELIVERY
+        priority:
+          type: string
+          default: HIGH
+        status:
+          type: string
+          default: RECURRING
+        routingNote:
+          type: string
+          nullable: true
+          default: testing route v2
+        assignedDate:
+          type: string
+          default: 06/22/2021 04:51:51 PM
+        completedDate:
+          type: string
+          default: 06/22/2021 04:51:51 PM
+        assignedTo:
+          type: string
+          default: U-0000000057
+        emailNotify:
+          type: boolean
+          default: false
+      additionalProperties: false
+    RouteResponse_2:
+      type: object
+      properties:
+        filingId:
+          type:
+          - string
+          - 'null'
+        isRouted:
+          type: boolean
+      additionalProperties: false
+    RouteCriteriaV2_2:
+      required:
+      - assignedDate
+      - assignedTo
+      - complete
+      - completedDate
+      - filingId
+      - nextstep
+      - priority
+      - status
+      type: object
+      properties:
+        filingId:
+          minLength: 1
+          type: array
+          default:
+          - '73078'
+          items:
+            type: integer
+            format: int32
+        currentStep:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          default:
+          - PROJECT SETUP
+          - PREPARATION
+        complete:
+          type: boolean
+          default: true
+        nextstep:
+          type: string
+          default: DELIVERY
+        priority:
+          type: string
+          default: HIGH
+        status:
+          type: string
+          default: RECURRING
+        routingNote:
+          type:
+          - string
+          - 'null'
+          default: testing route v2
+        assignedDate:
+          type: string
+          default: 06/22/2021 04:51:51 PM
+        completedDate:
+          type: string
+          default: 06/22/2021 04:51:51 PM
+        assignedTo:
+          type: string
+          default: U-0000000057
+        emailNotify:
+          type: boolean
+          default: false
+      additionalProperties: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+x-refined-from:
+- thomson-reuters-firmflow-web-api-services-v1-openapi.json
+- thomson-reuters-firmflow-web-api-services-openapi.yml
+- thomson-reuters-firmflow-web-api-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

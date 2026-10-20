@@ -1,0 +1,255 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Configuration API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Configuration across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Configuration
+paths:
+  /{version}/configuration/sociallinks:
+    get:
+      tags:
+      - Configuration
+      summary: User - Social - List
+      description: 'Get a social link list in Collaborate.
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-72703'
+      operationId: getSocialsLinksList
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '5'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/sociallinks'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sociallinks'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/sociallinks'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/configuration/messaginglinks:
+    get:
+      tags:
+      - Configuration
+      summary: Messaging link list
+      description: 'Get a messaging link list in Collaborate.
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-72704'
+      operationId: getMessageLinksList
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '5'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/messaginglink'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messaginglink'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/messaginglink'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/configuration/managetools:
+    get:
+      tags:
+      - Configuration
+      summary: Manage tools
+      description: 'Get manage tool status in Collaborate
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-73530'
+      operationId: getManageToolList
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '5'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/managetools'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/managetools'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/managetools'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    messaginglink:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialAndMessageLink'
+      xml:
+        name: messaginglink
+    managetools:
+      type: object
+      properties:
+        messaginglinks:
+          type: integer
+          format: int32
+        sociallinks:
+          type: integer
+          format: int32
+        customlinks:
+          type: integer
+          format: int32
+      xml:
+        name: managetools
+    sociallinks:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialAndMessageLink'
+      xml:
+        name: sociallinks
+    SocialAndMessageLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        prefix:
+          type: string
+      xml:
+        name: link
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

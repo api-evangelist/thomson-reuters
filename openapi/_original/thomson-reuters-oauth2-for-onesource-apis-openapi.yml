@@ -1,0 +1,146 @@
+# x-archived-from: thomson-reuters-oauth2-for-onesource-apis-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.0
+info:
+  title: OAUTH2 for ONESOURCE APIs
+  description: ONESOURCE uses OAuth2.0 to authorize Access to ONESOURCE product APIs. OAuth2 is an open protocol for authorization used in web, mobile, and desktop applications. Please check the link below for a more detailed user's guide.
+  termsOfService: https://developerportal.thomsonreuters.com/content/terms-use
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/oauth2/v1
+  description: ONESOURCE AMER region
+- url: https://api-emea.onesourcetax.com/oauth2/v1
+  description: ONESOURCE EMEA region
+- url: https://api-apac.onesourcetax.com/oauth2/v1
+  description: ONESOURCE APAC region
+externalDocs:
+  description: External user's guide documentaton for OAUTH2 endpoints
+  url: https://8o0y42ycsacwxt4k23aooi8ha9sqq5u4jlttdxwbxee0yoa6ia.mcoutput.com/36636/Content/01%20-%20ONESOURCE%20APIs/General/Introduction.htm
+paths:
+  /token:
+    post:
+      summary: Issues an OUATH token.
+      description: "This endpoint is used to generate an access token to call ONESOURCE APIs. It verifies and authenticates your organization and application entitlements, permissions and validity when calling ONESOURCE APIs. Two OAuth2.0 grant types are supported  <ul>\n  <li>\n    <b>Client Credentials</b> - Used with service accounts. A client assertion and\n    consumer key from your Service Account are required. For more\n    information, see the Getting Started instructions in Documentation of the Developer Portal. Access\n    tokens are inserted as bearer tokens in the Authorization  header. Tokens expire after\n    <b>30 minutes</b> and must be regenerated to continue calling APIs.\n  </li>   \n  <li>\n    <b>Authorization Code</b> - An authorization code, consumer key and\n    consumer secret from your application are required. For more\n    information, see the Getting Started instructions in Documentation of the Developer Portal. Access\n    tokens are inserted as bearer tokens\
+        \ in the Authorization  header. Tokens expire after\n    <b>60 minutes</b> and must be regenerated to continue calling APIs. \n  </li>\n</ul>"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                  description: Consumer Key found in Developer Portal.
+                scopes:
+                  type: string
+                  description: "Scopes of the API Product you want to access, separated by comma There are 3 types of scopes in ONESOURCE API <ul>\n  <li>\n    Product Scope - used to get access to Product APIs. There could be more than 1 product scope in a token request to access APIs. Example&colon; urn:tr:onesourcetax:auth:api:incometax\n  </li>\n  <li>\n    Account Scope - used to get access token for a switched account and not for the Home account the one the service account belongs to. Example&colon; urn:tr:onesourcetax:auth:account:46A\n  </li>\n  <li>\n    Client Scope - used with Client Manager to get access token to access product APIs for Client Manager clients. Example&colon;urn:tr:onesourcetax:auth:client:1234\n  </li>\n</ul>"
+                grant_type:
+                  type: string
+                  enum:
+                  - client_credentials
+                  - authorization_code
+                  description: OAuth2 grant type. Supported grant types are "client_credentials" and "authorization_code"
+                client_assertion_type:
+                  type: string
+                  default: urn:ietf:params:oauth:client-assertion-type:jwt-bearer
+                  description: Type of client assertion. This field is required when generating a token using client assertion.
+                client_assertion:
+                  type: string
+                  description: -> customer generated client assertion signed with private key associated with X.509 certificate. It is validated with the X.509 certificate of the service account. Used only client_credentials grant type.
+                client_secret:
+                  type: string
+                  description: Consumer Secret found in Developer portal. Used only in "authorization_code" grant type.
+                authcode:
+                  type: string
+                  description: Authorization code obtained by calling /authorize endpoint. Expires after 1 minute. Used only in "authorization_code" grant type.
+              required:
+              - client_id
+              - scopes
+              - grant_type
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                  token:
+                    type: string
+                    description: The Access Token you need to call APIs
+                  access_token:
+                    type: string
+                    description: The Access Token you need to call APIs
+                  token_type:
+                    type: string
+                  expires_in:
+                    type: string
+                  issued_at:
+                    type: string
+                  client_id:
+                    type: string
+        '400':
+          description: "<b>Bad Request</b> <ul>\n  <li>\n    Could not decode client_assertion, invalid client_assertion - The client_assertion field contains errors or was generated incorrectly.\n  </li>\n  <li> \n    urn:tr:onesource:auth:api scope is invalid or API product was not enabled - Api product scope is not enabled for the tenant or is invalid.\n  </li>\n  <li> \n    client_assertion is either empty or missing - The client_assertion field is either missing from request body or is empty.\n  </li>\n  <li> \n    The field client_id is either empty or missing - The client_id field is either missing from request body or is empty.\n  </li>\n  <li> \n    Invalid Client Id - The client_id value contains errors or does not exist.\n  </li>\n  <li>\n    client_assertion_type is either empty, missing or not set to urn:ietf:params:oauth:client-assertion-type:jwt-bearer - the client_assertion_type field is either missing from request body, empty or not set to urn:ietf:params:oauth:client-assertion-type:jwt-bearer.\n\
+            \  </li>\n  <li>\n    grant_type is either empty, missing or not set to authorization_code or client_credentials - the grant_type field is either missing from request body, empty or not set to authorization_code or client_credentials.\n  </li>\n  <li>\n    Invalid client_id - client_id value contains errors.\n  </li>\n  <li>\n    Minimum one urn:tr:onesource:auth:api scope is needed - request body has to contain minimum one api product scope.\n  </li>\n  <li>\n    'scopes' property is either empty or missing - the scopes field is either missing from request body or is empty.\n  </li>\n  <li>\n    authcode is empty or missing - The authcode field is either missing from request body or is empty.\n  </li>\n  <li>\n    The scopes are missing quotes - the scopes value is missing scopes\n  </li>\n  <li>\n    urn:tr:onesource:auth:account scope is invalid - Account you are trying to access either does not exist or is not connected to your app.\n  </li>\n  <li>\n    urn:tr:onesource:auth:client\
+            \ is invalid or has not been added to a service account - client does not exist in a tenant or has not been added to an app.\n  </li>\n  <li>\n    client_secret is either invalid, missing or empty - The client_secret field is either missing from request body, empty or contains errors\n  </li>\n  <li>\n    urn:tr:onesource:auth:api scope is invalid - Api product scope is not enabled for the tenant or is invalid.\n  </li>\n</ul>"
+        '401':
+          description: "<b>Unauthorized.</b>  <ul>\n  <li>\n    No client has been added to a service account - app has no clients added.\n  </li>\n  <li>\n    Client Assertion Expired - client assertion has expired, please generate new client assertion.\n  </li>\n  <li>\n    Requested scopes are not authorized for this application. - api product has not been added to the app but is enabled for a tenant.\n  </li>\n  <li>\n    Invalid Authorization Code - authcode field value is invalid or was not generated for the app.\n  </li>\n  <li>\n    Disabled ServiceAccount - app has been disabled.\n  </li>\n  <li>\n    Client manager is not enabled - client managaer is not enabled for a tenant where the app has been created.\n  </li>\n  <li>\n    Authorization Code Expired - authorization code has expired, please consider generating new authorization code.\n  </li>\n  <li>\n    The issuer does not match client_id - client assertion issuer does not match client_id in request body.\n  </li>\n  <li>\n\
+            \    client_id does not match client assertion subject - client assertion subject does not match client_id in request body.\n  </li>\n  <li>\n    API Product is not available for urn:tr:onesource:auth:client - Api product has not been enabled for a client in client manager.\n  </li>\n</ul>"
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  detail:
+                    type: string
+                  status:
+                    type: number
+                  instance:
+                    type: string
+                  api_request_id:
+                    type: string
+  /authorize:
+    get:
+      summary: Issues an authorization code, that can later be used in OAuth token generation.
+      description: This endpoint is used to get a code for OAuth2.0 Autorization Code grant. It redirects the user to the pre-registered login page. After a successful login by a ONESOURCE user it redirects the user to the callback url set for the calling application and an authorization code is passed as a query parameter. This aurhorization code is later used to call /token endpoint to obtain an access token. Authorization code expires after <b>1 minute</b>.
+      parameters:
+      - in: query
+        name: client_id
+        schema:
+          type: string
+        required: true
+        description: Consumer Key found in Developer Portal.
+      - in: query
+        name: response_type
+        schema:
+          type: string
+          enum:
+          - code
+        required: true
+        description: Constant value; indicating that you want an Authorization Code as response.
+      - in: query
+        name: state
+        schema:
+          type: string
+        required: false
+        description: Random string that can be used as  1. Session key or identifier that can be used to identify the user you want to persist data for;  2. CSRF protection mechanism, double check the value to ensure the response is legit.
+      - in: query
+        name: redirect_url
+        schema:
+          type: string
+        required: false
+        description: Url the user should be redirected back along with the Authorization Code after being authorized; if provided, it will be validated against the Callback URL that''s configured when creating an app in API Admin tile.
+      responses:
+        '302':
+          description: "<b>OK</b>  <ul>\n  <li>\n  Redirects user to the ONESOURCETAX login page. Browser will automatically handle 302 response and do the redirection, so what you will see as response should be 200 with the login page.\n  </li>\n</ul>  "
+        '400':
+          description: "<b>Bad Request</b> <ul>\n  <li>\n   client_id is missing - client_id parameter has not been added to the request url.\n  </li>\n  <li>\n    client_id contains spaces only - client_id parameter value contains spaces only.\n  </li>\n  <li>\n    Invalid client_id - client_id parameter value contains\n  </li>\n  <li>\n    Response type must be code - response_type parameter value must be code.\n  </li>\n</ul>"

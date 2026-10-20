@@ -1,0 +1,317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-obligation-search-response-schema.json",
+  "title": "ObligationSearchResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-calendar-global-content-management-api-openapi.yml#/components/schemas/ObligationSearchResponse",
+  "type": "object",
+  "properties": {
+    "_meta": {
+      "$ref": "#/$defs/Meta"
+    },
+    "items": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/ObligationResponse"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "ContentUpdates": {
+      "type": "object",
+      "properties": {
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "replacementObligations": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DynamicAttribute": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "EffectiveDate": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reference": {
+          "$ref": "#/$defs/EffectiveDateReference"
+        }
+      },
+      "additionalProperties": false
+    },
+    "EffectiveDateReference": {
+      "enum": [
+        "taxYearEndDate",
+        "taxYearStartDate"
+      ],
+      "type": "string"
+    },
+    "FrequencyType": {
+      "enum": [
+        "annual",
+        "monthly",
+        "quarterly",
+        "semiAnnual",
+        "fourMonthly",
+        "biMonthly",
+        "semiMonthly",
+        "nonStandard",
+        "biennial",
+        "weekly"
+      ],
+      "type": "string"
+    },
+    "JurisdictionResponse": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "Meta": {
+      "type": "object",
+      "properties": {
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ObligationCalculationRule": {
+      "type": "object",
+      "properties": {
+        "ruleId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int32"
+        },
+        "taxYearRange": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dataRequiredForCalculation": {
+          "$ref": "#/$defs/RequiredForCalculation"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ObligationResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The obligation record ID.",
+          "format": "int32"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The name of the obligation."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The description of the obligation."
+        },
+        "jurisdiction": {
+          "$ref": "#/$defs/JurisdictionResponse"
+        },
+        "domainType": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "The domain types associated with the obligation."
+        },
+        "taxType": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "The tax types associated with the obligation."
+        },
+        "deliverableType": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "The deliverable types associated with the obligation."
+        },
+        "obligationType": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "The obligation types associated with the obligation."
+        },
+        "taxedAs": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Taxed as values associated with the obligation."
+        },
+        "usReturnType": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "US return types associated to this obligation."
+        },
+        "form": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Forms associated to this obligation."
+        },
+        "effectiveFrom": {
+          "$ref": "#/$defs/EffectiveDate"
+        },
+        "effectiveTo": {
+          "$ref": "#/$defs/EffectiveDate"
+        },
+        "dynamicAttributes": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/DynamicAttribute"
+          },
+          "description": "Dynamic attributes applicable to the obligation."
+        },
+        "frequency": {
+          "$ref": "#/$defs/FrequencyType"
+        },
+        "contentUpdates": {
+          "$ref": "#/$defs/ContentUpdates"
+        },
+        "created": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "When this obligation was created, in UTC format.",
+          "format": "date-time"
+        },
+        "modified": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "When this obligation was last updated, in UTC format.",
+          "format": "date-time"
+        },
+        "calculationRule": {
+          "$ref": "#/$defs/ObligationCalculationRule"
+        },
+        "classicCalendarTemplate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The template of the matching obligation in Calendar Classic."
+        }
+      },
+      "additionalProperties": false
+    },
+    "RequiredForCalculation": {
+      "enum": [
+        "TaxId",
+        "IncorporationDate",
+        "QualificationDate",
+        "IssueDay"
+      ],
+      "type": "string"
+    }
+  }
+}

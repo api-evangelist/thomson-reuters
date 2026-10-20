@@ -1,0 +1,1930 @@
+# x-archived-from: thomson-reuters-onesource-e-invoicing-consolidated-apis-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: ONESOURCE E-Invoicing Consolidated APIs
+  description: RESTful APIs to manage e‑invoicing documents end‑to‑end and to discover company metadata used in document operations. External systems (ERPs, integration platforms, custom apps) can submit documents, search and retrieve document metadata, fetch payloads, apply operational actions, and record downstream processing outcomes, while also listing companies available to the authenticated user.
+  version: 1.8.0
+servers:
+- url: https://api-emea.onesourcetax.com/einvoicing/document/v1
+- url: https://api-emea.onesourcetax.com/einvoicing/company/v1
+x-tr-asset-insight-id: '208450'
+tags:
+- name: Company
+  description: Get Companies.
+- name: Document
+  description: Perform an action on a document.
+paths:
+  /documents/{id}/action:
+    post:
+      tags:
+      - Document
+      summary: Perform an action on a document.
+      description: Perform an action on a `Document`. Use this endpoint to handle documents in `Error` state.
+      parameters:
+      - name: id
+        in: path
+        description: Id of `Document`
+        required: true
+        schema:
+          type: string
+          example: 1f504527-9b0b-4ba2-a28d-08701d8829f0
+      requestBody:
+        description: The action to perform on the `Document`.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentAction'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          $ref: '#/components/responses/BadRequestActionApi'
+        '401':
+          $ref: '#/components/responses/UnauthorizedActionApi'
+        '403':
+          $ref: '#/components/responses/ForbiddenActionApi'
+        '404':
+          $ref: '#/components/responses/NotFoundActionApi'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorActionApi'
+  /companies:
+    get:
+      tags:
+      - Company
+      summary: Get companies.
+      description: Get all companies the calling user has access to. The companies are sorted in alphabetic order by company name.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InternalServerErrorCompany'
+  /datalists:
+    get:
+      tags:
+      - Company
+      summary: Get all datalists
+      description: Get all datalists for all companies the user has access to
+      parameters:
+      - name: companyId
+        in: query
+        required: true
+        description: The id of the sending company. An external company id can also be used if a previous setup has been made where the external id has been connected to the company.
+        example: 8839abe6-5277-4145-a44f-dcca99ac13e5
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response. If matching datalists found, return the list of datalists. Otherwise return an empty result list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /datalists/{id}/entries:
+    get:
+      tags:
+      - Company
+      summary: Get all entries of a datalist
+      parameters:
+      - name: id
+        in: path
+        description: Id of the datalist
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatalistEntry'
+        '401':
+          description: Authentication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden to access the requested resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+      - Company
+      summary: Replace a datalist's entries.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the datalist.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - payload
+              type: object
+              properties:
+                entries:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DatalistEntry'
+        required: true
+      responses:
+        '200':
+          description: Datalist entries successfully updated
+          content: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden to access the requested resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /documents/external-status:
+    post:
+      summary: Set external status on one or more documents.
+      tags:
+      - Document
+      description: 'Set external status on one or more documents.
+
+        '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - companyId
+              - externalStatuses
+              properties:
+                companyId:
+                  type: string
+                  description: Id of the company sending or receiving the document. For sent documents, the company id of the sender. For received document, the company id of the receiver.
+                externalStatuses:
+                  type: array
+                  items:
+                    required:
+                    - id
+                    properties:
+                      id:
+                        type: string
+                        description: The document ids to update the status for.
+                      status:
+                        type: string
+                        example: Failure
+                        description: "The external status to set. Available value are:\n\nAvailable values are:\n  * **Success** - Document has been successfully processed by the external system.\n  * **Failure** - Document has failed to be processed by the external system.\n\nIt's completely up to the external system to define the \"success\" and \"failure\" conditions"
+                      message:
+                        type: string
+                        description: A message related to the external status.
+                        example: Document could not be processed since it exceeds the maximum file size.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Document id.
+                    success:
+                      type: string
+                      description: Whether the operation was a success for the document id.
+                    error:
+                      type: string
+                      description: Error message, in case `success` is false.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /documents/{id}:
+    get:
+      tags:
+      - Document
+      summary: Get a Document.
+      description: Get a Document.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the `Document`.
+        required: true
+        schema:
+          type: string
+          example: ae9a667b-955a-4d3b-9bf2-d672c8432256
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /documents:
+    get:
+      tags:
+      - Document
+      summary: Get documents.
+      description: Get `Documents`.  Documents will be sorted by `modifiedTime` in descending order by default.
+      parameters:
+      - name: sendStatus
+        in: query
+        description: 'The send-status of a document. Available values are:
+
+          * **Done** - Documents that have been successfully delivered
+
+          * **Processing** - Documents that are being processed
+
+          * **Error** - Documents that have failed with some error
+
+          * **Cancelled** - Documents that have been cancelled
+
+
+          Received documents will always have the send-status `Done`.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Done
+      - name: companyId
+        in: query
+        description: 'Id of the company to get documents for. This parameter is required.
+
+
+          An external company id can also be used if a previous setup has been made where the external id has been connected to the company.'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 41a98840-16a3-47f1-90b4-b364c1c828ed
+      - name: direction
+        in: query
+        description: The direction of the document.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Sent
+          enum:
+          - Sent
+          - Received
+      - name: documentType
+        in: query
+        description: 'The document type of the document. Available document types are listed [here](https://pagero.github.io/partners/apis/document-types).
+
+
+          Currently, the following document types are supported:
+
+          * ApplicationResponse
+
+          * Invoice
+
+          * ItalianInvoiceReport
+
+          * TaxDataReport
+
+          * Order
+
+          * ReportNotification            '
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Invoice
+      - name: documentSubtype
+        in: query
+        description: The document subtype of the document. Available document subtypes are listed [here](https://pagero.github.io/partners/apis/document-types).
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Debit
+      - name: externalStatus
+        in: query
+        description: "Fetch only documents with this external status.\nAvailable values:\n  * **Success** - Document has been successfully processed by the external system.\n  * **Failure** - Document has failed to be processed by the external system."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: searchTerm
+        in: query
+        description: 'A generic search parameter that can be used to search on the following document values: document identifier, sender name, receiver name.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: INV454665
+      - name: createTimeFrom
+        in: query
+        description: Exclude documents created earlier than this date and time. Date and time should be expressed in ISO 8601 format.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+          example: '2024-09-27T08:30:00.000Z'
+      - name: createTimeTo
+        in: query
+        description: Exclude documents created later than this date and time. Date and time should be expressed in ISO 8601 format.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+          example: '2024-09-27T09:00:00.000Z'
+      - name: modifiedTimeFrom
+        in: query
+        description: Exclude documents modified earlier than this date and time. Date and time should be expressed in ISO 8601 format.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+          example: '2024-09-27T08:30:00.000Z'
+      - name: modifiedTimeTo
+        in: query
+        description: Exclude documents modified later than this date and time. Date and time should be expressed in ISO 8601 format.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+          example: '2024-09-27T09:00:00.000Z'
+      - name: pageIndex
+        in: query
+        description: The index of the page to fetch. The first page has index 0.
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: pageSize
+        in: query
+        description: The page size. This controls the maximum number of items in the collection resource response. In combination with `pageIndex`, it also affects how many entries to skip before collecting the result set.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          minimum: 0
+          type: integer
+          default: 10
+      - name: sort
+        in: query
+        description: 'Property to sort on. The default sorting order is ascending. To sort in descending order, prepend the property with a minus (''-'') sign. Sortable properties are:
+
+          * createTime
+
+          * modifiedTime'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        examples:
+          ascending:
+            summary: Sort on property `createTime` in ascending order.
+            value: createTime
+          descending:
+            summary: Sort on property `modifiedTime` in descending order.
+            value: -modifiedTime
+      - name: senderReference
+        in: query
+        description: The sender reference, as provided by the sender upon sending the document.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+      - Document
+      summary: Send a document.
+      description: Send a document. The request should be a multipart request containing the actual document data along with other properties. The `Content-Type`  of the request should be `multipart/form-data`.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - documentType
+              - payload
+              - senderReference
+              - sendingCompanyId
+              - systemName
+              - systemType
+              type: object
+              properties:
+                payload:
+                  type: string
+                  description: The document to send.
+                  format: binary
+                documentType:
+                  type: string
+                  description: 'The document type of the document. Available document types are listed [here](https://pagero.github.io/partners/apis/document-types).
+
+
+                    Currently, the following document types are supported:
+
+                    * ApplicationResponse
+
+                    * Invoice
+
+                    * ItalianInvoiceReport
+
+                    * TaxDataReport
+
+                    * Order
+
+                    * ReportNotification            '
+                  enum:
+                  - ApplicationResponse
+                  - Invoice
+                  - ItalianInvoiceReport
+                  - TaxDataReport
+                  - Order
+                  - ReportNotification
+                  example: Invoice
+                senderReference:
+                  type: string
+                  description: The sender's document reference. Must be unique for the sending company. Sending a document with the same `senderReference` twice will result in a `409 Conflict` error.
+                  example: 305c099a-d9ee-4723-9808-732127393085
+                sendingCompanyId:
+                  type: string
+                  description: The id of the sending company. An external company id can also be used if a previous setup has been made where the external id has been connected to the company.
+                  example: 8839abe6-5277-4145-a44f-dcca99ac13e5
+                documentIdentifier:
+                  type: string
+                  description: The document identifier, such as invoice number or order number. If provided, it will make the document searchable on document indentifier, even if the document can not be processed and ends up in `Error` state.
+                  example: INV4335465
+                systemName:
+                  $ref: '#/components/schemas/SystemName'
+                systemType:
+                  $ref: '#/components/schemas/SystemType'
+                relationshipType:
+                  type: string
+                  description: "The type of relationship to the receiver, as provided by the sender. \n\nAvailable values:\n  * **B2B** - Business to business\n  * **B2C** - Business to consumer\n  * **B2G** - Business to government"
+                  example: B2B
+        required: true
+      responses:
+        '201':
+          description: Document successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The id of the sent document. Can be used to reference  the document in other API requests.
+                    example: 21df3bfe-3a58-4619-a114-29f6663df748
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /documents/{id}/presentation:
+    get:
+      tags:
+      - Document
+      summary: Get document presentation.
+      description: Get presentation for a `Document`, if available. A presentation will always be available if document `status`is `Done`. It may also be available for documents with `status` `Error` depending on what the error is.
+      parameters:
+      - name: id
+        in: path
+        description: Id of `Document`
+        required: true
+        schema:
+          type: string
+          example: 56ce666b-5409-4a8d-813d-5882e90276a5
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: byte
+            image/tiff:
+              schema:
+                type: string
+                format: byte
+            application/octet-stream:
+              schema:
+                type: string
+                format: byte
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /documents/{id}/source-document:
+    get:
+      tags:
+      - Document
+      summary: Get source document.
+      description: Get source document for `Document`. This should always be available.
+      parameters:
+      - name: id
+        in: path
+        description: Id of `Document`
+        required: true
+        schema:
+          type: string
+          example: 0f57671d-5487-40be-8bfc-2a6ec62e8d53
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/xml:
+              schema:
+                type: string
+                format: byte
+            text/plain:
+              schema:
+                type: string
+                format: byte
+            application/pdf:
+              schema:
+                type: string
+                format: byte
+            application/json:
+              schema:
+                type: string
+                format: byte
+            application/octet-stream:
+              schema:
+                type: string
+                format: byte
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /documents/{id}/target-document:
+    get:
+      tags:
+      - Document
+      summary: Get target document.
+      description: Get target document for `Document`, if available. A target document will only be available if document `status` is `Done`.
+      parameters:
+      - name: id
+        in: path
+        description: Id of `Document`
+        required: true
+        schema:
+          type: string
+          example: d6912b66-5f21-4a73-ac76-95cb3c8a2a81
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/xml:
+              schema:
+                type: string
+                format: byte
+            text/plain:
+              schema:
+                type: string
+                format: byte
+            application/pdf:
+              schema:
+                type: string
+                format: byte
+            application/json:
+              schema:
+                type: string
+                format: byte
+            application/octet-stream:
+              schema:
+                type: string
+                format: byte
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        country:
+          type: string
+          description: Country
+          example: United States
+        countryCode:
+          type: string
+          description: ISO 3166 alpha-2 two-letter country code
+          example: US
+        postCode:
+          type: string
+          description: Post code / Zip code
+          example: '20854'
+        street:
+          type: string
+          description: Street
+          example: 11325 7 Locks Rd
+        street2:
+          type: string
+          description: Additional street
+          example: Apt 202
+        town:
+          type: string
+          description: Town
+          example: Potomac
+        postBox:
+          type: string
+          description: Post box
+          example: '7202'
+        province:
+          type: string
+          description: Province / Region
+          example: Maryland
+      description: Address
+    BinaryData:
+      type: string
+      format: binary
+    BusinessStatus:
+      type: object
+      description: The business level status of a document. Currently this is only available for invoices. The business status of the invoice will be decided by related application responses.
+      required:
+      - status
+      - createTime
+      properties:
+        status:
+          type: string
+          description: 'The current business status of the document. Available values:
+
+            * **InProcess**
+
+            * **UnderQuery**
+
+            * **OnHold**
+
+            * **ConditionallyAccepted**
+
+            * **Accepted**
+
+            * **Rejected**
+
+            * **ResponseExpected**
+
+            * **PaymentApproved**
+
+            * **PaymentInitiated**
+
+            * **PaymentRejected**
+
+            * **Paid**
+
+
+            Please note that more statuses may be added in the future.'
+          example: Accepted
+        createTime:
+          type: string
+          format: date-time
+          description: Creation time of the business status expressed in ISO 8601 format. This is primarily taken from the related document where the business status is communicated if a timestamp exists there. If not, it will be the time when the related document was processed.
+          example: '2024-09-26T09:45:54Z'
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              messageCode:
+                type: string
+                description: Code specified by the counterpart to further specify the business status.
+                example: TBD
+              message:
+                type: string
+                description: Message from the counterpart.
+                example: TBD
+    ClearanceStatus:
+      type: object
+      description: The clearance status of a document, if available.
+      required:
+      - status
+      - createTime
+      properties:
+        status:
+          type: string
+          description: 'The current clearance status of the document. Available values:
+
+
+            * **Approved**
+
+            * **ApprovedWithWarnings**
+
+            * **DeadlinePassed**
+
+            * **DeliveryImpossible**
+
+            * **DeliverySuccess**
+
+            * **DeliveryFailure**
+
+            * **Rejected**
+
+            * **ValidationFailure**
+
+
+            Please note that more statuses may be added in the future.'
+          example: TBD
+        createTime:
+          type: string
+          format: date-time
+          description: Creation time of the clearance status expressed in ISO 8601 format.
+          example: '2024-09-26T09:45:54Z'
+        clearanceId:
+          type: string
+          description: The clearance id, generated by the clearance authority
+          example: c0875cc3-0988-4f7d-a61f-0b179c5d24b1
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              messageCode:
+                type: string
+                description: Code specified by the counterpart to further specify the clearance status.
+                example: TBD
+              message:
+                type: string
+                description: Message from the counterpart.
+                example: TBD
+    CollectionMetadata:
+      type: object
+      properties:
+        currentPageIndex:
+          type: number
+          description: The number of pages to skip before starting to collect the result set.
+          example: 0
+        itemsPerPage:
+          type: number
+          description: No. of records which user wants to fetch in single api call. The default value is 10
+          example: 10
+        totalItems:
+          type: number
+          description: The total number of items in the collection.
+          example: 14
+        totalPages:
+          type: number
+          description: The total number of pages in the collection.
+          example: 2
+    CollectionMetadata_GetDocuments:
+      required:
+      - pageIndex
+      - pageSize
+      - total
+      type: object
+      properties:
+        pageIndex:
+          minimum: 1
+          type: integer
+          description: The index of the fetched page. The first page has index 0.
+          example: 1
+        pageSize:
+          minimum: 0
+          type: integer
+          description: The page size.
+          example: 10
+        total:
+          minimum: 0
+          type: integer
+          description: The total number of items in the collection.
+          example: 826
+    Contact:
+      type: object
+      properties:
+        phone:
+          type: string
+          description: Phone number
+          example: 831-999-7300
+        email:
+          type: string
+          description: Email address
+          example: john.doe@acme.com
+        fax:
+          type: string
+          description: Fax number
+          example: 1 (929) 207-0142
+      description: Contact
+    Document:
+      required:
+      - createTime
+      - direction
+      - distribution
+      - documentType
+      - id
+      - isFetched
+      - modifiedTime
+      - sendStatus
+      type: object
+      properties:
+        id:
+          type: string
+          description: The document id
+          example: 6168900e-6971-4190-9ef3-edb7203bda5d
+        sendStatus:
+          type: string
+          description: 'The send-status of a document. Available values are:
+
+            * **Done** - Documents that have been successfully delivered
+
+            * **Processing** - Documents that are being processed
+
+            * **Error** - Documents that have failed with some error
+
+            * **Canceled** - Documents that have been cancelled
+
+
+            Received documents will always have the send-status `Done`.'
+          example: Done
+        documentType:
+          type: string
+          description: The document type. Available document types are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Invoice
+        documentSubtype:
+          type: string
+          description: Document subtype. Available document subtypes are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Debit
+        externalStatus:
+          type: string
+          description: "External status. This is set by the client through the `POST /documents/external-status` endpoint.\n\nAvailable values:\n  * **Success** - Document has been successfully processed by the external system.\n  * **Failure** - Document has failed to be processed by the external system."
+          example: Success
+        externalStatusMessage:
+          type: string
+          description: A message related to the `externalStatus`. Can be used to provide an error message if `externalStatus` is `Failure`.
+          example: Document could not be processed since it exceeds the maximum file size.
+        createTime:
+          type: string
+          description: Creation time of the document in the system, expressed in ISO 8601 format.
+          format: date-time
+          example: '2024-09-25T12:14:06Z'
+        modifiedTime:
+          type: string
+          description: Modified time of the document in the system, expressed in ISO 8601 format.
+          format: date-time
+          example: '2024-09-25T12:14:06Z'
+        companyId:
+          type: string
+          description: Id of the company sending or receiving the document. For sent documents, the company id of the sender. For received document, the company id of the receiver.
+          example: 350e20c7-c804-4991-a41e-a1c1e21ecd85
+        senderReference:
+          type: string
+          description: The sender reference, as provided by the sender upon sending the document.
+          example: 305c099a-d9ee-4723-9808-732127393085
+        documentInfo:
+          $ref: '#/components/schemas/DocumentInfo'
+        documentReferences:
+          type: array
+          description: Document references. Includes references to all documents related to this document.
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        businessStatus:
+          $ref: '#/components/schemas/BusinessStatus'
+        businessStatusHistory:
+          type: array
+          description: Business status history.
+          items:
+            $ref: '#/components/schemas/BusinessStatus'
+        clearanceStatus:
+          $ref: '#/components/schemas/ClearanceStatus'
+        clearanceStatusHistory:
+          type: array
+          description: Clearance status history
+          items:
+            $ref: '#/components/schemas/ClearanceStatus'
+        errorMessage:
+          type: string
+          description: If `sendStatus` is `Error`, this property contains an error message.
+          example: The document payload is invalid.
+    Document_GetDocuments:
+      required:
+      - createTime
+      - direction
+      - distribution
+      - documentType
+      - id
+      - isFetched
+      - modifiedTime
+      - sendStatus
+      type: object
+      properties:
+        id:
+          type: string
+          description: The document id
+          example: 6168900e-6971-4190-9ef3-edb7203bda5d
+        sendStatus:
+          type: string
+          description: 'The send-status of a document. Available values are:
+
+            * **Done** - Documents that have been successfully delivered
+
+            * **Processing** - Documents that are being processed
+
+            * **Error** - Documents that have failed with some error
+
+            * **Cancelled** - Documents that have been cancelled
+
+
+            Received documents will always have the send-status `Done`.'
+          example: Done
+        linkingDocumentId:
+          type: string
+          description: When creating a document which is a response to a received document, this id can be used inside the response document to reference the received document. This will make the response document become enriched with data from the received document. The typical example is receiving an invoice and responding with an application response and this is also the only scenario which is supported at the moment. In this case, this id should be included in the application response as a reference to the invoice in the appropriate application response element.
+        documentType:
+          type: string
+          description: The document type. Available document types are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Invoice
+        documentSubtype:
+          type: string
+          description: Document subtype. Available document subtypes are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Debit
+        direction:
+          type: string
+          description: The direction of the document.
+          enum:
+          - Sent
+          - Received
+        relationshipType:
+          type: string
+          description: 'The type of relationship to the receiver. Set to keep track of whether the document is a B2B, B2C or B2G document. Available values:
+
+
+            * **B2B** - Business to business
+
+            * **B2C** - Business to consumer
+
+            * **B2G** - Business to government'
+          example: B2B
+        transactionType:
+          type: string
+          description: 'The transaction type. AR or AP. Available values:
+
+
+            * **AR** - Accounts Receivable
+
+            * **AP** - Accounts Payable'
+          example: AR
+        externalStatus:
+          type: string
+          description: "External status. This is set by the client through the `POST /documents/external-status` endpoint.\n\nAvailable values:\n  * **Success** - Document has been successfully processed by the external system.\n  * **Failure** - Document has failed to be processed by the external system.  "
+          example: Success
+        externalStatusMessage:
+          type: string
+          description: A message related to the `externalStatus`. Can be used to provide an error message if `externalStatus` is `Failure`.
+          example: Document could not be processed since it exceeds the maximum file size.
+        createTime:
+          type: string
+          description: Creation time of the document in the system, expressed in ISO 8601 format.
+          format: date-time
+          example: '2024-09-25T12:14:06.000Z'
+        modifiedTime:
+          type: string
+          description: Modified time of the document in the system, expressed in ISO 8601 format.
+          format: date-time
+          example: '2024-09-25T12:14:06.000Z'
+        companyId:
+          type: string
+          description: Id of the company sending or receiving the document. For sent documents, the company id of the sender. For received document, the company id of the receiver.
+          example: 350e20c7-c804-4991-a41e-a1c1e21ecd85
+        senderReference:
+          type: string
+          description: The sender reference, as provided by the sender upon sending the document.
+          example: 305c099a-d9ee-4723-9808-732127393085
+        documentInfo:
+          $ref: '#/components/schemas/DocumentInfo'
+        documentReferences:
+          type: array
+          description: Document references. Includes references to all documents related to this document.
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        businessStatus:
+          $ref: '#/components/schemas/BusinessStatus'
+        businessStatusHistory:
+          type: array
+          description: Business status history.
+          items:
+            $ref: '#/components/schemas/BusinessStatus'
+        clearanceStatus:
+          $ref: '#/components/schemas/ClearanceStatus'
+        clearanceStatusHistory:
+          type: array
+          description: Clearance status history
+          items:
+            $ref: '#/components/schemas/ClearanceStatus'
+        reportingStatus:
+          $ref: '#/components/schemas/ReportingStatus'
+        errorMessage:
+          type: string
+          description: If `sendStatus` is `Error`, this property contains an error message.
+          example: The document payload is invalid.
+        selfBilled:
+          type: boolean
+          description: True if the document is a self-billed invoice. This means that the invoice was issued by the buyer, on behalf of the seller.
+        systemName:
+          $ref: '#/components/schemas/SystemName'
+        systemType:
+          $ref: '#/components/schemas/SystemType'
+        sendingServiceProviderId:
+          type: string
+          description: Sending service provider id.
+          example: 361ef745-d750-490b-909f-662225fa35b2
+        sendingServiceProviderName:
+          type: string
+          description: sending service provider name.
+          example: Peppol
+        receivingServiceProviderId:
+          type: string
+          description: Receiving service provider id.
+          example: 620915dc-8c62-47cd-8a9f-c8026fa076dd
+        receivingServiceProviderName:
+          type: string
+          description: Receiving service provider name.
+          example: Peppol
+    Document_Presentation:
+      required:
+      - createTime
+      - distribution
+      - documentType
+      - id
+      - isFetched
+      - modifiedTime
+      - sendStatus
+      type: object
+      properties:
+        id:
+          type: string
+          description: The document id
+          example: 6168900e-6971-4190-9ef3-edb7203bda5d
+        sendStatus:
+          type: string
+          description: 'The send-status of a document. Available values are:
+
+            * **Done** - Documents that have been successfully delivered
+
+            * **Processing** - Documents that are being processed
+
+            * **Error** - Documents that have failed with some error
+
+            * **Canceled** - Documents that have been cancelled
+
+
+            Received documents will always have the send-status `Done`.'
+          example: Done
+        linkingDocumentId:
+          type: string
+          description: When creating a document which is a response to a received document, this id can be used inside the response document to reference the received document. This will make the response document become enriched with data from the received document. The typical example is receiving an invoice and responding with an application response and this is also the only scenario which is supported at the moment. In this case, this id should be included in the application response as a reference to the invoice in the appropriate application response element.
+        direction:
+          type: string
+          description: "It describes the direction of the document\n  * `Sent` - To view all the transaction which is sent by external system to OEI\n  * `Received` - To view all the transaction which is sent by OEI to ERP"
+          example: Sent
+        documentType:
+          type: string
+          description: The document type. Available document types are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Invoice
+        documentSubtype:
+          type: string
+          description: Document subtype. Available document subtypes are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Debit
+        externalStatus:
+          type: string
+          description: "External status. This is set by the client through the `POST /documents/external-status` endpoint.\n\nAvailable values:\n  * **Success** - Document has been successfully processed by the external system.\n  * **Failure** - Document has failed to be processed by the external system."
+          example: Success
+        externalStatusMessage:
+          type: string
+          description: A message related to the `externalStatus`. Can be used to provide an error message if `externalStatus` is `Failure`.
+          example: Document could not be processed since it exceeds the maximum file size.
+        createTime:
+          type: string
+          description: Creation time of the document in the system, expressed in ISO 8601 format.
+          format: date-time
+          example: '2024-09-25T12:14:06Z'
+        modifiedTime:
+          type: string
+          description: Modified time of the document in the system, expressed in ISO 8601 format.
+          format: date-time
+          example: '2024-09-25T12:14:06Z'
+        companyId:
+          type: string
+          description: Id of the company sending or receiving the document. For sent documents, the company id of the sender. For received document, the company id of the receiver.
+          example: 350e20c7-c804-4991-a41e-a1c1e21ecd85
+        senderReference:
+          type: string
+          description: The sender reference, as provided by the sender upon sending the document.
+          example: 305c099a-d9ee-4723-9808-732127393085
+        documentInfo:
+          $ref: '#/components/schemas/DocumentInfo'
+        documentReferences:
+          type: array
+          description: Document references. Includes references to all documents related to this document.
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        businessStatus:
+          $ref: '#/components/schemas/BusinessStatus'
+        businessStatusHistory:
+          type: array
+          description: Business status history.
+          items:
+            $ref: '#/components/schemas/BusinessStatus'
+        clearanceStatus:
+          $ref: '#/components/schemas/ClearanceStatus'
+        clearanceStatusHistory:
+          type: array
+          description: Clearance status history
+          items:
+            $ref: '#/components/schemas/ClearanceStatus'
+        errorMessage:
+          type: string
+          description: If `sendStatus` is `Error`, this property contains an error message.
+          example: The document payload is invalid.
+        selfBilled:
+          type: boolean
+          description: True if the document is a self-billed invoice. This means that the invoice was issued by the buyer, on behalf of the seller.
+    DocumentAction:
+      required:
+      - action
+      type: object
+      properties:
+        action:
+          type: string
+          description: 'The action to take on the `Document`. Available values:
+
+            * **Restart** - Restart the document
+
+            * **Cancel** - Cancel the document'
+          example: Cancel
+    DocumentActionRequest:
+      required:
+      - companyId
+      - actionEntries
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: Id of the company which owns the documents in this request. All document ids in the request must belong to documents owned by this company.
+          example: 6efc3db7-6c76-41b1-a411-a2468a55fc2b
+        actionEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentAction1'
+    DocumentAction1:
+      required:
+      - action
+      type: object
+      properties:
+        action:
+          type: string
+          description: 'The action to take on the `Document`. Available values:
+
+            * **Restart** - Restart the document
+
+            * **Cancel** - Cancel the document'
+          example: Cancel
+        message:
+          type: string
+          description: 'A message describing the reason for takong the action.
+
+            Required when performing an action on a document with documentType `TaxDataReport`.'
+          example: Cancelled because of invalid file structure.
+        id:
+          type: string
+          example: 620915dc-8c62-47cd-8a9f-c8026fa076dd
+        senderReference:
+          type: string
+          description: The sender reference, as provided by the sender upon sending the document.
+          example: 305c099a-d9ee-4723-9808-732127393085
+    DocumentAmounts:
+      type: object
+      description: Document amounts
+      properties:
+        netAmount:
+          type: string
+          description: Net amount
+          format: decimal
+          example: '200.00'
+        vatAmount:
+          type: string
+          description: VAT amount
+          format: decimal
+          example: '50.00'
+        totalAmount:
+          type: string
+          description: Total amount
+          format: decimal
+          example: '250.00'
+        currency:
+          type: string
+          description: Currency as an ISO 4217 three-letter code.
+          example: EUR
+    DocumentInfo:
+      type: object
+      description: Document metadata, such as information about sender, receiver, dates and amounts.
+      properties:
+        documentIdentifier:
+          type: string
+          description: Document identifier, for instance invoice number or order number.
+          example: INV384793
+        issueDate:
+          type: string
+          description: Issue date expressed in ISO 8601 format (yyyy-mm-dd)
+          format: date
+          example: '2024-09-26'
+        dueDate:
+          type: string
+          description: Due date expressed in ISO 8601 format (yyyy-mm-dd)
+          format: date
+          example: '2024-10-26'
+        amounts:
+          $ref: '#/components/schemas/DocumentAmounts'
+        senderParty:
+          $ref: '#/components/schemas/Party'
+        receiverParty:
+          $ref: '#/components/schemas/Party'
+    DocumentInfo_GetDocuments:
+      type: object
+      properties:
+        documentIdentifier:
+          type: string
+          description: Document identifier, for instance invoice number or order number.
+          example: INV384793
+        issueDate:
+          type: string
+          description: Issue date expressed in ISO 8601 format (yyyy-mm-dd)
+          format: date
+          example: '2024-09-26T00:00:00.000Z'
+        dueDate:
+          type: string
+          description: Due date expressed in ISO 8601 format (yyyy-mm-dd)
+          format: date
+          example: '2024-10-26T00:00:00.000Z'
+        amounts:
+          $ref: '#/components/schemas/DocumentAmounts'
+        senderParty:
+          $ref: '#/components/schemas/Party'
+        receiverParty:
+          $ref: '#/components/schemas/Party'
+        taxDataReportInfo:
+          $ref: '#/components/schemas/TaxDataReportInfo'
+      description: Document metadata, such as information about sender, receiver, dates and amounts.
+    DocumentReference:
+      type: object
+      description: Document reference
+      required:
+      - direction
+      - documentId
+      - documentType
+      properties:
+        documentId:
+          type: string
+          description: Id of the referenced document
+          example: 4911b83e-be25-4a17-99ec-1aef7079c5f5
+        documentType:
+          type: string
+          description: The document type. Available document types are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Order
+        documentSubType:
+          type: string
+          description: Document subtype. Available document subtypes are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Purchase
+        documentIdentifier:
+          type: string
+          description: Document identifier
+          example: AB4565756
+        direction:
+          type: string
+          description: Whether the referenced document was sent or received
+          enum:
+          - Sent
+          - Received
+    DocumentReference_GetDocuments:
+      required:
+      - direction
+      - documentId
+      - documentType
+      type: object
+      properties:
+        documentId:
+          type: string
+          description: Id of the referenced document
+          example: 4911b83e-be25-4a17-99ec-1aef7079c5f5
+        documentType:
+          type: string
+          description: The document type. Available document types are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Order
+        documentSubType:
+          type: string
+          description: Document subtype. Available document subtypes are listed [here](https://pagero.github.io/partners/apis/document-types).
+          example: Purchase
+        documentIdentifier:
+          type: string
+          description: Document identifier
+          example: AB4565756
+        direction:
+          type: string
+          description: The direction of the document.
+          enum:
+          - Sent
+          - Received
+      description: Document reference
+    Id:
+      type: object
+      required:
+      - idType
+      - value
+      properties:
+        idType:
+          type: string
+          description: 'Id type. Available values are:
+
+            * **GLN** - GLN number. Also known as EAN.
+
+            * **IBAN** - IBAN number
+
+            * **ORGNO** - An organization number
+
+            * **VATNO** - A VAT number
+
+            * **OTHER** - All ids that do not fit into any other id type'
+          example: ORGNO
+        value:
+          type: string
+          description: Id value
+          example: 5565814695
+    ExternalStatusRequest:
+      required:
+      - companyId
+      - entries
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: Id of the company which owns the documents in this request. All document ids in the request must belong to documents owned by this company.
+          example: 6efc3db7-6c76-41b1-a411-a2468a55fc2b
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalStatusRequest_entries'
+    Party:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        name:
+          type: string
+          description: Name
+          example: Acme Inc.
+        department:
+          type: string
+          description: Department
+          example: Accounting
+        unitNumber:
+          type: string
+          description: Unit number
+          example: '497654'
+        contact:
+          $ref: '#/components/schemas/Contact'
+        personalContact:
+          $ref: '#/components/schemas/PersonalContact'
+        ids:
+          type: array
+          description: Ids, like organisation number, VAT number or GN number.
+          items:
+            $ref: '#/components/schemas/Id'
+        erpId:
+          type: string
+          description: Identifier in an ERP system, typically a customer or supplier number.
+          example: '89543695'
+    PersonalContact:
+      allOf:
+      - type: object
+        properties:
+          name:
+            type: string
+            description: Name
+            example: John Doe
+      - $ref: '#/components/schemas/Contact'
+      description: Personal contact
+    ReportingStatus:
+      required:
+      - createTime
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: 'The reporting status. Available values are:
+
+            * **Approved** - The tax data report has been approved by the authority.
+
+            * **Rejected** - The tax data report has been rejected by the authority.'
+          example: Approved
+        clearanceId:
+          type: string
+          description: The id provided by the clearance authority
+          example: c0875cc3-0988-4f7d-a61f-0b179c5d24b1
+        message:
+          type: string
+          description: A message from the authority
+          example: The report was rejected because it was formatted incorrectly.
+        createTime:
+          type: string
+          description: Creation time of the report status expressed in ISO 8601 format.
+          example: '2024-09-27T09:00:00.000Z'
+      description: The reporting status of the document.
+    SystemName:
+      type: string
+      description: The name of the specific system instance from which the sent document originates.
+      example: SAP_Production
+    SystemType:
+      type: string
+      description: 'The system from which the sent document originates. Must have one of the following values:
+
+        * Oracle
+
+        * SAP
+
+        * SAP Ariba
+
+        * Other'
+      example: Oracle
+    TaxDataReportInfo:
+      type: object
+      properties:
+        taxDataReportType:
+          type: string
+          description: "Tax Data Report type. Possible values:\n  * ReceiptTransaction\n  * Payment\n  * Invoice"
+          example: ReceiptTransaction
+      description: Information specific to documents with document type `TaxDataReport`.
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          description: unique ID generated by OEI for each company
+        name:
+          type: string
+          description: The company name
+        department:
+          type: string
+          description: The department
+        address:
+          $ref: '#/components/schemas/CompanyAddress'
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyId'
+        contact:
+          $ref: '#/components/schemas/ContactInformation'
+        customerNumber:
+          type: string
+    CompanyId:
+      type: object
+      properties:
+        idType:
+          type: string
+          description: Type of id
+        value:
+          type: string
+          description: The id value
+    ContactInformation:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The company's email address
+        phone:
+          type: string
+          description: The company's phone number
+        fax:
+          type: string
+          description: The company's fax number
+    CompanyAddress:
+      type: object
+      properties:
+        street:
+          type: string
+          description: Street address
+        postBox:
+          type: string
+          description: Post box
+        postCode:
+          type: string
+          description: Post code
+        town:
+          type: string
+          description: Town
+        province:
+          type: string
+          description: Province
+        countryCode:
+          type: string
+          description: Country code in ISO 3366-1 2-letter format
+    UnAuthorizedErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: "Error code. Possible values:\n UNAUTHORIZED: The authorization code is not active\n"
+          enum:
+          - UNAUTHORIZED
+        description:
+          type: string
+          description: The translated errormessage.
+        technicalDescription:
+          type: string
+          description: A more detailed description of the error in English.
+    InternalServerErrorCompany:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: "Error code. Possible values:\n INTERNAL_SERVER_ERROR: Unknown error\n"
+          enum:
+          - INTERNAL_SERVER_ERROR
+        description:
+          type: string
+          description: The translated errormessage.
+        technicalDescription:
+          type: string
+          description: A more detailed description of the error in English.
+    documentResponse:
+      type: object
+      properties:
+        sendStatus:
+          type: string
+          example: Error
+        descriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/description'
+    description:
+      type: string
+      example: error message
+    inline_response_200:
+      required:
+      - items
+      - meta
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/CollectionMetadata_GetDocuments'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document_GetDocuments'
+    documents_body:
+      required:
+      - documentType
+      - payload
+      - senderReference
+      - sendingCompanyId
+      - systemName
+      - systemType
+      type: object
+      properties:
+        payload:
+          type: string
+          description: The document to send.
+          format: binary
+        documentType:
+          type: string
+          description: 'The document type of the sent document. Available document types are listed [here](https://pagero.github.io/partners/apis/document-types).
+
+            Currently, the following document types are supported: * ApplicationResponse * Invoice * ItalianInvoiceReport * TaxDataReport * Order'
+          example: Invoice
+        senderReference:
+          type: string
+          description: The sender's document reference. Must be unique for the sending company. Sending a document with the same `senderReference` twice will result in a `409 Conflict` error.
+          example: 305c099a-d9ee-4723-9808-732127393085
+        sendingCompanyId:
+          type: string
+          description: The id of the sending company. An external company id can also be used if a previous setup has been made where the external id has been connected to the company.
+          example: 8839abe6-5277-4145-a44f-dcca99ac13e5
+        systemName:
+          $ref: '#/components/schemas/SystemName'
+        systemType:
+          $ref: '#/components/schemas/SystemType'
+        documentIdentifier:
+          type: string
+          description: The document identifier, such as invoice number or order number. If provided, it will make the document searchable on document indentifier, even if the document can not be processed and ends up in `Error` state.
+          example: INV4335465
+        relationshipType:
+          type: string
+          description: "The type of relationship to the receiver, as provided by the sender. \n\nAvailable values:\n  * **B2B** - Business to business\n  * **B2C** - Business to consumer\n  * **B2G** - Business to government"
+          example: B2B
+    inline_response_201:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the sent document. Can be used to reference  the document in other API requests.
+          example: 21df3bfe-3a58-4619-a114-29f6663df748
+    inline_response_200_1:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Document id.
+        success:
+          type: string
+          description: Whether the operation was a success for the document id.
+        error:
+          type: string
+          description: Error message, in case `success` is false.
+    BusinessStatus_messages:
+      type: object
+      properties:
+        messageCode:
+          type: string
+          description: Code specified by the counterpart to further specify the business status.
+          example: TBD
+        message:
+          type: string
+          description: Message from the counterpart.
+          example: TBD
+    ClearanceStatus_messages:
+      type: object
+      properties:
+        messageCode:
+          type: string
+          description: Code specified by the counterpart to further specify the clearance status.
+          example: TBD
+        message:
+          type: string
+          description: Message from the counterpart.
+          example: TBD
+    ExternalStatusRequest_entries:
+      required:
+      - id
+      - status
+      type: object
+      properties:
+        id:
+          type: string
+          description: The document id to update the status for.
+          example: 72f912ed-786d-435b-a7d5-f497997b1999
+        status:
+          type: string
+          description: "The external status to set. Available value are:\n\nAvailable values are:\n  * **Success** - Document has been successfully processed by the external system.\n  * **Failure** - Document has failed to be processed by the external system.\n        \nIt's completely up to the external system to define the \"success\" and \"failure\" conditions"
+          example: Failure
+        message:
+          type: string
+          description: A message related to the external status.
+          example: Document could not be processed since it exceeds the maximum file size.
+    DocumentResponse:
+      type: object
+      properties:
+        descriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Description'
+    Description:
+      type: string
+      example: error message
+    DataList:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the datalist
+          readOnly: true
+        name:
+          type: string
+          description: Name of datalist
+        description:
+          type: string
+          description: Description of datalist
+        companyId:
+          type: string
+          description: Id of the company that owns the datalist
+        systemName:
+          type: string
+          description: Name of the system that owns the datalist
+    DatalistEntry:
+      type: object
+      required:
+      - value
+      properties:
+        key:
+          type: string
+          description: Key of the entry
+        value:
+          type: string
+          description: Value of the entry
+    Error:
+      type: object
+      properties:
+        descriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Description'
+    CreateDatalistRes:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the created datalist
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentResponse'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentResponse'
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentResponse'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentResponse'
+    BadRequestActionApi:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'
+    UnauthorizedActionApi:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'
+    ForbiddenActionApi:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'
+    NotFoundActionApi:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'
+    ConflictActionApi:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'
+    InternalServerErrorActionApi:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/documentResponse'

@@ -1,0 +1,158 @@
+# x-archived-from: thomson-reuters-predictive-mapping-service-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Predictive Mapping service
+  description: An API that help predict the Financial hierarchy classification from an account name
+  version: '1.0'
+servers:
+- url: https://api.onesourcetax.com/data-intelligence/financial-hierarchies
+security:
+- bearerAuth: []
+tags:
+- name: Predictive Financial Mapping API
+  description: API for predicting financial hierarchy
+paths:
+  /predict-mapping/v1/:
+    post:
+      tags:
+      - Predictive Financial Mapping API
+      summary: Predict financial hierarchy mappings
+      description: Use this operation to request financial hierarchy predictions
+      operationId: createFinancialHierarchyPrediction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictiveMappingRequest'
+      responses:
+        '200':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PredictiveMappingResponseFinancialHierarchyDto'
+  /predict-mapping/v1/feedback:
+    post:
+      tags:
+      - Predictive Financial Mapping API
+      summary: Give feedback on mapping predictions
+      description: 'Use this operation to give feedback on mapping predictions '
+      operationId: storeFeedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictiveFeedbackRequest'
+      responses:
+        '204':
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: object
+components:
+  schemas:
+    PredictiveFeedbackRequest:
+      type: object
+      properties:
+        input:
+          type: string
+        prediction_type:
+          type: string
+          enum:
+          - FINANCIAL_HIERARCHY
+        value:
+          type: string
+    PredictiveMappingRequest:
+      type: object
+      properties:
+        data:
+          type: array
+          description: Input data to create predictions for.
+          items:
+            type: string
+            description: Input data to create predictions for.
+        predictions:
+          type: integer
+          description: Maximum number of predictions that will be created for data
+          format: int32
+        minimum_confidence:
+          type: number
+          description: Threshold for minimum confidence for given predictions (0-1)
+          format: double
+    FinancialHierarchyDto:
+      type: object
+      properties:
+        confidence:
+          type: number
+          format: double
+        level_1:
+          $ref: '#/components/schemas/FinancialHierarchyNodeDto'
+        level_2:
+          $ref: '#/components/schemas/FinancialHierarchyNodeDto'
+        level_3:
+          $ref: '#/components/schemas/FinancialHierarchyNodeDto'
+    FinancialHierarchyNodeDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    PredictionMetaData:
+      type: object
+      properties:
+        predictions:
+          type: integer
+          format: int32
+        minimum_confidence:
+          type: number
+          format: double
+    PredictionResultCollectionFinancialHierarchyDto:
+      type: object
+      properties:
+        input:
+          type: string
+        predictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialHierarchyDto'
+    PredictiveMappingResponseFinancialHierarchyDto:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/PredictionMetaData'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionResultCollectionFinancialHierarchyDto'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tr-shared-flows:
+- AddXFH
+x-tr-identity-provider: ONESOURCE
+x-tr-proxy-name: ONESOURCE-PredictiveMapping
+x-tr-api-version: beta
+x-tr-asset-insight-id: '206145'
+x-tr-apigee-base-path: /data-intelligence/financial-hierarchies/predict-mapping/beta
+x-tr-logging-provider:
+- DataDog
+x-tr-servers:
+  default:
+    onesourceZuulServer: true
+    basePath: /dep-ai-services/financial-mapping/v1
+    regions:
+    - amer
+    - apac
+    - emea
+x-onesource-max-request-limit: 30ps
+x-onesource-throttle-category: Data Engine Platform AI_MetadataRequests_Limit
+x-tr-deploy-permissions:
+- dc-A8bQzXjSn1fRCWeFxc4J1j
+x-tr-promote-permissions:
+- dc-A8bQzXjSn1fRCWeFxc4J1j

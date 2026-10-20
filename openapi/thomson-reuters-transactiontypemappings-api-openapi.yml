@@ -1,0 +1,320 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Configuration…
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: TransactionTypeMappings
+paths:
+  /master-data/allocations/{allocationId}/transaction-type-maps:
+    get:
+      tags:
+      - TransactionTypeMappings
+      summary: Fetch all transaction type maps
+      operationId: TransactionTypeMappings_GettransactiontypeMaps
+      parameters:
+      - name: allocationId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse'
+              example:
+                items:
+                - id: 1
+                  sourceTransactionType: Recievable
+                  targetTransactionType: AR
+                - id: 2
+                  sourceTransactionType: Payable
+                  targetTransactionType: AP
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse'
+        '404':
+          description: NotFound
+    post:
+      tags:
+      - TransactionTypeMappings
+      summary: Create transaction type maps
+      operationId: TransactionTypeMappings_CreateTransactiontypeMaps
+      parameters:
+      - name: allocationId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse'
+              example:
+                items:
+                - id: 1
+                  sourceTransactionType: Recievable
+                  targetTransactionType: AR
+                - id: 2
+                  sourceTransactionType: Payable
+                  targetTransactionType: AP
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse'
+        '400':
+          description: BadRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationRequest'
+        required: true
+  /master-data/allocations/{allocationId}/transaction-type-maps/{transactionTypeMapId}:
+    get:
+      tags:
+      - TransactionTypeMappings
+      summary: Fetch transaction type map by id
+      operationId: TransactionTypeMappings_GettransactionMapInfoById
+      parameters:
+      - name: allocationId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: transactionTypeMapId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeResponseModel'
+              example:
+                id: 1
+                sourceTransactionType: Recievable
+                targetTransactionType: AR
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeResponseModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeResponseModel'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeResponseModel'
+        '404':
+          description: NotFound
+    put:
+      tags:
+      - TransactionTypeMappings
+      summary: Update transaction type map
+      operationId: TransactionTypeMappings_UpdateTransactiontypeMap
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: transactionTypeMapId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+        '400':
+          description: BadRequest
+        '404':
+          description: NotFound
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeRequestModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeRequestModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeRequestModel'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeRequestModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeRequestModel'
+        required: true
+    delete:
+      tags:
+      - TransactionTypeMappings
+      summary: Delete transaction type map
+      operationId: TransactionTypeMappings_DeleteTransactiontypeMap
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: transactionTypeMapId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+        '404':
+          description: NotFound
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeResponseModel:
+      description: TransactionType Response
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Id
+          type: integer
+        sourceTransactionType:
+          description: SourceTransactionType
+          type: string
+        targetTransactionType:
+          description: TargetTransactionType
+          type: string
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeRequestModel:
+      description: TransactionTypeDeletionModel
+      required:
+      - sourceTransactionType
+      - targetTransactionType
+      type: object
+      properties:
+        sourceTransactionType:
+          description: sourceTransactionType
+          type: string
+        targetTransactionType:
+          description: TargetTransactionType
+          enum:
+          - AP
+          - AR
+          type: string
+      example:
+        sourceTransactionType: Payable
+        targetTransactionType: -1
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeApiResponse:
+      description: TransactionType API Response
+      type: object
+      properties:
+        items:
+          description: items
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeResponseModel'
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationModel:
+      description: TransactionType
+      required:
+      - sourceTransactionType
+      - targetTransactionType
+      type: object
+      properties:
+        sourceTransactionType:
+          description: SourceTransactionType
+          type: string
+        targetTransactionType:
+          description: TargetTransactionType
+          enum:
+          - AP
+          - AR
+          type: string
+    TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationRequest:
+      type: object
+      properties:
+        items:
+          description: items
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TransactionTypes.TransactionTypeCreationModel'
+      example:
+        items:
+        - sourceTransactionType: Payable
+          targetTransactionType: -1
+        - sourceTransactionType: Recievable
+          targetTransactionType: 1

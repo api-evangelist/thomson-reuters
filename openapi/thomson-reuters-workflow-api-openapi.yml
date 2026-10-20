@@ -1,0 +1,1744 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Workflow API
+  version: v1
+  description: 'Operations tagged Workflow across 3 of this provider''s published API definitions: thomson-reuters-firmflow-web-api-services-v1-openapi.json, thomson-reuters-firmflow-web-api-services-openapi.yml, thomson-reuters-firmflow-web-api-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: Workflow
+paths:
+  /firmflow/api/V1/Workflow/CreateWorkflow:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Create a new workflow
+      description: Creates a new workflow based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflow'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflow'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflow'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+      operationId: postFirmflowApiV1WorkflowCreateWorkflow
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/DeleteWorkflow:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Delete a workflow
+      description: Deletes a workflow based on the provided filing ID.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: filingId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+      operationId: deleteFirmflowApiV1WorkflowDeleteWorkflow
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/DeleteWorkflows:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Delete multiple workflows
+      description: Deletes multiple workflows based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteWorkflowCritria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeleteWorkflowCritria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeleteWorkflowCritria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+      operationId: postFirmflowApiV1WorkflowDeleteWorkflows
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/EditWorkflow:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Edit a workflow
+      description: Updates a workflow based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: You can either use the entire request body or only include parts of the request body which you want to update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowData'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowData'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WorkflowData'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+      operationId: postFirmflowApiV1WorkflowEditWorkflow
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V2/Workflow/EditWorkflow:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Edit a workflow (version 2)
+      description: Updates a workflow based on the provided criteria (version 2).
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: You can either use the entire request body or only include parts of the request body which you want to update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowDataV2'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowDataV2'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WorkflowDataV2'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+      operationId: postFirmflowApiV2WorkflowEditWorkflow
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/DeliveryAndDestinations:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get delivery instructions and destinations for a workflow
+      description: Retrieves the delivery instructions and destinations associated with a specific workflow.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryInstructionCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryInstructionCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeliveryInstructionCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeliveryInstructionResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryInstructionResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryInstructionResponse'
+      operationId: postFirmflowApiV1WorkflowDeliveryAndDestinations
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/RoutingHistory:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get routing history for a workflow
+      description: Retrieves the routing history associated with a specific workflow.
+      operationId: Get_RoutingHistory
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: filingId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RoutingHistoryResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingHistoryResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RoutingHistoryResponse'
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/RoutingHistoryByFilingIds:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get routing history based on filing Ids
+      description: Retrieves a list of routing history based on the provided filing ids.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingHistoryByFilingIdsRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingHistoryByFilingIdsRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingHistoryByFilingIdsRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoutingHistoryByFilingIdsResponse'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoutingHistoryByFilingIdsResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoutingHistoryByFilingIdsResponse'
+      operationId: postFirmflowApiV1WorkflowRoutingHistoryByFilingIds
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/GetDeletedWorkflows:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get deleted workflows
+      description: Retrieves a list of deleted workflows based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeletedWorkFlowsResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletedWorkFlowsResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeletedWorkFlowsResult'
+      operationId: postFirmflowApiV1WorkflowGetDeletedWorkflows
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/GetDeletedDeliverableWorkflows:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get deleted deliverable workflows
+      description: Retrieves a list of deleted deliverable workflows based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeletedDeliverableWorkFlowsResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletedDeliverableWorkFlowsResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeletedDeliverableWorkFlowsResult'
+      operationId: postFirmflowApiV1WorkflowGetDeletedDeliverableWorkflows
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V2/Workflow/CreateWorkflow:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Create a new workflow (version 2)
+      description: Creates a new workflow based on the provided criteria (version 2).
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflowV2'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflowV2'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflowV2'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+      operationId: postFirmflowApiV2WorkflowCreateWorkflow
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/ControlSheetPDF:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Generate a control sheet PDF
+      description: Generates a control sheet PDF based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ControlSheetRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ControlSheetRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ControlSheetRequest'
+      responses:
+        '200':
+          description: Success
+      operationId: postFirmflowApiV1WorkflowControlSheetPDF
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /firmflow/api/V1/Workflow/GetWorkFlowSteps:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get workflow steps for a workflow
+      description: Retrieves the workflow steps for the specified drawer, service type, and workflow name.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: drawerId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: serviceTypeName
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: workflowName
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkflowStepResponse'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkflowStepResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkflowStepResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+      operationId: getFirmflowApiV1WorkflowGetWorkFlowSteps
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    RoutingSummary:
+      type: object
+      properties:
+        responsibleField:
+          type: string
+          nullable: true
+          default: ''
+        value:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    Filing:
+      type: object
+      properties:
+        workflowName:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        statusName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeletedWorkflowsRequest:
+      type: object
+      properties:
+        drawerId:
+          type: string
+        deletedDates:
+          type: string
+        pageNumber:
+          type: string
+        pageSize:
+          type: string
+      additionalProperties: false
+    RoutingHistoryByFilingIdsRequest:
+      type: object
+      properties:
+        filingIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          default: []
+      additionalProperties: false
+    DeleteWorkflowResponse:
+      type: object
+      properties:
+        isDeleted:
+          type: boolean
+        filingId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    WorkflowDataV2:
+      required:
+      - filingId
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+          default: 0
+        headers:
+          $ref: '#/components/schemas/Header'
+        deliverable:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deliverable'
+        notes:
+          $ref: '#/components/schemas/NoteRequest'
+        filing:
+          $ref: '#/components/schemas/Filing'
+        informationFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/InformationFields'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction'
+        routingSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingSummary'
+        reIndexDocs:
+          type: boolean
+          default: false
+          nullable: true
+      additionalProperties: false
+    WorkflowResponse:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+        errorComment:
+          type: string
+          nullable: true
+        status:
+          type: boolean
+        errorMessage:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorMessage'
+          nullable: true
+      additionalProperties: false
+    ErrorMessage:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        status:
+          type: boolean
+          nullable: true
+        errorComment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RoutingHistoryByFilingIdsResponse:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+        routingHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingDTO'
+          nullable: true
+          additionalProperties: false
+        responseMessage:
+          type: string
+      additionalProperties: false
+    AddWorkflowV2:
+      required:
+      - drawer
+      - serviceType
+      type: object
+      properties:
+        drawer:
+          type: string
+        serviceType:
+          type: string
+        folderId:
+          type: string
+          nullable: true
+        headers:
+          $ref: '#/components/schemas/Header'
+        filing:
+          $ref: '#/components/schemas/Filing'
+        deliverable:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deliverable'
+        informationFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/InformationFields'
+        notes:
+          $ref: '#/components/schemas/NoteRequest'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction'
+        routingSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingSummary'
+      additionalProperties: false
+    DeliveryInstructionCriteria:
+      required:
+      - drawerName
+      - pageNumber
+      - pageSize
+      - serviceType
+      type: object
+      properties:
+        drawerName:
+          type: string
+          default: clients
+        serviceType:
+          type: string
+          default: Tax
+        pageNumber:
+          type: integer
+          format: int32
+          default: 1
+        pageSize:
+          type: integer
+          format: int32
+          default: 10
+      additionalProperties: false
+    InformationFields:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          default: ''
+        value:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    NoteRequest:
+      type: object
+      properties:
+        action:
+          type: string
+          nullable: true
+          default: add new note
+        noteType:
+          type: string
+          nullable: true
+          default: ''
+        noteId:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          default: []
+        note:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    RoutingDTO:
+      type: object
+      properties:
+        workFlowName:
+          type: string
+          nullable: true
+        step:
+          type: string
+          nullable: true
+        assignedTo:
+          type: string
+          nullable: true
+        assignedBy:
+          type: string
+          nullable: true
+        assignedDateTime:
+          type: string
+          nullable: true
+        completedDateTime:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RoutingHistoryResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/RoutingDTO'
+      nullable: true
+      additionalProperties: false
+    Deliverable:
+      type: object
+      properties:
+        action:
+          type: string
+          nullable: true
+          default: ''
+        currentDueDate:
+          type: string
+          nullable: true
+          default: ''
+        originalDueDate:
+          type: string
+          nullable: true
+          default: ''
+        form:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    DeleteWorkflowCritria:
+      required:
+      - filingId
+      type: object
+      properties:
+        filingId:
+          minLength: 1
+          type: array
+          items:
+            type: integer
+            format: int32
+      additionalProperties: false
+    DeliveryInstructions:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+        delivery:
+          type: string
+          nullable: true
+        destination:
+          type: string
+          nullable: true
+        sourceDocument:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    DeletedWorkFlow:
+      type: object
+      properties:
+        serviceTypeName:
+          type: string
+          nullable: true
+        clientName:
+          type: string
+          nullable: true
+        clientNumber:
+          type: string
+          nullable: true
+        engagement:
+          type: string
+          nullable: true
+        year:
+          type: string
+          nullable: true
+        periodEnd:
+          type: string
+          nullable: true
+        filingId:
+          type: string
+          nullable: true
+        workFlow:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        deletedDate:
+          type: string
+          nullable: true
+      additionalProperties: false
+    WorkflowStepResponse:
+      type: object
+      properties:
+        serviceName:
+          type: string
+        workFlow:
+          type: string
+        workFlowSteps:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    DeletedWorkFlowsResult:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        deletedWorkFlows:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeletedWorkFlow'
+          nullable: true
+      additionalProperties: false
+    DeliveryInstruction:
+      type: object
+      properties:
+        delivery:
+          type: string
+          nullable: true
+          default: ''
+        destination:
+          type: string
+          nullable: true
+          default: ''
+        sourceDocument:
+          type: string
+          nullable: true
+          default: 'true'
+      additionalProperties: false
+    DeletedDeliverableWorkFlow:
+      type: object
+      properties:
+        filingId:
+          type: string
+          nullable: true
+        deliverableName:
+          type: string
+          nullable: true
+        serviceTypeName:
+          type: string
+          nullable: true
+        clientName:
+          type: string
+          nullable: true
+        clientNumber:
+          type: string
+          nullable: true
+        engagement:
+          type: string
+          nullable: true
+        year:
+          type: string
+          nullable: true
+        periodEnd:
+          type: string
+          nullable: true
+        workFlow:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        deletedDate:
+          type: string
+          nullable: true
+      additionalProperties: false
+    WorkflowData:
+      required:
+      - filingId
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+          default: 0
+        headers:
+          $ref: '#/components/schemas/Header'
+        deliverable:
+          $ref: '#/components/schemas/Deliverable'
+        notes:
+          $ref: '#/components/schemas/NoteRequest'
+        filing:
+          $ref: '#/components/schemas/Filing'
+        informationFields:
+          $ref: '#/components/schemas/InformationFields'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction'
+        routingSummary:
+          $ref: '#/components/schemas/RoutingSummary'
+        reIndexDocs:
+          type: boolean
+          default: false
+          nullable: true
+      additionalProperties: false
+    ControlSheetRequest:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          nullable: true
+        routingSummary:
+          type: boolean
+          nullable: true
+        deliverables:
+          type: integer
+          nullable: true
+        checklist:
+          type: integer
+          nullable: true
+        deliveryInstructions:
+          type: integer
+          nullable: true
+        additionalInformation:
+          type: integer
+          nullable: true
+        noteTypeNames:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    DeletedDeliverableWorkFlowsResult:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        deletedDeliverableWorkFlows:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeletedDeliverableWorkFlow'
+          nullable: true
+      additionalProperties: false
+    AddWorkflow:
+      required:
+      - drawer
+      - serviceType
+      type: object
+      properties:
+        drawer:
+          type: string
+        serviceType:
+          type: string
+        folderId:
+          type: string
+          nullable: true
+        headers:
+          $ref: '#/components/schemas/Header'
+        filing:
+          $ref: '#/components/schemas/Filing'
+        deliverable:
+          $ref: '#/components/schemas/Deliverable'
+        informationFields:
+          $ref: '#/components/schemas/InformationFields'
+        notes:
+          $ref: '#/components/schemas/NoteRequest'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction'
+        routingSummary:
+          $ref: '#/components/schemas/RoutingSummary'
+      additionalProperties: false
+    DeliveryInstructionResponse:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        firmFlowResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryInstructions'
+          nullable: true
+      additionalProperties: false
+    Header:
+      type: object
+      properties:
+        clientName:
+          default: ''
+          type: string
+          nullable: true
+        clientNumber:
+          type: string
+          nullable: true
+          default: ''
+        engagementType:
+          type: string
+          nullable: true
+          default: ''
+        pic:
+          type: string
+          nullable: true
+          default: ''
+        year:
+          type: string
+          nullable: true
+          default: ''
+        periodEnd:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    RoutingSummary_2:
+      type: object
+      properties:
+        responsibleField:
+          type:
+          - string
+          - 'null'
+          default: ''
+        value:
+          type:
+          - string
+          - 'null'
+          default: ''
+      additionalProperties: false
+    Filing_2:
+      type: object
+      properties:
+        workflowName:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        statusName:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    RoutingHistoryByFilingIdsRequest_2:
+      type: object
+      properties:
+        filingIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          default: []
+      additionalProperties: false
+    DeleteWorkflowResponse_2:
+      type: object
+      properties:
+        isDeleted:
+          type: boolean
+        filingId:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    WorkflowDataV2_2:
+      required:
+      - filingId
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+          default: 0
+        headers:
+          $ref: '#/components/schemas/Header_2'
+        deliverable:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deliverable_2'
+        notes:
+          $ref: '#/components/schemas/NoteRequest_2'
+        filing:
+          $ref: '#/components/schemas/Filing_2'
+        informationFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/InformationFields_2'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction_2'
+        routingSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingSummary_2'
+        reIndexDocs:
+          type:
+          - boolean
+          - 'null'
+          default: false
+      additionalProperties: false
+    WorkflowResponse_2:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+        errorComment:
+          type:
+          - string
+          - 'null'
+        status:
+          type: boolean
+        errorMessage:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ErrorMessage_2'
+      additionalProperties: false
+    ErrorMessage_2:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - boolean
+          - 'null'
+        errorComment:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    RoutingHistoryByFilingIdsResponse_2:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+        routingHistory:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoutingDTO_2'
+          additionalProperties: false
+        responseMessage:
+          type: string
+      additionalProperties: false
+    AddWorkflowV2_2:
+      required:
+      - drawer
+      - serviceType
+      type: object
+      properties:
+        drawer:
+          type: string
+        serviceType:
+          type: string
+        folderId:
+          type:
+          - string
+          - 'null'
+        headers:
+          $ref: '#/components/schemas/Header_2'
+        filing:
+          $ref: '#/components/schemas/Filing_2'
+        deliverable:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deliverable_2'
+        informationFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/InformationFields_2'
+        notes:
+          $ref: '#/components/schemas/NoteRequest_2'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction_2'
+        routingSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingSummary_2'
+      additionalProperties: false
+    InformationFields_2:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          default: ''
+        value:
+          type:
+          - string
+          - 'null'
+          default: ''
+      additionalProperties: false
+    NoteRequest_2:
+      type: object
+      properties:
+        action:
+          type:
+          - string
+          - 'null'
+          default: add new note
+        noteType:
+          type:
+          - string
+          - 'null'
+          default: ''
+        noteId:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          default: []
+        note:
+          type:
+          - string
+          - 'null'
+          default: ''
+      additionalProperties: false
+    RoutingDTO_2:
+      type: object
+      properties:
+        workFlowName:
+          type:
+          - string
+          - 'null'
+        step:
+          type:
+          - string
+          - 'null'
+        assignedTo:
+          type:
+          - string
+          - 'null'
+        assignedBy:
+          type:
+          - string
+          - 'null'
+        assignedDateTime:
+          type:
+          - string
+          - 'null'
+        completedDateTime:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    RoutingHistoryResponse_2:
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/RoutingDTO_2'
+      additionalProperties: false
+    Deliverable_2:
+      type: object
+      properties:
+        action:
+          type:
+          - string
+          - 'null'
+          default: ''
+        currentDueDate:
+          type:
+          - string
+          - 'null'
+          default: ''
+        originalDueDate:
+          type:
+          - string
+          - 'null'
+          default: ''
+        form:
+          type:
+          - string
+          - 'null'
+          default: ''
+      additionalProperties: false
+    DeliveryInstructions_2:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+        delivery:
+          type:
+          - string
+          - 'null'
+        destination:
+          type:
+          - string
+          - 'null'
+        sourceDocument:
+          type:
+          - boolean
+          - 'null'
+      additionalProperties: false
+    DeletedWorkFlow_2:
+      type: object
+      properties:
+        serviceTypeName:
+          type:
+          - string
+          - 'null'
+        clientName:
+          type:
+          - string
+          - 'null'
+        clientNumber:
+          type:
+          - string
+          - 'null'
+        engagement:
+          type:
+          - string
+          - 'null'
+        year:
+          type:
+          - string
+          - 'null'
+        periodEnd:
+          type:
+          - string
+          - 'null'
+        filingId:
+          type:
+          - string
+          - 'null'
+        workFlow:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        deletedDate:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DeletedWorkFlowsResult_2:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        deletedWorkFlows:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DeletedWorkFlow_2'
+      additionalProperties: false
+    DeliveryInstruction_2:
+      type: object
+      properties:
+        delivery:
+          type:
+          - string
+          - 'null'
+          default: ''
+        destination:
+          type:
+          - string
+          - 'null'
+          default: ''
+        sourceDocument:
+          type:
+          - string
+          - 'null'
+          default: 'true'
+      additionalProperties: false
+    DeletedDeliverableWorkFlow_2:
+      type: object
+      properties:
+        filingId:
+          type:
+          - string
+          - 'null'
+        deliverableName:
+          type:
+          - string
+          - 'null'
+        serviceTypeName:
+          type:
+          - string
+          - 'null'
+        clientName:
+          type:
+          - string
+          - 'null'
+        clientNumber:
+          type:
+          - string
+          - 'null'
+        engagement:
+          type:
+          - string
+          - 'null'
+        year:
+          type:
+          - string
+          - 'null'
+        periodEnd:
+          type:
+          - string
+          - 'null'
+        workFlow:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        deletedDate:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    WorkflowData_2:
+      required:
+      - filingId
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+          default: 0
+        headers:
+          $ref: '#/components/schemas/Header_2'
+        deliverable:
+          $ref: '#/components/schemas/Deliverable_2'
+        notes:
+          $ref: '#/components/schemas/NoteRequest_2'
+        filing:
+          $ref: '#/components/schemas/Filing_2'
+        informationFields:
+          $ref: '#/components/schemas/InformationFields_2'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction_2'
+        routingSummary:
+          $ref: '#/components/schemas/RoutingSummary_2'
+        reIndexDocs:
+          type:
+          - boolean
+          - 'null'
+          default: false
+      additionalProperties: false
+    ControlSheetRequest_2:
+      type: object
+      properties:
+        filingId:
+          type:
+          - integer
+          - 'null'
+        routingSummary:
+          type:
+          - boolean
+          - 'null'
+        deliverables:
+          type:
+          - integer
+          - 'null'
+        checklist:
+          type:
+          - integer
+          - 'null'
+        deliveryInstructions:
+          type:
+          - integer
+          - 'null'
+        additionalInformation:
+          type:
+          - integer
+          - 'null'
+        noteTypeNames:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      additionalProperties: false
+    DeletedDeliverableWorkFlowsResult_2:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        deletedDeliverableWorkFlows:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DeletedDeliverableWorkFlow_2'
+      additionalProperties: false
+    AddWorkflow_2:
+      required:
+      - drawer
+      - serviceType
+      type: object
+      properties:
+        drawer:
+          type: string
+        serviceType:
+          type: string
+        folderId:
+          type:
+          - string
+          - 'null'
+        headers:
+          $ref: '#/components/schemas/Header_2'
+        filing:
+          $ref: '#/components/schemas/Filing_2'
+        deliverable:
+          $ref: '#/components/schemas/Deliverable_2'
+        informationFields:
+          $ref: '#/components/schemas/InformationFields_2'
+        notes:
+          $ref: '#/components/schemas/NoteRequest_2'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction_2'
+        routingSummary:
+          $ref: '#/components/schemas/RoutingSummary_2'
+      additionalProperties: false
+    DeliveryInstructionResponse_2:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        firmFlowResponse:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DeliveryInstructions_2'
+      additionalProperties: false
+    Header_2:
+      type: object
+      properties:
+        clientName:
+          default: ''
+          type:
+          - string
+          - 'null'
+        clientNumber:
+          type:
+          - string
+          - 'null'
+          default: ''
+        engagementType:
+          type:
+          - string
+          - 'null'
+          default: ''
+        pic:
+          type:
+          - string
+          - 'null'
+          default: ''
+        year:
+          type:
+          - string
+          - 'null'
+          default: ''
+        periodEnd:
+          type:
+          - string
+          - 'null'
+          default: ''
+      additionalProperties: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+x-refined-from:
+- thomson-reuters-firmflow-web-api-services-v1-openapi.json
+- thomson-reuters-firmflow-web-api-services-openapi.yml
+- thomson-reuters-firmflow-web-api-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

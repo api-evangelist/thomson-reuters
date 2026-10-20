@@ -1,0 +1,4936 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Site Resource APIs API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Site Resource APIs across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Site Resource APIs
+paths:
+  /{version}/sites/templates/content:
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Import template
+      description: 'API to import template from .hqa file.
+
+
+        This is a Long polling API( Multi step API). Below are the steps explaning how to consume this API.
+
+
+        Step 1: Start the Import template process
+
+
+        Request URI:
+
+
+        POST /api/8/sites/templates/content
+
+
+        Request body (as a form-data):
+
+
+        .hqa file as FIle (multipart input)
+
+        templatename as Text(String)
+
+
+        Response:
+
+
+        Status code: 202 Accepted
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>INPROGRESS</progresskeystatus>
+
+        <link>https://host.com/context/api/8/progress/{progress_key}</link>
+
+        </progressresponse>
+
+
+        Step 2: Check the progress of Import template process
+
+
+        Request URI:
+
+
+        GET /api/8/progress/{progress_key}
+
+
+        Response:
+
+
+        In case Import template process is still running.
+
+
+        Status code: 200 OK
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>INPROGRESS</progresskeystatus>
+
+        <link>https://host.com/context/api/8/progress/{progress_key}</link>
+
+        </progressresponse>
+
+
+        When Import template process has been completed.
+
+
+        Status code: 303 See Other
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>DONE</progresskeystatus>
+
+        <link>https://host.com/context/api/8/sites/templates/{template_id}</link>
+
+        </progressresponse>'
+      operationId: importTemplate
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '9'
+      responses:
+        '156':
+          description: Site name already exists in the system
+        '200':
+          description: OK
+        '202':
+          description: Import template is in progress.
+        '303':
+          description: Import template completed.
+        '401':
+          description: Unauthorized
+        '403':
+          description: Access denied
+        '404':
+          description: Page not found / Metthod calling with invalid API version
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '436':
+          description: Invalid hqa file
+        '437':
+          description: Backward compability is not supported
+        '438':
+          description: Cannot create site because the instance licence limits have been reached. Please contact the System Administrator
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: Choose file
+                  format: binary
+                templatename:
+                  type: string
+                  description: Template name
+              required:
+              - file
+              - templatename
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/groups/{groupid}:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get site group
+      description: Get details of individual site group
+      operationId: getSiteGroup
+      parameters:
+      - name: siteid
+        in: path
+        description: site id
+        required: true
+        schema:
+          type: string
+      - name: groupid
+        in: path
+        description: site group id to retrive
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/group'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Add existing group to site
+      description: This API method adds an existing system group to the site
+      operationId: addExistingGroupToSite
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: groupid
+        in: path
+        description: 'The ID of the system group to be added to the site. '
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/group'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Update site group
+      description: This API method updates the name of an existing group in a site
+      operationId: updateSiteGroup
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: groupid
+        in: path
+        description: "\tThe ID of the site group."
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/group'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/group'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/group'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/groups:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get all site groups
+      description: 'A list of site groups.Notes :
+
+        In the response all site groups are returned e.g. org,site,system,admin, allsystem and synced.'
+      operationId: getAllSiteGroups
+      parameters:
+      - name: siteid
+        in: path
+        description: site id
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: 'org (only org groups which are in the site)<br>synced (only AD groups which are in the site) <br>system (only system groups which are in the site) <br>site (Only site groups which are in the site) <br>allsystem ({system + AD + org } groups which are in the site)<br>admin (Admin groups like Site admin, Member admin, Content admin, Reporting admin, QA admin )<br>Filter the group list by these 6 options.If no parameter is provided for the filter, then all groups of the site are returned. '
+        required: false
+        schema:
+          type: string
+          enum:
+          - org
+          - synced
+          - system
+          - site
+          - allsystem
+          - admin
+      - name: orderby
+        in: query
+        description: Sort the group list by these 2 options.<br>If no parameter is provided for orderby, the  group list will be sorted in ascending order.
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: ordertype
+        in: query
+        description: The group is ordered by these 5 options.<br>If no parameter is provided for ordertype, then the name is the default value.
+        required: false
+        schema:
+          type: string
+          enum:
+          - name
+          - type
+          - numberofusers
+          - created
+          - modified
+      - name: q
+        in: query
+        description: Text that will be searched against the group name to filter out the list of the group.
+        required: false
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/modulepermissions'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/modulepermissions'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Add site group
+      description: 'This API method adds a new group to the site.
+
+        Notes
+
+
+        copypermissionsfrom is Mandatory field it is use to copy other group permission.
+
+        Please set value of copypermissionsfrom to -1 when you don''t want to copy any other groups permissions.
+
+        The group name cannot contain the following characters: \ / : * ? " |'
+      operationId: createSiteGroup
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/group'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/group'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/group'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get all site users
+      description: 'Method to obtain a list of site users
+
+
+        Notes
+
+        1.The value of limit parameter behaves as follows:
+
+        limit =100 is the default value
+
+        if limit>0 then (number of items returned is equal to limit)
+
+        if limit=-1 then return all records
+
+        if limit <-1 then the system returns the default no of items i.e 100
+
+        2.The value of the offset parameter behaves as below
+
+        (Default) offset =0
+
+        if the offset is higher than 0 then the records are returned from the offset value
+
+        if offset is lower than 0 then an offset value of 0 is set
+
+        3.Default value for orderby parameter is asc (ascending)
+
+        4.Default value for ordertype parameter is organisation (organisation name)
+
+        5.In limit parameter if the limit is 0, it will display a validation message stating that the "limit provided is invalid"'
+      operationId: getAllSiteUsers
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: organisationid
+        in: query
+        description: A integer value representing an organisation in the Collaborate instance, the ID can be obtained by calling the Get Organisations API.
+        required: false
+        schema:
+          type: string
+      - name: invitationnotsent
+        in: query
+        description: A list of all users to whom an invitation is not sent.
+        required: false
+        schema:
+          type: string
+      - name: notloggedin
+        in: query
+        description: A list of users who have never logged in to the site.
+        required: false
+        schema:
+          type: string
+      - name: suspendedusers
+        in: query
+        description: A list of suspended users of the site.
+        required: false
+        schema:
+          type: string
+      - name: unallocatedusers
+        in: query
+        description: A list of users who are not a member of any groups in the site.
+        required: false
+        schema:
+          type: string
+      - name: groupid
+        in: query
+        description: A integer value representing a group.
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The starting position of the user list from when the user list  should be returned. This is to allow pagination.
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The number of items to return in an individual get call.
+        required: false
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: Can be ordered asc (ascending) or desc (descending). The default is ascending.
+        required: false
+        schema:
+          type: string
+      - name: ordertype
+        in: query
+        description: The order type is fullname, organisation, invited, lastlogin. The default is organisation
+        required: false
+        schema:
+          type: string
+      - name: activeusers
+        in: query
+        description: A list of active users of the site
+        required: false
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: Text that will be searched against first name, last name, email and organisation to filter out users. Available from collaborate version 5.0
+        required: false
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/users'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Add user to site
+      description: 'This method explains how to add a number of new users to the site.
+
+        When adding a single user to a site follow the first step below. When adding more than one user to a site the below two steps should be followed.
+
+        Note: The getProgressiveKey call is covered in step 1 and is used further in the process.Step 1:
+
+        Request URI
+
+        POST /api/3/sites/{siteid}/users
+
+        Response
+
+        The API returns a 200 OK http response if successful, otherwise an error object and error code is returned.
+
+        If a single user has been added successfully then the response will be as per below:
+
+        <users>
+
+        <user>
+
+        <index>1</index>
+
+        <userid>1805</userid>
+
+        <email>testemail@highq.com</email>
+
+        <status>Success</status>
+
+        <statuscode>201</statuscode>
+
+        <message>User added successfully</message>
+
+        </user>
+
+        </users>
+
+        If more than one user has been added successfully then response will be as per below:
+
+        <progressivekeyresponse>
+
+        <progressivekey>zJ5IlSYyhJ_1500443110814</progressivekey>
+
+        <progressivekeystatus>INPROGRESS</progressivekeystatus>
+
+        </progressivekeyresponse>
+
+        Step 2:
+
+        Purpose
+
+        Once step 1 has been called, the user progress status needs to be checked. This is done by using this API end point call.
+
+        <progressivekeyresponse>
+
+        <progressivekey>zJ5IlSYyhJ_1500443110814</progressivekey>
+
+        <progressivekeystatus>INPROGRESS</progressivekeystatus>
+
+        </progressivekeyresponse>
+
+        When a user has been added successfully the response will be as per below:
+
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+        <users>
+
+        <user>
+
+        <index>1</index>
+
+        <userid>1805</userid>
+
+        <email>testemail@highq.com</email>
+
+        <status>Success</status>
+
+        <statuscode>201</statuscode>
+
+        <message>User added successfully</message>
+
+        </user>
+
+        <user>
+
+        <index>2</index>
+
+        <status>Failure</status>
+
+        <statuscode>403</statuscode>
+
+        <message>Invalid Email address</message>
+
+        </user>
+
+        </users>
+
+        Assumption
+
+        - User will be added in site with the existing organisation only.
+
+        - If a user with the same email already exists in the site, a validation message will be displayed.
+
+        - Please note that if an existing system user is added to a site, then the request xml information such as firstname, lastname and orgid will not be updated. Only the system user will be added to site.
+
+        - If user associated with external organization then it will not add in internal site, a validation message will be displayed.(From 5.1 onwards)'
+      operationId: addUserToSite
+      parameters:
+      - name: siteid
+        in: path
+        description: Site IDs
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: sendinvitation
+        in: query
+        description: If set to true, the newly added user will be sent an invitation
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/IntegrationResponseUsersObject'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationResponseUsersObject'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IntegrationResponseUsersObject'
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Add existing user to site
+      description: 'This is the method to add a user to the site. This method expects that the user already exists in the system and the API user is aware of the userid of the user.
+
+        Note: The site should already exist in the system.'
+      operationId: insertExistingUserToSite
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: The ID of the site to which the user is to be added.
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: query
+        description: "\tThe ID of the user who is to be added to the site."
+        required: true
+        schema:
+          type: string
+      - name: sendinvitation
+        in: query
+        description: 'True or false option. (This is set to true by default)<br>If you do not want the notification sent to the user when a users are added to the site, the parameter should be set to false. '
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    delete:
+      tags:
+      - Site Resource APIs
+      summary: Remove users from a site
+      description: This method can be used to remove user(s) from a site.
+      operationId: removeUserFromSite
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: path
+        description: The ID for the site.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TransactionIds'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionIds'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/groups/{groupid}/users:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get users of a site group
+      description: This API method returns the users of a site group
+      operationId: getSiteGroupParticipants
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: groupid
+        in: path
+        description: The ID of the site group.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/users'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Add user to a group
+      description: This API method associates a user to a group
+      operationId: addUserToGroup
+      parameters:
+      - name: siteid
+        in: path
+        description: 'The ID of the site. '
+        required: true
+        schema:
+          type: string
+      - name: groupid
+        in: path
+        description: 'The ID of the site group. '
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: query
+        description: The ID of the user to be added to the group.
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    delete:
+      tags:
+      - Site Resource APIs
+      summary: Delete user from a group
+      description: This API method removes a user from a group
+      operationId: deleteUserFromGroup
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: groupid
+        in: path
+        description: The ID of the site group.
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: query
+        description: 'The ID of the user to be removed from the group. '
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users/email:
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Send an email to users
+      description: 'Use this method to send an email to user(s)
+
+
+        Notes :
+
+
+        1) User id must be integer. If it''s not, it will display this message "User ID provided is Invalid."
+
+
+        2) If a user id is listed multiple times in the transaction id''s list an email will be sent to the user and the second time it will display a message stating "This user was already sent an email."
+
+
+        3) The user must be a participant of the given site. If not then it will display a message stating "User with the specified User ID does not exist in the site."
+
+
+        4) If the site is in read only mode at the time the invitation is sent only system admin have rights to send an email to site participants.
+
+
+        5) In the request body users must have to add CDATA tag if they have special characters in emailsubject or messagebody tag. The request body is shown below
+
+
+        <emailusers>
+
+
+        <emailsubject><![CDATA[Subject]]></emailsubject>
+
+        <messagebody><![CDATA[message]]></messagebody>
+
+        <transactionids>
+
+        <transactionid>181</transactionid>
+
+        <transactionid>124</transactionid>
+
+        </emailusers>'
+      operationId: sendEmailToUser
+      parameters:
+      - name: siteid
+        in: path
+        description: site ID
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while send email to users
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/EmailUserDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailUserDBO'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmailUserDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/folders:
+    get:
+      tags:
+      - Site Resource APIs
+      operationId: getFolders
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: siteid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: folderid
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Get folders
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get site
+      description: 'The get site API returned the details for a site. Anyone with site access in Collaborate is permitted to use this API endpoint.
+
+        The fields returned for the site object are determined based on user permissions. If the user is a site admin user then they will get fields like Admin Notes otherwise not.
+
+        The current implementation does not include logo link.
+
+        The response object contains the user ID of the site owner.
+
+        The API responds with an access denied message when ''My site'' details of another user are accessed.
+
+        Blank values for individual fields are not returned in the XML response, absence of value in the returned XML means that either the value does not exist for that field or the user does not have access to that field.
+
+        From version 7 onwards module tag will be in response to all user (Not only Admin) , and enable=0/1 will be based on either ON/OFF or have access (for normal users) to that module.
+
+        API version 8 onwards, a new tag ''restrictiontype'' is added as part of ''Site Security API'' functionality.There will be 8 restrictions shown under this tag each with value 0/1 to show whether the respective feature is enabled or disabled for the site.'
+      operationId: getSite
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: The ID for the site in question
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/site'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Update site
+      description: Use this API endpoint to update the details of an existing site. The API supports the same fields used in Create site API.
+      operationId: updateSite
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: The ID for the site
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: OK
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/site'
+    delete:
+      tags:
+      - Site Resource APIs
+      summary: Delete site
+      description: 'This API method is used to delete a site. The site is marked as archived and the system admin can revert the action if required. The system throws an ''Access Denied'' message if the site does not exist.
+
+        If a delete file request is sent through the API for a site that has already been archived, the API will return a 200 OK response to that request.
+
+        ''My site'' cannot be deleted using this API method.
+
+        Response
+
+        The system sends a 200 OK response in case of success and throws an error object in case of an error.'
+      operationId: deleteSite
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: The ID for the site in question.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while deleting site
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get site list v2
+      description: 'This method returns the list of sites a user owns in Collaborate.
+
+        Please note that a site which has one of the configuration options enabled as specified in the "callfrom" parameter will not serve the documents using the API, as the configuration settings such as DRM, password protection etc cannot be bypassed using the API at the moment.
+
+        Until we provide API endpoints that allow you to accept these settings using the API, there is no way to get documents from these sites, doing so will conflict with the Collaborate security policies and hence cannot be achieved using the API at this time.
+
+        From version 7 onwards module tag will be in response to all user (Not only Admin) , and enable=0/1 will be based on either ON/OFF or have access (for normal users) to that module.
+
+        API version 8 onwards, a new tag ''restrictiontype'' is added as part of ''Site Security API'' functionality.There will be 8 restrictions shown under this tag each with value 0/1 to show whether the respective feature is enabled or disabled for the site.'
+      operationId: getSites
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: filterby
+        in: query
+        description: Possible values are {recent|favourite|category|all} Default for this field is "recent"<br>By default any filter will send back the first 20 sites if pagination is false
+        required: false
+        schema:
+          type: string
+          enum:
+          - recent
+          - favourite
+          - category
+          - all
+      - name: returncount
+        in: query
+        description: The no of sites returned. Default is 20. This option does not apply if filterBy property is set to all
+        required: false
+        schema:
+          type: string
+      - name: categoryid
+        in: query
+        description: This parameter is used to get the site list based on the site category ID, please provide site categoryid in addition to setting the filterby property to category.<br>example = /api/1/sites?filterby=category&categoryid=1
+        required: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: 'This parameter is used to search a site by name.The site is included in the search result if the string appears in the title of the site.(The results are returned in ascending order)<br>example: Retrieve sites having "HighQ" word in their name: /api/1/sites?name=''HighQ''<br>This will return all sites having "HighQ" in their site name.<br>Now from 5.1 onwards  search a site by name filter is support multilingual site name.<br>Version 6 or higher, provided search term for site name, should be considered as user preferred language.(because in response of site list api, site name returns in user preferred language)<br>If site name is not configured in user''s preferred language then input terms should try to match with default UK English language and return response according.<br>Version 5 or lower it should work as it was, provided site name in search term should consider as default UK English'
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: A site status available in the system {active|archived|readonly|preparation}<br>Default -> {active + readonly + preparation}<br>for filterBy={recent|favourite| category}]if filterBy={all} is set then all status become applicable.
+        required: false
+        schema:
+          type: string
+      - name: includefolderpermission
+        in: query
+        description: '{true|false} the default is false'
+        required: false
+        schema:
+          type: string
+      - name: callFrom
+        in: query
+        description: 'The only valid value is HIGHQDRIVE. If set the site list filters out any sites that have any restrictions on them. The conditions are as under.<br>1. ''Visible on HighQ Drive or Office Plugin'' check box is not selected in Site->Admin->Advanced page.<br>2. Password protected site <br>3. 2FA enable site <br> 4. Terms & conditions applied on the site <br> 5. IP Restricted sites<br> 6. Document workflow enabled site <br> 7. Check-in / check out enabled site <br> 8. DRM enabled site <br>9. Files module is disabled<br>example: exclude restricted site as: /api/1/sites? callFrom=HIGHQDRIVE'
+        required: false
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: asc or desc
+        required: false
+        schema:
+          type: string
+      - name: ordertype
+        in: query
+        description: ordertype
+        required: false
+        schema:
+          type: string
+          enum:
+          - owner
+          - siteStartDate
+          - matterNumber
+          - siteName
+          - clientNo
+          - statusDisplayName
+          - siteExpiryDate
+          - lastUpdateDate
+          - lastAccessedDate
+      - name: offset
+        in: query
+        description: The starting position of the site list from when the site list should be returned. This is to allow pagination
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The no of items to return in an individual get call
+        required: false
+        schema:
+          type: string
+      - name: matterno
+        in: query
+        description: Provide matter number as csv
+        required: false
+        schema:
+          type: string
+      - name: clientno
+        in: query
+        description: Provide client number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/sites'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sites'
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/Forbidden
+        '405':
+          description: Method not allowed (calling API with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Add site
+      description: 'Use this API to create a new site.The site object only supports attributes which are visible in the create site interface.
+
+        The method implementation now supports site templates.
+
+        This method does not support uploading site image in this call, the site icon support will be provided as a separate call.
+
+        The method call expects an existing category ID. The category ID should be obtained by the calling application by an earlier call to the Site categories interface.
+
+        Site start and end date should be in the format of ''dd MMM yyyy'' and it is NOT UTC. API client will always request actual date.
+
+        We expect three different wordings or identifications for options in for Files module. Possible values are:
+
+        - files (root folder)
+
+        - files (recent activity)
+
+        - files (advanced search)
+
+        The method implementation now supports(from 5.1 onward) Multilingual sitename. API version 6 or higher will represent in request body based on user preference order.API version 5 or older will represent default UK English.
+
+        will represent sitenames in every languages (Which will be additional tag in "Object it self API" from 5.1 onward)API version 6 or higher, in request body, They are sending both tags i.e. and then we need to validate values e.g. must be match with respective tag in terms of User''s language preference.API 7 or higher, site created from template will follow modules from source template and it will ignore module list sent in request body.
+
+
+        Please note support for creating site from template using this API will be deprecated in future. To create site from template please use new API Create site from template (/sites/templates/{templateid}/site) which is a long polling API(having support for long running requests)'
+      operationId: createSite
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '201':
+          description: Site created successfully [id,sitename and link tags are used in response.]
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/site'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '409':
+          description: Site already exists in the system
+        '500':
+          description: Internal error occured while adding site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/site'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/groups/{groupid}/modulepermissions:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get group module permission
+      description: Method to get module permissions for a group
+      operationId: getModulePermissions
+      parameters:
+      - name: siteid
+        in: path
+        description: site id
+        required: true
+        schema:
+          type: string
+      - name: groupid
+        in: path
+        description: The ID of the site group.
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/modulepermissions'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/modulepermissions'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Add / edit group module permission
+      description: Method to allocate module permissions to a group
+      operationId: addGroupModulePermission
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: groupid
+        in: path
+        description: The ID of the site group.
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/modulepermissions'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/modulepermissions'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/templates:
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Create template from site
+      description: 'API to Create template from site.
+
+
+        This is a Long polling API( Multi step API). Below are the steps explaning how to consume this API.
+
+
+        Step 1: Start the Create template from site process
+
+
+        Request URI:
+
+
+        POST api/8/sites/{site_id}/templates
+
+
+        Request body:
+
+
+        <template>
+
+        <templatename></templatename>
+
+        <templatedescription></templatedescription>
+
+        <adminnote></adminnote>
+
+        <clientno></clientno>
+
+        <matterno></matterno>
+
+        <categories></categories>
+
+        <includeUsers></includeUsers>
+
+        <includeSiteLogo></includeSiteLogo >
+
+        </template>
+
+
+        Response:
+
+
+        Status code: 202 Accepted
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>INPROGRESS</progresskeystatus>
+
+        <link>https://host.com/context/api/8/progress/{progress_key}</link>
+
+        </progressresponse>
+
+
+        Step 2: Check the progress of Create template from site process
+
+
+        Request URI:
+
+
+        GET /api/8/progress/{progress_key}
+
+
+        Response:
+
+
+        In case Create template from site process is still running.
+
+
+        Status code: 200 OK
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>INPROGRESS</progresskeystatus>
+
+        <link>https://host.com/context/api/8/progress/{progress_key}</link>
+
+        </progressresponse>
+
+
+        When Create template from site has been completed.
+
+
+        Status code: 303 See Other
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>DONE</progresskeystatus>
+
+        <link>https://host.com/context/api/8/sites/templates/{template_id}</link>
+
+        </progressresponse>'
+      operationId: createTemplateFromSite
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: The ID for the site
+        required: true
+        schema:
+          type: string
+      responses:
+        '156':
+          description: Template name already exists in the system
+        '200':
+          description: OK
+        '202':
+          description: Create template from site process is in progress
+        '303':
+          description: Create template from site process completed
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '404':
+          description: Page not found / Metthod calling with invalid API version
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SiteTemplate'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteTemplate'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/documentstatus/{documentkey}:
+    post:
+      tags:
+      - Site Resource APIs
+      operationId: checkDocumentCopyStatus
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: siteid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: documentkey
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: rootfolderid
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: isbatchprocess
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Check document copy status
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/templates/{templateid}/content:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Export template
+      description: 'API to Export template as a .hqa file.
+
+
+        This is a Long polling API( Multi step API). Below are the steps explaning how to consume this API.
+
+
+        Step 1: Start the Export template process
+
+
+        Request URI:
+
+
+        GET /api/8/sites/templates/{template_id}/content
+
+
+        Response:
+
+
+        Status code: 202 Accepted
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>INPROGRESS</progresskeystatus>
+
+        <link>https://host.com/context/api/8/progress/{progress_key}</link>
+
+        </progressresponse>
+
+
+        Step 2: Check the progress of Export template process
+
+
+        Request URI:
+
+
+        GET /api/8/progress/{progress_key}
+
+
+        Response:
+
+
+        In case Export template process is still running.
+
+
+        Status code: 200 OK
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>INPROGRESS</progresskeystatus>
+
+        <link>https://host.com/context/api/8/progress/{progress_key}</link>
+
+        </progressresponse>
+
+
+        When Export template process has been completed.
+
+
+        Status code: 303 See Other
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>DONE</progresskeystatus>
+
+        <link>https://host.com/context/api/8/sites/templates/{template_id}/content/{progress_key}</link>
+
+        </progressresponse>
+
+
+        Step 3: Export/Download template
+
+
+        Request URI:
+
+
+        GET /api/8/sites/templates/{template_id}/content/{progress_key}
+
+
+        Response:
+
+
+        Status code: 200 OK
+
+
+        hqa file will be in response.'
+      operationId: exportSiteTemplateFirstStep
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: templateid
+        in: path
+        description: The ID for the template
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '202':
+          description: Export site from template process is in progress
+        '303':
+          description: Export site from template process completed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Access denied
+        '404':
+          description: Page not found / Metthod calling with invalid API version
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/collobfolders:
+    get:
+      tags:
+      - Site Resource APIs
+      operationId: getCollobFoldersDetails
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: siteid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: parentfolderid
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: dmsdatabasename
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: childonly
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Get collob folders details
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/templates/{templateid}/content/{progresskey}:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Export/Download template as a .hqa file
+      description: 'API to export site template as a .hqa file.
+
+
+        To use this API, first use/consume Export template API (sites/templates/{templateid}/content).
+
+        progresskey can be found in the response of Export template API.
+
+        Please see documentation of Export template API for more details on how to consume this API.'
+      operationId: exportSiteTemplate
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: templateid
+        in: path
+        description: The ID for the template
+        required: true
+        schema:
+          type: string
+      - name: progresskey
+        in: path
+        description: A progress key
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Template exported
+        '401':
+          description: Unauthorized
+        '403':
+          description: Access denied
+        '404':
+          description: Page not found / Metthod calling with invalid API version
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal server error
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/activity:
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Register site login activity
+      description: This API is used to add site login activity when user visits any site from HighQ Drive so that site will appear in recently accessed sites list.
+      operationId: addSiteLoginActivity
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: The ID for the site in which site login activity to be added
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/templates/{templateid}/site:
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Create site from template
+      description: 'API to Create site from template.
+
+
+        This is a Long polling API( Multi step API). Below are the steps explaning how to consume this API.
+
+
+        Step 1: Start the Create site from template process
+
+
+        Request URI:
+
+
+        POST api/8/sites/templates/{template_id}/site
+
+
+        Request body:
+
+
+        <site>
+
+        <sitename></sitename>
+
+        <sitedescription></sitedescription>
+
+        <module></module>
+
+        <landingpage></landingpage>
+
+        <startdate></startdate>
+
+        <endDate></endDate>
+
+        <clientno></clientno>
+
+        <matterno></matterno>
+
+        <categories></categories>
+
+        <adminnote></adminnote>
+
+        </site>
+
+
+        Response:
+
+
+        Status code: 202 Accepted
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>INPROGRESS</progresskeystatus>
+
+        <link>https://host.com/context/api/8/progress/{progress_key}</link>
+
+        </progressresponse>
+
+
+        Step 2: Check the progress of Create site from template process
+
+
+        Request URI:
+
+
+        GET /api/8/progress/{progress_key}
+
+
+        Response:
+
+
+        In case Create site from template process is still running.
+
+
+        Status code: 200 OK
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>INPROGRESS</progresskeystatus>
+
+        <link>https://host.com/context/api/8/progress/{progress_key}</link>
+
+        </progressresponse>
+
+
+        When Create site from template process has been completed.
+
+
+        Status code: 303 See Other
+
+
+        Response body:
+
+
+        <progressresponse>
+
+        <progresskeystatus>DONE</progresskeystatus>
+
+        <link>https://host.com/context/api/8/sites/{site_id}</link>
+
+        </progressresponse>'
+      operationId: createSiteFromTemplate
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: templateid
+        in: path
+        description: The ID for the template
+        required: true
+        schema:
+          type: string
+      responses:
+        '156':
+          description: Site name already exists in the system
+        '200':
+          description: OK
+        '202':
+          description: Create site from template process is in progress
+        '303':
+          description: Create site from template process completed
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '404':
+          description: Page not found / Metthod calling with invalid API version
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/site'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users/{userid}/emailalerts:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get email alert settings
+      description: This method allows you to get the email alert setting for a user
+      operationId: getEmailAlertsForSiteUser
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: path
+        description: 'The ID of the user. '
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/emailalerts'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailalerts'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Set email alert settings
+      description: This method allows you to set or update the email alert setting for a user
+      operationId: setEmailAlertsForSiteUser
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: path
+        description: The ID of the user.
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/emailalerts'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailalerts'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users/{userids}:
+    delete:
+      tags:
+      - Site Resource APIs
+      summary: Remove users from a site
+      description: This method can be used to remove user(s) which given in userCSV from a site.
+      operationId: removeUsersFromSite
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: path
+        description: The ID for the site.
+        required: true
+        schema:
+          type: string
+      - name: userids
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users/resetpassword:
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Send reset password email to users
+      description: 'Use this method to send a reset password email to user(s)
+
+
+        Notes :
+
+        1) In the case of success, it will display the message "Successfully sent the reset password email"
+
+        2) When a user id is not correct, it will display the message "User Id provided is invalid"
+
+        3) When a given user id is not a site participant, it will display the message "User with the specified user ID does not exist in the site"
+
+        4) When a user id has already requested a password reset email and then requests it again it will display the message "User with this User ID has already been sent a reset password email"
+
+        5) When a user id is not in the system or a user is not active, it will display a message "User with this user ID does not exist in system or the user is not active"
+
+        6) When the site is archived or a user does not have access to the site, it will display the message "Site is archived or user does not have access to the site "
+
+        7) In any other case of exception, it will display the message "Internal server error"'
+      operationId: memberManagerResetPassword
+      parameters:
+      - name: siteid
+        in: path
+        description: site id
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TransactionIds'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionIds'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users/{userid}/groups:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get all groups in which given userID is participants
+      description: 'A list of groups in which given userID is participants.Notes :
+
+        In the response all groups in which given userID is participants are returned'
+      operationId: getAllSiteGroupsUsers
+      parameters:
+      - name: siteid
+        in: path
+        description: site id
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: path
+        description: user id
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/modulepermissions'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/modulepermissions'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users/activate:
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Activate users
+      description: 'Use this method to activate user(s) in a site
+
+
+        Note:
+
+
+        User Id must be integer. If it''s not, it will display the following message "User ID provided is Invalid."
+
+
+        If a user id is listed multiple times in the transaction id''s list it will initially activate the user and the next time it will display the following message "The selected user is already activated".
+
+
+        The user must be a participant of the given site. If the user is not, it will display the following message "User with the specified User ID does not exist in the site"'
+      operationId: activateSiteParticipants
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: path
+        description: site ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TransactionIds'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionIds'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users/{userid}/modulepermissions:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get user module permission
+      description: Use this method to get module permissions for a user
+      operationId: getModulePermissionForUser
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: path
+        description: The ID of the site user.
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/modulepermissions'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/modulepermissions'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Add / edit user module permission
+      description: Method to allocate module permissions to a user
+      operationId: addModulePermissionForUser
+      parameters:
+      - name: siteid
+        in: path
+        description: The ID of the site.
+        required: true
+        schema:
+          type: string
+      - name: userid
+        in: path
+        description: 'The ID of the user. '
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/modulepermissions'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/modulepermissions'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users/suspended:
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Suspend users
+      description: 'Use this method to suspend user(s) in a site
+
+
+        Notes :
+
+        1) In case of success, it will display the following message "User suspended successfully."
+
+        2) When the user id is not correct, it will display the following message "User Id provided is Invalid"
+
+        3) When a given user id is not a site participant, it will display the following message "User with the specified User ID does not exist in the site"
+
+        4) When a user id is already suspended from the site, it will display the following message "The selected user is already suspended"
+
+        5) When a user id is not in system or the user is not active, it will display the following message "User with this User ID does not exist in system or User is not active"
+
+        6) When a given user id is a system administrator or has created the given site it will display the following message "The selected user is either a System Administrator or is the creator of this site and cannot be suspended. "
+
+        7) In any other exception, it will display the following message "Internal server error"'
+      operationId: suspendSiteParticipants
+      parameters:
+      - name: siteid
+        in: path
+        description: site id
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TransactionIds'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionIds'
+    servers:
+    - url: /monumentuat/api
+  /{version}/progress/{progresskey}:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Check progress status
+      description: API to check status of a running progress by progress key.
+      operationId: checkProgressKeyStatus
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: progresskey
+        in: path
+        description: A progress key
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Process is in progress
+        '303':
+          description: Process is completed
+        '401':
+          description: Unauthorized
+        '404':
+          description: Page not found / Metthod calling with invalid API version
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/users/invitation:
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Send invitation email to users
+      description: 'Use this method to send an invitation email to user(s)
+
+
+        Notes :
+
+
+        1) User id must be integer. If it''s not, it will display the message "User ID provided is Invalid."
+
+        2) If a user id is displayed in the transaction id''s list multiple times, an invitation will be sent to the user and then a message will display the second time stating "This user was already sent an invitation."
+
+        3) User must be a participant of a given site. If they are not it will display the message "User with the specified User ID does not exist in the site."
+
+        4) Admin users can send invitations to users who were added by him. Other users will see the message "You do not have rights to send an invitation email to the specified user."
+
+        5) If the site is in preparation mode at the time the invitation is send to site admin only and it was send by site admin or system admin.
+
+        6) If the site is in archive mode at that time an invitation is sent, the response will be "Access denied".
+
+        7) If the site is in read only mode at that time an invitation is sent, only system admin have rights to send an invitation to site participants.
+
+        8) In the request body, a user must add an e-mail message in the CDATA tag if they have special characters in e-mail message tag. See the request body below
+
+        <invitations>
+
+        <messagebody>
+
+        <![CDATA[E-Mail message.]]>
+
+        </messagebody>
+
+        <transactionids>
+
+        <transactionid>102</transactionid>
+
+        <transactionid>126</transactionid>
+
+        <transactionid>128</transactionid>
+
+        <transactionid>129</transactionid>
+
+        </transactionids>
+
+        </invitations>
+
+        9) If user status is suspended, inactive or archived at the time an invitation is sent, the email will not be sent to the specific user and this message will display "User with this User ID does not exist in system or User is not active."'
+      operationId: sendInvitationToSiteParticipant
+      parameters:
+      - name: siteid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionstatus'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Invitation'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invitation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Invitation'
+    servers:
+    - url: /monumentuat/api
+  /{version}/progressivekeystatus/{progressivekey}:
+    post:
+      tags:
+      - Site Resource APIs
+      operationId: checkProgressiveKeyStatus
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: progressivekey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Check progressive key status
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/getPermittedSitesForUser:
+    get:
+      tags:
+      - Site Resource APIs
+      operationId: getPermittedSitesForUser
+      parameters:
+      - name: userEmailID
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: instanceMetaInfoRequired
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: searchText
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: startPosition
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        default:
+          description: successful operation
+      security:
+      - OAuth: []
+      summary: Get permitted sites for user
+      x-summary-source: derived
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/templates/{templateid}:
+    get:
+      tags:
+      - Site Resource APIs
+      summary: Get template
+      description: 'The get template API returned the details for a template. Anyone with template access in Collaborate is permitted to use this API endpoint.
+
+        The fields returned for the template object are determined based on user permissions. If the user is a site admin user then they will get fields like Admin Notes otherwise not.
+
+        The current implementation does not include logo link.
+
+        The response object contains the user ID of the template owner.
+
+        The API responds with an access denied message when ''My site'' details of another user are accessed.
+
+        Blank values for individual fields are not returned in the XML response, absence of value in the returned XML means that either the value does not exist for that field or the user does not have access to that field.
+
+        From version 7 onwards module tag will be in response to all user (Not only Admin) , and enable=0/1 will be based on either ON/OFF or have access (for normal users) to that module'
+      operationId: getTemplate
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: templateid
+        in: path
+        description: The ID for the template in question
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/site'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Site Resource APIs
+      summary: Update template
+      description: Use this API endpoint to update the details of an existing template. The API supports the same fields used in create template API.
+      operationId: updateSite_1
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: templateid
+        in: path
+        description: The ID for the template
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: OK
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while gettting site
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteTemplate'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SiteTemplate'
+    delete:
+      tags:
+      - Site Resource APIs
+      summary: Delete template
+      description: 'This API method is used to delete a template. The template is marked as archived and the system admin can revert the action if required. The system throws an ''Access Denied'' message if the template does not exist.
+
+        If a delete file request is sent through the API for a template that has already been archived, the API will return a 200 OK response to that request.
+
+
+        Response
+
+        The system sends a 200 OK response in case of success and throws an error object in case of an error.'
+      operationId: deleteSite_1
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: templateid
+        in: path
+        description: The ID for the template in question.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while deleting site
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/templates:
+    post:
+      tags:
+      - Site Resource APIs
+      summary: Create template
+      description: 'Use this API to create a new template.The template object only supports attributes which are visible in the create template interface.
+
+        The method implementation now supports site templates.
+
+        This method does not support uploading template image in this call, the template icon support will be provided as a separate call.
+
+        The method call expects an existing category ID. The category ID should be obtained by the calling application by an earlier call to the template categories interface.
+
+        template start and end date should be in the format of ''dd MMM yyyy'' and it is NOT UTC. API client will always request actual date.
+
+        We expect three different wordings or identifications for options in for Files module. Possible values are:
+
+        - files (root folder)
+
+        - files (recent activity)
+
+        - files (advanced search)
+
+        API 7 or higher, template created from template will follow modules from source template and it will ignore module list sent in request body.'
+      operationId: createSite_1
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      responses:
+        '201':
+          description: Template created successfully [id,sitename and link tags are used in response.]
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/site'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '409':
+          description: Template already exists in the system
+        '500':
+          description: Internal error occured while adding template
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SiteTemplate'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteTemplate'
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    TagsDBO:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            type: string
+    SiteRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedsite:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    HomeModulePermission:
+      type: object
+      properties:
+        view:
+          type: string
+    QaDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    Invitation:
+      type: object
+      properties:
+        messagebody:
+          type: string
+        transactionids:
+          $ref: '#/components/schemas/TransactionIds'
+      xml:
+        name: invitations
+    WikiModulePermission:
+      type: object
+      properties:
+        view:
+          type: string
+        edit:
+          type: string
+    MetadataListDBO:
+      type: object
+      properties:
+        metadataname:
+          type: array
+          items:
+            type: string
+        metadatavalue:
+          type: array
+          items:
+            type: string
+    user:
+      type: object
+      properties:
+        userid:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        email:
+          type: string
+        name:
+          $ref: '#/components/schemas/UserName'
+        userlink:
+          type: string
+        httplink:
+          type: string
+        httpavatar:
+          type: string
+        avatar:
+          type: string
+        externalid:
+          type: string
+        dateofbirth:
+          type: string
+        phone:
+          type: string
+        jobtitle:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        status:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        img:
+          type: string
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        bio:
+          type: string
+        sourcetype:
+          type: string
+        specialities:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        link:
+          type: string
+        loggeduserlike:
+          type: integer
+          format: int32
+        userName:
+          type: string
+    BidderSiteDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+        advancedqapermission:
+          type: string
+    IntegrationUserDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        userid:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        lastname:
+          type: string
+        practicegroup:
+          type: string
+        langcode:
+          type: string
+        localeID:
+          type: string
+        publicprofile:
+          type: string
+        pwpid:
+          type: string
+        usertypeid:
+          type: string
+        systemuser:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        address:
+          $ref: '#/components/schemas/Address'
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        img:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        externalid:
+          type: string
+        jobtitle:
+          type: string
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        specialities:
+          type: string
+        title:
+          type: string
+        goesby:
+          type: string
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        bio:
+          type: string
+        dateOfBirth:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+        sourcetype:
+          type: string
+        orgid:
+          type: string
+        ifpartner:
+          type: string
+        emaildomain:
+          type: string
+        invitationsent:
+          type: string
+        createdby:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        lastlogindate:
+          type: string
+        invalidlogins:
+          type: string
+        publicwebsiteprofileid:
+          type: string
+        resetpassworddate:
+          type: string
+        avatar:
+          type: string
+        followingcount:
+          type: integer
+          format: int32
+        followercount:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        sites:
+          $ref: '#/components/schemas/sites'
+        role:
+          type: string
+        orgName:
+          type: string
+      xml:
+        name: user
+    NameValueLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    WikiDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    site:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sitename:
+          type: string
+        sitetemplateID:
+          type: integer
+          format: int32
+          xml:
+            name: sitetemplateid
+        role:
+          type: string
+        sitedescription:
+          type: string
+        enabledmodules:
+          type: string
+        sitefolderID:
+          type: string
+        folder:
+          $ref: '#/components/schemas/Folder'
+        sitefolderpermission:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        adminnote:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+        createddate:
+          type: string
+        archiveddate:
+          type: string
+        clientno:
+          type: string
+        matterno:
+          type: string
+        landingpage:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        maxpagecount:
+          type: string
+        siteowner:
+          $ref: '#/components/schemas/UserDBO'
+        sitehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModule'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        csvSiteCategory:
+          type: string
+        biddersite:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        sitenametranslations:
+          $ref: '#/components/schemas/translations'
+        siteNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        siteLogoName:
+          type: string
+        siteLogoFileSize:
+          type: integer
+          format: int64
+        siteLogoHeight:
+          type: integer
+          format: int32
+        siteLogoWidth:
+          type: integer
+          format: int32
+        siteStatus:
+          type: integer
+          format: int32
+        applySiteTerms:
+          type: integer
+          format: int32
+        siteTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        nextLoginSiteTerms:
+          type: integer
+          format: int32
+        defaultSiteTermsEnable:
+          type: integer
+          format: int32
+        advancedQAPermission:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        siteLabelDisplay:
+          type: string
+        allowSiteAdministration:
+          type: integer
+          format: int32
+        siteLevelPasswordEnable:
+          type: integer
+          format: int32
+        siteLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        sitePassword:
+          type: string
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        applySiteHomePage:
+          type: integer
+          format: int32
+        siteHomePage:
+          type: string
+        siteHomePageType:
+          type: integer
+          format: int32
+        nextLoginSiteHomePage:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        siteCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        siteModuleID:
+          type: integer
+          format: int32
+        icalSecurity:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        announcementMLJSON:
+          type: string
+        siteRestrictionType:
+          $ref: '#/components/schemas/SiteRestrictionType'
+        enableDocumentRedaction:
+          type: boolean
+          xml:
+            name: enabledocumentredaction
+        mysite:
+          type: boolean
+    BlogModulePermission:
+      type: object
+      properties:
+        view:
+          type: string
+        edit:
+          type: string
+    Inbox:
+      type: object
+      properties:
+        enable:
+          type: string
+        accountname:
+          type: string
+    ContactUS:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactUSDBO'
+        type:
+          type: string
+      xml:
+        name: contactus
+    ActivityDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        microblog:
+          type: string
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ISheetDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    Categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDBO'
+    FileModule:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showsitemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    users:
+      type: object
+      properties:
+        total:
+          type: string
+        totalcount:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+      xml:
+        name: users
+    DocumentDBO:
+      type: object
+      properties:
+        documentname:
+          type: string
+          xml:
+            name: filename
+        dmsVersion:
+          type: string
+        notification:
+          type: string
+          example: E.g. 1/2/3
+        folderID:
+          type: string
+        documentID:
+          type: string
+          xml:
+            name: fileid
+        batchID:
+          type: string
+        status:
+          type: string
+        documentKey:
+          type: string
+        dmsDocumentDBO:
+          xml:
+            name: dms
+          $ref: '#/components/schemas/DMSDocumentDBO'
+        enable:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        versionid:
+          type: integer
+          format: int32
+        versionnote:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        type:
+          type: string
+        originaltype:
+          type: string
+        icon:
+          type: string
+        commentscount:
+          type: integer
+          format: int32
+        likescount:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/TagsDBO'
+        location:
+          type: string
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        siteid:
+          type: integer
+          format: int32
+        parentfolderid:
+          type: integer
+          format: int32
+        error:
+          type: string
+        size:
+          type: integer
+          format: int64
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: file
+    group:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: name of group
+        description:
+          type: string
+        guid:
+          type: string
+        groupID:
+          type: integer
+          format: int32
+        link:
+          type: string
+        sourcetype:
+          type: string
+        message:
+          type: string
+        scope:
+          type: string
+        numberofusers:
+          type: string
+        id:
+          type: string
+        type:
+          type: string
+        createddate:
+          type: string
+        nooforganisation:
+          type: integer
+          format: int32
+      xml:
+        name: group
+    FileModuleSiteTemplate:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showtemplatemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    UserName:
+      type: object
+      properties:
+        title:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        goesby:
+          type: string
+      xml:
+        name: username
+    Folder:
+      type: object
+      required:
+      - foldername
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        dmsfolderid:
+          type: string
+          xml:
+            attribute: true
+        permission:
+          type: string
+          xml:
+            attribute: true
+        foldername:
+          type: string
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/Folder'
+        child:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: folder
+    emailalerts:
+      type: object
+      properties:
+        immediate:
+          type: string
+        daily:
+          type: string
+        weekly:
+          type: string
+      xml:
+        name: emailalerts
+    ContactUSDBO:
+      type: object
+      properties:
+        value:
+          type: string
+      xml:
+        name: values
+    IntegrationResponseUsersObject:
+      type: object
+      properties:
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationUserDBO'
+      xml:
+        name: users
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    PermissionDBO:
+      type: object
+      properties:
+        view:
+          type: integer
+          format: int32
+        edit:
+          type: integer
+          format: int32
+        delete:
+          type: integer
+          format: int32
+        addEditAllFiles:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
+        viewAllFiles:
+          type: integer
+          format: int32
+    GroupsDBO:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            type: string
+    ExperiencesDBO:
+      type: object
+      properties:
+        experience:
+          type: array
+          items:
+            type: string
+    Emailmetadata:
+      type: object
+      properties:
+        enable:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailmetadataallfolder:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailfrom:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailto:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailcc:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailsent:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailreceived:
+          type: string
+          enum:
+          - TRUE/FALSE
+    EventsModulePermission:
+      type: object
+      properties:
+        view:
+          type: string
+        edit:
+          type: string
+    PeopleDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    HomeDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Address:
+      type: object
+      properties:
+        addressid:
+          type: string
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postCode:
+          type: string
+        knownas:
+          type: string
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    EmailUserDBO:
+      type: object
+      properties:
+        emailsubject:
+          type: string
+        messagebody:
+          type: string
+        transactionids:
+          $ref: '#/components/schemas/TransactionIds'
+      xml:
+        name: emailusers
+    modulepermissions:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeModulePermission'
+        activity:
+          $ref: '#/components/schemas/ActivityModulePermission'
+        files:
+          $ref: '#/components/schemas/FilesModulePermission'
+        wiki:
+          $ref: '#/components/schemas/WikiModulePermission'
+        blog:
+          $ref: '#/components/schemas/BlogModulePermission'
+        tasks:
+          $ref: '#/components/schemas/TaskModulePermission'
+        events:
+          $ref: '#/components/schemas/EventsModulePermission'
+      xml:
+        name: modulepermissions
+    SiteTemplateRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedtemplate:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    SiteTemplate:
+      type: object
+      properties:
+        templateid:
+          type: integer
+          format: int32
+        templatename:
+          type: string
+        role:
+          type: string
+        templatedescription:
+          type: string
+        enabledmodules:
+          type: string
+        templatefolderID:
+          type: string
+        includeUsers:
+          type: boolean
+        includeSiteLogo:
+          type: boolean
+        folder:
+          $ref: '#/components/schemas/Folder'
+        templatefolderpermission:
+          type: string
+        adminnote:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        enddate:
+          type: string
+        startdate:
+          type: string
+        archiveddate:
+          type: string
+        createddate:
+          type: string
+        landingpage:
+          type: string
+        clientno:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        matterno:
+          type: string
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        link:
+          type: string
+        templateowner:
+          $ref: '#/components/schemas/UserDBO'
+        templatehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModuleSiteTemplate'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        maxpagecount:
+          type: string
+        templatenametranslations:
+          $ref: '#/components/schemas/translations'
+        templateNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        csvTemplateCategory:
+          type: string
+        templateLogoFileSize:
+          type: integer
+          format: int64
+        templateLogoHeight:
+          type: integer
+          format: int32
+        templateLogoWidth:
+          type: integer
+          format: int32
+        biddertemplate:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        applyTemplateTerms:
+          type: integer
+          format: int32
+        templateTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        templateLogoName:
+          type: string
+        templateStatus:
+          type: integer
+          format: int32
+        nextLoginTemplateTerms:
+          type: integer
+          format: int32
+        defaultTemplateTermsEnable:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        templateLabelDisplay:
+          type: string
+        advancedQAPermission:
+          type: integer
+          format: int32
+        templateLevelPasswordEnable:
+          type: integer
+          format: int32
+        templateLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        allowTemplateAdministration:
+          type: integer
+          format: int32
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        templatePassword:
+          type: string
+        applyTemplateHomePage:
+          type: integer
+          format: int32
+        templateHomePageType:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        nextLoginTemplateHomePage:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        templateHomePage:
+          type: string
+        templateCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        templateModuleID:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        icalSecurity:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        announcementMLJSON:
+          type: string
+        templateRestrictionType:
+          $ref: '#/components/schemas/SiteTemplateRestrictionType'
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+      xml:
+        name: template
+    ModuleDBO:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeDBO'
+        activity:
+          $ref: '#/components/schemas/ActivityDBO'
+        document:
+          $ref: '#/components/schemas/DocumentDBO'
+        blog:
+          $ref: '#/components/schemas/BlogDBO'
+        wiki:
+          $ref: '#/components/schemas/WikiDBO'
+        task:
+          $ref: '#/components/schemas/TaskDBO'
+        event:
+          $ref: '#/components/schemas/EventDBO'
+        isheet:
+          $ref: '#/components/schemas/ISheetDBO'
+        qa:
+          $ref: '#/components/schemas/QaDBO'
+        people:
+          $ref: '#/components/schemas/PeopleDBO'
+    LocationDBO:
+      type: object
+      properties:
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postcode:
+          type: string
+    TaskDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        timelineview:
+          type: string
+    Link:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValueLink'
+    FilesModulePermission:
+      type: object
+      properties:
+        view:
+          type: string
+    sites:
+      type: object
+      properties:
+        site:
+          type: array
+          items:
+            $ref: '#/components/schemas/site'
+    RawSiteSize:
+      type: object
+      properties:
+        activedocumentsize:
+          type: integer
+          format: int64
+        deleteddocumentsize:
+          type: integer
+          format: int64
+        totalsize:
+          type: integer
+          format: int64
+    DMSDocumentDBO:
+      type: object
+      properties:
+        dmsdocid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmseditdate:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmsversion:
+          type: string
+      xml:
+        name: dms
+    transactionstatus:
+      type: object
+      properties:
+        transaction:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+      xml:
+        name: transactionstatus
+    Transaction:
+      type: object
+      properties:
+        transactionid:
+          type: string
+        statuscode:
+          type: string
+        reason:
+          type: string
+      xml:
+        name: transaction
+    ActivityModulePermission:
+      type: object
+      properties:
+        view:
+          type: string
+    TransactionIds:
+      type: object
+      properties:
+        transactionid:
+          type: array
+          items:
+            type: string
+      xml:
+        name: transactionids
+    categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+      xml:
+        name: categories
+    CategoryDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: CategoryDBO
+    TaskModulePermission:
+      type: object
+      properties:
+        view:
+          type: string
+        edit:
+          type: string
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,644 @@
+openapi: 3.2.0
+info:
+  version: v1/v2
+  title: GoSystem E-file E-file IRS Lifecycle V2 API
+  description: A RESTful API to provide access to the GoSystem E-file functionality.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/e-files
+security:
+- Authorization: []
+tags:
+- name: E-file IRS Lifecycle V2
+paths:
+  /v2/e-file-submissions:
+    post:
+      tags:
+      - E-file IRS Lifecycle V2
+      summary: Submit e-file
+      description: This endpoint submits e-file for a tax return across jurisdictions.
+      operationId: SubmitsE-fileV2
+      parameters:
+      - name: Account
+        in: header
+        required: true
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/EFileRequestV2'
+            examples:
+              Returns-Example:
+                $ref: '#/components/examples/returns-V2-Example'
+              Estimates-Example:
+                $ref: '#/components/examples/estimates-V2-Example'
+              Extensions-Example:
+                $ref: '#/components/examples/extensions-V2-Example'
+        required: true
+      responses:
+        '200':
+          description: Success. The e-file is submitted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileJurisdictionsSubmissionResponse'
+              examples:
+                efile-submission-success-example:
+                  $ref: '#/components/examples/efile-submission-success-V2-example'
+                efile-submission-failed-example:
+                  $ref: '#/components/examples/efile-submission-failed-V2-example'
+        '400':
+          description: 'Types of error in message:
+
+            - Missing account header: Message: "Please specify account information in header."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - User doesn''t have permission: Message: "User doesn''t have the permission."
+
+            - Invalid tax type: Message: "Invalid Tax Return Type."
+
+            - Invalid jurisdiction: Message: "Invalid Jurisdiction(s) + {wrongjurisdictions}."
+
+            - Invalid EFile Request Type for jurisdiction: Message: "Invalid EFile Request Type for {errorJurisdiction}."
+
+            - Locator doesn''t exist: Message: "Locator not found."
+
+            - Locator is super locked: Message: "Locator is superlocked, Efile Submission restricted."
+
+            - Exception during processing: Message: "Invalid Input {exception message}."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: Submits e-file V2
+  /v2/years/{year}/e-file-statuses:
+    post:
+      tags:
+      - E-file IRS Lifecycle V2
+      summary: Get e-file status
+      description: This endpoint retrieves e-file status by Tax Return or Taxpayer or Submitter or Account. Based on the query parameters, the e-file status can be returned.
+      operationId: ListsTheE-fileStatusesV2
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: Enter a valid 4-digit tax year (e.g., 2024) to view statuses for existing e-files.
+        schema:
+          type: integer
+          format: int32
+      - name: Account
+        in: header
+        required: false
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        schema:
+          type: string
+      - name: EFileJurisdictionID
+        in: header
+        required: false
+        description: Add Jurisdiction ID if required.
+        schema:
+          type: string
+      - name: EfileRequestType
+        in: header
+        required: false
+        description: Add Efile type if required.
+        schema:
+          type: string
+      - name: TotalRowsCount
+        in: header
+        required: false
+        description: Add Total rows count if filter is needed.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EFileStatusQuery'
+            examples:
+              EFile-Status-Query-Example:
+                $ref: '#/components/examples/EFile-Status-Query-Taxreturn-Example'
+        description: '**• If both EFileJurisdictionID and EFileRequestType Headers are needed, make sure the TaxReturnType in the Body is not null.**<br> • Query by Tax Return or Taxpayer or Submitter or Account. The queries are mutually exclusive. Pass the valid values for the query for which you need to fetch the status. For other queries pass null values. Queries will be executed from top to bottom and result will be fetched for the first query with not null values.'
+        required: true
+      responses:
+        '200':
+          description: Success. The e-file status is retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileStatusQuery'
+              examples:
+                efile-status-response-tax-return-example:
+                  $ref: '#/components/examples/efile-status-response-tax-return-V2-example'
+        '400':
+          description: 'Types of error in message:
+
+            - Year is invalid: Message: "Invalid Year."
+
+            - Tax return type is invalid: Message: "Invalid Tax Return Type."
+
+            - Account header is missing: Message: "Please specify account information in header."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - Not enough input parameters: Message: "Not enough input parameters to process the request. Please pass either TaxReturn Or TaxPayer Or Submitter Or Account information."
+
+            - Exception during processing: Message: "Error fetching status - {exception message}."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: Lists the e-file statuses V2
+  ? /v2/years/{year}/tax-return-types/{taxReturnType}/tax-returns/{taxReturnId}/jurisdictions/{jurisdiction}/e-file-request-types/{eFileRequestType}/e-file-rejection-messages
+  : get:
+      tags:
+      - E-file IRS Lifecycle V2
+      summary: Get rejection messages
+      description: This endpoint returns the detail for rejected message for a submitted tax return.
+      operationId: RetrievesTheRejectedMessageV2
+      parameters:
+      - name: year
+        in: path
+        required: true
+        description: The tax year for which the e-file is being processed. Must be a valid 4-digit year (e.g., 2024).
+        schema:
+          type: integer
+          format: int32
+      - name: taxReturnType
+        in: path
+        required: true
+        description: Specifies the type of tax return being filed. 1040, 1041, 1065, 1120, 990, 5500, 709.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnId
+        in: path
+        required: true
+        description: A 6-digit unique alphanumeric identifier for the specific tax return. This is also referred to as the Locator ID.
+        schema:
+          type: string
+      - name: jurisdiction
+        in: path
+        required: true
+        description: 'The state or local jurisdiction code where the tax is being filed. Example: AL for Alabama. Use the /v1/e-file-jurisdictions endpoint to retrieve valid codes.'
+        schema:
+          type: string
+      - name: eFileRequestType
+        in: path
+        required: true
+        description: Indicates the type of e-file request. This value is predefined for each jurisdiction. Use the /v2/e-file-jurisdictions endpoint to retrieve valid request types for each jurisdiction.
+        schema:
+          type: string
+          enum:
+          - REG
+          - REG2
+          - REG3
+          - REG4
+          - EXT
+          - EXT2
+          - EXT3
+          - EXT4
+          - EST
+          - EST2
+          - EST3
+      - name: Account
+        in: header
+        required: true
+        description: A 4-digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success. The rejection messages are retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EFileRejectedMessagesWrapper'
+              examples:
+                efile-rejection-messages-invalid-ein-ssn:
+                  $ref: '#/components/examples/efile-rejection-messages-invalid-ein-ssn-example'
+                efile-rejection-messages-generic-reject:
+                  $ref: '#/components/examples/efile-rejection-messages-generic-reject-example'
+                efile-rejection-messages-missing-irs-file:
+                  $ref: '#/components/examples/efile-rejection-messages-missing-irs-file-example'
+                efile-rejection-messages-ein-ssn-already-in-use:
+                  $ref: '#/components/examples/efile-rejection-messages-ein-ssn-already-in-use-example'
+                efile-rejection-messages-client-efin-account-not-associated:
+                  $ref: '#/components/examples/efile-rejection-messages-client-efin-account-not-associated-example'
+        '400':
+          description: 'Types of error in message:
+
+            - Missing account header: Message: "Please specify account information in header."
+
+            - Invalid tax type: Message: "Invalid Tax Return Type."
+
+            - Invalid jurisdiction: Message: "Invalid Jurisdiction(s)."
+
+            - Invalid EFile Request Type: Message: "Invalid EFile Request Type."
+
+            - Account doesn''t belong to firm: Message: "Account doesn''t belong to firm."
+
+            - Locator doesn''t exist: Message: "Locator not found."
+
+            - Exception during processing: Message: "Invalid Input."'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+        '404':
+          description: Not found.
+        '500':
+          description: Unexpected error encountered. Contact GoSystem Technical Support.
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves the rejected message V2
+components:
+  examples:
+    efile-rejection-messages-invalid-ein-ssn-example:
+      value:
+        EFileRejectList:
+          EFileRejectData:
+          - Severity: ''
+            Rec_Name_or_No: ''
+            Reject_Code: '9995'
+            Form_Occ_No: '0'
+            Field_Seq_No: '0'
+            FormNumber: ''
+            FormPageNo: '0'
+            RuleNumber: ''
+            ErrorMessage: ''
+            XPathToError: ''
+            Text: Invalid EIN\SSN number
+    efile-rejection-messages-client-efin-account-not-associated-example:
+      value:
+        EFileRejectList:
+          EFileRejectData:
+          - Severity: ''
+            Rec_Name_or_No: ''
+            Reject_Code: '9951'
+            Form_Occ_No: '0'
+            Field_Seq_No: '0'
+            FormNumber: ''
+            FormPageNo: '0'
+            RuleNumber: ''
+            ErrorMessage: ''
+            XPathToError: ''
+            Text: The ClientEFIN and Account aren't associated
+    efile-status-response-tax-return-V2-example:
+      value:
+        EFileStatusByAccount:
+          TaxReturn:
+          - ID: '123456'
+            TaxType: '1120'
+            Account: ACCT
+            Year: '2020'
+            TaxPayer: Test TaxPayer
+            ClientCode: xyz
+            Jurisdiction:
+            - Id: FED
+              Name: Federal
+              XMLCreateDate: 05/05/2020 10:20:01
+              EFileEvent:
+              - EFileRequestType: REG
+                EFileDesc: FED
+                Category: Return
+                Event: Initiated with diagnostics
+                EfileStatusDetails: ''
+                Description: Federal
+            - Id: PA
+              Name: Pennsylvania Test
+              XMLCreateDate: null
+              EFileEvent:
+              - EFileRequestType: REG
+                EFileDesc: PA
+                Category: Other Forms
+                Event: Qualified
+                EfileStatusDetails: Qualified - Mismatch
+                Description: Pennsylvania Test
+            - Id: NC
+              Name: North Carolina
+              XMLCreateDate: null
+              EFileEvent:
+              - EFileRequestType: REG
+                EFileDesc: NC
+                Category: Return
+                Event: Qualified
+                EfileStatusDetails: Qualified - Suspended
+                Description: North Carolina
+            - Id: VA
+              Name: Virginia
+              XMLCreateDate: 05/05/2020 10:20:01
+              EFileEvent:
+              - EFileRequestType: REG
+                EFileDesc: VA
+                Category: Return
+                Event: Error - Not Submitted
+                EfileStatusDetails: ''
+                Description: Virginia
+            - Id: CA
+              Name: California Extension
+              XMLCreateDate: 05/05/2020 10:20:01
+              EFileEvent:
+              - EFileRequestType: EXT
+                EFileDesc: CA
+                Category: First Extension
+                Event: Manually Rejected
+                EfileStatusDetails: ''
+                Description: California Extension
+            - Id: WI
+              Name: Wisconsin
+              XMLCreateDate: null
+              EFileEvent:
+              - EFileRequestType: REG
+                EFileDesc: WI
+                Category: Return
+                Event: Accepted
+                EfileStatusDetails: ''
+                TimeStamp: 05/05/2020 10:20:01
+                Description: Wisconsin
+                Submitter:
+                - Id: UserId
+            - Id: AZ
+              Name: Arizona
+              XMLCreateDate: 05/05/2020 10:20:01
+              EFileEvent:
+              - EFileRequestType: REG
+                EFileDesc: AZ
+                Category: Return
+                Event: Initiated
+                EfileStatusDetails: ''
+                Description: Arizona
+    efile-submission-success-V2-example:
+      value:
+        EFileSubmissions:
+        - BatchId: '123456'
+          IsSubmitted: true
+          IsBatchComplete: false
+          ErrorDetail: null
+          FileInfo: null
+          Account: ACCT
+          Year: 2020
+          TaxType: _1120
+          TaxReturnID: '123456'
+          Jurisdiction: FED
+          EFileRequestType: REG
+        FailedSubmissionCount: 0
+    extensions-V2-Example:
+      value:
+      - Year: 2020
+        TaxType: '1065'
+        TaxReturnID: 1234AC
+        Jurisdiction: IN
+        EFileRequestType: EXT
+    estimates-V2-Example:
+      value:
+      - Year: 2020
+        TaxType: '1120'
+        TaxReturnID: 1234AD
+        Jurisdiction: CA
+        EFileRequestType: EST
+    EFile-Status-Query-Taxreturn-Example:
+      value:
+        TaxReturn:
+          TaxReturnType: null
+          TaxReturnId: '123456'
+        TaxPayer:
+          TaxPayer: null
+        Submitter:
+          SubmitterLocation: null
+          SubmitterId: null
+        Account:
+          Status: All
+    efile-rejection-messages-ein-ssn-already-in-use-example:
+      value:
+        EFileRejectList:
+          EFileRejectData:
+          - Severity: ''
+            Rec_Name_or_No: ''
+            Reject_Code: '9998'
+            Form_Occ_No: '0'
+            Field_Seq_No: '0'
+            FormNumber: ''
+            FormPageNo: '0'
+            RuleNumber: ''
+            ErrorMessage: ''
+            XPathToError: ''
+            Text: The EIN\SSN is already in use. Duplicate situation has occurred
+    efile-rejection-messages-missing-irs-file-example:
+      value:
+        EFileRejectList:
+          EFileRejectData:
+          - Severity: ''
+            Rec_Name_or_No: ''
+            Reject_Code: '9500'
+            Form_Occ_No: '0'
+            Field_Seq_No: '0'
+            FormNumber: ''
+            FormPageNo: '0'
+            RuleNumber: ''
+            ErrorMessage: ''
+            XPathToError: ''
+            Text: Missing IRS file
+    efile-rejection-messages-generic-reject-example:
+      value:
+        EFileRejectList:
+          EFileRejectData:
+          - Severity: ''
+            Rec_Name_or_No: ''
+            Reject_Code: '9999'
+            Form_Occ_No: '0'
+            Field_Seq_No: '0'
+            FormNumber: ''
+            FormPageNo: '0'
+            RuleNumber: ''
+            ErrorMessage: ''
+            XPathToError: ''
+            Text: Generic Reject
+    efile-submission-failed-V2-example:
+      value:
+        EFileSubmissions:
+        - BatchId: null
+          IsSubmitted: true
+          IsBatchComplete: false
+          ErrorDetail: SubmitEFile failed Locator 123456 has Busy flag set to 26
+          FileInfo: null
+          Account: ACCT
+          Year: 2020
+          TaxType: _1120
+          TaxReturnID: '123456'
+          Jurisdiction: FED
+          EFileRequestType: REG
+        FailedSubmissionCount: 1
+    returns-V2-Example:
+      value:
+      - Year: 2020
+        TaxType: '1040'
+        TaxReturnID: 1234AB
+        Jurisdiction: TX
+        EFileRequestType: REG
+  schemas:
+    AccountQuery:
+      type: object
+      properties:
+        Status:
+          type: string
+    EFileJurisdictionsSubmissionResponse:
+      type: object
+      properties:
+        EFileSubmissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileSubmissionResponse'
+        FailedSubmissionCount:
+          format: int32
+          type: integer
+    EFileRejectedMessagesWrapper:
+      type: object
+      properties:
+        EFileRejectList:
+          $ref: '#/components/schemas/EFileRejectedMessages'
+    EFileSubmissionResponse:
+      type: object
+      properties:
+        BatchId:
+          type:
+          - string
+          - 'null'
+        IsSubmitted:
+          type: boolean
+        IsBatchComplete:
+          type: boolean
+        ErrorDetail:
+          type:
+          - string
+          - 'null'
+        FileInfo:
+          type:
+          - string
+          - 'null'
+        Account:
+          type: string
+        Year:
+          format: int32
+          type: integer
+        TaxType:
+          type: string
+        TaxReturnID:
+          type: string
+        Jurisdiction:
+          type: string
+        EFileRequestType:
+          type: string
+    SubmitterQuery:
+      type: object
+      properties:
+        SubmitterLocation:
+          type:
+          - string
+          - 'null'
+        SubmitterId:
+          type:
+          - string
+          - 'null'
+    EFileRejectedMessage:
+      type: object
+      properties:
+        Severity:
+          type: string
+        Rec_Name_or_No:
+          type: string
+        Reject_Code:
+          type: string
+        Form_Occ_No:
+          type: string
+        Field_Seq_No:
+          type: string
+        FormNumber:
+          type: string
+        FormPageNo:
+          type: string
+        RuleNumber:
+          type: string
+        ErrorMessage:
+          type: string
+        XPathToError:
+          type: string
+        Text:
+          type: string
+    EFileRejectedMessages:
+      type: object
+      properties:
+        EFileRejectData:
+          type: array
+          items:
+            $ref: '#/components/schemas/EFileRejectedMessage'
+    EFileStatusQuery:
+      type: object
+      properties:
+        TaxReturn:
+          $ref: '#/components/schemas/TaxReturnQuery'
+        TaxPayer:
+          $ref: '#/components/schemas/TaxPayerQuery'
+        Submitter:
+          $ref: '#/components/schemas/SubmitterQuery'
+        Account:
+          $ref: '#/components/schemas/AccountQuery'
+    TaxReturnQuery:
+      type: object
+      properties:
+        TaxReturnType:
+          type:
+          - string
+          - 'null'
+        TaxReturnId:
+          type: string
+    TaxPayerQuery:
+      type: object
+      properties:
+        TaxPayer:
+          type:
+          - string
+          - 'null'
+    EFileRequestV2:
+      type: object
+      properties:
+        Year:
+          format: int32
+          type: integer
+          description: The tax year for which the e-file is being processed. Must be a valid 4-digit year (e.g., 2024).
+        TaxType:
+          type: string
+          description: Specifies the type of tax return being processed. 1040, 1041, 1065, 1120, 990, 5500, 709.
+        TaxReturnID:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the specific tax return. This is also referred to as the Locator ID.
+        Jurisdiction:
+          type: string
+          description: 'The state or local jurisdiction code where the tax is being filed. Example: AL for Alabama. Use the /v2/e-file-jurisdictions endpoint to retrieve valid codes.'
+        EFileRequestType:
+          type: string
+          description: 'Indicates the type of e-file request. This value is predefined for each jurisdiction. Example: REG, REG2. Use the /v2/e-file-jurisdictions endpoint to retrieve valid request types for each jurisdiction.'
+          enum:
+          - REG
+          - REG2
+          - REG3
+          - EXT
+          - EXT2
+          - EXT3
+          - EXT4
+          - EST
+          - EST2
+          - EST3
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

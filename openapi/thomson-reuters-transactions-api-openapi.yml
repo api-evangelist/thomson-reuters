@@ -1,0 +1,572 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Transactions API
+  version: '2.0'
+  description: 'Operations tagged Transactions across 2 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-services-v1-openapi.json, thomson-reuters-onesource-trust-tax-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax
+security:
+- bearerAuth: []
+tags:
+- name: Transactions
+paths:
+  /v1/transactions/operations/{id}:
+    get:
+      tags:
+      - Transactions
+      summary: Allows an authenticated user to retrieve the transaction status
+      description: Retrieves the Transaction status
+      operationId: RetrievesTheTransactionStatus
+      parameters:
+      - name: id
+        in: path
+        description: Operation request identifier
+        required: true
+        schema:
+          type: string
+          description: Operation request identifier
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves the Transaction status
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v1/tax-years/{tax-year}/transaction-tax-codes:
+    get:
+      tags:
+      - Transactions
+      summary: Allows an authenticated user to get applicable tax codes for transaction
+      description: Retrieves Transaction TaxCodes
+      operationId: RetrievesTransactionTaxCodes
+      parameters:
+      - name: tax-year
+        in: path
+        description: Tax year
+        required: true
+        schema:
+          type: integer
+          description: Tax year
+          format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxCodeDetail'
+        '403':
+          description: Unauthorized-This usually indicates a bad authorization token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Unexpected error encountered. Response has been reported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Transaction TaxCodes
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v1/tax-years/{tax-year}/pans/{pan}/accounts/{acctNo}/transactions/{transactionid}:
+    put:
+      tags:
+      - Transactions
+      summary: Allows an authenticated user to update transactions for designated PAN/Trust…
+      description: Update existing Transaction information
+      operationId: UpdateExistingTransactionInformation
+      parameters:
+      - name: tax-year
+        in: path
+        description: Transaction tax year
+        required: true
+        schema:
+          type: string
+          description: Transaction tax year
+      - name: pan
+        in: path
+        description: Product Access Number
+        required: true
+        schema:
+          type: string
+          description: Product Access Number
+      - name: acctNo
+        in: path
+        description: Trust Account Number
+        required: true
+        schema:
+          type: string
+          description: Trust Account Number
+      - name: transactionid
+        in: path
+        description: Transaction ID# (referred to in register properties as Worksheet Reference Number; referred to in Account Binder Transaction Summary as Transaction Detail)
+        required: true
+        schema:
+          type: integer
+          description: Transaction ID# (referred to in register properties as Worksheet Reference Number; referred to in Account Binder Transaction Summary as Transaction Detail)
+          format: int32
+      requestBody:
+        description: Transaction Model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TransactionModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TransactionModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TransactionModel'
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request-The request contained invalid parameters that the server was unable to process. A list of incorrect parameters will be provided in the response. Please edit the request and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Unauthorized-This usually indicates a bad authorization token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Unexpected error encountered. Response has been reported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Update existing Transaction information
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+components:
+  schemas:
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+    OperationsStatus:
+      enum:
+      - NotStarted
+      - Running
+      - Succeeded
+      - Failed
+      - Cancelled
+      - PartiallySucceeded
+      - Rejected
+      type: string
+    TransactionPaidBy:
+      type: object
+      properties:
+        payor_id:
+          pattern: 111-11-1111 (SSN) or 11-1111111 (TIN)
+          type:
+          - string
+          - 'null'
+          description: Payor ID, either SSN or TIN number
+      additionalProperties: false
+      description: Transaction Paid By Model
+    TaxableFor1:
+      enum:
+      - FederalAndState
+      - FederalOnly
+      type: integer
+      description: Taxable for
+      format: int32
+    OperationModel:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/OperationsStatus'
+        location:
+          type:
+          - string
+          - 'null'
+        created_date_time:
+          type: string
+          format: date-time
+        last_action_date_time:
+          type: string
+          format: date-time
+      additionalProperties: false
+    ChangeType2:
+      enum:
+      - No Change
+      - Add
+      - Change
+      - Delete
+      type: integer
+      description: Change Type
+      format: int32
+    RevisedFtTransactionType:
+      enum:
+      - ReceiptInKind
+      - DividendReinvestment
+      - SavingsDeposit
+      - SavingWithdrawal
+      - PurchaseAsset
+      - AssetSale
+      - DistributionInKind
+      - AdjustFederalTaxCost
+      - AdjustStateTaxCost
+      - AdjustBookValue
+      - AdjustShares
+      - StockDividendNoOdds
+      - StockDividendCashInLieuOfFractions
+      - RightsReceived
+      - RightsExchanged
+      - CapitalGainsDistribution
+      - LiabilityPaymentsReceived
+      - CashDisbursement
+      - PurchaseOfAccruedInterest
+      - SaleOfAccruedInterest
+      - AssetIncome
+      - MineralRoyalty
+      - Depletion
+      - CommonFundDistributionOfIncome
+      - MutualFundDistribution
+      - CashReceipt
+      - PeriodicMiscellaneousFee
+      - InterestLeftOnDeposit
+      - AddedTransactionFromChangeSystem
+      - AdjustTaxCode
+      - MiscellaneousAdjustTaxCode
+      - AssetSaleNoGainOrLoss
+      type: integer
+      description: Revised FT Transaction Type
+      format: int32
+    TaxCodeDetail:
+      type: object
+      properties:
+        require_asset:
+          type: boolean
+          description: Indicates whether the Asset is required for the specified tax code.
+        asset_type_allowed:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AssetTypes'
+          description: Lists all Asset types allowed for the specified tax code
+        tax_code:
+          type: integer
+          description: TrustTax tax code
+          format: int32
+        description:
+          type:
+          - string
+          - 'null'
+          description: TrustTax tax code description
+      additionalProperties: false
+    TransactionAssetAssociation:
+      type: object
+      properties:
+        assetid:
+          maxLength: 12
+          type:
+          - string
+          - 'null'
+          description: Asset ID/CUSIP
+      additionalProperties: false
+      description: Asset id associated to this transaction
+    TransactionTAS:
+      type: object
+      properties:
+        revised_tav_tax_code:
+          type:
+          - integer
+          - 'null'
+          description: Revised TAV Tax Code
+          format: int32
+        revised_ft_transaction_type:
+          $ref: '#/components/schemas/RevisedFtTransactionType'
+      additionalProperties: false
+      description: Trust Accounting System
+    TransactionGeneral:
+      type: object
+      properties:
+        tax_code:
+          type:
+          - integer
+          - 'null'
+          description: Tax Code
+          format: int32
+        tax_effective_date:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Tax Effective Date
+        ex_dividend_date:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Ex-Dividend Date
+        factor_date:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Factor Date
+        registration_code:
+          maximum: 9999
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Registration Code
+          format: int32
+        taxable_amount:
+          type:
+          - number
+          - 'null'
+          description: Taxable Amount
+          format: double
+        original_face_value:
+          type:
+          - number
+          - 'null'
+          description: Original Face Value
+          format: double
+        apply_payments_to:
+          maxLength: 2
+          type:
+          - string
+          - 'null'
+          description: "Apply payments to is 2 letter state code which is only applicable for following tax codes 81, 82, 189, 190, 236, 398, 414, 415, 416, 417\n            \nState codes\nAL - Alabama\nAK - Alaska\nAZ - Arizona\nAR - Arkansas\nCA - California\nCO - Colorado\nCT - Connecticut\nDE - Delaware\nDC - District of Columbia\nFL - Florida\nGA - Georgia\nHI - Hawaii\nID - Idaho\nIL - Illinois\nIN - Indiana\nIA - Iowa\nKS - Kansas\nKY - Kentucky\nLA - Louisiana\nME - Maine\nMD - Maryland\nMA - Massachusetts\nMI - Michigan\nMN - Minnesota\nMS - Mississippi\nMO - Missouri\nMT - Montana\nNE - Nebraska\nNV - Nevada\nNH - New Hampshire\nNJ - New Jersey\nNM - New Mexico\nNY - New York\nNC - North Carolina\nND - North Dakota\nOH - Ohio\nOK - Oklahoma\nOR - Oregon\nPA - Pennsylvania\nRI - Rhode Island\nSC - South Carolina\nSD - South Dakota\nTN - Tennessee\nTX - Texas\nUT - Utah\nVT - Vermont\nVA - Virginia\nWA - Washington\nWV - West Virginia\nWI - Wisconsin\nWY - Wyoming\nNR - Non Resident (foreign)\nNS - Not needed\n(empty string) - Unknown"
+        taxable_for:
+          $ref: '#/components/schemas/TaxableFor1'
+        cost_basis:
+          type:
+          - number
+          - 'null'
+          description: Cost basis is only applicable for following tax codes 950, 951
+          format: double
+        units:
+          type:
+          - number
+          - 'null'
+          description: Units
+          format: double
+        non_cover_indicator:
+          $ref: '#/components/schemas/NonCoverIndicator'
+        original_acquisition_date:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Original acquisition date is only applicable for following tax codes 950, 951
+        include_in_trust_accounting_income:
+          type:
+          - boolean
+          - 'null'
+          description: Include in Trust Accounting Income (TAI)
+        on_1099_indicator:
+          type:
+          - boolean
+          - 'null'
+          description: On 1099 Indicator is only applicable for 1099 account types and for following tax codes 1,2,3,4,5,6,7,8,9,10,11,13,29,39,51,55,67,68,83,84,85,86,92,107,108,110,121,123,124,125,126,127,150,152,154,155,158,162,165,166,167,168,169,183,184,185,186,191,192,193,194,195,198,199,215,216,217,218,221,222,223,224,226,227,228,298,299,300,348,349,447,448,493,494,495,496,497,498,499,500,501,502,503,504,505,506,507,517,520,594,906
+        hit_reviewed_indicator:
+          type:
+          - boolean
+          - 'null'
+          description: HIT Reviewed Indicator
+        explanation:
+          maxLength: 360
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Explanation
+        change_type:
+          $ref: '#/components/schemas/ChangeType2'
+      additionalProperties: false
+      description: Transaction General Model
+    TransactionModel:
+      required:
+      - yrseq
+      type: object
+      properties:
+        yrseq:
+          type: integer
+          description: Year seq
+          format: int32
+        general:
+          $ref: '#/components/schemas/TransactionGeneral'
+        asset_association:
+          $ref: '#/components/schemas/TransactionAssetAssociation'
+        paid_for:
+          $ref: '#/components/schemas/TransactionPaidFor'
+        paid_to:
+          $ref: '#/components/schemas/TransactionPaidTo'
+        paid_by:
+          $ref: '#/components/schemas/TransactionPaidBy'
+        trust_accounting_system:
+          $ref: '#/components/schemas/TransactionTAS'
+        preparer_notes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TransactionPreparerNotes'
+          description: Preparer notes list
+      additionalProperties: false
+      description: Transaction Model
+    TransactionPaidTo:
+      type: object
+      properties:
+        recipient_id:
+          pattern: 111-11-1111 (SSN) or 11-1111111 (TIN)
+          type:
+          - string
+          - 'null'
+          description: Recipient ID, either SSN or TIN number
+      additionalProperties: false
+      description: Transaction Paid To Model
+    TransactionPaidFor:
+      type: object
+      properties:
+        beneficiary_id:
+          pattern: 111-11-1111 (SSN) or 11-1111111 (TIN)
+          type:
+          - string
+          - 'null'
+          description: Beneficiary ID, either SSN or TIN number
+      additionalProperties: false
+      description: Transaction Paid For Model
+    NonCoverIndicator:
+      enum:
+      - Undetermined
+      - Noncovered
+      - Covered
+      type: integer
+      description: Noncovered Indicator
+      format: int32
+    PriorityEnum:
+      enum:
+      - Information
+      - Action
+      - Urgent
+      - Private
+      type: integer
+      format: int32
+    AssetTypes:
+      enum:
+      - Other
+      - CommonFund
+      - MutualFund
+      - RentOrRoyalty
+      - ScheduleC
+      - ScheduleF
+      - PartnershipK1
+      - InstallmentSale
+      - Mineral
+      - EstateTrustK1
+      - SCorpK1
+      - MunicipalBond
+      - ForeignAsset
+      - TerritorialBond
+      - USGovtBond
+      - SmallBusinessCorporationStock
+      type: integer
+      format: int32
+    TransactionPreparerNotes:
+      required:
+      - explanation
+      - priority
+      type: object
+      properties:
+        priority:
+          $ref: '#/components/schemas/PriorityEnum'
+        explanation:
+          maxLength: 1275
+          minLength: 1
+          type: string
+          description: Explanation
+      additionalProperties: false
+      description: Preparer Notes
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer { token }"'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.json
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

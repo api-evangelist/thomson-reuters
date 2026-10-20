@@ -1,0 +1,237 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Classifications Controller API
+  version: '1.0'
+  description: 'Operations tagged classifications-controller across 2 of this provider''s published API definitions: thomson-reuters-eap-uat-trri-api-research-openapi.json, thomson-reuters-eap-uat-trri-api-research-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/regulatory-intelligence
+tags:
+- name: classifications-controller
+  description: Classifications Controller
+paths:
+  /v1/classifications:
+    get:
+      tags:
+      - classifications-controller
+      summary: return a list of all current main classifications
+      operationId: getRootClassificationsUsingGET
+      parameters:
+      - name: depth
+        in: query
+        description: number of child levels
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ListClassificationDto'
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+  /v1/classifications/{id}:
+    get:
+      tags:
+      - classifications-controller
+      summary: return all child classifications for this particular id
+      operationId: getClassificationUsingGET
+      parameters:
+      - name: depth
+        in: query
+        description: number of child levels
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: id
+        in: path
+        description: classificationId
+        required: true
+        schema:
+          type: string
+        example: ID4B86BB0459011E3A899B08B7B2FF604
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClassificationDto'
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+  /v1/document-classifications-view:
+    post:
+      tags:
+      - classifications-controller
+      summary: Returns documents classifications
+      operationId: getDocumentsClassificationsUsingPOST
+      requestBody:
+        description: documentIds
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentListRequestDto'
+        required: true
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DocumentClassificationsResponse'
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get classifications from Novus
+          content: {}
+      x-codegen-request-body-name: documentIds
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+  /v1/documents/{guid}/classifications:
+    get:
+      tags:
+      - classifications-controller
+      summary: Returns document classifications
+      operationId: getDocumentClassificationsUsingGET
+      parameters:
+      - name: guid
+        in: path
+        description: ID of document to return classifications
+        required: true
+        schema:
+          type: string
+        example: I7F4C0140552111E9A0BECB92654B8826
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DocumentClassificationsDto'
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Requested document are forbidden to user
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get classifications from Novus
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+components:
+  schemas:
+    ListClassificationDto:
+      title: ListClassificationDto
+      type: object
+      properties:
+        classificationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationDto'
+    ClassificationDto:
+      title: ClassificationDto
+      type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationDto'
+        hasChildren:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+        parentId:
+          type: string
+    TaxonomyDto:
+      title: TaxonomyDto
+      type: object
+      properties:
+        id:
+          type: string
+        parentId:
+          type: string
+        type:
+          type: string
+        value:
+          type: string
+    DocumentClassificationsResponse:
+      title: DocumentClassificationsResponse
+      type: object
+      properties:
+        documentClassificationsView:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentClassificationsDto'
+    DocumentClassificationsDto:
+      title: DocumentClassificationsDto
+      type: object
+      properties:
+        classifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxonomyDto'
+        documentId:
+          type: string
+    DocumentListRequestDto:
+      title: DocumentListRequestDto
+      type: object
+      properties:
+        documentIds:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: To generate Access Token, please use the steps described in <a href='/regulatory-intelligence/swagger_openapi_document/eap-trri-api-access-token/100?from=api&id=9296' rel='noopener noreferrer' target='_blank'>TRRI API Access Token</a> section, ex. 'Bearer {access_token}'.
+x-refined-from:
+- thomson-reuters-eap-uat-trri-api-research-openapi.json
+- thomson-reuters-eap-uat-trri-api-research-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

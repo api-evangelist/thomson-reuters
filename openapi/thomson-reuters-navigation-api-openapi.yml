@@ -1,0 +1,916 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Navigation API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Navigation across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Navigation
+paths:
+  /{version}/site/{siteid}/navigation:
+    get:
+      tags:
+      - Navigation
+      summary: Get site navigation menus
+      description: Get site navigation menus API
+      operationId: getSiteNavigationMenus
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '9'
+      - name: siteid
+        in: path
+        description: The site id of site navigation
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Sitenavigation returned successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting site navigation menus
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Navigation
+      summary: Add single site navigation menu
+      description: 'Single Site navigation menu configurations API
+
+
+        <itemid>
+
+
+        Item id should be unique in xml. It is used to design sub menu. For e.g. itemid is used while creating the submenu. <menuid>
+
+
+        Menu id of database. <menutypealias>
+
+
+        menutypealias is mandatory field. Allowed values are [COLLABORATE_EXTERNAL_TYPE / COLLABORATE_SINGLE_CONTENT_TYPE / COLLABORATE_CONTAINER_TYPE]
+
+
+        <contenttypeid>
+
+
+        Content type id is mandatory field. Following values are allowed. Content type id
+
+
+        Description
+
+
+        1
+
+
+        belongs to a wiki page type menu. And <contentid> should be the wiki id. 2
+
+
+        belongs to a blog type menu. And <contentid> should be the blog id. 3
+
+
+        belongs to a task type menu. And <contentid> should be the task id. 4
+
+
+        belongs to an event type menu. And <contentid> should be the event id. 8
+
+
+        belongs to a document type menu. And <contentid> should be the document id. 13
+
+
+        belongs to a folder type menu. And <contentid> should be the folder id. 14
+
+
+        belongs to a user type menu. And <contentid> should be the user id. 23
+
+
+        belongs to an isheet view type menu. And <contentid> should be the isheet id. <sheetviewid> should be 0 or greater than 0. <sheetItemID> should be greater than 0. 25
+
+
+        belongs to a site type menu. And <contentid> should be the site id. 27
+
+
+        belongs to a blog category type menu. And <contentid> should be the blog category id. 28
+
+
+        belongs to an event category type menu. And <contentid> should be the event category id. 29
+
+
+        belongs to a tasklist type menu. And <contentid> should be the tasklist id. 30
+
+
+        belongs to a module type menu. And <contentid> should be the module id. 31
+
+
+        belongs to an isheet view type menu. And <contentid> should be the isheet id. <sheetviewid> should be 0 or greater than 0. 32
+
+
+        belongs to an isheet view type menu. And <contentid> should be the isheet id. Content type id is used to identify the menu type. <contentid>
+
+
+        content id is mandatory field. When contenttypeid is 30, following values are allowed for module type content type. Content id
+
+
+        Module name
+
+
+        1
+
+
+        SITE_MODULE_HOME
+
+
+        2
+
+
+        SITE_MODULE_ACTIVITY
+
+
+        3
+
+
+        SITE_MODULE_DOCUMENTS
+
+
+        4
+
+
+        SITE_MODULE_WIKI
+
+
+        5
+
+
+        SITE_MODULE_BLOGS
+
+
+        6
+
+
+        SITE_MODULE_TASKS
+
+
+        7
+
+
+        SITE_MODULE_EVENTS
+
+
+        8
+
+
+        SITE_MODULE_PEOPLE
+
+
+        9
+
+
+        SITE_MODULE_QA
+
+
+        10
+
+
+        SITE_MODULE_ISHEET
+
+
+        13
+
+
+        SITE_MODULE_REPORTING
+
+
+        <contentid> should be -1 or greater than -1. <siteid>
+
+
+        Site is to identify that particular menu is belongs to which site. <numberofcolumns>
+
+
+        Optional. But is mandatory in COLLABORATE_CONTAINER_TYPE. <parentmenuid>
+
+
+        Optional. It is used to identify that menu is belongs to which container. <displayorder>
+
+
+        Optional. It is used at the time of displaying menu order. <externalurl>
+
+
+        Optional. But is mandatory in COLLABORATE_EXTERNAL_TYPE.Url pattern should be valid. <linktarget>
+
+
+        Optional. But is mandatory in COLLABORATE_EXTERNAL_TYPE. Default value is _blank. linktarget is usedto open any hyperlink in new window or existing window. <mobilemenucssclassname>
+
+
+        Optional. Is used for mobile view for menu. <mobilemenucssstyle>
+
+
+        Optional. Is used for mobile view for menu. <mobilesubmenucssclassname>
+
+
+        Optional. Is used for mobile view css for sub menu. <mobilesubmenucssstyle>
+
+
+        Optional. Is used for mobile view css for sub menu. <menucssclassname>
+
+
+        Optional. Is used for desktop/tablet view css for menu. <menucssstyle>
+
+
+        Optional. Is used for desktop/tablet view css for menu. <submenucssclassname>
+
+
+        Optional. Is used for desktop/tablet view css for sub menu. <submenucssstyle>
+
+
+        Optional. Is used for desktop/tablet view css for sub menu. <submenualign>
+
+
+        Optional. Is used in for COLLABORATE_CONTAINER_TYPE. Default value is left. And Allowed value is left/right. <sheetviewid>
+
+
+        Optional. Is used when contenttypeid is 31. <sheetitemid>
+
+
+        Optional. Is used when contenttypeid is 23. <sheetviewmode>
+
+
+        Optional. 0 or 1 value is allowed. Otherwise default value 0 will be consider. <menuitemtitle>
+
+
+        Is used to set the multilingual values for the menu or submenu. English UK is mandatory. Currently following languages are allowed.'
+      operationId: insertNavigationMenu
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '9'
+      - name: siteid
+        in: path
+        description: The site id of site navigation
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Site navigation menu saved successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while performing save site navigation menu configuration
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Menu'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Menu'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/Menu'
+    put:
+      tags:
+      - Navigation
+      summary: Add multiple site navigation menu configurations
+      description: 'Multiple site navigation menu configurations API
+
+
+        <itemid>
+
+
+        Item id should be unique in xml. It is used to design sub menu. For e.g. itemid is used while creating the submenu. <menuid>
+
+
+        Menu id of database. <menutypealias>
+
+
+        menutypealias is mandatory field. Allowed values are [COLLABORATE_EXTERNAL_TYPE / COLLABORATE_SINGLE_CONTENT_TYPE / COLLABORATE_CONTAINER_TYPE]
+
+
+        <contenttypeid>
+
+
+        Content type id is mandatory field. Following values are allowed. Content type id
+
+
+        Description
+
+
+        1
+
+
+        belongs to a wiki page type menu. And <contentid> should be the wiki id. 2
+
+
+        belongs to a blog type menu. And <contentid> should be the blog id. 3
+
+
+        belongs to a task type menu. And <contentid> should be the task id. 4
+
+
+        belongs to an event type menu. And <contentid> should be the event id. 8
+
+
+        belongs to a document type menu. And <contentid> should be the document id. 13
+
+
+        belongs to a folder type menu. And <contentid> should be the folder id. 14
+
+
+        belongs to a user type menu. And <contentid> should be the user id. 23
+
+
+        belongs to an isheet view type menu. And <contentid> should be the isheet id. <sheetviewid> should be 0 or greater than 0. <sheetItemID> should be greater than 0. 25
+
+
+        belongs to a site type menu. And <contentid> should be the site id. 27
+
+
+        belongs to a blog category type menu. And <contentid> should be the blog category id. 28
+
+
+        belongs to an event category type menu. And <contentid> should be the event category id. 29
+
+
+        belongs to a tasklist type menu. And <contentid> should be the tasklist id. 30
+
+
+        belongs to a module type menu. And <contentid> should be the module id. 31
+
+
+        belongs to an isheet view type menu. And <contentid> should be the isheet id. <sheetviewid> should be 0 or greater than 0. 32
+
+
+        belongs to an isheet view type menu. And <contentid> should be the isheet id. Content type id is used to identify the menu type. <contentid>
+
+
+        content id is mandatory field. When contenttypeid is 30, following values are allowed for module type content type. Content id
+
+
+        Module name
+
+
+        1
+
+
+        SITE_MODULE_HOME
+
+
+        2
+
+
+        SITE_MODULE_ACTIVITY
+
+
+        3
+
+
+        SITE_MODULE_DOCUMENTS
+
+
+        4
+
+
+        SITE_MODULE_WIKI
+
+
+        5
+
+
+        SITE_MODULE_BLOGS
+
+
+        6
+
+
+        SITE_MODULE_TASKS
+
+
+        7
+
+
+        SITE_MODULE_EVENTS
+
+
+        8
+
+
+        SITE_MODULE_PEOPLE
+
+
+        9
+
+
+        SITE_MODULE_QA
+
+
+        10
+
+
+        SITE_MODULE_ISHEET
+
+
+        13
+
+
+        SITE_MODULE_REPORTING
+
+
+        <contentid> should be -1 or greater than -1. <siteid>
+
+
+        Site is to identify that particular menu is belongs to which site. <numberofcolumns>
+
+
+        Optional. But is mandatory in COLLABORATE_CONTAINER_TYPE. <parentmenuid>
+
+
+        Optional. It is used to identify that menu is belongs to which container. <displayorder>
+
+
+        Optional. It is used at the time of displaying menu order. <externalurl>
+
+
+        Optional. But is mandatory in COLLABORATE_EXTERNAL_TYPE.Url pattern should be valid. <linktarget>
+
+
+        Optional. But is mandatory in COLLABORATE_EXTERNAL_TYPE. Default value is _blank. linktarget is usedto open any hyperlink in new window or existing window. <mobilemenucssclassname>
+
+
+        Optional. Is used for mobile view for menu. <mobilemenucssstyle>
+
+
+        Optional. Is used for mobile view for menu. <mobilesubmenucssclassname>
+
+
+        Optional. Is used for mobile view css for sub menu. <mobilesubmenucssstyle>
+
+
+        Optional. Is used for mobile view css for sub menu. <menucssclassname>
+
+
+        Optional. Is used for desktop/tablet view css for menu. <menucssstyle>
+
+
+        Optional. Is used for desktop/tablet view css for menu. <submenucssclassname>
+
+
+        Optional. Is used for desktop/tablet view css for sub menu. <submenucssstyle>
+
+
+        Optional. Is used for desktop/tablet view css for sub menu. <submenualign>
+
+
+        Optional. Is used in for COLLABORATE_CONTAINER_TYPE. Default value is left. And Allowed value is left/right. <sheetviewid>
+
+
+        Optional. Is used when contenttypeid is 31. <sheetitemid>
+
+
+        Optional. Is used when contenttypeid is 23. <sheetviewmode>
+
+
+        Optional. 0 or 1 value is allowed. Otherwise default value 0 will be consider. <menuitemtitle>
+
+
+        Is used to set the multilingual values for the menu or submenu. English UK is mandatory. Currently following languages are allowed.'
+      operationId: insertUpdateNavigationMenuConfigurations
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '9'
+      - name: siteid
+        in: path
+        description: The site id of site navigation
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Site navigation menu configurations saved successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while performing site navigation menu configurations
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Menus'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Menus'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/Menus'
+    servers:
+    - url: /monumentuat/api
+  /{version}/site/{siteid}/navigation/setting:
+    get:
+      tags:
+      - Navigation
+      summary: Get site navigation settings
+      description: Get site navigation settings API
+      operationId: getSiteNavigationSettings
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '9'
+      - name: siteid
+        in: path
+        description: The site id of site navigation
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Site navigation settings returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SiteNavigationSettingsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteNavigationSettingsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SiteNavigationSettingsDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting site navigation menus
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Navigation
+      summary: Update site navigation settings
+      description: Update site navigation settings API
+      operationId: updateSiteNavigationSettings
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '9'
+      - name: siteid
+        in: path
+        description: Id of the site for which the settings is to be update
+        required: true
+        schema:
+          type: string
+      - name: sitenavigationtype
+        in: query
+        description: "1 = Automatic\n 2 = Custom"
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Site navigation settings updated successfully.
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Invalid sitenavigation type
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/site/{siteid}/navigation/{menuid}:
+    get:
+      tags:
+      - Navigation
+      summary: Get single site navigation menu
+      description: Get single site navigation menu API
+      operationId: getSiteNavigationMenu
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '9'
+      - name: siteid
+        in: path
+        description: The site id of site navigation
+        required: true
+        schema:
+          type: string
+      - name: menuid
+        in: path
+        description: menuID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Sitenavigation menu returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Menu'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Menu'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting conversation messages
+      security:
+      - OAuth: []
+    delete:
+      tags:
+      - Navigation
+      summary: Remove site navigation menu
+      description: Remove site navigation menu API
+      operationId: deleteSiteNavigationMenu
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '9'
+      - name: siteid
+        in: path
+        description: The site id of site navigation
+        required: true
+        schema:
+          type: string
+      - name: menuid
+        in: path
+        description: menuID
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Sitenavigation menu  deleted successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting conversation messages
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    Menu:
+      type: object
+      properties:
+        menuid:
+          type: integer
+          format: int32
+        menutypealias:
+          type: string
+        menutypedispalyname:
+          type: string
+        contentid:
+          type: integer
+          format: int32
+        contenttypeid:
+          type: integer
+          format: int32
+        contenttypealias:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+        numberofcolumns:
+          type: integer
+          format: int32
+        parentmenuid:
+          type: integer
+          format: int32
+        displayorder:
+          type: integer
+          format: int32
+        externalurl:
+          type: string
+        linktarget:
+          type: string
+        mobilemenucssclassname:
+          type: string
+        mobilemenucssstyle:
+          type: string
+        mobilesubmenucssclassname:
+          type: string
+        mobilesubmenucssstyle:
+          type: string
+        parentfolderid:
+          type: integer
+          format: int32
+        menucssclassname:
+          type: string
+        menucssstyle:
+          type: string
+        submenucssclassname:
+          type: string
+        submenucssstyle:
+          type: string
+        submenualign:
+          type: string
+        sheetviewid:
+          type: integer
+          format: int32
+        sheetitemid:
+          type: integer
+          format: int32
+        sheetviewmode:
+          type: integer
+          format: int32
+        modulealias:
+          type: string
+        menuitemtitles:
+          $ref: '#/components/schemas/MenuItemTitles'
+        itemid:
+          type: integer
+          format: int32
+      xml:
+        name: menu
+    MenuItemTitles:
+      type: object
+      properties:
+        menuitemtitle:
+          type: array
+          items:
+            $ref: '#/components/schemas/MenuItemTitle'
+    Menus:
+      type: object
+      properties:
+        menu:
+          type: array
+          items:
+            $ref: '#/components/schemas/Menu'
+      xml:
+        name: menus
+    SiteNavigationSettingsDBO:
+      type: object
+      properties:
+        siteNavigationType:
+          type: integer
+          format: int32
+      xml:
+        name: site
+    MenuItemTitle:
+      type: object
+      properties:
+        title:
+          type: string
+        tooltip:
+          type: string
+        language:
+          type: string
+        newtitle:
+          type: string
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

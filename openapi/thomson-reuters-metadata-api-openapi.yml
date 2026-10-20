@@ -1,0 +1,1068 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Metadata API
+  version: '1.0'
+  description: 'Operations tagged Metadata across 9 of this provider''s published API definitions: thomson-reuters-gosystem-locator-api-openapi.json, thomson-reuters-gosystem-tax-return-api-openapi.json, thomson-reuters-onesource-tax-provision-odata-apis-openapi.json, thomson-reuters-onesource-trust-tax-administration-openapi.json, thomson-reuters-onesource-trust-tax-shipment-openapi.json, thomson-reuters-osa-odata-query-service-api-openapi.json, thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml, thomson-reuters-onesource-trust-tax-administration-openapi.yml, thomson-reuters-onesource-trust-tax-shipment-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+- url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+  description: AMERS endpoints
+- url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+  description: EMEA endpoints
+- url: https://api.onesourcetax.com/trust-tax/administration
+- url: https://api.onesourcetax.com/data-query-reporting/state-apportionment/odata/v1/
+  description: AMERS endpoints
+tags:
+- name: Metadata
+paths:
+  /v1/bulk/tax-returns/metadata:
+    put:
+      summary: Update metadata
+      description: Updates the metadata node that was added during return or locator creation. Provide the account details, locator ID, tax type, year, and metadata items in the request. Use this endpoint only to update the metadata node you added during return or locator creation.
+      tags:
+      - Metadata
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMetadataRequestWrapper'
+            examples:
+              Create Locator - Example:
+                $ref: '#/components/examples/UpdateMetadata-Example'
+        required: true
+      responses:
+        '200':
+          description: Success. Metadata is updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMetadataResponseList'
+              examples:
+                UpdateMetadataSuccessResponse - Example:
+                  $ref: '#/components/examples/UpdateMetadataSuccess'
+                UpdateMetadataErrorResponse - Example:
+                  $ref: '#/components/examples/UpdateMetadataFailure'
+        '403':
+          description: Add user permission required.
+        '404':
+          description: Account doesn't belong to the firm.
+      security:
+      - Authorization: []
+      operationId: putV1BulkTaxReturnsMetadata
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gosystem/tax-returns
+  /beta/user-accounts:
+    get:
+      tags:
+      - Metadata
+      summary: Return accounts list for logged in user
+      description: This endpoint returns the accounts list for the logged in user.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccountsDTO'
+              examples:
+                user-accounts-example:
+                  $ref: '#/components/examples/user-accounts-example'
+        '401':
+          description: Unauthorized - Missing or invalid user claims
+      security:
+      - Authorization: []
+      operationId: getBetaUserAccounts
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gosystem/tax-returns
+  /beta/tax-returns:
+    get:
+      tags:
+      - Metadata
+      summary: Get list of tax returns
+      description: This endpoint gets the list of tax returns for the given firm, year, taxType, and user.
+      parameters:
+      - name: year
+        in: query
+        required: true
+        description: Tax return year
+        schema:
+          type: integer
+          format: int32
+          example: 2019
+      - name: account
+        in: query
+        required: true
+        description: Four character account
+        schema:
+          type:
+          - string
+          - 'null'
+          example: 12AB
+      - name: taxType
+        in: query
+        required: true
+        description: Single character tax type
+        schema:
+          type:
+          - string
+          - 'null'
+          example: P
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxReturnsDTO'
+              examples:
+                tax-returns-example:
+                  $ref: '#/components/examples/tax-returns-example'
+        '400':
+          description: Bad Request - Invalid parameters or validation failures
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                BadRequest_InvalidTaxYearFormat:
+                  $ref: '#/components/examples/BadRequest_InvalidTaxYearFormat_TaxReturns'
+                BadRequest_MissingAccountParameter:
+                  $ref: '#/components/examples/BadRequest_MissingAccountParameter_TaxReturns'
+                BadRequest_InvalidAccountFormat:
+                  $ref: '#/components/examples/BadRequest_InvalidAccountFormat_TaxReturns'
+                BadRequest_MissingTaxTypeParameter:
+                  $ref: '#/components/examples/BadRequest_MissingTaxTypeParameter_TaxReturns'
+                BadRequest_InvalidTaxTypeFormat:
+                  $ref: '#/components/examples/BadRequest_InvalidTaxTypeFormat_TaxReturns'
+                BadRequest_AccountDoesNotExist_TaxReturns:
+                  $ref: '#/components/examples/BadRequest_AccountDoesNotExist_TaxReturns'
+                BadRequest_TaxYearOutOfRange_TaxReturns:
+                  $ref: '#/components/examples/BadRequest_TaxYearOutOfRange_TaxReturns'
+        '401':
+          description: Unauthorized - Missing or invalid user claims
+        '403':
+          description: Forbidden - User access denied or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                Forbidden_UserNotMemberOfAnyGroups_TaxReturns:
+                  $ref: '#/components/examples/Forbidden_UserNotMemberOfAnyGroups_TaxReturns'
+                Forbidden_NoAccessToAccount_TaxReturns:
+                  $ref: '#/components/examples/Forbidden_NoAccessToAccount_TaxReturns'
+      security:
+      - Authorization: []
+      operationId: getBetaTaxReturns
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gosystem/tax-returns
+  /beta/fields:
+    get:
+      tags:
+      - Metadata
+      summary: Get list of fields for the given tax year and return type
+      description: This endpoint gets the list of fields for the given tax year and return type.
+      parameters:
+      - name: TaxYear
+        in: query
+        required: true
+        description: Tax year
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: ReturnType
+        in: query
+        required: true
+        description: Four character tax return type
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: FormName
+        in: query
+        description: Form Name
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: FieldType
+        in: query
+        description: Field Type
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: ScreenLongName
+        in: query
+        description: Screen Long Name
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: IncludeStringValues
+        in: query
+        description: Whether string values should be included or not
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type:
+                - array
+                - 'null'
+                items:
+                  $ref: '#/components/schemas/Field'
+              examples:
+                1065-2019-organizer-fields-response-partial:
+                  $ref: '#/components/examples/1065-2019-organizer-fields-response'
+                1040-2021-organizer-fields-response-partial:
+                  $ref: '#/components/examples/1040-2021-organizer-fields-response-partial'
+                1065-2019-organizer-fields-response-with-string-values-partial:
+                  $ref: '#/components/examples/1065-2019-organizer-fields-response-with-string-values-partial'
+                1040-2021-organizer-fields-response-with-string-values-partial:
+                  $ref: '#/components/examples/1040-2021-organizer-fields-response-with-string-values-partial'
+        '400':
+          description: Bad Request - Invalid parameters or validation failures
+          content:
+            application/json:
+              examples:
+                BadRequest_InvalidTaxYearFormat_Fields:
+                  $ref: '#/components/examples/BadRequest_InvalidTaxYearFormat_Fields'
+                BadRequest_InvalidReturnTypeFormat_Fields:
+                  $ref: '#/components/examples/BadRequest_InvalidReturnTypeFormat_Fields'
+                BadRequest_InvalidFormNameFormat_Fields:
+                  $ref: '#/components/examples/BadRequest_InvalidFormNameFormat_Fields'
+                BadRequest_InvalidFieldTypeFormat_Fields:
+                  $ref: '#/components/examples/BadRequest_InvalidFieldTypeFormat_Fields'
+                BadRequest_InvalidReturnTypeOrTaxYear_Fields:
+                  $ref: '#/components/examples/BadRequest_InvalidReturnTypeOrTaxYear_Fields'
+        '401':
+          description: Unauthorized - Missing or invalid authentication token
+      security:
+      - Authorization: []
+      operationId: getBetaFields
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gosystem/tax-returns
+  /beta/forms:
+    get:
+      tags:
+      - Metadata
+      summary: Get list of forms for the given tax year and return type
+      description: This endpoint gets the list of forms for the given tax year and return type.
+      parameters:
+      - name: TaxYear
+        in: query
+        required: true
+        description: Tax year
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: ReturnType
+        in: query
+        required: true
+        description: Four character tax return type
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type:
+                - array
+                - 'null'
+                items:
+                  $ref: '#/components/schemas/Field'
+              examples:
+                1065-2019-forms-response-partial:
+                  $ref: '#/components/examples/1065-2019-forms-response-partial'
+                1120-2019-forms-response-partial:
+                  $ref: '#/components/examples/1120-2019-forms-response-partial'
+                1040-2021-forms-response-partial:
+                  $ref: '#/components/examples/1040-2021-forms-response-partial'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                BadRequest_InvalidTaxYearFormat_Fields:
+                  $ref: '#/components/examples/BadRequest_InvalidTaxYearFormat_Fields'
+                BadRequest_InvalidReturnTypeFormat_Fields:
+                  $ref: '#/components/examples/BadRequest_InvalidReturnTypeFormat_Fields'
+                BadRequest_InvalidReturnTypeOrTaxYear_Fields:
+                  $ref: '#/components/examples/BadRequest_InvalidReturnTypeOrTaxYear_Fields'
+        '401':
+          description: Unauthorized - Missing or invalid authentication token
+      security:
+      - Authorization: []
+      operationId: getBetaForms
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gosystem/tax-returns
+  /odata/v1:
+    get:
+      tags:
+      - Metadata
+      operationId: odata/v1/
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ODataServiceDocument'
+      security:
+      - Basic: []
+      summary: Odata/v1/
+      x-summary-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+      description: AMERS endpoints
+    - url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+      description: EMEA endpoints
+  /v1/$metadata:
+    get:
+      tags:
+      - Metadata
+      summary: Retrieves the metadata
+      operationId: AllowsAuthenticatedUsersToAccessTheEndpoint'sMetadata
+      parameters: []
+      responses:
+        '200':
+          description: Success
+      security:
+      - bearerAuth: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Allows authenticated users to access the endpoint's metadata
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax/administration
+  /eap/odata/$metadata:
+    get:
+      tags:
+      - Metadata
+      summary: Retrieves the metadata
+      operationId: getEapOdata$metadata
+      produces:
+      - application/xml
+      parameters:
+      - name: authorization
+        in: header
+        description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer {token}"'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Success
+      x-operation-id-source: normalized
+      x-operation-id-original: Allows authenticated users to access the endpoint's metadata
+  /odata/v1/$metadata:
+    get:
+      summary: Get OData Metadata
+      description: Retrieve service metadata for OData client tools
+      operationId: getMetadata
+      responses:
+        '200':
+          description: Metadata retrieved successfully
+          content:
+            application/xml:
+              schema:
+                type: string
+                description: OData metadata XML document
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+      tags:
+      - Metadata
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/state-apportionment/odata/v1/
+      description: AMERS endpoints
+components:
+  schemas:
+    UpdateMetadataRequestWrapper:
+      type: array
+      items:
+        $ref: '#/components/schemas/UpdateMetadataRequest'
+    UpdateMetadataResponseList:
+      type: array
+      items:
+        $ref: '#/components/schemas/UpdateMetadataResponse'
+    UpdateMetadataResponse:
+      type: object
+      properties:
+        Description:
+          type: string
+        LocatorId:
+          type: string
+    UpdateMetadataRequest:
+      type: object
+      properties:
+        Account:
+          type: string
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        Locator:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the TaxReturnID.
+        TaxType:
+          type: string
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+        Year:
+          type: integer
+          description: The tax year for which the e-file is required. Must be a valid 4-digit year (for example, 2024).
+        Metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataItem'
+    MetadataItem:
+      type: object
+      properties:
+        name:
+          type: string
+        dataType:
+          type: string
+        value:
+          type: string
+    UserAccountsDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        userAccounts:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/UserAccount'
+    TaxReturnsDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        taxReturns:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxReturn'
+    StringValues:
+      type:
+      - object
+      - 'null'
+      properties:
+        eorgName:
+          type:
+          - string
+          - 'null'
+        stringText:
+          type:
+          - string
+          - 'null'
+        stringValue:
+          type:
+          - string
+          - 'null'
+    Field:
+      type:
+      - object
+      - 'null'
+      properties:
+        taxYear:
+          type:
+          - string
+          - 'null'
+        returnType:
+          type:
+          - string
+          - 'null'
+        fieldId:
+          type:
+          - string
+          - 'null'
+        formName:
+          type:
+          - string
+          - 'null'
+        fieldName:
+          type:
+          - string
+          - 'null'
+        fieldType:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        screenName:
+          type:
+          - string
+          - 'null'
+        screenLongName:
+          type:
+          - string
+          - 'null'
+        dataType:
+          type:
+          - string
+          - 'null'
+        dataLength:
+          type:
+          - string
+          - 'null'
+        dataPrecision:
+          type:
+          - string
+          - 'null'
+        isGroup:
+          type: boolean
+        required:
+          type: boolean
+        stringValues:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/StringValues'
+    TaxReturn:
+      type:
+      - object
+      - 'null'
+      properties:
+        year:
+          type: integer
+          format: int32
+        taxReturnId:
+          type:
+          - string
+          - 'null'
+        firm:
+          type:
+          - string
+          - 'null'
+        account:
+          type:
+          - string
+          - 'null'
+        taxType:
+          type:
+          - string
+          - 'null'
+        subTaxType:
+          type:
+          - string
+          - 'null'
+        taxPayerName:
+          type:
+          - string
+          - 'null'
+        clientCode:
+          type:
+          - string
+          - 'null'
+    ProblemResponseDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        responseType:
+          type:
+          - string
+          - 'null'
+        statusCode:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        fieldErrors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldError'
+    UserAccount:
+      type:
+      - object
+      - 'null'
+      properties:
+        account:
+          type:
+          - string
+          - 'null'
+    FieldError:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldId:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        errorCode:
+          type:
+          - string
+          - 'null'
+    ODataSingletonInfo:
+      type: object
+      properties:
+        typeAnnotation:
+          $ref: '#/components/schemas/ODataTypeAnnotation'
+        url:
+          type: string
+          format: uri
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ODataTypeAnnotation:
+      type: object
+      properties:
+        typeName:
+          type: string
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    ODataFunctionImportInfo:
+      type: object
+      properties:
+        typeAnnotation:
+          $ref: '#/components/schemas/ODataTypeAnnotation'
+        url:
+          type: string
+          format: uri
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ODataServiceDocument:
+      type: object
+      properties:
+        typeAnnotation:
+          $ref: '#/components/schemas/ODataTypeAnnotation'
+        entitySets:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ODataEntitySetInfo'
+        singletons:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ODataSingletonInfo'
+        functionImports:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ODataFunctionImportInfo'
+      additionalProperties: false
+    ODataEntitySetInfo:
+      type: object
+      properties:
+        typeAnnotation:
+          $ref: '#/components/schemas/ODataTypeAnnotation'
+        url:
+          type: string
+          format: uri
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Authentication failed
+        message:
+          type: string
+          example: Username or password incorrect.
+  examples:
+    UpdateMetadataSuccess:
+      value:
+      - Description: Metadata updated successfully
+        LocatorId: 5452MJ
+    UpdateMetadataFailure:
+      value:
+      - Description: Error while patching locator metadata
+        LocatorId: 5452MJ
+    UpdateMetadata-Example:
+      value:
+      - Account: '3777'
+        Locator: 9542Jb
+        TaxType: '1120'
+        Year: 2024
+        Metadata:
+        - name: UBID
+          dataType: int
+          value: '123456789123456789'
+        - name: UCID
+          dataType: int
+          value: '123'
+        - name: Initial Date
+          dataType: date
+          value: '2024-12-25'
+    tax-returns-example:
+      value:
+        taxReturns:
+        - year: 2019
+          taxReturnId: 0123PT
+          firm: FT
+          account: ' AB12'
+          taxType: P
+          subTaxType: ''
+          taxPayerName: Tax Payer 1
+          clientCode: 111-2222-333
+        - year: 2019
+          taxReturnId: 0456PT
+          firm: FT
+          account: ' AB12'
+          taxType: P
+          subTaxType: ''
+          taxPayerName: Tax Payer 1
+          clientCode: 111-2222-333
+    1040-2021-organizer-fields-response-partial:
+      value:
+      - taxYear: '2021'
+        returnType: '1040'
+        fieldId: X235.2336.128
+        formName: NY ORGANIZER IT-217
+        fieldName: ENITY NAME OF QUALIFED PROP OW
+        fieldType: O
+        description: Enity Name of qualifed prop owned by pass through entities
+        screenName: ''
+        screenLongName: ''
+        dataType: Alphanu
+        dataLength: '21'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues: []
+      - taxYear: '2021'
+        returnType: '1040'
+        fieldId: X235.2336.130
+        formName: NY ORGANIZER IT-217
+        fieldName: QUALIFIED PROP OWNED BY PASS T
+        fieldType: O
+        description: Qualified prop owned by pass through entities
+        screenName: ''
+        screenLongName: ''
+        dataType: Alphanu
+        dataLength: '10'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues: []
+    BadRequest_InvalidTaxTypeFormat_TaxReturns:
+      value:
+        message: Invalid tax type
+    BadRequest_MissingAccountParameter_TaxReturns:
+      value:
+        message: Account is a required field
+    1065-2019-organizer-fields-response-with-string-values-partial:
+      value:
+      - taxYear: '2019'
+        returnType: '1065'
+        fieldId: C8865.217.9
+        formName: 8865 3468 ORGANIZER
+        fieldName: POST OCT 3 ENERGY CRED 3
+        fieldType: O
+        description: POST OCT 3 ENERGY CRED 3
+        screenName: ''
+        screenLongName: ''
+        dataType: Alpha
+        dataLength: '1'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues:
+        - eorgName: C8865.217.9
+          stringText: Megawatts
+          stringValue: ''
+        - eorgName: C8865.217.9
+          stringText: Horsepower
+          stringValue: X
+      - taxYear: '2019'
+        returnType: '1065'
+        fieldId: C8865.217.7
+        formName: 8865 3468 ORGANIZER
+        fieldName: POST OCT 3 ENERGY CRED 1
+        fieldType: O
+        description: POST OCT 3 ENERGY CRED 1
+        screenName: ''
+        screenLongName: ''
+        dataType: Dollar
+        dataLength: '15'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues: []
+      - taxYear: '2019'
+        returnType: '1065'
+        fieldId: C8865.217.8
+        formName: 8865 3468 ORGANIZER
+        fieldName: POST OCT 3 ENERGY CRED 2
+        fieldType: O
+        description: POST OCT 3 ENERGY CRED 2
+        screenName: ''
+        screenLongName: ''
+        dataType: Edited
+        dataLength: '15'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues: []
+    BadRequest_TaxYearOutOfRange_TaxReturns:
+      value:
+        message: FAILED, Accessing return data includes only the current tax year and the four previous tax years.
+    1040-2021-forms-response-partial:
+      value:
+      - formName: 1040 X PAGE 1 MFJ
+      - formName: 1095-B
+      - formName: 1095-C
+      - formName: 1098C AC
+      - formName: 1098C AD
+      - formName: 1098C AE
+      - formName: 1098C BA
+      - formName: 1098C BB
+      - formName: 1098C BC
+      - formName: 1098C BD
+    BadRequest_InvalidFieldTypeFormat_Fields:
+      value:
+        type: https://tools.ietf.org/html/rfc9110#section-15.5.1
+        title: One or more validation errors occurred.
+        status: 400
+        errors:
+          FieldType:
+          - Invalid field type
+        traceId: 00-7eeeae247d0750351e9d658eae1c21c4-ed4b87745bf8f0e9-00
+    user-accounts-example:
+      value:
+        userAccounts:
+        - account: 12AB
+        - account: 34CD
+        - account: EF56
+    BadRequest_InvalidAccountFormat_TaxReturns:
+      value:
+        message: Invalid account
+    BadRequest_InvalidTaxYearFormat_Fields:
+      value:
+        type: https://tools.ietf.org/html/rfc9110#section-15.5.1
+        title: One or more validation errors occurred.
+        status: 400
+        errors:
+          TaxYear:
+          - Invalid tax year
+        traceId: 00-7eeeae247d0750351e9d658eae1c21c4-ed4b87745bf8f0e9-00
+    1120-2019-forms-response-partial:
+      value:
+      - formName: 1120 PAGE 3
+      - formName: 1120 SUBGROUP IN
+      - formName: 1120F
+      - formName: 1120F SCH M1
+      - formName: 1120F SCH M2
+      - formName: 1120L CONTRIBUTIONS
+      - formName: 1120L GEN DEDUCT
+      - formName: 1120L SUBGROUP
+      - formName: 1120X
+    BadRequest_InvalidFormNameFormat_Fields:
+      value:
+        type: https://tools.ietf.org/html/rfc9110#section-15.5.1
+        title: One or more validation errors occurred.
+        status: 400
+        errors:
+          FormName:
+          - Invalid form name
+        traceId: 00-7eeeae247d0750351e9d658eae1c21c4-ed4b87745bf8f0e9-00
+    Forbidden_NoAccessToAccount_TaxReturns:
+      value:
+        message: FAILED, The user or the user group does not have access to account.
+    BadRequest_MissingTaxTypeParameter_TaxReturns:
+      value:
+        message: Tax type is a required field
+    BadRequest_InvalidTaxYearFormat_TaxReturns:
+      value:
+        message: Invalid tax year
+    1065-2019-organizer-fields-response:
+      value:
+      - taxYear: '2019'
+        returnType: '1065'
+        fieldId: C8865.217.7
+        formName: 8865 3468 ORGANIZER
+        fieldName: POST OCT 3 ENERGY CRED 1
+        fieldType: O
+        description: POST OCT 3 ENERGY CRED 1
+        screenName: ''
+        screenLongName: ''
+        dataType: Dollar
+        dataLength: '15'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues: []
+      - taxYear: '2019'
+        returnType: '1065'
+        fieldId: C8865.217.8
+        formName: 8865 3468 ORGANIZER
+        fieldName: POST OCT 3 ENERGY CRED 2
+        fieldType: O
+        description: POST OCT 3 ENERGY CRED 2
+        screenName: ''
+        screenLongName: ''
+        dataType: Edited
+        dataLength: '15'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues: []
+    1065-2019-forms-response-partial:
+      value:
+      - formName: 3468 INVEST CRED
+      - formName: 7004 8004 EXTENSION
+      - formName: 8865 3468 INVEST CRD
+      - formName: 8865 3468 ORG CERT
+      - formName: 8865 3468 ORG LESSEE
+      - formName: 8865 3468 ORG PRE36
+      - formName: 8865 3468 ORGANIZER
+      - formName: 8865 4684 P I DET
+      - formName: 8865 4684 PART II
+      - formName: 8865 4797 1099B
+    Forbidden_UserNotMemberOfAnyGroups_TaxReturns:
+      value:
+        message: FAILED, The user is not member of any Groups.
+    BadRequest_InvalidReturnTypeFormat_Fields:
+      value:
+        type: https://tools.ietf.org/html/rfc9110#section-15.5.1
+        title: One or more validation errors occurred.
+        status: 400
+        errors:
+          ReturnType:
+          - Invalid return type
+        traceId: 00-7eeeae247d0750351e9d658eae1c21c4-ed4b87745bf8f0e9-00
+    BadRequest_AccountDoesNotExist_TaxReturns:
+      value:
+        message: FAILED, Invalid account.
+    BadRequest_InvalidReturnTypeOrTaxYear_Fields:
+      value:
+        message: Invalid Return Type or Tax Year
+        statusCode: '400'
+    1040-2021-organizer-fields-response-with-string-values-partial:
+      value:
+      - taxYear: '2021'
+        returnType: '1040'
+        fieldId: X235.2336.129
+        formName: NY ORGANIZER IT-217
+        fieldName: QUALIFED PROPERTY OWNED BY PAS
+        fieldType: O
+        description: Qualifed property owned by pass-through entities
+        screenName: ''
+        screenLongName: ''
+        dataType: Alphanu
+        dataLength: '2'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues:
+        - eorgName: X235.2336.129
+          stringText: (None selected)
+          stringValue: ''
+        - eorgName: X235.2336.129
+          stringText: Estate or Trust
+          stringValue: ET
+        - eorgName: X235.2336.129
+          stringText: Partnership
+          stringValue: P
+        - eorgName: X235.2336.129
+          stringText: S Corporation
+          stringValue: S
+      - taxYear: '2021'
+        returnType: '1040'
+        fieldId: X235.2336.128
+        formName: NY ORGANIZER IT-217
+        fieldName: ENITY NAME OF QUALIFED PROP OW
+        fieldType: O
+        description: Enity Name of qualifed prop owned by pass through entities
+        screenName: ''
+        screenLongName: ''
+        dataType: Alphanu
+        dataLength: '21'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues: []
+      - taxYear: '2021'
+        returnType: '1040'
+        fieldId: X235.2336.130
+        formName: NY ORGANIZER IT-217
+        fieldName: QUALIFIED PROP OWNED BY PASS T
+        fieldType: O
+        description: Qualified prop owned by pass through entities
+        screenName: ''
+        screenLongName: ''
+        dataType: Alphanu
+        dataLength: '10'
+        dataPrecision: '0'
+        isGroup: true
+        required: false
+        stringValues: []
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+    Basic:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication using username and password
+x-refined-from:
+- thomson-reuters-gosystem-locator-api-openapi.json
+- thomson-reuters-gosystem-tax-return-api-openapi.json
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.json
+- thomson-reuters-onesource-trust-tax-administration-openapi.json
+- thomson-reuters-onesource-trust-tax-shipment-openapi.json
+- thomson-reuters-osa-odata-query-service-api-openapi.json
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml
+- thomson-reuters-onesource-trust-tax-administration-openapi.yml
+- thomson-reuters-onesource-trust-tax-shipment-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

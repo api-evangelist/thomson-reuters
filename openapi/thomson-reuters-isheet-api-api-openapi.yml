@@ -1,0 +1,1286 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters ISheet API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged ISheet API across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: ISheet API
+paths:
+  /{version}/isheet/template:
+    get:
+      tags:
+      - ISheet API
+      summary: To get the list of iSheet template
+      description: 'This method is used to get the list of iSheet template
+
+
+        Note: Only the linked iSheets are returned through this call.'
+      operationId: getLinkTemplates
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: API will return the list of iSheet templates
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/templateListDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templateListDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/templateListDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets:
+    get:
+      tags:
+      - ISheet API
+      summary: To get the iSheet details
+      description: 'This API will get the list of iSheets.
+
+
+        Specific type of iSheets e.g file metadata iSheet can be obtained by providing the type parameter.
+
+
+        Request : Method Type : Get, Request URL: /isheets?siteid=${siteid}&type=${type}
+
+        Parameters
+
+
+        Parameter NameValueDescription
+
+
+        siteidInt The id of the site for which the iSheets are to be obtained.
+
+
+        typestring Parameter to specify the type of iSheet to be obtained. The possible values are documentmetadata / foldermetadata / normal.
+
+
+        Response
+
+        If the authenticated user has access to the iSheets module for the specific site then this method call will return the iSheets in the site.
+
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+        <isheets>
+
+        <isheet>
+
+        <name>SharePoint_Sheet</name>
+
+        <id>{Integer value of the }</id>
+
+        <type>{text value of one of the supported types}</type>
+
+        </isheet>
+
+        </isheets>'
+      operationId: getISheets_1
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: query
+        description: Id of the site
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: type
+        in: query
+        description: Type of the iSheet
+        required: false
+        schema:
+          type: string
+          enum:
+          - normal
+          - documentmetadata
+          - foldermetadata
+      responses:
+        '200':
+          description: API will return the list of iSheets
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetsDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/{isheetid}/columns:
+    get:
+      tags:
+      - ISheet API
+      summary: To get the iSheet columns
+      description: This API will get the list of iSheet columns.
+      operationId: getColumns
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the column details are to be obtained
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the list of iSheet columns
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/columnListDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/columnListDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/columnListDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/item/delete:
+    post:
+      tags:
+      - ISheet API
+      summary: To delete the records from the iSheet
+      description: 'This API call is used to delete items/records from iSheet.
+
+
+        This method can only delete a record if it was added through an API call and an external id was provided for the record added.
+
+        This method does not support deletion of a record internally created in Collaborate, using the Collaborate interface.
+
+
+        NameTypeDescription
+
+
+        siteidintThe id of the site in which the iSheet exists
+
+
+        sheetidintSpecific iSheet from which the records are to be deleted
+
+
+        itemsintThese are the external ids of the system from which the records were imported, these ids can be obtained by a call to get external ids method'
+      operationId: deleteIsheetItems_1
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: API will return the list of iSheet ids which are deleted successfully or the error message
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/deleteItemsDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deleteItemsDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/deleteItemsDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/templateisheet:
+    get:
+      tags:
+      - ISheet API
+      summary: To get the list of iSheets created using a specific iSheet template
+      description: This method is used to get the list of iSheets created using a specific iSheet template
+      operationId: getTemplateISheetsByTemplate
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: templateid
+        in: query
+        description: The id of the template which was used to create the specific iSheets
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the list of iSheets
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/templateISheetListDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templateISheetListDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/templateISheetListDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/templateisheet/column:
+    get:
+      tags:
+      - ISheet API
+      summary: To get the list of iSheets columns created using a specific iSheet template
+      description: This method is used to get the list of iSheets columns created using a specific iSheet template
+      operationId: getColumnsByTemplateISheet
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: templateisheetid
+        in: query
+        description: The id of the template which was used to create the specific iSheet columns
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the list of columns
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/columnListDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/columnListDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/columnListDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/externalId:
+    get:
+      tags:
+      - ISheet API
+      summary: To get external ids of the iSheet
+      description: 'This method gives the external ids of iSheets in CSV format. The external ids are the id of the iSheet records added to the system by an earlier API call.
+
+        The client application can use these external ids to match the ids with the external system and perform operations.
+
+
+        If no external ids were added to the system when the records were added to the system, or the records were added through the Collaborate then no external ids will be returned for this call.
+
+
+        GET /isheet/externalId?sheetid={sheetid}&siteid={siteid}'
+      operationId: getSheetExternalIDs
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: sheetid
+        in: query
+        description: Id of the iSheet for which the column details are to be obtained
+        required: true
+        schema:
+          type: string
+      - name: siteid
+        in: query
+        description: Id of the site from which the external ID's are to be obtained
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the CSV of external ids
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/item/create:
+    post:
+      tags:
+      - ISheet API
+      summary: To create records in the iSheet
+      description: 'This API call is used to create iSheet items/records.
+
+
+        The request XML requires siteid and sheet id parameters to determine the iSheet to which the records will be added.
+
+        In order to add the records to the correct columns a column and value mapping is provided, which is associated with a sequence parameter.
+
+        the headColumn defines the names of the columns to which the content will be added and row data defines the values for those columns.
+
+        Please note that the attachments cannot be added to an attachments column using this method.
+
+        iSheets link column is also not supported through the API.
+
+
+        NameTypeDescription
+
+
+        siteidintThe id of the site in which the iSheet exists
+
+
+        sheetidintThe iSheet id to which the records are to be added
+
+
+        headcolumnstringThe name of the columns to which a value is to be added
+
+
+        sequenceintA number represending the sequence of the column in the iSheet
+
+
+        itemID (optional)intThis parameter is to be used in case of file metadata iSheet, and is the id of the row which is to be updated. (Please note that the id can be obtained by inspecting the HTML of the page)
+
+
+        externalIDintItem id of the item from the external system. This saves the external item id of the item in the system, this should be used later on to execute the delete operation
+
+
+        The following iSheet column types are supported at this time:
+
+
+        Single Line Text
+
+
+        Multiple Line Text
+
+
+        Choice
+
+
+        Number
+
+
+        Date and Time
+
+
+        Decimal number'
+      operationId: inserDataInFinalSheet
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: API will return the list of data provided in the iSheet
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResponseDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/sheetDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sheetDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/sheetDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheet/templatesheets/{templateid}:
+    get:
+      tags:
+      - ISheet API
+      summary: To get the list of iSheets created using a specific iSheet template
+      description: 'This API call is used to get a list of iSheets created using a specific iSheet template.
+
+
+        Request : Method Type : Get, Request URL: /isheet/templateisheet?templateid={templateid}
+
+
+        Parameters
+
+
+        Parameter NameValueDescription
+
+
+        templateidInt The id of the template which was used to create the specific iSheets.
+
+
+        Response XML
+
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+        <site>
+
+        <siteid>1</siteid>
+
+        <sitename>Test site</sitename>
+
+        <template>
+
+        <templateid>1</templateid>
+
+        <templatelinkid>1</templatelinkid>
+
+        </template>
+
+        </site>'
+      operationId: getLinkTemplateSheets
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: templateid
+        in: path
+        description: Id of the template for get linked iSheets
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the iSheets.
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/files/{fileid}/isheetRecordID:
+    get:
+      tags:
+      - ISheet API
+      summary: To get the iSheet record id from a file
+      description: 'This API call is used to get iSheet recordId form a fileId.
+
+
+        Collaborate site can be configured with a file metadata iSheet.
+
+        With a file metadata iSheet a new record is created in the file metadata iSheet when a file is uploaded to the files module of the site.
+
+        There can only be one file metadata isheet in a site.
+
+
+        On uploading the file to the files module the associated record in the file metadata isheet can be obtained by calling the following method.
+
+        This method can also be called for any existing file in the site, to update the metadata records for the file.
+
+
+        Call the isheetRecordID to obtain the isheet record which is to be updated.
+
+
+        Request
+
+        Method Type : Get, Request URL: files/${fileid}/isheetRecordID
+
+        Where fileid parameter is the id of the file for which the metadata record id is required
+
+
+        Response
+
+        The method returns the iSheet Record id in the following format:
+
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+        <sheet>
+
+        <IsheetRecordID>{numeric record id} </IsheetRecordID>
+
+        </sheet>
+
+
+        Please note that the isheetRecordID parameter is case sensitive
+
+        In case of an invalid file id an error object is returned
+
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+        <error>
+
+        <ref>136 </ref>
+
+        <summary>File not found </summary>
+
+        </error>'
+      operationId: getIsheetRecordID
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: Id of the file to get the iSheet record id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 'API will return the specific iSheet record id '
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/sheetDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sheetDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/sheetDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/tasks/{taskid}/isheetRecordID:
+    get:
+      tags:
+      - ISheet API
+      summary: To get the iSheet record from task
+      description: 'This API call is used to get iSheet record id from a task id.
+
+
+        A site can be configured with a task metadata isheet. When a task is created in the task module, a new record is created in the task metadata iSheet.
+
+        Note: There can only be one task metadata iSheet in a site.
+
+
+        On creating the task in the task module, the associated record in the task metadata iSheet can be obtained by calling the following method.
+
+        This method can also be called for any existing tasks in the site, to update the metadata records for the task.
+
+
+        Call the isheetRecordID to obtain the isheet record which is to be updated.'
+      operationId: getIsheetRecordIDFromTaskID
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: taskid
+        in: path
+        description: Id of the task for which the metadata record id is required
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the list of iSheet record ids
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/sheetDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sheetDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/sheetDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    templateISheetDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        status:
+          type: integer
+          format: int32
+        columnList:
+          xml:
+            name: columns
+          $ref: '#/components/schemas/columnListDBO'
+      xml:
+        name: templateiSheet
+    SiteCategoryListDBO:
+      type: object
+      properties:
+        siteCategory:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    deleteItemsDBO:
+      type: object
+      properties:
+        metaDataDBO:
+          $ref: '#/components/schemas/MetaDataDBO'
+        items:
+          type: string
+      xml:
+        name: delete-items
+    columnListDBO:
+      type: object
+      properties:
+        columns:
+          type: array
+          xml:
+            name: column
+          items:
+            xml:
+              name: column
+            $ref: '#/components/schemas/column'
+      xml:
+        name: columns
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ResponseDBO:
+      type: object
+      properties:
+        error:
+          type: string
+          xml:
+            name: Error
+        externalIDs:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+        blogResynchronisationFlag:
+          type: string
+        eventResynchronisationFlag:
+          type: string
+        response:
+          type: array
+          xml:
+            name: item
+          items:
+            xml:
+              name: item
+            $ref: '#/components/schemas/ResultDBO'
+        blogResponse:
+          type: array
+          xml:
+            name: blogs
+          items:
+            xml:
+              name: blogs
+            $ref: '#/components/schemas/BlogDBO'
+        eventResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventDBO'
+        categories:
+          $ref: '#/components/schemas/SiteCategoryListDBO'
+      xml:
+        name: Items
+    ItemDBO:
+      type: object
+      properties:
+        externalID:
+          type: string
+          xml:
+            attribute: true
+        itemID:
+          type: string
+          xml:
+            attribute: true
+        column:
+          type: array
+          items:
+            $ref: '#/components/schemas/column'
+      xml:
+        name: item
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    templateISheetListDBO:
+      type: object
+      properties:
+        templateISheet:
+          type: array
+          xml:
+            name: templateiSheet
+          items:
+            xml:
+              name: templateiSheet
+            $ref: '#/components/schemas/templateISheetDBO'
+      xml:
+        name: templateiSheets
+    sheetDBO:
+      type: object
+      properties:
+        metaData:
+          $ref: '#/components/schemas/MetaDataDBO'
+        head:
+          $ref: '#/components/schemas/HeadDBO'
+        data:
+          $ref: '#/components/schemas/DataDBO'
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        type:
+          type: string
+        templateID:
+          type: integer
+          format: int32
+        isheetRecordID:
+          type: integer
+          format: int32
+      xml:
+        name: sheet
+    ResultDBO:
+      type: object
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        text:
+          type: string
+        errorcolumnname:
+          type: string
+    DataDBO:
+      type: object
+      properties:
+        item:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemDBO'
+      xml:
+        name: data
+    templateDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+      xml:
+        name: template
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    ISheetsDBO:
+      type: object
+      properties:
+        isheet:
+          type: array
+          items:
+            xml:
+              name: isheet
+            $ref: '#/components/schemas/sheetDBO'
+      xml:
+        name: isheets
+    HeadDBO:
+      type: object
+      properties:
+        headColumn:
+          type: array
+          items:
+            $ref: '#/components/schemas/HeadColumnDBO'
+      xml:
+        name: headColumn
+    templateListDBO:
+      type: object
+      properties:
+        templates:
+          type: array
+          xml:
+            name: template
+          items:
+            xml:
+              name: template
+            $ref: '#/components/schemas/templateDBO'
+      xml:
+        name: templates
+    MetaDataDBO:
+      type: object
+      properties:
+        siteName:
+          type: string
+        sheetName:
+          type: string
+        siteid:
+          type: string
+        sheetid:
+          type: string
+      xml:
+        name: metaData
+    rawDataDBO:
+      type: object
+      properties:
+        text:
+          type: array
+          items:
+            type: string
+        linkDisplayName:
+          type: string
+        linkDisplayURL:
+          type: string
+      xml:
+        name: rawData
+    column:
+      type: object
+      properties:
+        sequence:
+          type: string
+          xml:
+            attribute: true
+        rawData:
+          $ref: '#/components/schemas/rawDataDBO'
+        title:
+          type: string
+        type:
+          type: string
+        mendatory:
+          type: boolean
+        columnID:
+          type: integer
+          format: int32
+      xml:
+        name: column
+    HeadColumnDBO:
+      type: object
+      properties:
+        columnValue:
+          type: string
+        sequence:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: headcolumn
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

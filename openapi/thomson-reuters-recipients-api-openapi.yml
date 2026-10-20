@@ -1,0 +1,1453 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Recipients API
+  version: '2.0'
+  description: 'Operations tagged Recipients across 2 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-services-v1-openapi.json, thomson-reuters-onesource-trust-tax-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax
+security:
+- bearerAuth: []
+tags:
+- name: Recipients
+paths:
+  /v1/recipients/operations/{id}:
+    get:
+      tags:
+      - Recipients
+      summary: Allows an authenticated user to retrieve the recipients operation status
+      description: Retrieves the Recipients status
+      operationId: RetrievesTheRecipientsStatus
+      parameters:
+      - name: id
+        in: path
+        description: Operation request identifier
+        required: true
+        schema:
+          type: string
+          description: Operation request identifier
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves the Recipients status
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+  /v1/pans/{pan}/accounts/{acctNo}/recipients:
+    put:
+      tags:
+      - Recipients
+      summary: Allows an authenticated user to update existing recipient for designated…
+      description: Updates existing Recipients information
+      operationId: UpdatesExistingRecipientsInformation
+      parameters:
+      - name: pan
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: acctNo
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RecipientModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipientModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RecipientModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RecipientModel'
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates existing Recipients information
+    post:
+      tags:
+      - Recipients
+      summary: Allows an authenticated user to add new recipient for designated PAN/Trust…
+      description: Creates a new Recipient for designated PAN/Trust Account
+      operationId: CreatesANewRecipientForDesignatedPAN/TrustAccount
+      parameters:
+      - name: pan
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: acctNo
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RecipientModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipientModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RecipientModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RecipientModel'
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates a new Recipient for designated PAN/Trust Account
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax
+components:
+  schemas:
+    OperationsStatus:
+      enum:
+      - NotStarted
+      - Running
+      - Succeeded
+      - Failed
+      - Cancelled
+      - PartiallySucceeded
+      - Rejected
+      type: string
+    ResState:
+      enum:
+      - AL
+      - AK
+      - AZ
+      - AR
+      - CA
+      - CO
+      - CT
+      - DE
+      - DC
+      - FL
+      - GA
+      - HI
+      - ID
+      - IL
+      - IN
+      - IA
+      - KS
+      - KY
+      - LA
+      - ME
+      - MD
+      - MA
+      - MI
+      - MN
+      - MS
+      - MO
+      - MT
+      - NE
+      - NV
+      - NH
+      - NJ
+      - NM
+      - NY
+      - NC
+      - ND
+      - OH
+      - OK
+      - OR
+      - PA
+      - RI
+      - SC
+      - SD
+      - TN
+      - TX
+      - UT
+      - VT
+      - VA
+      - WA
+      - WV
+      - WI
+      - WY
+      - NR
+      - NS
+      type: integer
+      description: 'Residential State
+
+
+        AL - Alabama
+
+        AK - Alaska
+
+        AZ - Arizona
+
+        AR - Arkansas
+
+        CA - California
+
+        CO - Colorado
+
+        CT - Connecticut
+
+        DE - Delaware
+
+        DC - District of Columbia
+
+        FL - Florida
+
+        GA - Georgia
+
+        HI - Hawaii
+
+        ID - Idaho
+
+        IL - Illinois
+
+        IN - Indiana
+
+        IA - Iowa
+
+        KS - Kansas
+
+        KY - Kentucky
+
+        LA - Louisiana
+
+        ME - Maine
+
+        MD - Maryland
+
+        MA - Massachusetts
+
+        MI - Michigan
+
+        MN - Minnesota
+
+        MS - Mississippi
+
+        MO - Missouri
+
+        MT - Montana
+
+        NE - Nebraska
+
+        NV - Nevada
+
+        NH - New Hampshire
+
+        NJ - New Jersey
+
+        NM - New Mexico
+
+        NY - New York
+
+        NC - North Carolina
+
+        ND - North Dakota
+
+        OH - Ohio
+
+        OK - Oklahoma
+
+        OR - Oregon
+
+        PA - Pennsylvania
+
+        RI - Rhode Island
+
+        SC - South Carolina
+
+        SD - South Dakota
+
+        TN - Tennessee
+
+        TX - Texas
+
+        UT - Utah
+
+        VT - Vermont
+
+        VA - Virginia
+
+        WA - Washington
+
+        WV - West Virginia
+
+        WI - Wisconsin
+
+        WY - Wyoming
+
+        NR - Non Resident (foreign)
+
+        NS - Not needed'
+      format: int32
+    OperationModel:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/OperationsStatus'
+        location:
+          type:
+          - string
+          - 'null'
+        created_date_time:
+          type: string
+          format: date-time
+        last_action_date_time:
+          type: string
+          format: date-time
+      additionalProperties: false
+    RecipientDetail:
+      required:
+      - name1
+      - tax_payer_id
+      type: object
+      properties:
+        tax_payer_id:
+          pattern: 111-11-1111 (SSN) or 11-1111111 (TIN)
+          type: string
+          description: An Individual Taxpayer Identification Number (or ITIN) is nine-digit number issued by the IRS to individuals who must have an identifying number but who are not eligible for a Social Security Number or an Employer ID Number
+        name1:
+          maxLength: 45
+          type: string
+          description: We have parsed the beneficiary name into First, Middle and Last name which are used for some state e-filing purposes. You should review the Beneficiary List register for the parsed names and make any appropriate changes. Updating the Beneficiary List register will not change the beneficiary name on the recipient detail screen. If you make any change to the Bene Name on the recipient detail screen you should review the Beneficiary List register.
+        name2:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: We have parsed the beneficiary name into First, Middle and Last name which are used for some state e-filing purposes. You should review the Beneficiary List register for the parsed names and make any appropriate changes. Updating the Beneficiary List register will not change the beneficiary name on the recipient detail screen. If you make any change to the Bene Name on the recipient detail screen you should review the Beneficiary List register.
+        date_of_birth:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Data of Birth
+        date_of_death:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Date of Death
+        address1:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Address 1
+        address2:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Address 2
+        address3:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Address 3
+        city:
+          maxLength: 25
+          type:
+          - string
+          - 'null'
+          description: City
+        country:
+          $ref: '#/components/schemas/Country'
+        state:
+          $ref: '#/components/schemas/State'
+        zip:
+          maxLength: 10
+          minLength: 5
+          type:
+          - string
+          - 'null'
+          description: US Zip code
+        canadian_province:
+          $ref: '#/components/schemas/CanadaProvince'
+        foreign_province:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Foreign Province
+        foreign_postal_code:
+          maxLength: 15
+          type:
+          - string
+          - 'null'
+          description: Foreign Postal Code
+        resident_state:
+          $ref: '#/components/schemas/ResState'
+        state_tax:
+          type:
+          - number
+          - 'null'
+          description: State Tax
+          format: double
+        tax_letter_fee:
+          type:
+          - number
+          - 'null'
+          description: Tax Letter Fee
+          format: double
+        phone_number:
+          maxLength: 14
+          type:
+          - string
+          - 'null'
+          description: Phone Number
+        tav_recipient_number:
+          maxLength: 12
+          type:
+          - string
+          - 'null'
+          description: TAV Recipient Number
+        1099_recipient_type:
+          $ref: '#/components/schemas/A1099RecipientType'
+        clifford_crummey:
+          $ref: '#/components/schemas/CliffordCrummey'
+        w9_date:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: W-9 Date
+        w9_sent_indicator:
+          type:
+          - boolean
+          - 'null'
+          description: W-9 Sent
+        generation_skip_person:
+          $ref: '#/components/schemas/GenerationSkipPerson'
+        prior_year_undistributed_resident_state_municipal_income_5227:
+          type:
+          - number
+          - 'null'
+          description: Prior year undistributed resident state municipal income (5227 accounts)
+          format: double
+        for_wsc_mlp_processing_use_this_recipient_address:
+          type:
+          - boolean
+          - 'null'
+          description: For WSC MLP processing use this recipient address
+        type_of_entity_of_beneficiary:
+          $ref: '#/components/schemas/TypeOfEntityOfBeneficiary'
+        type_of_beneficiary_for_990:
+          $ref: '#/components/schemas/TypeOfBeneficiaryFor990'
+        do_not_send_to_mail_service:
+          type:
+          - boolean
+          - 'null'
+          description: Do Not Send to Mail Service
+        tax_payer_id_lock:
+          $ref: '#/components/schemas/OnOff'
+        1099_recipient_type_lock:
+          $ref: '#/components/schemas/OnOff'
+        address_lock:
+          $ref: '#/components/schemas/OnOff'
+        date_of_birth_lock:
+          $ref: '#/components/schemas/OnOff'
+        name_lock:
+          $ref: '#/components/schemas/OnOff'
+        resident_state_lock:
+          $ref: '#/components/schemas/OnOff'
+        yrseq:
+          type: integer
+          description: Tax Year Sequence, use accounts api to get appropriate account and year sequence
+          format: int32
+      additionalProperties: false
+      description: Recipient Detail Model
+    CliffordCrummey:
+      enum:
+      - NA
+      - Clifford
+      - Crummey
+      type: integer
+      format: int32
+    TypeOfBeneficiaryFor990:
+      enum:
+      - Abusiness
+      - Anindividual
+      type: integer
+      format: int32
+    RecipientModel:
+      type: object
+      properties:
+        copy_to_lock:
+          $ref: '#/components/schemas/OnOff'
+        pan:
+          type:
+          - string
+          - 'null'
+          description: Product Access Number
+        acct_no:
+          type:
+          - string
+          - 'null'
+          description: Trust Number
+        detail:
+          $ref: '#/components/schemas/RecipientDetail'
+        distribution:
+          $ref: '#/components/schemas/RecipientDistribution'
+        copy_to:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RecipientCopyTo'
+          description: Gets or Sets CopyTo
+        options:
+          $ref: '#/components/schemas/RecipientOptions'
+        form_1042s_recipient:
+          $ref: '#/components/schemas/RecipientForm1042SRecipient'
+        grants_allocations_and_contributions:
+          $ref: '#/components/schemas/Recipient990Grants'
+      additionalProperties: false
+      description: Recipient Model
+    RecipientDistribution:
+      type: object
+      properties:
+        roll_dollar_distribution_overrides_next_yr:
+          type:
+          - boolean
+          - 'null'
+          description: Roll DOLLAR distribution overrides to next year
+        1099_distribution_percentage:
+          maximum: 1
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: 1099 Distribution Percentage
+          format: double
+      additionalProperties: false
+      description: Distribution - Decimal/Dollar
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+    TypeOfContribution:
+      enum:
+      - Cash
+      - NonCash
+      type: integer
+      description: Type of contribution
+      format: int32
+    Country:
+      enum:
+      - US
+      - AF
+      - AX
+      - AL
+      - AG
+      - AQ
+      - AN
+      - AO
+      - AV
+      - AY
+      - AC
+      - AR
+      - AM
+      - AA
+      - AT
+      - AS
+      - AU
+      - AJ
+      - BF
+      - BA
+      - FQ
+      - BG
+      - BB
+      - BO
+      - BE
+      - BH
+      - BN
+      - BD
+      - BT
+      - BL
+      - BK
+      - BC
+      - BV
+      - BR
+      - IO
+      - BX
+      - BU
+      - UV
+      - BM
+      - BY
+      - CB
+      - CM
+      - CA
+      - CV
+      - CJ
+      - CT
+      - CD
+      - CI
+      - CH
+      - KT
+      - IP
+      - CK
+      - CO
+      - CN
+      - CF
+      - CG
+      - CW
+      - CR
+      - CS
+      - IV
+      - HR
+      - CU
+      - UC
+      - CY
+      - EZ
+      - DA
+      - DX
+      - DJ
+      - DO
+      - DR
+      - TT
+      - EC
+      - EG
+      - ES
+      - EK
+      - ER
+      - EN
+      - ET
+      - FK
+      - FO
+      - FM
+      - FJ
+      - FI
+      - FR
+      - FP
+      - FS
+      - GB
+      - GA
+      - GG
+      - GM
+      - GH
+      - GI
+      - GR
+      - GL
+      - GJ
+      - GQ
+      - GT
+      - GK
+      - GV
+      - PU
+      - GY
+      - HA
+      - HM
+      - VT
+      - HO
+      - HK
+      - HQ
+      - HU
+      - IC
+      - IN
+      - ID
+      - IR
+      - IZ
+      - EI
+      - IM
+      - IS
+      - IT
+      - JM
+      - JN
+      - JA
+      - DQ
+      - JE
+      - JQ
+      - JO
+      - KZ
+      - KE
+      - KQ
+      - KR
+      - KN
+      - KS
+      - KV
+      - KU
+      - KG
+      - LA
+      - LG
+      - LE
+      - LT
+      - LI
+      - LY
+      - LS
+      - LH
+      - LU
+      - MC
+      - MK
+      - MA
+      - MI
+      - MY
+      - MV
+      - ML
+      - MT
+      - RM
+      - MR
+      - MP
+      - MX
+      - MQ
+      - MD
+      - MN
+      - MG
+      - MJ
+      - MH
+      - MO
+      - MZ
+      - WA
+      - NR
+      - BQ
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NU
+      - NG
+      - NI
+      - NE
+      - NF
+      - CQ
+      - 'NO'
+      - MU
+      - OC
+      - PK
+      - PS
+      - LQ
+      - PM
+      - PP
+      - PF
+      - PA
+      - PE
+      - RP
+      - PC
+      - PL
+      - PO
+      - RQ
+      - QA
+      - RO
+      - RS
+      - RW
+      - TB
+      - SH
+      - SC
+      - ST
+      - RN
+      - SB
+      - VC
+      - WS
+      - SM
+      - TP
+      - SA
+      - SG
+      - RI
+      - SE
+      - SL
+      - SN
+      - NN
+      - LO
+      - SI
+      - BP
+      - SO
+      - SF
+      - SX
+      - OD
+      - SP
+      - PG
+      - CE
+      - SU
+      - NS
+      - SV
+      - WZ
+      - SW
+      - SZ
+      - SY
+      - TW
+      - TI
+      - TZ
+      - TH
+      - TO
+      - TL
+      - TN
+      - TD
+      - TS
+      - TU
+      - TX
+      - TK
+      - TV
+      - UG
+      - UP
+      - AE
+      - UK
+      - UY
+      - UZ
+      - NH
+      - VA
+      - VE
+      - VM
+      - VI
+      - VQ
+      - WQ
+      - WF
+      - WI
+      - YM
+      - ZA
+      - ZI
+      - XY
+      type: integer
+      format: int32
+    OnOff:
+      enum:
+      - 'Off'
+      - 'On'
+      type: integer
+      description: On or Off
+      format: int32
+    LobTreatyCategoryCode:
+      enum:
+      - NoLimitationOnBenefitsTreatyClaimed
+      - GovernmentContractingStatePoliticalSubdivisionLocalAuthority
+      - TaxExemptPensionTrustPensionFund
+      - TaxExemptCharitableOrganization
+      - PubliclyTradedCorporation
+      - SubsidiaryOfPubliclyTradedCorporation
+      - CompanyThatMeetsTheOwnershipAndBaseErosionTest
+      - CompanyThatMeetsTheDerivativeBenefitsTest
+      - CompanyWithAnItemOfIncomeThatMeetsTheActiveTradeOrBusinessTest
+      - DiscretionaryDetermination
+      - Other
+      type: integer
+      description: Limitation on Benefits (LOB) Treaty Category Code
+      format: int32
+    A1099RecipientType:
+      enum:
+      - LegalBeneficiary
+      - _1099RecipientOnly
+      - DummyBeneficiaryFor1099Totaling
+      - LegalBeneficiaryAnd1099Recipient
+      type: integer
+      format: int32
+    RecipientNonCashContribution:
+      type: object
+      properties:
+        fmv:
+          type:
+          - number
+          - 'null'
+          description: FMV
+          format: double
+        description:
+          maxLength: 70
+          type:
+          - string
+          - 'null'
+          description: Description
+        date_of_gift:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Date of gift
+        how_book_value_was_determined:
+          maxLength: 70
+          type:
+          - string
+          - 'null'
+          description: Explanation how book value was determined
+        how_fmv_was_determined:
+          maxLength: 70
+          type:
+          - string
+          - 'null'
+          description: Explanation how fmv was determined
+      additionalProperties: false
+      description: Non Cash Contribution
+    GenerationSkipPerson:
+      enum:
+      - NotReviewed
+      - 'Yes'
+      - 'No'
+      type: integer
+      format: int32
+    CanadaProvince:
+      enum:
+      - AB
+      - BC
+      - MB
+      - NB
+      - NL
+      - NS
+      - NT
+      - NU
+      - 'ON'
+      - PE
+      - QC
+      - SK
+      - YT
+      type: integer
+      description: Canadian province codes
+      format: int32
+    RecipientCopyTo:
+      required:
+      - name1
+      type: object
+      properties:
+        name1:
+          maxLength: 40
+          type: string
+          description: Name
+        name2:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Name 2
+        address1:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Address 1
+        address2:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Address 2
+        city:
+          maxLength: 25
+          type:
+          - string
+          - 'null'
+          description: City
+        country:
+          $ref: '#/components/schemas/Country'
+        state:
+          $ref: '#/components/schemas/State'
+        zip:
+          maxLength: 15
+          type:
+          - string
+          - 'null'
+          description: US Zip code
+        foreign_province:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Foreign Province available if Country not = United States of America)
+        foreign_postal_code:
+          maxLength: 15
+          type:
+          - string
+          - 'null'
+          description: Foreign Postal Code
+      additionalProperties: false
+      description: ''
+    TypeOf1042sPrintedForm:
+      enum:
+      - OriginalFiling
+      - Amended
+      - Revised
+      type: integer
+      description: Type of 1042-S (for printed form only)
+      format: int32
+    RecipientForm1042SRecipient:
+      type: object
+      properties:
+        documentation_not_available_or_invalid:
+          type:
+          - boolean
+          - 'null'
+          description: Documentation not available or invalid
+        no_election_made_to_receive_treaty_rates:
+          type:
+          - boolean
+          - 'null'
+          description: No election made to receive treaty rates
+        recipient_eligible_for_special_treaty_dividend_benefits:
+          type:
+          - boolean
+          - 'null'
+          description: Recipient eligible for special treaty dividend benefits
+        country_code_for_tax_purposes:
+          $ref: '#/components/schemas/Country'
+        recipients_chapter3_status_code:
+          maximum: 38
+          minimum: 3
+          type:
+          - integer
+          - 'null'
+          description: Recipient’s Chapter 3 Status Code
+          format: int32
+        recipients_chapter4_status_code:
+          maximum: 50
+          minimum: 1
+          type:
+          - integer
+          - 'null'
+          description: Recipient’s Chapter 4 Status Code
+          format: int32
+        lob_treaty_category_code:
+          $ref: '#/components/schemas/LobTreatyCategoryCode'
+        recipients_us_tin:
+          pattern: 111-11-1111 (SSN) or 11-1111111 (TIN)
+          type:
+          - string
+          - 'null'
+          description: Recipient’s U.S. TIN
+        recipients_giin:
+          maxLength: 19
+          type:
+          - string
+          - 'null'
+          description: Recipient’s GIIN
+        recipients_foreign_tin:
+          maxLength: 22
+          type:
+          - string
+          - 'null'
+          description: Recipient’s Foreign TIN
+        type_of_1042s_printed_form:
+          $ref: '#/components/schemas/TypeOf1042sPrintedForm'
+        date_of_1042s:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Date of 1042-S (for printed form only)
+        amendment_number:
+          maximum: 9
+          minimum: 1
+          type:
+          - integer
+          - 'null'
+          description: Amendment Number (use when Type is set to Amended)
+          format: int32
+        alternate_name_used_for_1042:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Alternate Name (used for 1042-S electronic filing)
+        primary_withholding_agent_name_if_different:
+          maxLength: 40
+          type:
+          - string
+          - 'null'
+          description: Primary Withholding Agent Name if different
+        primary_withholding_agent_ein_if_different:
+          pattern: 111-11-1111 (SSN) or 11-1111111 (TIN)
+          type:
+          - string
+          - 'null'
+          description: Primary Withholding Agent EIN if different
+        recipients_account_number:
+          maxLength: 20
+          type:
+          - string
+          - 'null'
+          description: Recipient’s Account Number
+        payers_name_if_different_from_agent:
+          maxLength: 50
+          type:
+          - string
+          - 'null'
+          description: Payer’s Name if different from Agent
+        payers_tin_if_different_from_agent:
+          pattern: 111-11-1111 (SSN) or 11-1111111 (TIN)
+          type:
+          - string
+          - 'null'
+          description: Payer’s TIN if different from Agent
+        payers_giin_if_different_from_agent:
+          maxLength: 19
+          type:
+          - string
+          - 'null'
+          description: Payer’s GIIN if different from Agent
+        payers_chapter3_status_code:
+          maximum: 35
+          minimum: 1
+          type:
+          - integer
+          - 'null'
+          description: Payer’s Chapter 3 Status Code if different from Agent
+          format: int32
+        payers_chapter4_status_code:
+          maximum: 50
+          minimum: 1
+          type:
+          - integer
+          - 'null'
+          description: Payer’s Chapter 4 Status Code if different from Agent
+          format: int32
+        country_code_for_tax_purposes_lock:
+          $ref: '#/components/schemas/OnOff'
+      additionalProperties: false
+      description: Form 1042-S Recipient Information
+    Recipient990Grants:
+      type: object
+      properties:
+        total_grants_allocations_and_contributions:
+          type:
+          - number
+          - 'null'
+          description: Total grants, allocations and contributions
+          format: double
+        donor_advised_contribution:
+          type:
+          - boolean
+          - 'null'
+          description: Donor advised contribution
+        relationship_to_substantial_contributor:
+          maxLength: 38
+          type:
+          - string
+          - 'null'
+          description: Relationship to substantial contributor
+        purpose_of_grant_allocation_or_contribution:
+          maxLength: 38
+          type:
+          - string
+          - 'null'
+          description: Purpose of grant allocation or contribution
+        foundation_status_of_recipient:
+          maxLength: 22
+          type:
+          - string
+          - 'null'
+          description: Foundation status of recipient
+        type_of_contribution:
+          $ref: '#/components/schemas/TypeOfContribution'
+        non_cash_contribution:
+          $ref: '#/components/schemas/RecipientNonCashContribution'
+      additionalProperties: false
+      description: Grants, Allocations, and Contributions
+    State:
+      enum:
+      - AL
+      - AK
+      - AZ
+      - AR
+      - AS
+      - CA
+      - CO
+      - CT
+      - DE
+      - DC
+      - FL
+      - FM
+      - GA
+      - GU
+      - HI
+      - ID
+      - IL
+      - IN
+      - IA
+      - KS
+      - KY
+      - LA
+      - ME
+      - MD
+      - MA
+      - MH
+      - MI
+      - MN
+      - MS
+      - MO
+      - MP
+      - MT
+      - NE
+      - NV
+      - NH
+      - NJ
+      - NM
+      - NY
+      - NC
+      - ND
+      - OH
+      - OK
+      - OR
+      - PW
+      - PA
+      - PR
+      - RI
+      - SC
+      - SD
+      - TN
+      - TX
+      - UT
+      - VT
+      - VA
+      - VI
+      - WA
+      - WV
+      - WI
+      - WY
+      - AA
+      - AE
+      - AP
+      type: integer
+      description: " US State\n\n\tAL\t - \tAlabama\n\tAK\t - \tAlaska\n\tAZ\t - \tArizona\n\tAR\t - \tArkansas\n\tAS\t - \tAmerican Samoa\n\tCA\t - \tCalifornia\n\tCO\t - \tColorado\n\tCT\t - \tConnecticut\n\tDE\t - \tDelaware\n\tDC\t - \tDistrict of Columbia\n\tFL\t - \tFlorida\n\tFM\t - \tFederated States of Micronesia\n\tGA\t - \tGeorgia\n\tGU\t - \tGuam\n\tHI\t - \tHawaii\n\tID\t - \tIdaho\n\tIL\t - \tIllinois\n\tIN\t - \tIndiana\n\tIA\t - \tIowa\n\tKS\t - \tKansas\n\tKY\t - \tKentucky\n\tLA\t - \tLouisiana\n\tME\t - \tMaine\n\tMD\t - \tMaryland\n\tMA\t - \tMassachusetts\n\tMH\t - \tMarshall Islands\n\tMI\t - \tMichigan\n\tMN\t - \tMinnesota\n\tMS\t - \tMississippi\n\tMO\t - \tMissouri\n\tMP\t - \tNorthern Mariana Islands\n\tMT\t - \tMontana\n\tNE\t - \tNebraska\n\tNV\t - \tNevada\n\tNH\t - \tNew Hampshire\n\tNJ\t - \tNew Jersey\n\tNM\t - \tNew Mexico\n\tNY\t - \tNew York\n\tNC\t - \tNorth Carolina\n\tND\t - \tNorth Dakota\n\tOH\t - \tOhio\n\tOK\t - \tOklahoma\n\tOR\t - \tOregon\n\tPW\t - \tPalau\n\tPA\t - \tPennsylvania\n\tPR\t - \tPuerto Rico\n\tRI\t - \tRhode Island\n\tSC\t - \tSouth Carolina\n\tSD\t - \tSouth Dakota\n\tTN\t - \tTennessee\n\tTX\t - \tTexas\n\tUT\t - \tUtah\n\tVT\t - \tVermont\n\tVA\t - \tVirginia\n\tVI\t - \tVirgin Islands\n\tWA\t - \tWashington\n\tWV\t - \tWest Virginia\n\tWI\t - \tWisconsin\n\tWY\t - \tWyoming\n\tAA\t - \tAPO (ZIP 340xx)\n\tAE\t - \tAPO (ZIP 090xx-0989xx)\n\tAP\t - \tAPO (ZIP 962xx-966xx)"
+      format: int32
+    TypeOfEntityOfBeneficiary:
+      enum:
+      - NoOverride
+      - Trust
+      - QualifiedExemptOrgCorporation
+      - Partnership
+      - CCorporation
+      - SCorporation
+      - Other
+      - Individual
+      - Estate
+      - QualifiedExemptOrgTrust
+      - LLCPartnership
+      - LLCCCorporation
+      - LLCSCorporation
+      type: integer
+      description: Type of entity of beneficiary
+      format: int32
+    RecipientOptions:
+      type: object
+      properties:
+        suppress_schedulek1_tax_summary_1099:
+          type:
+          - boolean
+          - 'null'
+          description: 1099 Distribution Percentage
+        corrected_k1_1099:
+          type:
+          - boolean
+          - 'null'
+          description: Corrected K-1/1099
+        final_k1:
+          type:
+          - boolean
+          - 'null'
+          description: Final K-1
+        amended_k1:
+          type:
+          - boolean
+          - 'null'
+          description: Amended K-1
+        print_alternate_no_distribution_wording:
+          type:
+          - boolean
+          - 'null'
+          description: Print alternate 'No Distribution' wording
+        tax_year_on_k1_recipient_summary_beginning:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Tax year on K-1/recipient summary Beginning
+        tax_year_on_k1_recipient_summary_ending:
+          pattern: yyyy-MM-dd
+          type:
+          - string
+          - 'null'
+          description: Tax year on K-1/recipient summary Beginning
+        k1_percentage_of_distribution_at_year_end:
+          maximum: 1
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: K-1 Percentage of distribution at year end
+          format: double
+        transfer_k1_information_to_account:
+          type:
+          - boolean
+          - 'null'
+          description: Transfer K-1 information to account
+        suppress_state_message:
+          type:
+          - boolean
+          - 'null'
+          description: Suppress state message
+        make_usgi_equal_to_federal:
+          type:
+          - boolean
+          - 'null'
+          description: Make USGI equal to federal
+        fraction_of_year_excluded:
+          maximum: 1
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Schedule J - (Exclusion of pre-21 accumulations). Fraction of year excluded, if a short year return (override)
+          format: double
+      additionalProperties: false
+      description: Options
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer { token }"'
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.json
+- thomson-reuters-onesource-trust-tax-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

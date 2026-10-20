@@ -1,0 +1,150 @@
+openapi: 3.2.0
+info:
+  version: v1
+  title: GoSystem TBB TBB Import API
+  description: 'A RESTful API to provide access to the GoSystem TBB functionality.
+
+
+    Get Locator API (/v1/trialbalance/locators/{account}/{year}) - Retrieves the list of locators along with the binder ID.
+
+
+    GET Template API (/v1/trialBalance/{binderid}/importTemplates/{importtype}) - Retrieves the list of templates available for the particular import type. The import types are 3000 - Preliminary Balances, 3001 - Adjustments, 3 - TCC, 3007 - Schedule M-3. You can pass the binder IDs you get from the Get Locator API.
+
+
+    TBB Import (/v1/trialBalance/{binderid}/import/{importtype}/template/{templateid}) - Imports the data from Excel in Preliminary Balance, Adjustment, Schedule M-3, and TCC screens. Import type IDs for different imports are 3000 - Preliminary Balances, 3001 - Adjustments, 3 - TCC, 3007 - Schedule M-3. You''ll get the template ID from the GET Template API.
+
+
+    Valid tax return types are 1120C, 1120S, and 1065 for TBB Import.
+
+
+    Trial Balance Computation API (/v1/trialBalance/{binderId}/computations) - Submits a batch job to the compute queue. Once the batch job is completed successfully, the data from the Trial Balance bridge is updated in the organizer.
+
+
+    Note: Make sure the locator is closed while performing this operation.
+
+
+    Compute Transfer Options API (/v1/trialBalance/{binderId}/compute-transfer-config) - This endpoint allows you to update the computed date within the organizer. To ensure that the organizer is updated, the parameter UpdateFederalTAS must be set to true. If UpdateFederalTAS is set to false, the data is updated only within the TBB and isn''t transferred to the organizer.
+
+
+    Compute Status API (/v1/trialBalance/{binderId}/compute-status) - Retrieves combined compute information for a binder. This includes Compute Status, Compute Options, and Compute Process Options.'
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: TBB Import
+paths:
+  /v1/trialBalance/{binderid}/import/{importtype}/template/{templateid}:
+    post:
+      tags:
+      - TBB Import
+      summary: Import data from Excel into TBB screens
+      description: Import the data from excel in Prelim. Balance, Adjustment, Schedule M3 and TCC Screen. Import Type id for different imports > Prelim. Balance-3000 Adjustment- 3001 Schedule M3- 3007 TCC- 3. The Trial Balance Browser (TBB) must be launched on the same locator where the import is performed. Failure to do so may result in import issues.
+      operationId: ImportTBBData
+      parameters:
+      - name: binderid
+        in: path
+        required: true
+        description: A Binder ID is a unique alphanumeric identifier for a trial balance binder in GoSystem Tax RS. To retrieve Binder IDs for a specific account and tax year, you can use the endpoint GET /v1/trialbalance/locators/{account}/{year}.
+        schema:
+          type: string
+      - name: importtype
+        in: path
+        required: true
+        description: Identifies the category of data being imported into a Trial Balance Binder. Available types are 3000 – Preliminary Balances, 3001 – Adjustments, 3 – TCC, and 3007 – Schedule M-3.
+        schema:
+          type: integer
+          format: int32
+      - name: templateid
+        in: path
+        required: true
+        description: Identifier for the template used in import. Can be retrieved from /v1/trialBalance/{binderid}/importTemplates/{importtype}.
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Upload a valid Excel file for import.
+      responses:
+        '200':
+          description: Success. The import is completed.
+          content:
+            application/text:
+              examples:
+                SuccessFullImport:
+                  summary: Import completed with no errors
+                  value: Import completed with no errors
+                invalidTaxTypeImport:
+                  summary: Invalid tax return type
+                  value: Invalid tax return type. Valid tax return types are 1120C, 1120S, and 1065.
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportRequest'
+              examples:
+                import-validation-error-example:
+                  $ref: '#/components/examples/importapi-response-example'
+        '404':
+          description: Not Found
+      x-operation-id-source: normalized
+      x-operation-id-original: Import TBB data
+components:
+  schemas:
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          format: int64
+          type: integer
+    FieldErrorWrapper:
+      type: array
+      items:
+        $ref: '#/components/schemas/FieldError'
+    ImportRequest:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        detail:
+          type:
+          - string
+          - 'null'
+        fieldErrors:
+          $ref: '#/components/schemas/FieldErrorWrapper'
+        _embedded:
+          type:
+          - string
+          - 'null'
+  examples:
+    importapi-response-example:
+      value:
+        type: Data Validation
+        title: Data validation failed.
+        detail: null
+        instance: null
+        fieldErrors:
+        - fieldName: Import File
+          messages:
+          - 'Row 2 - [TRC Number]: Invalid'
+          errorCode: 0
+        _embedded: null
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

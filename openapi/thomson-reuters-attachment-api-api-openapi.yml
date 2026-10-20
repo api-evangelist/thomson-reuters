@@ -1,0 +1,1630 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Attachment API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Attachment API across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Attachment API
+paths:
+  /{version}/attachments:
+    get:
+      tags:
+      - Attachment API
+      summary: Get all attachments
+      description: This method is used to get a list of attachment of a Collaborate content item. Please note this method does not apply to iSheet attachments and Q&A attachments, as attachments to those modules are managed separately within the context of those modules.
+      operationId: getAllAttachments
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: contenttype
+        in: query
+        description: "Content type allows below options: \n- Microblogs\n- Wiki\n- Blog\n- Tasks\n- Events\n- Comments\n- Messages"
+        required: true
+        schema:
+          type: string
+      - name: contentid
+        in: query
+        description: This the content id of the required content. <br> e.g. blogid for contenttype=blog, taskid for contenttype=tasks
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Attachments returned successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Attachments'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachments'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Attachments'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while getting attachments
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Attachment API
+      summary: Add attachment
+      description: 'API method to add an attachment to a content in Collaborate.
+
+
+        The file should be added as multipart form data. Please note that the parameters are case sensitive.
+
+
+        If the operation is successful the API returns a progressive key resource object . And based on this progressive key, can see the status of attachment otherwise an error object is returned with the appropriate error code
+
+
+        To get the status of attachment based on progressive key
+
+        e.g. POST /api/{version}/progressivekeystatus/{progressive_key}
+
+
+        NameTypeDescription
+
+
+        progressive_keyString Key to check the status of your action.
+
+
+        Response
+
+
+        <attachment>
+
+        <id>101</id>
+
+        </attachment>
+
+
+        If the operation is successful the API returns a progressive key resource object. Possible statuses are "in-progress", "done" or "failed" otherwise, an error object is returned with the appropriate error code.
+
+
+        Note: This API will insert an attachment/file into the system with a non-active state. The attachment ID you can use while adding/editing the content API such as task, blog, or event.'
+      operationId: addAttachment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: siteid
+        in: query
+        description: Site ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Attachment adding process initiated successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while adding attachment
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: The parameter name should be called file and the value for it is the file to be uploaded
+                  format: binary
+                filename:
+                  type: string
+                  description: Name of the newly created file
+              required:
+              - file
+              - filename
+    servers:
+    - url: /monumentuat/api
+  /{version}/attachments/{attachmentid}:
+    delete:
+      tags:
+      - Attachment API
+      summary: Remove attachment from content (un-link)
+      description: This method is used to un-link attachment from particular content (not the actual delete of attachment from system).
+      operationId: removeAttachment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: attachmentid
+        in: path
+        description: Attachment id which is already linked in provided content id
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: contenttype
+        in: query
+        description: 'Content type allows below options,
+
+          - Wiki
+
+          - Blog
+
+          - Tasks
+
+          - Events
+
+          - Comments'
+        required: true
+        schema:
+          type: string
+      - name: contentid
+        in: query
+        description: 'This the content id of the required content.
+
+          <br> e.g. blogid for contenttype=blog, taskid for contenttype=tasks'
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Attachment un-linked/removed successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while un-linking/removing attachment
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    Images:
+      type: object
+      properties:
+        image:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+    TagsDBO:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            type: string
+    SiteRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedsite:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    QaDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    MetadataListDBO:
+      type: object
+      properties:
+        metadataname:
+          type: array
+          items:
+            type: string
+        metadatavalue:
+          type: array
+          items:
+            type: string
+    BidderSiteDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+        advancedqapermission:
+          type: string
+    IntegrationUserDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        userid:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        lastname:
+          type: string
+        practicegroup:
+          type: string
+        langcode:
+          type: string
+        localeID:
+          type: string
+        publicprofile:
+          type: string
+        pwpid:
+          type: string
+        usertypeid:
+          type: string
+        systemuser:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        address:
+          $ref: '#/components/schemas/Address'
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        img:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        externalid:
+          type: string
+        jobtitle:
+          type: string
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        specialities:
+          type: string
+        title:
+          type: string
+        goesby:
+          type: string
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        bio:
+          type: string
+        dateOfBirth:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+        sourcetype:
+          type: string
+        orgid:
+          type: string
+        ifpartner:
+          type: string
+        emaildomain:
+          type: string
+        invitationsent:
+          type: string
+        createdby:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        lastlogindate:
+          type: string
+        invalidlogins:
+          type: string
+        publicwebsiteprofileid:
+          type: string
+        resetpassworddate:
+          type: string
+        avatar:
+          type: string
+        followingcount:
+          type: integer
+          format: int32
+        followercount:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        sites:
+          $ref: '#/components/schemas/sites'
+        role:
+          type: string
+        orgName:
+          type: string
+      xml:
+        name: user
+    NameValueLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    WikiDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    site:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sitename:
+          type: string
+        sitetemplateID:
+          type: integer
+          format: int32
+          xml:
+            name: sitetemplateid
+        role:
+          type: string
+        sitedescription:
+          type: string
+        enabledmodules:
+          type: string
+        sitefolderID:
+          type: string
+        folder:
+          $ref: '#/components/schemas/Folder'
+        sitefolderpermission:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        adminnote:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+        createddate:
+          type: string
+        archiveddate:
+          type: string
+        clientno:
+          type: string
+        matterno:
+          type: string
+        landingpage:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        maxpagecount:
+          type: string
+        siteowner:
+          $ref: '#/components/schemas/UserDBO'
+        sitehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModule'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        csvSiteCategory:
+          type: string
+        biddersite:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        sitenametranslations:
+          $ref: '#/components/schemas/translations'
+        siteNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        siteLogoName:
+          type: string
+        siteLogoFileSize:
+          type: integer
+          format: int64
+        siteLogoHeight:
+          type: integer
+          format: int32
+        siteLogoWidth:
+          type: integer
+          format: int32
+        siteStatus:
+          type: integer
+          format: int32
+        applySiteTerms:
+          type: integer
+          format: int32
+        siteTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        nextLoginSiteTerms:
+          type: integer
+          format: int32
+        defaultSiteTermsEnable:
+          type: integer
+          format: int32
+        advancedQAPermission:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        siteLabelDisplay:
+          type: string
+        allowSiteAdministration:
+          type: integer
+          format: int32
+        siteLevelPasswordEnable:
+          type: integer
+          format: int32
+        siteLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        sitePassword:
+          type: string
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        applySiteHomePage:
+          type: integer
+          format: int32
+        siteHomePage:
+          type: string
+        siteHomePageType:
+          type: integer
+          format: int32
+        nextLoginSiteHomePage:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        siteCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        siteModuleID:
+          type: integer
+          format: int32
+        icalSecurity:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        announcementMLJSON:
+          type: string
+        siteRestrictionType:
+          $ref: '#/components/schemas/SiteRestrictionType'
+        enableDocumentRedaction:
+          type: boolean
+          xml:
+            name: enabledocumentredaction
+        mysite:
+          type: boolean
+    IntegrationResponseDBO:
+      type: object
+      properties:
+        integrationResponseUsersObject:
+          $ref: '#/components/schemas/IntegrationResponseUsersObject'
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+    Image:
+      type: object
+      properties:
+        caption:
+          type: string
+        imagelink:
+          type: string
+        apilink:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        filesize:
+          type: string
+        imagetype:
+          type: string
+        createddate:
+          type: string
+        displayversion:
+          type: string
+        parentfolderid:
+          type: string
+        folderpath:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        taskcount:
+          type: string
+        commentcount:
+          type: string
+        id:
+          type: string
+        siteid:
+          type: string
+        height:
+          type: string
+        width:
+          type: string
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+    Inbox:
+      type: object
+      properties:
+        enable:
+          type: string
+        accountname:
+          type: string
+    ItemErrorDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        columns:
+          $ref: '#/components/schemas/ColumnErrorsDBO'
+        itemid:
+          type: string
+        externalid:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+        successdeletedcount:
+          type: integer
+          format: int32
+        failurecount:
+          type: integer
+          format: int32
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+      xml:
+        name: item
+    ContactUS:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactUSDBO'
+        type:
+          type: string
+      xml:
+        name: contactus
+    FileDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        extension:
+          type: string
+        folderpath:
+          type: string
+        filehttplink:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+    ActivityDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        microblog:
+          type: string
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ISheetDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    Categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDBO'
+    FilesDBO:
+      type: object
+      properties:
+        file:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDBO'
+        attachment:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDBO'
+    Attachments:
+      type: object
+      properties:
+        images:
+          $ref: '#/components/schemas/Images'
+        files:
+          $ref: '#/components/schemas/FilesDBO'
+        attachment:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDBO'
+      xml:
+        name: attachments
+    FileModule:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showsitemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    DocumentDBO:
+      type: object
+      properties:
+        documentname:
+          type: string
+          xml:
+            name: filename
+        dmsVersion:
+          type: string
+        notification:
+          type: string
+          example: E.g. 1/2/3
+        folderID:
+          type: string
+        documentID:
+          type: string
+          xml:
+            name: fileid
+        batchID:
+          type: string
+        status:
+          type: string
+        documentKey:
+          type: string
+        dmsDocumentDBO:
+          xml:
+            name: dms
+          $ref: '#/components/schemas/DMSDocumentDBO'
+        enable:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        versionid:
+          type: integer
+          format: int32
+        versionnote:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        type:
+          type: string
+        originaltype:
+          type: string
+        icon:
+          type: string
+        commentscount:
+          type: integer
+          format: int32
+        likescount:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/TagsDBO'
+        location:
+          type: string
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        siteid:
+          type: integer
+          format: int32
+        parentfolderid:
+          type: integer
+          format: int32
+        error:
+          type: string
+        size:
+          type: integer
+          format: int64
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: file
+    ColumnErrorsDBO:
+      type: object
+      properties:
+        column:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnErrorDBO'
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+      xml:
+        name: columns
+    Folder:
+      type: object
+      required:
+      - foldername
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        dmsfolderid:
+          type: string
+          xml:
+            attribute: true
+        permission:
+          type: string
+          xml:
+            attribute: true
+        foldername:
+          type: string
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/Folder'
+        child:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: folder
+    ContactUSDBO:
+      type: object
+      properties:
+        value:
+          type: string
+      xml:
+        name: values
+    ISheetTemplateParameterGroups:
+      type: object
+      properties:
+        templateparametergroup:
+          type: array
+          items:
+            xml:
+              name: templateparametergroup
+            $ref: '#/components/schemas/ISheetTemplateParameterGroup'
+      xml:
+        name: templateparametergroups
+    IntegrationResponseUsersObject:
+      type: object
+      properties:
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationUserDBO'
+      xml:
+        name: users
+    AttachmentDBO:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        siteid:
+          type: string
+        parentfolderid:
+          type: string
+        filehttplink:
+          type: string
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: string
+        imagetype:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        displayversion:
+          type: string
+        documentcount:
+          type: string
+        taskcount:
+          type: string
+        commentcount:
+          type: string
+      xml:
+        name: attachment
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    PermissionDBO:
+      type: object
+      properties:
+        view:
+          type: integer
+          format: int32
+        edit:
+          type: integer
+          format: int32
+        delete:
+          type: integer
+          format: int32
+        addEditAllFiles:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
+        viewAllFiles:
+          type: integer
+          format: int32
+    GroupsDBO:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            type: string
+    ExperiencesDBO:
+      type: object
+      properties:
+        experience:
+          type: array
+          items:
+            type: string
+    Emailmetadata:
+      type: object
+      properties:
+        enable:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailmetadataallfolder:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailfrom:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailto:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailcc:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailsent:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailreceived:
+          type: string
+          enum:
+          - TRUE/FALSE
+    Attachment:
+      type: object
+      properties:
+        file:
+          type: string
+        name:
+          type: string
+        order:
+          type: string
+        id:
+          type: integer
+          format: int32
+        extension:
+          type: string
+        parentfolderid:
+          type: integer
+          format: int32
+        filehttplink:
+          type: string
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+        displayname:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+      xml:
+        name: attachment
+    PeopleDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    HomeDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Address:
+      type: object
+      properties:
+        addressid:
+          type: string
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postCode:
+          type: string
+        knownas:
+          type: string
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    ProgressiveKeyDBO:
+      type: object
+      properties:
+        progressivekey:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+        progressivekeystatus:
+          type: string
+        userid:
+          type: integer
+          format: int32
+        responsebody:
+          type: string
+        message:
+          type: string
+        messagecode:
+          type: string
+        integrationResponseDBO:
+          $ref: '#/components/schemas/IntegrationResponseDBO'
+        columns:
+          $ref: '#/components/schemas/ColumnErrorsDBO'
+        items:
+          $ref: '#/components/schemas/ItemErrorsDBO'
+        importisheettemplate:
+          $ref: '#/components/schemas/importISheetTemplateDBO'
+        error:
+          $ref: '#/components/schemas/ErrorDBO'
+        contentType:
+          type: string
+        failedEntities:
+          type: integer
+          format: int32
+        downloadlink:
+          type: string
+        attachment:
+          $ref: '#/components/schemas/Attachment'
+        link:
+          type: string
+      xml:
+        name: progressivekeyresponse
+    ISheetTemplateParameter:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        data:
+          type: string
+      xml:
+        name: templateparameter
+    ItemErrorsDBO:
+      type: object
+      properties:
+        item:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemErrorDBO'
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+      xml:
+        name: items
+    ModuleDBO:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeDBO'
+        activity:
+          $ref: '#/components/schemas/ActivityDBO'
+        document:
+          $ref: '#/components/schemas/DocumentDBO'
+        blog:
+          $ref: '#/components/schemas/BlogDBO'
+        wiki:
+          $ref: '#/components/schemas/WikiDBO'
+        task:
+          $ref: '#/components/schemas/TaskDBO'
+        event:
+          $ref: '#/components/schemas/EventDBO'
+        isheet:
+          $ref: '#/components/schemas/ISheetDBO'
+        qa:
+          $ref: '#/components/schemas/QaDBO'
+        people:
+          $ref: '#/components/schemas/PeopleDBO'
+    LocationDBO:
+      type: object
+      properties:
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postcode:
+          type: string
+    TaskDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        timelineview:
+          type: string
+    Link:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValueLink'
+    sites:
+      type: object
+      properties:
+        site:
+          type: array
+          items:
+            $ref: '#/components/schemas/site'
+    RawSiteSize:
+      type: object
+      properties:
+        activedocumentsize:
+          type: integer
+          format: int64
+        deleteddocumentsize:
+          type: integer
+          format: int64
+        totalsize:
+          type: integer
+          format: int64
+    DMSDocumentDBO:
+      type: object
+      properties:
+        dmsdocid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmseditdate:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmsversion:
+          type: string
+      xml:
+        name: dms
+    importISheetTemplateDBO:
+      type: object
+      properties:
+        linkedtemplateid:
+          type: integer
+          format: int32
+        aliasname:
+          type: string
+        linkedisheet:
+          type: string
+        importdata:
+          type: string
+        appendisheetname:
+          type: string
+        templateparametergroups:
+          $ref: '#/components/schemas/ISheetTemplateParameterGroups'
+        templateSheetIdMap:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        templateId:
+          type: integer
+          format: int32
+        templateTitle:
+          type: string
+      xml:
+        name: importisheettemplate
+    categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+      xml:
+        name: categories
+    ISheetTemplateParameterGroup:
+      type: object
+      properties:
+        templateruleid:
+          type: integer
+          format: int32
+          xml:
+            attribute: true
+        templateparameter:
+          type: array
+          items:
+            xml:
+              name: templateparameter
+            $ref: '#/components/schemas/ISheetTemplateParameter'
+      xml:
+        name: templateparametergroup
+    ColumnErrorDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        columnid:
+          type: integer
+          format: int32
+        name:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+      xml:
+        name: column
+    CategoryDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: CategoryDBO
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

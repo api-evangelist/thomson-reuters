@@ -1,0 +1,352 @@
+openapi: 3.2.0
+info:
+  version: v1,v2
+  title: GoSystem Tax Documents (Print) Tax Documents V1 (Print) API
+  description: The Tax Documents (Print) RESTful services provide access to GoSystem print functionality.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: Tax Documents V1 (Print)
+  description: ⚠️ We recommend using V2 Print instead of V1 Print. V1 Print will be deprecated in a future release.
+paths:
+  /v1/tax-documents:
+    post:
+      tags:
+      - Tax Documents V1 (Print)
+      summary: Generate a V1 print job for a tax return
+      description: 'Triggers a V1 print job for a tax return. The print job is queued and processed asynchronously. Required parameters include TaxYear, TaxType, TaxReturnId, and PrintType. The PrintType parameter determines which portion of the return to print: CompleteReturn, FederalReturn, AllStateCityReturn, or K1.'
+      operationId: TriggerV1Print
+      parameters:
+      - name: Account
+        in: header
+        description: The account number associated with the request.
+        required: true
+        schema:
+          type: string
+      - name: Password
+        in: header
+        description: The password for encrypted or protected tax documents.
+        required: false
+        schema:
+          type: string
+          example: password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrintV1Request'
+            examples:
+              1120-RequestExample:
+                $ref: '#/components/examples/1120-v1-Print-Request-Example'
+              1065-RequestExample:
+                $ref: '#/components/examples/1065-v1-Print-Request-Example'
+              K-1Package-Request-Example:
+                $ref: '#/components/examples/K-1Package-v1-Print-Request-Example'
+        required: true
+      responses:
+        '200':
+          description: Success. The print job is queued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusWrapper'
+              examples:
+                200-Print-Started-Response:
+                  $ref: '#/components/examples/200-V1-Print-Started-Response'
+        '400':
+          description: Bad request. The server cannot process the request due to a client error.
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                Missing-Account-Header:
+                  summary: Missing Account header
+                  value: Please specify account information in header
+                Account-Not-Belong-To-Firm:
+                  summary: Account does not belong to firm
+                  value: Account does not belong to firm
+                Invalid-Input-Error:
+                  summary: Invalid input. Unable to queue the print job.
+                  value: Invalid Input Unable to Queue the print job
+        '401':
+          description: Unauthorized. The access token is missing or invalid (invalid_access_token).
+          content:
+            application/json:
+              examples:
+                Invalid-Access-Token:
+                  summary: Invalid access token
+                  value:
+                    type: https://developerportal.thomsonreuters.com/gosystem/errors/#invalid_access_token
+                    title: Invalid Access Token
+                    detail: Invalid Access Token
+                    status: 401
+                    instance: /gosystem/tax-returns/v1/tax-documents
+                    api_requestId: rrt-0cf08d88dc2ed26af-a-de-1424128-13963770-1
+  /v1/tax-document-statuses:
+    get:
+      tags:
+      - Tax Documents V1 (Print)
+      summary: Get the V1 print job status for a tax return
+      description: Retrieves the current status of a V1 print job. Use the jobId returned from the print request to check the job status.
+      operationId: GetV1PrintStatus
+      parameters:
+      - name: jobId
+        in: query
+        description: The job ID returned after the print job is triggered.
+        required: true
+        schema:
+          type: string
+          example: 20191105\10\12\{0F1B1332-8041-44FA-BCB6-671F4855A49A}
+      - name: Account
+        in: header
+        description: The account number associated with the request.
+        required: true
+        schema:
+          type: string
+          example: '1111'
+      responses:
+        '200':
+          description: Success. The print job status is retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusWrapper'
+              examples:
+                200-V1-Print-CompleteReturn-Response:
+                  $ref: '#/components/examples/200-V1-Print-CompleteReturn-Status-Response'
+                200-V1-Print-K1-Response:
+                  $ref: '#/components/examples/200-V1-Print-K1-Status-Response'
+        '400':
+          description: Bad request. The server cannot process the request due to a client error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+              examples:
+                Invalid-Credentials-Null:
+                  summary: Authentication failure. The RSUser object is null.
+                  value:
+                    Message: Invalid Input GetPrintStatus failed. Invalid credentials (RSUser object null)
+                Invalid-Credentials-Disabled:
+                  summary: Authentication failure. The user is invalid or disabled.
+                  value:
+                    Message: Invalid Input GetPrintStatus failed. Invalid credentials (RSUser invalid or disabled)
+                General-Exception:
+                  summary: General exception. Unable to retrieve the print job status.
+                  value:
+                    Message: Invalid Input Unable to Retrieve the print job Status. Error - {exception message}
+        '401':
+          description: Unauthorized. The access token is missing or invalid (invalid_access_token).
+          content:
+            application/json:
+              examples:
+                Invalid-Access-Token:
+                  summary: Invalid access token
+                  value:
+                    type: https://developerportal.thomsonreuters.com/gosystem/errors/#invalid_access_token
+                    title: Invalid Access Token
+                    detail: Invalid Access Token
+                    status: 401
+                    instance: /gosystem/tax-returns/v1/tax-document-statuses?jobId=jnbjkhjgcvhbjhbj%2Chgh
+                    api_requestId: rrt-0cf08d88dc2ed26af-a-de-1424128-13978795-1
+  /v1/files:
+    get:
+      tags:
+      - Tax Documents V1 (Print)
+      summary: Download a V1 printed tax document
+      description: Downloads a printed tax document. Use the fileId from the tax-document-statuses response to retrieve the file. The Accept header must match the file extension in the fileId.
+      operationId: DownloadV1PrintedDocument
+      parameters:
+      - name: fileId
+        in: query
+        description: The file ID from the tax-document-statuses response.
+        required: true
+        schema:
+          type: string
+          example: 20191105\10\12\{0F1B1332-8041-44FA-BCB6-671F4855A49A}\A1234AB9.pdf
+      - name: Accept
+        in: header
+        description: The content type of the requested file. This value must match the file extension in the fileId.
+        required: true
+        schema:
+          type: string
+          enum:
+          - text/xml
+          - application/pdf
+          - application/zip
+          - text/csv
+      responses:
+        '200':
+          description: Success. The file is downloaded.
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            application/zip:
+              schema:
+                type: string
+                format: binary
+            text/xml:
+              schema:
+                type: string
+                format: binary
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request. The server cannot process the request due to a client error.
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                Invalid-File-ID-Format:
+                  summary: Invalid file ID format
+                  value: invalid File ID format
+                Missing-File-Extension:
+                  summary: Missing file extension in the file ID
+                  value: File ID does not have extension
+                XML-Accept-Header-Mismatch:
+                  summary: Accept header mismatch for XML files
+                  value: Accept header should be text/xml for xml file
+                PDF-Accept-Header-Mismatch:
+                  summary: Accept header mismatch for PDF files
+                  value: Accept header should be application/pdf for pdf file
+                ZIP-Accept-Header-Mismatch:
+                  summary: Accept header mismatch for ZIP files
+                  value: Accept header should be application/zip for zip file
+                CSV-Accept-Header-Mismatch:
+                  summary: Accept header mismatch for CSV files
+                  value: Accept header should be text/csv
+        '401':
+          description: Unauthorized. The access token is missing or invalid (invalid_access_token).
+          content:
+            application/json:
+              examples:
+                Invalid-Access-Token:
+                  summary: Invalid access token
+                  value:
+                    type: https://developerportal.thomsonreuters.com/gosystem/errors/#invalid_access_token
+                    title: Invalid Access Token
+                    detail: Invalid Access Token
+                    status: 401
+                    instance: /gosystem/tax-returns/v1/files?fileId=vsv
+                    api_requestId: rrt-055707734af19e5ad-a-de-950225-14161487-1
+components:
+  schemas:
+    Statuses:
+      type: object
+      properties:
+        Error:
+          format: int32
+          type: integer
+          description: The error code. A value of 0 indicates success.
+        Code:
+          format: int32
+          type: integer
+          description: The status code.
+        Info:
+          type: string
+          description: The status information.
+        Ident:
+          type: string
+          description: The job identifier.
+        Description:
+          type: string
+          description: The status description.
+        JobId:
+          type: string
+          description: The job ID used for tracking.
+        FileName:
+          type: string
+          description: The generated file name.
+        FileIds:
+          type: string
+          description: The generated file IDs.
+    PrintV1Request:
+      type: object
+      properties:
+        TaxYear:
+          type: string
+          description: The 4-digit tax year.
+        TaxType:
+          type: string
+          description: 'The tax return type. Valid values are: 1040, 1041, 1065, 1120, 990, 5500, 706, or 709.'
+        TaxReturnId:
+          type: string
+          description: The 6-character locator ID.
+        PrintType:
+          enum:
+          - CompleteReturn
+          - FederalReturn
+          - AllStateCityReturn
+          - K1
+          type: string
+          description: The type of print to generate.
+    StatusWrapper:
+      type: object
+      properties:
+        Status:
+          $ref: '#/components/schemas/Statuses'
+  examples:
+    200-V1-Print-K1-Status-Response:
+      summary: V1 print K-1 status response
+      value:
+        Status:
+          Error: 0
+          Code: 2
+          Info: Print Return complete
+          Ident: 20191105\10\12\{0F1B1332-8041-44FA-BCB6-671F4855A49A}\A1234AB9.ZIP
+          Description: Finished
+          FileIds: 20191105\10\12\{0F1B1332-8041-44FA-BCB6-671F4855A49A}\A1234AB9.ZIP
+    1065-v1-Print-Request-Example:
+      summary: 1065 V1 print request
+      value:
+        taxYear: '2019'
+        taxType: '1065'
+        taxReturnId: 1234AB
+        printType: FederalReturn
+    1120-v1-Print-Request-Example:
+      summary: 1120 V1 print request
+      value:
+        taxYear: '2019'
+        taxType: '1120'
+        taxReturnId: 1234AB
+        printType: CompleteReturn
+    200-V1-Print-CompleteReturn-Status-Response:
+      summary: V1 print complete return status response
+      value:
+        Status:
+          Error: 0
+          Code: 2
+          Info: Print Return complete
+          Ident: 20191105\10\12\{0F1B1332-8041-44FA-BCB6-671F4855A49A}\A1234AB9.pdf
+          Description: Finished
+          FileIds: 20191105\10\12\{0F1B1332-8041-44FA-BCB6-671F4855A49A}\A1234AB9.pdf
+    K-1Package-v1-Print-Request-Example:
+      summary: K-1 Package V1 print request
+      value:
+        taxYear: '2019'
+        taxType: '1065'
+        taxReturnId: 1234AB
+        printType: K1
+    200-V1-Print-Started-Response:
+      summary: V1 print started response
+      value:
+        Status:
+          Error: 0
+          Code: 0
+          Ident: 20191105\10\12\{0F1B1332-8041-44FA-BCB6-671F4855A49A}
+          JobId: 20191105\10\12\{0F1B1332-8041-44FA-BCB6-671F4855A49A}
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

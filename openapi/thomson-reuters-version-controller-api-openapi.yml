@@ -1,0 +1,77 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Version Controller API
+  version: '1.0'
+  description: 'Operations tagged version-controller across 2 of this provider''s published API definitions: thomson-reuters-eap-uat-trri-api-research-openapi.json, thomson-reuters-eap-uat-trri-api-research-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/regulatory-intelligence
+tags:
+- name: version-controller
+  description: Version Controller
+paths:
+  /v1/document-roots/{documentRootId}:
+    get:
+      tags:
+      - version-controller
+      summary: Return document versions by family ID
+      operationId: getRootDocumentVersionsUsingGET
+      parameters:
+      - name: documentRootId
+        in: path
+        description: Document family ID to return versions
+        required: true
+        schema:
+          type: string
+        example: ID02B0FE00A9911DDB6FFD6F08131F47D
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DocumentVersionsDto'
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: No versions exist or incorrect document family ID
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+components:
+  schemas:
+    DocumentVersionsDto:
+      title: DocumentVersionsDto
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentVersion'
+    DocumentVersion:
+      title: DocumentVersion
+      type: object
+      properties:
+        documentId:
+          type: string
+        endDate:
+          type: integer
+          format: int64
+        startDate:
+          type: integer
+          format: int64
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: To generate Access Token, please use the steps described in <a href='/regulatory-intelligence/swagger_openapi_document/eap-trri-api-access-token/100?from=api&id=9296' rel='noopener noreferrer' target='_blank'>TRRI API Access Token</a> section, ex. 'Bearer {access_token}'.
+x-refined-from:
+- thomson-reuters-eap-uat-trri-api-research-openapi.json
+- thomson-reuters-eap-uat-trri-api-research-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

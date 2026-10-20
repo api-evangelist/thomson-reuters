@@ -1,0 +1,490 @@
+# x-archived-from: thomson-reuters-authorize-openapi.yml
+# x-archived-on: 2026-10-20
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Authorize
+  description: The Authorization RESTful services verify and authenticate your organization and application entitlements, permissions, and validity when calling GoSystem APIs.
+host: api.thomsonreuters.com
+basePath: /gosystem
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /oauth2/v1/auth-code:
+    post:
+      summary: Generate authorization code V1
+      description: 'This endpoint generates a one-time use authorization code that''s used in the code parameter of the <b>oauth2/v1/token</b> endpoint. The authorization code expires after 60 seconds.<br>
+
+        Parameters for this endpoint are client_id, login_id, firm, center, state, and api_token. The login_id, firm, and center are your GoSystem sign-in details. The api_token should be retrieved by signing in to GoSystem and going to Options (on the right) > API Token menu.'
+      tags:
+      - Authorization
+      consumes:
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      parameters:
+      - name: client_id
+        in: formData
+        type: string
+        description: The Client ID (also called Consumer Key) is a unique identifier for your application that's used to authenticate API requests. You can find it in the Thomson Reuters Developer Portal under GoSystem API > My Keys by selecting the eye icon next to your application.
+        required: true
+        default: wrrAGpAG6yjvKXhVfpF7ngxA5QxNYzHU
+      - name: login_id
+        in: formData
+        type: string
+        description: GoSystem sign-in ID of the user.
+        required: true
+        default: QAAUTOMATION21
+      - name: firm
+        in: formData
+        type: string
+        description: Firm name associated with the request.
+        required: true
+        default: 2WF5
+      - name: center
+        in: formData
+        type: string
+        description: Location of the user.
+        required: true
+        default: '***'
+      - name: state
+        in: formData
+        type: string
+        description: State code for the request. This is a random unique identifier.
+        required: true
+        default: abc
+      - name: api_token
+        in: formData
+        type: string
+        description: You can retrieve the token by signing in to GoSystem Tax > Options > API Token in the application interface.
+        required: true
+        default: 293A83913F8B99B13CE64A263365BCE918BA8C785160B88BBA8A1C3B28472DE59447D85CD7794406A2C4CE0261355DCAC6324E6B62EB59803F5F144A274A25B0CAF6E9AC9A
+      responses:
+        '200':
+          description: Success. The auth code is generated.
+          schema:
+            $ref: '#/definitions/AuthCodeResponse'
+        '400':
+          description: Error verifying user or error verifying token.
+        '401':
+          description: 'Types of error in message:
+
+            invalid_client_id - missing or invalid
+
+            invalid_grant_type - missing or invalid
+
+            invalid_scope - missing, invalid, or improperly formed
+
+            invalid_client_assertion - missing, invalid, or improperly formed
+
+            invalid_client_assertion_type - missing or invalid'
+        '404':
+          description: invalid_api_uri - the URI provided isn't valid.
+        '429':
+          description: rate_limit_exceed - the rate limit for your application/company has been met.
+        '500':
+          description: error_api_gateway - an error occurred in Apigee (for example, company might be missing custom attributes).
+  /oauth2/v1/token:
+    post:
+      summary: Get access token V1
+      description: 'This endpoint verifies and authenticates your organization and application entitlements, permissions, and validity when calling GoSystem APIs.<br/>
+
+        The authorization code grant (3-legged OAuth) requires client_id, scope, grant_type, code, and client_secret. The client_secret should be retrieved from the developer portal keys. The code will be returned from the authorize call. The code expires after 60 seconds.<br/>
+
+        Access tokens (also known as bearer tokens) are inserted in the Authorization parameter. Tokens expire after 60 minutes and must be regenerated to continue calling APIs.'
+      tags:
+      - Authorization
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: body
+        description: Bearer <token> (Token returned from the Get Security Token call.)
+        required: true
+        schema:
+          $ref: '#/definitions/AuthorizationRequest'
+      - name: Content-Type
+        in: header
+        description: 'application/json: Specifies that the request body is formatted in JSON.'
+        type: string
+        default: application/x-www-form-urlencoded
+      responses:
+        '200':
+          description: Success. An access token is generated.
+          schema:
+            $ref: '#/definitions/AuthorizationResponseV1'
+        '401':
+          description: 'Types of error in message:
+
+            invalid_client_id - missing or invalid
+
+            invalid_grant_type - missing or invalid
+
+            invalid_scope - missing, invalid, or improperly formed
+
+            invalid_client_assertion - missing, invalid, or improperly formed
+
+            invalid_client_assertion_type - missing or invalid'
+        '402':
+          description: 'Types of error in message:
+
+            unauthorized_token - client assertion is expired, improper issued_at, or issuer doesn''t have access. Additionally, the issuer might not match public key on file
+
+
+            unauthorized_client_id - Client ID has been revoked or expired
+
+            unauthorized_client_secret - Client Secret provided doesn''t match the one on file
+
+            unauthorized_auth_code - authcode is empty, missing, invalid, or expired
+
+            access_token_expired - the access token provided has expired or been revoked'
+        '404':
+          description: invalid_api_uri - the URI provided isn't valid.
+        '429':
+          description: rate_limit_exceed - the rate limit for your application/company has been met.
+        '500':
+          description: error_api_gateway - an error occurred in Apigee (for example, company might be missing custom attributes).
+  /oauth2/v1/refresh:
+    post:
+      summary: Refresh access token V1
+      description: 'The access token is short lived. It''ll expire after 60 minutes. This endpoint refreshes your access token with the help of the refresh token.<br/>
+
+        The refresh token endpoint requires client_id and client_secret to be sent in the basic authorization header. The client_id and client_secret should be retrieved from the developer portal keys. The grant_type needs to be passed as refresh_token, and a valid refresh token received from the /oauth2/v1/token call needs to be passed as refresh_token. The refresh token expires after 24 hours.'
+      tags:
+      - Authorization
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: grant_type
+        in: formData
+        type: string
+        description: authorization_code
+        required: true
+        default: refresh_token
+      - name: refresh_token
+        in: formData
+        type: string
+        description: refresh_token value.
+        required: true
+        default: wx0zRxm0530a4BCWKSFhGvnF8fA2sf8M
+      - name: Authorization
+        in: header
+        description: Bearer <token> (Token returned from the Get Security Token call.)
+        required: true
+        type: string
+        default: Basic {{ base64 encoded client id:client secret }}
+      responses:
+        '200':
+          description: Success. An access token is generated.
+          schema:
+            $ref: '#/definitions/AuthorizationResponseV1'
+        '401':
+          description: 'Types of error in message:
+
+            invalid_client_id - missing or invalid client_id'
+        '404':
+          description: invalid_api_uri - the URI provided isn't valid.
+        '429':
+          description: rate_limit_exceed - the rate limit for your application/company has been met.
+        '500':
+          description: error_api_gateway - an error occurred in Apigee (for example, company might be missing custom attributes).
+  /oauth2/v2/auth-code:
+    post:
+      summary: Generate authorization code V2
+      description: 'This endpoint generates a one-time use authorization code that''s used in the code parameter of the <b>oauth2/v2/token</b> endpoint. The authorization code expires after 60 seconds.<br>
+
+        Parameters for this endpoint are client_id, login_id, firm, center, state, and api_token. The login_id, firm, and center are your GoSystem sign-in details. The api_token should be retrieved by signing in to GoSystem and going to Options (on the right) > API Token menu.'
+      tags:
+      - Authorization
+      consumes:
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      parameters:
+      - name: client_id
+        in: formData
+        type: string
+        description: The Client ID (also called Consumer Key) is a unique identifier for your application that's used to authenticate API requests. You can find it in the Thomson Reuters Developer Portal under GoSystem API > My Keys by selecting the eye icon next to your application.
+        required: true
+        default: wrrAGpAG6yjvKXhVfpF7ngxA5QxNYzHU
+      - name: login_id
+        in: formData
+        type: string
+        description: GoSystem sign-in ID of the user.
+        required: true
+        default: QAAUTOMATION21
+      - name: firm
+        in: formData
+        type: string
+        description: Firm name associated with the request.
+        required: true
+        default: 2WF5
+      - name: center
+        in: formData
+        type: string
+        description: Location of the user.
+        required: true
+        default: '***'
+      - name: state
+        in: formData
+        type: string
+        description: State code for the request. This is a random unique identifier.
+        required: true
+        default: abc
+      - name: api_token
+        in: formData
+        type: string
+        description: You can retrieve the token by signing in to GoSystem Tax > Options > API Token in the application interface.
+        required: true
+        default: 293A83913F8B99B13CE64A263365BCE918BA8C785160B88BBA8A1C3B28472DE59447D85CD7794406A2C4CE0261355DCAC6324E6B62EB59803F5F144A274A25B0CAF6E9AC9A
+      responses:
+        '200':
+          description: Success. The auth code is generated.
+          schema:
+            $ref: '#/definitions/AuthCodeResponse'
+        '400':
+          description: Error verifying user or error verifying token.
+        '401':
+          description: 'Types of error in message:
+
+            invalid_client_id - missing or invalid
+
+            invalid_grant_type - missing or invalid
+
+            invalid_scope - missing, invalid, or improperly formed
+
+            invalid_client_assertion - missing, invalid, or improperly formed
+
+            invalid_client_assertion_type - missing or invalid'
+        '404':
+          description: invalid_api_uri - the URI provided isn't valid.
+        '429':
+          description: rate_limit_exceed - the rate limit for your application/company has been met.
+        '500':
+          description: error_api_gateway - an error occurred in Apigee (for example, company might be missing custom attributes).
+  /oauth2/v2/token:
+    post:
+      summary: Get access token V2
+      description: 'This endpoint verifies and authenticates your organization and application entitlements, permissions, and validity when calling GoSystem APIs.<br/>
+
+        The authorization code grant (3-legged OAuth) requires client_id, scope, grant_type, code, and client_secret. The client_secret should be retrieved from the developer portal keys. The code will be returned from the authorize call. The code expires after 60 seconds.<br/>
+
+        Access tokens (also known as bearer tokens) are inserted in the Authorization parameter. Tokens expire after 60 minutes and must be regenerated to continue calling APIs.'
+      tags:
+      - Authorization
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: body
+        description: Bearer <token> (Token returned from the Get Security Token call.)
+        required: true
+        schema:
+          $ref: '#/definitions/AuthorizationRequest'
+      - name: Content-Type
+        in: header
+        description: 'application/json: Specifies that the request body is formatted in JSON.'
+        type: string
+        default: application/x-www-form-urlencoded
+      responses:
+        '200':
+          description: Success. An access token is generated.
+          schema:
+            $ref: '#/definitions/AuthorizationResponseV2'
+        '401':
+          description: 'Types of error in message:
+
+            invalid_client_id - missing or invalid
+
+            invalid_grant_type - missing or invalid
+
+            invalid_scope - missing, invalid, or improperly formed
+
+            invalid_client_assertion - missing, invalid, or improperly formed
+
+            invalid_client_assertion_type - missing or invalid'
+        '402':
+          description: 'Types of error in message:
+
+            unauthorized_token - client assertion is expired, improper issued_at, or issuer doesn''t have access. Additionally, the issuer might not match public key on file
+
+
+            unauthorized_client_id - Client ID has been revoked or expired
+
+            unauthorized_client_secret - Client Secret provided doesn''t match the one on file
+
+            unauthorized_auth_code - authcode is empty, missing, invalid, or expired
+
+            access_token_expired - the access token provided has expired or been revoked'
+        '404':
+          description: invalid_api_uri - the URI provided isn't valid.
+        '429':
+          description: rate_limit_exceed - the rate limit for your application/company has been met.
+        '500':
+          description: error_api_gateway - an error occurred in Apigee (for example, company might be missing custom attributes).
+  /oauth2/v2/refresh:
+    post:
+      summary: Refresh access token V2
+      description: 'The access token is short lived. It''ll expire after 60 minutes. This endpoint refreshes your access token with the help of the refresh token.<br/>
+
+        The refresh token endpoint requires client_id and client_secret to be sent in the basic authorization header. The client_id and client_secret should be retrieved from the developer portal keys. The grant_type needs to be passed as refresh_token, and a valid refresh token received from the /oauth2/v2/token call needs to be passed as refresh_token. The refresh token expires after 24 hours.'
+      tags:
+      - Authorization
+      produces:
+      - application/json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: grant_type
+        in: formData
+        type: string
+        description: authorization_code
+        required: true
+        default: refresh_token
+      - name: refresh_token
+        in: formData
+        type: string
+        description: refresh_token value.
+        required: true
+        default: wx0zRxm0530a4BCWKSFhGvnF8fA2sf8M
+      - name: Authorization
+        in: header
+        description: Bearer <token> (Token returned from the Get Security Token call.)
+        required: true
+        type: string
+        default: Basic {{ base64 encoded client id:client secret }}
+      responses:
+        '200':
+          description: Success. An access token is generated.
+          schema:
+            $ref: '#/definitions/AuthorizationResponseV2'
+        '401':
+          description: 'Types of error in message:
+
+            invalid_client_id - missing or invalid client_id'
+        '404':
+          description: invalid_api_uri - the URI provided isn't valid.
+        '429':
+          description: rate_limit_exceed - the rate limit for your application/company has been met.
+        '500':
+          description: error_api_gateway - an error occurred in Apigee (for example, company might be missing custom attributes).
+definitions:
+  AuthorizationRequest:
+    type: object
+    example:
+      client_id: wrrAGpAG6yjvKXhVfpF7ngxA5QxNYzHU
+      code: pDuc8tKv
+      client_secret: Tny5ztH9UqteAiHA
+      scope: urn:tr:gosystem:auth:api:taxreturn,urn:tr:gosystem:auth:firm:FT,urn:tr:gosystem:auth:location:FTSUPPORT
+      grant_type: authorization_code
+    properties:
+      client_id:
+        type: string
+        description: The Client ID (also called Consumer Key) is a unique identifier for your application that's used to authenticate API requests. You can find it in the Thomson Reuters Developer Portal under GoSystem API > My Keys by selecting the eye icon next to your application.
+      code:
+        type: string
+        description: Authorization code from auth-code.
+      client_secret:
+        type: string
+        description: The Client Secret is a confidential key paired with the Client ID to securely authenticate your application. It should be kept private and is also available in the My Keys section of the Thomson Reuters Developer Portal.
+      scope:
+        type: string
+        example: '"urn:tr:gosystem:auth:api:taxreturn","urn:tr:gosystem:auth:firm:FT","urn:tr:gogsystem:auth:location:FTSUPPORT"'
+        description: ''
+      grant_type:
+        type: string
+        example: authorization_code
+        description: authorization_code
+  AuthorizationResponseV1:
+    type: object
+    example:
+      success: 'true'
+      token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.NHVaYe26MbtOYhSKkoKYdFVomg4i8ZJd8_-RU8VNbftc4TSMb4bXP3l3YlNWACwyXPGffz5aXHc6lty1Y2t4SWRqGteragsVdZufDn5BlnJl9pdR_kdVFUsra2rWKEofkZeIC4yWytE58sMIihvo9H1ScmmVwBcQP6XETqYd0aSHp1gOa9RdUPDvoXQ5oqygTqVtxaDr6wUFKrKItgBMzWIdNZ6y7O9E0DhEPTbE9rfBo6KTFsHAZnMg4k68CDp2woYIaXbmYTWcvbzIuHO7_37GT79XdIwkm95QJ7hYC9RiwrV7mesbY4PAahERJawntho0my942XheVLmGwLMBkQ
+      token_type: BearerToken
+      expires_in: '3600'
+      issued_at: '1732012345678'
+      client_id: abc123xyz456def789
+      refresh_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicmVmcmVzaCI6dHJ1ZSwiaWF0IjoxNTE2MjM5MDIyfQ.POstGetfAytaZS82wHcjoTyoqhMyxXiWdR7Nn7A29DNSl0EiXLdwJ6xC6AfgZWF1bOsS_TuYI3OWDEjXBeZcPo2T3svRs68fx7C6lbywnGCJ1kLcXxobE4Qj5J6ymtV6tGSCGvLKqZ8lYPYO9zBFvQvOkRpXVDVGjHc5h5I5w8bE3NaQqKKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZ
+      refresh_token_expires_in: '86400'
+    properties:
+      success:
+        type: string
+      token:
+        type: string
+      token_type:
+        type: string
+        default: BearerToken
+      expires_in:
+        type: string
+      issued_at:
+        type: string
+      client_id:
+        type: string
+      refresh_token:
+        type: string
+      refresh_token_expires_in:
+        type: string
+  AuthorizationResponseV2:
+    type: object
+    example:
+      success: 'true'
+      access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.NHVaYe26MbtOYhSKkoKYdFVomg4i8ZJd8_-RU8VNbftc4TSMb4bXP3l3YlNWACwyXPGffz5aXHc6lty1Y2t4SWRqGteragsVdZufDn5BlnJl9pdR_kdVFUsra2rWKEofkZeIC4yWytE58sMIihvo9H1ScmmVwBcQP6XETqYd0aSHp1gOa9RdUPDvoXQ5oqygTqVtxaDr6wUFKrKItgBMzWIdNZ6y7O9E0DhEPTbE9rfBo6KTFsHAZnMg4k68CDp2woYIaXbmYTWcvbzIuHO7_37GT79XdIwkm95QJ7hYC9RiwrV7mesbY4PAahERJawntho0my942XheVLmGwLMBkQ
+      token_type: BearerToken
+      expires_in: '3600'
+      issued_at: '1732012345678'
+      client_id: abc123xyz456def789
+      refresh_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicmVmcmVzaCI6dHJ1ZSwiaWF0IjoxNTE2MjM5MDIyfQ.POstGetfAytaZS82wHcjoTyoqhMyxXiWdR7Nn7A29DNSl0EiXLdwJ6xC6AfgZWF1bOsS_TuYI3OWDEjXBeZcPo2T3svRs68fx7C6lbywnGCJ1kLcXxobE4Qj5J6ymtV6tGSCGvLKqZ8lYPYO9zBFvQvOkRpXVDVGjHc5h5I5w8bE3NaQqKKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZqKqKpFtbqQKZ
+      refresh_token_expires_in: '86400'
+    properties:
+      success:
+        type: string
+      access_token:
+        type: string
+      token_type:
+        type: string
+        default: BearerToken
+      expires_in:
+        type: string
+      issued_at:
+        type: string
+      client_id:
+        type: string
+      refresh_token:
+        type: string
+      refresh_token_expires_in:
+        type: string
+  AuthCodeRequest:
+    type: object
+    example:
+      client_id: abc123xyz456def789
+      login_id: john.doe@example.com
+      firm: ABC Accounting Firm
+      center: New York Office
+      state: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+      api_token: xyz789abc123def456ghi789
+    properties:
+      client_id:
+        type: string
+      login_id:
+        type: string
+      firm:
+        type: string
+      center:
+        type: string
+      state:
+        type: string
+      api_token:
+        type: string
+  AuthCodeResponse:
+    type: object
+    example:
+      AuthorizationCode: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9
+    properties:
+      AuthorizationCode:
+        type: string

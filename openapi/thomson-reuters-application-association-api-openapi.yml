@@ -1,0 +1,236 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Application Association API
+  version: '1.0'
+  description: 'Operations tagged Application Association across 2 of this provider''s published API definitions: thomson-reuters-common-accounts-service-1-0-openapi.json, thomson-reuters-common-accounts-service-1-0-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+  description: Generated server url
+security:
+- Authorization: []
+tags:
+- name: Application Association
+paths:
+  /{chart_of_accounts_id}/associations/applications:
+    get:
+      tags:
+      - Application Association
+      summary: Get Chart of Account Associations
+      description: Get Chart of Account Associations record by ID
+      operationId: getAssociationsOfChartOfAccountByID
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        description: chart of account unique identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApplicationAssociationListResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '404':
+          description: Chart of account not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApplicationAssociationListResponse'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Application Association
+      summary: Create Chart of Account Associations
+      description: Create Chart of Account Associations record by ID
+      operationId: createAssociationsOfChartOfAccountByID
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationAssociationRequest'
+        required: true
+      responses:
+        '201':
+          description: Association created successfully
+        '400':
+          description: Invalid input
+        '403':
+          description: Forbidden
+        '404':
+          description: Chart of account not found
+        '500':
+          description: Failure
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Application Association
+      summary: Update Chart of Account Association
+      description: Update the Chart of Account Association record by id
+      operationId: updateAssociationRollupId
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationAssociationUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: Association updated successfully
+        '400':
+          description: Invalid input
+        '403':
+          description: Forbidden
+        '404':
+          description: Chart of account or association not found
+        '500':
+          description: Failure
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+components:
+  schemas:
+    ApiErrorValidation:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: code
+            message:
+              type: string
+              description: message
+    AppAssocResponseMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+    ApplicationAssociationRequest:
+      type: object
+      properties:
+        application_id:
+          type: string
+          description: ID of the application
+          example: app123
+        application_level2_id:
+          type: string
+          description: Level 2 ID of the application
+          example: level2-123
+      description: Request object for application association
+    ApplicationAssociationUpdateRequest:
+      required:
+      - application_id
+      - application_level2_id
+      type: object
+      properties:
+        application_id:
+          type: string
+          description: ID of the application
+          example: OTP
+        application_level2_id:
+          type: string
+          description: Level 2 ID of the application
+          example: level2-123
+      description: Request object for updating application association
+    ApplicationAssociationListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationAssociationGetApiResponse'
+        _meta:
+          $ref: '#/components/schemas/AppAssocResponseMeta'
+    ApplicationAssociationGetApiResponse:
+      type: object
+      properties:
+        application_id:
+          type: string
+        application_level2_id:
+          type: string
+        rollup_id:
+          type: integer
+          format: int32
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-common-accounts-service-1-0-openapi.json
+- thomson-reuters-common-accounts-service-1-0-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,1301 @@
+openapi: 3.2.0
+info:
+  title: GoSystem Tax Return Efile Attachments API
+  description: This API exposes features for working with GoSystem Tax Returns.
+  version: beta
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: Efile Attachments
+paths:
+  /beta/efile-attachments:
+    post:
+      tags:
+      - Efile Attachments
+      summary: Attach a new or existing file to the return
+      description: This endpoint attaches a new or existing file to the return.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EfileAttachmentFormData'
+      responses:
+        '200':
+          description: Success - File successfully uploaded and processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfileAttachmentResponse'
+              examples:
+                efile-attachments-success:
+                  $ref: '#/components/examples/efile-attachments-success-response'
+        '400':
+          description: Bad Request - Invalid input parameters or validation errors
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                invalid-boolean-isNewFile:
+                  value: Please provide boolean value for isNewFile.
+                invalid-boolean-IsPredefinedDescription:
+                  value: Please provide boolean value for IsPredefinedDescription.
+                invalid-boolean-IsPredefinedFormElementName:
+                  value: Please provide boolean value for IsPredefinedFormElementName.
+                missing-isNewFile:
+                  value: isNewFile is mandatory,please provide any boolean value for isNewFile.
+                incorrect-jurisdiction-code:
+                  value: Incorrect jurisdiction code.
+                no-predefined-description:
+                  value: This jurisdiction doesn't have Predefined Description.
+                no-predefined-form-element:
+                  value: This jurisdiction doesn't have Predefined Form-Element.
+                jurisdiction-no-additional-fields:
+                  value: This jurisdiction doesn't have Predefined Description,Predefined Form-Element,Additional Information and Form-Element Name.
+                missing-form-data:
+                  value: 'SaveEfileAttach: formData is missing in the request.'
+        '404':
+          description: Not Found
+        '415':
+          description: Unsupported Media Type - Request isn't multipart/form-data
+        '500':
+          description: Internal Server Error - Unexpected server error during processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                unknown-error:
+                  $ref: '#/components/examples/efile-attachments-unknown-error'
+      operationId: postBetaEfileAttachments
+      x-operation-id-source: derived
+  /beta/efile-attachments/{jurisdictionAttachmentCode}/{attachmentName}:
+    get:
+      tags:
+      - Efile Attachments
+      summary: Download an efile attachment
+      description: This endpoint downloads an efile attachment.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: jurisdictionAttachmentCode
+        in: path
+        description: Jurisdiction Code
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: attachmentName
+        in: path
+        description: Attachment Name
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: Success - Returns the requested attachment file as binary data for download
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              description: Indicates file should be downloaded with original filename
+              schema:
+                type: string
+            Content-Type:
+              description: MIME type - application/octet-stream for binary file downloads
+              schema:
+                type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+      operationId: getBetaEfileAttachmentsByJurisdictionAttachmentCodeByAttachmentName
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Efile Attachments
+      summary: Update an existing attachment
+      description: This endpoint updates an existing attachment.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: jurisdictionAttachmentCode
+        in: path
+        description: Jurisdiction Code
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: attachmentName
+        in: path
+        description: Attachment Name
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EfileAttachmentUpdateFormData'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfileAttachmentResponse'
+              examples:
+                efile-attachments-success:
+                  $ref: '#/components/examples/efile-attachments-success-response'
+        '400':
+          description: Bad Request - Invalid input parameters or validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                file-already-exists:
+                  value:
+                    statusCode: '400'
+                    message: File already exist for this jurisdiction
+                disabled-jurisdiction-code:
+                  value:
+                    responseType: Error
+                    statusCode: '400'
+                    message: This jurisdiction code is disabled now.
+                    fieldErrors: []
+            text/plain:
+              schema:
+                type: string
+              examples:
+                invalid-boolean-IsPredefinedDescription:
+                  value: Please provide boolean value for IsPredefinedDescription.
+                invalid-boolean-IsPredefinedFormElementName:
+                  value: Please provide boolean value for isNewFile.
+                incorrect-jurisdiction-code:
+                  value: Incorrect jurisdiction code.
+                no-predefined-description:
+                  value: This jurisdiction doesn't have Predefined Description.
+                no-predefined-form-element:
+                  value: This jurisdiction doesn't have Predefined Form-Element.
+                jurisdiction-no-additional-fields:
+                  value: This jurisdiction doesn't have Predefined Description,Predefined Form-Element,Additional Information and Form-Element Name.
+        '404':
+          description: Not Found - Existing attachment specified in path parameters doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                existing-file-missing:
+                  value:
+                    responseType: Error
+                    statusCode: '404'
+                    message: Existing file missing
+                    fieldErrors: []
+        '415':
+          description: Unsupported Media Type - Request isn't multipart/form-data
+        '500':
+          description: Internal Server Error - Unexpected server error during processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                unknown-error:
+                  value:
+                    statusCode: '500'
+                    message: Unknown Error occured
+      operationId: putBetaEfileAttachmentsByJurisdictionAttachmentCodeByAttachmentName
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Efile Attachments
+      summary: Delete an existing attachment
+      description: This endpoint deletes an existing attachment.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: jurisdictionAttachmentCode
+        in: path
+        description: Jurisdiction Code
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: attachmentName
+        in: path
+        description: Attachment Name
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: Success - Attachment successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfileAttachmentResponse'
+              examples:
+                successful-deletion:
+                  value:
+                    needToRecreateEfile: true
+                    response: null
+        '400':
+          description: Bad Request - Invalid input parameters or service layer errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                invalid-file-details:
+                  value:
+                    responseType: Error
+                    statusCode: '400'
+                    message: Invalid existing file details
+                    fieldErrors: []
+                disabled-jurisdiction-code:
+                  value:
+                    responseType: Error
+                    statusCode: '400'
+                    message: This jurisdiction code is disabled now.
+                    fieldErrors: []
+        '404':
+          description: Not Found - Specified attachment doesn't exist for the given jurisdiction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                attachment-not-found:
+                  value:
+                    responseType: Error
+                    statusCode: '404'
+                    message: Not Found
+                    fieldErrors: []
+        '500':
+          description: Internal Server Error - Unexpected server error during processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                unknown-error:
+                  value:
+                    statusCode: '500'
+                    message: Unknown Error occured
+      operationId: deleteBetaEfileAttachmentsByJurisdictionAttachmentCodeByAttachmentName
+      x-operation-id-source: derived
+  /beta/efile-attachments-metadata:
+    get:
+      tags:
+      - Efile Attachments
+      summary: Get a list of metadata for all attachments for the opened tax return
+      description: This endpoint gets a list of metadata for all attachments for the opened tax return.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type:
+                - array
+                - 'null'
+                items:
+                  $ref: '#/components/schemas/EfileAttachmentMetadata'
+              examples:
+                efile-attachments-metadata:
+                  $ref: '#/components/examples/efile-attachments-metadata'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                internal-server-error:
+                  value:
+                    responseType: null
+                    statusCode: '500'
+                    message: An error has occurred
+                    fieldErrors: null
+      operationId: getBetaEfileAttachmentsMetadata
+      x-operation-id-source: derived
+  /beta/efile-jurisdictions-attachment-codes:
+    get:
+      tags:
+      - Efile Attachments
+      summary: Get a list of Jurisdiction attachment codes
+      description: This endpoint gets a list of Jurisdiction attachment codes for Jurisdictions enabled for this return along with the supported file types for each of those Jurisdictions.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type:
+                - array
+                - 'null'
+                items:
+                  $ref: '#/components/schemas/JurisdictionAttachmentCode'
+              examples:
+                efile-attachments-metadata:
+                  $ref: '#/components/examples/efile-attachments-jurisdiction-codes-partial'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                internal-server-error:
+                  value:
+                    statusCode: '500'
+                    message: An error has occurred
+      operationId: getBetaEfileJurisdictionsAttachmentCodes
+      x-operation-id-source: derived
+  /beta/efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode}:
+    get:
+      tags:
+      - Efile Attachments
+      summary: Get more details for the given Jurisdiction attachment code
+      description: This endpoint gets more details like available attachment file types, additional info, and form details for the given Jurisdiction attachment code.
+      parameters:
+      - name: authToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: taxReturnSessionToken
+        in: header
+        required: true
+        description: Returned from open tax return call
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: jurisdictionAttachmentCode
+        in: path
+        description: Jurisdiction Code
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JurisdictionAttachmentCodeDetail'
+              examples:
+                1065-federal-jurisdiction-details:
+                  $ref: '#/components/examples/1065-federal-jurisdiction-details'
+                1065-california-jurisdiction-details:
+                  $ref: '#/components/examples/1065-california-jurisdiction-details'
+                1120-federal-jurisdiction-details:
+                  $ref: '#/components/examples/1120-federal-jurisdiction-details'
+                1120-california-jurisdiction-details:
+                  $ref: '#/components/examples/1120-california-jurisdiction-details'
+                1120-virginia-jurisdiction-details:
+                  $ref: '#/components/examples/1120-virginia-jurisdiction-details'
+                1040-federal-jurisdiction-details:
+                  $ref: '#/components/examples/1040-federal-jurisdiction-details'
+                1040-newyork-jurisdiction-details:
+                  $ref: '#/components/examples/1040-newyork-jurisdiction-details'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponseDTO'
+              examples:
+                internal-server-error:
+                  value:
+                    statusCode: '500'
+                    message: An error has occurred
+      operationId: getBetaEfileJurisdictionAttachmentDetailsByJurisdictionAttachmentCode
+      x-operation-id-source: derived
+components:
+  schemas:
+    FormElement:
+      type: object
+      properties:
+        titleText:
+          type: array
+          items:
+            type:
+            - string
+            - 'null'
+            description: Form element title/description, these forms are available based on tax return field values and condition.
+        elementUsed:
+          type:
+          - boolean
+          - 'null'
+        hasCurrency:
+          type:
+          - boolean
+          - 'null'
+    EfileAttachmentMetadata:
+      type: object
+      properties:
+        attachmentName:
+          type: string
+          description: The full filename of the attachment (mapped from EFileAttachInfo.Filename)
+        fileName:
+          type: string
+          description: The short filename without path (mapped from EFileAttachInfo.ShortFileName)
+        description:
+          type: string
+          description: Human-readable description of the attachment (mapped from EFileAttachInfo.Title)
+        jurisdictionAttachmentCode:
+          type: string
+          description: Jurisdiction code - "FE" for Federal, or state number for state attachments (mapped from EFileAttachInfo.AttachCode)
+        size:
+          type: string
+          description: File size as string representation (mapped from EFileAttachInfo.FileSize.ToString())
+        lastModified:
+          type: string
+          description: Last modification date as string (mapped from EFileAttachInfo.DateMod)
+        addionalInfo1:
+          type:
+          - string
+          - 'null'
+          description: First additional information field, null if not available (mapped from EFileAttachInfo.ArrayInput[0])
+        addionalInfo2:
+          type:
+          - string
+          - 'null'
+          description: Second additional information field, null if not available (mapped from EFileAttachInfo.ArrayInput[1])
+        formName:
+          type:
+          - string
+          - 'null'
+          description: Form name if applicable, null if not available (mapped from EFileAttachInfo.ArrayFormInfoInput[0])
+        formElement:
+          type:
+          - string
+          - 'null'
+          description: Form element name if applicable, extracted from pipe-delimited string, null if not available (mapped from EFileAttachInfo.ArrayFormInfoInput[1].Split('|').First())
+    JurisdictionAttachmentCode:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        fileType:
+          type: array
+          items:
+            type: string
+    EfileAttachmentUpdateFormData:
+      type: object
+      required:
+      - description
+      properties:
+        fileName:
+          type: string
+          description: Contains the name of the new file. Required if a new file is included
+        description:
+          type: string
+          description: Description of the attachment
+        isPredefinedDescription:
+          type:
+          - boolean
+          - 'null'
+          description: If this is a new file being attached, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if Predefined Description(s) are available or not
+        isPredefinedFormElementName:
+          type:
+          - boolean
+          - 'null'
+          description: If this is a new file being attached, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if Form detail and Additional Infos applicable or not
+        additionalInfo1:
+          type:
+          - string
+          - 'null'
+          description: Additional Info 1 for applicable Jurisdiction, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if applicable or not
+        additionalInfo2:
+          type:
+          - string
+          - 'null'
+          description: Additional Info 2 for applicable Jurisdiction, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if applicable or not
+        formName:
+          type:
+          - string
+          - 'null'
+          description: Additional Info 2 for applicable Jurisdiction, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if FormName applicable or not
+        formElement:
+          type:
+          - string
+          - 'null'
+          description: Additional Info 2 for applicable Jurisdiction, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if FormElement applicable or not
+        isAsyncExecution:
+          type:
+          - boolean
+          - 'null'
+          description: Whether to execute asynchronously
+    JurisdictionAttachmentCodeDetail:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Jurisdiction name
+        code:
+          type: string
+          description: Jurisdiction attachment code
+        fileTypes:
+          type: array
+          items:
+            type: string
+            description: Valid file type extension that's allowed for this jurisdiction attachment code, other file types will result in validation failure. Only PDF attachment is allowed if no files types specified.
+        predefinedDescriptions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PredefinedDescription'
+        hasAdditionalInfo:
+          type:
+          - boolean
+          - 'null'
+          description: Is set to true when a specific Jurisdiction has additional info 1 or 1 & 2
+        canAttachMultiple:
+          type:
+          - boolean
+          - 'null'
+          description: Is set to true when a specific Jurisdiction allows multiple e-file PDF or XML attachment
+        mustCheckFormName:
+          type:
+          - boolean
+          - 'null'
+          description: Is set to true when a specific Jurisdiction to valid it has Form Names
+        hasFormInfo:
+          type:
+          - boolean
+          - 'null'
+          description: Is set to true when a specific Jurisdiction has Form and Form element details however form and element section becomes available when all tax return field conditions are satisfied.
+        hasStateRequiredFormNames:
+          type:
+          - boolean
+          - 'null'
+          description: Is set to true when a specific Jurisdiction to valid it has state required Form Names
+        additionalInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfoLabel'
+        formInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfoLabel'
+        forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Form'
+        stateRequiredFormTitle:
+          type: array
+          items:
+            type:
+            - string
+            - 'null'
+    ProblemResponseDTO:
+      type:
+      - object
+      - 'null'
+      properties:
+        responseType:
+          type:
+          - string
+          - 'null'
+        statusCode:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        fieldErrors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FieldError'
+    PredefinedDescription:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Predefined description provided by IRS
+        isReusable:
+          type: boolean
+          description: This specific description can be used in multiple attachments.
+    InfoLabel:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Label text for the addition info 1, 2 and Form Name
+        maxLength:
+          type: integer
+          description: Maximum length for additional info 1, 2 and Form Name
+    Form:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          description: Efile attachment form name, this section is available based on jurisdiction and tax return field values and condition.
+        formElements:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormElement'
+        hasCurrency:
+          type:
+          - boolean
+          - 'null'
+    FieldError:
+      type:
+      - object
+      - 'null'
+      properties:
+        fieldId:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        errorCode:
+          type:
+          - string
+          - 'null'
+    EfileAttachmentFormData:
+      type: object
+      required:
+      - isNewFile
+      properties:
+        filename:
+          type:
+          - string
+          - 'null'
+          description: Contains the name of the new file. Auto-populated from file if not provided
+        isNewFile:
+          type: boolean
+          description: If this is a new file being attached
+        jurisdictionAttachmentCode:
+          type:
+          - string
+          - 'null'
+          description: Jurisdiction of the attachment
+        existingJurisdictionAttachmentCode:
+          type:
+          - string
+          - 'null'
+          description: Contains the existing efile attachment jurisdiction. Required if isNewFile set to false
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the attachment
+        IsPredefinedDescription:
+          type:
+          - boolean
+          - 'null'
+          description: If this is a new file being attached, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if Predefined Description(s) are available or not
+        IsPredefinedFormElementName:
+          type:
+          - boolean
+          - 'null'
+          description: If this is a new file being attached, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if Form detail and Additional Infos applicable or not
+        AdditionalInfo1:
+          type:
+          - string
+          - 'null'
+          description: Additional Info 1 for applicable Jurisdiction, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if applicable or not
+        AdditionalInfo2:
+          type:
+          - string
+          - 'null'
+          description: Additional Info 2 for applicable Jurisdiction, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if applicable or not
+        FormName:
+          type:
+          - string
+          - 'null'
+          description: Form name for applicable Jurisdiction, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if FormName applicable or not
+        FormElement:
+          type:
+          - string
+          - 'null'
+          description: Form element for applicable Jurisdiction, use /efile-jurisdiction-attachment-details/{jurisdictionAttachmentCode} endpoint to check if FormElement applicable or not
+        LastModified:
+          type:
+          - string
+          - 'null'
+          description: Contains the last modified date of the new file being added
+        isAsyncExecution:
+          type:
+          - boolean
+          - 'null'
+          description: Whether to execute asynchronously
+        file:
+          type:
+          - string
+          - 'null'
+          format: binary
+          description: File to be added. Required if isNewFile set to true
+    EfileAttachmentResponse:
+      type: object
+      properties:
+        needToRecreateEfile:
+          type: boolean
+  examples:
+    1040-federal-jurisdiction-details:
+      value:
+        PredefinedDescriptions:
+        - Description: Divorce Decree
+          IsReusable: false
+        - Description: BirthCertificate
+          IsReusable: false
+        - Description: DeathCertificate
+          IsReusable: false
+        - Description: HospitalMedical Records
+          IsReusable: false
+        - Description: Section 1061 Recharacterization amount
+          IsReusable: false
+        - Description: Tax exempt income per Rev. Proc. 2021-48
+          IsReusable: false
+        - Description: Schedule A Personal Representative Court Certificate
+          IsReusable: false
+        - Description: Form 1118 Schedule L Retirement Documentation
+          IsReusable: false
+        - Description: Form 1118 Schedule L Disability Documentation
+          IsReusable: false
+        - Description: Form 1310 Personal Representative Court Certificate
+          IsReusable: false
+        - Description: Form 2210 Retirement Documentation
+          IsReusable: false
+        HasAdditionalInfo: false
+        CanAttachMultiple: true
+        MustCheckFormName: true
+        HasFormInfo: false
+        HasStateRequiredFormNames: false
+        AdditionalInfos: []
+        FormInfos: []
+        Forms: []
+        StateRequiredFormTitle: []
+        FileTypes: []
+        Name: Federal
+        Code: FE
+        FileType: []
+    1120-virginia-jurisdiction-details:
+      value:
+        PredefinedDescriptions:
+        - Description: Form500 Combined Return Attachment
+          IsReusable: false
+        - Description: Form500 Consolidated Return Attachment
+          IsReusable: false
+        - Description: Form500 Federal Return Attachment
+          IsReusable: false
+        - Description: Form500 Telecommunications Tax Form 500T
+          IsReusable: false
+        - Description: Form500 Coalfield Employment Enhancement Credit Form 306
+          IsReusable: false
+        - Description: Form500 Schedule 500CR - Enterprise Zone Form 301
+          IsReusable: false
+        - Description: Form500 Schedule 500A - Nonapportionable Investment Function Income
+          IsReusable: false
+        - Description: Form500 Form 500C Additional Tax
+          IsReusable: false
+        - Description: Result of Federal Audit Checkbox
+          IsReusable: false
+        - Description: Other - Attach Explanation Checkbox
+          IsReusable: false
+        HasAdditionalInfo: true
+        CanAttachMultiple: false
+        MustCheckFormName: false
+        HasFormInfo: true
+        HasStateRequiredFormNames: true
+        AdditionalInfos:
+        - Text: 'Form and line number to which attachment is linked:'
+          MaxLength: 20
+        FormInfos:
+        - Text: Form Name
+          MaxLength: 25
+        - Text: Form Element
+          MaxLength: 25
+        Forms:
+        - Name: Sch500ADJ
+          FormElements:
+          - TitleText:
+            - Section A - Line 6-Code01
+            ElementUsed: true
+            HasCurrency: true
+          - TitleText:
+            - Section B - Line 9-Code14
+            ElementUsed: false
+            HasCurrency: true
+          HasCurrency: true
+        - Name: Form500
+          FormElements:
+          - TitleText:
+            - Combined Return Checkbox
+            ElementUsed: false
+            HasCurrency: true
+          - TitleText:
+            - Cosolidated Return Checkbox
+            ElementUsed: false
+            HasCurrency: true
+          - TitleText:
+            - Telecommunications Tax
+            ElementUsed: false
+            HasCurrency: true
+          - TitleText:
+            - Electric Suppliers Tax
+            ElementUsed: false
+            HasCurrency: true
+          - TitleText:
+            - Coalfield Employment Enhancement Tax Credit Earned
+            ElementUsed: false
+            HasCurrency: true
+          - TitleText:
+            - Additional Tax from Sch 500C
+            ElementUsed: false
+            HasCurrency: true
+          - TitleText:
+            - Nonapportionable Investment Function Income
+            ElementUsed: false
+            HasCurrency: true
+        StateRequiredFormTitle:
+        - Sch500ADJ
+        - Sch502ADJ
+        - Form500
+        - Sch500CR
+        - Sch500A
+        FileTypes:
+        - pdf
+        Name: Virginia
+        Code: VA
+    efile-attachments-metadata:
+      value:
+      - AttachmentName: P9069JC0_FE_My_Federal_Return_1120.pdf
+        FileName: My_Federal_Return_1120.pdf
+        Description: Form 3115 - IRS approved advance consent
+        JurisdictionAttachmentCode: FE
+        Size: '98892'
+        LastModified: 05/13/2021 03:50 PM
+        addionalInfo1: Partnership ABC LLC
+        addionalInfo2: 'EIN: 12-3456789'
+        formName: Form 3115
+        formElement: AdvanceConsent
+      - AttachmentName: P9069JC0_FE_My_Federal_Return_1120.pdf
+        FileName: My_Federal_Return_1120.pdf
+        Description: 8453 Signature Document
+        JurisdictionAttachmentCode: FE
+        Size: '98886'
+        LastModified: 05/13/2021 03:50 PM
+        addionalInfo1: null
+        addionalInfo2: null
+        formName: Form 8453
+        formElement: SignatureDocument
+      - AttachmentName: P9069JC0_FE_My_Federal_Return_1120.pdf
+        FileName: My_Federal_Return_1120.pdf
+        Description: New description
+        JurisdictionAttachmentCode: FE
+        Size: '98891'
+        LastModified: 05/13/2021 03:50 PM
+        addionalInfo1: null
+        addionalInfo2: null
+        formName: null
+        formElement: null
+      - AttachmentName: P1234AB9_FE-KIA_File1.xml
+        FileName: File1.xml
+        Description: Test description 1
+        JurisdictionAttachmentCode: FE-KIA
+        Size: '795342'
+        LastModified: 04/09/2020 09:23 AM
+        addionalInfo1: Additional info for KIA
+        addionalInfo2: null
+        formName: null
+        formElement: TestElement1
+      - AttachmentName: P1234AB9_AL-KIA_File2.xml
+        FileName: File2.xml
+        Description: Test description 2
+        JurisdictionAttachmentCode: AL-KIA
+        Size: '795342'
+        LastModified: 04/09/2020 09:23 AM
+        addionalInfo1: null
+        addionalInfo2: null
+        formName: Alabama Form
+        formElement: null
+      - AttachmentName: P1234AB9_AL-KIB_File3.xml
+        FileName: File3.xml
+        Description: Test description 3
+        JurisdictionAttachmentCode: AL-KIB
+        Size: '795342'
+        LastModified: 04/09/2020 09:23 AM
+        addionalInfo1: null
+        addionalInfo2: null
+        formName: null
+        formElement: null
+    efile-attachments-success-response:
+      value:
+        needToRecreateEfile: false
+        response: null
+    efile-attachments-unknown-error:
+      value:
+        statusCode: '500'
+        message: Unknown Error occured
+    1120-federal-jurisdiction-details:
+      value:
+        PredefinedDescriptions:
+        - Description: 8453 Signature Document
+          IsReusable: false
+        - Description: Form1120SScheduleB-1
+          IsReusable: false
+        - Description: Form 5471 Schedule O - Org Chart
+          IsReusable: false
+        - Description: Form 5471 Schedule Q
+          IsReusable: true
+        - Description: DoneeOrganizationContemporaneousWrittenAcknowledgment
+          IsReusable: false
+        - Description: 8838P Signature Document
+          IsReusable: false
+        - Description: Form 8848
+          IsReusable: false
+        - Description: 1120SchD Page2
+          IsReusable: false
+        - Description: Form 8992 Schedule B
+          IsReusable: false
+        - Description: '1099'
+          IsReusable: false
+        HasAdditionalInfo: false
+        CanAttachMultiple: true
+        MustCheckFormName: true
+        HasFormInfo: false
+        HasStateRequiredFormNames: false
+        AdditionalInfos: []
+        FormInfos: []
+        Forms: []
+        StateRequiredFormTitle: []
+        FileTypes: []
+        Name: Federal
+        Code: FE
+        FileType: []
+    1120-california-jurisdiction-details:
+      value:
+        PredefinedDescriptions: []
+        HasAdditionalInfo: true
+        CanAttachMultiple: false
+        MustCheckFormName: false
+        HasFormInfo: false
+        HasStateRequiredFormNames: false
+        AdditionalInfos:
+        - Text: 'Regulations Reference to which attachment is linked:'
+          MaxLength: 100
+        - Text: 'Form and line number to which attachment is linked:'
+          MaxLength: 100
+        FormInfos: []
+        Forms: []
+        StateRequiredFormTitle: []
+        FileTypes:
+        - pdf
+        Name: California
+        Code: CA
+    1065-california-jurisdiction-details:
+      value:
+        PredefinedDescriptions: []
+        HasAdditionalInfo: true
+        CanAttachMultiple: false
+        MustCheckFormName: false
+        HasFormInfo: false
+        HasStateRequiredFormNames: false
+        AdditionalInfos:
+        - Text: 'Regulations Reference to which attachment is linked:'
+          MaxLength: 100
+        - Text: 'Form and line number to which attachment is linked:'
+          MaxLength: 100
+        FormInfos: []
+        Forms: []
+        StateRequiredFormTitle: []
+        FileTypes:
+        - pdf
+        Name: California
+        Code: CA
+    efile-attachments-jurisdiction-codes-partial:
+      value:
+      - Name: Federal
+        Code: FE
+        FileType: []
+      - Name: AK Corp Partners K-1 Aggregation
+        Code: AK-KIA
+        FileType:
+        - XML
+      - Name: AL PPT
+        Code: AL-PPT
+        FileType:
+        - PDF
+      - Name: AL PTEC
+        Code: AL-PTE
+        FileType:
+        - PDF
+      - Name: Alabama
+        Code: AL
+        FileType:
+        - PDF
+      - Name: Alabama K-1 Aggregation
+        Code: AL-KIA
+        FileType:
+        - XML
+      - Name: Alabama PTEC K-1 Aggregation
+        Code: AL-KIB
+        FileType:
+        - XML
+      - Name: Alaska
+        Code: AK
+        FileType:
+        - PDF
+      - Name: Alaska Natural Person K-1 Aggregation
+        Code: AK-KIB
+        FileType:
+        - XML
+      - Name: Alaska Vendor Federal Return
+        Code: AK-VEN
+        FileType:
+        - XML
+      - Name: Arizona
+        Code: AZ
+        FileType:
+        - PDF
+      - Name: Arizona Vendor Federal Return
+        Code: AZ-VEN
+        FileType:
+        - XML
+      - Name: Alabama K-1 Aggregation
+        Code: AL-KIA
+        FileType:
+        - XML
+      - Name: Alabama PTEC K-1 Aggregation
+        Code: AL-KIB
+        FileType:
+        - XML
+      - Name: California
+        Code: CA
+        FileType:
+        - PDF
+      - Name: California 565 K-1 Aggregation
+        Code: CA-KIA
+        FileType:
+        - XML
+      - Name: California 568 K-1 Aggregation
+        Code: CA-KIB
+        FileType:
+        - XML
+      - Name: California 568 Sch T Aggregation
+        Code: CA-KIC
+        FileType:
+        - XML
+    1065-federal-jurisdiction-details:
+      value:
+        PredefinedDescriptions:
+        - Description: 8453 Signature Document
+          IsReusable: false
+        - Description: Attachments to Form 3468
+          IsReusable: false
+        - Description: Organization Chart Statement
+          IsReusable: false
+        - Description: Form 1128 - Application to Adopt, Change or Retain a Tax Year
+          IsReusable: false
+        - Description: Form 2439 - Notice to Shareholder of Undistributed Long-Term Capital Gains
+          IsReusable: false
+        - Description: Form 3115 - Change in Accounting Method Automatic Form 3115s
+          IsReusable: false
+        - Description: Form 3115 - IRS approved advance consent
+          IsReusable: false
+        - Description: Form 8082 - Notice of Inconsistent Treatment or Administrative Adjustment Request (AAR)
+          IsReusable: false
+        - Description: Form 8271 - Investor Reporting of Tax Shelter Registration Number
+          IsReusable: false
+        - Description: Form 8283 - Noncash Charitable Contributions
+          IsReusable: false
+        - Description: Form 8621 - Return by a Sholder of a Passive Foreign Inv Co
+          IsReusable: false
+        - Description: 965 TAX
+          IsReusable: false
+        - Description: Form 5471 Schedule Q
+          IsReusable: true
+        - Description: Form 5471 Schedule R
+          IsReusable: true
+        - Description: Source of Income
+          IsReusable: false
+        HasAdditionalInfo: true
+        CanAttachMultiple: true
+        MustCheckFormName: true
+        HasFormInfo: true
+        HasStateRequiredFormNames: true
+        AdditionalInfos:
+        - Text: 'Form and line number to which attachment is linked:'
+          MaxLength: 50
+        FormInfos:
+        - Text: Form Name
+          MaxLength: 25
+        - Text: Form Element
+          MaxLength: 25
+        Forms: []
+        StateRequiredFormTitle:
+        - Federal Return
+        FileTypes: []
+        Name: Federal
+        Code: FE
+    1040-newyork-jurisdiction-details:
+      value:
+        PredefinedDescriptions:
+        - Description: Brownfield Redevelopment Tax Credit - Certificate of Completion
+          IsReusable: false
+        - Description: Disability Income Exclusion
+          IsReusable: false
+        HasAdditionalInfo: false
+        CanAttachMultiple: false
+        MustCheckFormName: false
+        HasFormInfo: false
+        HasStateRequiredFormNames: false
+        AdditionalInfos: []
+        FormInfos: []
+        Forms: []
+        StateRequiredFormTitle: []
+        FileTypes: []
+        Name: New York
+        Code: NY
+        FileType: []
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

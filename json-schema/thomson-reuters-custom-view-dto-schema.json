@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-custom-view-dto-schema.json",
+  "title": "CustomViewDTO",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-blueprint-service-openapi.yml#/components/schemas/CustomViewDTO",
+  "required": [
+    "aggregation",
+    "group_by",
+    "name"
+  ],
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Label of the Custom View"
+    },
+    "aggregation": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AggregationDTO"
+      }
+    },
+    "group_by": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GroupByDTO"
+      }
+    }
+  },
+  "$defs": {
+    "AggregationDTO": {
+      "required": [
+        "name",
+        "operator",
+        "source_column"
+      ],
+      "type": "object",
+      "properties": {
+        "source_column": {
+          "type": "string",
+          "description": "identifier of the column Id"
+        },
+        "name": {
+          "type": "string",
+          "description": "Output Name"
+        },
+        "operator": {
+          "type": "string",
+          "description": "operator"
+        },
+        "config": {
+          "$ref": "#/$defs/ConfigDTOAggregation"
+        }
+      }
+    },
+    "ConfigDTO": {
+      "type": "object",
+      "properties": {
+        "rollup_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "root_entity_column": {
+          "type": "string"
+        },
+        "allocation_column": {
+          "type": "string"
+        }
+      }
+    },
+    "ConfigDTOAggregation": {
+      "type": "object",
+      "properties": {
+        "weighted_on": {
+          "type": "string"
+        }
+      }
+    },
+    "GroupByDTO": {
+      "required": [
+        "source_column"
+      ],
+      "type": "object",
+      "properties": {
+        "source_column": {
+          "type": "string",
+          "description": "identifier of the column name"
+        },
+        "type": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "#/$defs/ConfigDTO"
+        }
+      }
+    }
+  }
+}

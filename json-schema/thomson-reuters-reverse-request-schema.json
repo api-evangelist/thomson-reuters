@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-reverse-request-schema.json",
+  "title": "ReverseRequest",
+  "description": "A reverse request is used to reverse or void an existing the tax audit entry. Reversing Tax results are also persisted in the Determination's Audit database for reporting purposes.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-indirect-tax-determination-rest-tax-service-openapi.yml#/components/schemas/ReverseRequest",
+  "type": "object",
+  "required": [
+    "callingSystemNumber",
+    "companyRole",
+    "documentNumber",
+    "externalCompanyId",
+    "hostSystem",
+    "documentDate"
+  ],
+  "properties": {
+    "callingSystemNumber": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "A pass-through element that contains a descriptor of the calling system sending the transaction. Determination uses as cobmination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database."
+    },
+    "companyRole": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "The role the company plays in a given transaction: Buyer (<B>B</B>), Middleman (<B>M</B>) or Seller (<B>S</B>). Each role results in different transaction tax and reporting requirements. Currently only Seller (S) role is supported by the API."
+    },
+    "documentNumber": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "This number is passed through to the Audit database and acts as a reference for all document types. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in audit database, the existing document is reversed, and new document is added to the audit database."
+    },
+    "externalCompanyId": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the batch level or with each document, and is passed through to the Determination response, and to the Audit database."
+    },
+    "hostSystem": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "The name of the Souce System instance sending the transaction. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in audit database, the existing document is reversed, and new document is added to the Audit database."
+    },
+    "documentDate": {
+      "type": "string",
+      "format": "date",
+      "description": "The date as stored on this document. This is used for comparison to configurations throughout Determination and is also used to query transaction data in reporting."
+    },
+    "uniqueDocumentNumber": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "The unique identifier for this document, as assigned by the Source System. ONESOURCE Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed. If Source system does not provide this value (both for commit and reverse endpoints), ONESOURCE determination will auto generate this value based on concatenated value of externalCompanyID|documentNumber|companyRole. If Source system provided a value for the document in the commit call, same value must be passed when reversing the document, otherwise, reversal will fail."
+    }
+  }
+}

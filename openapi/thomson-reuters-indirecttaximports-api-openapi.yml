@@ -1,0 +1,570 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Indirect Tax Imports API
+  version: v2
+  description: 'Operations tagged IndirectTaxImports across 2 of this provider''s published API definitions: thomson-reuters-onesource-indirect-tax-compliance-imports-api-openapi.json, thomson-reuters-onesource-indirect-tax-compliance-imports-api-v2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/imports
+tags:
+- name: IndirectTaxImports
+paths:
+  /:
+    get:
+      tags:
+      - IndirectTaxImports
+      summary: This endpoint is used to list all the existing imports in the system
+      operationId: IndirectTaxImports_imports
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListReponse'
+              example:
+                items:
+                - id: 1
+                  name: Import 1
+                  detailedStatus: Upload Successful
+                  statusId: 7
+                  status: Success
+                  specificationId: 0
+                  specificationName: Allocation Specification 1
+                  importSpecificationName: Import Specification 1
+                  importTypeName: Transactions
+                  lastRunDate: '2025-03-19T10:13:13.643'
+                  editCount: 0
+                  errorCount: 0
+                  activeCount: 100
+                  warningCount: 10
+                - id: 2
+                  name: Import 2
+                  detailedStatus: Allocation Failed
+                  statusId: 4
+                  status: Error
+                  specificationId: 2
+                  specificationName: Allocation Specification 2
+                  importSpecificationName: Import Specification 2
+                  importTypeName: Transactions
+                  lastRunDate: '2025-03-19T10:11:39.083'
+                  editCount: 0
+                  errorCount: 4
+                  activeCount: 0
+                  warningCount: 0
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListReponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListReponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListReponse'
+    post:
+      tags:
+      - IndirectTaxImports
+      summary: Import tax data
+      operationId: IndirectTaxImports_ImportData
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+              example:
+                id: 1
+                status: QueuedForImport
+                errorMessage: null
+                hasErrors: false
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/imports
+  /operations/{id}:
+    get:
+      tags:
+      - IndirectTaxImports
+      summary: Import status
+      operationId: IndirectTaxImports_FetchStatus
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus'
+              example:
+                id: 1
+                statusId: 15
+                status: Validating
+                errorCount: 0
+                ruleErrorCount: 0
+                activeCount: 0
+                editCount: 0
+                warningCount: 0
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/imports
+  /parts/operations/{id}:
+    get:
+      tags:
+      - IndirectTaxImports
+      summary: This endpoint is used to fetch the status of an import file upload task that…
+      operationId: IndirectTaxImports_FetchUploadStatus
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+              example:
+                id: 1
+                status: InProgress
+                errorMessage: null
+                hasErrors: false
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/imports
+  /{id}:
+    post:
+      tags:
+      - IndirectTaxImports
+      summary: Re-run import
+      operationId: IndirectTaxImports_ImportRerun
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+              example:
+                id: 1
+                status: InProgress
+                errorMessage: null
+                hasErrors: false
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+    delete:
+      tags:
+      - IndirectTaxImports
+      summary: This endpoint is used to delete the import task that matches the input…
+      operationId: IndirectTaxImports_DeleteImportData
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+              example:
+                id: 1
+                status: Deleted
+                errorMessage: null
+                hasErrors: false
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+    patch:
+      tags:
+      - IndirectTaxImports
+      summary: This endpoint is used to update import status to process the external import…
+      operationId: IndirectTaxImports_ProcessImport
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest'
+        required: true
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/imports
+  /{id}/parts:
+    post:
+      tags:
+      - IndirectTaxImports
+      summary: This endpoint is used to import data via API into Returns using an external…
+      operationId: IndirectTaxImports_uploadData
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse'
+    servers:
+    - url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2/imports
+components:
+  schemas:
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportStatus:
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+        statusId:
+          format: int32
+          type: integer
+        status:
+          type: string
+        errorCount:
+          format: int64
+          type: integer
+        ruleErrorCount:
+          format: int64
+          type: integer
+        activeCount:
+          format: int64
+          type: integer
+        editCount:
+          format: int64
+          type: integer
+        warningCount:
+          format: int64
+          type: integer
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportResponse:
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+        status:
+          type: string
+        errorMessage:
+          type: string
+        hasErrors:
+          type: boolean
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetail:
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+        detailedStatus:
+          type: string
+        statusId:
+          format: int32
+          type: integer
+        status:
+          type: string
+        specificationId:
+          format: int32
+          type: integer
+        specificationName:
+          type: string
+        importSpecificationName:
+          type: string
+        importTypeName:
+          type: string
+        lastRunDate:
+          format: date-time
+          type: string
+        editCount:
+          format: int32
+          type: integer
+        errorCount:
+          format: int64
+          type: integer
+        activeCount:
+          format: int64
+          type: integer
+        warningCount:
+          format: int64
+          type: integer
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportPatchRequest:
+      type: object
+      properties:
+        isImportData:
+          type: boolean
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListReponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetail'
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetailListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportDetail'
+    TRTA.Athena.Imports.Models.Api.V4.IndirectTax.ImportConflictResponse:
+      type: object
+      properties:
+        Message:
+          type: string
+        ErrorCode:
+          type: string
+        MessageDetail:
+          type: string
+x-refined-from:
+- thomson-reuters-onesource-indirect-tax-compliance-imports-api-openapi.json
+- thomson-reuters-onesource-indirect-tax-compliance-imports-api-v2-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

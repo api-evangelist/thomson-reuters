@@ -1,0 +1,1496 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Organisation API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Organisation across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Organisation
+paths:
+  /{version}/organisations:
+    get:
+      tags:
+      - Organisation
+      summary: Get Organisation List
+      description: 'Get a list of organisations. This API call is used to retrieve a list of organisations from the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The industry is invalid
+
+
+        293
+
+        N/A
+
+
+        The category is invalid
+
+
+        294
+
+        N/A
+
+
+        The status is invalid.
+
+
+        295
+
+        N/A
+
+
+        The limit value is invalid.
+
+
+        291
+
+        N/A
+
+
+        The offset value is invalid.
+
+
+        292
+
+        N/A
+
+
+        The ordertype is invalid.
+
+
+        289
+
+        N/A
+
+
+        The orderby value is invalid. Please use either asc or desc
+
+
+        290
+
+        N/A
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-62789'
+      operationId: getOrganisations
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: searchTxt
+        in: query
+        description: Will search across all organisation fields for a matching string. This should be the same search
+        required: false
+        schema:
+          type: string
+      - name: domain
+        in: query
+        description: Domain to search for. Domain name must be a single value. We will not support CSV for this field
+        required: false
+        schema:
+          type: string
+      - name: industry
+        in: query
+        description: The ID of the organisation industry
+        required: false
+        schema:
+          type: string
+      - name: category
+        in: query
+        description: The ID of the organisation category
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: 'Status: active | archive | pending'
+        required: false
+        schema:
+          type: string
+      - name: ordertype
+        in: query
+        description: Domain to search for. Domain name must be a single value. We will not support CSV for this field
+        required: false
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: 'Allow ascending and descending sorting of a single field.<br>GET /api/4/organisations?orderby=desc<br>possible fields: asc,desc'
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: 'Limits the number of organisations returned. e.g.<br>GET /api/4/organisations?offset=10&limit=5Default: 100'
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: 'Allows paging of organisations. e.g.<br>GET /api/4/organisations?offset=10&limit=5<br>Default: 0'
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Organisations'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Organisations'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisations'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Organisation
+      summary: Add Organisation
+      description: 'Add a new organisation to Collaborate.This API call is used to add a new organisation object to the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The contact tier is invalid
+
+
+        275
+
+        N/A
+
+
+        The contact type id is invalid
+
+
+        276
+
+        N/A
+
+
+        Contact email is invalid
+
+
+        278
+
+        N/A
+
+
+        The internal organisation attribute is invalid
+
+
+        284
+
+        N/A
+
+
+        The organisation status is invalid. It must either be active or pending
+
+
+        274
+
+        N/A
+
+
+        The organisation industry ID is invalid
+
+
+        273
+
+        N/A
+
+
+        The disable edit profile attribute is invalid
+
+
+        285
+
+        N/A
+
+
+        The restrict direct login attribute is invalid
+
+
+        286
+
+        N/A
+
+
+        The organisation strategic attribute is invalid
+
+
+        287
+
+        N/A
+
+
+        keycontact userid attribute is required
+
+
+        288
+
+        N/A
+
+
+        The keycontact userid attribute is invalid
+
+
+        312
+
+        N/A
+
+
+        The organisation name is required
+
+
+        269
+
+        N/A
+
+
+        The organisation name cannot be more than 128 characters
+
+
+        270
+
+        N/A
+
+
+        A contact name is required
+
+
+        277
+
+        N/A
+
+
+        An email address is required
+
+
+        278
+
+        N/A
+
+
+        Enter a valid contact primary email address
+
+
+        279
+
+        N/A
+
+
+        A company switchboard is required
+
+
+        280
+
+        N/A
+
+
+        The online service link is invalid
+
+
+        281
+
+        N/A
+
+
+        The organisation name cannot contain the following characters: \\ / : * ? \" |
+
+
+        282
+
+        N/A
+
+
+        This organisation name already exists in system
+
+
+        317
+
+        N/A
+
+
+        The contact person''s email address domain is already being used by another organisation
+
+
+        315
+
+        N/A
+
+
+        The external ID entered already exists in system
+
+
+        407
+
+        N/A
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-62781'
+      operationId: addOrganisation
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      responses:
+        '201':
+          description: OK [orgid,name,link are used in response. Remaining are not in response.]
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/organisation'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/organisation'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/organisation'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/organisation'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/organisation'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/organisation'
+    servers:
+    - url: /monumentuat/api
+  /{version}/organisations/departments:
+    get:
+      tags:
+      - Organisation
+      summary: Org department list
+      description: 'This API call is used to get a list of departments in an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The ordertype is invalid. name and ID are supported ordertype
+
+
+        351
+
+
+        The orderby value is invalid. asc and desc are supported orderby values.
+
+
+        147
+
+
+        The Organisation ID is invalid
+
+
+        260
+
+
+        You do not have access to the given organisation ID
+
+
+        318
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65701'
+      operationId: getOrgDepartmentList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: orgid
+        in: query
+        description: The ID of the organisation of which the departments to be listed
+        required: true
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: The field on which searching will be done. Only supported field is departmentname
+        required: false
+        schema:
+          type: string
+      - name: ordertype
+        in: query
+        description: Field on which sorting will be applied. It has to be ID or the name of the department.
+        required: false
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: The sorting order, either asc or desc.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/departments'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/departments'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/departments'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Organisation
+      summary: Add org department
+      description: 'This API call is used to add a new department to an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The Organisation ID is invalid
+
+
+        260
+
+
+        This department name already exists
+
+
+        370
+
+
+        You do not have the permissions to create a department within this organisation
+
+
+        318
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65697'
+      operationId: addOrgDepartment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: orgid
+        in: query
+        description: The ID of the organisation to add the new department to.
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/department'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/department'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/department'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/department'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/department'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/department'
+    servers:
+    - url: /monumentuat/api
+  /{version}/organisations/departments/{deptid}:
+    get:
+      tags:
+      - Organisation
+      summary: Get org department
+      description: 'This API call is used to get a department from an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        Department ID is invalid
+
+
+        349
+
+
+        You do not have permissions to view this Department ID
+
+
+        350
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65700'
+      operationId: getOrgDepartment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: deptid
+        in: path
+        description: The ID of the department
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/department'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/department'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/department'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Organisation
+      summary: Update org department
+      description: 'This API call is used to change a department within an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        This department name already exists
+
+
+        370
+
+
+        The Department ID is invalid
+
+
+        349
+
+
+        The department status is invalid. Please use the active status.
+
+
+        344
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65698'
+      operationId: updateOrgDepartment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: deptid
+        in: path
+        description: The department ID to be updated
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/department'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/department'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/department'
+    delete:
+      tags:
+      - Organisation
+      summary: Delete org department
+      description: 'This API call is used to delete a department to an organisation object in the system.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        Department ID is invalid
+
+
+        349
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-65699'
+      operationId: deleteOrgDepartment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '5'
+      - name: deptid
+        in: path
+        description: The ID of the department to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/organisations/{orgid}:
+    get:
+      tags:
+      - Organisation
+      summary: Get Organisation
+      description: 'Get an organisation from Collaborate.This API call is used to retrieve an organisation from the system. The organisation identifier is the organisation ID.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The Organisation id is invalid
+
+
+        260
+
+        N/A
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-62788'
+      operationId: getOrganisation
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: orgid
+        in: path
+        description: The ID of the organisation to retrieve
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/organisation'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/organisation'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/organisation'
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Organisation
+      summary: Update Organisation
+      description: 'Update an existing organisation in Collaborate.This API call is used to update an existing organisation in the system, by replacing the organisation with the provided organisation object.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The organisation ID is invalid
+
+
+        260
+
+
+        N/A
+
+
+        This group is associated with the site(s) listed below
+
+
+        283
+
+        N/A
+
+
+        The contact tier is invalid
+
+
+        275
+
+        N/A
+
+
+        The contact type ID is invalid
+
+
+        276
+
+        N/A
+
+
+        Contact email is invalid
+
+
+        278
+
+        N/A
+
+
+        The internal organisation attribute is invalid
+
+
+        284
+
+        N/A
+
+
+        The organisation status is invalid. It must either be active or pending
+
+
+        274
+
+        N/A
+
+
+        The organisation industry id is invalid
+
+
+        273
+
+        N/A
+
+
+        The disable edit profile attribute is invalid
+
+
+        285
+
+        N/A
+
+
+        The restrict direct login attribute is invalid
+
+
+        286
+
+        N/A
+
+
+        The organisation strategic attribute is invalid
+
+
+        287
+
+        N/A
+
+
+        keycontact userid attribute is required
+
+
+        288
+
+        N/A
+
+
+        The keycontact userid attribute is invalid
+
+
+        312
+
+        N/A
+
+
+        The organisation name is required
+
+
+        269
+
+        N/A
+
+
+        The organisation name cannot be more than 128 characters
+
+
+        270
+
+        N/A
+
+
+        A contact name is required
+
+
+        277
+
+        N/A
+
+
+        An email address is required
+
+
+        278
+
+        N/A
+
+
+        Enter a valid contact primary email address
+
+
+        279
+
+        N/A
+
+
+        A company switchboard is required
+
+
+        280
+
+        N/A
+
+
+        The online service link is invalid
+
+
+        281
+
+        N/A
+
+
+        The organisation name cannot contain the following characters: \\ / : * ? \" |
+
+
+        282
+
+        N/A
+
+
+        This organisation name already exists in system.
+
+
+        317
+
+        N/A
+
+
+        The contact person''s email address domain is already being used by another organisation
+
+
+        315
+
+        N/A
+
+
+        The external ID entered already exists in system
+
+
+        407
+
+        N/A
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-62783'
+      operationId: updateOrganisation
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: orgid
+        in: path
+        description: The ID of the organisation to update
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/organisation'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/organisation'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/organisation'
+    delete:
+      tags:
+      - Organisation
+      summary: Archive Organisation
+      description: 'Archive an organisation within Collaborate.This API call is used to archive an organisation within the system. The organisation identifier is the organisation ID.
+
+
+        Error Codes
+
+
+        Summary
+
+        Ref Code (V4)
+
+        Ref Code (before V4)
+
+
+        The Organisation ID is invalid
+
+
+        260
+
+        N/A
+
+
+        JIRA Ticket : https://dev.highq.com/jira/browse/COL-62784'
+      operationId: deleteOrganisation
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: orgid
+        in: path
+        description: The ID of the organisation to archive
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 4xx Fail transaction(Client Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: 5xx Fail transaction(Server Side)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    Partner:
+      type: object
+      properties:
+        orgpartnerid:
+          type: string
+        userid:
+          type: string
+        status:
+          type: string
+        orderid:
+          type: string
+      xml:
+        name: keycontact
+    department:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        orgid:
+          type: string
+        link:
+          type: string
+          example: http://example.com/context/api/5/organisations/departments/3
+          description: used in response
+    ContactDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        typeid:
+          type: string
+        contacttier:
+          type: string
+        orgcontactid:
+          type: string
+      xml:
+        name: contact
+    PartnersDBO:
+      type: object
+      properties:
+        keycontact:
+          type: array
+          items:
+            $ref: '#/components/schemas/Partner'
+      xml:
+        name: keycontacts
+    departments:
+      type: object
+      properties:
+        department:
+          type: array
+          items:
+            $ref: '#/components/schemas/department'
+      xml:
+        name: departments
+    organisation:
+      type: object
+      required:
+      - name
+      - status
+      properties:
+        name:
+          type: string
+          example: E.g. HighQ
+          description: Any Valid String(MAX 512 Chars)
+        link:
+          type: string
+        orgid:
+          type: string
+        companyswitchboard:
+          type: string
+        externalid:
+          type: string
+        contact:
+          $ref: '#/components/schemas/ContactDBO'
+        orgindustryid:
+          type: string
+        status:
+          type: string
+          description: Status of organisation
+          enum:
+          - Active/Archive/Pending
+        onlineserviceslink:
+          type: string
+        disableeditprofile:
+          type: string
+        internal:
+          type: string
+        restrictdirectlogin:
+          type: string
+        strategic:
+          type: string
+        keycontacts:
+          description: upto maximum 10 will be handled
+          $ref: '#/components/schemas/PartnersDBO'
+        activateautologin:
+          type: integer
+          format: int32
+        category:
+          type: integer
+          format: int32
+        guid:
+          type: string
+        excludesynchronization:
+          type: integer
+          format: int32
+        url:
+          type: string
+          description: Any valid url
+        logoid:
+          type: integer
+          format: int32
+        logowidth:
+          type: integer
+          format: int32
+        logoheight:
+          type: integer
+          format: int32
+        homepage:
+          type: integer
+          format: int32
+        createddate:
+          type: string
+        noofusers:
+          type: string
+      xml:
+        name: organisation
+    Organisations:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+        organisation:
+          type: array
+          items:
+            $ref: '#/components/schemas/organisation'
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

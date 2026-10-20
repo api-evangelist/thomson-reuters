@@ -1,0 +1,179 @@
+openapi: 3.2.0
+info:
+  version: ''
+  title: GoSystem Locator Tax Returns API
+  description: A RESTful API that provides access to GoSystem Locator functionalities.
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- Authorization: []
+tags:
+- name: Tax Returns
+paths:
+  /v2/bulk/tax-returns/completed-date:
+    put:
+      summary: Update tax returns completed date
+      description: Updates the completed date for one or more tax returns. Provide the account details, tax return ID, tax year, tax type, and the new completed date in the request.
+      tags:
+      - Tax Returns
+      operationId: UpdateTaxReturnsCompletedDate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TaxReturnCompletedDatesRequest'
+      responses:
+        '200':
+          description: Success. Completed dates are updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateLocatorDatesResponse'
+              examples:
+                Success:
+                  $ref: '#/components/examples/UpdateCompletedDateSuccess'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Failure:
+                  $ref: '#/components/examples/UpdateCompletedDateFailure'
+  /v2/accounts/{accountId}/years/{year}/tax-return-types/{taxReturnType}/tax-returns/{taxReturnId}/status:
+    get:
+      summary: Get tax return status
+      description: Retrieves the status of a specific tax return using the account ID, year, tax return type, and tax return ID.
+      tags:
+      - Tax Returns
+      operationId: GetTaxReturnStatus
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The tax year for which the status is required. Must be a valid 4-digit year (for example, 2024).
+      - name: taxReturnType
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The type of tax return.
+      - name: taxReturnId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the locator ID.
+      responses:
+        '200':
+          description: Success. Tax return status is retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxReturnStatusResponse'
+              examples:
+                Success:
+                  $ref: '#/components/examples/TaxReturnStatusSuccess'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Failure:
+                  $ref: '#/components/examples/TaxReturnStatusFailure'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          default: 0
+        message:
+          type: string
+    UpdateLocatorDatesResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        code:
+          type: integer
+        description:
+          type: string
+        info:
+          type: string
+    TaxReturnCompletedDatesRequest:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: A 4-digit alphanumeric identifier for the client account. This value must match the Account value in the request headers.
+        taxReturnId:
+          type: string
+          description: A 6-digit unique alphanumeric identifier for the tax return. Also referred to as the locator ID.
+        taxYear:
+          type: string
+          description: The tax year for which the e-file is required. Must be a valid 4-digit year (for example, 2024).
+        taxType:
+          type: string
+          description: The type of tax return being filed. Valid values are 1040, 1041, 1065, 1120, 990, 5500, and 709.
+        completedDate:
+          type: string
+          format: date-time
+        password:
+          type: string
+          description: The password for the locator, if one is required.
+    TaxReturnStatusResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        code:
+          type: integer
+        description:
+          type: string
+        returnStatus:
+          type: string
+  examples:
+    TaxReturnStatusFailure:
+      value:
+        error: true
+        code: 400
+        description: Invalid parameters
+        returnStatus: ''
+    TaxReturnStatusSuccess:
+      value:
+        error: false
+        code: 0
+        description: Tax return status retrieved successfully
+        returnStatus: Completed
+    UpdateCompletedDateFailure:
+      value:
+        error: true
+        code: 400
+        description: The TaxReturnCompletedDates request is empty or null.
+        info: ''
+    UpdateCompletedDateSuccess:
+      value:
+        error: false
+        code: 0
+        description: Completed dates updated successfully
+        info: All records updated
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

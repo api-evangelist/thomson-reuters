@@ -1,0 +1,667 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters User Controller API
+  version: 1.0.0
+  description: 'Operations tagged user-controller across 2 of this provider''s published API definitions: thomson-reuters-ogt-next-platform-openapi.json, thomson-reuters-ogt-next-platform-openapi.yml. Each path carries the servers of the definition it was published in.'
+security:
+- basicAuth: []
+tags:
+- name: user-controller
+paths:
+  /user-service/users/{username}:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v3/users/{username}
+    get:
+      tags:
+      - user-controller
+      operationId: findByUsername
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+      summary: Find by username
+      x-summary-source: derived
+    put:
+      tags:
+      - user-controller
+      operationId: save
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultDTO'
+      summary: Save
+      x-summary-source: derived
+  /user-service/users/{username}/unlink/partners:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v3/users/{username}/unlink/partners
+    put:
+      tags:
+      - user-controller
+      operationId: unlinkPartner
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartnerDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultDTO'
+      summary: Unlink partner
+      x-summary-source: derived
+  /user-service/users/{username}/unlink/groups:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v3/users/{username}/unlink/groups
+    put:
+      tags:
+      - user-controller
+      operationId: unlinkGroups
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultDTO'
+      summary: Unlink groups
+      x-summary-source: derived
+  /user-service/users/{username}/password:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v3/users/{username}/password
+    put:
+      tags:
+      - user-controller
+      operationId: updatePassword
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Update password
+      x-summary-source: derived
+  /user-service/users/{username}/link/partners:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v3/users/{username}/link/partners
+    put:
+      tags:
+      - user-controller
+      operationId: changeLinkPartner
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartnerDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultDTO'
+      summary: Change link partner
+      x-summary-source: derived
+    post:
+      tags:
+      - user-controller
+      operationId: linkPartner
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartnerDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultDTO'
+      summary: Link partner
+      x-summary-source: derived
+  /user-service/users/{username}/link/groups:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v3/users/{username}/link/groups
+    put:
+      tags:
+      - user-controller
+      operationId: linkGroups
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultDTO'
+      summary: Link groups
+      x-summary-source: derived
+  /user-service/users/recover-password:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v3/users/recover-password
+    put:
+      tags:
+      - user-controller
+      operationId: recoverPassword
+      parameters:
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Recover password
+      x-summary-source: derived
+  /user-service/users:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v3/users
+    get:
+      tags:
+      - user-controller
+      operationId: find
+      parameters:
+      - name: active
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: userType
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: group
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageUserDTO'
+      summary: Find
+      x-summary-source: derived
+    post:
+      tags:
+      - user-controller
+      operationId: create
+      parameters:
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInsertDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResultDTO'
+      summary: Create
+      x-summary-source: derived
+  /user-service/users/password/composition-rules:
+    x-tr-target-path: platform-bff/api/platform-user-service/api/v3/users/password/composition-rules
+    get:
+      tags:
+      - user-controller
+      operationId: getPasswordCompositionRules
+      parameters:
+      - name: Accept-Language
+        in: header
+        description: Language of validation messages
+        required: false
+        schema:
+          type: string
+      - name: companyId
+        in: header
+        description: Tenant identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+      summary: Get password composition rules
+      x-summary-source: derived
+components:
+  schemas:
+    UserDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        cpf:
+          type: string
+        department:
+          type: string
+        jobRole:
+          type: string
+        phone:
+          type: string
+        phoneExtension:
+          type: string
+        fax:
+          type: string
+        additional:
+          type: string
+        userType:
+          type: string
+        active:
+          type: boolean
+        blocked:
+          type: boolean
+        sso:
+          type: boolean
+        groups:
+          type: array
+          items:
+            type: string
+        partners:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerDTO'
+    PageUserDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDTO'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    PartnerDTO:
+      type: object
+      properties:
+        codPartner:
+          type: string
+        defaultPartner:
+          type: boolean
+        codFunctionPartner:
+          type: string
+    PageableObject:
+      type: object
+      properties:
+        paged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        unpaged:
+          type: boolean
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        empty:
+          type: boolean
+        UNSORTED:
+          type: boolean
+    UserUpdateDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        cpf:
+          type: string
+        department:
+          type: string
+        jobRole:
+          type: string
+        phone:
+          type: string
+        phoneExtension:
+          type: string
+        fax:
+          type: string
+        additional:
+          type: string
+        userType:
+          type: string
+          enum:
+          - COMMON
+          - READING
+        active:
+          type: boolean
+        blocked:
+          type: boolean
+        sso:
+          type: boolean
+    ResultDTO:
+      type: object
+      properties:
+        result:
+          type: boolean
+        message:
+          type: string
+    UserInsertDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        cpf:
+          type: string
+        department:
+          type: string
+        jobRole:
+          type: string
+        phone:
+          type: string
+        phoneExtension:
+          type: string
+        fax:
+          type: string
+        additional:
+          type: string
+        userType:
+          type: string
+          enum:
+          - COMMON
+          - READING
+        sso:
+          type: boolean
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- thomson-reuters-ogt-next-platform-openapi.json
+- thomson-reuters-ogt-next-platform-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,489 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters AP Batches API
+  version: '1.0'
+  description: 'Operations tagged AP Batches across 2 of this provider''s published API definitions: thomson-reuters-ap-exchange-api-1-0-openapi.json, thomson-reuters-ap-exchange-api-1-0-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+tags:
+- name: AP Batches
+  description: Use the AP Batches AP Exchange API to view AP route batches and view and update batch runs.
+paths:
+  /routes/{routeId}/batches:
+    get:
+      tags:
+      - AP Batches
+      summary: Returns collection of AP route batches
+      operationId: APBatch_Index
+      parameters:
+      - name: routeId
+        in: path
+        required: true
+        description: ID of AP route (Sequence Number)
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: $filter
+        in: query
+        description: 'Filter batches (example: batchRunDateTime gt 2020-11-26T15:59:12.000Z)'
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Select fields defined in request
+        schema:
+          type: string
+      - name: $count
+        in: query
+        description: Include parameter with count of items
+        schema:
+          type: boolean
+      - name: $top
+        in: query
+        description: Limit quantity of items
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: Skip quantity of items
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: TrackerODataResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackerODataResponseOfAPBatchModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+  /routes/{routeId}/batches/{batchId}/runs:
+    get:
+      tags:
+      - AP Batches
+      summary: Returns collection of AP route batch runs
+      operationId: APBatch_GetBatchRuns
+      parameters:
+      - name: routeId
+        in: path
+        required: true
+        description: ID of AP route (Sequence Number)
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: batchId
+        in: path
+        required: true
+        description: AP batch ID
+        schema:
+          type:
+          - string
+          - 'null'
+        x-position: 2
+      - name: $filter
+        in: query
+        description: 'Filter batch runs (example: sentToAPDateTime gt 2020-11-26T15:59:12.000Z)'
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Select fields defined in request
+        schema:
+          type: string
+      - name: $count
+        in: query
+        description: Include parameter with count of items
+        schema:
+          type: boolean
+      - name: $top
+        in: query
+        description: Limit quantity of items
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: Skip quantity of items
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: TrackerODataResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackerODataResponseOfAPBatchRunModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+  /routes/{routeId}/batches/{batchId}:
+    patch:
+      tags:
+      - AP Batches
+      summary: Updates batch run
+      operationId: APBatch_Patch
+      parameters:
+      - name: routeId
+        in: path
+        required: true
+        description: AP route ID (Sequence Number)
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: batchId
+        in: path
+        required: true
+        description: AP batch ID
+        schema:
+          type:
+          - string
+          - 'null'
+        x-position: 2
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 200 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.
+
+          '
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        x-name: apBatchModel
+        description: AP batch to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APBatchPaymentModel'
+        x-position: 3
+      responses:
+        '200':
+          description: APBatchModel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APBatchModel'
+        '204':
+          description: Record was patched successfully
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    APBatchModel:
+      title: APBatchModel
+      type: object
+      additionalProperties: false
+      properties:
+        batchId:
+          type: string
+        apRouteId:
+          type: integer
+          format: int32
+        sentToAPDateTime:
+          type: string
+          format: date-time
+        batchRunDateTime:
+          type: string
+          format: date-time
+        paymentStatus:
+          $ref: '#/components/schemas/APExtractAllowedBatchPaymentStatuses'
+        paymentComments:
+          type:
+          - string
+          - 'null'
+    TrackerODataResponseOfAPBatchModel:
+      type: object
+      properties:
+        count:
+          type: integer
+        value:
+          type: array
+          items:
+            title: APBatchModel
+            type: object
+            additionalProperties: false
+            properties:
+              batchId:
+                type: string
+              apRouteId:
+                type: integer
+                format: int32
+              sentToAPDateTime:
+                type: string
+                format: date-time
+              batchRunDateTime:
+                type: string
+                format: date-time
+              paymentStatus:
+                $ref: '#/components/schemas/APExtractAllowedBatchPaymentStatuses'
+              paymentComments:
+                type:
+                - string
+                - 'null'
+        nextLink:
+          type: string
+    TAPExtractAllowedBatchPaymentStatuses:
+      type: string
+      description: ''
+      x-enumFlags: true
+      x-enumNames:
+      - None
+      - APPaymentInProcess
+      - ContentError
+      - OnHold
+      - WillNotBePaid
+      - Other
+      - Submitted
+      - Resubmitted
+      - Paid
+      enum:
+      - None
+      - APPaymentInProcess
+      - ContentError
+      - OnHold
+      - WillNotBePaid
+      - Other
+      - Submitted
+      - Resubmitted
+      - Paid
+    APBatchPaymentModel:
+      type: object
+      additionalProperties: false
+      properties:
+        paymentStatus:
+          $ref: '#/components/schemas/TAPExtractAllowedBatchPaymentStatuses'
+        paymentComments:
+          type:
+          - string
+          - 'null'
+          maxLength: 250
+          minLength: 0
+    TrackerODataResponseOfAPBatchRunModel:
+      type: object
+      properties:
+        count:
+          type: integer
+        value:
+          type: array
+          items:
+            title: APBatchRunModel
+            type: object
+            additionalProperties: false
+            properties:
+              id:
+                type:
+                - string
+                - 'null'
+              batchId:
+                type:
+                - string
+                - 'null'
+              apRouteId:
+                type: integer
+                format: int32
+              sentToAPDateTime:
+                type: string
+                format: date-time
+              runDateTime:
+                type: string
+                format: date-time
+              invoiceCount:
+                type: integer
+                format: int32
+        nextLink:
+          type: string
+    APExtractAllowedBatchPaymentStatuses:
+      type: string
+      description: ''
+      x-enumFlags: true
+      x-enumNames:
+      - None
+      - APPaymentInProcess
+      - ContentError
+      - OnHold
+      - WillNotBePaid
+      - Other
+      - Submitted
+      - Resubmitted
+      - Paid
+      enum:
+      - None
+      - APPaymentInProcess
+      - ContentError
+      - OnHold
+      - WillNotBePaid
+      - Other
+      - Submitted
+      - Resubmitted
+      - Paid
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-ap-exchange-api-1-0-openapi.json
+- thomson-reuters-ap-exchange-api-1-0-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

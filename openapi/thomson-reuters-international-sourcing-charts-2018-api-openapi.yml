@@ -1,0 +1,752 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts International Sourcing Charts…
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: International Sourcing Charts (2018+)
+paths:
+  /v1/international-sourcing-charts:
+    get:
+      tags:
+      - International Sourcing Charts (2018+)
+      summary: Returns the list of International Sourcing Charts available for 2018 forward
+      parameters:
+      - name: year
+        in: query
+        description: 4-digit year.
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSourcingChartRepresentations'
+              examples:
+                international-sourcing-charts:
+                  $ref: '#/components/examples/international-sourcing-charts'
+                international-sourcing-charts-year-specific:
+                  $ref: '#/components/examples/international-sourcing-charts-year-specific'
+        '204':
+          description: No data found for given inputs.
+          content: {}
+        '400':
+          description: Request failed. This is usually due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1InternationalSourcingCharts
+      x-operation-id-source: derived
+    post:
+      tags:
+      - International Sourcing Charts (2018+)
+      summary: Creates a new International Sourcing Chart
+      operationId: createsNewInternationalSourcingChart.
+      parameters:
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: InternationalSourcingChart Representation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartCreateRepresentation'
+            examples:
+              create-international-sourcing-chart:
+                $ref: '#/components/examples/create-international-summary-chart'
+      responses:
+        '200':
+          description: InternationalSourcingChart created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSourcingChartCreateResponseRepresentation'
+              examples:
+                create-international-sourcing-chart-response:
+                  $ref: '#/components/examples/create-international-sourcing-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: creates new International Sourcing Chart.
+  /v1/international-sourcing-charts/{chartId}/copies:
+    post:
+      tags:
+      - International Sourcing Charts (2018+)
+      summary: Creates a copy of an existing International Sourcing Chart.
+      operationId: CreatesACopyOfAnExistingInternationalSourcingChart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: InternationalSourcingChart Representation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartRenameRepresentation'
+            examples:
+              create-copy-international-sourcing-chart:
+                $ref: '#/components/examples/international-summary-chart-rename-request'
+      responses:
+        '200':
+          description: InternationalSourcingChart created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSourcingChartCreateResponseRepresentation'
+              examples:
+                create-copy-international-sourcing-chart-response:
+                  $ref: '#/components/examples/create-international-sourcing-chart-response'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates a copy of an existing International Sourcing Chart.
+  /v1/international-sourcing-charts/{chartId}:
+    put:
+      tags:
+      - International Sourcing Charts (2018+)
+      summary: Renames an International Sourcing Chart. Enter the chartId in the URL
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartRenameRepresentation'
+            examples:
+              rename-international-sourcing-chart:
+                $ref: '#/components/examples/international-summary-chart-rename-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSourcingChartRepresentation'
+              examples:
+                rename-international-sourcing-chart-response:
+                  $ref: '#/components/examples/international-sourcing-chart-response'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1InternationalSourcingChartsByChartId
+      x-operation-id-source: derived
+  /v1/international-sourcing-charts/{chartId}/read-only-status:
+    put:
+      tags:
+      - International Sourcing Charts (2018+)
+      summary: Updates the read-only status for an International Sourcing Chart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSummaryChartReadOnlyStatusRepresentation'
+            examples:
+              read-only-status-international-sourcing-chart:
+                $ref: '#/components/examples/international-summary-chart-read-only-status-request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSourcingChartRepresentation'
+              examples:
+                read-only-status-international-sourcing-chart-response:
+                  $ref: '#/components/examples/international-sourcing-chart-response'
+        '400':
+          description: Request failed due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: putV1InternationalSourcingChartsByChartIdReadOnlyStatus
+      x-operation-id-source: derived
+  /v1/international-sourcing-charts/{chartId}/assigned-source-codes:
+    get:
+      tags:
+      - International Sourcing Charts (2018+)
+      summary: Returns the list of assigned source codes for the given International Sourcing…
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSourcingChartSourceCodes'
+              examples:
+                success:
+                  $ref: '#/components/examples/international-sourcing-chart-assigned-source-codes'
+        '400':
+          description: Request failed due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1InternationalSourcingChartsByChartIdAssignedSourceCodes
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - International Sourcing Charts (2018+)
+      summary: Adds or removes source codes for the given International Sourcing Chart.
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternationalSourcingChartSourceCodesRequests'
+            examples:
+              international-sourcing-chart-source-codes-patch-request:
+                $ref: '#/components/examples/international-sourcing-chart-source-codes-patch-request'
+      responses:
+        '200':
+          description: All operations executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSourcingChartMultipleResponses'
+              examples:
+                international-sourcing-chart-source-codes-patch-success-response:
+                  $ref: '#/components/examples/international-sourcing-chart-source-codes-patch-success-response'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSourcingChartMultipleResponses'
+              examples:
+                international-sourcing-chart-source-codes-patch-multiple-responses:
+                  $ref: '#/components/examples/international-sourcing-chart-source-codes-patch-multiple-responses'
+        '400':
+          description: Request failed due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: patchV1InternationalSourcingChartsByChartIdAssignedSourceCodes
+      x-operation-id-source: derived
+  /v1/international-sourcing-charts/{chartId}/unassigned-source-codes:
+    get:
+      tags:
+      - International Sourcing Charts (2018+)
+      summary: Returns the list of unassigned source codes for the given International…
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternationalSourcingChartSourceCodes'
+              examples:
+                success:
+                  $ref: '#/components/examples/international-sourcing-chart-unassigned-source-codes'
+        '400':
+          description: Request failed due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1InternationalSourcingChartsByChartIdUnassignedSourceCodes
+      x-operation-id-source: derived
+components:
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    InternationalSourcingChartSourceCodes:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalSourcingChartSourceCode'
+    InternationalSourcingChartRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+    InternationalSourcingChartSourceCodesRequest:
+      type: object
+      properties:
+        value:
+          type: object
+          $ref: '#/components/schemas/InternationalSourcingChartSourceCodeRepresentation'
+        path:
+          type: string
+        op:
+          type: string
+    InternationalSourcingChartRepresentations:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalSourcingChartRepresentation'
+    InternationalSourcingChartMultipleResponses:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalSourcingChartMultipleResponse'
+    InternationalSummaryChartRenameRepresentation:
+      type: object
+      properties:
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+    InternationalSourcingChartSourceCode:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sourceCode:
+          type: string
+        sourceDescription:
+          type: string
+        isAssigned:
+          type: boolean
+    InternationalSourcingChartSourceCodesRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/InternationalSourcingChartSourceCodesRequest'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    InternationalSummaryChartReadOnlyStatusRepresentation:
+      type: object
+      properties:
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+    InternationalSummaryChartCreateRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+    InternationalSourcingChartSourceCodeRepresentation:
+      type: object
+      properties:
+        sourceCode:
+          type: string
+    InternationalSourcingChartCreateResponseRepresentation:
+      type: object
+      properties:
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+    InternationalSourcingChartMultipleResponse:
+      type: object
+      properties:
+        op:
+          type: string
+        path:
+          type: string
+        value:
+          type: object
+          $ref: '#/components/schemas/InternationalSourcingChartSourceCodeRepresentation'
+        statusCode:
+          type: integer
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+  examples:
+    international-sourcing-chart-source-codes-patch-success-response:
+      value:
+      - op: Add
+        path: null
+        value:
+          SourceCode: '3'
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+      - op: Remove
+        path: null
+        value:
+          SourceCode: '1'
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    international-summary-chart-rename-request:
+      value:
+        chartName: TestChart
+    international-sourcing-charts:
+      value:
+      - year: 2023
+        chartId: E45V010100003QV4
+        chartName: _AutoAPIIntlSrcCharts120441
+        isReadOnly: false
+      - year: 2023
+        chartId: E45V010100003QV2
+        chartName: _AutoAPIIntlSrcCharts13469
+        isReadOnly: false
+      - year: 2022
+        chartId: E45V010100003QSL
+        chartName: _AutoAPIIntlSrcCharts13469?.?
+        isReadOnly: false
+      - year: 2022
+        chartId: E45V010100003QV6
+        chartName: _AutoAPIIntlSrcCharts1640
+        isReadOnly: false
+      - year: 2021
+        chartId: E45V010100003QV5
+        chartName: _AutoAPIIntlSrcCharts17457
+        isReadOnly: false
+      - year: 2020
+        chartId: E45V010100003QV7
+        chartName: _AutoAPIIntlSrcCharts17924
+        isReadOnly: false
+      - year: 2019
+        chartId: E45V010100003QV3
+        chartName: _AutoAPIIntlSrcCht11190
+        isReadOnly: false
+    international-sourcing-chart-assigned-source-codes:
+      value:
+      - id: 1
+        sourceCode: '1'
+        sourceDescription: U.S. Income
+        isAssigned: true
+      - id: 2
+        sourceCode: '3'
+        sourceDescription: Passive Income
+        isAssigned: true
+    international-summary-chart-read-only-status-request:
+      value:
+        isReadOnly: false
+    create-international-sourcing-chart-response:
+      value:
+        chartId: E45V010100003L6F
+        chartName: TestChart
+        year: 2022
+    international-sourcing-chart-unassigned-source-codes:
+      value:
+      - id: 8
+        sourceCode: '15'
+        sourceDescription: FOGI
+        isAssigned: false
+      - id: 10
+        sourceCode: '21'
+        sourceDescription: General Limitation Income
+        isAssigned: false
+      - id: 53
+        sourceCode: '31'
+        sourceDescription: GILTI (Global Intangible Low Taxed Income)
+        isAssigned: false
+      - id: 54
+        sourceCode: '32'
+        sourceDescription: Foreign Branch Income
+        isAssigned: false
+      - id: 11
+        sourceCode: '61'
+        sourceDescription: Passive, FPHCI
+        isAssigned: false
+    international-sourcing-chart-source-codes-patch-multiple-responses:
+      value:
+      - op: Add
+        path: null
+        value:
+          SourceCode: '3'
+        statusCode: 400
+        detail: Validation Error
+        fieldErrors:
+        - fieldName: SourceCode
+          messages:
+          - Source Code [3] already exists and cannot be added.
+          errorCode: 0
+      - op: Add
+        path: null
+        value:
+          SourceCode: '1'
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    international-sourcing-chart-source-codes-patch-request:
+      value:
+      - value:
+          SourceCode: '3'
+        op: Add
+      - value:
+          SourceCode: '1'
+        op: Remove
+    international-sourcing-charts-year-specific:
+      value:
+      - year: 2023
+        chartId: E45V010100003QV4
+        chartName: _AutoAPIIntlSrcCharts120441
+        isReadOnly: false
+      - year: 2023
+        chartId: E45V010100003QV2
+        chartName: _AutoAPIIntlSrcCharts13469
+        isReadOnly: false
+    create-international-summary-chart:
+      value:
+        year: 2022
+        chartName: TestChart
+    international-sourcing-chart-response:
+      value:
+        year: 2022
+        chartId: E45V010100003PR8
+        chartName: TestChart
+        isReadOnly: false
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

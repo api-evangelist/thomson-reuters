@@ -1,0 +1,691 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Engagements API
+  version: v1
+  contact:
+    name: API Support
+    url: https://www.thomsonreuters.com/en/contact-us
+    email: engagementmanagerdevleads@thomsonreuters.com
+  description: 'Operations tagged Engagements across 2 of this provider''s published API definitions: thomson-reuters-engagement-manager-openapi.json, thomson-reuters-engagement-manager-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/us/engagementmanager
+  description: US Production
+- url: https://api.thomsonreuters.com/uk/engagementmanager
+  description: UK Production
+security:
+- Token: []
+tags:
+- name: Engagements
+  description: Get list of engagements
+paths:
+  /external/v1/engagements/{clientId}:
+    get:
+      tags:
+      - Engagements
+      summary: Retrieve all engagements for a specific client
+      description: '## Purpose
+
+        This endpoint retrieves all engagements (binders) associated with a specific client ID. Use this to get a comprehensive list of all engagements for a client, including current and prior year engagements.
+
+
+        ## Why Use This Endpoint
+
+        - Retrieve all engagements/binders for a specific client
+
+        - View engagement details including period dates, types, and status
+
+        - Check finalization status of engagements
+
+        - Identify consolidated engagements and their subsidiaries
+
+        - Access engagement metadata for further operations
+
+        - Navigate between related engagements (current and prior years)
+
+
+        ## How to Get Client ID
+
+        First, use the `/clients/load-clients` endpoint to retrieve the list of clients and obtain the `clientId` value.
+
+
+        ## Path Parameter
+
+        - `clientId` (required): The unique identifier of the client. Must be a positive integer greater than 0.
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+        ## Common Use Cases
+
+        - Display all engagements for a client in your application
+
+        - Check if a client has finalized engagements
+
+        - Navigate to specific engagement details
+
+        - Build engagement selection interfaces
+
+        - Track engagement history across multiple years
+
+        - Identify consolidated engagement structures
+
+
+        ## Error Responses
+
+        - `400 Bad Request`: Invalid client ID (must be greater than 0)
+
+        - `401 Unauthorized`: Invalid or expired token
+
+        - `404 Not Found`: Client ID does not exist
+
+        - `500 Internal Server Error`: Server or database errors'
+      operationId: EmMainEndPointsExternalBinderGetEngagementListByClientIdEndpoint
+      parameters:
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved the list of engagements.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EMMainDataTransferObjectsModelsEMDTOsEngagementListDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: 2ebb159b-1a92-428a-b083-62ab6cd4da52
+                    dateTime: '2026-04-21T05:50:04.7816961Z'
+                    traceId: 1e2c6dc622344d43a7aedda3dacbccac
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 279b9c43-974c-470a-a2d0-2981c5db1bd9
+                    dateTime: '2026-04-21T05:50:04.7816640Z'
+                    traceId: 81e5ba9e84704a8aaf327cc5d3df836e
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: d5ace0dd-d0f2-4131-990c-2983693e1d4a
+                    dateTime: '2026-04-21T05:50:04.7816917Z'
+                    traceId: 1ff0ac6616f442219263ba1f022276ca
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: b43bbbdd-15d2-4b30-8ce8-987511a046b8
+                    dateTime: '2026-04-21T05:50:04.7816978Z'
+                    traceId: cd5f866a31d7443598cf9b8ff69ef251
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+  /external/v1/engagements/by-binder-id/{binderId}:
+    get:
+      tags:
+      - Engagements
+      summary: Retrieve detailed information for a specific engagement
+      description: '## Purpose
+
+        This endpoint retrieves comprehensive details for a specific engagement (binder) using its unique identifier. Use this to access detailed engagement information including metadata, configuration, and associated data.
+
+
+        ## Why Use This Endpoint
+
+        - Retrieve complete engagement details by ID
+
+        - Access engagement metadata and configuration settings
+
+        - View engagement-specific information for processing workflows
+
+        - Retrieve engagement data for display or further operations
+
+        - Access detailed engagement attributes and properties
+
+        - Get engagement information for validation or business logic
+
+
+        ## How to Get Binder ID
+
+        First, use the `/engagements/{clientId}` endpoint to retrieve the list of engagements for a client and obtain the `binderId` value from the engagement list.
+
+
+        ## Path Parameter
+
+        - `binderId` (required): The unique identifier of the engagement/binder. Must be a positive integer greater than 0.
+
+
+        ## Authentication
+
+        Requires Bearer token authentication (CIAM). Include the token in the Authorization header:
+
+        ```
+
+        Authorization: Bearer
+
+        ```
+
+
+        ## Common Use Cases
+
+        - Display detailed engagement information in your application
+
+        - Retrieve engagement data for processing workflows
+
+        - Validate engagement existence before operations
+
+        - Load engagement configuration and settings
+
+        - Access engagement metadata for business logic
+
+        - Retrieve engagement details for reporting purposes
+
+
+        ## Error Responses
+
+        - `400 Bad Request`: Invalid binder ID (must be greater than 0)
+
+        - `401 Unauthorized`: Invalid or expired token
+
+        - `500 Internal Server Error`: Server or database errors'
+      operationId: EmMainEndPointsEngagementManagementBinderGetBinderExternalEndpoint
+      parameters:
+      - name: binderId
+        in: path
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: X-TR-EM-APIKEY
+        in: header
+        required: true
+        description: Required API key for external endpoints
+        schema:
+          type: string
+          description: API key for external endpoints
+      responses:
+        '200':
+          description: Successfully retrieved the engagement/binder details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EMMainDataTransferObjectsModelsExternalEngagementEngagementBinderExternalDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Bad request due to invalid input.
+                  extensions:
+                    statusCode: 400
+                    code: ERR_BAD_4000
+                    errorId: c140b33d-5c75-4ec6-a5e0-6e6cf7c44e79
+                    dateTime: '2026-04-21T05:50:05.2334464Z'
+                    traceId: d644390c38bb4e33b3798070eab10965
+                    spanId: 358611c48f91f940
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Unauthorized access.
+                  extensions:
+                    statusCode: 401
+                    code: ERR_AUTH_4010
+                    errorId: 79ce4d97-eaae-4093-8a02-c992dd480aae
+                    dateTime: '2026-04-21T05:50:05.2334281Z'
+                    traceId: 1d5277690f7548f0a7de2d463bf53900
+                    spanId: 358611c48f91f940
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: Access forbidden.
+                  extensions:
+                    statusCode: 403
+                    code: ERR_FORB_4030
+                    errorId: b01874fd-e328-4373-97ac-63afeee54856
+                    dateTime: '2026-04-21T05:50:05.2334435Z'
+                    traceId: 107b4b3a8a434b6081118a4deba5fcd7
+                    spanId: 358611c48f91f940
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmMainExtensionsUtilityErrorResponse'
+              example:
+                errors:
+                - message: An unexpected error occurred.
+                  extensions:
+                    statusCode: 500
+                    code: ERR_INT_5000
+                    errorId: 79a19809-7c4c-4413-b5dc-d1cd09d41f42
+                    dateTime: '2026-04-21T05:50:05.2334503Z'
+                    traceId: 3d37ac75055846f2aee98f1e2986e9c7
+                    spanId: 358611c48f91f940
+    servers:
+    - url: https://api.thomsonreuters.com/us/engagementmanager
+      description: US Production
+    - url: https://api.thomsonreuters.com/uk/engagementmanager
+      description: UK Production
+components:
+  schemas:
+    EMMainDataTransferObjectsModelsExternalEngagementEngagementBinderExternalDto:
+      type: object
+      description: 'Represents an engagement binder containing all properties related to its lifecycle,
+
+        finalization state, engagement structure, external system integrations, and processing flags.'
+      additionalProperties: false
+      properties:
+        engagementBinderId:
+          type: integer
+          description: The unique identifier of the engagement binder.
+          format: int32
+          example: 1042
+        name:
+          type: string
+          description: The display name of the engagement binder.
+          example: ABC Corp Audit 2024
+        engagementType:
+          type: string
+          description: The type of engagement (e.g., Audit, Tax).
+          example: Audit
+        subsidiaryBinderIds:
+          type:
+          - array
+          - 'null'
+          description: The list of binder IDs representing subsidiary binders in a consolidated engagement.
+          example:
+          - 1043
+          - 1044
+          - 1045
+          items:
+            type: integer
+            format: int32
+        periodFrequency:
+          type: string
+          description: The frequency of the trial balance period (e.g., Annual, Monthly, Quarterly).
+          example: Annual
+        period:
+          description: The trial balance period associated with the binder.
+          example: 12
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsTrialBalancePeriod'
+        priorYearsCount:
+          type: integer
+          description: The number of prior years to include in the binder.
+          format: int32
+          example: 7
+        clientId:
+          type: integer
+          description: The unique identifier of the client associated with this binder.
+          format: int32
+          example: 789
+        isFinalized:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the overall engagement binder has been finalized.
+          example: false
+        isTrialBalanceFinalized:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the trial balance portion of the engagement has been finalized.
+          example: false
+        isWorkpapersFinalized:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the workpapers portion of the engagement has been finalized.
+          example: false
+        isJournalEntriesFinalized:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the journal entries portion of the engagement has been finalized.
+          example: false
+        isNotesListFinalized:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the notes list portion of the engagement has been finalized.
+          example: false
+        engagementBeginDate:
+          type:
+          - string
+          - 'null'
+          description: The start date of the engagement period.
+          format: date-time
+          example: '2024-01-01T00:00:00Z'
+        engagementEndDate:
+          type:
+          - string
+          - 'null'
+          description: The end date of the engagement period.
+          format: date-time
+          example: '2024-12-31T00:00:00Z'
+        reportReleaseDate:
+          type:
+          - string
+          - 'null'
+          description: The date the engagement report is scheduled for release.
+          format: date-time
+          example: '2025-03-31T00:00:00Z'
+        documentDuration:
+          type:
+          - integer
+          - 'null'
+          description: The number of months after which documents are considered complete and eligible for archival.
+          example: 12
+        documentCompletionDate:
+          type:
+          - string
+          - 'null'
+          description: The calculated date by which document completion is expected.
+          format: date-time
+          example: '2025-06-30T00:00:00Z'
+        completionCalculatedFrom:
+          type: string
+          description: The engagement date field used to calculate the document completion date.
+          example: EndingDate
+        engagementStructure:
+          type: string
+          description: The structural type of the engagement (e.g., None, Consolidated, Divisional, FundGroup).
+          example: Consolidated
+        structureMask:
+          type:
+          - string
+          - 'null'
+          description: The mask pattern that defines the division or fund grouping structure for the binder.
+          example: '##-###'
+        hasCptLinks:
+          type: boolean
+          description: Indicates whether the binder has active CPT (Checkpoint Tools) integration links.
+          example: false
+        cptIntegrationData:
+          type:
+          - string
+          - 'null'
+          description: Serialized JSON data containing CPT integration configuration details.
+          example: '{"cptEngagementId":"CPT-2024-001"}'
+        hasSmartEngagementLinks:
+          type: boolean
+          description: Indicates whether the binder is linked to an Onvio Smart engagement.
+          example: true
+        smartIntegrationData:
+          type:
+          - string
+          - 'null'
+          description: Serialized JSON data containing Onvio Smart integration configuration details.
+          example: '{"smartEngagementId":"SMT-2024-042"}'
+        smartBinderId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the linked Onvio Smart binder.
+          example: SMB-98765
+        smartRollForwardType:
+          type: string
+          description: The Smart engagement type to apply when this binder is rolled forward.
+          example: Desktop
+        taxEntityType:
+          type: string
+          description: The tax entity type associated with the engagement (e.g., Individual, Corporation, Partnership).
+          example: Partnership
+        taxSoftwareVendor:
+          type: string
+          description: The tax software vendor used in conjunction with this engagement.
+          example: Lacerte
+        taxEntityDescription:
+          type: string
+          description: The human-readable description of the tax entity type for display purposes.
+          example: C Corporation
+    EMMainDataTransferObjectsModelsEMDTOsEngagementListDto:
+      type: object
+      additionalProperties: false
+      properties:
+        engagementId:
+          type: integer
+          description: Unique identifier for the engagement/binder. Use this ID to retrieve engagement details or perform operations.
+          format: int32
+          example: 94
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the engagement/binder. Null if not set.
+          example: 2024 Annual Audit
+        isFinalized:
+          type: boolean
+          description: Indicates whether the engagement has been finalized. Finalized engagements are typically locked from further edits.
+          example: false
+        period:
+          description: The trial balance period details for this engagement, including start date, end date, and year-end date.
+          oneOf:
+          - $ref: '#/components/schemas/EMMainDataTransferObjectsModelsTrialBalancePeriod'
+        engagementType:
+          type:
+          - string
+          - 'null'
+          description: Type of engagement (e.g., Audit, Review, Tax, Compilation). Null if not specified.
+          example: Audit
+        taxSoftwareVendor:
+          type: string
+          description: The tax software vendor used for this engagement (e.g., UltraTax, ProSystem fx, CCH).
+          example: UltraTax
+        periodFrequency:
+          type: string
+          description: Frequency of the engagement period (e.g., Annual, Quarterly, Monthly).
+          example: Annual
+        taxEntityType:
+          type:
+          - string
+          - 'null'
+          description: Tax entity type for the engagement (e.g., Corporation, Partnership, Individual). Null if not specified.
+          example: Corporation
+        engagementStructure:
+          type: string
+          description: Engagement structure type (e.g., Standard, Consolidated, Subsidiary).
+          example: Consolidated
+        priorYearsCount:
+          type: integer
+          description: Number of prior year engagements/binders associated with this engagement.
+          format: int32
+          example: 3
+        subsidiaryBinderIds:
+          type: array
+          description: List of subsidiary binder IDs if this is a consolidated engagement. Empty if no subsidiaries.
+          example:
+          - 101
+          - 102
+          - 103
+          items:
+            type: integer
+            format: int32
+    EmMainExtensionsUtilityErrorExtensions:
+      type: object
+      description: 'Provides extended metadata and diagnostic information for error responses.
+
+        Includes status codes, error codes, timestamps, and distributed tracing identifiers.'
+      additionalProperties: false
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status code (e.g., 400, 401, 403, 500)
+          format: int32
+          example: 401
+        code:
+          type: string
+          description: Application-specific error code for programmatic handling
+          example: ERR_AUTH_4010
+        errorId:
+          type: string
+          description: Unique identifier (GUID) for this error occurrence. Use this when reporting issues to support.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        dateTime:
+          type: string
+          description: ISO 8601 timestamp (UTC) when the error occurred
+          example: '2024-03-15T14:30:00Z'
+        traceId:
+          type: string
+          description: Distributed trace ID for correlating requests across microservices (W3C Trace Context format)
+          example: a1b2c3d4e5f67890abcdef1234567890
+        spanId:
+          type: string
+          description: Span ID for this specific operation within the distributed trace (W3C Trace Context format)
+          example: 358611c48f91f940
+    EMMainDataTransferObjectsModelsTrialBalancePeriod:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the trial balance period.
+          format: int32
+          example: 1
+        startDate:
+          type:
+          - string
+          - 'null'
+          description: The start date of the engagement period. Null if not set.
+          format: date-time
+          example: '2024-01-01T00:00:00Z'
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: The end date of the engagement period. Null if not set.
+          format: date-time
+          example: '2024-12-31T00:00:00Z'
+        yearEndDate:
+          type:
+          - string
+          - 'null'
+          description: The fiscal year-end date for the engagement. Null if not set.
+          format: date-time
+          example: '2024-12-31T00:00:00Z'
+    EmMainExtensionsUtilityErrorDetail:
+      type: object
+      description: Represents detailed information about a specific error that occurred during API request processing.
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          description: Gets or sets the human-readable error message describing what went wrong.
+          example: '"Unauthorized access."
+
+            "Bad request due to invalid input."
+
+            "Resource not found."
+
+            "An unexpected error occurred."'
+        extensions:
+          description: Gets or sets the extended error metadata containing additional diagnostic information.
+          oneOf:
+          - $ref: '#/components/schemas/EmMainExtensionsUtilityErrorExtensions'
+    EmMainExtensionsUtilityErrorResponse:
+      type: object
+      description: 'Represents a standardized error response structure for API errors.
+
+        Contains a collection of detailed error information.'
+      example:
+        errors:
+        - message: Unauthorized access.
+          extensions:
+            statusCode: 401
+            code: ERR_AUTH_4010
+            errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+            dateTime: '2024-03-15T14:30:00Z'
+            traceId: a1b2c3d4e5f67890abcdef1234567890
+            spanId: 358611c48f91f940
+      additionalProperties: false
+      properties:
+        errors:
+          type: array
+          description: Collection of detailed error information
+          items:
+            $ref: '#/components/schemas/EmMainExtensionsUtilityErrorDetail'
+  securitySchemes:
+    Token:
+      type: apiKey
+      description: Please enter a valid token(M2M or GFR)
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-engagement-manager-openapi.json
+- thomson-reuters-engagement-manager-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

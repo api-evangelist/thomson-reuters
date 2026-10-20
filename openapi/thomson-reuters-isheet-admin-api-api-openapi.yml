@@ -1,0 +1,5897 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters ISheet Admin API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged ISheet Admin API across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: ISheet Admin API
+paths:
+  /{version}/isheets/admin:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the list of iSheets
+      description: 'This API call is used to get a list of iSheet of the site.
+
+
+        This method includes the iSheet structure as seen in the iSheet admin interface. Please note that this method is only available to site and content admins.'
+      operationId: getISheets
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: Id of the iSheet site for which the iSheets are to be obtained
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Type parameter is not mandatory. Blank or Null will return all iSheets including metadata iSheets. Other values are documentmetadata, foldermetadata, taskmetadata, normal
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the list of iSheets of the site
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetDocTemplatesDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetDocTemplatesDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetDocTemplatesDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - ISheet Admin API
+      summary: To create an iSheet
+      description: 'Method to add a new iSheet to the site.
+
+        The method only allows you to define the details of an iSheet, and does not provide the capability to add columns to the iSheet.
+
+        Add columns to iSheet record method should be used to add columns to the iSheet.
+
+
+        To Add an iSheet call API: POST : /api/3/isheets/admin?siteid={siteid}
+
+
+        Parameters:
+
+
+        NameTypeDescription
+
+
+        siteidnumberThe of the site to create the iSheet in
+
+
+        If successful, the API returns the 200 http message If the operation fails, the API will return one of the following error codes.
+
+
+        CodeMeaning
+
+
+        200iSheet created successfully
+
+
+        401Unauthorised
+
+
+        403Validation failed/ Forbidden
+
+
+        405Method not allowed (calling api with wrong method)
+
+
+        500Internal error occurred
+
+
+        This method is supported in version 3 of the API and above.'
+      operationId: createIsheet
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: Id of the site for which iSheet is to be created
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the details about the newly created iSheet.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/isheetDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/isheetDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/isheetDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/sections:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the list of iSheet sections
+      description: 'This API call is used to get list of sections for an iSheet of the site.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: getISheetSection
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the sections are to be obtained
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the list of iSheet sections
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetSectionsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetSectionsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetSectionsDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - ISheet Admin API
+      summary: To create an iSheet section
+      description: 'This API will add a new section to the iSheet.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: addIsheetSection
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the section is to be add
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the details about the newly created iSheet section.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetSectionsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetSectionsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetSectionsDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ISheetSectionDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ISheetSectionDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ISheetSectionDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/columntypes:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the iSheet column types
+      description: 'This method returns the allowed column types and should be used when creating a new column in an iSheet.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: getColumnTypes
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: API will return the list of iSheet column types.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ColumnTypesDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColumnTypesDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ColumnTypesDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}:
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update the iSheet
+      description: API method to edit an existing iSheet.
+      operationId: updateIsheet
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet which is being edited
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetDBO'
+    delete:
+      tags:
+      - ISheet Admin API
+      summary: To delete the iSheet
+      description: 'This API will delete the existing iSheet.
+
+
+        To delete an iSheet call API: DELETE /api/{version}/isheets/admin/{isheetid}
+
+
+        Parameters:
+
+
+        NameTypeDescription
+
+
+        isheetIdnumberId of the iSheet for which the column is to be deleted
+
+
+        To get the status of an iSheet columns based on a progressive key, call API POST /api/3/progressivekeystatus/{progressive_key}
+
+
+        e.g. POST /api/{version}/progressivekeystatus/{progressive_key}
+
+
+        NameTypeDescription
+
+
+        progressive_keyStringThis key is returned when a long-running operation is called and can be used to find the final status of the operation
+
+
+        If the operation is successful, the API returns a progressive key resource object. The possible status values are "INPROGRESS", "DONE" or "FAIL".
+
+        In the case of a failure, an error object is returned with the appropriate error code.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: deleteIsheet
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet which is to be deleted
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '201':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/views:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the list of iSheet view
+      description: Get the list of views for an iSheet.
+      operationId: getISheetViews
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the list of iSheet views.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetViews'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetViews'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetViews'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - ISheet Admin API
+      summary: To create an iSheet view
+      description: 'Add a new view to the iSheet
+
+
+        The methods returns a 200 http response in case of a successful request, otherwise an error object is returned.'
+      operationId: createIsheetView
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the newly created iSheet view
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/iSheetView'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/iSheetView'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/iSheetView'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/iSheetView'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/iSheetView'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/iSheetView'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/sortisheets:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the list of the iSheets sorted based on the position in ascending order
+      description: 'This method is used to get the iSheets sorted based on the position in ascending order.
+
+
+        GET /api/3/isheets/admin/sortisheets?siteid=${siteid}
+
+
+        Parameter Name
+
+
+        Parameter Value
+
+
+        Description
+
+
+        siteid
+
+
+        number
+
+
+        The id of the site
+
+
+        Note : As seen in the UI, the response will display the iSheets in their correct sequence.'
+      operationId: getSortIsheets
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: Id of the site
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the list of iSheets sorted based on the position in ascending order
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetsDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update iSheets in order
+      description: 'This method is used to update iSheets into a sort order
+
+
+        PUT /api/3/isheets/admin/sortisheets?siteid=${siteid}
+
+
+        Parameter Name
+
+
+        Parameter Value
+
+
+        Description
+
+
+        siteid
+
+
+        number
+
+
+        The id of the site for isheet sorts
+
+
+        Note : Need to manage sequences in the request xml. We will refer this sequence for update. First iSheet will be set as first and second will be set for second iSheet.'
+      operationId: updateSortIsheets
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: Id of the site
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ISheetsDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ISheetsDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ISheetsDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/doctemplate:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the iSheet document template
+      description: 'This API call is used to get a list of iSheet document templates.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: getDocTemplates
+      parameters:
+      - name: siteid
+        in: query
+        description: Id of the site
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: List of iSheet document template
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetDocTemplatesDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetDocTemplatesDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetDocTemplatesDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - ISheet Admin API
+      summary: To add an iSheet document report
+      description: 'This method shows you how to add a new iSheet document report
+
+
+        POST /api/{version}/isheets/admin/doctemplate?siteid=${siteid}
+
+
+        Parameter Name
+
+
+        Parameter Value
+
+
+        Description
+
+
+        siteid
+
+
+        A numeric value representing the site id
+
+
+        The id of the site for iSheet document templates.'
+      operationId: insertSheetDocReport
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: Id of the site for which the template are to be obtained
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: API will return the details of newly created iSheet document report.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetDocTemplateDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetDocTemplateDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetDocTemplateDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                reportfile:
+                  type: string
+                  description: Parameter name should be called reportfile and the value for it is the file to be uploaded
+                  format: binary
+                templatename:
+                  type: string
+                  description: Template name
+                templatetype:
+                  type: string
+                  enum:
+                  - SITE_WIDE
+                  - SINGLE_RECORD
+                  description: Template type
+                linkedisheet:
+                  type: string
+                  description: Id of iSheet - only applicable for templatetype=SINGLE_RECORD
+                linkedviewtype:
+                  type: string
+                  enum:
+                  - '0'
+                  - '1'
+                  description: Linked view type - only applicable for templatetype=SINGLE_RECORD
+                linkedviewid:
+                  type: string
+                  description: 'CSV of isheet view id (multiple view id with '','' separated ). Only applicable for templatetype=SINGLE_RECORD and 0 : All isheet views'
+                generatedocument:
+                  type: string
+                  enum:
+                  - WORD
+                  - PDF
+                  description: Generate document
+                downloaddocument:
+                  type: string
+                  enum:
+                  - '0'
+                  - '1'
+                  description: Download document
+                savetofolder:
+                  type: string
+                  enum:
+                  - '0'
+                  - '1'
+                  description: Save to folder
+                savetospecificfolder:
+                  type: string
+                  description: Id of the folder
+                savetospecificisheetcolumn:
+                  type: string
+                  description: Id of the column. This field only applicable for templatetype=SINGLE_RECORD
+              required:
+              - reportfile
+              - templatename
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/columns:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the list of iSheet column
+      description: 'Method to Get columns of an existing iSheet.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: getIsheetColumns
+      parameters:
+      - name: isheetid
+        in: path
+        description: Id of iSheet in which columns are to be get
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: API will return the list of iSheet columns
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/columns'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/columns'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/columns'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - ISheet Admin API
+      summary: To add iSheet column
+      description: 'Method to add a column to an existing iSheet.
+
+
+        To get the status of an iSheet columns based on a progressive key, call API POST /api/3/progressivekeystatus/{progressive_key}
+
+
+        e.g. POST /api/{version}/progressivekeystatus/{progressive_key}
+
+
+        NameTypeDescription
+
+
+        progressive_keyStringThis key is returned when a long-running operation is called and can be used to find the final status of the operation
+
+
+        If the operation is successful, the API returns a progressive key resource object. The possible status values are "INPROGRESS", "DONE" or "FAIL".
+
+        In the case of a failure, an error object is returned with the appropriate error code.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: insertIsheetColumns
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of iSheet in which columns are to be add
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: If the operation is successful, the API returns a progressive key resource object. Using the progressive key, an API user can see the status of an iSheet columns. In case of a failure, an error object is returned with the appropriate error code.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ColumnErrorsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColumnErrorsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ColumnErrorsDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/columns'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/columns'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/columns'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/views/{viewid}:
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update the iSheet view
+      description: 'Edit view to the iSheet
+
+
+        The methods returns a 200 http response in case of a successful request, otherwise an error object is returned.'
+      operationId: updateIsheetView
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: viewid
+        in: path
+        description: Id of the view
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/iSheetView'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/iSheetView'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/iSheetView'
+    delete:
+      tags:
+      - ISheet Admin API
+      summary: To delete the iSheet view
+      description: 'Delete an iSheet view.
+
+
+        The method returns a 200 http response if the section is deleted successfully, otherwise an error response is returned.'
+      operationId: deleteIsheetView
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: viewid
+        in: path
+        description: Id of the iSheet view
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/columns/{columnid}/permissions/status:
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To enable or disable iSheet column permission
+      description: 'This method is use to enable or disable permissions at the iSheet column level.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: enableDisableSheetColumnPermission
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which view permission is to be enable/disable
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: inheritfromisheet
+        in: query
+        description: Inheritfromisheet value can be true/false
+        required: true
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      - name: columnid
+        in: path
+        description: Id of the column for which permission is to be enable/disable
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/sections/{sectionid}:
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To edit the iSheet section
+      description: 'Method used to Edit section to the iSheet.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: editISheetSection
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the section is to be edit
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: sectionid
+        in: path
+        description: Id of the section which is to be edit
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ISheetSectionDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ISheetSectionDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ISheetSectionDBO'
+    delete:
+      tags:
+      - ISheet Admin API
+      summary: To delete iSheet section
+      description: 'Method used to delete a section. A section can only be deleted if there are no columns associated with it.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: deleteISheetSection
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the section is to be delete
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: sectionid
+        in: path
+        description: Id of section is to be delete
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/views/{viewid}/permissions/status:
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To enable or disable iSheet view permission
+      description: 'This method is used to enable/disable permissions at an iSheet view level.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: enableDisableSheetViewPermission
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which view permission is to be enable/disable
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: accesstoallusers
+        in: query
+        description: Accesstoallusers value can be true/false
+        required: true
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      - name: viewid
+        in: path
+        description: Id of view in which is need to enable/disable permission
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/choicecolumnoptions:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the list of iSheet Choice and Score columns
+      description: 'Method to Get Choice And Score columns of an existing iSheet.
+
+        This method is supported in version 8 of the API and above.'
+      operationId: getISheetChoiceANDScoreColumns
+      parameters:
+      - name: isheetid
+        in: path
+        description: Id of iSheet in which columns are to be get
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      responses:
+        '200':
+          description: API will return the list of iSheet Choice and Score columns
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/columns'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/columns'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/columns'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/permissions:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the list of the iSheet permission
+      description: 'Method used to get the list of isheet permissions.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: getIsheetPermissions
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the permission is to be get
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the list of iSheet permissions
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/isheetPermissionsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/isheetPermissionsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/isheetPermissionsDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update the iSheet permission
+      description: 'This method is used to Sets the values based on the information provided at the iSheet level.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: updateSheetPermission
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the permission is to be update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetPermissionsDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetPermissionsDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetPermissionsDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/views/{viewid}/permissions:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the iSheet view permission
+      description: 'This method returns the list of iSheet-view permissions.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: getISheetViewPermissions
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet of view for which the permission is to be get
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: viewid
+        in: path
+        description: Id of the view for which the permission is to be get
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the list of iSeet view permissions
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/iSheetViewPermissionsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/iSheetViewPermissionsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/iSheetViewPermissionsDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update the iSheet view permission
+      description: 'This method set the values based on the information provided.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: updateIsheetViewPermission
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet of view for which the permission is to be update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: viewid
+        in: path
+        description: Id of the view for which the permission is to be update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/iSheetViewPermissionsDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/iSheetViewPermissionsDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/iSheetViewPermissionsDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/permissions/status:
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To enable or disable iSheet permission
+      description: 'This method is used to enable/disable a permission at the iSheet level.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: enableDisableSheetPermission
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the permission is to be enable/disable
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: enablepermissions
+        in: query
+        description: Enable permissions can be true/false
+        required: true
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/columns/{columnid}/permissions:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the list of the iSheet column permission
+      description: 'This method returns the list of iSheet column permissions.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: getIsheetColumnPermissions
+      parameters:
+      - name: isheetid
+        in: path
+        description: Id of the iSheet of column for which the permission is to be get
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: columnid
+        in: path
+        description: Id of the column for which the permission is to be get
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: The API reruns the iSheet column permissions where Usergrouptype 1=USER, 2=GROUP
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/isheetColumnPermissionsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/isheetColumnPermissionsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/isheetColumnPermissionsDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update iSheet column permission
+      description: 'This method set the values based on the information provided.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: updateIsheetColumnPermission
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet of column for which the permission is to be update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: columnid
+        in: path
+        description: Id of the column for which the permission is to be update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetColumnPermissionsDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetColumnPermissionsDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetColumnPermissionsDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/settings:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the iSheet settings
+      description: 'This method is used to get iSheet settings.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: getIsheetSettings
+      parameters:
+      - name: siteid
+        in: query
+        description: Id of the site
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: API will return the list of the iSheet settings
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/isheetSettings'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/isheetSettings'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/isheetSettings'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update the iSheet settings
+      description: 'This method is used to update the iSheet settings.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: updateIsheetSettings
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: Id of the site for which the settings is to be update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/isheetSettings'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/isheetSettings'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/isheetSettings'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/doctemplate/{doctemplateid}:
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To edit the iSheet document template
+      description: This method lets you edit an iSheet document template.
+      operationId: updateSheetDocReport
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: doctemplateid
+        in: path
+        description: Id of doctemplate which is to be update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                reportfile:
+                  type: string
+                  description: Parameter name should be called reportfile and the value for it is the file to be uploaded
+                  format: binary
+                templatename:
+                  type: string
+                  description: Template name
+                templatetype:
+                  type: string
+                  enum:
+                  - SITE_WIDE
+                  - SINGLE_RECORD
+                  description: Template type
+                linkedisheet:
+                  type: string
+                  description: Id of the iSheet - only applicable for templatetype=SINGLE_RECORD
+                linkedviewtype:
+                  type: string
+                  enum:
+                  - '0'
+                  - '1'
+                  description: Linked view type - only applicable for templatetype=SINGLE_RECORD
+                linkedviewid:
+                  type: string
+                  description: 'CSV of isheet view id (multiple view id with '','' separated ). Only applicable for templatetype=SINGLE_RECORD and 0 : All isheet views'
+                generatedocument:
+                  type: string
+                  enum:
+                  - WORD
+                  - PDF
+                  description: Generate document
+                downloaddocument:
+                  type: string
+                  enum:
+                  - '0'
+                  - '1'
+                  description: Download document
+                savetofolder:
+                  type: string
+                  enum:
+                  - '0'
+                  - '1'
+                  description: Save to folder
+                savetospecificfolder:
+                  type: string
+                  description: Id of the folder
+                savetospecificisheetcolumn:
+                  type: string
+                  description: Id of the column. This field only applicable for templatetype=SINGLE_RECORD
+              required:
+              - reportfile
+    delete:
+      tags:
+      - ISheet Admin API
+      summary: To delete an iSheet document template
+      description: 'This API call is used to delete the iSheet document template.
+
+
+        The method has no request parameters or body.'
+      operationId: deleteIsheetDocTemplate
+      parameters:
+      - name: doctemplateid
+        in: path
+        description: Id of the iSheet document template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/columns/{columnid}:
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update the iSheet column
+      description: 'Method to edit a column to an existing iSheet.
+
+        This method is supported in version 3 of the API and above.'
+      operationId: updateIsheetColumn
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: columnid
+        in: path
+        description: Id of iSheet column
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ColumnErrorsDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColumnErrorsDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ColumnErrorsDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/columnDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/columnDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/columnDBO'
+    delete:
+      tags:
+      - ISheet Admin API
+      summary: To delete the iSheet Column
+      description: 'API method to delete an individual column.
+
+
+        DELETE /api/3/isheets/admin/{isheetid}/columns/{columnid}
+
+
+        Name
+
+
+        Type
+
+
+        Description
+
+
+        isheetId
+
+
+        number
+
+
+        Id of the iSheet for which the column is to be deleted
+
+
+        columnid
+
+
+        number
+
+
+        Id of the column to be deleted
+
+
+        To get the status of an iSheet column based on a progressive key
+
+
+        POST /api/3/progressivekeystatus/{progressive_key}
+
+
+        Name
+
+
+        Type
+
+
+        Description
+
+
+        progressive_key
+
+
+        String
+
+
+        Use this key to check the status of your progress. When you first send a delete request, a progressive key is returned in response.
+
+
+        If the operation is successful, the API returns a progressive key resource object with a status of either ''INPROGRESS'', ''DONE'' or ''FAIL''.If there is a failure, an error object is returned with the appropriate error code.'
+      operationId: deleteISheetColumn
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the column is to be deleted
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: columnid
+        in: path
+        description: Id of the column to be deleted
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '201':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/choicelists:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get a list of choice list templates
+      description: 'This method returns list of choice list templates.
+
+        This method is supported in version 8 of the API and above.
+
+
+        API Error code
+
+
+        Error message
+
+
+        Description
+
+
+        137
+
+
+        The limit value is invalid.
+
+
+        Limit value should be a positive integer, -1 for all items
+
+
+        138
+
+
+        The offset value is invalid.
+
+
+        Offset value should be a positive integer, 0 is default value
+
+
+        167
+
+
+        columntype parameter is invalid
+
+
+        Column type values can be choice or 3 or score or 17
+
+
+        168
+
+
+        columntype parameter is required
+
+
+        Column type is required parameter and can''t be empty
+
+
+        169
+
+
+        creator parameter is invalid
+
+
+        Creator parameter can be a single user id or multiple user ids separated by a comma e.g. 6 or 3,4,5'
+      operationId: getChoiceListTemplates
+      parameters:
+      - name: version
+        in: path
+        description: Version of the API
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: columntype
+        in: query
+        description: The type of lists to get, choice or score
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: search
+        in: query
+        description: This returns the matching choice lists by name
+        required: false
+        schema:
+          type: string
+      - name: creator
+        in: query
+        description: This returns a list of choice lists created by user given in the parameter, it accepts comma separated user id(s) of the creators
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The number of items to return in an individual get call, default value is -1 which returns all the values
+        required: false
+        schema:
+          type: string
+          default: '-1'
+      - name: offset
+        in: query
+        description: The starting position of the choice list from when the choice list should be returned, This is to allow pagination
+        required: false
+        schema:
+          type: string
+          default: '0'
+      responses:
+        '200':
+          description: API will return the list of choice list templates
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/choicelists'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/choicelists'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - ISheet Admin API
+      summary: To add a choice list along with its items/values
+      description: 'The add choice list API is used to add a choice list along with its items/values.
+
+
+        API Version: 8
+
+
+        Collaborate Branch: 5.3
+
+
+        Request URI: POST /api/8/isheets/admin/choicelists
+
+
+        API Error code
+
+
+        Error message
+
+
+        Description
+
+
+        167
+
+
+        columntype parameter is invalid
+
+
+        Column type values can be choice or 3 or score or 17.
+
+
+        168
+
+
+        columntype parameter is required
+
+
+        If the choice list column type is empty.
+
+
+        171
+
+
+        The name cannot be blank
+
+
+        If the choice list name is empty.
+
+
+        172
+
+
+        The name cannot be more than 256 characters
+
+
+        If the choice list name exceeds 256 characters.
+
+
+        173
+
+
+        Choice list item(s) or its label should not be empty
+
+
+        If the choice list item(s) is not provided.
+
+
+        174
+
+
+        The name ''Dummy choice'' already exists in the system
+
+
+        If the duplicate choice list name found.
+
+
+        175
+
+
+        The choice option value size must be less than 256 characters
+
+
+        If the choice list item label exceeds 255 chars.
+
+
+        176
+
+
+        Invalid score value ''''. Enter numeric values between -9999.9999 to 9999.9999
+
+
+        If the score value is not within the range -9999.9999 to 9999.9999'
+      operationId: addChoiceListTemplate
+      parameters:
+      - name: version
+        in: path
+        description: Version of the API
+        required: true
+        schema:
+          type: string
+          default: '8'
+      responses:
+        '201':
+          description: API will return the added choice list with id and name.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/choicelist'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/choicelist'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (Invalid endpoint/method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/choicelist'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/choicelist'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/choicelist'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/sortcolumns:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the list of sorted iSheet columns based on column position in ascending…
+      description: 'This method is used to get the list of sorted iSheet columns based on column position in ascending order
+
+
+        Note : As we can see in the UI, the response will display with columns in the correct sequences.'
+      operationId: getSortIsheetColumns
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the list of sorted iSheet columns based on column position in ascending order.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/columns'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/columns'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/columns'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update iSheet columns' position in sorted order
+      description: 'This method is used to update iSheet columns'' position in sorted order.
+
+
+        Parameter Name
+
+
+        Parameter Value
+
+
+        Description
+
+
+        sectionid
+
+
+        number
+
+
+        This parameter query is only applicable if the section is enabled in the iSheet. Once the section is enabled, the columns associated to the section can be re-ordered. Columns that are not associated, cannot be re-ordered.
+
+
+        PUT /api/3/isheets/admin/{isheetid}/sortcolumns?sectionid={sectionid}
+
+
+        Note : The order of the columns in the request API determines the order of the columns in iSheet.'
+      operationId: updateSortIsheetColumns
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: sectionid
+        in: query
+        description: Id of the section
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/columns'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/columns'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/columns'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/doctemplate/{doctemplateid}/download:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To download the iSheet document report (configuration file)
+      description: 'This api is designed for downloading the configuration file (docx, docm) of an iSheet document template
+
+
+        Parameter Name
+
+
+        Parameter Value
+
+
+        Description
+
+
+        doctemplateid
+
+
+        number
+
+
+        Id of isheet document template.
+
+
+        Response : Binary stream of document.
+
+
+        Code
+
+
+        Meaning
+
+
+        200
+
+
+        Document found.
+
+
+        400
+
+
+        Problem with parsing XML or JSON object (Bad Request).
+
+
+        401
+
+
+        Unauthorized.
+
+
+        403
+
+
+        Validation failed/ Forbidden.
+
+
+        404
+
+
+        Document doesn''t exists in the system.
+
+
+        405
+
+
+        Method not allowed (calling api with wrong method).
+
+
+        500
+
+
+        Internal error occured while gettting document content'
+      operationId: downloadSheetDocReport
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: doctemplateid
+        in: path
+        description: Id of the document template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/isheettemplate/{linkedtemplateid}:
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update the imported iSheet template
+      description: 'This method set the values based on the information provided
+
+
+        If the operation is successful the API returns an progressive key resource object.
+
+        And based on this progressive key, you can see the status of the isheet template, otherwise an error object is returned with the appropriate error code.
+
+
+        To get the status of an iSheet template based on a progressive key
+
+
+        POST /api/3/progressivekeystatus/{progressive_key}
+
+
+        Name
+
+
+        Type
+
+
+        Description
+
+
+        progressive_key
+
+
+        String
+
+
+        You can use this key to check the status of your progress. When the first request is sent, a progressive key is returned in response.
+
+
+        If the operation is successful, the API returns a progressive key resource object with status of either ''INPROGRESS'', ''DONE'', or ''FAIL''. If there is a failure, an error object is returned with the appropriate error code.
+
+
+        Note: linkedtemplateid = A new id is generated when an iSheet template is added in the site.'
+      operationId: updateImportedIsheetTemplate
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: linkedtemplateid
+        in: path
+        description: Id of the linked template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '201':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/importISheetTemplateDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/importISheetTemplateDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/importISheetTemplateDBO'
+    delete:
+      tags:
+      - ISheet Admin API
+      summary: To delete the imported iSheet template
+      description: 'Use this method to delete iSheet templates from a site
+
+
+        If the operation is successful, the API returns a progressive key resource object. And based on this progressive key, you can see the status of the iSheet template, otherwise an error object is returned with the appropriate error code.
+
+
+        To get the status of an iSheet template based on a progressive key
+
+
+        POST /api/3/progressivekeystatus/{progressive_key}
+
+
+        Name
+
+
+        Type
+
+
+        Description
+
+
+        progressive_key
+
+
+        String
+
+
+        Use this key to check the status of your progress. When the first request is sent, a progressive key is returned in the response.
+
+
+        If the operation is successful, the API returns a progressive key resource object with status of either ''INPROGRESS'', ''DONE'', or ''FAIL''. If there is a failure, an error object is returned with the appropriate error code.
+
+
+        Note: linkedtemplateid = A new id is generated when an iSheet template is added in the site.'
+      operationId: deleteImportedIsheetTemplate
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: linkedtemplateid
+        in: path
+        description: Id of the linked template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/choicelists/{choicelistid}:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get choice list template
+      description: 'This API will get individual choice list.
+
+
+        GET /api/{version}/isheets/admin/choicelists/{choicelistid}
+
+
+        Parameter Name
+
+
+        Parameter Value
+
+
+        Description
+
+
+        choicelistid
+
+
+        number
+
+
+        Id of the choice list is to be get.'
+      operationId: getChoiceListTemplate
+      parameters:
+      - name: version
+        in: path
+        description: Version of the API
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: choicelistid
+        in: path
+        description: Id of the choice list template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the choice list templates
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/choicelist'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/choicelist'
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update a choice list
+      description: 'The update choice list API is used to rename a choice list.
+
+
+        API Version: 8
+
+
+        Collaborate Branch: 5.3
+
+
+        Request URI: PUT /api/8/isheets/admin/choicelists/{choicelistid}
+
+
+        API Error code
+
+
+        Error message
+
+
+        Description
+
+
+        171
+
+
+        The name cannot be blank
+
+
+        If the choice list name is empty.
+
+
+        172
+
+
+        The name cannot be more than 256 characters
+
+
+        If the choice list name exceeds 256 characters.
+
+
+        174
+
+
+        The name ''Dummy choice'' already exists in the system
+
+
+        If the duplicate choice list name found.'
+      operationId: updateChoiceListTemplate
+      parameters:
+      - name: version
+        in: path
+        description: Version of the API
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: choicelistid
+        in: path
+        description: Id of the choice list template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: If update successfully, The API will return the 200 response code without any message.
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (Invalid endpoint/method)
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/choicelist'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/choicelist'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/choicelist'
+    delete:
+      tags:
+      - ISheet Admin API
+      summary: To delete choice list template
+      description: 'This API will delete the existing choice list.
+
+
+        DELETE /api/{version}/isheets/admin/choicelists/{choicelistid}
+
+
+        Parameter Name
+
+
+        Parameter Value
+
+
+        Description
+
+
+        choicelistid
+
+
+        number
+
+
+        Id of the choice list is to be deleted.
+
+
+        Note:
+
+
+        System admin or site admin of any site can able to access this API for delete choice list.
+
+
+        If user have system admin role, he/she can able to delete any choice list.
+
+
+        If user have site admin role, he/she can able to delete only own created choice list.'
+      operationId: deleteChoiceListTemplate
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '8'
+      - name: choicelistid
+        in: path
+        description: Id of the choice list template
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/isheettemplate/{templateid}:
+    post:
+      tags:
+      - ISheet Admin API
+      summary: To import the iSheet templatein a site
+      description: 'Use this method to import an iSheet template to a site
+
+
+        If the operation is successful the API returns a progressive key resource object . And based on this progressive key, can see the status of an isheet template otherwise an error object is returned with the appropriate error code.
+
+
+        To get the status of an iSheet template based on a progressive key
+
+
+        POST /api/3/progressivekeystatus/{progressive_key}
+
+
+        Name
+
+
+        Type
+
+
+        Description
+
+
+        progressive_key
+
+
+        String
+
+
+        You can use this key to check the status of your progress. When the first request is sent, a progressive key is returned in response.
+
+
+        If the operation is successful, the API returns a progressive key resource object with status of either ''INPROGRESS'', ''DONE'', or ''FAIL''. If there is a failure, an error object is returned with the appropriate error code.
+
+
+        Note: templateid is the id of the templates imported into the site from system admin'
+      operationId: importIsheetTemplate
+      parameters:
+      - name: templateid
+        in: path
+        description: Id of the template
+        required: true
+        schema:
+          type: string
+      - name: siteid
+        in: query
+        description: Id of the site the template will be imported to
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      responses:
+        '201':
+          description: This key is returned when a long-running operation is called and can be used to find the final status of the operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ProgressiveKeyDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/importISheetTemplateDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/importISheetTemplateDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/importISheetTemplateDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/{isheetid}/sortviews:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: TO get the list of iSheet views sorted based on the position in ascending order
+      description: 'This method is used to get the list of iSheet views sorted based on the position in ascending order
+
+
+        Note : As we can see in the UI, the response will display with iSheet views in the correct sequences.'
+      operationId: getSortIsheetViews
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet for which the views are to be obtained or sort
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the list of iSheet views sorted based on the position in ascending order
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetViews'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ISheetViews'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ISheetViews'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - ISheet Admin API
+      summary: To update iSheet views' position in sorted order
+      description: 'This method is used to update iSheet views'' position in sorted order.
+
+
+        PUT /api/3/isheets/admin/{isheetid}/sortviews
+
+
+        Note : Need to manage sequences in request xml. we will refer this sequence for update. First iSheet view will be set as first and second will be set for second iSheet view.'
+      operationId: updateSortIsheetViews
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: isheetid
+        in: path
+        description: Id of the iSheet
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The API will return the 200 response code without any message
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ISheetViews'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ISheetViews'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ISheetViews'
+    servers:
+    - url: /monumentuat/api
+  /{version}/isheets/admin/isheettemplate/linkedtemplatelist:
+    get:
+      tags:
+      - ISheet Admin API
+      summary: To get the linked iSheet templates of the site
+      description: 'This method is used to get a list of iSheet templates which are imported in a site
+
+
+        Parameter Name
+
+
+        Parameter Value
+
+
+        Description
+
+
+        siteid
+
+
+        number
+
+
+        The id of the site to get list of linked iSheet templates.
+
+
+        Note : As we can see in the UI, the response will display with iSheet template in the correct sequences.'
+      operationId: getLinkedtemplateList
+      parameters:
+      - name: version
+        in: path
+        description: Version of the api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: siteid
+        in: query
+        description: Id of the site for which the template are to be obtained
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: API will return the list of imported iSheet reports.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ImportISheetTemplatesDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportISheetTemplatesDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ImportISheetTemplatesDBO'
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling API endpoint with the wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    choice:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        score:
+          type: string
+        color:
+          type: string
+        imageid:
+          type: integer
+          format: int32
+      xml:
+        name: choice
+    QaDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    LookupsDBO:
+      type: object
+      properties:
+        lookup:
+          type: array
+          items:
+            xml:
+              name: lookup
+            $ref: '#/components/schemas/LookupDBO'
+      xml:
+        name: lookups
+    BidderSiteDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+        advancedqapermission:
+          type: string
+    IntegrationUserDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        userid:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        lastname:
+          type: string
+        practicegroup:
+          type: string
+        langcode:
+          type: string
+        localeID:
+          type: string
+        publicprofile:
+          type: string
+        pwpid:
+          type: string
+        usertypeid:
+          type: string
+        systemuser:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        address:
+          $ref: '#/components/schemas/Address'
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        img:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        externalid:
+          type: string
+        jobtitle:
+          type: string
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        specialities:
+          type: string
+        title:
+          type: string
+        goesby:
+          type: string
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        bio:
+          type: string
+        dateOfBirth:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+        sourcetype:
+          type: string
+        orgid:
+          type: string
+        ifpartner:
+          type: string
+        emaildomain:
+          type: string
+        invitationsent:
+          type: string
+        createdby:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        lastlogindate:
+          type: string
+        invalidlogins:
+          type: string
+        publicwebsiteprofileid:
+          type: string
+        resetpassworddate:
+          type: string
+        avatar:
+          type: string
+        followingcount:
+          type: integer
+          format: int32
+        followercount:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        sites:
+          $ref: '#/components/schemas/sites'
+        role:
+          type: string
+        orgName:
+          type: string
+      xml:
+        name: user
+    site:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sitename:
+          type: string
+        sitetemplateID:
+          type: integer
+          format: int32
+          xml:
+            name: sitetemplateid
+        role:
+          type: string
+        sitedescription:
+          type: string
+        enabledmodules:
+          type: string
+        sitefolderID:
+          type: string
+        folder:
+          $ref: '#/components/schemas/Folder'
+        sitefolderpermission:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        adminnote:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+        createddate:
+          type: string
+        archiveddate:
+          type: string
+        clientno:
+          type: string
+        matterno:
+          type: string
+        landingpage:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        maxpagecount:
+          type: string
+        siteowner:
+          $ref: '#/components/schemas/UserDBO'
+        sitehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModule'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        csvSiteCategory:
+          type: string
+        biddersite:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        sitenametranslations:
+          $ref: '#/components/schemas/translations'
+        siteNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        siteLogoName:
+          type: string
+        siteLogoFileSize:
+          type: integer
+          format: int64
+        siteLogoHeight:
+          type: integer
+          format: int32
+        siteLogoWidth:
+          type: integer
+          format: int32
+        siteStatus:
+          type: integer
+          format: int32
+        applySiteTerms:
+          type: integer
+          format: int32
+        siteTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        nextLoginSiteTerms:
+          type: integer
+          format: int32
+        defaultSiteTermsEnable:
+          type: integer
+          format: int32
+        advancedQAPermission:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        siteLabelDisplay:
+          type: string
+        allowSiteAdministration:
+          type: integer
+          format: int32
+        siteLevelPasswordEnable:
+          type: integer
+          format: int32
+        siteLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        sitePassword:
+          type: string
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        applySiteHomePage:
+          type: integer
+          format: int32
+        siteHomePage:
+          type: string
+        siteHomePageType:
+          type: integer
+          format: int32
+        nextLoginSiteHomePage:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        siteCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        siteModuleID:
+          type: integer
+          format: int32
+        icalSecurity:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        announcementMLJSON:
+          type: string
+        siteRestrictionType:
+          $ref: '#/components/schemas/SiteRestrictionType'
+        enableDocumentRedaction:
+          type: boolean
+          xml:
+            name: enabledocumentredaction
+        mysite:
+          type: boolean
+    IntegrationResponseDBO:
+      type: object
+      properties:
+        integrationResponseUsersObject:
+          $ref: '#/components/schemas/IntegrationResponseUsersObject'
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+    Inbox:
+      type: object
+      properties:
+        enable:
+          type: string
+        accountname:
+          type: string
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    Categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDBO'
+    JoinConditionsDBO:
+      type: object
+      properties:
+        joincondition:
+          type: array
+          items:
+            $ref: '#/components/schemas/JoinConditionDBO'
+      xml:
+        name: joinconditions
+    FileModule:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showsitemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    ColumnErrorsDBO:
+      type: object
+      properties:
+        column:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnErrorDBO'
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+      xml:
+        name: columns
+    Folder:
+      type: object
+      required:
+      - foldername
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        dmsfolderid:
+          type: string
+          xml:
+            attribute: true
+        permission:
+          type: string
+          xml:
+            attribute: true
+        foldername:
+          type: string
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/Folder'
+        child:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: folder
+    ChoiceListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        label:
+          type: string
+        score:
+          type: number
+        color:
+          type: string
+        imageid:
+          type: integer
+          format: int32
+      xml:
+        name: item
+    ContactUSDBO:
+      type: object
+      properties:
+        value:
+          type: string
+      xml:
+        name: values
+    ColumnTypeDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        alias:
+          type: string
+      xml:
+        name: type
+    Attachment:
+      type: object
+      properties:
+        file:
+          type: string
+        name:
+          type: string
+        order:
+          type: string
+        id:
+          type: integer
+          format: int32
+        extension:
+          type: string
+        parentfolderid:
+          type: integer
+          format: int32
+        filehttplink:
+          type: string
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+        displayname:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+      xml:
+        name: attachment
+    ISheetSectionDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+      xml:
+        name: section
+    ModuleDBO:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeDBO'
+        activity:
+          $ref: '#/components/schemas/ActivityDBO'
+        document:
+          $ref: '#/components/schemas/DocumentDBO'
+        blog:
+          $ref: '#/components/schemas/BlogDBO'
+        wiki:
+          $ref: '#/components/schemas/WikiDBO'
+        task:
+          $ref: '#/components/schemas/TaskDBO'
+        event:
+          $ref: '#/components/schemas/EventDBO'
+        isheet:
+          $ref: '#/components/schemas/ISheetDBO'
+        qa:
+          $ref: '#/components/schemas/QaDBO'
+        people:
+          $ref: '#/components/schemas/PeopleDBO'
+    columns:
+      type: object
+      properties:
+        column:
+          type: array
+          items:
+            $ref: '#/components/schemas/columnDBO'
+      xml:
+        name: columns
+    isheetSettings:
+      type: object
+      properties:
+        landingsheetid:
+          type: string
+      xml:
+        name: isheetsettings
+    choicelists:
+      type: object
+      properties:
+        totalcount:
+          type: integer
+          format: int32
+        totaldisplay:
+          type: integer
+          format: int32
+        choicelist:
+          type: array
+          items:
+            xml:
+              name: choicelist
+            $ref: '#/components/schemas/choicelist'
+      xml:
+        name: choicelists
+    sites:
+      type: object
+      properties:
+        site:
+          type: array
+          items:
+            $ref: '#/components/schemas/site'
+    DMSDocumentDBO:
+      type: object
+      properties:
+        dmsdocid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmseditdate:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmsversion:
+          type: string
+      xml:
+        name: dms
+    rawDataDBO:
+      type: object
+      properties:
+        text:
+          type: array
+          items:
+            type: string
+        linkDisplayName:
+          type: string
+        linkDisplayURL:
+          type: string
+      xml:
+        name: rawData
+    column:
+      type: object
+      properties:
+        sequence:
+          type: string
+          xml:
+            attribute: true
+        rawData:
+          $ref: '#/components/schemas/rawDataDBO'
+        title:
+          type: string
+        type:
+          type: string
+        mendatory:
+          type: boolean
+        columnID:
+          type: integer
+          format: int32
+      xml:
+        name: column
+    ChoiceListItems:
+      type: object
+      properties:
+        item:
+          type: array
+          items:
+            xml:
+              name: item
+            $ref: '#/components/schemas/ChoiceListItem'
+      xml:
+        name: items
+    MetadataListDBO:
+      type: object
+      properties:
+        metadataname:
+          type: array
+          items:
+            type: string
+        metadatavalue:
+          type: array
+          items:
+            type: string
+    ItemErrorDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        columns:
+          $ref: '#/components/schemas/ColumnErrorsDBO'
+        itemid:
+          type: string
+        externalid:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+        successdeletedcount:
+          type: integer
+          format: int32
+        failurecount:
+          type: integer
+          format: int32
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+      xml:
+        name: item
+    ISheetDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    DocumentDBO:
+      type: object
+      properties:
+        documentname:
+          type: string
+          xml:
+            name: filename
+        dmsVersion:
+          type: string
+        notification:
+          type: string
+          example: E.g. 1/2/3
+        folderID:
+          type: string
+        documentID:
+          type: string
+          xml:
+            name: fileid
+        batchID:
+          type: string
+        status:
+          type: string
+        documentKey:
+          type: string
+        dmsDocumentDBO:
+          xml:
+            name: dms
+          $ref: '#/components/schemas/DMSDocumentDBO'
+        enable:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        versionid:
+          type: integer
+          format: int32
+        versionnote:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        type:
+          type: string
+        originaltype:
+          type: string
+        icon:
+          type: string
+        commentscount:
+          type: integer
+          format: int32
+        likescount:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/TagsDBO'
+        location:
+          type: string
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        siteid:
+          type: integer
+          format: int32
+        parentfolderid:
+          type: integer
+          format: int32
+        error:
+          type: string
+        size:
+          type: integer
+          format: int64
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: file
+    DataDBO:
+      type: object
+      properties:
+        item:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemDBO'
+      xml:
+        name: data
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    GroupsDBO:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            type: string
+    ExperiencesDBO:
+      type: object
+      properties:
+        experience:
+          type: array
+          items:
+            type: string
+    Emailmetadata:
+      type: object
+      properties:
+        enable:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailmetadataallfolder:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailfrom:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailto:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailcc:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailsent:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailreceived:
+          type: string
+          enum:
+          - TRUE/FALSE
+    ISheetSectionsDBO:
+      type: object
+      properties:
+        section:
+          type: array
+          items:
+            xml:
+              name: section
+            $ref: '#/components/schemas/ISheetSectionDBO'
+      xml:
+        name: sections
+    ColumnTypesDBO:
+      type: object
+      properties:
+        type:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnTypeDBO'
+      xml:
+        name: columntypes
+    FoldersDBO:
+      type: object
+      properties:
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/FolderDBO'
+      xml:
+        name: folders
+    Address:
+      type: object
+      properties:
+        addressid:
+          type: string
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postCode:
+          type: string
+        knownas:
+          type: string
+    ProgressiveKeyDBO:
+      type: object
+      properties:
+        progressivekey:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+        progressivekeystatus:
+          type: string
+        userid:
+          type: integer
+          format: int32
+        responsebody:
+          type: string
+        message:
+          type: string
+        messagecode:
+          type: string
+        integrationResponseDBO:
+          $ref: '#/components/schemas/IntegrationResponseDBO'
+        columns:
+          $ref: '#/components/schemas/ColumnErrorsDBO'
+        items:
+          $ref: '#/components/schemas/ItemErrorsDBO'
+        importisheettemplate:
+          $ref: '#/components/schemas/importISheetTemplateDBO'
+        error:
+          $ref: '#/components/schemas/ErrorDBO'
+        contentType:
+          type: string
+        failedEntities:
+          type: integer
+          format: int32
+        downloadlink:
+          type: string
+        attachment:
+          $ref: '#/components/schemas/Attachment'
+        link:
+          type: string
+      xml:
+        name: progressivekeyresponse
+    LocationDBO:
+      type: object
+      properties:
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postcode:
+          type: string
+    TaskDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        timelineview:
+          type: string
+    HeadDBO:
+      type: object
+      properties:
+        headColumn:
+          type: array
+          items:
+            $ref: '#/components/schemas/HeadColumnDBO'
+      xml:
+        name: headColumn
+    DocumentsDBO:
+      type: object
+      properties:
+        document:
+          type: array
+          items:
+            xml:
+              name: document
+            $ref: '#/components/schemas/DocumentDBO'
+      xml:
+        name: documents
+    ISheetTemplateParameterGroup:
+      type: object
+      properties:
+        templateruleid:
+          type: integer
+          format: int32
+          xml:
+            attribute: true
+        templateparameter:
+          type: array
+          items:
+            xml:
+              name: templateparameter
+            $ref: '#/components/schemas/ISheetTemplateParameter'
+      xml:
+        name: templateparametergroup
+    CategoryDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: CategoryDBO
+    HeadColumnDBO:
+      type: object
+      properties:
+        columnValue:
+          type: string
+        sequence:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: headcolumn
+    TagsDBO:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            type: string
+    SiteRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedsite:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    ISheetAccessPermissionDBO:
+      type: object
+      properties:
+        own:
+          type: string
+        thisentity:
+          type: string
+        all:
+          type: string
+    ViewFilter:
+      type: object
+      properties:
+        row:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterRow'
+      xml:
+        name: viewfilter
+    WikiDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ISheetViews:
+      type: object
+      properties:
+        isheetview:
+          type: array
+          items:
+            $ref: '#/components/schemas/iSheetView'
+      xml:
+        name: isheetviews
+    ContactUS:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactUSDBO'
+        type:
+          type: string
+      xml:
+        name: contactus
+    FilterRow:
+      type: object
+      properties:
+        rowid:
+          type: integer
+          format: int32
+        columnid:
+          type: integer
+          format: int32
+        operatorid:
+          type: integer
+          format: int32
+        oprand:
+          type: string
+        logicaltype:
+          type: string
+        sheetfiltervaluetypeid:
+          type: string
+        displaytype:
+          type: string
+        sourceColumnId:
+          type: integer
+          format: int32
+        scoreConditionTypeid:
+          type: integer
+          format: int32
+      xml:
+        name: row
+    ActivityDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        microblog:
+          type: string
+    isheetDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        accesstype:
+          type: string
+        type:
+          type: string
+        viewlink:
+          type: string
+        allowsections:
+          type: string
+        allowlookup:
+          type: string
+        displayisheet:
+          type: string
+        searchasdefaultview:
+          type: string
+        enableversion:
+          type: string
+        enablesheetalerter:
+          type: string
+        alertercondition:
+          type: string
+        overrideitemmodifieddate:
+          type: string
+        enablebulkinsertupdate:
+          type: string
+        fielddescriptions:
+          type: string
+        enablerowlocking:
+          type: string
+        setcharlimittruncatemultilinetextenabled:
+          type: string
+        setcharlimittruncatemultilinetextval:
+          type: string
+        allowchoicelistvaluesforreuse:
+          type: string
+        allowscorelistvaluesforreuse:
+          type: string
+        columns:
+          $ref: '#/components/schemas/columns'
+        recordcount:
+          type: string
+          xml:
+            attribute: true
+        metadata:
+          $ref: '#/components/schemas/MetaDataDBO'
+        head:
+          $ref: '#/components/schemas/HeadDBO'
+        data:
+          $ref: '#/components/schemas/DataDBO'
+      xml:
+        name: isheet
+    isheetColumnPermissionsDBO:
+      type: object
+      properties:
+        usergrouptype:
+          type: integer
+          format: int32
+          xml:
+            attribute: true
+        ispermissionenable:
+          type: integer
+          format: int32
+        sourcecolumnid:
+          type: integer
+          format: int32
+        isheetcolumnpermission:
+          type: array
+          items:
+            xml:
+              name: isheetcolumnpermission
+            $ref: '#/components/schemas/ISheetColumnPermissionDBO'
+      xml:
+        name: isheetcolumnpermissions
+    isheetPermissionsDBO:
+      type: object
+      properties:
+        usergrouptype:
+          type: string
+          xml:
+            attribute: true
+        ispermissionenable:
+          type: integer
+          format: int32
+        isheetpermission:
+          type: array
+          items:
+            $ref: '#/components/schemas/ISheetPermissionDBO'
+        sourcesheetid:
+          type: integer
+          format: int32
+      xml:
+        name: isheetpermissions
+    columnDBO:
+      type: object
+      required:
+      - name
+      - type
+      properties:
+        columnid:
+          type: integer
+          format: int32
+        name:
+          type: string
+          example: test
+          description: any valid name
+        type:
+          type: integer
+          format: int32
+          example: Type of the column, column types are obtained from a call to the column types API(api/3/isheets/columntypes)
+          description: '1'
+        systemgeneratedtype:
+          type: string
+        section:
+          type: integer
+          format: int32
+        description:
+          type: string
+        addtodefaultview:
+          type: string
+        columnconditionstate:
+          type: string
+        columnconditions:
+          $ref: '#/components/schemas/columnConditions'
+        columnspecificdetail:
+          $ref: '#/components/schemas/columnSpecificDetail'
+        sequence:
+          type: string
+          xml:
+            attribute: true
+        attributecolumnid:
+          type: string
+          xml:
+            attribute: true
+        rawdata:
+          $ref: '#/components/schemas/rawData'
+        colViewPosition:
+          type: integer
+          format: int32
+        columntype:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        modifiedDate:
+          type: string
+          format: date-time
+        injectReferenceColumn:
+          type: integer
+          format: int32
+        parentColumnID:
+          type: integer
+          format: int32
+        reusecolumnidfromisheet:
+          type: integer
+          format: int32
+          example: '{instance}/api/8/isheets/admin/{isheetid}/choicecolumnoptions'
+          description: The id of the isheet column (Optional). This param is only for add/update isheet column API. A user can set the choice/score column id for which s(he) wants the items to set into the specified iSheet column in the request body. A user can get the id of column using API.
+        choicelistid:
+          type: integer
+          format: int32
+          example: '{instance}/api/8/isheets/admin/choicelists?columntype=3 or 17'
+          description: The id of the choice list (Optional). This param is only for add/update isheet column API. Using the choice list id a user can fetch the choice/score items to save it into the specified iSheet column in the request body. A user can get the id of choice list using API.
+        sourceSheetID:
+          type: integer
+          format: int32
+      xml:
+        name: column
+    ItemDBO:
+      type: object
+      properties:
+        externalID:
+          type: string
+          xml:
+            attribute: true
+        itemID:
+          type: string
+          xml:
+            attribute: true
+        column:
+          type: array
+          items:
+            $ref: '#/components/schemas/column'
+      xml:
+        name: item
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ISheetTemplateParameterGroups:
+      type: object
+      properties:
+        templateparametergroup:
+          type: array
+          items:
+            xml:
+              name: templateparametergroup
+            $ref: '#/components/schemas/ISheetTemplateParameterGroup'
+      xml:
+        name: templateparametergroups
+    IntegrationResponseUsersObject:
+      type: object
+      properties:
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationUserDBO'
+      xml:
+        name: users
+    iSheetView:
+      type: object
+      properties:
+        viewid:
+          type: integer
+          format: int32
+        title:
+          type: string
+        markasdefault:
+          type: integer
+          format: int32
+        emailview:
+          type: integer
+          format: int32
+        columns:
+          $ref: '#/components/schemas/columns'
+        viewsortorder:
+          $ref: '#/components/schemas/ViewSortOrder'
+        viewfilter:
+          $ref: '#/components/schemas/ViewFilter'
+        sourceSheetID:
+          type: integer
+          format: int32
+        allowInlineEditing:
+          type: string
+      xml:
+        name: isheetview
+    PeopleDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ItemErrorsDBO:
+      type: object
+      properties:
+        item:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemErrorDBO'
+        failedEntities:
+          type: integer
+          format: int32
+        successEntities:
+          type: integer
+          format: int32
+      xml:
+        name: items
+    HomeDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ISheetTemplateParameter:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        data:
+          type: string
+      xml:
+        name: templateparameter
+    choicelist:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        columntype:
+          type: string
+        createdby:
+          type: integer
+          format: int32
+        createddate:
+          type: string
+        items:
+          $ref: '#/components/schemas/ChoiceListItems'
+      xml:
+        name: choicelist
+    ColumnErrorDBO:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        columnid:
+          type: integer
+          format: int32
+        name:
+          type: string
+        status:
+          type: string
+        statuscode:
+          type: string
+        message:
+          type: string
+      xml:
+        name: column
+    ImportISheetTemplatesDBO:
+      type: object
+      properties:
+        importisheettemplate:
+          type: array
+          items:
+            xml:
+              name: importisheettemplate
+            $ref: '#/components/schemas/importISheetTemplateDBO'
+      xml:
+        name: importisheettemplates
+    columnConditions:
+      type: object
+      properties:
+        row:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterRow'
+      xml:
+        name: columnconditions
+    ISheetViewPermissionDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        view:
+          type: string
+        print:
+          type: string
+        export:
+          type: string
+      xml:
+        name: isheetviewpermission
+    NameValueLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    rawData:
+      type: object
+      properties:
+        value:
+          type: string
+        choices:
+          $ref: '#/components/schemas/choices'
+        date:
+          type: string
+        time:
+          type: string
+        linkdisplayname:
+          type: string
+        linkdisplayurl:
+          type: string
+        lookups:
+          $ref: '#/components/schemas/LookupsDBO'
+        folders:
+          $ref: '#/components/schemas/FoldersDBO'
+        documents:
+          $ref: '#/components/schemas/DocumentsDBO'
+        fromdate:
+          type: string
+        todate:
+          type: string
+        attachments:
+          $ref: '#/components/schemas/AttachmentsDBO'
+        isheetitems:
+          $ref: '#/components/schemas/ISheetItemsDBO'
+      xml:
+        name: rawdata
+    ISheetDocTemplatesDBO:
+      type: object
+      properties:
+        isheetdoctemplate:
+          type: array
+          items:
+            xml:
+              name: isheetdoctemplate
+            $ref: '#/components/schemas/ISheetDocTemplateDBO'
+      xml:
+        name: isheetdoctemplates
+    ISheetDocTemplateDBO:
+      type: object
+      properties:
+        isheetdoctemplateid:
+          type: integer
+          format: int32
+        templatename:
+          type: string
+        templatetype:
+          type: string
+        linkedisheet:
+          type: string
+        linkedviewtype:
+          type: string
+        linkedviewid:
+          type: string
+        reportfile:
+          type: string
+          format: binary
+        generatedocument:
+          type: string
+        downloaddocument:
+          type: string
+        savetofolder:
+          type: string
+        savetospecificfolder:
+          type: string
+        savetospecificisheetcolumn:
+          type: string
+      xml:
+        name: isheetdoctemplate
+    SortOrder:
+      type: object
+      properties:
+        columnid:
+          type: string
+          xml:
+            attribute: true
+        ordertype:
+          type: string
+          xml:
+            attribute: true
+        sortposition:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: sortorder
+    sheetDBO:
+      type: object
+      properties:
+        metaData:
+          $ref: '#/components/schemas/MetaDataDBO'
+        head:
+          $ref: '#/components/schemas/HeadDBO'
+        data:
+          $ref: '#/components/schemas/DataDBO'
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        type:
+          type: string
+        templateID:
+          type: integer
+          format: int32
+        isheetRecordID:
+          type: integer
+          format: int32
+      xml:
+        name: sheet
+    PermissionDBO:
+      type: object
+      properties:
+        view:
+          type: integer
+          format: int32
+        edit:
+          type: integer
+          format: int32
+        delete:
+          type: integer
+          format: int32
+        addEditAllFiles:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
+        viewAllFiles:
+          type: integer
+          format: int32
+    FolderDBO:
+      type: object
+      properties:
+        folderid:
+          type: string
+      xml:
+        name: folder
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    JoinConditionDBO:
+      type: object
+      properties:
+        currentsheetcolumnid:
+          type: integer
+          format: int32
+        targetsheetcolumnid:
+          type: integer
+          format: int32
+      xml:
+        name: joincondition
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    choices:
+      type: object
+      properties:
+        choice:
+          type: array
+          items:
+            $ref: '#/components/schemas/choice'
+      xml:
+        name: choices
+    LookupDBO:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+      xml:
+        name: lookup
+    columnSpecificDetail:
+      type: object
+      properties:
+        defaultvalue:
+          type: string
+        columnwidth:
+          type: string
+        sheetname:
+          type: string
+        sitename:
+          type: string
+        mandatory:
+          type: string
+        allowsearch:
+          type: string
+        maxchars:
+          type: integer
+          format: int32
+        allowfieldfromanotherisheet:
+          type: string
+        allowrichhtmltext:
+          type: string
+        numberoflines:
+          type: integer
+          format: int32
+        displaymethod:
+          type: string
+        includeotheroption:
+          type: string
+        singleormultileselectioninsearch:
+          type: string
+        choices:
+          $ref: '#/components/schemas/choices'
+        includeinalertpreferences:
+          type: string
+        min:
+          type: string
+        max:
+          type: string
+        decimalplaces:
+          type: integer
+          format: int32
+        showthousandseparators:
+          type: string
+        showaspercentage:
+          type: string
+        formattype:
+          type: string
+        dateformat:
+          type: string
+        defaultdateandtime:
+          type: string
+        sheetlookup:
+          type: string
+        fielddisplay:
+          type: string
+        allowmultipleusers:
+          type: string
+        methodtype:
+          type: string
+        sheetids:
+          type: string
+        allowuserstorenamelinks:
+          type: string
+        sheetid:
+          type: integer
+          format: int32
+        columnids:
+          type: string
+        viewid:
+          type: integer
+          format: int32
+        allowmultiplevalues:
+          type: string
+        restrictdelete:
+          type: string
+        displaycolumnnameprefix:
+          type: string
+        linkname:
+          type: string
+        joinconditions:
+          $ref: '#/components/schemas/JoinConditionsDBO'
+        formula:
+          type: string
+        startvalue:
+          type: integer
+          format: int32
+        prefix:
+          type: string
+        postfix:
+          type: string
+        minlength:
+          type: integer
+          format: int32
+        lookupglossarysheetid:
+          type: integer
+          format: int32
+        lookupglossarysheetviewid:
+          type: integer
+          format: int32
+        width:
+          type: integer
+          format: int32
+        otherscorevalue:
+          type: string
+        importdatafromexternalsource:
+          type: string
+        analysisengine:
+          type: string
+        allowInlineEditing:
+          type: string
+      xml:
+        name: columnspecificdetail
+    ISheetItemsDBO:
+      type: object
+      properties:
+        isheetitem:
+          type: array
+          items:
+            xml:
+              name: isheetitem
+            $ref: '#/components/schemas/ISheetItemDBO'
+      xml:
+        name: isheetitems
+    ISheetsDBO:
+      type: object
+      properties:
+        isheet:
+          type: array
+          items:
+            xml:
+              name: isheet
+            $ref: '#/components/schemas/sheetDBO'
+      xml:
+        name: isheets
+    ISheetColumnPermissionDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        view:
+          type: string
+        edit:
+          type: string
+      xml:
+        name: isheetcolumnpermission
+    Link:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValueLink'
+    ISheetPermissionDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        isheetview:
+          $ref: '#/components/schemas/ISheetAccessPermissionDBO'
+        isheetedit:
+          $ref: '#/components/schemas/ISheetAccessPermissionDBO'
+      xml:
+        name: isheetpermission
+    AttachmentsDBO:
+      type: object
+      properties:
+        attachment:
+          type: array
+          items:
+            xml:
+              name: attachment
+            $ref: '#/components/schemas/Attachment'
+      xml:
+        name: attachments
+    RawSiteSize:
+      type: object
+      properties:
+        activedocumentsize:
+          type: integer
+          format: int64
+        deleteddocumentsize:
+          type: integer
+          format: int64
+        totalsize:
+          type: integer
+          format: int64
+    ViewSortOrder:
+      type: object
+      properties:
+        sortorder:
+          type: array
+          items:
+            $ref: '#/components/schemas/SortOrder'
+      xml:
+        name: viewsortorder
+    importISheetTemplateDBO:
+      type: object
+      properties:
+        linkedtemplateid:
+          type: integer
+          format: int32
+        aliasname:
+          type: string
+        linkedisheet:
+          type: string
+        importdata:
+          type: string
+        appendisheetname:
+          type: string
+        templateparametergroups:
+          $ref: '#/components/schemas/ISheetTemplateParameterGroups'
+        templateSheetIdMap:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        templateId:
+          type: integer
+          format: int32
+        templateTitle:
+          type: string
+      xml:
+        name: importisheettemplate
+    categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+      xml:
+        name: categories
+    ISheetItemDBO:
+      type: object
+      properties:
+        recordid:
+          type: string
+        linkname:
+          type: string
+        apilink:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: isheetitem
+    MetaDataDBO:
+      type: object
+      properties:
+        siteName:
+          type: string
+        sheetName:
+          type: string
+        siteid:
+          type: string
+        sheetid:
+          type: string
+      xml:
+        name: metaData
+    iSheetViewPermissionsDBO:
+      type: object
+      properties:
+        usergrouptype:
+          type: string
+          xml:
+            attribute: true
+        ispermissionenable:
+          type: integer
+          format: int32
+        isheetviewpermission:
+          type: array
+          items:
+            $ref: '#/components/schemas/ISheetViewPermissionDBO'
+        sourceviewid:
+          type: integer
+          format: int32
+      xml:
+        name: isheetviewpermissions
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

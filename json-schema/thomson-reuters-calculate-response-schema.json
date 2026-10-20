@@ -1,0 +1,1220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-calculate-response-schema.json",
+  "title": "CalculateResponse",
+  "description": "Tax response from the ONESOURCE Determination Engine.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-indirect-tax-determination-rest-tax-service-openapi.yml#/components/schemas/CalculateResponse",
+  "allOf": [
+    {
+      "$ref": "#/$defs/TaxResponse"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "documents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CalculateDocumentResponse"
+          },
+          "minItems": 1,
+          "description": "The documents block serves as the container for an individual document. Each payload can have one or more documents."
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "AccrualAmount": {
+      "type": "object",
+      "description": "This is the amount of tax that needs to be accrued by the buyer based on the accrual method.",
+      "properties": {
+        "authorityAmount": {
+          "type": "number",
+          "description": "Accrued tax amount rounded in authority currency."
+        },
+        "unroundedAuthorityAmount": {
+          "type": "number",
+          "description": "Accrued tax amount un-rounded in authority currency."
+        },
+        "documentAmount": {
+          "type": "number",
+          "description": "Accrued tax amount rounded in document currency."
+        },
+        "unroundedDocumentAmount": {
+          "type": "number",
+          "description": "Accrued tax amount un-rounded in document currency."
+        }
+      }
+    },
+    "CalculateDocumentResponse": {
+      "description": "Document level response from ONESOURCE Determination engine.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/DocumentResponse"
+        },
+        {
+          "type": "object"
+        }
+      ],
+      "properties": {
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/CalculateLineResponse"
+          },
+          "description": "The line block serves as the container for an individual line. Each document can have 1 or more lines."
+        }
+      }
+    },
+    "CalculateLineResponse": {
+      "description": "Line level response from ONESOURCE Determination engine.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/LineResponse"
+        }
+      ]
+    },
+    "ChargeInfo": {
+      "type": "object",
+      "description": "When using chargeResponse with CombineWithLine option along with one of the summarization processingOption, this block provides basic breakdown of the various charges that we combined with line tax details. This information is for reference purpose only, all tax details are already part of line tax data.",
+      "required": [
+        "chargeResponse"
+      ],
+      "properties": {
+        "chargeResponse": {
+          "type": "string",
+          "description": "If chargeIncludedInAmounts in processingOptions in the request was set to true, value will be CombineWithLine."
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of Charge. For example, Freight, Insurance, Handling, etc."
+        },
+        "taxAmount": {
+          "type": "number",
+          "description": "Total tax amount for the charge line."
+        },
+        "taxRate": {
+          "type": "number",
+          "description": "Effective tax rate for the charge line."
+        }
+      }
+    },
+    "ChargeLineResponse": {
+      "type": "object",
+      "required": [
+        "chargeResponse"
+      ],
+      "properties": {
+        "chargeResponse": {
+          "type": "string",
+          "description": "The chargeResponse block serves as the container for each charge block, this setting is sent in the request."
+        },
+        "chargeType": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "This element is only visible when there are one or more header or line level charges are included with the request."
+        },
+        "basisPercent": {
+          "type": "number",
+          "description": "A percentage multiplied with the gross amount that is used to define the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on."
+        },
+        "commodityCode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "A code that defines the a product (good or service) that is passed in from the calling business application. A government subscribes to a specific product assoication such as the UNSPSC in the United States, or the Harmonized System which is used in many countries around the world that defines the classification of traded goods or services."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "A description of a particular product. This data is primarily used to reference records from the audit data and when reconciling tax results to the financial transaction."
+        },
+        "grossAmount": {
+          "type": "number",
+          "description": "The amount value passed in the request, or calculated by determination based on the documentAmountType in the processingOptions sent in the request."
+        },
+        "messages": {
+          "type": "array",
+          "description": "A message related to this line. There can be one or multiple messages blocks returned with each line.",
+          "items": {
+            "$ref": "#/$defs/Message"
+          }
+        },
+        "taxCode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "The tax code is optionally passed in the request or may have been set by a TransEditor."
+        },
+        "taxSummary": {
+          "$ref": "#/$defs/LineTaxSummary"
+        },
+        "totalTaxAmount": {
+          "type": "number",
+          "description": "The total tax amount for this line item."
+        },
+        "taxes": {
+          "type": "array",
+          "description": "A tax block that is associated to this charge. There can be one or more tax blocks for each charge. Tax blocks are only returned for a given Authority if a Tax Rule for that Authority was used when tax was calculated.",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/Tax"
+              },
+              {
+                "$ref": "#/$defs/TaxSummary"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ClassificationCode": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "classificationCodeId": {
+          "type": "string",
+          "description": ""
+        },
+        "classificationCodeType": {
+          "type": "string",
+          "description": "",
+          "enum": [
+            "INDUSTRY PRODUCT CODE",
+            "INDUSTRY CODE",
+            "CNAE CODE"
+          ]
+        }
+      }
+    },
+    "DocumentResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/Status"
+        },
+        "basisPercent": {
+          "type": "number",
+          "description": "A percentage multiplied with the gross amount that is used to define the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on."
+        },
+        "calculationDirection": {
+          "type": "string",
+          "description": "There are three calculation directions, of which each is based on the documentAmountType, in the request processingOption: Forward (F): This calculation uses grossAmount to determine tax. Reverse-from-tax (R): This calculation uses taxAmount (and optionally grossAmount) to determine how the tax amount should be distributed across authorities. Determination also computes a calculated gross amount. Reverse-from-total (T): This uses grossPlusTax to determine the tax amount and how it should be distributed across authorities. Determination also computes a calculated gross amount. (For more information, see the line-level output element amount.",
+          "enum": [
+            "F",
+            "R",
+            "T"
+          ]
+        },
+        "companyName": {
+          "type": "string",
+          "description": "The name of the company performing the transaction. ONESOURCE Indirect Tax Determination uses this element to apply the correct company-specific settings for the transaction. This element is returned if externalCompanyId is not populated."
+        },
+        "companyRole": {
+          "type": "string",
+          "maximum": 1,
+          "description": "The company's role as either a buyer, seller, or middleman for this transaction. Each have different tax and reporting requirements for any transaction."
+        },
+        "currencyCode": {
+          "type": "string",
+          "maximum": 3,
+          "description": "The currency used for this document. Passed through from the request."
+        },
+        "customerName": {
+          "type": "string",
+          "maximum": 100,
+          "description": "The customer/'s name as passed in from the Source System. This element's value is used by Determination to search for exemption certificates that are relevant to a transaction, or to auto-create customers or certificates if the system is so configured."
+        },
+        "customerNumber": {
+          "type": "string",
+          "maximum": 100,
+          "description": "The customer/'s number. This data is used by Determination to search for exemption certificates that are relevant to a transaction, or to auto-create customers or certificates if the system is so configured."
+        },
+        "externalCompanyId": {
+          "type": "string",
+          "maximum": 100,
+          "description": "The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the batch level or with each document, and is passed through to the Determination response, and to the Audit database."
+        },
+        "messages": {
+          "type": "array",
+          "description": "A message related to this document. There can be multiple message elements returned with each Document.",
+          "items": {
+            "$ref": "#/$defs/Message"
+          }
+        },
+        "transactionDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The system date at the time the transaction was processed, UTC."
+        },
+        "totalTaxAmount": {
+          "type": "number",
+          "description": "The total tax amount for the invoice."
+        },
+        "userAttributes": {
+          "type": "array",
+          "description": "The userAttributes block enables companies to submit, and have returned, user-defined elements that are not directly supported in Determination. These elements can be used in conjunction with TransEditors to enable tax calculations, and may be stored in the Audit database for reporting purposes. Each userAttribute block contains a single name/value pair. <B>TR reserves ATTRIBUTE41 to ATTRIBUTE50 for internal PS use</B>.",
+          "items": {
+            "$ref": "#/$defs/UserAttribute"
+          }
+        },
+        "charges": {
+          "type": "array",
+          "description": "They serve as the container for an individual charge line. Each invoice can have multiple charge lines.",
+          "items": {
+            "$ref": "#/$defs/ChargeLineResponse"
+          }
+        },
+        "isCredit": {
+          "type": "boolean",
+          "description": "Indicates whether the returned transaction is a credit transaction as identified by your source system. true indicates a credit transaction which includes negative amounts; false (default) indicates that this is not a credit transaction.",
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "userElementAmount": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/$defs/UserAttributeAmount"
+          }
+        },
+        "userElementDate": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/$defs/UserAttributeDate"
+          }
+        },
+        "vendorChargeTax": {
+          "$ref": "#/$defs/VendorChargeTaxResponse"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "description": "A block containing one or more severe errors associated with the request. If no severe errors are encountered, this block will not be returned.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "The severe error's code."
+        },
+        "description": {
+          "type": "string",
+          "description": "The severe error's description."
+        },
+        "location": {
+          "type": "string",
+          "description": "An path to the element containing the severe error."
+        }
+      }
+    },
+    "ExemptAmount": {
+      "type": "object",
+      "description": "The amount of gross not liable for this tax, in authority and document currencies, in rounded and unrounded amounts. When set to false, all amounts in this structure are unrounded. When set to true or null (default), amounts are rounded/unrounded as described.",
+      "properties": {
+        "authorityAmount": {
+          "type": "number",
+          "description": "The amount of gross not liable for this tax, rounded, in the authority currency."
+        },
+        "unroundedAuthorityAmount": {
+          "type": "number",
+          "description": "The amount of gross not liable for this tax, un-rounded, in the authority currency."
+        },
+        "documentAmount": {
+          "type": "number",
+          "description": "The amount of gross not liable for this tax, rounded, in the document currency."
+        },
+        "unroundedDocumentAmount": {
+          "type": "number",
+          "description": "The amount of gross not liable for this tax, un-rounded, in the document currency."
+        }
+      }
+    },
+    "Fee": {
+      "type": "object",
+      "description": "This structural element contains the fee-related elements for tax authorities.",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": "The fee amount."
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "The currency code for the fee."
+        },
+        "unitOfMeasure": {
+          "type": "string",
+          "description": "The unit of measure for the fee. The default is Each."
+        }
+      }
+    },
+    "GrossAmount": {
+      "type": "object",
+      "description": "The amount value passed in the request, or calculated by determination based on the documentAmountType in the processingOptions sent in the request.",
+      "properties": {
+        "authorityAmount": {
+          "type": "number",
+          "description": "The gross amount, rounded, in the authority currency."
+        },
+        "unroundedAuthorityAmount": {
+          "type": "number",
+          "description": "The gross amount, un-rounded, in the authority currency."
+        }
+      }
+    },
+    "LineResponse": {
+      "type": "object",
+      "properties": {
+        "chargeType": {
+          "type": "string"
+        },
+        "basisPercent": {
+          "type": "number",
+          "description": "A percentage of the gross amount of the line used in tax calculation. .5 is equal to 50%, .6 is equal to 60%, and so on."
+        },
+        "commodityCode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "A code that defines the a product (good or service) that is passed in from the Source System/ERP. A government subscribes to a specific product assoication such as the UNSPSC in the United States, or the Harmonized System which is used in many countries around the world that defines the classification of traded goods or services."
+        },
+        "countryOfOrigin": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The country where the goods were manufactured. Used in Intrastat reporting."
+        },
+        "customerName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The customer name associated with this line."
+        },
+        "customerNumber": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The customer number associated with this line."
+        },
+        "deliveryTerms": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Indicates how goods were shipped and where title was transferred. For more information, see Point of Title Transfer."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "A description of a particular product. This data is primarily used to reference records from the audit data and when reconciling tax results to the financial transaction."
+        },
+        "discountAmount": {
+          "type": "number",
+          "description": "In some situations volume or other discounts must be taken into account when calculating tax. For these situations, discountAmount can be used to indicate that amount. When discountAmount is provided, Determination will reduce the Taxable Basis by that amount. For example, if the Gross Amount is $100 and a Discount Amount of $20 is provided, Determination adjusts the Taxable Basis to $80."
+        },
+        "grossAmount": {
+          "type": "number",
+          "description": "The amount value passed in the request, or calculated by determination based on the documentAmountType in the processingOptions sent in the request."
+        },
+        "lineNumber": {
+          "type": "string",
+          "description": "The actual line number for the current line in the response. It correlates to a line number that was passed into ONESOURCE Determination."
+        },
+        "partNumber": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "The part number used by the calling business application. This element is stored in the audit tables and does not affect calculation."
+        },
+        "pointOfTitleTransfer": {
+          "type": "string",
+          "maxLength": 3,
+          "description": "The Point of Title Transfer location passed via the request or derived value based on Delivery Terms."
+        },
+        "messages": {
+          "type": "array",
+          "description": "A message related to this line. There can be one or multiple messages blocks returned with each line.",
+          "items": {
+            "$ref": "#/$defs/Message"
+          }
+        },
+        "taxCode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "The tax code is optionally passed in the request or may have been set by a TransEditor or another configuration in Determination."
+        },
+        "taxSummary": {
+          "$ref": "#/$defs/LineTaxSummary"
+        },
+        "transactionType": {
+          "type": "string",
+          "description": "The transaction type, which is required to apply the correct type of taxes to the transaction. Expected values GS: Goods, WG: Work on Goods, PP: Physical Performance, DS: Default Services, CL: Customer Location Services, TS: Transport Services, SI: Supplied and Installed, IN: Installation Services, MV: Movement, BG: IndiaSEZBuyerGoods, BS: IndiaSEZBuyerServices, SG: IndiaSEZSellerGoods, SS: IndiaSEZSellerServices, MF: Motor Fuels, ES: Electronic Services, PC: Prime Contracting, RR: Rental, AT: Ancillary Transport Services, T1: Chain Transaction 1, T2: Chain Transaction 2, TG: Telecommunication Services - General, TP: Telecommunication Services - Private",
+          "maxLength": 2
+        },
+        "userAttributes": {
+          "type": "array",
+          "description": "A block that enables users to submit, and have returned, user-defined elements in the case where Determination does not provide a defined element. These user-defined elements can be used in conjunction with TransEditors (input filters) and other configurations to enable custom tax calculations.",
+          "items": {
+            "$ref": "#/$defs/UserAttribute"
+          }
+        },
+        "totalTaxAmount": {
+          "type": "number",
+          "description": "The total tax amount for this line item."
+        },
+        "taxes": {
+          "type": "array",
+          "description": "A tax block that is associated to this line item. There can be one or more tax blocks for each line. Tax blocks are only returned for a given Authority if a Tax Rule for that Authority was used when tax was calculated.",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/Tax"
+              },
+              {
+                "$ref": "#/$defs/TaxSummary"
+              }
+            ]
+          }
+        },
+        "charges": {
+          "type": "array",
+          "description": "ChargeInfo: When using chargeResponse with the CombineWithLine option, along with one of the summarization processingOption, this block provides basic breakdown of the various charges that were combined with line tax details. This information is for reference purpose only. All tax details are part of line tax data.",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/ChargeInfo"
+              },
+              {
+                "$ref": "#/$defs/ChargeLineResponse"
+              }
+            ]
+          }
+        },
+        "userElementAmount": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/$defs/UserAttributeAmount"
+          }
+        },
+        "userElementDate": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/$defs/UserAttributeDate"
+          }
+        },
+        "classificationCodes": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/$defs/ClassificationCode"
+          }
+        },
+        "quantities": {
+          "type": "array",
+          "description": "Contains a list of analogous quantities differing in their units of measure.",
+          "items": {
+            "$ref": "#/$defs/Quantity"
+          }
+        },
+        "vendorChargeTax": {
+          "$ref": "#/$defs/VendorChargeTaxResponse"
+        }
+      }
+    },
+    "LineTaxSummary": {
+      "type": "object",
+      "description": "A summary of tax amounts for the line.",
+      "properties": {
+        "taxableBasis": {
+          "type": "string",
+          "description": "Contains the maximum taxable basis from the amount on the authority tax lines. If an authority tax line is a tier, all tiers for the authority have their tax basis summed and treated like a single tax line for purposes of determining the maximum taxable basis. If the total exceeds gross amount, the taxable basis is set to the gross amount. If no tax results, the value is zero."
+        },
+        "nonTaxableBasis": {
+          "type": "string",
+          "description": "Contains the maximum non-taxable basis from the tax results. No special process occurs for tiered results. If no tax results, the value is zero."
+        },
+        "exemptAmount": {
+          "type": "string",
+          "description": "Contains the maximum exempt amount from the tax results. If no tax, the value is zero."
+        },
+        "taxRate": {
+          "type": "string",
+          "description": "Sum of all taxes. No distinction is made for rates from tiers. If all taxes are fees, the value is zero."
+        },
+        "effectiveTaxRate": {
+          "type": "string",
+          "description": "Total taxes on the line divided by the maximum taxable basis."
+        },
+        "netGrossAmount": {
+          "type": "string",
+          "description": "Net Gross Amount"
+        },
+        "netTaxAmount": {
+          "type": "string",
+          "description": "Net Tax Amount"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "description": "A message related to this Request/Document/line/Tax. There can be one or multiple messages blocks returned with each Batch/Document/line/Tax.",
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "Returns information about the location at which the message occurred. Used for debugging only."
+        },
+        "category": {
+          "type": "string",
+          "description": "Specifies the category of the message."
+        },
+        "code": {
+          "type": "string",
+          "description": "The message's code. Generally the message code is used by business applications to identify the event that occurred."
+        },
+        "messageText": {
+          "type": "string",
+          "description": "The actual message, containing detailed information about the event that occurred."
+        },
+        "messageLevel": {
+          "type": "string",
+          "description": "The message's level: INFO for informational messages (such as successful processing), WARN for warnings (errors that do not terminate processing), and ERROR for fatal errors that terminate processing. Determination lets you set the severity of different errors and display either only level 2, level 1 and 2, or level 0, 1, and 2 errors.",
+          "enum": [
+            "INFO",
+            "WARN",
+            "ERROR"
+          ]
+        }
+      }
+    },
+    "NonTaxableBasis": {
+      "type": "object",
+      "description": "Identifies the portion of a line's taxable basis not used for calculating tax. Some authorities may consider the non-taxable basis a deduction from the gross sales or gross receipts, thus reducing the aggregated taxable basis to be reported on a return.",
+      "properties": {
+        "documentAmount": {
+          "type": "string",
+          "description": "The non-taxable basis, rounded, in the document currency."
+        },
+        "unroundedDocumentAmount": {
+          "type": "string",
+          "description": "The non-taxable basis, un-rounded, in the document currency."
+        },
+        "authorityAmount": {
+          "type": "string",
+          "description": "The non-taxable basis, rounded, in the authority currency."
+        },
+        "unroundedAuthorityAmount": {
+          "type": "string",
+          "description": "The non-taxable basis, un-rounded, in the authority currency."
+        }
+      }
+    },
+    "Quantity": {
+      "type": "object",
+      "description": "The quantity block contains a analogous quantity elements that may differ in their units of measure.",
+      "required": [
+        "amount"
+      ],
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": "The number of the quantity (for example, 50 for 50 L)."
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "Indicates that this quantity should be used as the default quantity in the transaction when multiple quantities are specified."
+        },
+        "type": {
+          "type": "string",
+          "description": "",
+          "maxLength": 50
+        },
+        "uom": {
+          "type": "string",
+          "maxLength": 25,
+          "description": "The unit of measure for the quantity (for example, EA, Each, KG or 50L)."
+        }
+      }
+    },
+    "Status": {
+      "type": "object",
+      "description": "A block which contains a summary of the status of the entire request, included aggregation of severe errors.",
+      "properties": {
+        "isSuccess": {
+          "type": "boolean",
+          "description": "Indicates whether the request was successful. All documents must process successfully for this tag to be set to true.",
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "isPartialSuccess": {
+          "type": "boolean",
+          "description": "Indicates whether the request was partially successful. At least one document, but not all, must process successfully for this tag to be set to true.",
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "description": "A block containing one or more severe errors associated with the request. If no severe errors are encountered, this block will not be returned.",
+          "items": {
+            "$ref": "#/$defs/Error"
+          }
+        }
+      }
+    },
+    "Tax": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TaxSummary"
+        },
+        {
+          "type": "object"
+        }
+      ],
+      "required": [
+        "responseSummary"
+      ],
+      "properties": {
+        "responseSummary": {
+          "type": "string",
+          "description": "The Tax block serves as the container for an individual tax blocks for each authority, this setting is sent in the request."
+        },
+        "addressType": {
+          "type": "string",
+          "description": "Indicates the address type, for example, 'shipFrom', 'shipTo' which resulted in this tax.",
+          "enum": [
+            "SF",
+            "ST",
+            "OO",
+            "OA",
+            "BT",
+            "SU",
+            "MM",
+            "SC",
+            "BC"
+          ]
+        },
+        "authorityName": {
+          "type": "string",
+          "description": "The name of the current authority for which data is being returned."
+        },
+        "authorityOfficialName": {
+          "type": "string",
+          "description": "The official name of the current authority for which data is being returned, if it differs from the Determination-provided authority name."
+        },
+        "authorityCategory": {
+          "type": "string",
+          "description": "The category of the current authority for which data is being returned. From the Authorities Edit page."
+        },
+        "authorityUuid": {
+          "type": "string",
+          "description": "Unique identifier of the current authority being returned. Determined by Determination default data."
+        },
+        "basisPercent": {
+          "type": "number",
+          "description": "A percentage amount that is used to adjust the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on. If this element is provided, it overrides any data found on an authority rule or exemption certificate applied to the transaction."
+        },
+        "buyerRegistration": {
+          "type": "string",
+          "description": "Buyer registration number used by this tax calculation. Derived from registration found in input XML or from value in database."
+        },
+        "euTransaction": {
+          "type": "string",
+          "description": "Indicates whether this tax result was generated by an EU authority or not. Valid values are true and false."
+        },
+        "chargeType": {
+          "type": "string",
+          "description": "The charge type. Visible only when there are 1 or more header/Line level charges."
+        },
+        "exemptCertificate": {
+          "type": "string",
+          "description": "The exempt certificate number applied to this tax result."
+        },
+        "exemptCertificateExpireDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The expiration date of the exemption certificate applied to this tax result."
+        },
+        "exemptReason": {
+          "type": "string",
+          "description": "The exempt reason code that was used to select the tax rule resulting in this tax."
+        },
+        "inputRecoveryAmount": {
+          "type": "number",
+          "description": "The amount of tax eligible for VAT recovery."
+        },
+        "inputRecoveryPercent": {
+          "type": "number",
+          "description": "The percentage of tax eligible for VAT recovery."
+        },
+        "isIntrastatReported": {
+          "type": "boolean",
+          "description": "Indicates whether this transaction applies for Intrastat reporting. Based on Jurisdiction logic."
+        },
+        "isTriangulation": {
+          "type": "boolean",
+          "description": "Indicates whether triangulation simplification was used on this transaction. If the tag is not generated, simplification was not used."
+        },
+        "isVatReported": {
+          "type": "boolean",
+          "description": "Indicates whether this transaction applies for VAT reporting. Based on Jurisdiction logic."
+        },
+        "messages": {
+          "type": "array",
+          "description": "A message related to this tax block. There can be multiple messages elements returned with each Document/Line/Tax blocks.",
+          "items": {
+            "$ref": "#/$defs/Message"
+          }
+        },
+        "middlemanRegistration": {
+          "type": "string",
+          "description": "Middleman registration number used by this tax calculation. Derived from registration found in input XML or from value in database."
+        },
+        "natureOfTax": {
+          "type": "string",
+          "description": "Indicates whether the value stored in <TAX_AMOUNT> represents a (P)ercentage, (F)ee, or is (E)xempt (no tax)."
+        },
+        "revisedGrossAmount": {
+          "type": "number",
+          "description": "The revised amount used by certain tax authorities, primarily in Brazil. These authorities revise the gross amount as part of the process of tax calculation and base the tax on this amount."
+        },
+        "ruleOrder": {
+          "type": "string",
+          "description": "The order of the rule applied to calculate this tax. This rule order is stored in the Audit database."
+        },
+        "sellerRegistration": {
+          "type": "string",
+          "description": "Seller registration number used by this tax calculation. Derived from registration found in input XML or from value in database."
+        },
+        "supplyExemptPercent": {
+          "type": "number",
+          "description": "A pass-through element which has been deprecated in favor of enhanced VAT calculation logic. See <INPUT_RECOVERY_AMOUNT/PERCENT> and VAT Recoverability and Rules for more information."
+        },
+        "taxDeterminationDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date used in selecting all applicable system configuration including tax rates and rules. Overrides any system-determined date."
+        },
+        "taxDirection": {
+          "type": "string",
+          "description": "The tax direction specifies Input/Output values for VAT recovery identification."
+        },
+        "taxPointDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date at which a tax liability to an authority has been established."
+        },
+        "taxTreatment": {
+          "type": "string",
+          "description": "The flag that indicates alternative tax treatment after Determination performs its calculation: D: Deferred.  DI: Deferred Invoice.  DP: Deferred Payment."
+        },
+        "taxType": {
+          "type": "string",
+          "description": "The type of tax applied to a tax result. For example: sales, consumer use, or zero rate. By default, the tax type is determined automatically. You can override it with configuration or in the input request. Some tax types are specific to US or International transactions."
+        },
+        "taxableRegion": {
+          "type": "string",
+          "description": "State or Province from the address that triggered this tax."
+        },
+        "taxableDistrict": {
+          "type": "string",
+          "description": "District from the address that triggered this tax."
+        },
+        "taxableCounty": {
+          "type": "string",
+          "description": "County from the address that triggered this tax."
+        },
+        "taxableCity": {
+          "type": "string",
+          "description": "City from the address that triggered this tax."
+        },
+        "taxableGeocode": {
+          "type": "string",
+          "description": "Geocode from the address that triggered this tax."
+        },
+        "taxablePostcode": {
+          "type": "string",
+          "description": "Postcode from the address that triggered this tax."
+        },
+        "uomConversion": {
+          "$ref": "#/$defs/UomConversion"
+        },
+        "vatGroupRegistration": {
+          "type": "string",
+          "description": "The registration number used to trigger VAT Registration Group functionality for this calculation."
+        },
+        "zoneName": {
+          "type": "string",
+          "description": "The name of the zone for which authority level information is being supplied."
+        },
+        "zoneLevel": {
+          "type": "string",
+          "description": "The zone level of the zone where this tax applies."
+        },
+        "zoneIsoCode": {
+          "type": "string",
+          "description": ""
+        },
+        "ZoneFipsCode": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "TaxAmount": {
+      "type": "object",
+      "description": "The amount of tax owed to the authority, in authority and document currencies, in rounded and unrounded amounts.",
+      "properties": {
+        "authorityAmount": {
+          "type": "number",
+          "description": "The amount of tax, rounded, in the authority currency."
+        },
+        "unroundedAuthorityAmount": {
+          "type": "number",
+          "description": "The amount of tax, un-rounded, in the authority currency."
+        },
+        "documentAmount": {
+          "type": "number",
+          "description": "The amount of tax, rounded, in the document currency."
+        },
+        "unroundedDocumentAmount": {
+          "type": "number",
+          "description": "The amount of tax, un-rounded, in the document currency."
+        }
+      }
+    },
+    "TaxResponse": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "maximum": 100,
+          "description": "The name of the company running the transaction. ONESOURCE Indirect Tax Determination uses this element to apply the correct company-specific settings for the transaction. Returned if EXTERNAL_COMPANY_ID is not populated.."
+        },
+        "companyRole": {
+          "type": "string",
+          "maximum": 1,
+          "description": "The company's role as a buyer, seller, or middleman for this transaction. Each have different tax and reporting requirements for any transaction."
+        },
+        "externalCompanyId": {
+          "type": "string",
+          "maximum": 100,
+          "description": "The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the batch level or with each document, and is passed through to the Determination response, and to the Audit database."
+        },
+        "hostRequestLogId": {
+          "type": "string",
+          "description": "The Contains pass-through elements used to identify the originating request from the Source System."
+        },
+        "messages": {
+          "type": "array",
+          "description": "A message related to this batch. There can be multiple MESSAGE elements returned with each batch.",
+          "items": {
+            "$ref": "#/$defs/Message"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/Status"
+        }
+      }
+    },
+    "TaxSummary": {
+      "type": "object",
+      "description": "The TaxSummary block serves as the container for an individual tax blocks as summarized or sent individually for each authority, this setting is sent in the request.",
+      "required": [
+        "responseSummary"
+      ],
+      "properties": {
+        "responseSummary": {
+          "type": "string",
+          "description": "Response tax summary level, as indicated in the responseSummary element in the processingOptions section in the request."
+        },
+        "adminZoneLevel": {
+          "type": "string",
+          "description": "The zone level in which the tax is actually administered. For example, many US states administer both state and county taxes."
+        },
+        "authorityType": {
+          "type": "string",
+          "description": "The type of authority. Returned value is one of City Rental, City Sales/Use, County Rental, County Sales/Use, District Rental, District Sales/Use, EXC, State Rental, State Sales/Use (US). CST, DPH, EXC, FCP, FCP-ST, GCT, GIT, GST, HST, ICMS, IGIC, IGV, IMI, IPI, IPSI, ISS, IST, ISV, ITBIS, ITBM, IVA, KDV, MOT, MVA, MWST, PIS, PST, PVM, QST, ST, TVA, VAT (INTL)."
+        },
+        "authorityCurrencyCode": {
+          "type": "string",
+          "description": "The currency code used by the authority."
+        },
+        "effectiveZoneLevel": {
+          "type": "string",
+          "description": "The zone level in which the tax logically applies. If a US state administers both state and county taxes, the effective tax level defines who the tax is being collected for regardless of who is administering it."
+        },
+        "erpTaxCode": {
+          "type": "string",
+          "description": "A default tax code to be used by the Source System."
+        },
+        "exemptAmount": {
+          "$ref": "#/$defs/ExemptAmount"
+        },
+        "fee": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Fee"
+          }
+        },
+        "grossAmount": {
+          "$ref": "#/$defs/GrossAmount"
+        },
+        "documentDescription": {
+          "type": "array",
+          "description": "A text description of the tax which you may choose to print on customer invoices. This value comes from the Authority or Rule used to generate the tax.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isExempt": {
+          "type": "string",
+          "description": "Indicates that this line was exempt from tax. Exemption is different from zero tax. In VAT regimes, exemption excludes the transaction from the VAT system. In the case of a sale, VAT paid to make the supply cannot be recovered if the supply is exempt. In Sales Tax countries such as the US, the exempt indicator prevents tax from being charged. If (N)o is explicitly passed the exemption certificate lookup is bypassed; tax will be charged even though an apparently valid certificate may exist in ONESOURCE Indirect Tax Determination. If isExempt is used in the request or in configuration of Determination, the ruleOrder value will be zero."
+        },
+        "jurisdictionText": {
+          "type": "array",
+          "description": "The text returned by this authority's jurisdiction determination logic. This may be text explaining why the authority was selected to tax this address or it may be a situation-specific warning message related to the tax scenario such as 'May require proof of export'.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nonTaxableBasis": {
+          "$ref": "#/$defs/NonTaxableBasis"
+        },
+        "revisedGrossAmount": {
+          "type": "number",
+          "description": "The revised amount used by certain tax authorities, primarily in Brazil. These authorities revise the gross amount as part of the process of tax calculation and base the tax on this amount."
+        },
+        "taxAmount": {
+          "$ref": "#/$defs/TaxAmount"
+        },
+        "taxDirection": {
+          "type": "string",
+          "description": "The tax direction specifies Input/Output values for VAT recovery identification."
+        },
+        "taxRate": {
+          "type": "string",
+          "description": "The rate of taxation for the authority."
+        },
+        "taxRateCode": {
+          "type": "string",
+          "description": "The tax rate code associated with the applied rate."
+        },
+        "taxableBasis": {
+          "$ref": "#/$defs/TaxableBasis"
+        },
+        "taxableCountry": {
+          "type": "string",
+          "description": "Country code from address that triggered this tax."
+        },
+        "accrualAmount": {
+          "$ref": "#/$defs/AccrualAmount"
+        },
+        "vendorTax": {
+          "$ref": "#/$defs/VendorTax"
+        },
+        "vctEffectiveTaxableBasis": {
+          "$ref": "#/$defs/VctEffectiveTaxableBasis"
+        }
+      }
+    },
+    "TaxableBasis": {
+      "type": "object",
+      "description": "The amount actually taxed by this authority: gross less basis percentage and other exempt amounts. Rounded and unrounded amounts in authority and document currencies.",
+      "properties": {
+        "authorityAmount": {
+          "type": "number",
+          "description": "The taxable basis, rounded, in the authority currency."
+        },
+        "unroundedAuthorityAmount": {
+          "type": "number",
+          "description": "The taxable basis, un-rounded, in the authority currency."
+        },
+        "documentAmount": {
+          "type": "number",
+          "description": "The taxable basis, rounded, in the document currency."
+        },
+        "unroundedDocumentAmount": {
+          "type": "number",
+          "description": "The taxable basis, un-rounded, in the document currency."
+        }
+      }
+    },
+    "UomConversion": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "factor": {
+          "type": "number",
+          "description": "The conversion factor (i.e. 0.0001, 10, 0.01, etc.) applied to the FROM amount to yield the TO amount."
+        },
+        "operator": {
+          "type": "string",
+          "maxLength": 1,
+          "description": "The operator to be applied to the conversion factor. The operator can be multiply (*) or divide (/)."
+        },
+        "from": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "toRounded": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "toUnrounded": {
+          "$ref": "#/$defs/Quantity"
+        }
+      }
+    },
+    "UserAttribute": {
+      "type": "object",
+      "description": "The userAttribute block enables companies to submit, and have returned, user-defined elements that are not directly supported in Determination. These elements can be used in conjunction with TransEditors to enable tax calculations, and may be stored in the Audit database for reporting purposes. Each userAttribute block contains a single name/value pair. <B>TR reserves ATTRIBUTE41 to ATTRIBUTE50 for internal PS use.</B>",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(ATTRIBUTE([1-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|(200)))$",
+          "description": "The name of the user attribute. Currently restricted to the case-sensitive values ATTRIBUTE1 through ATTRIBUTE50."
+        },
+        "value": {
+          "type": "string",
+          "description": "The value to be passed into Determination's audit tables and returned to your business application."
+        }
+      }
+    },
+    "UserAttributeAmount": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(AMOUNT_ATTRIBUTE[1-5])$",
+          "description": "The name of the user amount attribute. Currently restricted to the case-sensitive values AMOUNT_ATTRIBUTE1 through AMOUNT_ATTRIBUTE5."
+        },
+        "value": {
+          "type": "number",
+          "description": "The value to be passed into Determination's audit tables and returned to your business application."
+        }
+      }
+    },
+    "UserAttributeDate": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(DATE_ATTRIBUTE[1-5])$",
+          "description": "The name of the user date attribute. Currently restricted to the case-sensitive values DATE_ATTRIBUTE1 through DATE_ATTRIBUTE5."
+        },
+        "value": {
+          "type": "string",
+          "format": "date",
+          "description": "The value to be passed into Determination's audit tables and returned to your business application."
+        }
+      }
+    },
+    "VctEffectiveTaxableBasis": {
+      "type": "object",
+      "description": "The taxable basis determined using the accrual amount for every line. This amount is calculated by dividing the accrual amount at the jurisdiction level by the jurisdiction tax rate.",
+      "properties": {
+        "authorityAmount": {
+          "type": "number",
+          "description": "The VCT effective taxable basis amount rounded in authority currency."
+        },
+        "unroundedAuthorityAmount": {
+          "type": "number",
+          "description": "The VCT effective taxable basis amount un-rounded in authority currency."
+        },
+        "documentAmount": {
+          "type": "number",
+          "description": "The VCT effective taxable basis amount rounded in document currency."
+        },
+        "unroundedDocumentAmount": {
+          "type": "number",
+          "description": "The VCT effective taxable basis amount un-rounded in document currency."
+        }
+      }
+    },
+    "VendorChargeTaxResponse": {
+      "type": "object",
+      "properties": {
+        "accrualAmount": {
+          "type": "number",
+          "description": "This is the amount of tax that needs to be accrued by the buyer based on accrual method."
+        },
+        "accrualMethod": {
+          "type": "string",
+          "description": "Accrual Method used for VCT calculations for the request."
+        },
+        "toleranceIndicator": {
+          "type": "boolean",
+          "description": "Indicates whether the VCT is within the tolerance limits."
+        },
+        "isDppApplied": {
+          "type": "boolean",
+          "description": "Indicates whether Direct Pay Permit Flag was applied for the request."
+        },
+        "isVctApplied": {
+          "type": "boolean",
+          "description": "Indicates whether the VCT calculations were applied or not for the request."
+        },
+        "payToVendorAmount": {
+          "type": "number",
+          "description": "Total amount to be paid to the vendor."
+        },
+        "shortPayVendor": {
+          "type": "string",
+          "description": "Indicates whether the vendor was short paid or not."
+        },
+        "taxVariance": {
+          "type": "number",
+          "description": "Tax difference between calculated and vendor charged tax."
+        },
+        "vctResponseCode": {
+          "type": "string",
+          "description": "VCT codes from 00 to 07 per VCT table sheet."
+        },
+        "vctStatus": {
+          "type": "string",
+          "description": "The overcharge or undercharge indicator. Possible Values: ND - no difference, OC - overcharged, UC - overcharged."
+        },
+        "useTaxConfig": {
+          "type": "boolean",
+          "description": "Determines whether the tax is calculated as buyer or seller – \"Yes\" means the transaction was run as buyer."
+        },
+        "allocationMethod": {
+          "type": "string",
+          "description": "Allocation method applied for the accrued amount in case of US undercharge."
+        },
+        "vctEffectiveTaxableBasis": {
+          "type": "string",
+          "description": "The taxable basis determined using the accrual amount for every line. This amount is calculated by dividing the accrual amount at the jurisdiction level by the jurisdiction tax rate."
+        },
+        "isTrustedVendor": {
+          "type": "boolean",
+          "description": "Indicates whether the vendor is trusted or not."
+        }
+      }
+    },
+    "VendorTax": {
+      "type": "object",
+      "description": "The amount of tax charged by Vendor and split by authorities.",
+      "properties": {
+        "authorityAmount": {
+          "type": "number",
+          "description": "Vendor tax amount rounded in authority currency."
+        },
+        "unroundedAuthorityAmount": {
+          "type": "number",
+          "description": "Vendor tax amount un-rounded in authority currency."
+        },
+        "documentAmount": {
+          "type": "number",
+          "description": "Vendor tax amount rounded in document currency."
+        },
+        "unroundedDocumentAmount": {
+          "type": "number",
+          "description": "Vendor tax amount un-rounded in document currency."
+        }
+      }
+    }
+  }
+}

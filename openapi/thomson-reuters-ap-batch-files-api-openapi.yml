@@ -1,0 +1,305 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters AP Batch Files API
+  version: '1.0'
+  description: 'Operations tagged AP Batch Files across 2 of this provider''s published API definitions: thomson-reuters-ap-exchange-api-1-0-openapi.json, thomson-reuters-ap-exchange-api-1-0-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+tags:
+- name: AP Batch Files
+  description: Use the AP Batch Files AP Exchange API to view summaries and supporting files for batch runs.
+paths:
+  /routes/{routeId}/batches/{batchId}/files:
+    post:
+      tags:
+      - AP Batch Files
+      summary: Returns summaries and supporting files of a given batch run
+      operationId: APBatch_Files
+      parameters:
+      - name: routeId
+        in: path
+        required: true
+        description: AP route ID (Sequence Number)
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: batchId
+        in: path
+        required: true
+        description: AP batch ID
+        schema:
+          type:
+          - string
+          - 'null'
+        x-position: 2
+      requestBody:
+        x-name: request
+        description: AP batch file request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APDataExchangeFileRequest'
+        x-position: 3
+      responses:
+        '200':
+          description: APDataExchangeFileModel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APDataExchangeFileModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+  /routes/{routeId}/batches/{batchId}/spreadsheet:
+    get:
+      tags:
+      - AP Batch Files
+      summary: Returns spreadsheet of a given batch run
+      operationId: APBatch_Spreadsheet
+      parameters:
+      - name: routeId
+        in: path
+        required: true
+        description: AP route ID (Sequence Number)
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: batchId
+        in: path
+        required: true
+        description: AP batch ID
+        schema:
+          type:
+          - string
+          - 'null'
+        x-position: 2
+      responses:
+        '200':
+          description: APDataExchangeFileModel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APDataExchangeFileModel'
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/ap-exchange-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/ap-exchange-api/v1
+components:
+  schemas:
+    APDataFileFormat:
+      type: string
+      description: ''
+      x-enumNames:
+      - Html
+      - Pdf
+      enum:
+      - Html
+      - Pdf
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    APDataExchangeFileRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - fileType
+      - fileFormat
+      - includeSupportingDocuments
+      properties:
+        fileType:
+          $ref: '#/components/schemas/APDataFileType'
+        fileFormat:
+          $ref: '#/components/schemas/APDataFileFormat'
+        includeSupportingDocuments:
+          type: boolean
+        orientation:
+          $ref: '#/components/schemas/TPdfOrientation'
+        fontSize:
+          $ref: '#/components/schemas/TFontSize'
+    TPdfOrientation:
+      type: string
+      description: ''
+      x-enumNames:
+      - Portrait
+      - Landscape
+      enum:
+      - Portrait
+      - Landscape
+    APDataFileType:
+      type: string
+      description: ''
+      x-enumNames:
+      - Invoice
+      - Summary
+      enum:
+      - Invoice
+      - Summary
+    TFontSize:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Six
+      - Seven
+      - Eight
+      - Nine
+      - Ten
+      - Eleven
+      - Twelve
+      - Fourteen
+      - Sixteen
+      enum:
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 14
+      - 16
+    APDataExchangeFileModel:
+      type: object
+      additionalProperties: false
+      properties:
+        downloadLink:
+          type:
+          - string
+          - 'null'
+        fileName:
+          type:
+          - string
+          - 'null'
+        fileSizeInBytes:
+          type: integer
+          format: int32
+        md5Hash:
+          type:
+          - string
+          - 'null'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-ap-exchange-api-1-0-openapi.json
+- thomson-reuters-ap-exchange-api-1-0-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

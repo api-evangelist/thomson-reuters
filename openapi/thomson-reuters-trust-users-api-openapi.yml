@@ -1,0 +1,463 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Trust Users API
+  version: '1.0'
+  description: 'Operations tagged Trust Users across 2 of this provider''s published API definitions: thomson-reuters-onesource-trust-tax-administration-openapi.json, thomson-reuters-onesource-trust-tax-administration-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/trust-tax/administration
+security:
+- bearerAuth: []
+tags:
+- name: Trust Users
+paths:
+  /v1/trust-clients/{client_key}/pans/{pan}/trust-users:
+    get:
+      tags:
+      - Trust Users
+      summary: Retrieves users for a client and pan
+      description: Allows authenticated users to access the User data by specific PAN for a Client
+      operationId: AllowsAuthenticatedUsersToAccessTheUserDataBySpecificPANForAClient
+      parameters:
+      - name: client_key
+        in: path
+        description: The client key.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: The client key.
+      - name: pan
+        in: path
+        description: The pan.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: The pan.
+      - name: $select
+        in: query
+        description: Limits the properties returned in the result.
+        schema:
+          type: string
+      - name: $expand
+        in: query
+        description: Indicates the related entities to be represented inline. The maximum depth is 2.
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: 'Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.'
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Specifies the order in which items are returned. The maximum number of expressions is 5.
+        schema:
+          type: string
+      - name: $top
+        in: query
+        description: Limits the number of items returned from a collection.
+        schema:
+          type: integer
+          format: int32
+      - name: $skip
+        in: query
+        description: Excludes the specified number of items of the queried collection from the result.
+        schema:
+          type: integer
+          format: int32
+      - name: $count
+        in: query
+        description: Indicates whether the total count of items within a collection are returned in the result.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Allows authenticated users to access the User data by specific PAN for a Client
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax/administration
+  /v1/trust-clients/{client_key}/trust-users:
+    get:
+      tags:
+      - Trust Users
+      summary: Retrieves users for a client
+      description: Allows authenticated users to access the User data for a Client
+      operationId: AllowsAuthenticatedUsersToAccessTheUserDataForAClient
+      parameters:
+      - name: client_key
+        in: path
+        description: The client key.
+        required: true
+        schema:
+          type:
+          - string
+          - 'null'
+          description: The client key.
+      - name: $select
+        in: query
+        description: Limits the properties returned in the result.
+        schema:
+          type: string
+      - name: $expand
+        in: query
+        description: Indicates the related entities to be represented inline. The maximum depth is 2.
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: 'Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.'
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Specifies the order in which items are returned. The maximum number of expressions is 5.
+        schema:
+          type: string
+      - name: $top
+        in: query
+        description: Limits the number of items returned from a collection.
+        schema:
+          type: integer
+          format: int32
+      - name: $skip
+        in: query
+        description: Excludes the specified number of items of the queried collection from the result.
+        schema:
+          type: integer
+          format: int32
+      - name: $count
+        in: query
+        description: Indicates whether the total count of items within a collection are returned in the result.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseModel'
+      x-operation-id-source: normalized
+      x-operation-id-original: Allows authenticated users to access the User data for a Client
+    servers:
+    - url: https://api.onesourcetax.com/trust-tax/administration
+components:
+  schemas:
+    UserAccess:
+      enum:
+      - Enabled
+      - Disabled
+      - Deleted
+      type: integer
+      format: int32
+    Pan:
+      type: object
+      properties:
+        user_id:
+          type:
+          - string
+          - 'null'
+          description: User ID
+        client_id:
+          type: integer
+          description: Client ID
+          format: int32
+        pan:
+          type:
+          - string
+          - 'null'
+          description: Product Access Number
+        added_ini:
+          type:
+          - string
+          - 'null'
+          description: Initials of person added User Account
+        added_date:
+          type:
+          - string
+          - 'null'
+          description: Date User Account was added
+          format: date-time
+        change_ini:
+          type:
+          - string
+          - 'null'
+          description: Initials of person making last change to User Account
+        changed_date:
+          type:
+          - string
+          - 'null'
+          description: Date of last change to User Account
+          format: date-time
+        change_type:
+          $ref: '#/components/schemas/ChangeType'
+      additionalProperties: false
+    Client:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Client ID
+          format: int32
+        key:
+          type:
+          - string
+          - 'null'
+          description: Client Key
+      additionalProperties: false
+    UserHasAccess:
+      enum:
+      - 'No'
+      - 'Yes'
+      type: integer
+      format: int32
+    User:
+      type: object
+      properties:
+        universal_id:
+          type:
+          - string
+          - 'null'
+          description: Universal Id
+        id:
+          type:
+          - string
+          - 'null'
+          description: User ID
+        client_id:
+          type: integer
+          description: Client ID
+          format: int32
+        user_type:
+          $ref: '#/components/schemas/UserType'
+        user_access:
+          $ref: '#/components/schemas/UserAccess'
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name
+        initials:
+          type:
+          - string
+          - 'null'
+          description: Initials
+        email_address:
+          type:
+          - string
+          - 'null'
+          description: Email Address
+        broadcast_flag:
+          type:
+          - integer
+          - 'null'
+          description: Send e-Newz
+          format: int32
+        added_ini:
+          type:
+          - string
+          - 'null'
+          description: Initials of person added User Master
+        added_date:
+          type:
+          - string
+          - 'null'
+          description: Date User Master was added
+          format: date-time
+        change_ini:
+          type:
+          - string
+          - 'null'
+          description: Initials of person making last change to User Master
+        changed_date:
+          type:
+          - string
+          - 'null'
+          description: Date of last change to User Master
+          format: date-time
+        userrights:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/UserRight'
+          description: Rights
+        change_type:
+          $ref: '#/components/schemas/ChangeType'
+        pans:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Pan'
+          description: Pans
+        client:
+          $ref: '#/components/schemas/Client'
+      additionalProperties: false
+    ChangeType:
+      enum:
+      - No_Change
+      - Add
+      - Change
+      - Delete
+      type: integer
+      format: int32
+    UserRight:
+      type: object
+      properties:
+        right:
+          $ref: '#/components/schemas/Right'
+        user_has_access:
+          $ref: '#/components/schemas/UserHasAccess'
+        user:
+          $ref: '#/components/schemas/User'
+        added_ini:
+          type:
+          - string
+          - 'null'
+          description: Initials of person added User Right
+        added_date:
+          type:
+          - string
+          - 'null'
+          description: Date User Right was added
+          format: date-time
+        change_ini:
+          type:
+          - string
+          - 'null'
+          description: Initials of person making last change to User Right
+        changed_date:
+          type:
+          - string
+          - 'null'
+          description: Date of last change to User Right
+          format: date-time
+        change_type:
+          $ref: '#/components/schemas/ChangeType'
+        user_id:
+          type:
+          - string
+          - 'null'
+          description: User ID
+        client_id:
+          type: integer
+          description: Client ID
+          format: int32
+        right_id:
+          type: integer
+          description: Rights Code
+          format: int32
+      additionalProperties: false
+    Right:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Rights ID
+          format: int32
+        description:
+          type:
+          - string
+          - 'null'
+          description: Rights Description
+      additionalProperties: false
+    ErrorResponseModel:
+      type: object
+      properties:
+        errors:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+        extensions:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          readOnly: true
+      additionalProperties: false
+    UserType:
+      enum:
+      - TrustTax
+      - Insight
+      - Developer
+      - Support
+      - Accountmanager
+      - TaxPrep
+      - Compliance
+      - Marketing
+      - WebDelivery
+      - Pseudo
+      type: integer
+      format: int32
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-onesource-trust-tax-administration-openapi.json
+- thomson-reuters-onesource-trust-tax-administration-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

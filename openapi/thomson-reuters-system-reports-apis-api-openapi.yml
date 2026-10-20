@@ -1,0 +1,79 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters System Reports APIs API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged System Reports APIs across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: System Reports APIs
+paths:
+  /{version}/systemreports/sitesummaryreport/content:
+    get:
+      tags:
+      - System Reports APIs
+      summary: Download Site summary xlsx report
+      description: 'API method to download Site summary report export in xlsx format
+
+        - Only System admin (Internal Admin) can download the report'
+      operationId: downloadSiteSummarySystemReportsXLSFile
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '7'
+      responses:
+        '200':
+          description: Document downloaded
+        '401':
+          description: Unauthorized
+        '403':
+          description: Access denied
+        '404':
+          description: Page not found / Metthod calling with invalid API version
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal server error
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

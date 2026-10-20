@@ -1,0 +1,149 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Configuration Template…
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: TemplateFamilies
+paths:
+  /master-data/template-families:
+    get:
+      tags:
+      - TemplateFamilies
+      summary: This endpoint fetches the list of all Template Families supported in the system
+      operationId: TemplateFamilies_GetLicensedTemplates
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateFamilyListResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateFamilyListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateFamilyListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateFamilyListResponse'
+  /master-data/template-families/{id}/templates:
+    get:
+      tags:
+      - TemplateFamilies
+      summary: This endpoint is used to retrieve the list of all templates in a specific…
+      operationId: TemplateFamilies_getTemplatesFromTemplateId
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateListResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateListResponse'
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.Templates.TemplateFamilyListResponse:
+      type: object
+      properties:
+        items:
+          description: Template families
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.TemplateFamily'
+    TRTA.Athena.Models.Api.V4.Templates.Template:
+      type: object
+      properties:
+        id:
+          format: uuid
+          description: Id of template
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          description: Name of template
+          type: string
+        majorVersion:
+          format: int32
+          description: Major version of template
+          type: integer
+        minorVersion:
+          format: int32
+          description: Minor version of template
+          type: integer
+        year:
+          format: int32
+          description: Year of template
+          type: integer
+        taxRegimeId:
+          description: Tax Regime Id of template
+          type: string
+        taxType:
+          description: Tax type of template
+          type: string
+        isClientTemplate:
+          description: If it is client template
+          type: boolean
+        sourceReturnIdClid:
+          format: uuid
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+        sourceReturnCsid:
+          format: uuid
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+    TRTA.Athena.Models.Api.V4.Templates.TemplateFamily:
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Id of template family
+          type: integer
+        name:
+          description: Name of template family
+          type: string
+        taxRegime:
+          description: Tax Regime of template
+          type: string
+        taxType:
+          description: Tax type of template
+          type: string
+    TRTA.Athena.Models.Api.V4.Templates.TemplateListResponse:
+      type: object
+      properties:
+        items:
+          description: Templates
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.Templates.Template'
+          readOnly: true

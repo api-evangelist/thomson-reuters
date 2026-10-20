@@ -1,0 +1,1960 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Accounts API
+  version: '1.0'
+  description: 'Operations tagged Accounts across 6 of this provider''s published API definitions: thomson-reuters-common-accounts-service-1-0-openapi.json, thomson-reuters-common-accounts-service-openapi.json, thomson-reuters-statutory-reporting-period-setup-apis-openapi.json, thomson-reuters-common-accounts-service-1-0-openapi.yml, thomson-reuters-common-accounts-service-openapi.yml, thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+  description: Generated server url
+- url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server providing global access to reporting entities
+- url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server providing global access to template entities
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the EMEA region
+- url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the EMEA region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+  description: Production server for reporting entities supporting the APAC region.
+- url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+  description: Production server for template entities supporting the APAC region.
+tags:
+- name: Accounts
+paths:
+  /{chart_of_accounts_id}/accounts:
+    get:
+      tags:
+      - Accounts
+      summary: Get All Accounts By chart id
+      description: Get all Accounts records by chart id with the attributes
+      operationId: getAccountsByChartOfAccountsID
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionAccountsResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionAccountsResponse'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionAccountsResponse'
+      security:
+      - Authorization: []
+    post:
+      tags:
+      - Accounts
+      summary: Create Accounts
+      description: Create Accounts records with the attributes
+      operationId: postAccounts
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequest'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountSaveResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountSaveResponse'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountSaveResponse'
+      security:
+      - Authorization: []
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /accounts:
+    get:
+      tags:
+      - Accounts
+      summary: Get All Accounts
+      description: Get all Accounts with mapped account grouping details
+      operationId: getAllAccounts
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionAccountsResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionAccountsResponse'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiCollectionAccountsResponse'
+      security:
+      - Authorization: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{chart_of_accounts_id}/accounts/{accountCode}:
+    get:
+      tags:
+      - Accounts
+      summary: Get Specific Account By chart id and account code
+      operationId: getAccountsByChartOfAccountsIDAndAccountCode
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: accountCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+      security:
+      - Authorization: []
+    patch:
+      tags:
+      - Accounts
+      summary: Update Specific Account By chart id and account code
+      operationId: patchAccountsByChartOfAccountsIDAndAccountCode
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: accountCode
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: update_hierarchy
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JSONObject'
+        required: true
+      responses:
+        '204':
+          description: Accepted
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                type: string
+      security:
+      - Authorization: []
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{chart_of_accounts_id}/accounts/bulk:
+    post:
+      tags:
+      - Accounts
+      summary: Committing Bulk Import entities
+      description: Committing all Bulk Import entities
+      operationId: commitBulkImport
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/BulkAccountRequest'
+        required: true
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: string
+            text/csv:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: string
+            text/csv:
+              schema:
+                type: string
+        '500':
+          description: Failure
+          content:
+            application/json:
+              schema:
+                type: string
+            text/csv:
+              schema:
+                type: string
+      security:
+      - Authorization: []
+      x-tr-jtp-reference:
+        $ref: '#/x-tr-jtp/default'
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{chart_of_accounts_id}/accounts/{accountCode}/approve-hierarchy:
+    post:
+      tags:
+      - Accounts
+      summary: Approve AI Assignment Hierarchy
+      description: Approve AI Assignment Financial Hierarchy Mapping.
+      operationId: approveAIAssignmentHierarchy
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: accountCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApprovedAIAssignedResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{chart_of_accounts_id}/accounts/predictions:
+    post:
+      tags:
+      - Accounts
+      summary: Request FH mappings from AI model and apply it to specified account codes
+      description: Synchronously predict FH for max. 100 specified account codes and returns summary as response
+      operationId: applyFHPredictionsToAccountsAndReturnSummary
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictionRequest'
+        required: true
+      responses:
+        '200':
+          description: Prediction summary
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PredictionSummaryResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PredictionSummaryResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PredictionSummaryResponse'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PredictionSummaryResponse'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{chart_of_accounts_id}/accounts/unmap-hierarchy:
+    patch:
+      tags:
+      - Accounts
+      summary: Unmap financial hierarchy from accounts
+      description: Removes financial hierarchy associations for a list of account identifiers. Sync process, complete operation to be rolled back in case of error
+      operationId: unmapAccountFinancialHierarchy
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnMapFinancialHierarchyRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UnMapFinancialHierarchyResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{chart_of_accounts_id}/accounts/{accountCode}/prediction-hierarchy:
+    get:
+      tags:
+      - Accounts
+      summary: Get Prediction Hierarchy
+      description: Get Prediction Hierarchy for a specific account
+      operationId: getPredictionHierarchy
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        description: Client Id
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        description: Client Number
+        required: false
+        schema:
+          type: string
+      - name: chart_of_accounts_id
+        in: path
+        description: chart of account unique identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: accountCode
+        in: path
+        description: account code identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PredictiveMappingV3Response'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+        '500':
+          description: Failure
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiErrorValidation'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{chart_of_accounts_id}/accounts/predictions/job:
+    post:
+      tags:
+      - Accounts
+      summary: Request FH mappings from AI model and apply it to unmapped accounts (limited to…
+      description: Asynchronously predict FH for unmapped accounts (limited to first 10K). Returns a prediction job that can be used to track the progress of the bulk prediction operation. The job ID can be used to query the status of the prediction job later.
+      operationId: triggerFHPredictionsForUnmappedAccounts
+      parameters:
+      - name: chart_of_accounts_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok - Returns prediction job details
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+        '400':
+          description: Bad Request - Invalid chart type or chart ID or chart with no accounts
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+        '404':
+          description: Not Found - Chart not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+        '409':
+          description: Conflict - Another prediction job is in progress
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+        '500':
+          description: Failure - Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdResponseString'
+      security:
+      - Authorization: []
+    servers:
+    - url: https://api.onesourcetax.com/administration/accounts/v1/charts-of-accounts
+      description: Generated server url
+  /{entity-id}/financial-periods/{financial-period-id}/bulk/accounts:
+    get:
+      summary: Get Accounts
+      tags:
+      - Accounts
+      description: Use this operation to return a list of Accounts with its attributes.
+      operationId: GetListOfAccounts
+      parameters:
+      - name: entity-id
+        in: path
+        required: true
+        description: The entity id in which the financial period is created. To obtain a reporting entity ID, refer to the [Get Reporting Entities API](#tag/reporting-entities/get/) documentation. For guidance on obtaining a template entity ID, see the [Get Template Entities API](#tag/template-entities/get/) documentation.
+        schema:
+          type: string
+          format: uuid
+        example: 81fa8dec-d6b0-454c-bd15-b38a00b479ab
+      - name: financial-period-id
+        in: path
+        required: true
+        description: The identifier of the financial period from which account details are retrieved. Obtain this ID using the [Get Financial Periods API](#tag/financial-periods/get{entity-id}/financial-periods).
+        schema:
+          type: string
+          format: uuid
+        example: 16378fc4-3147-47d0-a22a-b39f00aab97d
+      responses:
+        '200':
+          description: Successfully retrieved a list of accounts with its data.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '400':
+          description: Bad Request. Occurs when the server cannot process the request due to invalid parameters or a malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidParameter:
+                  summary: Example invalid financial-period-id error
+                  value:
+                    statusCode: 400
+                    message: financial-period-id is not valid
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: https://developers.onesourcetax.com/errors/#keymanagement.service.invalid_access_token
+                  title:
+                    type: string
+                    example: Invalid Access Token
+                  detail:
+                    type: string
+                    example: Invalid Access Token
+                  status:
+                    type: integer
+                    example: 401
+                  instance:
+                    type: string
+                    example: /statutory-reporting/v1/reporting-entities/92abcd47-4e56-4961-b9b6-b30e00f46ba8/financial-periods/a5d4f2f3-5250-494d-b773-b30e00f46d48/bulk/accounts
+                  api_requestId:
+                    type: string
+                    example: rrt-0080bd6edb6a51c07-c-ea-1408325-2337761-1
+        '403':
+          description: 'Forbidden: The request was understood, but the server refuses to authorize it. The client does not have the necessary permissions to access the resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbiddenAccessDenied:
+                  summary: Example forbidden error - Insufficient permissions
+                  value:
+                    StatusCode: 403
+                    Message: 'Access Denied: User does not have the required role or permissions to perform this action.'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: '{"message":"financialperiod is not found","statusCode":404}'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  StatusCode:
+                    type: integer
+                    example: 500
+                  Message:
+                    type: string
+                    example: An internal server error occurred while processing your request.
+      security:
+      - Token: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Get List of Accounts
+    put:
+      summary: Update Accounts
+      tags:
+      - Accounts
+      description: Use this operation to update accounts for a financial period.
+      operationId: UpdateAccounts
+      parameters:
+      - name: entity-id
+        in: path
+        required: true
+        description: The entity id in which the financial period is created. To obtain a reporting entity ID, refer to the [Get Reporting Entities API](#tag/reporting-entities/get/) documentation. For guidance on obtaining a template entity ID, see the [Get Template Entities API](#tag/template-entities/get/) documentation.
+        schema:
+          type: string
+          format: uuid
+        example: 81fa8dec-d6b0-454c-bd15-b38a00b479ab
+      - name: financial-period-id
+        in: path
+        required: true
+        description: The identifier of the financial period during which account information is updated. Obtain this ID using the [Get Financial Periods API](#tag/financial-periods/get{entity-id}/financial-periods).
+        schema:
+          type: string
+          format: uuid
+        example: 16378fc4-3147-47d0-a22a-b39f00aab97d
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AccountRequest_3'
+      responses:
+        '200':
+          description: Accounts updated successfully.
+        '207':
+          description: 'Multi-Status: The request was processed, but individual accounts update operations may have varied statuses.'
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                emptyMultiStatusResponse:
+                  summary: Example of an 207 Multi-Status response
+                  value: {}
+        '400':
+          description: Bad Request. Occurs when the server cannot process the request due to invalid parameters or a malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidParameter:
+                  summary: Example invalid financial-period-id error
+                  value:
+                    statusCode: 400
+                    message: financial-period-id is not valid
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: https://developers.onesourcetax.com/errors/#keymanagement.service.invalid_access_token
+                  title:
+                    type: string
+                    example: Invalid Access Token
+                  detail:
+                    type: string
+                    example: Invalid Access Token
+                  status:
+                    type: integer
+                    example: 401
+                  instance:
+                    type: string
+                    example: /statutory-reporting/v1/reporting-entities/92abcd47-4e56-4961-b9b6-b30e00f46ba8/financial-periods/a5d4f2f3-5250-494d-b773-b30e00f46d48/bulk/accounts
+                  api_requestId:
+                    type: string
+                    example: rrt-0080bd6edb6a51c07-c-ea-1408325-2337761-1
+        '403':
+          description: 'Forbidden: The request was understood, but the server refuses to authorize it. The client does not have the necessary permissions to access the resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbiddenAccessDenied:
+                  summary: Example forbidden error - Insufficient permissions
+                  value:
+                    StatusCode: 403
+                    Message: 'Access Denied: User does not have the required role or permissions to perform this action.'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: '{"message":"financialperiod is not found","statusCode":404}'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  StatusCode:
+                    type: integer
+                    example: 500
+                  Message:
+                    type: string
+                    example: An internal server error occurred while processing your request.
+      security:
+      - Token: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Update Accounts
+    post:
+      summary: Create Accounts
+      tags:
+      - Accounts
+      description: Use this operation to create Accounts.
+      operationId: CreateAccounts
+      parameters:
+      - name: entity-id
+        in: path
+        required: true
+        description: The entity id in which the financial period is created. To obtain a reporting entity ID, refer to the [Get Reporting Entities API](#tag/reporting-entities/get/) documentation. For guidance on obtaining a template entity ID, see the [Get Template Entities API](#tag/template-entities/get/) documentation.
+        schema:
+          type: string
+          format: uuid
+        example: 81fa8dec-d6b0-454c-bd15-b38a00b479ab
+      - name: financial-period-id
+        in: path
+        required: true
+        description: The identifier of the financial period during which the account is created. Obtain this ID using the [Get Financial Periods API](#tag/financial-periods/get{entity-id}/financial-periods).
+        schema:
+          type: string
+          format: uuid
+        example: 16378fc4-3147-47d0-a22a-b39f00aab97d
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AccountCreateRequest'
+      responses:
+        '201':
+          description: Successfully Created accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountCreationResponse'
+        '207':
+          description: 'Multi-Status: The request was processed, but individual accounts update operations may have varied statuses.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountsResult'
+        '400':
+          description: Bad Request. Occurs when the server cannot process the request due to invalid parameters or a malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidParameter:
+                  summary: Example invalid financial-period-id error
+                  value:
+                    statusCode: 400
+                    message: financial-period-id is not valid
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: https://developers.onesourcetax.com/errors/#keymanagement.service.invalid_access_token
+                  title:
+                    type: string
+                    example: Invalid Access Token
+                  detail:
+                    type: string
+                    example: Invalid Access Token
+                  status:
+                    type: integer
+                    example: 401
+                  instance:
+                    type: string
+                    example: /statutory-reporting/v1/reporting-entities/92abcd47-4e56-4961-b9b6-b30e00f46ba8/financial-periods/a5d4f2f3-5250-494d-b773-b30e00f46d48/bulk/accounts
+                  api_requestId:
+                    type: string
+                    example: rrt-0080bd6edb6a51c07-c-ea-1408325-2337761-1
+        '403':
+          description: 'Forbidden: The request was understood, but the server refuses to authorize it. The client does not have the necessary permissions to access the resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbiddenAccessDenied:
+                  summary: Example forbidden error - Insufficient permissions
+                  value:
+                    StatusCode: 403
+                    Message: 'Access Denied: User does not have the required role or permissions to perform this action.'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: '{"message":"financialperiod is not found","statusCode":404}'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  StatusCode:
+                    type: integer
+                    example: 500
+                  Message:
+                    type: string
+                    example: An internal server error occurred while processing your request.
+      security:
+      - Token: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Create Accounts
+    delete:
+      summary: Delete Accounts
+      tags:
+      - Accounts
+      description: Use this operation to delete one or many Accounts.
+      operationId: DeleteAccounts
+      parameters:
+      - name: entity-id
+        in: path
+        required: true
+        description: The entity id in which the financial period is created. To obtain a reporting entity ID, refer to the [Get Reporting Entities API](#tag/reporting-entities/get/) documentation. For guidance on obtaining a template entity ID, see the [Get Template Entities API](#tag/template-entities/get/) documentation.
+        schema:
+          type: string
+          format: uuid
+        example: 81fa8dec-d6b0-454c-bd15-b38a00b479ab
+      - name: financial-period-id
+        in: path
+        required: true
+        description: The identifier of the financial period during which the account is deleted. Obtain this ID using the [Get Financial Periods API](#tag/financial-periods/get{entity-id}/financial-periods).
+        schema:
+          type: string
+          format: uuid
+        example: 16378fc4-3147-47d0-a22a-b39f00aab97d
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AccountDeleteRequest'
+      responses:
+        '200':
+          description: Successfully  deleted accounts.
+        '207':
+          description: 'Multi-Status: The request was processed, but individual accounts update operations may have varied statuses.'
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                emptyMultiStatusResponse:
+                  summary: Example of an 207 Multi-Status response
+                  value: {}
+        '400':
+          description: Bad Request. Occurs when the server cannot process the request due to invalid parameters or a malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidParameter:
+                  summary: Example invalid financial-period-id error
+                  value:
+                    statusCode: 400
+                    message: financial-period-id is not valid
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: https://developers.onesourcetax.com/errors/#keymanagement.service.invalid_access_token
+                  title:
+                    type: string
+                    example: Invalid Access Token
+                  detail:
+                    type: string
+                    example: Invalid Access Token
+                  status:
+                    type: integer
+                    example: 401
+                  instance:
+                    type: string
+                    example: /statutory-reporting/v1/reporting-entities/92abcd47-4e56-4961-b9b6-b30e00f46ba8/financial-periods/a5d4f2f3-5250-494d-b773-b30e00f46d48/bulk/accounts
+                  api_requestId:
+                    type: string
+                    example: rrt-0080bd6edb6a51c07-c-ea-1408325-2337761-1
+        '403':
+          description: 'Forbidden: The request was understood, but the server refuses to authorize it. The client does not have the necessary permissions to access the resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbiddenAccessDenied:
+                  summary: Example forbidden error - Insufficient permissions
+                  value:
+                    StatusCode: 403
+                    Message: 'Access Denied: User does not have the required role or permissions to perform this action.'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: '{"message":"financialperiod is not found","statusCode":404}'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  StatusCode:
+                    type: integer
+                    example: 500
+                  Message:
+                    type: string
+                    example: An internal server error occurred while processing your request.
+      security:
+      - Token: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Delete Accounts
+    servers:
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server providing global access to reporting entities
+    - url: https://api.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server providing global access to template entities
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the EMEA region
+    - url: https://api-emea.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the EMEA region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/reporting-entities/
+      description: Production server for reporting entities supporting the APAC region.
+    - url: https://api-apac.onesourcetax.com/statutory-reporting/v1/template-entities/
+      description: Production server for template entities supporting the APAC region.
+components:
+  schemas:
+    AccountRequest:
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 0
+          type: string
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+        financial_designation:
+          type: string
+        financial_hierarchy_level4_id:
+          type: string
+        financial_hierarchy_level1_id:
+          type: string
+    PredictionSummaryResponse:
+      type: object
+      properties:
+        success_count:
+          type: integer
+          format: int32
+        failure_count:
+          type: integer
+          format: int32
+        skipped_count:
+          type: integer
+          format: int32
+        failures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Failure'
+        skipped:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skipped'
+    PredictionRequest:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          maxItems: 100
+          minItems: 0
+          type: array
+          items:
+            type: string
+    PredictionV3MetaData:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+    AccountsResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        chart_of_accounts_id:
+          type: string
+        financial_hierarchy_level:
+          type: integer
+          format: int32
+        financial_hierarchy_level4_id:
+          type: string
+        financial_hierarchy_level1_id:
+          type: string
+        confidence_score:
+          type: number
+        status:
+          type: string
+        financial_hierarchy_level4_name:
+          type: string
+        financial_hierarchy_level3_id:
+          type: string
+        financial_designation:
+          type: string
+        account_grouping_id:
+          type: string
+        _embedded:
+          $ref: '#/components/schemas/EmbeddedGroup'
+        created_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+        accounting_convention_sign:
+          type: string
+    IdResponseString:
+      type: object
+      properties:
+        id:
+          type: string
+    BulkAccountRequest:
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 0
+          type: string
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+        financial_designation:
+          type: string
+        financial_hierarchy_level4_id:
+          type: string
+        financial_hierarchy_level1_id:
+          type: string
+        account_grouping_id:
+          type: string
+    HierarchyLevel:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Failure:
+      type: object
+      properties:
+        code:
+          type: string
+        error:
+          type: string
+    EmbeddedGroup:
+      type: object
+      properties:
+        account_grouping:
+          $ref: '#/components/schemas/AccountGroup'
+    PredictionResult:
+      type: object
+      properties:
+        confidence:
+          type: number
+          format: double
+        level1:
+          $ref: '#/components/schemas/HierarchyLevel'
+        level2:
+          $ref: '#/components/schemas/HierarchyLevel'
+        level3:
+          $ref: '#/components/schemas/HierarchyLevel'
+    AccountSaveResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        financial_designation:
+          type: string
+        chart_of_accounts_id:
+          type: string
+        accounting_convention_sign:
+          type: string
+    ApiErrorValidation:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: code
+            message:
+              type: string
+              description: message
+    PredictiveMappingV3Response:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/PredictionV3MetaData'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionV3ResultCollectionPredictionResult'
+        status:
+          type: string
+        message:
+          type: string
+    AccountGroup:
+      type: object
+      properties:
+        name:
+          type: string
+        financial_hierarchy_level_3_parent_id:
+          type: string
+        id:
+          type: string
+        account_count:
+          type: integer
+          format: int32
+        sequence_order:
+          type: integer
+          format: int32
+        is_default:
+          type: boolean
+    ApiCollectionAccountsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountsResponse'
+        _meta:
+          $ref: '#/components/schemas/ApiMeta'
+    JSONObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+      additionalProperties:
+        type: object
+    UnMapFinancialHierarchyRequest:
+      required:
+      - account_codes
+      type: object
+      properties:
+        account_codes:
+          maxItems: 1000
+          minItems: 1
+          type: array
+          items:
+            type: string
+    PredictionV3ResultCollectionPredictionResult:
+      type: object
+      properties:
+        input:
+          type: string
+        predictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionResult'
+    ApprovedAIAssignedResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        status:
+          type: string
+    ApiMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        sort:
+          type: string
+        filter:
+          type: string
+        extra:
+          type: object
+          additionalProperties:
+            type: object
+          writeOnly: true
+    Skipped:
+      type: object
+      properties:
+        code:
+          type: string
+        reason:
+          type: string
+    UnMapFinancialHierarchyResponse:
+      type: object
+      properties:
+        successfulAccounts:
+          type: array
+          items:
+            type: string
+        alreadyUnmapped:
+          type: array
+          items:
+            type: string
+        notFound:
+          type: array
+          items:
+            type: string
+        totalProcessed:
+          type: integer
+          format: int32
+    AccountSaveResponse_2:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        financial_designation:
+          type: string
+        chart_of_accounts_id:
+          type: string
+    ApiErrorValidation_2:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    BulkAccountRequest_2:
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 0
+          type: string
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+        financial_designation:
+          type: string
+        financial_hierarchy_level4_id:
+          type: string
+        account_grouping_id:
+          type: string
+    AccountRequest_2:
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 0
+          type: string
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+        financial_designation:
+          type: string
+        financial_hierarchy_level4_id:
+          type: string
+    AccountsResponse_2:
+      type: object
+      properties:
+        account_grouping_id:
+          type: string
+        financial_designation:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+        chart_of_accounts_id:
+          type: string
+        financial_hierarchy_level4_id:
+          type: string
+        financial_hierarchy_level4_name:
+          type: string
+        financial_hierarchy_level3_id:
+          type: string
+        _embedded:
+          $ref: '#/components/schemas/EmbeddedGroup'
+        created_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+    ErrorResponse:
+      type: object
+      description: Standard error response object containing HTTP status code and a descriptive message.
+      properties:
+        StatusCode:
+          type: integer
+          format: int32
+          description: HTTP status code of the error (for example, 400, 404, 500).
+          minimum: 100
+          maximum: 599
+        Message:
+          type: string
+          nullable: true
+          description: A human-readable message providing details about the error.
+          minLength: 1
+          maxLength: 512
+      additionalProperties: false
+      example:
+        StatusCode: 400
+        Message: Invalid request parameters.
+    AccountsResult:
+      description: A generic container for the result of an accounts operation.
+      type: object
+      additionalProperties: false
+    AccountRequest_3:
+      description: Represents a request to create or update an account. It can include an optional ID for updates, along with the required code and name.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier for the account, typically used when updating an existing account.
+        code:
+          minLength: 1
+          type: string
+          description: A unique code defined by the user for the account. The code must be at least one character long and cannot be changed once created.
+        name:
+          minLength: 1
+          type: string
+          description: The human-readable name of the account. Must be at least 1 character long.
+        roundIndependently:
+          type: boolean
+          description: Specifies whether this account's calculations should be rounded independently.
+      additionalProperties: false
+      example:
+      - id: 410066c4-c6b2-11f0-a08c-0e0af77c40c5
+        code: A1
+        name: A1_Test
+        roundIndependently: false
+      - id: 41009cde-c6b2-11f0-a08d-0e0af77c40c5
+        code: A2
+        name: A2_Test
+        roundIndependently: false
+      - id: 16a5d577-fa0a-4d9d-bb52-fe144e957e8a
+        code: '123'
+        name: 1234_Test
+        roundIndependently: false
+    AccountCreateRequest:
+      description: Defines the structure for creating a new account. Requires a unique code and a descriptive name.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          minLength: 1
+          type: string
+          description: A unique code defined by the user for the account. The code must be at least one character long and cannot be changed once created.
+        name:
+          minLength: 1
+          type: string
+          description: The human-readable name for the new account. Must be at least 1 character long.
+        roundIndependently:
+          type: boolean
+          description: Specifies whether this new account's calculations should be rounded independently.
+      additionalProperties: false
+      example:
+      - code: ACC4
+        name: ACC4
+        roundIndependently: true
+      - code: ACC3
+        name: ACC3
+        roundIndependently: true
+      - code: ACC2
+        name: ACC2
+        roundIndependently: true
+      - code: ACC1
+        name: ACC1
+        roundIndependently: true
+    AccountCreationResponse:
+      description: Represents an individual account. Accounts are identified by a unique code and name, and can have specific rounding behaviors.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier for the account.
+        code:
+          minLength: 1
+          type: string
+          description: A unique, user-defined code for the account. Must be at least 1 character long.
+        name:
+          minLength: 1
+          type: string
+          description: The human-readable name of the account. Must be at least 1 character long.
+        roundIndependently:
+          type: boolean
+          description: Indicates whether this account's calculations should be rounded independently of other accounts.
+        lastModified:
+          type: string
+          format: date-time
+          description: The date and time when the account was last modified.
+      additionalProperties: false
+      example:
+      - id: 0ce28fbb-d4da-4041-9d6c-b3a9008068fb
+        code: ACC4
+        name: ACC4
+        roundIndependently: true
+        lastModified: '2025-12-04T07:47:31'
+      - id: 6baa54b6-f2a3-4e46-863f-b3a900806993
+        code: ACC3
+        name: ACC3
+        roundIndependently: true
+        lastModified: '2025-12-04T07:47:32'
+      - id: 531a81e8-0bb7-40b5-a05f-b3a900806a18
+        code: ACC2
+        name: ACC2
+        roundIndependently: true
+        lastModified: '2025-12-04T07:47:32'
+      - id: 011f4738-2798-4ea5-8d78-b3a900806aa2
+        code: ACC1
+        name: ACC1
+        roundIndependently: true
+        lastModified: '2025-12-04T07:47:33'
+    Account:
+      description: Represents an individual account. Accounts are identified by a unique code and name, and can have specific rounding behaviors.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier for the account.
+        code:
+          minLength: 1
+          type: string
+          description: A unique, user-defined code for the account. Must be at least 1 character long.
+        name:
+          minLength: 1
+          type: string
+          description: The human-readable name of the account. Must be at least 1 character long.
+        roundIndependently:
+          type: boolean
+          description: Indicates whether this account's calculations should be rounded independently of other accounts.
+        lastModified:
+          type: string
+          format: date-time
+          description: The date and time when the account was last modified.
+      additionalProperties: false
+      example:
+      - id: 40ff5a72-c6b2-11f0-a08a-0e0af77c40c5
+        code: Rounding differences
+        name: Rounding differences (suggested assignment creditors)
+        roundIndependently: false
+        lastModified: '2025-11-20T09:35:56'
+      - id: 410032f8-c6b2-11f0-a08b-0e0af77c40c5
+        code: suspense
+        name: suspense
+        roundIndependently: false
+        lastModified: '2025-11-20T09:35:56'
+      - id: 410066c4-c6b2-11f0-a08c-0e0af77c40c5
+        code: A1
+        name: A1
+        roundIndependently: false
+        lastModified: '2025-11-20T09:35:56'
+      - id: 41009cde-c6b2-11f0-a08d-0e0af77c40c5
+        code: A2
+        name: A2
+        roundIndependently: false
+        lastModified: '2025-11-20T09:35:56'
+      - id: 16a5d577-fa0a-4d9d-bb52-fe144e957e8a
+        code: '123'
+        name: '1234'
+        roundIndependently: false
+        lastModified: '2025-12-02T09:54:59'
+      - id: b5394154-4b78-4762-bad1-b4d6540033d0
+        code: '001'
+        name: Test 001
+        roundIndependently: false
+        lastModified: '2025-12-02T09:57:34'
+    AccountDeleteRequest:
+      description: Represents a request to create or update an account. It can include an optional ID for updates, along with the required code and name.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier for the account, typically used when updating an existing account.
+        code:
+          minLength: 1
+          type: string
+          description: A unique code defined by the user for the account. The code must be at least one character long and cannot be changed once created.
+        name:
+          minLength: 1
+          type: string
+          description: The human-readable name of the account. Must be at least 1 character long.
+        roundIndependently:
+          type: boolean
+          description: Specifies whether this account's calculations should be rounded independently.
+      additionalProperties: false
+      example:
+      - id: 011f4738-2798-4ea5-8d78-b3a900806aa2
+        code: ACC1
+        name: ACC1
+        roundIndependently: true
+    AccountSaveResponse_3:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        financial_designation:
+          type: string
+        chart_of_accounts_id:
+          type: string
+    ApiErrorValidation_3:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    BulkAccountRequest_3:
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 0
+          type: string
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+        financial_designation:
+          type: string
+        financial_hierarchy_level4_id:
+          type: string
+        account_grouping_id:
+          type: string
+    AccountRequest_4:
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 0
+          type: string
+        name:
+          maxLength: 200
+          minLength: 0
+          type: string
+        financial_designation:
+          type: string
+        financial_hierarchy_level4_id:
+          type: string
+    AccountsResponse_3:
+      type: object
+      properties:
+        account_grouping_id:
+          type: string
+        financial_designation:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+        chart_of_accounts_id:
+          type: string
+        financial_hierarchy_level4_id:
+          type: string
+        financial_hierarchy_level4_name:
+          type: string
+        financial_hierarchy_level3_id:
+          type: string
+        _embedded:
+          $ref: '#/components/schemas/EmbeddedGroup'
+        created_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+    AccountRequest_5:
+      description: Represents a request to create or update an account. It can include an optional ID for updates, along with the required code and name.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier for the account, typically used when updating an existing account.
+        code:
+          minLength: 1
+          type: string
+          description: A unique code defined by the user for the account. The code must be at least one character long and cannot be changed once created.
+        name:
+          minLength: 1
+          type: string
+          description: The human-readable name of the account. Must be at least 1 character long.
+        roundIndependently:
+          type: boolean
+          description: Specifies whether this account's calculations should be rounded independently.
+      additionalProperties: false
+      example:
+      - id: 410066c4-c6b2-11f0-a08c-0e0af77c40c5
+        code: A1
+        name: A1_Test
+        roundIndependently: false
+      - id: 41009cde-c6b2-11f0-a08d-0e0af77c40c5
+        code: A2
+        name: A2_Test
+        roundIndependently: false
+      - id: 16a5d577-fa0a-4d9d-bb52-fe144e957e8a
+        code: '123'
+        name: 1234_Test
+        roundIndependently: false
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header
+    Token:
+      type: apiKey
+      description: 'Authorization header. Provide a valid Access token for authentication  Example: `Authorization: Bearer <<Access Token>>`. You can find Authentication process in ''API Access'' Section'
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-common-accounts-service-1-0-openapi.json
+- thomson-reuters-common-accounts-service-openapi.json
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.json
+- thomson-reuters-common-accounts-service-1-0-openapi.yml
+- thomson-reuters-common-accounts-service-openapi.yml
+- thomson-reuters-statutory-reporting-period-setup-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

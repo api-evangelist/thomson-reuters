@@ -1,0 +1,372 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Comments API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Comments API across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Comments API
+paths:
+  /{version}/comments:
+    post:
+      tags:
+      - Comments API
+      summary: Add Comment
+      description: Add comment API
+      operationId: addComment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: groupsupport
+        in: query
+        description: groupsupport flag for mention group
+        required: false
+        schema:
+          type: string
+          default: '0'
+      - name: contentid
+        in: query
+        description: This the content id of the required content.<br><br>e.g. blogid for contenttype=blog, taskid for contenttype=tasks
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: contenttype
+        in: query
+        description: 'Content type<br><br>e.g. /api/1/comments?contenttype=files<br>- Microblogs
+
+          - Files
+
+          - Wiki
+
+          - Blog
+
+          - Tasks
+
+          - Events'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Comment added successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while adding comment
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CommentDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/CommentDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/comments/{commentid}:
+    put:
+      tags:
+      - Comments API
+      summary: Edit Comment
+      description: Edit comment API
+      operationId: updateComment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: groupsupport
+        in: query
+        description: groupsupport flag for mention group
+        required: false
+        schema:
+          type: string
+          default: '0'
+      - name: commentid
+        in: path
+        description: This is the comment id
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Comment updated successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while updating comment
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CommentDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentDBO'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/CommentDBO'
+    delete:
+      tags:
+      - Comments API
+      summary: Delete Comment
+      description: Delete comment API
+      operationId: deleteComment
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '4'
+      - name: commentid
+        in: path
+        description: This is the comment id
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Comment deleted successfully
+        '400':
+          description: Problem with parameters
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed | Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error occurred while deleting comment
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    Images:
+      type: object
+      properties:
+        image:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+    FileDBO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        extension:
+          type: string
+        folderpath:
+          type: string
+        filehttplink:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: integer
+          format: int64
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    FilesDBO:
+      type: object
+      properties:
+        file:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDBO'
+        attachment:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDBO'
+    Attachments:
+      type: object
+      properties:
+        images:
+          $ref: '#/components/schemas/Images'
+        files:
+          $ref: '#/components/schemas/FilesDBO'
+        attachment:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDBO'
+      xml:
+        name: attachments
+    Image:
+      type: object
+      properties:
+        caption:
+          type: string
+        imagelink:
+          type: string
+        apilink:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        filesize:
+          type: string
+        imagetype:
+          type: string
+        createddate:
+          type: string
+        displayversion:
+          type: string
+        parentfolderid:
+          type: string
+        folderpath:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        taskcount:
+          type: string
+        commentcount:
+          type: string
+        id:
+          type: string
+        siteid:
+          type: string
+        height:
+          type: string
+        width:
+          type: string
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+    CommentDBO:
+      type: object
+      properties:
+        id:
+          type: string
+        html:
+          type: string
+        attachments:
+          $ref: '#/components/schemas/Attachments'
+        folderType:
+          type: string
+      xml:
+        name: comment
+    AttachmentDBO:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        extension:
+          type: string
+        siteid:
+          type: string
+        parentfolderid:
+          type: string
+        filehttplink:
+          type: string
+        folderpath:
+          type: string
+        folderhttplink:
+          type: string
+        filesize:
+          type: string
+        imagetype:
+          type: string
+        createddate:
+          type: string
+        modifiedby:
+          type: string
+        modifieddate:
+          type: string
+        displayversion:
+          type: string
+        documentcount:
+          type: string
+        taskcount:
+          type: string
+        commentcount:
+          type: string
+      xml:
+        name: attachment
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,93 @@
+openapi: 3.2.0
+info:
+  title: Datahub Query Service Query Odata Service API
+  description: Allows for the retrieval of reconciled and/or aggregated data sets from published collections
+  version: '1.0'
+servers:
+- url: https://api.onesourcetax.com/data-hub/v1
+security:
+- bearerAuth: []
+tags:
+- name: Query Odata Service
+paths:
+  /query/odata/collectionservice:
+    get:
+      description: Odata service to query and retrieve Datahub Collection Service document.
+      operationId: getOdataCollections
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OData default response
+      security:
+      - bearerAuth: []
+      summary: Access Datahub Collection Records Service document (adheres to Odata 4.0)
+      tags:
+      - Query Odata Service
+  /query/odata/collectionservice/{collection-name}:
+    get:
+      tags:
+      - Query Odata Service
+      summary: Access Datahub Collection Records (adheres to Odata 4.0)
+      description: Odata service to query and retrieve Datahub Collection Records data.
+      operationId: getQueryOdataCollectionserviceByCollectionName
+      parameters:
+      - name: collection-name
+        in: path
+        description: Name of the collection name to be queried
+        required: true
+        schema:
+          type: string
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      x-operation-id-source: normalized
+      x-operation-id-original: getOdataCollections
+  /query/odata/collectionservice/_Metadata:
+    get:
+      tags:
+      - Query Odata Service
+      summary: Access Datahub Collection Records (adheres to Odata 4.0)
+      description: Odata service to query and retrieve Datahub Collection Records data.
+      operationId: getQueryOdataCollectionserviceMetadata
+      parameters:
+      - name: X-ONESOURCE-Client-Id
+        in: header
+        required: false
+        schema:
+          type: integer
+      - name: X-ONESOURCE-Client-Number
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      x-operation-id-source: normalized
+      x-operation-id-original: getOdataCollections
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

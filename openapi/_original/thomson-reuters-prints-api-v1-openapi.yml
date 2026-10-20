@@ -1,0 +1,541 @@
+# x-archived-from: thomson-reuters-prints-api-v1-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Prints API
+  version: v1
+  description: The Prints API provides endpoints for managing print jobs, including generating, downloading, and retrieving metadata related to print configurations. This API is designed to facilitate the creation and management of print jobs within the ONESOURCE platform.
+servers:
+- url: https://api-uat.onesourcetax.com/trusts/v1/prints
+  description: UAT server for trusts datasets
+- url: https://api-apac.onesourcetax.com/trusts/v1/prints
+  description: APAC server for trusts datasets
+paths:
+  /configuration:
+    post:
+      tags:
+      - Prints
+      summary: This endpoint retrieves print metadata.
+      description: This endpoint provides metadata related to print configurations, such as available sheets, print types, and print styles. Users can use this metadata to configure and customize their print jobs.
+      operationId: Prints_PrintConfigurationData
+      consumes:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: Authorization
+        in: header
+        description: Authorization token required to authenticate and authorize the user.
+        required: true
+        type: string
+      requestBody:
+        description: Payload containing the configuration request data in various formats.
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ConfigurationRequestData'
+          text/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ConfigurationRequestData'
+          application/xml:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ConfigurationRequestData'
+          text/xml:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ConfigurationRequestData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ConfigurationRequestData'
+        required: true
+      responses:
+        '200':
+          description: Successfully retrieves the configuration data for prints.
+          schema:
+            $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ConfigurationResponseData'
+  /all:
+    post:
+      tags:
+      - Prints
+      summary: Fetch list of Prints.
+      description: This endpoint retrieves a list of print jobs based on the provided query parameters, such as offset and take. It allows users to filter and paginate through the list of prints associated with their account.
+      operationId: Prints_GetUserPrintsDetails
+      consumes:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: offset
+        in: query
+        description: The starting point of the data set from which data will be fetched.
+        required: false
+        type: integer
+        format: int32
+      - name: take
+        in: query
+        description: The number of records to retrieve starting from the offset.
+        required: false
+        type: integer
+        format: int32
+      - name: Authorization
+        in: header
+        description: Required authorization token to access the endpoint.
+        required: true
+        type: string
+      requestBody:
+        description: Request payload containing parameters for exporting print data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ExportPrintsRequest'
+          text/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ExportPrintsRequest'
+          application/xml:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ExportPrintsRequest'
+          text/xml:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ExportPrintsRequest'
+          application/x-www-form-urlencoded:
+            schema: null
+            $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ExportPrintsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully retrieved the data.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ExportPrintsResponse'
+        '400':
+          description: The request parameters were invalid.
+          schema:
+            $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ExportPrintsResponse'
+  /generate:
+    post:
+      tags:
+      - Prints
+      summary: This endpoint generates prints.
+      description: This endpoint allows users to create print jobs by submitting configuration details and calculations.
+      operationId: Prints_GeneratePrint
+      consumes:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token required for accessing this endpoint.
+        required: true
+        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.PrintRequest'
+          text/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.PrintRequest'
+          application/xml:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.PrintRequest'
+          text/xml:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.PrintRequest'
+          application/x-www-form-urlencoded:
+            schema: null
+            $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.PrintRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully generated the print.
+          schema:
+            $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.PrintResponse'
+  /download:
+    post:
+      tags:
+      - Prints
+      summary: This endpoint downloads prints.
+      description: This endpoint allows users to download previously generated print jobs by providing the required print job identifiers.
+      operationId: Prints_DownloadPdf
+      consumes:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token required for accessing the download feature.
+        required: true
+        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+          text/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+          application/xml:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+          text/xml:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+        required: true
+      responses:
+        '200':
+          description: Print download was successful.
+          schema:
+            type: object
+  /status:
+    post:
+      tags:
+      - Prints
+      summary: This endpoint retrieves the status of generated prints.
+      description: This endpoint allows users to check the current status of previously generated print jobs.
+      operationId: Prints_PrintStatus
+      consumes:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      - text/json
+      - application/xml
+      - text/xml
+      parameters:
+      - name: Authorization
+        in: header
+        description: Authorization token required to access this endpoint.
+        required: true
+        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+          text/json:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+          application/xml:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+          text/xml:
+            schema: null
+            $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully retrieved the status of the prints.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.PrintStatusResponse'
+definitions:
+  TRTA.Athena.Models.Api.V4.Prints.ConfigurationRequestData:
+    type: object
+    description: Request data for retrieving print configuration metadata.
+    properties:
+      datasetId:
+        type: string
+        description: The unique identifier of the dataset.
+      entityId:
+        type: string
+        description: The unique identifier of the entity.
+      bulkPrint:
+        type: boolean
+        description: Indicates whether the request is for bulk printing.
+  TRTA.Athena.Models.Api.V4.Prints.ConfigurationResponseData:
+    type: object
+    description: Response data containing print configuration metadata.
+    properties:
+      sheets:
+        type: array
+        description: A list of sheet names available for printing.
+        items:
+          type: string
+      printType:
+        type: array
+        items:
+          $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ApiPrintType'
+        description: A list of available print types.
+      printStyle:
+        type: array
+        items:
+          $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.ApiPrintStyle'
+        description: A list of available print styles.
+  TRTA.Athena.Models.Api.V4.Prints.ApiPrintType:
+    type: object
+    description: Represents a print type with its details.
+    properties:
+      id:
+        format: int32
+        type: integer
+        description: The unique identifier of the print type.
+      description:
+        type: string
+        description: A brief description of the print type.
+  TRTA.Athena.Models.Api.V4.Prints.ApiPrintStyle:
+    type: object
+    description: Represents a print style with its details.
+    properties:
+      id:
+        format: uuid
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+        description: The unique identifier of the print style.
+      description:
+        type: string
+        description: A brief description of the print style.
+  TRTA.Athena.Models.Api.V4.Prints.ExportPrintsRequest:
+    type: object
+    description: Request data for exporting print details.
+    properties:
+      calculationName:
+        type: string
+        description: The name of the calculation associated with the print.
+      dataSetName:
+        type: string
+        description: The name of the dataset associated with the print.
+      entityName:
+        type: string
+        description: The name of the entity associated with the print.
+      createdDate:
+        type: string
+        description: The date when the print was created.
+      printedBy:
+        type: string
+        description: The name of the user who initiated the print.
+      sheets:
+        type: string
+        description: The sheets included in the print.
+      printType:
+        type: string
+        description: The type of print requested.
+  TRTA.Athena.Models.Api.V4.Prints.ExportPrintsResponse:
+    type: object
+    description: Response data for exported print details.
+    properties:
+      calculationName:
+        type: string
+        description: The name of the calculation associated with the print.
+      datasetName:
+        type: string
+        description: The name of the dataset associated with the print.
+      entityIdentifier:
+        type: string
+        description: The unique identifier of the entity.
+      entityShortName:
+        type: string
+        description: The short name of the entity.
+      entityName:
+        type: string
+        description: The full name of the entity.
+      createdDate:
+        format: date-time
+        type: string
+        description: The date and time when the print was created.
+      printedBy:
+        type: string
+        description: The name of the user who initiated the print.
+      sheets:
+        type: string
+        description: The sheets included in the print.
+      printJobId:
+        format: uuid
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+        description: The unique identifier of the print job.
+      printType:
+        type: string
+        readOnly: true
+        description: The type of print requested.
+  TRTA.Athena.Models.Api.V4.Prints.PrintRequest:
+    type: object
+    description: Request data for generating a print job.
+    properties:
+      configuration:
+        $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.Configuration'
+        description: The configuration details for the print job.
+      calculations:
+        type: array
+        items:
+          $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.Calculation'
+        description: A list of calculations to include in the print job.
+  TRTA.Athena.Models.Api.V4.Prints.Configuration:
+    type: object
+    description: Configuration details for a print job.
+    properties:
+      bulkPrint:
+        type: boolean
+        description: Indicates whether the print job is for bulk printing.
+      sheets:
+        type: string
+        description: The sheets to include in the print job.
+      selectedSheets:
+        type: string
+        description: The selected sheets for the print job.
+      printType:
+        format: int32
+        type: integer
+        description: The type of print requested.
+      printStyle:
+        type: string
+        description: The style of the print.
+      showDataEntryCells:
+        type: boolean
+        description: Indicates whether to show data entry cells in the print.
+      formsWithoutBackground:
+        type: boolean
+        description: Indicates whether to exclude background from forms.
+      enableDebugPrint:
+        type: boolean
+        description: Indicates whether to enable debug mode for the print.
+  TRTA.Athena.Models.Api.V4.Prints.Calculation:
+    type: object
+    description: Represents a calculation to include in a print job.
+    properties:
+      datasetId:
+        type: string
+        description: The unique identifier of the dataset.
+      entityId:
+        type: string
+        description: The unique identifier of the entity.
+  TRTA.Athena.Models.Api.V4.Prints.PrintResponse:
+    type: object
+    description: Response data for a generated print job.
+    properties:
+      status:
+        type: string
+        description: The status of the print job.
+      printJobs:
+        type: array
+        items:
+          $ref: '#/definitions/TRTA.Athena.Models.Api.V4.Prints.PrintStatus'
+        description: A list of print job statuses.
+  TRTA.Athena.Models.Api.V4.Prints.PrintStatus:
+    type: object
+    description: Represents the status of a print job.
+    properties:
+      entityId:
+        type: string
+        description: The unique identifier of the entity.
+      datasetId:
+        type: string
+        description: The unique identifier of the dataset.
+      jobId:
+        type: string
+      description: The unique identifier of the print job.
+  TRTA.Athena.Models.Api.V4.Prints.DownloadPrintRequest:
+    type: object
+    description: Request data for downloading print jobs.
+    properties:
+      printJobIds:
+        type: array
+        items:
+          type: string
+        description: A list of print job IDs to download.
+  TRTA.Athena.Models.Api.V4.Prints.PrintStatusResponse:
+    type: object
+    description: Response data for the status of print jobs.
+    properties:
+      status:
+        type: string
+        readOnly: true
+        description: The status of the print job.
+      calculationName:
+        type: string
+        description: The name of the calculation associated with the print.
+      datasetName:
+        type: string
+        description: The name of the dataset associated with the print.
+      entityIdentifier:
+        type: string
+        description: The unique identifier of the entity.
+      entityShortName:
+        type: string
+        description: The short name of the entity.
+      entityName:
+        type: string
+        description: The full name of the entity.
+      createdDate:
+        format: date-time
+        type: string
+        description: The date and time when the print was created.
+      printedBy:
+        type: string
+        description: The name of the user who initiated the print.
+      sheets:
+        type: string
+        description: The sheets included in the print.
+      printJobId:
+        format: uuid
+        type: string
+        example: 00000000-0000-0000-0000-000000000000
+        description: The unique identifier of the print job.
+      printType:
+        type: string
+        readOnly: true
+        description: The type of print requested.
+x-tr-streaming-enabled: true
+x-tr-shared-flows:
+- AddXFH
+x-tr-identity-provider: ONESOURCE
+x-tr-proxy-name: ONESOURCE-TrustsPrints
+x-tr-api-version: v1
+x-tr-asset-insight-id: '200190'
+x-tr-apigee-base-path: /trusts/v1/prints
+x-tr-logging-provider:
+- SumoLogic
+- DataDog
+x-tr-servers:
+  default:
+    onesourceZuulServer: true
+    basePath: /oct/api/api/v4/prints
+    regions:
+    - amer
+    - apac
+    - emea
+x-onesource-max-request-limit: 500ps
+x-onesource-throttle-category: Trusts_MetadataRequests_Limit
+x-tr-deploy-permissions:
+- dc-A8bQzXjSn1fRCWeFxc4J1j
+x-tr-promote-permissions:
+- dc-A8bQzXjSn1fRCWeFxc4J1j

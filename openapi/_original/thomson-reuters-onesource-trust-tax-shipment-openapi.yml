@@ -1,0 +1,1625 @@
+# x-archived-from: thomson-reuters-onesource-trust-tax-shipment-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  version: '1.0'
+  title: ONESOURCE Trust Tax - Shipment
+  description: ONESOURCE Trust Tax is a comprehensive and integrated web application that automates the trust tax process from the initial bridging of trust accounting data to the final print and filing of completed tax returns. Our selection of RESTful APIs allows authenticated ONESOURCE Trust Tax users direct access to specified functions within the ONESOURCE Trust Tax application. For example, the Shipment APIs allow authenticated ONESOURCE Trust Tax users to retrieve the paginated list for shipments. It also allows you to filter and sort the data using OData query specifications.
+host: api.onesourcetax.com
+basePath: /trust-tax/shipment
+paths:
+  /eap/odata/pans/{pan}/history:
+    get:
+      tags:
+      - Shipments
+      summary: Returns shipment histories data for the particular PAN and year
+      description: Allows authenticated users to access the Shipments history data
+      operationId: Allows authenticated users to access the Shipments history data
+      consumes: []
+      produces:
+      - application/json
+      parameters:
+      - name: pan
+        in: path
+        description: ''
+        required: true
+        type: string
+      - name: taxyear
+        in: query
+        description: ''
+        required: false
+        type: integer
+        format: int32
+      - name: $select
+        in: query
+        description: Limits the properties returned in the result.
+        required: false
+        type: string
+      - name: $expand
+        in: query
+        description: Indicates the related entities to be represented inline. The maximum depth is 2.
+        required: false
+        type: string
+      - name: $filter
+        in: query
+        description: 'Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.'
+        required: false
+        type: string
+      - name: $orderby
+        in: query
+        description: Specifies the order in which items are returned. The maximum number of expressions is 5.
+        required: false
+        type: string
+      - name: $top
+        in: query
+        description: Limits the number of items returned from a collection.
+        required: false
+        type: integer
+        format: int32
+      - name: $skip
+        in: query
+        description: Excludes the specified number of items of the queried collection from the result.
+        required: false
+        type: integer
+        format: int32
+      - name: $count
+        in: query
+        description: Indicates whether the total count of items within a collection are returned in the result.
+        required: false
+        type: boolean
+        default: false
+      - name: authorization
+        in: header
+        description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer {token}"'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            uniqueItems: false
+            type: array
+            items:
+              $ref: '#/definitions/ShipmentHistory'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        '500':
+          description: Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      deprecated: false
+  /eap/odata/pans/{pan}/tracking:
+    get:
+      tags:
+      - Shipments
+      summary: Returns shipment trackings data for the particular PAN
+      description: Allows authenticated users to access the Shipments tracking data
+      operationId: Allows authenticated users to access the Shipments tracking data
+      consumes: []
+      produces:
+      - application/json
+      parameters:
+      - name: pan
+        in: path
+        description: ''
+        required: true
+        type: string
+      - name: $select
+        in: query
+        description: Limits the properties returned in the result.
+        required: false
+        type: string
+      - name: $expand
+        in: query
+        description: Indicates the related entities to be represented inline. The maximum depth is 2.
+        required: false
+        type: string
+      - name: $filter
+        in: query
+        description: 'Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.'
+        required: false
+        type: string
+      - name: $orderby
+        in: query
+        description: Specifies the order in which items are returned. The maximum number of expressions is 5.
+        required: false
+        type: string
+      - name: $top
+        in: query
+        description: Limits the number of items returned from a collection.
+        required: false
+        type: integer
+        format: int32
+      - name: $skip
+        in: query
+        description: Excludes the specified number of items of the queried collection from the result.
+        required: false
+        type: integer
+        format: int32
+      - name: $count
+        in: query
+        description: Indicates whether the total count of items within a collection are returned in the result.
+        required: false
+        type: boolean
+        default: false
+      - name: authorization
+        in: header
+        description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer {token}"'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            uniqueItems: false
+            type: array
+            items:
+              $ref: '#/definitions/ShipmentTracking'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        '500':
+          description: Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      deprecated: false
+  /eap/odata/$metadata:
+    get:
+      tags:
+      - Metadata
+      summary: Retrieves the metadata
+      description: Retrieves the metadata
+      operationId: Allows authenticated users to access the endpoint's metadata
+      produces:
+      - application/xml
+      parameters:
+      - name: authorization
+        in: header
+        description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer {token}"'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Success
+definitions:
+  ShipmentHistory:
+    type: object
+    properties:
+      trust_key:
+        format: int32
+        description: Internal TrustKey in ShipmentHistory
+        type: integer
+      year_seq:
+        format: int32
+        description: Tax year
+        type: integer
+      permseq:
+        format: int32
+        type: integer
+      bulk_shipment_sent_to_print_date:
+        format: date-time
+        description: Date bulk shipment sent to print
+        type: string
+      print_file_created_date:
+        format: date-time
+        description: When print file was created
+        type: string
+      document_printed:
+        format: string
+        description: Document printed
+        enum:
+        - E_Filing_reports_for_filing_rejected_returns_on_paper
+        - Tax_return
+        - Tax_return_and_worksheet
+        - Electronic_Estimate_Summary
+        - Electronic_Filing
+        - Tax_return_projection_and_worksheet
+        - Transform
+        - Tax_Return_Deleted
+        - Tax_Projection_Deleted
+        - Electronic_Estimate_Summary_Deleted
+        - Extension
+        - Split_Return
+        - Worksheet
+        - Tax_Return_Projection
+        - _1042_S_Filing_Request
+        type: string
+      process_cd:
+        format: int32
+        description: Process Cd
+        type: integer
+      document_printed_option:
+        format: string
+        description: Option of document printed
+        enum:
+        - Federal_and_state
+        - Federal_only
+        - State_only
+        - Intangibles_only
+        - _1099
+        - _1099_MISC
+        - _5x5_Fed_and_state_1041
+        - _5x5_Fed_only_1041
+        - _5x5_State_only_1041
+        - _5x5_Fed_and_state_Grantor
+        - _5x5_Fed_only_Grantor
+        - _5x5_State_only_Grantor
+        - _5227
+        - _5498
+        - _1098
+        - UIT_Report
+        - REMIC_Report
+        - MBS_Report
+        - UIT_Return_of_Capital_Report
+        - REMIC_Cost_Basis_Report
+        - _990
+        type: string
+      locator:
+        description: Locator
+        type: string
+      internal_processing_option:
+        description: Internal processing options
+        type: string
+      ship_mode:
+        format: string
+        description: How bulk shipment was shipped
+        enum:
+        - Next_Morning_Air_including_Saturday_delivery
+        - Next_Morning_Air
+        - Next_day_PM_delivery
+        - Second_Day_Air
+        - Ground
+        - Express_Mail_PO_Box_to_addressee
+        - First_Class_mail
+        - International_Express
+        - Routed_Shipment
+        - Mailing_Service
+        - _98
+        type: string
+      shipment_number:
+        format: int32
+        description: Shipment number
+        type: integer
+      bulk_shipment_sent_to_assembly_date:
+        format: date-time
+        description: Date bulk shipment sent to Assembly
+        type: string
+      bulk_shipment_sent_to_distribution_date:
+        format: date-time
+        description: Date bulk shipment sent to Distribution
+        type: string
+      shipped_date:
+        format: date-time
+        description: Date shipped
+        type: string
+      number_of_packages_for_mailing_service:
+        format: int32
+        description: Number of packages for mailing service
+        type: integer
+      ship_to_account_number:
+        description: Ship to account number
+        type: string
+      ship_to_seqno:
+        format: int32
+        description: Ship to seqno
+        type: integer
+      delivery_method:
+        format: string
+        description: Delivery method
+        enum:
+        - Bulk_Ship
+        - Mail_Service
+        type: string
+      sent_to_preparation_for_mailing_service_date:
+        format: date-time
+        description: Date sent to Preparation for mailing service
+        type: string
+      sent_to_print_for_mailing_service_date:
+        format: date-time
+        description: Date sent to Print for mailing service
+        type: string
+      postage_charge_for_mailing_service:
+        format: double
+        description: Postage charge for mailing service
+        type: number
+      number_of_pages_mailed_by_mailing_service:
+        format: int32
+        description: Number of pages mailed by mailing service
+        type: integer
+      images_printed:
+        format: int32
+        description: Images Printed
+        type: integer
+      added_date:
+        format: date-time
+        description: Added date
+        type: string
+      pages_ovr_limit:
+        format: int32
+        description: Pages Ovr Limit
+        type: integer
+      clr_date:
+        format: date-time
+        description: CLR Date
+        type: string
+      clr_ini:
+        description: CLR Ini
+        type: string
+      mailvendor_cd:
+        format: int32
+        description: Mail Vendor Code
+        type: integer
+      account:
+        $ref: '#/definitions/Account'
+        description: Account
+  Account:
+    type: object
+    properties:
+      yr_seq:
+        format: int32
+        description: Tax year and sequence
+        type: integer
+      account_details:
+        $ref: '#/definitions/AccountDetails'
+        description: Account details
+      tax_year_begin:
+        format: date-time
+        description: Beginning date for tax year
+        type: string
+      tax_year_end:
+        format: date-time
+        description: Ending date for tax year
+        type: string
+      power_amt:
+        format: double
+        description: Dollar amount for 5x5 power
+        type: number
+      power_pct:
+        format: double
+        description: Decimal fraction for 5x5 power percentage
+        type: number
+      short_yr_reason:
+        format: string
+        description: Reason if short year return
+        enum:
+        - NA
+        - Final_Return
+        - Initial_Return
+        - Split_Year_Return
+        - Year_End_Change
+        - New_Return_That_Closed
+        type: string
+      ten991098_fl:
+        format: string
+        description: Indicator to prepare 1098
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      ten995498_fl:
+        format: string
+        description: Indicator to prepare 5498
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      ten99diob_fl:
+        format: string
+        description: Indicator to prepare 1099-Div, Int, OID, B
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      ten99_misc_rr_fl:
+        format: string
+        description: Indicator to prepare 1099-Misc R
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      ten99_misc_sp_fl:
+        format: string
+        description: Indicator to prepare 1099-Misc S
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      ten99r_fl:
+        format: string
+        description: Indicator to prepare 1099-R
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      ten99q_fl:
+        format: string
+        description: Indicator to prepare 1099-Q
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      entity_type:
+        format: string
+        description: Entity Type
+        enum:
+        - Unknown
+        - Decedents_Estate
+        - Simple_Trust
+        - Complex_Dollar_100
+        - Complex_Dollar_300
+        - Pooled_Income_Fund
+        - Grantor
+        - Bankruptcy_Estate
+        - Agent_Or_Custodian
+        - Tax_Deferred_Account
+        - _990
+        - NA
+        - Tracking_Only
+        - _1041_QFT
+        - Form_2439
+        type: string
+      tax_info_stmt_fl:
+        format: string
+        description: Tax Info Stmt
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      minor_acct_type:
+        format: int32
+        description: Minor Acct Type
+        type: integer
+      county:
+        description: County of residence
+        type: string
+      city:
+        description: City of residence
+        type: string
+      use_nqi_flag:
+        format: string
+        description: Indicator to use NQI information on 1042S
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      cap_gain_1042S_flag:
+        format: string
+        description: 1042-S Capital Gain Indicator (Informational)
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      reit_cap_gain_1042S_flag:
+        format: string
+        description: 1042-S REIT Capital Gain Dividend Indicator
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      reit_div_1042S_flag:
+        format: string
+        description: 1042-S REIT Dividend Treaty Rate Indicator
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      n990_code:
+        format: string
+        description: Type of 990 used before 2008
+        enum:
+        - 'No'
+        - _990
+        - _990_EZ
+        - _990N
+        type: string
+      n990_flag:
+        format: string
+        description: Form 990 return type
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      n990_ez_flag:
+        format: string
+        description: Form 990 EZ return type
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      n990_n_flag:
+        format: string
+        description: Form 990 N return type
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      n990_pf_flag:
+        format: string
+        description: Form 990 PF return type
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      n990_t_flag:
+        format: string
+        description: Form 990 T return type
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      gst_status:
+        format: string
+        description: Trust GST Status
+        enum:
+        - Not_Applicable
+        - Not_Currently_Subject_To_GST
+        - Currently_Subject_To_GST
+        - May_Be_Subject_To_GST_In_The_Future
+        - To_be_Determined_By_Executor_Or_Administrator
+        - Specialist_GST_Review_Required
+        - Grandfathered
+        - Exempt
+        type: string
+      exclude_mbs_flag:
+        format: string
+        description: Exclude MBS Flag
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      exclude_oid_flag:
+        format: string
+        description: Exclude OID Flag
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      exclude_remic_flag:
+        format: string
+        description: Exclude REMIC Flag
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      exclude_uit_flag:
+        format: string
+        description: Exclude UIT Flag
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      exclude_mlp_flag:
+        format: string
+        description: Exclude MLP Flag
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      Custom_YrCurrency1:
+        format: double
+        description: Custom Currency(1) - year dependent
+        type: number
+      Custom_YrCurrency2:
+        format: double
+        description: Custom Currency(2) - year dependent
+        type: number
+      return_types:
+        description: Return types
+        uniqueItems: false
+        type: array
+        items:
+          $ref: '#/definitions/ReturnType'
+      account_info:
+        $ref: '#/definitions/AccountInfo'
+        description: Account info
+      added_ini:
+        description: Initials of Person added Account
+        type: string
+      added_date:
+        format: date-time
+        description: Date Account was added
+        type: string
+      change_ini:
+        description: Initials of person making last change to Account
+        type: string
+      changed_date:
+        format: date-time
+        description: Date of last change to Account
+        type: string
+      change_type:
+        format: string
+        description: Type of change to Account
+        enum:
+        - No_Change
+        - Add
+        - Change
+        - Delete
+        type: string
+      Custom_YrText1:
+        description: Custom Text (1) - year dependent
+        type: string
+      Custom_YrText2:
+        description: Custom Text (2) - year dependent
+        type: string
+      Custom_YrText3:
+        description: Custom Text (3) - year dependent
+        type: string
+      Custom_YrText4:
+        description: Custom Text (4) - year dependent
+        type: string
+      Custom_YrText5:
+        description: Custom Text (5) - year dependent
+        type: string
+      Custom_YrText6:
+        description: Custom Text (6) - year dependent
+        type: string
+      Custom_YrText7:
+        description: Custom Text (7) - year dependent
+        type: string
+      Custom_YrText8:
+        description: Custom Text (8) - year dependent
+        type: string
+      Custom_YrText9:
+        description: Custom Text (9) - year dependent
+        type: string
+      Custom_YrText10:
+        description: Custom Text (10) - year dependent
+        type: string
+      Custom_YrText11:
+        description: Custom Text (11) - year dependent
+        type: string
+      Custom_YrText12:
+        description: Custom Text (12) - year dependent
+        type: string
+      Custom_YrText13:
+        description: Custom Text (13) - year dependent
+        type: string
+      Custom_YrText14:
+        description: Custom Text (14) - year dependent
+        type: string
+      Custom_YrText15:
+        description: Custom Text (15) - year dependent
+        type: string
+      Custom_YrText16:
+        description: Custom Text (16) - year dependent
+        type: string
+      Custom_YrText17:
+        description: Custom Text (17) - year dependent
+        type: string
+      Custom_YrText18:
+        description: Custom Text (18) - year dependent
+        type: string
+      Custom_YrText19:
+        description: Custom Text (19) - year dependent
+        type: string
+      Custom_YrText20:
+        description: Custom Text (20) - year dependent
+        type: string
+      Custom_YrText21:
+        description: Custom Text (21) - year dependent
+        type: string
+      Custom_YrText22:
+        description: Custom Text (22) - year dependent
+        type: string
+      Custom_YrText23:
+        description: Custom Text (23) - year dependent
+        type: string
+      Custom_YrText24:
+        description: Custom Text (24) - year dependent
+        type: string
+      Custom_YrText25:
+        description: Custom Text (25) - year dependent
+        type: string
+      Custom_YrText26:
+        description: Custom Text (26) - year dependent
+        type: string
+      Custom_YrText27:
+        description: Custom Text (27) - year dependent
+        type: string
+      Custom_YrText28:
+        description: Custom Text (28) - year dependent
+        type: string
+      Custom_YrText29:
+        description: Custom Text (29) - year dependent
+        type: string
+      Custom_YrText30:
+        description: Custom Text (30) - year dependent
+        type: string
+      Custom_YrText31:
+        description: Custom Text (31) - year dependent
+        type: string
+      Custom_YrText32:
+        description: Custom Text (32) - year dependent
+        type: string
+      Custom_YrText33:
+        description: Custom Text (33) - year dependent
+        type: string
+      Custom_YrText34:
+        description: Custom Text (34) - year dependent
+        type: string
+      Custom_YrText35:
+        description: Custom Text (35) - year dependent
+        type: string
+      Custom_YrNumber1:
+        format: double
+        description: Custom Number (1) - year dependent
+        type: number
+      Custom_YrNumber2:
+        format: double
+        description: Custom Number (2) - year dependent
+        type: number
+      Custom_YrNumber4:
+        format: double
+        description: Custom Number (4) - year dependent
+        type: number
+      Custom_YrNumber5:
+        format: double
+        description: Custom Number (5) - year dependent
+        type: number
+      Custom_YrNumber6:
+        format: double
+        description: Custom Number (6) - year dependent
+        type: number
+      Custom_YrNumber7:
+        format: double
+        description: Custom Number (7) - year dependent
+        type: number
+      Custom_YrNumber8:
+        format: double
+        description: Custom Number (8) - year dependent
+        type: number
+      Custom_YrNumber9:
+        format: double
+        description: Custom Number (9) - year dependent
+        type: number
+      Custom_YrNumber10:
+        format: double
+        description: Custom Number (10) - year dependent
+        type: number
+      Custom_YrNumber11:
+        format: double
+        description: Custom Number (11) - year dependent
+        type: number
+      Custom_YrNumber12:
+        format: double
+        description: Custom Number (12) - year dependent
+        type: number
+      Custom_YrDate1:
+        format: date-time
+        description: Custom Date (1) - year dependent
+        type: string
+      Custom_YrDate2:
+        format: date-time
+        description: Custom Date (2) - year dependent
+        type: string
+      Custom_YrDate3:
+        format: date-time
+        description: Custom Date (3) - year dependent
+        type: string
+      Custom_YrDate4:
+        format: date-time
+        description: Custom Date (4) - year dependent
+        type: string
+      Custom_YrDate5:
+        format: date-time
+        description: Custom Date (5) - year dependent
+        type: string
+      Custom_YrDate6:
+        format: date-time
+        description: Custom Date (6) - year dependent
+        type: string
+      Custom_YrDate7:
+        format: date-time
+        description: Custom Date (7) - year dependent
+        type: string
+      Custom_YrDate8:
+        format: date-time
+        description: Custom Date (8) - year dependent
+        type: string
+      Custom_YrDate9:
+        format: date-time
+        description: Custom Date (9) - year dependent
+        type: string
+      Custom_YrDate10:
+        format: date-time
+        description: Custom Date (10) - year dependent
+        type: string
+      Custom_YrFlag1:
+        format: int32
+        description: Custom Flag(1) - year dependent
+        type: integer
+      Custom_YrFlag2:
+        format: int32
+        description: Custom Flag(2) - year dependent
+        type: integer
+      Custom_YrFlag3:
+        format: int32
+        description: Custom Flag(3) - year dependent
+        type: integer
+      Custom_YrFlag4:
+        format: int32
+        description: Custom Flag(4) - year dependent
+        type: integer
+      Custom_YrFlag5:
+        format: int32
+        description: Custom Flag(5) - year dependent
+        type: integer
+      Custom_YrFlag6:
+        format: int32
+        description: Custom Flag(6) - year dependent
+        type: integer
+      Custom_YrFlag7:
+        format: int32
+        description: Custom Flag(7) - year dependent
+        type: integer
+      Custom_YrFlag8:
+        format: int32
+        description: Custom Flag(8) - year dependent
+        type: integer
+      Custom_YrFlag9:
+        format: int32
+        description: Custom Flag(9) - year dependent
+        type: integer
+      Custom_YrFlag10:
+        format: int32
+        description: Custom Flag(10) - year dependent
+        type: integer
+      Custom_YrFlag11:
+        format: int32
+        description: Custom Flag(11) - year dependent
+        type: integer
+      Custom_YrFlag12:
+        format: int32
+        description: Custom Flag(12) - year dependent
+        type: integer
+      Custom_YrFlag13:
+        format: int32
+        description: Custom Flag(13) - year dependent
+        type: integer
+      Custom_YrFlag14:
+        format: int32
+        description: Custom Flag(14) - year dependent
+        type: integer
+      Custom_YrFlag15:
+        format: int32
+        description: Custom Flag(15) - year dependent
+        type: integer
+      Custom_YrFlag16:
+        format: int32
+        description: Custom Flag(16) - year dependent
+        type: integer
+      Custom_YrFlag17:
+        format: int32
+        description: Custom Flag(17) - year dependent
+        type: integer
+      Custom_YrFlag18:
+        format: int32
+        description: Custom Flag(18) - year dependent
+        type: integer
+      Custom_YrFlag19:
+        format: int32
+        description: Custom Flag(19) - year dependent
+        type: integer
+      Custom_YrFlag20:
+        format: int32
+        description: Custom Flag(20) - year dependent
+        type: integer
+      Custom_YrFlag21:
+        format: int32
+        description: Custom Flag(21) - year dependent
+        type: integer
+      Custom_YrFlag22:
+        format: int32
+        description: Custom Flag(22) - year dependent
+        type: integer
+      Custom_YrFlag23:
+        format: int32
+        description: Custom Flag(23) - year dependent
+        type: integer
+      Custom_YrFlag24:
+        format: int32
+        description: Custom Flag(24) - year dependent
+        type: integer
+      Custom_YrFlag25:
+        format: int32
+        description: Custom Flag(25) - year dependent
+        type: integer
+      Custom_YrFlag26:
+        format: int32
+        description: Custom Flag(26) - year dependent
+        type: integer
+      Custom_YrFlag27:
+        format: int32
+        description: Custom Flag(27) - year dependent
+        type: integer
+      Custom_YrFlag28:
+        format: int32
+        description: Custom Flag(28) - year dependent
+        type: integer
+      Custom_YrFlag29:
+        format: int32
+        description: Custom Flag(29) - year dependent
+        type: integer
+      Custom_YrFlag30:
+        format: int32
+        description: Custom Flag(30) - year dependent
+        type: integer
+      Custom_YrFlag31:
+        format: int32
+        description: Custom Flag(31) - year dependent
+        type: integer
+      Custom_YrFlag32:
+        format: int32
+        description: Custom Flag(32) - year dependent
+        type: integer
+      Custom_YrFlag33:
+        format: int32
+        description: Custom Flag(33) - year dependent
+        type: integer
+      Custom_YrFlag34:
+        format: int32
+        description: Custom Flag(34) - year dependent
+        type: integer
+      Custom_YrFlag35:
+        format: int32
+        description: Custom Flag(35) - year dependent
+        type: integer
+      Custom_YrFlag36:
+        format: int32
+        description: Custom Flag(36) - year dependent
+        type: integer
+      Custom_YrFlag37:
+        format: int32
+        description: Custom Flag(37) - year dependent
+        type: integer
+      Custom_YrFlag38:
+        format: int32
+        description: Custom Flag(38) - year dependent
+        type: integer
+      Custom_YrFlag39:
+        format: int32
+        description: Custom Flag(39) - year dependent
+        type: integer
+      Custom_YrFlag40:
+        format: int32
+        description: Custom Flag(40) - year dependent
+        type: integer
+  AccountDetails:
+    type: object
+    properties:
+      prep_cd:
+        description: Preparer code
+        type: string
+      easy_flag:
+        format: string
+        description: Electronic Estimate Status
+        enum:
+        - No_Estimate_To_Be_Filed
+        - Prepare_And_File_Electronic_Estimates
+        - Voucher_Only_Estimate_Computation
+        - State_Only_Processing
+        type: string
+      year_end_tax_type:
+        format: string
+        description: Year-end tax return print option
+        enum:
+        - Load_And_Hold
+        - Prepare_Print_For_Review_Local_Print
+        - Print_Without_Review_Do_It
+        - No_Tax_Return_Prepared
+        type: string
+      locator:
+        description: Locator
+        type: string
+      name1:
+        description: Taxpayer name (cont.)
+        type: string
+      name2:
+        description: Taxpayer name
+        type: string
+      related_type:
+        format: string
+        description: Related  account processing type
+        enum:
+        - NA
+        - Combined_Main_Account
+        - Combined_Sub_Account
+        - Holds_Shared_Assets_For_Others
+        - Gets_Share_Of_Other_Account
+        type: string
+      locator_5x5:
+        description: Locator for grantor portion of 5x5
+        type: string
+      form_5227_1041A_type:
+        format: string
+        description: 5227/1041A type
+        enum:
+        - NA
+        - Charitable_Lead_Trust
+        - Charitable_Remainder_Annuity_Trust
+        - Charitable_Remainder_Unitrust
+        - Pooled_Income_Fund
+        - Other
+        type: string
+      priority:
+        format: int32
+        description: Priority
+        type: integer
+      admin_cd:
+        description: Admin Code
+        type: string
+      inv_officer_cd:
+        description: Invest Officer Code
+        type: string
+      ten99_service_level:
+        format: string
+        description: 1099 Service Level
+        enum:
+        - NA
+        - Premium_1099_with_full_detail
+        - _1099_with_reported_detail_only
+        - _1099_with_no_detail
+        type: string
+      bnc:
+        description: BNC
+        type: string
+      state_ein:
+        description: State taxpayer ID
+        type: string
+      ein:
+        description: Taxpayer identification number
+        type: string
+      intervivos_test_type:
+        format: string
+        description: Intervivos/Testamentary
+        enum:
+        - NA
+        - Testamentary
+        - Intervivos
+        type: string
+      year_end_month:
+        format: string
+        description: Year-End month from last Load
+        enum:
+        - Unknown
+        - January
+        - February
+        - March
+        - April
+        - May
+        - June
+        - July
+        - August
+        - September
+        - October
+        - November
+        - December
+        type: string
+      upia_code:
+        format: string
+        description: Uniform Principal and Income Act Type
+        enum:
+        - Non_Participant
+        - Power_To_Adjust
+        - Unitrust
+        type: string
+      govern_state_code:
+        description: UPIA Governing state situs
+        type: string
+      victim_911_flag:
+        format: string
+        description: 9/11 Victim
+        enum:
+        - Not_Affected
+        - Directly_Affected
+        - Indirectly_Affected
+        type: string
+      disability_trust_flag:
+        format: string
+        description: Trust is a disability trust
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      dual_return_flag:
+        format: string
+        description: Process Dual 1041 and 990 Return
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      grantor_name:
+        description: Grantor Name
+        type: string
+      state_grantor_tin:
+        description: State Grantor TIN
+        type: string
+      state_grantor_first_name:
+        description: State Grantor First Name
+        type: string
+      state_grantor_mid_name:
+        description: State Grantor Middle Name
+        type: string
+      state_grantor_last_name:
+        description: State Grantor Last Name
+        type: string
+      state_grantor_addr:
+        description: State Grantor Address
+        type: string
+      state_grantor_city:
+        description: State Grantor City
+        type: string
+      state_grantor_state:
+        description: State Grantor State
+        type: string
+      state_gantor_country:
+        description: State Grantor Foreign Country
+        type: string
+      state_grantor_died_bfr_ret:
+        format: string
+        description: State Grantor Died Before Filing Return
+        enum:
+        - 'No'
+        - 'Yes'
+        type: string
+      state_grantor_postal_code:
+        description: State Grantor Foreign Postal Code
+        type: string
+      state_grantor_prov:
+        description: State Grantor Province
+        type: string
+      state_grantor_zip:
+        description: State Grantor Zipcode
+        type: string
+      added_ini:
+        description: Initials of Person added Account Details
+        type: string
+      added_date:
+        format: date-time
+        description: Date Account Details was added
+        type: string
+      change_ini:
+        description: Initials of person making last change to Account Details
+        type: string
+      changed_date:
+        format: date-time
+        description: Date of last change to Account Details
+        type: string
+      change_type:
+        format: string
+        description: Type of change to Account Details
+        enum:
+        - No_Change
+        - Add
+        - Change
+        - Delete
+        type: string
+      Custom_PermFlag1:
+        format: int32
+        description: Custom Flag(1) - Permanent
+        type: integer
+      Custom_PermFlag2:
+        format: int32
+        description: Custom Flag(2) - Permanent
+        type: integer
+      Custom_PermFlag3:
+        format: int32
+        description: Custom Flag(3) - Permanent
+        type: integer
+      Custom_PermFlag4:
+        format: int32
+        description: Custom Flag(4) - Permanent
+        type: integer
+      Custom_PermFlag5:
+        format: int32
+        description: Custom Flag(5) - Permanent
+        type: integer
+      Custom_PermFlag6:
+        format: int32
+        description: Custom Flag(6) - Permanent
+        type: integer
+      Custom_PermFlag7:
+        format: int32
+        description: Custom Flag(7) - Permanent
+        type: integer
+      Custom_PermFlag8:
+        format: int32
+        description: Custom Flag(8) - Permanent
+        type: integer
+      Custom_PermFlag9:
+        format: int32
+        description: Custom Flag(9) - Permanent
+        type: integer
+      Custom_PermFlag10:
+        format: int32
+        description: Custom Flag(10) - Permanent
+        type: integer
+      Custom_PermFlag11:
+        format: int32
+        description: Custom Flag(11) - Permanent
+        type: integer
+      Custom_PermFlag12:
+        format: int32
+        description: Custom Flag(12) - Permanent
+        type: integer
+      Custom_PermFlag13:
+        format: int32
+        description: Custom Flag(13) - Permanent
+        type: integer
+      Custom_PermFlag14:
+        format: int32
+        description: Custom Flag(14) - Permanent
+        type: integer
+      Custom_PermFlag15:
+        format: int32
+        description: Custom Flag(15) - Permanent
+        type: integer
+      Custom_PermFlag16:
+        format: int32
+        description: Custom Flag(16) - Permanent
+        type: integer
+      Custom_PermFlag17:
+        format: int32
+        description: Custom Flag(17) - Permanent
+        type: integer
+      Custom_PermFlag18:
+        format: int32
+        description: Custom Flag(18) - Permanent
+        type: integer
+      Custom_PermFlag19:
+        format: int32
+        description: Custom Flag(19) - Permanent
+        type: integer
+      Custom_PermFlag20:
+        format: int32
+        description: Custom Flag(20) - Permanent
+        type: integer
+      Custom_PermNumber1:
+        format: double
+        description: Custom Number (1) - Permanent
+        type: number
+      Custom_PermNumber2:
+        format: double
+        description: Custom Number (2) - Permanent
+        type: number
+      Custom_PermNumber3:
+        format: double
+        description: Custom Number (3) - Permanent
+        type: number
+      Custom_PermNumber4:
+        format: double
+        description: Custom Number (4) - Permanent
+        type: number
+      Custom_PermNumber5:
+        format: double
+        description: Custom Number (5) - Permanent
+        type: number
+      Custom_PermNumber6:
+        format: double
+        description: Custom Number (6) - Permanent
+        type: number
+      Custom_PermDate1:
+        format: date-time
+        description: Custom Date(1) - Permanent
+        type: string
+      Custom_PermDate2:
+        format: date-time
+        description: Custom Date(2) - Permanent
+        type: string
+      Custom_PermDate3:
+        format: date-time
+        description: Custom Date(3) - Permanent
+        type: string
+      Custom_PermDate4:
+        format: date-time
+        description: Custom Date(4) - Permanent
+        type: string
+      Custom_PermDate5:
+        format: date-time
+        description: Custom Date(5) - Permanent
+        type: string
+      Custom_PermDate6:
+        format: date-time
+        description: Custom Date(6) - Permanent
+        type: string
+      Custom_PermText1:
+        description: Custom Text(1) - Permanent
+        type: string
+      Custom_PermText2:
+        description: Custom Text(2) - Permanent
+        type: string
+      Custom_PermText3:
+        description: Custom Text(3) - Permanent
+        type: string
+      Custom_PermText4:
+        description: Custom Text(4) - Permanent
+        type: string
+      Custom_PermText5:
+        description: Custom Text(5) - Permanent
+        type: string
+      Custom_PermText6:
+        description: Custom Text(6) - Permanent
+        type: string
+      Custom_PermText7:
+        description: Custom Text(7) - Permanent
+        type: string
+      Custom_PermText8:
+        description: Custom Text(8) - Permanent
+        type: string
+      Custom_PermText9:
+        description: Custom Text(9) - Permanent
+        type: string
+      Custom_PermText10:
+        description: Custom Text(10) - Permanent
+        type: string
+      Custom_PermText11:
+        description: Custom Text(11) - Permanent
+        type: string
+      Custom_PermText12:
+        description: Custom Text(12) - Permanent
+        type: string
+      Custom_PermText13:
+        description: Custom Text(13) - Permanent
+        type: string
+      Custom_PermText14:
+        description: Custom Text(14) - Permanent
+        type: string
+      Custom_PermText15:
+        description: Custom Text(15) - Permanent
+        type: string
+      Custom_PermText16:
+        description: Custom Text(16) - Permanent
+        type: string
+      Custom_PermText17:
+        description: Custom Text(17) - Permanent
+        type: string
+      Custom_PermText18:
+        description: Custom Text(18) - Permanent
+        type: string
+      Custom_PermText19:
+        description: Custom Text(19) - Permanent
+        type: string
+      Custom_PermText20:
+        description: Custom Text(20) - Permanent
+        type: string
+      create_date:
+        format: date-time
+        description: Date trust was created.
+        type: string
+  ReturnType:
+    type: object
+    properties:
+      fed_status_type:
+        format: string
+        description: Return type of account status (1041, 1099, 1098, 5498, 5227)
+        enum:
+        - _1041_990
+        - _5227
+        - _1099
+        - _5498
+        - _1098
+        - _1099_MISC
+        - _990
+        type: string
+  AccountInfo:
+    type: object
+    properties:
+      pan:
+        description: Product Access Number
+        type: string
+      account_number:
+        description: Account number
+        type: string
+  ErrorResponseModel:
+    type: object
+    properties:
+      errors:
+        type: object
+        additionalProperties:
+          uniqueItems: false
+          type: array
+          items:
+            type: string
+        readOnly: true
+      type:
+        type: string
+      title:
+        type: string
+      status:
+        format: int32
+        type: integer
+      detail:
+        type: string
+      instance:
+        type: string
+    additionalProperties:
+      type: object
+  ShipmentTracking:
+    type: object
+    properties:
+      shipment_no:
+        format: int32
+        description: Shipment No
+        type: integer
+      billed_to:
+        description: PAN billed for shipping charges
+        type: string
+      ship_mode:
+        format: string
+        description: How it was shipped
+        enum:
+        - Next_Morning_Air_including_Saturday_delivery
+        - Next_Morning_Air
+        - Next_day_PM_delivery
+        - Second_Day_Air
+        - Ground
+        - Express_Mail_PO_Box_to_addressee
+        - First_Class_mail
+        - International_Express
+        - Routed_Shipment
+        - Mailing_Service
+        - _98
+        type: string
+      sub_mode:
+        description: Sub Mode
+        type: string
+      create_dt_tm:
+        format: date-time
+        description: Created Date Time
+        type: string
+      date_shipped:
+        format: date-time
+        description: Date shipped
+        type: string
+      cost:
+        format: double
+        description: Shipping charge
+        type: number
+      shipping_charge:
+        format: double
+        description: Shipping charge
+        type: number
+      list:
+        format: double
+        description: List
+        type: number
+      weight:
+        format: double
+        description: Weight
+        type: number
+      number_of_packages:
+        format: int32
+        description: Number of packages
+        type: integer
+      charge_opt:
+        description: Charge_Opt
+        type: string
+      product_cd:
+        description: Product_Cd
+        type: string
+      confid_ind:
+        description: Confid_Ind
+        type: string
+      zip:
+        description: Zip
+        type: string
+      refer_ship_no:
+        description: Refer_Ship_No
+        type: string
+      adj_fedx_charge:
+        format: double
+        description: Adj_Fedx_Charge
+        type: number
+      adj_fedx_cost:
+        format: double
+        description: Adj_Fedx_Cost
+        type: number
+      fedex_discount:
+        format: double
+        description: Fedex_Discount
+        type: number
+      requested_document_or_process:
+        format: int32
+        description: Requested document or process
+        type: integer
+      bundle_acctno:
+        description: Bundle_AcctNo
+        type: string
+      order_key:
+        format: int32
+        description: Order_Key
+        type: integer
+      cost_cntr:
+        description: Cost_Cntr
+        type: string
+      department:
+        description: Department
+        type: string
+      cod:
+        format: double
+        description: COD
+        type: number
+      data_id:
+        description: Data_ID
+        type: string
+      cost_center:
+        description: Cost_Center
+        type: string
+      assembly_dt_tm:
+        format: date-time
+        description: Assembly_Dt_Tm
+        type: string
+      distribution_dt_tm:
+        format: date-time
+        description: Distribution_Dt_Tm
+        type: string
+      number_of_accounts:
+        format: int32
+        description: Number of accounts
+        type: integer
+      ps_product_code:
+        description: PS_Product_Code
+        type: string
+      description:
+        description: Description
+        type: string
+      pages_printed:
+        format: int32
+        description: Pages Printed
+        type: integer
+      images_printed:
+        format: int32
+        description: Images Printed
+        type: integer
+      print_filename:
+        description: PrintFileName
+        type: string
+      staple_ind:
+        description: Staple_Ind
+        type: string
+      address_shipped_to:
+        format: int32
+        description: Address shipped to
+        type: integer
+      account_shipped_to:
+        description: Account shipped to
+        type: string
+      gl_product:
+        description: GLProduct
+        type: string
+      operating_unit:
+        description: OperatingUnit
+        type: string
+      res_or_comm:
+        description: ResOrComm
+        type: string
+      num_stitched_sets:
+        format: int32
+        description: NumStitchedSets
+        type: integer
+      average_pages_per_set:
+        format: int32
+        description: AveragePagesPerSet
+        type: integer
+      delivery:
+        description: Delivery Method
+        type: string
+      mailvendor_cd:
+        format: int32
+        description: Mail Vendor Code
+        type: integer
+      mail_tracking_no:
+        format: int32
+        description: Mailing Service tracking number
+        type: integer
+      foreign_fl:
+        format: int32
+        description: Foreign_Fl
+        type: integer
+      wbs_element:
+        description: WBS Element
+        type: string
+tags: []

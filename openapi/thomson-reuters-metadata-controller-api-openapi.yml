@@ -1,0 +1,471 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Metadata Controller API
+  version: '1.0'
+  description: 'Operations tagged metadata-controller across 2 of this provider''s published API definitions: thomson-reuters-eap-uat-trri-api-research-openapi.json, thomson-reuters-eap-uat-trri-api-research-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/regulatory-intelligence
+tags:
+- name: metadata-controller
+  description: Metadata Controller
+paths:
+  /v1/document-metadata-view:
+    post:
+      tags:
+      - metadata-controller
+      summary: Returns metadata for a list of documents
+      operationId: getDocumentsMetadataUsingPOST
+      requestBody:
+        description: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentListRequestDto'
+        required: true
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ListDocumentMetadataDto'
+        '201':
+          description: Created
+          content: {}
+        '400':
+          description: Requested documents list should be > 0 && <= 100
+          content: {}
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get metadata from Novus
+          content: {}
+      x-codegen-request-body-name: request
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+  /v2/documents/{documentId}/rulebook-location:
+    get:
+      tags:
+      - metadata-controller
+      summary: Returns TOC tree starting with the root node with all the immediate children…
+      operationId: getDocumentTocTreeUsingGET
+      parameters:
+      - name: documentId
+        in: path
+        description: The unique document identifier
+        required: true
+        schema:
+          type: string
+        example: IC5A20E7DDE1C454EA14C5AEAA856E7DC
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RulebookResponseDto'
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Requested document are forbidden to user
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get TOC tree from Novus
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+  /v2/documents/{guid}/breadcrumb:
+    get:
+      tags:
+      - metadata-controller
+      summary: Returns a document breadcrumb
+      operationId: getDocumentBreadcrumbUsingGET
+      parameters:
+      - name: guid
+        in: path
+        description: ID of document to return breadcrumb
+        required: true
+        schema:
+          type: string
+        example: N3A3B9450230211E8A98DBFE07F88253F
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BreadcrumbResponseDto'
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Requested document are forbidden to user
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get breadcrumb from Novus
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+  /v1/documents/{guid}/metadata:
+    get:
+      tags:
+      - metadata-controller
+      summary: Returns a document metadata
+      operationId: getDocumentMetadataUsingGET
+      parameters:
+      - name: guid
+        in: path
+        description: ID of document to return metadata
+        required: true
+        schema:
+          type: string
+        example: IC5A20E7DDE1C454EA14C5AEAA856E7DC
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DocumentMetadataDto'
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Requested document are forbidden to user
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get metadata from Novus
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+  /v1/documents/{guid}/series:
+    get:
+      tags:
+      - metadata-controller
+      summary: Returns a series of related documents
+      operationId: getDocumentSeriesUsingGET
+      parameters:
+      - name: guid
+        in: path
+        description: ID of document to requested series
+        required: true
+        schema:
+          type: string
+        example: I91F08B2089E811EA9211B4C038C89754
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ListDocumentSeriesDto'
+        '401':
+          description: Supplied transfer token are missed or invalid
+          content: {}
+        '403':
+          description: Requested document are forbidden to user
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get document series
+          content: {}
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+  /v2/mandates-view:
+    post:
+      tags:
+      - metadata-controller
+      summary: Return a document mandate
+      operationId: getDocumentsMandatesUsingPOST
+      requestBody:
+        description: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentListRequestDto'
+        required: true
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ListMandatesResponseDto'
+        '201':
+          description: Created
+          content: {}
+        '400':
+          description: Requested documents list should be > 0 && <= 100
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Failed to get mandate from Novus
+          content: {}
+      x-codegen-request-body-name: request
+    servers:
+    - url: https://api.thomsonreuters.com/regulatory-intelligence
+components:
+  schemas:
+    MandatesDto:
+      title: MandatesDto
+      type: object
+      properties:
+        documentId:
+          type: string
+        mandates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mandate'
+    Document:
+      title: Document
+      type: object
+      properties:
+        date:
+          type: string
+        documentId:
+          type: string
+        title:
+          type: string
+    BreadcrumbResponseDto:
+      title: BreadcrumbResponseDto
+      type: object
+      properties:
+        documentId:
+          type: string
+        label:
+          type: string
+        location:
+          type: array
+          items:
+            $ref: '#/components/schemas/TocNodeDto'
+        nodeId:
+          type: string
+        parentNodeId:
+          type: string
+    RulebookResponseDto:
+      title: RulebookResponseDto
+      type: object
+      properties:
+        rulebookLocation:
+          $ref: '#/components/schemas/RulebookLocationDto'
+    ListDocumentSeriesDto:
+      title: ListDocumentSeriesDto
+      type: object
+      properties:
+        documentSeries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentSeries'
+    RulebookLocationDto:
+      title: RulebookLocationDto
+      type: object
+      properties:
+        documentId:
+          type: string
+        label:
+          type: string
+        nodeId:
+          type: string
+        parentNodeId:
+          type: string
+        rulebookPath:
+          $ref: '#/components/schemas/RulebookPathDto'
+    ListDocumentMetadataDto:
+      title: ListDocumentMetadataDto
+      type: object
+      properties:
+        documentMetadataView:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentMetadataDto'
+    TocNodeDto:
+      title: TocNodeDto
+      type: object
+      properties:
+        label:
+          type: string
+        nodeId:
+          type: string
+        parentNodeId:
+          type: string
+    ListMandatesResponseDto:
+      title: ListMandatesResponseDto
+      type: object
+      properties:
+        mandatesView:
+          type: array
+          items:
+            $ref: '#/components/schemas/MandatesDto'
+    Mandate:
+      title: Mandate
+      type: object
+      properties:
+        nodeId:
+          type: string
+        title:
+          type: string
+    RulebookPathDto:
+      title: RulebookPathDto
+      type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/RulebookPathDto'
+        documentId:
+          type: string
+        hasChildren:
+          type: boolean
+        label:
+          type: string
+        nodeId:
+          type: string
+        parentNodeId:
+          type: string
+    DocumentSeries:
+      title: DocumentSeries
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        seriesId:
+          type: string
+        seriesTitle:
+          type: string
+    DocumentMetadataDatesDto:
+      title: DocumentMetadataDatesDto
+      type: object
+      properties:
+        adoptedDate:
+          type: string
+          format: date
+        approvalDate:
+          type: string
+          format: date
+        commentDates:
+          type: array
+          items:
+            type: string
+            format: date
+        complianceDates:
+          type: array
+          items:
+            type: string
+            format: date
+        documentDate:
+          type: string
+          format: date
+        effectiveDates:
+          type: array
+          items:
+            type: string
+            format: date
+        enactedDate:
+          type: string
+          format: date
+        expectedFutureDate:
+          type: string
+          format: date
+        expirationDate:
+          type: string
+          format: date
+        filingDate:
+          type: string
+          format: date
+        publicationDate:
+          type: string
+          format: date
+        sourcePublicationDate:
+          type: string
+          format: date
+    DocumentListRequestDto:
+      title: DocumentListRequestDto
+      type: object
+      properties:
+        documentIds:
+          type: array
+          items:
+            type: string
+    AuthorRelationshipDto:
+      title: AuthorRelationshipDto
+      type: object
+      properties:
+        author:
+          type: string
+        authorId:
+          type: string
+    DocumentMetadataDto:
+      title: DocumentMetadataDto
+      type: object
+      properties:
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorRelationshipDto'
+        citation:
+          type: string
+        dates:
+          $ref: '#/components/schemas/DocumentMetadataDatesDto'
+        documentId:
+          type: string
+        documentRootId:
+          type: string
+        externalUrl:
+          type: string
+        link:
+          type: string
+        sourceIdentifier:
+          type: string
+        title:
+          type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: To generate Access Token, please use the steps described in <a href='/regulatory-intelligence/swagger_openapi_document/eap-trri-api-access-token/100?from=api&id=9296' rel='noopener noreferrer' target='_blank'>TRRI API Access Token</a> section, ex. 'Bearer {access_token}'.
+x-refined-from:
+- thomson-reuters-eap-uat-trri-api-research-openapi.json
+- thomson-reuters-eap-uat-trri-api-research-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

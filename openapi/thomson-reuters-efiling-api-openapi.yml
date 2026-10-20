@@ -1,0 +1,327 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Process Efiling API
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance
+tags:
+- name: Efiling
+paths:
+  /eap/e-filing-manager/tax-returns/{taxReturnId}:
+    post:
+      tags:
+      - Efiling
+      summary: Initiate efiling operations
+      description: This end-point intiatiates the specified {TRTA.Efiler.Services.OICPublicAPI.Models.V1.PublicApiOperations} for the tax-return {taxReturnId}.
+      operationId: Efiling_ProcessEfilingOperations
+      parameters:
+      - name: taxReturnId
+        in: path
+        description: tax return id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EfilingOperationRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EfilingOperationRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/EfilingOperationRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/EfilingOperationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EfilingOperationRequest'
+        description: tax return data
+        required: true
+  /eap/e-filing-manager/tax-returns/{taxReturnId}/operations/{operationId}:
+    get:
+      tags:
+      - Efiling
+      summary: Get current status of efiling operation
+      description: Returns the latest status of efiling operation corresponding to {operationId}
+      operationId: Efiling_GetFilingActionStatus
+      parameters:
+      - name: taxReturnId
+        in: path
+        description: tax return id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: operationId
+        in: path
+        description: tax return efilings operation id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/EfilerStatusResponse'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+  /eap/e-filing-manager/tax-returns/{taxReturnId}/results/{operationId}:
+    get:
+      tags:
+      - Efiling
+      summary: Download efiling artifacts
+      description: Downloads efiling artifacts generated for the corresponding {operationId}
+      operationId: Efiling_GetEFilerExportDataForDownload
+      parameters:
+      - name: taxReturnId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: operationId
+        in: path
+        description: tax return files operation id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/HttpResponseException'
+components:
+  schemas:
+    TaxReturnData:
+      required:
+      - formCode
+      - vatNumber
+      type: object
+      properties:
+        formCode:
+          description: tax return form code
+          type: string
+        vatNumber:
+          description: VAT Number associated with the tax return
+          type: string
+    EfilingOperationRequest:
+      required:
+      - efilingOperation
+      - isAmended
+      type: object
+      properties:
+        efilingOperation:
+          description: efiling operation to be performed
+          enum:
+          - EXPORT
+          - VALIDATE
+          - EFILE
+          type: string
+        isAmended:
+          description: is return amended?
+          type: boolean
+        taxReturnData:
+          $ref: '#/components/schemas/TaxReturnData'
+          description: Filing data
+      example:
+        efilingOperation: 0
+        isAmended: false
+        taxReturnData:
+          formCode: Norway/2021/mvaVAT
+          vatNumber: '910142887'
+    ErrorModel:
+      type: object
+      properties:
+        code:
+          description: error code
+          type: string
+        type:
+          description: error type
+          type: string
+        location:
+          description: error location
+          type: string
+        message:
+          description: error message
+          type: string
+        details:
+          description: error details
+          type: string
+    EfilerStatusResponse:
+      type: object
+      properties:
+        status:
+          description: current status of the tax return submission
+          type: string
+        submittedDate:
+          description: tax return submitted date
+          type: string
+        errors:
+          description: submission errors if any
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorModel'
+    HttpResponseException:
+      type: object
+      properties:
+        Response:
+          type: object
+          readOnly: true
+        Message:
+          type: string
+          readOnly: true
+        Data:
+          type: object
+          additionalProperties:
+            type: object
+          readOnly: true
+        InnerException:
+          type: object
+          readOnly: true
+        StackTrace:
+          type: string
+          readOnly: true
+        HelpLink:
+          type: string
+        Source:
+          type: string
+        HResult:
+          format: int32
+          type: integer
+          readOnly: true

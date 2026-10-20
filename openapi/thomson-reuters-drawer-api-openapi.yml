@@ -1,0 +1,118 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Drawer API
+  version: v1
+  description: 'Operations tagged Drawer across 3 of this provider''s published API definitions: thomson-reuters-gofileroom-web-api-v1-v1-openapi.json, thomson-reuters-gofileroom-web-api-v1-openapi.yml, thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: Drawer
+  description: Drawer
+paths:
+  /api/v1/drawers:
+    get:
+      tags:
+      - Drawer
+      summary: Get drawer access information
+      description: An endpoint used to provide information about the drawers accessible to a user.
+      operationId: Drawer_GetDrawersForTheUserV1
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DrawerObject'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DrawerObject'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DrawerObject'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DrawerObject'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    DrawerObject:
+      type: object
+      properties:
+        DrawerID:
+          type: string
+          description: Gets or sets the Drawers ID.
+        DrawerName:
+          type: string
+          description: Gets or sets the name of the drawer.
+        Permissions:
+          $ref: '#/components/schemas/DrawerObject_Permissions'
+      description: An object representing a drawer.
+    DrawerObject_Permissions:
+      type: object
+      properties:
+        View:
+          type: boolean
+        Edit:
+          type: boolean
+        Add:
+          type: boolean
+        Delete:
+          type: boolean
+        LookupManagement:
+          type: boolean
+      description: The list of permissions the user has for this drawer. A true value indicates that the permission specified by the key is available to the user.
+    DrawerObject_2:
+      type: object
+      properties:
+        DrawerID:
+          type: string
+          description: Gets or sets the Drawers ID
+        DrawerName:
+          type: string
+          description: Gets or sets the name of the drawer.
+        Permissions:
+          $ref: '#/components/schemas/DrawerObject_Permissions_2'
+      description: An object representing a drawer.
+    DrawerObject_Permissions_2:
+      type: object
+      properties:
+        View:
+          type: boolean
+        Edit:
+          type: boolean
+        Add:
+          type: boolean
+        Delete:
+          type: boolean
+        LookupManagement:
+          type: boolean
+      description: The list of permissions the user has for this drawer.  A true value indicates that the permission specified by the key is available to the user.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.json
+- thomson-reuters-gofileroom-web-api-v1-openapi.yml
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,457 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Multi Doc Export API
+  version: v1
+  description: 'Operations tagged MultiDocExport across 3 of this provider''s published API definitions: thomson-reuters-gofileroom-web-api-v1-v1-openapi.json, thomson-reuters-gofileroom-web-api-v1-openapi.yml, thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: MultiDocExport
+  description: MultiDocExport
+paths:
+  /api/v1/multidocexportrequests:
+    get:
+      tags:
+      - MultiDocExport
+      summary: Get MultiDocExport jobs
+      description: An endpoint used to get a list of all of the current MultiDoc Export Jobs.
+      operationId: MultiDocExport_ListMultiDocExportJobs
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QueueDocumentsListResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QueueDocumentsListResponse'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QueueDocumentsListResponse'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QueueDocumentsListResponse'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/multiDocExportRequests:
+    patch:
+      tags:
+      - MultiDocExport
+      summary: Update a multiple-document export job
+      description: An endpoint used to update the resource. Only the elements to be updated should be passed in the body.
+      operationId: Update_MultiDocExport_Patch
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The Multi Doc Export Job Metadata.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMDERequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMDERequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UpdateMDERequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UpdateMDERequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateMDERequest'
+        required: true
+      responses:
+        '204':
+          description: Update Complete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEResponse'
+        '400':
+          description: Bad Request
+          content: {}
+        '401':
+          description: Unauthorized, Token is expired
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: MultiDocRequest
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/multiDocExportFile/{FileId}:
+    patch:
+      tags:
+      - MultiDocExport
+      summary: Update a multiple-document export job
+      description: An endpoint used to update the resource. Only the elements to be updated should be passed in the body.
+      operationId: MultiDocExport_Patch
+      parameters:
+      - name: FileId
+        in: path
+        description: ID of the File to Update.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The Multi Doc Export Job Metadata.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMDEFile'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMDEFile'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UpdateMDEFile'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UpdateMDEFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateMDEFile'
+        required: true
+      responses:
+        '204':
+          description: Update Complete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEFileResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEFileResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEFileResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEFileResponse'
+        '400':
+          description: Bad Request
+          content: {}
+        '401':
+          description: Unauthorized, Token is expired
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: updateMDEFile
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/cancelMDERequest/{RequestId}:
+    patch:
+      tags:
+      - MultiDocExport
+      summary: Cancel a multiple-document export job
+      description: An endpoint used to cancel a multiple-document export job. Only the elements to be updated should be passed in the body.
+      operationId: MultiDocExport_CancelMDEJob
+      parameters:
+      - name: RequestId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: ID of the job to cancel.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelExportJobRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CancelExportJobRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CancelExportJobRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/CancelExportJobRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CancelExportJobRequest'
+        required: true
+      responses:
+        '204':
+          description: Cancel Complete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/UpdateMDEResponse'
+        '400':
+          description: Bad Request
+          content: {}
+        '401':
+          description: Unauthorized, Token is expired
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: cancelRequest
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    QueueDocumentsListResponse:
+      type: object
+      properties:
+        RequestId:
+          type: string
+          description: Gets or sets the request identifier.
+        DocumentId:
+          type: string
+          description: Gets or sets the document identifier.
+        DocumentName:
+          type: string
+          description: Gets the document name.
+        IsQueued:
+          type: boolean
+          description: Gets or sets a value indicating whether the document is queued.
+        QueueDocumentException:
+          type: string
+          description: Gets or sets the queue document exception.
+      description: A class that contains the status of documents waiting for queue.
+    CancelExportJobRequest:
+      type: object
+      properties:
+        RequestId:
+          type: integer
+          description: Gets or sets the job identifier.
+          format: int32
+        FileId:
+          type: array
+          description: Gets or sets the job identifier.
+          items:
+            type: integer
+            format: int32
+      description: Represents a request to download multiple documents.
+    UpdateMDEFileResponse:
+      type: object
+      properties:
+        UpdateSuccessful:
+          type: boolean
+          description: Gets or sets a value indicating whether update successful.
+        FileId:
+          type: integer
+          description: The FileId in the Export.
+          format: int32
+        UpdateFileException:
+          type: string
+          description: Gets or sets the Update File exception.
+      description: A class that contains the status of export files.
+    UpdateMDEResponse:
+      type: object
+      properties:
+        UpdateSuccessful:
+          type: boolean
+          description: Gets or sets a value indicating whether update successful.
+        RequestId:
+          type: integer
+          description: RequestId.
+          format: int32
+        UpdateRequestException:
+          type: string
+          description: Gets or sets the Update Request exception.
+      description: A class that contains the status of export jobs.
+    UpdateMDERequest:
+      type: object
+      properties:
+        RequestId:
+          type: integer
+          description: The RequestId of the Export Request.
+          format: int32
+        TotalExports:
+          type: integer
+          description: The Total Number of All Export Files Requested.
+          format: int32
+        TotalExportSize:
+          type: number
+          description: The Total Size of All Export Files Requested.
+          format: double
+        LargeFileKey:
+          type: integer
+          description: The Indicator of If Large File Key is Required.
+          format: int32
+        ExportStatus:
+          type: string
+          description: The Current Status of the Export Request.
+      description: The Update for Multiple Document Export Requests.
+    UpdateMDEFile:
+      type: object
+      properties:
+        FileId:
+          type: integer
+          description: The FileId in the Export.
+          format: int32
+        ExportStatus:
+          type: integer
+          description: The Status of the file being exported.
+          format: int32
+        FileExportException:
+          type: string
+          description: Export Error.
+      description: The Update for Multiple Document Exports.
+    QueueDocumentsListResponse_2:
+      type: object
+      properties:
+        RequestId:
+          type: string
+          description: Gets or sets the request identifier.
+        DocumentId:
+          type: string
+          description: Gets or sets the document identifier.
+        DocumentName:
+          type: string
+          description: Gets the document name.
+        IsQueued:
+          type: boolean
+          description: Gets or sets a value indicating whether the document is queued or not.
+        QueueDocumentException:
+          type: string
+          description: Gets or sets the queue document exception.
+      description: A class that contains the status of documents waiting for queue
+    UpdateMDEFileResponse_2:
+      type: object
+      properties:
+        UpdateSuccessful:
+          type: boolean
+          description: Gets or sets a value indicating whether [update successful].
+        FileId:
+          type: integer
+          description: The FileId in the Export
+          format: int32
+        UpdateFileException:
+          type: string
+          description: Gets or sets the Update File exception.
+      description: A class that contains the status of export files
+    UpdateMDEResponse_2:
+      type: object
+      properties:
+        UpdateSuccessful:
+          type: boolean
+          description: Gets or sets a value indicating whether [update successful].
+        RequestId:
+          type: integer
+          description: RequestId.
+          format: int32
+        UpdateRequestException:
+          type: string
+          description: Gets or sets the Update Reqeust exception.
+      description: A class that contains the status of export jobs
+    UpdateMDERequest_2:
+      type: object
+      properties:
+        RequestId:
+          type: integer
+          description: The RequestId of the Export Request
+          format: int32
+        TotalExports:
+          type: integer
+          description: The Total Number of All Export Files Requested
+          format: int32
+        TotalExportSize:
+          type: number
+          description: The Total Size of All Export FIles Requested
+          format: double
+        LargeFileKey:
+          type: integer
+          description: The Indicator of If Laqrge File Key is Required
+          format: int32
+        ExportStatus:
+          type: string
+          description: The Current Status of the Export Request
+      description: The Update for Multiple Document Export Requests
+    UpdateMDEFile_2:
+      type: object
+      properties:
+        FileId:
+          type: integer
+          description: The FileId in the Export
+          format: int32
+        ExportStatus:
+          type: integer
+          description: The Status of the file being exported
+          format: int32
+        FileExportException:
+          type: string
+          description: Export Error
+      description: The Update for Multiple Document Exports
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.json
+- thomson-reuters-gofileroom-web-api-v1-openapi.yml
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

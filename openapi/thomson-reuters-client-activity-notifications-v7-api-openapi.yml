@@ -1,0 +1,106 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Client activity notifications - V7 API
+  version: v1
+  description: 'Operations tagged Client activity notifications - V7 across 2 of this provider''s published API definitions: thomson-reuters-stay-up-to-date-on-client-activity-webhooks-openapi.json, thomson-reuters-stay-up-to-date-on-client-activity-webhooks-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.sureprep.com
+  description: Base URLs for SurePrep API.
+tags:
+- name: Client activity notifications - V7
+  description: Using V7 of our API webhooks to receive updates on your client’s records, SurePrep sends your API an automated message with real-time information as soon as it’s available. Once you receive a message, you can decide when to perform an action for optimal results.
+paths:
+  /V7/TaxCaddyAPI/ClientSubscribe:
+    put:
+      tags:
+      - Client activity notifications - V7
+      operationId: SurePrepMiddlewareV7_ClientSubscribe
+      summary: ClientSubscribe - V7
+      description: Used to subscribe clients (All or individual) to the DRL and Document Added webhooks.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurePrep.API.TaxCaddyAPI.Model.SubscribeRequest'
+      parameters:
+      - name: Authorization
+        in: header
+        description: 'Bearer access token (For example: Bearer ABCD-EFG)'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurePrep.API.TaxCaddyAPI.Model.CommonResponse'
+    servers:
+    - url: https://api.sureprep.com
+      description: Base URLs for SurePrep API.
+  /V7/TaxCaddyAPI/ClientUnsubscribe:
+    put:
+      tags:
+      - Client activity notifications - V7
+      operationId: SurePrepMiddlewareV7_ClientUnsubscribe
+      summary: ClientUnsubscribe - V7
+      description: Used to unsubscribe clients (All or individual) from the DRL and Document Added webhooks.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurePrep.API.TaxCaddyAPI.Model.SubscribeRequest'
+      parameters:
+      - name: Authorization
+        in: header
+        description: 'Bearer access token (For example: Bearer ABCD-EFG)'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurePrep.API.TaxCaddyAPI.Model.CommonResponse'
+    servers:
+    - url: https://api.sureprep.com
+      description: Base URLs for SurePrep API.
+components:
+  schemas:
+    SurePrep.API.TaxCaddyAPI.Model.CommonResponse:
+      type: object
+      properties:
+        ErrorCode:
+          type: string
+          description: Identification code for the error that has occurred.
+        ErrorDescription:
+          type: string
+          description: Description of the error that has occurred for the request attempt.
+    SurePrep.API.TaxCaddyAPI.Model.SubscribeRequest:
+      type: object
+      required:
+      - UserEmail
+      - TaxClientID
+      - EventCode
+      properties:
+        UserEmail:
+          type: string
+          description: Email address of the logged in user who will be performing the activity (active FileRoom users only). This user will need to have “Access to TaxCaddy Admin”.
+        TaxClientID:
+          type: string
+          description: The API Method will accept a single Tax Client ID.
+        EventCode:
+          type: string
+          description: The Event Code the client will be subscribed to. Can be **doc.uploaded** to be alerted when a new document is uploaded to a subscribed client's account, or **drl.created** to be alerted when a subscribed client's DRL is created or has gone into error.
+        LinkedReturns:
+          type: boolean
+          description: When users provide 'true', the subscription will include all tax return profiles (i.e. 1040 & 1041) linked to the taxpayer's TaxCaddy account. Provide the 1040 TaxClientID along with the **true** value for this field.
+x-refined-from:
+- thomson-reuters-stay-up-to-date-on-client-activity-webhooks-openapi.json
+- thomson-reuters-stay-up-to-date-on-client-activity-webhooks-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,5210 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Firms API
+  version: '1.0'
+  description: 'Operations tagged Firms across 5 of this provider''s published API definitions: thomson-reuters-datawarehouse-api-odata-1-2-openapi.json, thomson-reuters-firms-api-2-0-openapi.json, thomson-reuters-datawarehouse-api-odata-1-2-openapi.yml, thomson-reuters-datawarehouse-api-odata-openapi.yml, thomson-reuters-firms-api-2-0-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.com/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.co.uk/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.ca/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.com.au/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.de/legal-tracker/firms-api/v2
+- url: https://api.thomsonreuters.ae/legal-tracker/firms-api/v2
+tags:
+- name: Firms
+paths:
+  /Firms:
+    get:
+      summary: Get entities from Firms
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - FirmId
+            - FirmId desc
+            - FirmName
+            - FirmName desc
+            - CustomName
+            - CustomName desc
+            - FirmClassification
+            - FirmClassification desc
+            - LeadSystemAdminFullName
+            - LeadSystemAdminFullName desc
+            - LeadSystemAdminEmail
+            - LeadSystemAdminEmail desc
+            - ClientRelationshipAttorneyFullName
+            - ClientRelationshipAttorneyFullName desc
+            - ClientRelationshipAttorneyEmail
+            - ClientRelationshipAttorneyEmail desc
+            - ClientRelationshipAttorneyPosition
+            - ClientRelationshipAttorneyPosition desc
+            - ClientRelationshipAttorneyPhone
+            - ClientRelationshipAttorneyPhone desc
+            - ClientRelationshipAttorneyPracticeAreasDetails
+            - ClientRelationshipAttorneyPracticeAreasDetails desc
+            - VendorType
+            - VendorType desc
+            - ActiveInactiveRestricted
+            - ActiveInactiveRestricted desc
+            - StateID
+            - StateID desc
+            - ProvinceRegion
+            - ProvinceRegion desc
+            - CountryID
+            - CountryID desc
+            - City
+            - City desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - FirmId
+            - FirmName
+            - CustomName
+            - FirmClassification
+            - LeadSystemAdminFullName
+            - LeadSystemAdminEmail
+            - ClientRelationshipAttorneyFullName
+            - ClientRelationshipAttorneyEmail
+            - ClientRelationshipAttorneyPosition
+            - ClientRelationshipAttorneyPhone
+            - ClientRelationshipAttorneyPracticeAreasDetails
+            - VendorType
+            - ActiveInactiveRestricted
+            - StateID
+            - ProvinceRegion
+            - CountryID
+            - City
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of Firm
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}'):
+    get:
+      summary: Get entity from Firms by key
+      tags:
+      - Firms
+      parameters:
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - FirmId
+            - FirmName
+            - CustomName
+            - FirmClassification
+            - LeadSystemAdminFullName
+            - LeadSystemAdminEmail
+            - ClientRelationshipAttorneyFullName
+            - ClientRelationshipAttorneyEmail
+            - ClientRelationshipAttorneyPosition
+            - ClientRelationshipAttorneyPhone
+            - ClientRelationshipAttorneyPracticeAreasDetails
+            - VendorType
+            - ActiveInactiveRestricted
+            - StateID
+            - ProvinceRegion
+            - CountryID
+            - City
+      responses:
+        '200':
+          description: Retrieved entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/Invoices:
+    get:
+      summary: Get entities from related Invoices
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceId
+            - InvoiceId desc
+            - MatterId
+            - MatterId desc
+            - InvoiceNumber
+            - InvoiceNumber desc
+            - FirmId
+            - FirmId desc
+            - CurrencyId
+            - CurrencyId desc
+            - LockedExchangeRate
+            - LockedExchangeRate desc
+            - InvoiceDate
+            - InvoiceDate desc
+            - ApprovedTotalExcludingTax
+            - ApprovedTotalExcludingTax desc
+            - ApprovedExpenses
+            - ApprovedExpenses desc
+            - ApprovedFees
+            - ApprovedFees desc
+            - ApprovedTax
+            - ApprovedTax desc
+            - BillingPeriodEndDate
+            - BillingPeriodEndDate desc
+            - BillingPeriodStartDate
+            - BillingPeriodStartDate desc
+            - SentToAPDate
+            - SentToAPDate desc
+            - DatePosted
+            - DatePosted desc
+            - DateApproved
+            - DateApproved desc
+            - IsTaxCompliantEUVat
+            - IsTaxCompliantEUVat desc
+            - AuditState
+            - AuditState desc
+            - InvoiceType
+            - InvoiceType desc
+            - IsLEDES
+            - IsLEDES desc
+            - Status
+            - Status desc
+            - Description
+            - Description desc
+            - CountryId
+            - CountryId desc
+            - LFClientNumber
+            - LFClientNumber desc
+            - LFMatterNumber
+            - LFMatterNumber desc
+            - LedesClientMatterId
+            - LedesClientMatterId desc
+            - CommentsToFirm
+            - CommentsToFirm desc
+            - FirmOfficeName
+            - FirmOfficeName desc
+            - ApprovalRouteName
+            - ApprovalRouteName desc
+            - CurrentApprover
+            - CurrentApprover desc
+            - LongAPBatchId
+            - LongAPBatchId desc
+            - APBatchId
+            - APBatchId desc
+            - DaysPendingReviewer
+            - DaysPendingReviewer desc
+            - PerformanceBasedWithhelFees
+            - PerformanceBasedWithhelFees desc
+            - PerformanceBasedWithhelExpenses
+            - PerformanceBasedWithhelExpenses desc
+            - BilledFees
+            - BilledFees desc
+            - BilledExpenses
+            - BilledExpenses desc
+            - BilledTax
+            - BilledTax desc
+            - ApprovedInApprovalFees
+            - ApprovedInApprovalFees desc
+            - ApprovedInApprovalExpenses
+            - ApprovedInApprovalExpenses desc
+            - ApprovedInApprovalTax
+            - ApprovedInApprovalTax desc
+            - RecommendedVolumeDiscount
+            - RecommendedVolumeDiscount desc
+            - InvoiceApproverFullName
+            - InvoiceApproverFullName desc
+            - InvoicePostedByFullName
+            - InvoicePostedByFullName desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceId
+            - MatterId
+            - InvoiceNumber
+            - FirmId
+            - CurrencyId
+            - LockedExchangeRate
+            - InvoiceDate
+            - ApprovedTotalExcludingTax
+            - ApprovedExpenses
+            - ApprovedFees
+            - ApprovedTax
+            - BillingPeriodEndDate
+            - BillingPeriodStartDate
+            - SentToAPDate
+            - DatePosted
+            - DateApproved
+            - IsTaxCompliantEUVat
+            - AuditState
+            - InvoiceType
+            - IsLEDES
+            - Status
+            - Description
+            - CountryId
+            - LFClientNumber
+            - LFMatterNumber
+            - LedesClientMatterId
+            - CommentsToFirm
+            - FirmOfficeName
+            - ApprovalRouteName
+            - CurrentApprover
+            - LongAPBatchId
+            - APBatchId
+            - DaysPendingReviewer
+            - PerformanceBasedWithhelFees
+            - PerformanceBasedWithhelExpenses
+            - BilledFees
+            - BilledExpenses
+            - BilledTax
+            - ApprovedInApprovalFees
+            - ApprovedInApprovalExpenses
+            - ApprovedInApprovalTax
+            - RecommendedVolumeDiscount
+            - InvoiceApproverFullName
+            - InvoicePostedByFullName
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of Invoice
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.Invoice'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')Invoices
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/Budgets:
+    get:
+      summary: Get entities from related Budgets
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - ApprovedDate
+            - ApprovedDate desc
+            - ApprovalStatus
+            - ApprovalStatus desc
+            - BudgetApproverName
+            - BudgetApproverName desc
+            - BudgetDate
+            - BudgetDate desc
+            - BudgetDefinition
+            - BudgetDefinition desc
+            - BudgetPhaseDescription
+            - BudgetPhaseDescription desc
+            - BudgetPhaseName
+            - BudgetPhaseName desc
+            - BudgetPhasePosition
+            - BudgetPhasePosition desc
+            - BudgetExchangeRate
+            - BudgetExchangeRate desc
+            - BudgetType
+            - BudgetType desc
+            - CreatedDate
+            - CreatedDate desc
+            - CurrencyId
+            - CurrencyId desc
+            - Fees
+            - Fees desc
+            - FirmId
+            - FirmId desc
+            - FirmType
+            - FirmType desc
+            - Expenses
+            - Expenses desc
+            - IsCompany
+            - IsCompany desc
+            - MatterId
+            - MatterId desc
+            - MonthlyAvailableBudget
+            - MonthlyAvailableBudget desc
+            - PhasedBudgetDefinitionVersionID
+            - PhasedBudgetDefinitionVersionID desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - ApprovedDate
+            - ApprovalStatus
+            - BudgetApproverName
+            - BudgetDate
+            - BudgetDefinition
+            - BudgetPhaseDescription
+            - BudgetPhaseName
+            - BudgetPhasePosition
+            - BudgetExchangeRate
+            - BudgetType
+            - CreatedDate
+            - CurrencyId
+            - Fees
+            - FirmId
+            - FirmType
+            - Expenses
+            - IsCompany
+            - MatterId
+            - MonthlyAvailableBudget
+            - PhasedBudgetDefinitionVersionID
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of Budget
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.Budget'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')Budgets
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/Accruals:
+    get:
+      summary: Get entities from related Accruals
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - MatterId
+            - MatterId desc
+            - FirmId
+            - FirmId desc
+            - AccrualDate
+            - AccrualDate desc
+            - FirmType
+            - FirmType desc
+            - UnbilledTotal
+            - UnbilledTotal desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - MatterId
+            - FirmId
+            - AccrualDate
+            - FirmType
+            - UnbilledTotal
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of Accrual
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.Accrual'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')Accruals
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/InvoiceLines:
+    get:
+      summary: Get entities from related InvoiceLines
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceId
+            - InvoiceId desc
+            - LineItemId
+            - LineItemId desc
+            - TimekeeperId
+            - TimekeeperId desc
+            - TimekeeperClassification
+            - TimekeeperClassification desc
+            - LineItemNumberOfUnits
+            - LineItemNumberOfUnits desc
+            - LineItemUnitCost
+            - LineItemUnitCost desc
+            - LineItemTotal
+            - LineItemTotal desc
+            - LineItemTaxTotal
+            - LineItemTaxTotal desc
+            - EffectiveNumberofUnits
+            - EffectiveNumberofUnits desc
+            - LineItemType
+            - LineItemType desc
+            - EffectiveUnitCost
+            - EffectiveUnitCost desc
+            - EffectiveTotal
+            - EffectiveTotal desc
+            - EffectiveTaxTotal
+            - EffectiveTaxTotal desc
+            - LineItemDate
+            - LineItemDate desc
+            - LineItemDescription
+            - LineItemDescription desc
+            - LineItemNumber
+            - LineItemNumber desc
+            - LineItemActivityCode
+            - LineItemActivityCode desc
+            - LineItemActivityCodeDefinition
+            - LineItemActivityCodeDefinition desc
+            - LineItemExpenseCode
+            - LineItemExpenseCode desc
+            - LineItemExpenseCodeDefinition
+            - LineItemExpenseCodeDefinition desc
+            - LineItemTaskCode
+            - LineItemTaskCode desc
+            - LineItemTaskCodeDefinition
+            - LineItemTaskCodeDefinition desc
+            - AmountForInvoiceAdjustment
+            - AmountForInvoiceAdjustment desc
+            - AmountForWithholdingTax
+            - AmountForWithholdingTax desc
+            - ApprovedAmountForWithholdingTax
+            - ApprovedAmountForWithholdingTax desc
+            - CurrentlyApprovedRateForWithholdingTax
+            - CurrentlyApprovedRateForWithholdingTax desc
+            - CurrentlyApprovedTaxableAmountForWithholdingTax
+            - CurrentlyApprovedTaxableAmountForWithholdingTax desc
+            - FirmId
+            - FirmId desc
+            - MatterId
+            - MatterId desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceId
+            - LineItemId
+            - TimekeeperId
+            - TimekeeperClassification
+            - LineItemNumberOfUnits
+            - LineItemUnitCost
+            - LineItemTotal
+            - LineItemTaxTotal
+            - EffectiveNumberofUnits
+            - LineItemType
+            - EffectiveUnitCost
+            - EffectiveTotal
+            - EffectiveTaxTotal
+            - LineItemDate
+            - LineItemDescription
+            - LineItemNumber
+            - LineItemActivityCode
+            - LineItemActivityCodeDefinition
+            - LineItemExpenseCode
+            - LineItemExpenseCodeDefinition
+            - LineItemTaskCode
+            - LineItemTaskCodeDefinition
+            - AmountForInvoiceAdjustment
+            - AmountForWithholdingTax
+            - ApprovedAmountForWithholdingTax
+            - CurrentlyApprovedRateForWithholdingTax
+            - CurrentlyApprovedTaxableAmountForWithholdingTax
+            - FirmId
+            - MatterId
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of InvoiceLine
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceLine'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')InvoiceLines
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/Timekeepers:
+    get:
+      summary: Get entities from related Timekeepers
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceId
+            - InvoiceId desc
+            - TimekeeperId
+            - TimekeeperId desc
+            - TimekeeperClassificationId
+            - TimekeeperClassificationId desc
+            - EffectiveDate
+            - EffectiveDate desc
+            - FirmId
+            - FirmId desc
+            - CountryId
+            - CountryId desc
+            - TotalBilled
+            - TotalBilled desc
+            - TotalHours
+            - TotalHours desc
+            - LockedExchangeRate
+            - LockedExchangeRate desc
+            - LockedExchangeRateLockdownDate
+            - LockedExchangeRateLockdownDate desc
+            - MatterId
+            - MatterId desc
+            - CurrencyId
+            - CurrencyId desc
+            - TimekeeperName
+            - TimekeeperName desc
+            - Ethnicity
+            - Ethnicity desc
+            - Gender
+            - Gender desc
+            - YearsOfExperience
+            - YearsOfExperience desc
+            - LGBTQ
+            - LGBTQ desc
+            - MilitaryStatus
+            - MilitaryStatus desc
+            - Disability
+            - Disability desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceId
+            - TimekeeperId
+            - TimekeeperClassificationId
+            - EffectiveDate
+            - FirmId
+            - CountryId
+            - TotalBilled
+            - TotalHours
+            - LockedExchangeRate
+            - LockedExchangeRateLockdownDate
+            - MatterId
+            - CurrencyId
+            - TimekeeperName
+            - Ethnicity
+            - Gender
+            - YearsOfExperience
+            - LGBTQ
+            - MilitaryStatus
+            - Disability
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of Timekeeper
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.Timekeeper'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')Timekeepers
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/MatterFirms:
+    get:
+      summary: Get entities from related MatterFirms
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - MatterId
+            - MatterId desc
+            - FirmId
+            - FirmId desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - MatterId
+            - FirmId
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of MatterFirm
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterFirm'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')MatterFirms
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/TimekeeperRateSheets:
+    get:
+      summary: Get entities from related TimekeeperRateSheets
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - RateSheetId
+            - RateSheetId desc
+            - TimekeeperId
+            - TimekeeperId desc
+            - MatterId
+            - MatterId desc
+            - TimekeeperName
+            - TimekeeperName desc
+            - FirmId
+            - FirmId desc
+            - RateSheetStatus
+            - RateSheetStatus desc
+            - RateSheetEffectiveDate
+            - RateSheetEffectiveDate desc
+            - RateSheetDateSubmitted
+            - RateSheetDateSubmitted desc
+            - RateSheetClosedDate
+            - RateSheetClosedDate desc
+            - ApprovalStatus
+            - ApprovalStatus desc
+            - ClosedDate
+            - ClosedDate desc
+            - EffectiveDate
+            - EffectiveDate desc
+            - LineItemUnitCost
+            - LineItemUnitCost desc
+            - CoAdjustedRate
+            - CoAdjustedRate desc
+            - CountryId
+            - CountryId desc
+            - BaseRate
+            - BaseRate desc
+            - Discount
+            - Discount desc
+            - PostalCode
+            - PostalCode desc
+            - LFClientNumber
+            - LFClientNumber desc
+            - LFMatterNumber
+            - LFMatterNumber desc
+            - CurrencyId
+            - CurrencyId desc
+            - Ethnicity
+            - Ethnicity desc
+            - Gender
+            - Gender desc
+            - TimekeeperClassificationCode
+            - TimekeeperClassificationCode desc
+            - YearsOfExperience
+            - YearsOfExperience desc
+            - StateId
+            - StateId desc
+            - CurrentRate
+            - CurrentRate desc
+            - ChangeComments
+            - ChangeComments desc
+            - ClosingComments
+            - ClosingComments desc
+            - LGBTQ
+            - LGBTQ desc
+            - MilitaryStatus
+            - MilitaryStatus desc
+            - Disability
+            - Disability desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - RateSheetId
+            - TimekeeperId
+            - MatterId
+            - TimekeeperName
+            - FirmId
+            - RateSheetStatus
+            - RateSheetEffectiveDate
+            - RateSheetDateSubmitted
+            - RateSheetClosedDate
+            - ApprovalStatus
+            - ClosedDate
+            - EffectiveDate
+            - LineItemUnitCost
+            - CoAdjustedRate
+            - CountryId
+            - BaseRate
+            - Discount
+            - PostalCode
+            - LFClientNumber
+            - LFMatterNumber
+            - CurrencyId
+            - Ethnicity
+            - Gender
+            - TimekeeperClassificationCode
+            - YearsOfExperience
+            - StateId
+            - CurrentRate
+            - ChangeComments
+            - ClosingComments
+            - LGBTQ
+            - MilitaryStatus
+            - Disability
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of TimekeeperRateSheet
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.TimekeeperRateSheet'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')TimekeeperRateSheets
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/MatterParticipants:
+    get:
+      summary: Get entities from related MatterParticipants
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - MatterId
+            - MatterId desc
+            - UserId
+            - UserId desc
+            - UserName
+            - UserName desc
+            - MatterRole
+            - MatterRole desc
+            - UserType
+            - UserType desc
+            - FirmId
+            - FirmId desc
+            - FirmName
+            - FirmName desc
+            - UserStatus
+            - UserStatus desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - MatterId
+            - UserId
+            - UserName
+            - MatterRole
+            - UserType
+            - FirmId
+            - FirmName
+            - UserStatus
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of MatterParticipant
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterParticipant'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')MatterParticipants
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/InvoiceReductions:
+    get:
+      summary: Get entities from related InvoiceReductions
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceId
+            - InvoiceId desc
+            - ReductionTypeId
+            - ReductionTypeId desc
+            - ReductionType
+            - ReductionType desc
+            - MatterId
+            - MatterId desc
+            - FirmId
+            - FirmId desc
+            - ReductionAmount
+            - ReductionAmount desc
+            - LockedExchangeRate
+            - LockedExchangeRate desc
+            - LockedExchangeRateDate
+            - LockedExchangeRateDate desc
+            - CurrencyId
+            - CurrencyId desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceId
+            - ReductionTypeId
+            - ReductionType
+            - MatterId
+            - FirmId
+            - ReductionAmount
+            - LockedExchangeRate
+            - LockedExchangeRateDate
+            - CurrencyId
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of InvoiceReduction
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceReduction'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')InvoiceReductions
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /Firms('{FirmId}')/InvoiceTaxes:
+    get:
+      summary: Get entities from related InvoiceTaxes
+      tags:
+      - Firms
+      parameters:
+      - $ref: '#/components/parameters/top'
+      - $ref: '#/components/parameters/skip'
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)
+        schema:
+          type: string
+      - $ref: '#/components/parameters/count'
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceTaxId
+            - InvoiceTaxId desc
+            - MatterId
+            - MatterId desc
+            - InvoiceId
+            - InvoiceId desc
+            - FirmId
+            - FirmId desc
+            - Rate
+            - Rate desc
+            - CurrentlyApprovedRate
+            - CurrentlyApprovedRate desc
+            - TaxableAmount
+            - TaxableAmount desc
+            - CurrentlyApprovedTaxableAmount
+            - CurrentlyApprovedTaxableAmount desc
+            - TaxType
+            - TaxType desc
+            - Amount
+            - Amount desc
+            - ApprovedAmount
+            - ApprovedAmount desc
+            - CurrencyId
+            - CurrencyId desc
+            - LockedExchangeRate
+            - LockedExchangeRate desc
+            - LockedExchangeRateDate
+            - LockedExchangeRateDate desc
+            - CustomName
+            - CustomName desc
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        explode: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - InvoiceTaxId
+            - MatterId
+            - InvoiceId
+            - FirmId
+            - Rate
+            - CurrentlyApprovedRate
+            - TaxableAmount
+            - CurrentlyApprovedTaxableAmount
+            - TaxType
+            - Amount
+            - ApprovedAmount
+            - CurrencyId
+            - LockedExchangeRate
+            - LockedExchangeRateDate
+            - CustomName
+      responses:
+        '200':
+          description: Retrieved entities
+          content:
+            application/json:
+              schema:
+                title: Collection of InvoiceTax
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceTax'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getFirms('{FirmId}')InvoiceTaxes
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /firms:
+    get:
+      tags:
+      - Firms
+      summary: Get firms connected to the company
+      parameters:
+      - name: $top
+        in: query
+        description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          default: 50
+        example: 50
+      - name: $skip
+        in: query
+        description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+        example: 0
+      - name: $filter
+        in: query
+        description: Filter items by property values, see [Filtering](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionfilter)<br /><br /><i>Available operations:</i> eq, ne, gt, ge, lt, le, in, and, or, not<br /><i>Available functions:</i> contains, startswith, endswith, indexof<br /><i>Available properties:</i> id, firmName, status, active, classification, leadSystemAdmin, offices, users, leadSystemAdmin/id, leadSystemAdmin/name, leadSystemAdmin/email, offices/item, offices/item/id, offices/item/name, offices/item/firmId, offices/item/active, offices/item/address, offices/item/city, offices/item/state, offices/item/provinceRegion, offices/item/country, offices/item/generalPhone, offices/item/systemAdmin, offices/item/vendors, offices/item/systemAdmin/id, offices/item/systemAdmin/name, offices/item/systemAdmin/email, offices/item/vendors/item, offices/item/vendors/item/id, offices/item/vendors/item/name, offices/item/vendors/item/number, users/item, users/item/id, users/item/firstName, users/item/lastName, users/item/email, users/item/status, users/item/systemRole, users/item/firmOfficeId, users/item/position, users/item/averageRating
+        schema:
+          type:
+          - string
+          - 'null'
+        example: id eq 111222
+      - name: $select
+        in: query
+        description: Select properties to be returned, see [Select](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionselect)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - firmName
+            - status
+            - active
+            - classification
+            - leadSystemAdmin
+            - offices
+            - users
+            type: string
+      - name: $orderby
+        in: query
+        description: Order items by property values, see [Sorting](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionorderby)
+        schema:
+          uniqueItems: true
+          type: array
+          items:
+            enum:
+            - id
+            - firmName
+            - status
+            - active
+            - classification
+            - id desc
+            - firmName desc
+            - status desc
+            - active desc
+            - classification desc
+            type: string
+      - name: $expand
+        in: query
+        description: Expand a complex property, see [Expand](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionexpand)
+        schema:
+          type: string
+      - name: $count
+        in: query
+        description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A list of firms is successfully returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirmCollection'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+      security:
+      - OAuth2: []
+      - Token: []
+      operationId: getFirms
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/firms-api/v2
+  /firms/{id}:
+    get:
+      tags:
+      - Firms
+      summary: Get a firm profile
+      parameters:
+      - name: id
+        in: path
+        description: The firm identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A firm profile is successfully returned.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirmProfile'
+        '304':
+          description: Firm is not modified.
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '404':
+          description: Firm is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+      security:
+      - OAuth2: []
+      - Token: []
+      operationId: getFirmsById
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - Firms
+      summary: Update a firm profile
+      parameters:
+      - name: id
+        in: path
+        description: The firm identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-Match
+        in: header
+        description: The ETag for the record to perform a concurrency check.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 200 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.'
+        schema:
+          type: string
+        example: return=representation
+      requestBody:
+        description: The changes to apply.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FirmProfilePatchRequest'
+        required: true
+      responses:
+        '200':
+          description: The firm profile was successfully updated.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirmProfile'
+        '204':
+          description: The firm profile was successfully updated.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '404':
+          description: Firm profile is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '412':
+          description: ETag provided in the If-Match header is out of date.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+      security:
+      - OAuth2: []
+      - Token: []
+      operationId: patchFirmsById
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/firms-api/v2
+  /firms/{id}/offices/{officeId}:
+    get:
+      tags:
+      - Firms
+      summary: Get an office profile
+      parameters:
+      - name: id
+        in: path
+        description: The firm identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: officeId
+        in: path
+        description: The firm office identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-None-Match
+        in: header
+        description: Executes a request only if the passed ETag doesn't equal the current resource ETag (i.e. resource hasn't changed).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A firm office profile is successfully returned.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirmOfficeProfile'
+        '304':
+          description: Firm office is not modified.
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '404':
+          description: Firm office is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+      security:
+      - OAuth2: []
+      - Token: []
+      operationId: getFirmsByIdOfficesByOfficeId
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - Firms
+      summary: Update an office profile
+      parameters:
+      - name: id
+        in: path
+        description: The firm identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: officeId
+        in: path
+        description: The firm office identifier.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: If-Match
+        in: header
+        description: The ETag for the record to perform a concurrency check.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 200 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.'
+        schema:
+          type: string
+        example: return=representation
+      requestBody:
+        description: The changes to apply.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FirmOfficeProfilePatchRequest'
+        required: true
+      responses:
+        '200':
+          description: The firm office profile is successfully updated.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirmOfficeProfile'
+        '204':
+          description: The firm office profile is successfully updated.
+          headers:
+            ETag:
+              description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+              schema:
+                type: string
+                description: Entity tag is part of HTTP provided for web cache validation problem, but also used for optimistic concurrency control.
+        '400':
+          description: invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '401':
+          description: Caller must authenticate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '403':
+          description: Caller does not have necessary permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '404':
+          description: Firm office is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '412':
+          description: ETag provided in the If-Match header is out of date.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+      security:
+      - OAuth2: []
+      - Token: []
+      operationId: patchFirmsByIdOfficesByOfficeId
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ca/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.com.au/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.de/legal-tracker/firms-api/v2
+    - url: https://api.thomsonreuters.ae/legal-tracker/firms-api/v2
+components:
+  schemas:
+    LegalTracker.Datawarehouse.CustomNumberField:
+      type: object
+      properties:
+        Label:
+          type:
+          - string
+          - 'null'
+        Value:
+          type:
+          - integer
+          - 'null'
+          format: int32
+      title: CustomNumberField
+    LegalTracker.Datawarehouse.InvoiceLine:
+      type: object
+      properties:
+        InvoiceId:
+          type: string
+        LineItemId:
+          type: string
+        TimekeeperId:
+          type:
+          - string
+          - 'null'
+        TimekeeperClassification:
+          type:
+          - string
+          - 'null'
+        LineItemNumberOfUnits:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        LineItemUnitCost:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        LineItemTotal:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        LineItemTaxTotal:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        EffectiveNumberofUnits:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        LineItemType:
+          type:
+          - string
+          - 'null'
+        EffectiveUnitCost:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        EffectiveTotal:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        EffectiveTaxTotal:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        LineItemDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        LineItemDescription:
+          type:
+          - string
+          - 'null'
+        LineItemNumber:
+          type:
+          - string
+          - 'null'
+        LineItemActivityCode:
+          type:
+          - string
+          - 'null'
+        LineItemActivityCodeDefinition:
+          type:
+          - string
+          - 'null'
+        LineItemExpenseCode:
+          type:
+          - string
+          - 'null'
+        LineItemExpenseCodeDefinition:
+          type:
+          - string
+          - 'null'
+        LineItemTaskCode:
+          type:
+          - string
+          - 'null'
+        LineItemTaskCodeDefinition:
+          type:
+          - string
+          - 'null'
+        AmountForInvoiceAdjustment:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        AmountForWithholdingTax:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        ApprovedAmountForWithholdingTax:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        CurrentlyApprovedRateForWithholdingTax:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        CurrentlyApprovedTaxableAmountForWithholdingTax:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        FirmId:
+          type: string
+        MatterId:
+          type: string
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Invoice:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Invoice'
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+      title: InvoiceLine
+    LegalTracker.Datawarehouse.MatterCustomNumberField:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        CustomNumberField1:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField2:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField3:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField4:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField5:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField6:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField7:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField8:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField9:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField10:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        CustomNumberField11:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomNumberField'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterCustomNumberField
+    LegalTracker.Datawarehouse.MatterCustomDateField:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        CustomDateField1:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField2:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField3:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField4:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField5:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField6:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField7:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField8:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField9:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField10:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField11:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField12:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField13:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField14:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField15:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField16:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField17:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField18:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField19:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField20:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        CustomDateField21:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDateField'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterCustomDateField
+    LegalTracker.Datawarehouse.MatterCustomDropdownField:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        CustomDropdownField1:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField2:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField3:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField4:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField5:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField6:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField7:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField8:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField9:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField10:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField11:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField12:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField13:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField14:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField15:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField16:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField17:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField18:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField19:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField20:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField21:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField22:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField23:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField24:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField25:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField26:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField27:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField28:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField29:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField30:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField31:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField32:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField33:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField34:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField35:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField36:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField37:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField38:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField39:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField40:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        CustomDropdownField41:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomDropdownField'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterCustomDropdownField
+    LegalTracker.Datawarehouse.MatterCustomTextField:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        CustomTextField1:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField2:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField3:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField4:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField5:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField6:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField7:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField8:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField9:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField10:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField11:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField12:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField13:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField14:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField15:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField16:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField17:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField18:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField19:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField20:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        CustomTextField21:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextField'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterCustomTextField
+    LegalTracker.Datawarehouse.CustomTextField:
+      type: object
+      properties:
+        CustomLabel:
+          type:
+          - string
+          - 'null'
+        Value:
+          type:
+          - string
+          - 'null'
+      title: CustomTextField
+    LegalTracker.Datawarehouse.CustomDropdownField:
+      type: object
+      properties:
+        CustomLabel:
+          type:
+          - string
+          - 'null'
+        Value:
+          type:
+          - string
+          - 'null'
+      title: CustomDropdownField
+    LegalTracker.Datawarehouse.MatterCustomRichTextAreaField:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        CustomRichTextAreaField1:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField2:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField3:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField4:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField5:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField6:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField7:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField8:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField9:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField10:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomRichTextAreaField11:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterCustomRichTextAreaField
+    LegalTracker.Datawarehouse.InvoiceReduction:
+      type: object
+      properties:
+        InvoiceId:
+          type: string
+        ReductionTypeId:
+          type: string
+        ReductionType:
+          type:
+          - string
+          - 'null'
+        MatterId:
+          type: string
+        FirmId:
+          type: string
+        ReductionAmount:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        LockedExchangeRate:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        LockedExchangeRateDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        CurrencyId:
+          type:
+          - string
+          - 'null'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Invoice:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Invoice'
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+      title: InvoiceReduction
+    LegalTracker.Datawarehouse.MatterCreator:
+      type: object
+      properties:
+        CreatedByUserObjectId:
+          type: string
+        MatterCreatorName:
+          type:
+          - string
+          - 'null'
+        MatterCreatorEmail:
+          type:
+          - string
+          - 'null'
+        UserType:
+          type:
+          - string
+          - 'null'
+        TitlePosition:
+          type:
+          - string
+          - 'null'
+        AdmissionYear:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        DeactivatedDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterCreator
+    LegalTracker.Datawarehouse.MatterCustomTextAreaField:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        CustomTextAreaField1:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField2:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField3:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField4:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField5:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField6:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField7:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField8:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField9:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField10:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField11:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField12:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        CustomTextAreaField13:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTextAreaField'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterCustomTextAreaField
+    LegalTracker.Datawarehouse.MatterCustomCurrencyField:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        CustomCurrencyField1:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField2:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField3:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField4:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField5:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField6:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField7:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField8:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField9:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField10:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField11:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField12:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField13:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField14:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField15:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField16:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField17:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField18:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField19:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField20:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField21:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField22:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField23:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField24:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField25:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField26:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField27:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField28:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField29:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField30:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField31:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField32:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField33:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField34:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField35:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField36:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField37:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField38:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField39:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField40:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        CustomCurrencyField41:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomCurrencyField'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterCustomCurrencyField
+    LegalTracker.Datawarehouse.Accrual:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        FirmId:
+          type: string
+        AccrualDate:
+          type: string
+          format: date
+          example: '2017-04-13'
+        FirmType:
+          type:
+          - string
+          - 'null'
+        UnbilledTotal:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+      title: Accrual
+    LegalTracker.Datawarehouse.CustomDateField:
+      type: object
+      properties:
+        Label:
+          type:
+          - string
+          - 'null'
+        Value:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+      title: CustomDateField
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific
+    LegalTracker.Datawarehouse.Firm:
+      type: object
+      properties:
+        FirmId:
+          type: string
+        FirmName:
+          type:
+          - string
+          - 'null'
+        CustomName:
+          type:
+          - string
+          - 'null'
+        FirmClassification:
+          type:
+          - string
+          - 'null'
+        LeadSystemAdminFullName:
+          type:
+          - string
+          - 'null'
+        LeadSystemAdminEmail:
+          type:
+          - string
+          - 'null'
+        ClientRelationshipAttorneyFullName:
+          type:
+          - string
+          - 'null'
+        ClientRelationshipAttorneyEmail:
+          type:
+          - string
+          - 'null'
+        ClientRelationshipAttorneyPosition:
+          type:
+          - string
+          - 'null'
+        ClientRelationshipAttorneyPhone:
+          type:
+          - string
+          - 'null'
+        ClientRelationshipAttorneyPracticeAreasDetails:
+          type:
+          - string
+          - 'null'
+        VendorType:
+          type:
+          - string
+          - 'null'
+        ActiveInactiveRestricted:
+          type:
+          - string
+          - 'null'
+        StateID:
+          type:
+          - string
+          - 'null'
+        ProvinceRegion:
+          type:
+          - string
+          - 'null'
+        CountryID:
+          type:
+          - string
+          - 'null'
+        City:
+          type:
+          - string
+          - 'null'
+        Invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Invoice'
+        Budgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Budget'
+        Accruals:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Accrual'
+        InvoiceLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceLine'
+        Timekeepers:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Timekeeper'
+        MatterFirms:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterFirm'
+        TimekeeperRateSheets:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.TimekeeperRateSheet'
+        MatterParticipants:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterParticipant'
+        InvoiceReductions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceReduction'
+        InvoiceTaxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceTax'
+      title: Firm
+    LegalTracker.Datawarehouse.MatterType:
+      type: object
+      properties:
+        MatterTypeId:
+          type: string
+        MatterTypeName:
+          type:
+          - string
+          - 'null'
+        MatterTypeParentId:
+          type:
+          - string
+          - 'null'
+        MatterTypeFullPath:
+          type:
+          - string
+          - 'null'
+        MatterTypeStatus:
+          type:
+          - string
+          - 'null'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterType
+    LegalTracker.Datawarehouse.Invoice:
+      type: object
+      properties:
+        InvoiceId:
+          type: string
+        MatterId:
+          type: string
+        InvoiceNumber:
+          type:
+          - string
+          - 'null'
+        FirmId:
+          type: string
+        CurrencyId:
+          type:
+          - string
+          - 'null'
+        LockedExchangeRate:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        InvoiceDate:
+          type: string
+          format: date
+          example: '2017-04-13'
+        ApprovedTotalExcludingTax:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        ApprovedExpenses:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        ApprovedFees:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        ApprovedTax:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        BillingPeriodEndDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        BillingPeriodStartDate:
+          type: string
+          format: date
+          example: '2017-04-13'
+        SentToAPDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        DatePosted:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        DateApproved:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        IsTaxCompliantEUVat:
+          type:
+          - string
+          - 'null'
+        AuditState:
+          type:
+          - string
+          - 'null'
+        InvoiceType:
+          type:
+          - string
+          - 'null'
+          description: 'Note: return value "LEDES XML" means LEDES XML 2.1'
+        IsLEDES:
+          type:
+          - string
+          - 'null'
+        Status:
+          type:
+          - string
+          - 'null'
+        Description:
+          type:
+          - string
+          - 'null'
+        CountryId:
+          type: string
+        LFClientNumber:
+          type:
+          - string
+          - 'null'
+        LFMatterNumber:
+          type:
+          - string
+          - 'null'
+        LedesClientMatterId:
+          type:
+          - string
+          - 'null'
+        CommentsToFirm:
+          type:
+          - string
+          - 'null'
+        FirmOfficeName:
+          type:
+          - string
+          - 'null'
+        ApprovalRouteName:
+          type:
+          - string
+          - 'null'
+        CurrentApprover:
+          type:
+          - string
+          - 'null'
+        LongAPBatchId:
+          type:
+          - string
+          - 'null'
+        APBatchId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        DaysPendingReviewer:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        PerformanceBasedWithhelFees:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        PerformanceBasedWithhelExpenses:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        BilledFees:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        BilledExpenses:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        BilledTax:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        ApprovedInApprovalFees:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        ApprovedInApprovalExpenses:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        ApprovedInApprovalTax:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        RecommendedVolumeDiscount:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        InvoiceApproverFullName:
+          type:
+          - string
+          - 'null'
+        InvoicePostedByFullName:
+          type:
+          - string
+          - 'null'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+        Country:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Country'
+        InvoiceAllocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceAllocation'
+        InvoiceLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceLine'
+        Timekeepers:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Timekeeper'
+        InvoiceReductions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceReduction'
+        InvoiceTaxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceTax'
+      title: Invoice
+    LegalTracker.Datawarehouse.Timekeeper:
+      type: object
+      properties:
+        InvoiceId:
+          type: string
+        TimekeeperId:
+          type: string
+        TimekeeperClassificationId:
+          type: string
+        EffectiveDate:
+          type: string
+          format: date
+          example: '2017-04-13'
+        FirmId:
+          type: string
+        CountryId:
+          type:
+          - string
+          - 'null'
+        TotalBilled:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        TotalHours:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        LockedExchangeRate:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        LockedExchangeRateLockdownDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        MatterId:
+          type: string
+        CurrencyId:
+          type:
+          - string
+          - 'null'
+        TimekeeperName:
+          type:
+          - string
+          - 'null'
+        Ethnicity:
+          type:
+          - string
+          - 'null'
+        Gender:
+          type:
+          - string
+          - 'null'
+        YearsOfExperience:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        LGBTQ:
+          type:
+          - string
+          - 'null'
+        MilitaryStatus:
+          type:
+          - string
+          - 'null'
+        Disability:
+          type:
+          - string
+          - 'null'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Invoice:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Invoice'
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+        TimekeeperClassification:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.TimekeeperClassification'
+        TimekeeperRateSheets:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.TimekeeperRateSheet'
+      title: Timekeeper
+    LegalTracker.Datawarehouse.TimekeeperRateSheet:
+      type: object
+      properties:
+        RateSheetId:
+          type: string
+        TimekeeperId:
+          type: string
+        MatterId:
+          type: string
+        TimekeeperName:
+          type:
+          - string
+          - 'null'
+        FirmId:
+          type: string
+        RateSheetStatus:
+          type:
+          - string
+          - 'null'
+        RateSheetEffectiveDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        RateSheetDateSubmitted:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        RateSheetClosedDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        ApprovalStatus:
+          type:
+          - string
+          - 'null'
+        ClosedDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        EffectiveDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        LineItemUnitCost:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        CoAdjustedRate:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        CountryId:
+          type: string
+        BaseRate:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        Discount:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        PostalCode:
+          type:
+          - string
+          - 'null'
+        LFClientNumber:
+          type:
+          - string
+          - 'null'
+        LFMatterNumber:
+          type:
+          - string
+          - 'null'
+        CurrencyId:
+          type:
+          - string
+          - 'null'
+        Ethnicity:
+          type:
+          - string
+          - 'null'
+        Gender:
+          type:
+          - string
+          - 'null'
+        TimekeeperClassificationCode:
+          type:
+          - string
+          - 'null'
+        YearsOfExperience:
+          type:
+          - string
+          - 'null'
+        StateId:
+          type: string
+        CurrentRate:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        ChangeComments:
+          type:
+          - string
+          - 'null'
+        ClosingComments:
+          type:
+          - string
+          - 'null'
+        LGBTQ:
+          type:
+          - string
+          - 'null'
+        MilitaryStatus:
+          type:
+          - string
+          - 'null'
+        Disability:
+          type:
+          - string
+          - 'null'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+        Timekeeper:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Timekeeper'
+        Country:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Country'
+        State:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.State'
+      title: TimekeeperRateSheet
+    LegalTracker.Datawarehouse.SubstantiveLaw:
+      type: object
+      properties:
+        SubstantiveLawId:
+          type: string
+        SubstantiveLawName:
+          type:
+          - string
+          - 'null'
+        ParentSubstantiveLawId:
+          type:
+          - string
+          - 'null'
+        SubstantiveLawFullPath:
+          type:
+          - string
+          - 'null'
+        SubstantiveLawStatus:
+          type:
+          - string
+          - 'null'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: SubstantiveLaw
+    LegalTracker.Datawarehouse.MatterFirm:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        FirmId:
+          type: string
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+      title: MatterFirm
+    LegalTracker.Datawarehouse.InvoiceTax:
+      type: object
+      properties:
+        InvoiceTaxId:
+          type: string
+        MatterId:
+          type: string
+        InvoiceId:
+          type: string
+        FirmId:
+          type: string
+        Rate:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        CurrentlyApprovedRate:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        TaxableAmount:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        CurrentlyApprovedTaxableAmount:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        TaxType:
+          type:
+          - string
+          - 'null'
+        Amount:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        ApprovedAmount:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        CurrencyId:
+          type:
+          - string
+          - 'null'
+        LockedExchangeRate:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        LockedExchangeRateDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        CustomName:
+          type:
+          - string
+          - 'null'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Invoice:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Invoice'
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+      title: InvoiceTax
+    LegalTracker.Datawarehouse.PracticeGroup:
+      type: object
+      properties:
+        PracticeGroupId:
+          type: string
+        PracticeGroupName:
+          type:
+          - string
+          - 'null'
+        ParentPracticeGroupId:
+          type:
+          - string
+          - 'null'
+        PracticeGroupFullPath:
+          type:
+          - string
+          - 'null'
+        PracticeGroupStatus:
+          type:
+          - string
+          - 'null'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: PracticeGroup
+    LegalTracker.Datawarehouse.MatterParticipant:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        UserId:
+          type: string
+        UserName:
+          type:
+          - string
+          - 'null'
+        MatterRole:
+          type:
+          - string
+          - 'null'
+        UserType:
+          type:
+          - string
+          - 'null'
+        FirmId:
+          type: string
+        FirmName:
+          type:
+          - string
+          - 'null'
+        UserStatus:
+          type:
+          - string
+          - 'null'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+      title: MatterParticipant
+    LegalTracker.Datawarehouse.CustomTreeNodeField:
+      type: object
+      properties:
+        CustomLabel:
+          type:
+          - string
+          - 'null'
+        Value:
+          type:
+          - string
+          - 'null'
+      title: CustomTreeNodeField
+    LegalTracker.Datawarehouse.MatterCustomTreeNodeField:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        CustomTreeNodeField1:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTreeNodeField'
+        CustomTreeNodeField2:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTreeNodeField'
+        CustomTreeNodeField3:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTreeNodeField'
+        CustomTreeNodeField4:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTreeNodeField'
+        CustomTreeNodeField5:
+          anyOf:
+          - $ref: '#/components/schemas/LegalTracker.Datawarehouse.CustomTreeNodeField'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterCustomTreeNodeField
+    LegalTracker.Datawarehouse.CustomTextAreaField:
+      type: object
+      properties:
+        Label:
+          type:
+          - string
+          - 'null'
+        Value:
+          type:
+          - string
+          - 'null'
+      title: CustomTextAreaField
+    LegalTracker.Datawarehouse.OrgUnit:
+      type: object
+      properties:
+        OrgUnitId:
+          type: string
+        OrgUnitName:
+          type:
+          - string
+          - 'null'
+        ParentOrgUnitId:
+          type:
+          - string
+          - 'null'
+        OrgUnitFullPath:
+          type:
+          - string
+          - 'null'
+        OrgUnitStatus:
+          type:
+          - string
+          - 'null'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: OrgUnit
+    LegalTracker.Datawarehouse.BilledToEntity:
+      type: object
+      properties:
+        BilledToEntityId:
+          type: string
+        ClientName:
+          type:
+          - string
+          - 'null'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: BilledToEntity
+    LegalTracker.Datawarehouse.State:
+      type: object
+      properties:
+        StateId:
+          type: string
+        StateName:
+          type:
+          - string
+          - 'null'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        TimekeeperRateSheets:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.TimekeeperRateSheet'
+      title: State
+    LegalTracker.Datawarehouse.No2CompanyPerson:
+      type: object
+      properties:
+        ClientAttorney2ContactId:
+          type: string
+        No2CompanyPersonName:
+          type:
+          - string
+          - 'null'
+        No2CompanyPersonEmail:
+          type:
+          - string
+          - 'null'
+        UserType:
+          type:
+          - string
+          - 'null'
+        TitlePosition:
+          type:
+          - string
+          - 'null'
+        AdmissionYear:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        DeactivatedDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: No2CompanyPerson
+    LegalTracker.Datawarehouse.InvoiceAllocation:
+      type: object
+      properties:
+        InvoiceId:
+          type: string
+        MatterId:
+          type: string
+        AllocationPercent:
+          type:
+          - string
+          - 'null'
+        AcctCode1:
+          type:
+          - string
+          - 'null'
+        AcctCode2:
+          type:
+          - string
+          - 'null'
+        AcctCode3:
+          type:
+          - string
+          - 'null'
+        AcctCode4:
+          type:
+          - string
+          - 'null'
+        AcctCode5:
+          type:
+          - string
+          - 'null'
+        AcctCode6:
+          type:
+          - string
+          - 'null'
+        AcctCode7:
+          type:
+          - string
+          - 'null'
+        AcctCode8:
+          type:
+          - string
+          - 'null'
+        AcctCode9:
+          type:
+          - string
+          - 'null'
+        AcctCode10:
+          type:
+          - string
+          - 'null'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        Invoice:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Invoice'
+      title: InvoiceAllocation
+    LegalTracker.Datawarehouse.APRoute:
+      type: object
+      properties:
+        APRoutingId:
+          type: string
+        APRouteName:
+          type:
+          - string
+          - 'null'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: APRoute
+    LegalTracker.Datawarehouse.MatterAllocation:
+      type: object
+      properties:
+        AllocationTemplateId:
+          type: string
+        Name:
+          type:
+          - string
+          - 'null'
+        AcctCode1:
+          type:
+          - string
+          - 'null'
+        AcctCode2:
+          type:
+          - string
+          - 'null'
+        AcctCode3:
+          type:
+          - string
+          - 'null'
+        AcctCode4:
+          type:
+          - string
+          - 'null'
+        AcctCode5:
+          type:
+          - string
+          - 'null'
+        AcctCode6:
+          type:
+          - string
+          - 'null'
+        AcctCode7:
+          type:
+          - string
+          - 'null'
+        AcctCode8:
+          type:
+          - string
+          - 'null'
+        AcctCode9:
+          type:
+          - string
+          - 'null'
+        AcctCode10:
+          type:
+          - string
+          - 'null'
+        AllocationPercent:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        Description:
+          type:
+          - string
+          - 'null'
+        Status:
+          type: integer
+          format: int32
+        Comment:
+          type:
+          - string
+          - 'null'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: MatterAllocation
+    LegalTracker.Datawarehouse.LeadOutsideCounsel:
+      type: object
+      properties:
+        LeadOutsideCounselId:
+          type: string
+        LeadOutsideCounselName:
+          type:
+          - string
+          - 'null'
+        LeadOutsideCounselEmail:
+          type:
+          - string
+          - 'null'
+        UserType:
+          type:
+          - string
+          - 'null'
+        FirmId:
+          type:
+          - string
+          - 'null'
+        TitlePosition:
+          type:
+          - string
+          - 'null'
+        AdmissionYear:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        DeactivatedDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: LeadOutsideCounsel
+    LegalTracker.Datawarehouse.LeadCompanyPerson:
+      type: object
+      properties:
+        LeadCompanyPersonId:
+          type: string
+        LeadCompanyPersonName:
+          type:
+          - string
+          - 'null'
+        LeadCompanyPersonEmail:
+          type:
+          - string
+          - 'null'
+        UserType:
+          type:
+          - string
+          - 'null'
+        TitlePosition:
+          type:
+          - string
+          - 'null'
+        AdmissionYear:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        DeactivatedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2017-04-13T15:51:04Z'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: LeadCompanyPerson
+    LegalTracker.Datawarehouse.TimekeeperClassification:
+      type: object
+      properties:
+        TimekeeperClassificationId:
+          type: string
+        Description:
+          type:
+          - string
+          - 'null'
+        IsLawyer:
+          type:
+          - string
+          - 'null'
+        Code:
+          type:
+          - string
+          - 'null'
+        Enabled:
+          type:
+          - string
+          - 'null'
+        Timekeepers:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Timekeeper'
+      title: TimekeeperClassification
+    LegalTracker.Datawarehouse.CustomCurrencyField:
+      type: object
+      properties:
+        Label:
+          type:
+          - string
+          - 'null'
+        Value:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+      title: CustomCurrencyField
+    LegalTracker.Datawarehouse.Matter:
+      type: object
+      properties:
+        MatterId:
+          type: string
+        MatterName:
+          type:
+          - string
+          - 'null'
+        InternalExternal:
+          type:
+          - string
+          - 'null'
+        StartDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        MatterStatus:
+          type:
+          - string
+          - 'null'
+        DateClosed:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        LeadFirmId:
+          type:
+          - string
+          - 'null'
+        LastUpdated:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        CreatedDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        DateResolved:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2017-04-13'
+        LongName:
+          type:
+          - string
+          - 'null'
+        AmountClaimed:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        AmountPaid:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        AmountReceived:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        TrialDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2017-04-13T15:51:04Z'
+        ServiceReceivedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2017-04-13T15:51:04Z'
+        FilingDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2017-04-13T15:51:04Z'
+        DateOfLoss:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2017-04-13T15:51:04Z'
+        CaseApplicationNumber:
+          type:
+          - string
+          - 'null'
+        RegistrationNumber:
+          type:
+          - string
+          - 'null'
+        BusinessManager:
+          type:
+          - string
+          - 'null'
+        DaysToEditMatter:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        Description:
+          type:
+          - string
+          - 'null'
+        CurrencyId:
+          type:
+          - string
+          - 'null'
+        Complexity:
+          type:
+          - string
+          - 'null'
+        FormOfResolution:
+          type:
+          - string
+          - 'null'
+        TimingOfResolution:
+          type:
+          - string
+          - 'null'
+        ClosedForInvoicing:
+          type:
+          - string
+          - 'null'
+        ClosedForEditing:
+          type:
+          - string
+          - 'null'
+        DaysPending:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        LeadFirmNameWithFullDetails:
+          type:
+          - string
+          - 'null'
+        IsGroup:
+          type:
+          - string
+          - 'null'
+        ClientMatterNumber:
+          type:
+          - string
+          - 'null'
+        StateOrProvince:
+          type:
+          - string
+          - 'null'
+        KeyIssues:
+          type:
+          - string
+          - 'null'
+        AdverseFirmInfo:
+          type:
+          - string
+          - 'null'
+        CourtOrCounty:
+          type:
+          - string
+          - 'null'
+        BilledToEntityId:
+          type: string
+        APRoutingId:
+          type: string
+        CountryId:
+          type: string
+        MatterTypeId:
+          type: string
+        PracticeGroupId:
+          type: string
+        OrgUnitId:
+          type: string
+        SubstantiveLawId:
+          type: string
+        LeadCompanyPersonId:
+          type: string
+        LeadOutsideCounselId:
+          type: string
+        CreatedByUserObjectId:
+          type: string
+        ClientAttorney2ContactId:
+          type: string
+        AllocationTemplateId:
+          type: string
+        AssociatedMatterID:
+          type:
+          - string
+          - 'null'
+        ApprovalRoutingId:
+          type:
+          - string
+          - 'null'
+        MatterGroupId:
+          type:
+          - string
+          - 'null'
+        StateId:
+          type: string
+        BilledToEntity:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.BilledToEntity'
+        APRoute:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.APRoute'
+        Country:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Country'
+        MatterType:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterType'
+        PracticeGroup:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.PracticeGroup'
+        OrgUnit:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.OrgUnit'
+        SubstantiveLaw:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.SubstantiveLaw'
+        MatterCustomTreeNodeField:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterCustomTreeNodeField'
+        MatterCustomCurrencyField:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterCustomCurrencyField'
+        MatterCustomRichTextAreaField:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterCustomRichTextAreaField'
+        MatterCustomNumberField:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterCustomNumberField'
+        MatterCustomDropdownField:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterCustomDropdownField'
+        MatterCustomTextField:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterCustomTextField'
+        MatterCustomDateField:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterCustomDateField'
+        State:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.State'
+        MatterCustomTextAreaField:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterCustomTextAreaField'
+        MatterAllocation:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterAllocation'
+        LeadCompanyPerson:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.LeadCompanyPerson'
+        LeadOutsideCounsel:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.LeadOutsideCounsel'
+        MatterCreator:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterCreator'
+        No2CompanyPerson:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.No2CompanyPerson'
+        Accruals:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Accrual'
+        Invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Invoice'
+        Budgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Budget'
+        InvoiceAllocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceAllocation'
+        InvoiceLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceLine'
+        Timekeepers:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Timekeeper'
+        MatterFirms:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterFirm'
+        TimekeeperRateSheets:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.TimekeeperRateSheet'
+        MatterParticipants:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.MatterParticipant'
+        InvoiceReductions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceReduction'
+        InvoiceTaxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.InvoiceTax'
+      title: Matter
+    LegalTracker.Datawarehouse.Budget:
+      type: object
+      properties:
+        ApprovedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2017-04-13T15:51:04Z'
+        ApprovalStatus:
+          type:
+          - string
+          - 'null'
+        BudgetApproverName:
+          type:
+          - string
+          - 'null'
+        BudgetDate:
+          type: string
+          format: date
+          example: '2017-04-13'
+        BudgetDefinition:
+          type:
+          - string
+          - 'null'
+        BudgetPhaseDescription:
+          type:
+          - string
+          - 'null'
+        BudgetPhaseName:
+          type:
+          - string
+          - 'null'
+        BudgetPhasePosition:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        BudgetExchangeRate:
+          anyOf:
+          - type: number
+          - type: string
+          format: double
+          example: 3.14
+        BudgetType:
+          type:
+          - string
+          - 'null'
+        CreatedDate:
+          type: string
+          format: date
+          example: '2017-04-13'
+        CurrencyId:
+          type:
+          - string
+          - 'null'
+        Fees:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        FirmId:
+          type: string
+        FirmType:
+          type:
+          - string
+          - 'null'
+        Expenses:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        IsCompany:
+          type:
+          - string
+          - 'null'
+        MatterId:
+          type: string
+        MonthlyAvailableBudget:
+          anyOf:
+          - type: number
+          - type: string
+          format: decimal
+          multipleOf: 1
+          example: 0
+        PhasedBudgetDefinitionVersionID:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        Firm:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Firm'
+        Matter:
+          $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+      title: Budget
+    LegalTracker.Datawarehouse.Country:
+      type: object
+      properties:
+        CountryId:
+          type: string
+        CountryName:
+          type:
+          - string
+          - 'null'
+        ISOCode:
+          type:
+          - string
+          - 'null'
+        Matters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Matter'
+        TimekeeperRateSheets:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.TimekeeperRateSheet'
+        Invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalTracker.Datawarehouse.Invoice'
+      title: Country
+    FirmInfoStatus:
+      enum:
+      - Live
+      - Memo
+      type: string
+    InvoiceFormatsAllowed:
+      enum:
+      - CompanyDefault
+      - AllFormatsAllowed
+      - LedesOnly
+      - FirmDefault
+      type: string
+    FirmCollection:
+      type: object
+      properties:
+        value:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Firm'
+      additionalProperties: false
+    ServiceProviderType:
+      enum:
+      - AccidentReconstruction
+      - Accountant
+      - Arbitrator
+      - Architect
+      - ComputerForensics
+      - Consultant
+      - CopyServices
+      - CourtReporter
+      - Doctor
+      - Economist
+      - ElectronicDataDiscovery
+      - Engineer
+      - EnvironmentalTesting
+      - ForensicAnimation
+      - ForensicGraphics
+      - IndependentAdjuster
+      - InsuranceCompany
+      - Laboratory
+      - LawFirm
+      - LegalServices
+      - LitigationSupport
+      - Lobbyist
+      - Logistics
+      - OccupationalTherapist
+      - Other
+      - PatentFilingService
+      - Photocopying
+      - Photographer
+      - PhysicalTherapist
+      - PrivateInvestigator
+      - ProcessService
+      - Psychologist
+      - Research
+      - TechnologyConsultant
+      - TemporaryStaffingService
+      - TrademarkService
+      - TransferAgent
+      - TranslationService
+      - TrialConsultant
+      - VideoDepositionService
+      - VideoServices
+      - Videographer
+      - WitnessExpert
+      type: string
+    InvoiceCurrenciesAllowed:
+      enum:
+      - CompanyDefault
+      - AllCurrenciesAllowed
+      - SpecifiedCurrencies
+      - FirmDefault
+      type: string
+    FirmUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstName:
+          type:
+          - string
+          - 'null'
+        lastName:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        systemRole:
+          $ref: '#/components/schemas/SystemRole'
+        firmOfficeId:
+          type: integer
+          format: int32
+        position:
+          $ref: '#/components/schemas/Position'
+        averageRating:
+          type: number
+          format: double
+      additionalProperties: false
+    MatterBudgetReqt:
+      enum:
+      - 'Null'
+      - Optional
+      - Never
+      type: string
+    SystemRole:
+      enum:
+      - 'Null'
+      - FirmAdmin
+      - FirmOfficeAdmin
+      - FirmUserWithBilling
+      - ThirdPartyBiller
+      - FirmUser
+      type: string
+    FirmOfficeProfilePatchRequest:
+      type: object
+      properties:
+        vendors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FirmOfficeVendorNumber'
+          description: 'The updated Vendor information, given as a list of objects providing an id or name for
+
+            the field to be updated.'
+          example:
+          - name: Vendor ID
+            number: '1234'
+        notes:
+          maxLength: 200
+          type:
+          - string
+          - 'null'
+          description: The updated company-specific firm office notes.
+        invoiceCurrenciesAllowed:
+          $ref: '#/components/schemas/InvoiceCurrenciesAllowed'
+        invoiceCurrencies:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: 'If given, replace the collection of allowed currencies.
+
+
+            Values must be provided if and only if InvoiceCurrenciesAllowed
+
+            is set to SpecifiedCurrencies.'
+        invoiceFormatsAllowed:
+          $ref: '#/components/schemas/InvoiceFormatsAllowed'
+        ledesFormatsAllowed:
+          $ref: '#/components/schemas/LedesFormatsAllowed'
+        invoiceTaxTypeAllowed:
+          $ref: '#/components/schemas/InvoiceTaxTypeAllowed'
+      additionalProperties: false
+      description: A request to perform an update on non-null fields.
+    ErrorResponse_2:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    FirmCustomField:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomFieldType'
+        isEditable:
+          type: boolean
+        textValue:
+          type:
+          - string
+          - 'null'
+        fileValue:
+          $ref: '#/components/schemas/EFile'
+      additionalProperties: false
+    FirmOffice:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        firmId:
+          type: integer
+          format: int32
+        active:
+          type: boolean
+        address:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        provinceRegion:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+        generalPhone:
+          type:
+          - string
+          - 'null'
+        systemAdmin:
+          $ref: '#/components/schemas/Contact'
+        vendors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FirmOfficeVendorNumber'
+      additionalProperties: false
+    FirmOfficeVendorNumber:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        number:
+          maxLength: 200
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    BillingAddress:
+      type: object
+      properties:
+        street1:
+          maxLength: 150
+          type:
+          - string
+          - 'null'
+        street2:
+          maxLength: 150
+          type:
+          - string
+          - 'null'
+        street3:
+          maxLength: 150
+          type:
+          - string
+          - 'null'
+        street4:
+          maxLength: 150
+          type:
+          - string
+          - 'null'
+        street5:
+          maxLength: 150
+          type:
+          - string
+          - 'null'
+        street6:
+          maxLength: 150
+          type:
+          - string
+          - 'null'
+        city:
+          maxLength: 65
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        provinceRegion:
+          maxLength: 100
+          type:
+          - string
+          - 'null'
+        zipCode:
+          maxLength: 25
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+        details:
+          type: array
+          items:
+            required:
+            - code
+            - message
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              target:
+                type: string
+        innerError:
+          required:
+          - code
+          - message
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      additionalProperties: false
+    FirmOfficeProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firmId:
+          type: integer
+          format: int32
+        active:
+          type: boolean
+        officeName:
+          type:
+          - string
+          - 'null'
+        address:
+          $ref: '#/components/schemas/Address'
+        generalPhone:
+          type:
+          - string
+          - 'null'
+        generalFax:
+          type:
+          - string
+          - 'null'
+        taxId:
+          type:
+          - string
+          - 'null'
+        vatId:
+          type:
+          - string
+          - 'null'
+        gstId:
+          type:
+          - string
+          - 'null'
+        hstId:
+          type:
+          - string
+          - 'null'
+        pstId:
+          type:
+          - string
+          - 'null'
+        qstId:
+          type:
+          - string
+          - 'null'
+        salesTaxId:
+          type:
+          - string
+          - 'null'
+        withholdingTaxId:
+          type:
+          - string
+          - 'null'
+        managingPartner:
+          type:
+          - string
+          - 'null'
+        representativeClients:
+          type:
+          - string
+          - 'null'
+        isSendingLedes:
+          type: boolean
+        officeSize:
+          type:
+          - string
+          - 'null'
+        officeAdmin:
+          $ref: '#/components/schemas/Contact'
+        backupOfficeAdmin:
+          $ref: '#/components/schemas/Contact'
+        baseCurrency:
+          type:
+          - string
+          - 'null'
+        practiceAreas:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddress'
+        vendors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FirmOfficeVendorNumber'
+        notes:
+          type:
+          - string
+          - 'null'
+        invoiceCurrenciesAllowed:
+          $ref: '#/components/schemas/InvoiceCurrenciesAllowed'
+        invoiceCurrencies:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        invoiceFormatsAllowed:
+          $ref: '#/components/schemas/InvoiceFormatsAllowed'
+        ledesFormatsAllowed:
+          $ref: '#/components/schemas/LedesFormatsAllowed'
+        invoiceTaxTypeAllowed:
+          $ref: '#/components/schemas/InvoiceTaxTypeAllowed'
+      additionalProperties: false
+    InvoiceTaxTypeAllowed:
+      enum:
+      - CompanyDefault
+      - FirmDefault
+      - AllTaxTypesAllowed
+      - NonStandardTaxTypesProhibited
+      - NonStandardTaxTypesWithOtherProhibited
+      type: string
+    FirmOfficeSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Address:
+      type: object
+      properties:
+        street1:
+          maxLength: 150
+          type:
+          - string
+          - 'null'
+        street2:
+          maxLength: 150
+          type:
+          - string
+          - 'null'
+        city:
+          maxLength: 65
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        provinceRegion:
+          maxLength: 100
+          type:
+          - string
+          - 'null'
+        zipCode:
+          maxLength: 25
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    FirmProfilePatchRequest:
+      type: object
+      properties:
+        active:
+          $ref: '#/components/schemas/FirmActiveStatus'
+        customFirmName:
+          maxLength: 20
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: If given, change the company's name for this form.
+        firmClassification:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: If given, update the company's firm classification.
+        matterBudgetRequirement:
+          $ref: '#/components/schemas/MatterBudgetReqt'
+        accrualAndUnbilledAmountsRequirement:
+          $ref: '#/components/schemas/AccrualsReqt'
+        evaluationRequirement:
+          $ref: '#/components/schemas/EvaluationReqt'
+        invoiceCurrenciesAllowed:
+          $ref: '#/components/schemas/InvoiceCurrenciesAllowed'
+        invoiceCurrencies:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: 'If given, replace the collection of allowed currencies.
+
+
+            Values must be provided if and only if InvoiceCurrenciesAllowed
+
+            is set to SpecifiedCurrencies.'
+        invoiceFormatsAllowed:
+          $ref: '#/components/schemas/InvoiceFormatsAllowed'
+        ledesFormatsAllowed:
+          $ref: '#/components/schemas/LedesFormatsAllowed'
+        invoiceTaxTypeAllowed:
+          $ref: '#/components/schemas/InvoiceTaxTypeAllowed'
+        notes:
+          maxLength: 500
+          type:
+          - string
+          - 'null'
+          description: If given, update the company's firm notes.
+        firmCustomFields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FirmCustomField'
+          description: 'Replace the custom field values for this firm with new values. Omitted values will
+
+            be deleted.
+
+
+            Custom fields are matched on either database field ID or the unique field name.'
+      additionalProperties: false
+      description: A request to perform an update on non-null fields.
+    UserStatus:
+      enum:
+      - Active
+      - Inactive
+      type: string
+    CustomFieldType:
+      enum:
+      - Text
+      - File
+      type: string
+    EFile:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        fileName:
+          type:
+          - string
+          - 'null'
+        fileSize:
+          type: integer
+          format: int32
+      additionalProperties: false
+    AccrualsReqt:
+      enum:
+      - 'Null'
+      - Optional
+      - Never
+      type: string
+    Position:
+      enum:
+      - 'Null'
+      - Partner
+      - Associate
+      - OfCounsel
+      - Paralegal
+      - LegalAssistant
+      - BillingClerkOrManager
+      - Other
+      - Unspecified
+      type: string
+    FirmProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        globallyActive:
+          type: boolean
+        active:
+          $ref: '#/components/schemas/FirmActiveStatus'
+        status:
+          $ref: '#/components/schemas/FirmInfoStatus'
+        fullFirmName:
+          type:
+          - string
+          - 'null'
+        customFirmName:
+          type:
+          - string
+          - 'null'
+        serviceProviderType:
+          $ref: '#/components/schemas/ServiceProviderType'
+        firmHistory:
+          type:
+          - string
+          - 'null'
+        website:
+          type:
+          - string
+          - 'null'
+        mainOffice:
+          $ref: '#/components/schemas/FirmOfficeSummary'
+        previousOrgNames:
+          type:
+          - string
+          - 'null'
+        numberOfEmployees:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        leadSystemAdmin:
+          $ref: '#/components/schemas/Contact'
+        backupSystemAdmin:
+          $ref: '#/components/schemas/Contact'
+        primaryBillingContact:
+          $ref: '#/components/schemas/Contact'
+        backupBillingContact:
+          $ref: '#/components/schemas/Contact'
+        firmClassification:
+          type:
+          - string
+          - 'null'
+        matterBudgetRequirement:
+          $ref: '#/components/schemas/MatterBudgetReqt'
+        accrualAndUnbilledAmountsRequirement:
+          $ref: '#/components/schemas/AccrualsReqt'
+        evaluationRequirement:
+          $ref: '#/components/schemas/EvaluationReqt'
+        invoiceCurrenciesAllowed:
+          $ref: '#/components/schemas/InvoiceCurrenciesAllowed'
+        invoiceCurrencies:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        invoiceFormatsAllowed:
+          $ref: '#/components/schemas/InvoiceFormatsAllowed'
+        ledesFormatsAllowed:
+          $ref: '#/components/schemas/LedesFormatsAllowed'
+        invoiceTaxTypeAllowed:
+          $ref: '#/components/schemas/InvoiceTaxTypeAllowed'
+        notes:
+          type:
+          - string
+          - 'null'
+        firmCustomFields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FirmCustomField'
+      additionalProperties: false
+    EvaluationReqt:
+      enum:
+      - 'Null'
+      - Optional
+      - Never
+      type: string
+    Firm:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firmName:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/FirmInfoStatus'
+        active:
+          $ref: '#/components/schemas/FirmActiveStatus'
+        classification:
+          type:
+          - string
+          - 'null'
+        leadSystemAdmin:
+          $ref: '#/components/schemas/Contact'
+        offices:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FirmOffice'
+        users:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FirmUser'
+      additionalProperties: false
+    FirmActiveStatus:
+      enum:
+      - Active
+      - Restricted
+      - Inactive
+      type: string
+    LedesFormatsAllowed:
+      enum:
+      - CompanyDefault
+      - FirmDefault
+      - LedesAll
+      - Ledes98B
+      - Ledes98BI
+      - LedesXML
+      type: string
+    ErrorResponse_3:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: false
+  parameters:
+    top:
+      name: $top
+      in: query
+      description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+      schema:
+        type: integer
+        minimum: 0
+      example: 50
+    skip:
+      name: $skip
+      in: query
+      description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+      schema:
+        type: integer
+        minimum: 0
+    count:
+      name: $count
+      in: query
+      description: Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)
+      schema:
+        type: boolean
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-datawarehouse-api-odata-1-2-openapi.json
+- thomson-reuters-firms-api-2-0-openapi.json
+- thomson-reuters-datawarehouse-api-odata-1-2-openapi.yml
+- thomson-reuters-datawarehouse-api-odata-openapi.yml
+- thomson-reuters-firms-api-2-0-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

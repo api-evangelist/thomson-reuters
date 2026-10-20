@@ -1,0 +1,145 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Rollups API
+  version: v1
+  description: 'Operations tagged Rollups across 2 of this provider''s published API definitions: thomson-reuters-onesource-tax-provision-odata-apis-openapi.json, thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+  description: AMERS endpoints
+- url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+  description: EMEA endpoints
+security:
+- Basic: []
+tags:
+- name: Rollups
+  description: Retrieves rollups defining how the data should be tiered.
+paths:
+  /odata/v1/rollup:
+    get:
+      tags:
+      - Rollups
+      description: Retrieves all rollup details based on the provided OData query options.
+      summary: Gets all rollup details
+      parameters:
+      - name: $top
+        in: query
+        description: The max number of records.
+        required: false
+        schema:
+          type: integer
+      - name: $skip
+        in: query
+        description: The number of records to skip.
+        required: false
+        schema:
+          type: string
+      - name: $filter
+        in: query
+        description: A function that must evaluate to true for a record to be returned.
+        required: false
+        schema:
+          type: string
+      - name: $select
+        in: query
+        description: Specifies a subset of properties to return. Use a comma separated list.
+        required: false
+        schema:
+          type: string
+      - name: $orderby
+        in: query
+        description: Determines what values are used to order a collection of records.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the list of rollup details.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rollup'
+        '401':
+          description: Unauthorized access due to invalid token or credentials.
+          content:
+            application/json;odata.metadata=minimal;odata.streaming=true:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error while fetching rollup details.
+      operationId: getOdataV1Rollup
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.onesourcetax.com/data-query-reporting/tax-provision
+      description: AMERS endpoints
+    - url: https://api-emea.onesourcetax.com/data-query-reporting/tax-provision
+      description: EMEA endpoints
+components:
+  schemas:
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: {}
+    Rollup:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+          nullable: true
+        dataset:
+          type: string
+          nullable: true
+        unitcode:
+          type: string
+          nullable: true
+        unitname:
+          type: string
+          nullable: true
+        rolluptype:
+          type: string
+          nullable: true
+        rollup:
+          type: string
+          nullable: true
+        rollupcode:
+          type: string
+          nullable: true
+        rollupname:
+          type: string
+          nullable: true
+        component:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Basic:
+      type: http
+      scheme: basic
+x-refined-from:
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.json
+- thomson-reuters-onesource-tax-provision-odata-apis-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

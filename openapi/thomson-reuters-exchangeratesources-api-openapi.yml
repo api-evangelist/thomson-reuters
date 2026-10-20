@@ -1,0 +1,222 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Configuration Exchange…
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: ExchangeRateSources
+paths:
+  /master-data/exchange-rate-sources:
+    get:
+      tags:
+      - ExchangeRateSources
+      summary: Fetch all exchange rate sources
+      operationId: ExchangeRateSources_GetExchangeRateSources
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourceListResponse'
+              example:
+                items:
+                - sourceId: 1
+                  sourceName: SourceFile
+                  frequency: Daily
+                - sourceId: 2
+                  sourceName: ECB
+                  frequency: Monthly
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourceListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourceListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourceListResponse'
+        '404':
+          description: NotFound
+    post:
+      tags:
+      - ExchangeRateSources
+      summary: Create exchange rate sources
+      operationId: ExchangeRateSources_ImportExchangeRates
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.HttpResponseException'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.HttpResponseException'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.HttpResponseException'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/System.Web.Http.HttpResponseException'
+  /master-data/effective-date-types:
+    get:
+      tags:
+      - ExchangeRateSources
+      summary: Fetch effective date types
+      operationId: ExchangeRateSources_GetTransactionDateTypes
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeListResponse'
+              example:
+                items:
+                - id: 1
+                  effectiveDateType: InvoiceDate
+                - id: 1
+                  effectiveDateType: ReportingDate
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeListResponse'
+        '404':
+          description: NotFound
+components:
+  schemas:
+    System.Web.Http.HttpResponseException:
+      type: object
+      properties:
+        Response:
+          type: object
+          readOnly: true
+        Message:
+          type: string
+          readOnly: true
+        Data:
+          type: object
+          additionalProperties:
+            type: object
+          readOnly: true
+        InnerException:
+          type: object
+          readOnly: true
+        StackTrace:
+          type: string
+          readOnly: true
+        HelpLink:
+          type: string
+        Source:
+          type: string
+        HResult:
+          format: int32
+          type: integer
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.ExchangeRateSources.ExchangeRatesResponse:
+      description: ExchangeRatesResponse
+      type: object
+      properties:
+        status:
+          description: Status of import
+          type: string
+        errorMessage:
+          description: Error Message
+          type: string
+        hasErrors:
+          description: HasErrors
+          type: boolean
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourcesResponseModel:
+      type: object
+      properties:
+        sourceId:
+          format: int32
+          type: integer
+        sourceName:
+          type: string
+        frequency:
+          type: string
+    TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourceListResponse:
+      type: object
+      properties:
+        items:
+          description: List of exchange rate source
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.ExchangeRateSourcesResponseModel'
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeListResponse:
+      type: object
+      properties:
+        items:
+          description: List of Effective Date Types
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeResponseModel'
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.ExchangeRates.EffectiveDateTypeResponseModel:
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+        effectiveDateType:
+          type: string

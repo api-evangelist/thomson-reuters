@@ -1,0 +1,1756 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Matter Intakes API
+  version: '1.9'
+  description: 'Operations tagged MatterIntakes across 2 of this provider''s published API definitions: thomson-reuters-matters-api-1-9-openapi.json, thomson-reuters-matters-api-1-9-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+tags:
+- name: MatterIntakes
+  description: Use the MatterIntakes API to upload matterIntakes into Tracker.
+paths:
+  /intake-requests/{id}:
+    get:
+      tags:
+      - MatterIntakes
+      summary: Find a matterIntake by ID
+      description: Retrieves information about a matterIntake by ID.
+      operationId: MatterIntake_GetMatterIntake
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of matter intake.
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        '200':
+          description: MatterIntake
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatterIntake'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No request with that identifier could be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+  /intake-requests:
+    post:
+      tags:
+      - MatterIntakes
+      summary: Create a new matterIntake record
+      description: Create a new matterIntake record.
+      operationId: MatterIntake_PostMatterIntake
+      parameters:
+      - name: Prefer
+        in: header
+        description: '* return=representation: This is the default. The server includes an entity representing the current state of the resource. In response to a successful request a status of 201 would be returned.
+
+          * return=minimal: The response will not include the entity in the response. A successful request would result in a status of 204 to be returned.
+
+          '
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        x-name: matterIntake
+        description: Creation model.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatterIntake'
+        x-position: 1
+      responses:
+        '201':
+          description: The matter intake was successfully created and the entity will be returned in the response.
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatterIntake'
+        '204':
+          description: The matter intake was successfully created and the entity will not be returned in the response.
+          headers:
+            ETag:
+              description: The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control.
+              schema:
+                type: string
+        '400':
+          description: One or more validation errors in the request were encountered while processing the initial request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: The requested resource requires authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Access is denied:
+                  value:
+                    error:
+                      code: Unauthorized
+                      message: The requested resource requires authentication.
+        '403':
+          description: The web service account has insufficient permissions to access this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      - Token: []
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/matters-api/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/matters-api/v1
+components:
+  schemas:
+    InnerMatterUploadModel:
+      type: object
+      additionalProperties: false
+      properties:
+        fullNameAndPartiesInvolved:
+          type:
+          - string
+          - 'null'
+          description: Full name of the matter. If the matter type is Litigation/Dispute, enter the name of the case as it appears on the complaint, and include the docket number for litigation.
+          maxLength: 3000
+        shortName:
+          type:
+          - string
+          - 'null'
+          description: Unique, short, descriptive name for this matter. Matters are commonly listed by their short names in Tracker.
+          maxLength: 100
+        leadCompanyPersonEmail:
+          type:
+          - string
+          - 'null'
+          description: Email address of the primary company person or in-house counsel who is responsible for the matter.
+          format: email
+          maxLength: 150
+        numberTwoCompanyPersonEmail:
+          type:
+          - string
+          - 'null'
+          format: email
+          maxLength: 150
+        organizationalUnit:
+          type:
+          - string
+          - 'null'
+          description: Name of the primary company entity/division/unit for which the legal work is being performed, as listed in Tracker.
+        practiceGroup:
+          type:
+          - string
+          - 'null'
+          description: Name of the primary group within the law department that is performing or overseeing the legal work, as listed in Tracker.
+        countryOrRegion:
+          type:
+          - string
+          - 'null'
+          description: Name or code for the country or region that the matter is associated with.
+        matterGroup:
+          type:
+          - string
+          - 'null'
+        businessManager:
+          type:
+          - string
+          - 'null'
+          maxLength: 40
+        associatedMatterId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier used in an associated system, such as the source system for matter information. If there is no associated system identifier, you can use another system, such as the line number of the matter in your file, but that number cannot be reused in a later matter update.
+          maxLength: 50
+        associatedMatterUrl:
+          type:
+          - string
+          - 'null'
+          maxLength: 2000
+        associatedMatterData:
+          type:
+          - string
+          - 'null'
+          maxLength: 50
+        clientMatterNumber:
+          type:
+          - string
+          - 'null'
+        invoiceApprovalRoute:
+          type:
+          - string
+          - 'null'
+          description: Name of the assigned invoice approval route as listed in Tracker.
+        apRoute:
+          type:
+          - string
+          - 'null'
+          description: Name of the assigned AP route as listed in Tracker.
+        utbmsAuditSet:
+          type:
+          - string
+          - 'null'
+          description: Name of the assigned UTBMS Audit Set as listed in Tracker.
+        billedToEntityName:
+          type:
+          - string
+          - 'null'
+        taxConfiguration:
+          type:
+          - string
+          - 'null'
+        preconfiguredAllocations:
+          type:
+          - string
+          - 'null'
+        matterAllocations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MatterAllocationModel'
+        documentManagementSystemIntegrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DocumentManagementSystemIntegration'
+        leadOutsideCounselEmail:
+          type:
+          - string
+          - 'null'
+          format: email
+          maxLength: 150
+        leadOutsideCounselName:
+          type:
+          - string
+          - 'null'
+        leadOutsideCounselUserId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        leadOutsideCounselOfficeId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        leadOutsideCounselOfficeName:
+          type:
+          - string
+          - 'null'
+        leadFirmFeeArrangement:
+          type:
+          - string
+          - 'null'
+        leadFirmFeeComment:
+          type:
+          - string
+          - 'null'
+        currencyID:
+          type:
+          - string
+          - 'null'
+        firmAccess:
+          type:
+          - string
+          - 'null'
+        startDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        keyIssues:
+          type:
+          - string
+          - 'null'
+          maxLength: 1000
+        adverseFirmInfo:
+          type:
+          - string
+          - 'null'
+          maxLength: 1500
+        affidavitOfUseFilingDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dateOfLoss:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dateOfNoticeOfLoss:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        disclosureDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        filingDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        registrationDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        renewalExpirationDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        serviceReceivedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        trialDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        auditSummary:
+          type:
+          - string
+          - 'null'
+        caseApplicationNumber:
+          type:
+          - string
+          - 'null'
+        claims:
+          type:
+          - string
+          - 'null'
+        classesOfGoods:
+          type:
+          - string
+          - 'null'
+        serialReelNumber:
+          type:
+          - string
+          - 'null'
+        ownerRecordTitleHolder:
+          type:
+          - string
+          - 'null'
+        inventor:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        provinceRegion:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        registrationNumber:
+          type:
+          - string
+          - 'null'
+        patentTitle:
+          type:
+          - string
+          - 'null'
+        patentType:
+          type:
+          - string
+          - 'null'
+        court:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        courtAdditionalInfo:
+          type:
+          - string
+          - 'null'
+        financialOnly:
+          type:
+          - string
+          - 'null'
+        billingOnlyRole:
+          type:
+          - string
+          - 'null'
+        consolidatedBilling:
+          type:
+          - string
+          - 'null'
+        preconfiguredTaskCodeAlerts:
+          type:
+          - string
+          - 'null'
+        localFirmOrAgent:
+          type:
+          - string
+          - 'null'
+        matterAdminRole:
+          type:
+          - string
+          - 'null'
+          description: Email address of active Tracker user
+        matterEditorRole:
+          type:
+          - string
+          - 'null'
+          description: Email address of active Tracker user
+        matterReaderRole:
+          type:
+          - string
+          - 'null'
+          description: Email address of active Tracker user
+        noMatterOrReportAccessRole:
+          type:
+          - string
+          - 'null'
+          description: Email address of active Tracker user
+        preApprovedAllocations:
+          type:
+          - string
+          - 'null'
+        renewalExpirationDateSendNoticeEmail:
+          type:
+          - string
+          - 'null'
+        reportAccessOnlyRole:
+          type:
+          - string
+          - 'null'
+          description: Email address of active Tracker user
+        reviewInvoiceAllocations:
+          type:
+          - string
+          - 'null'
+        taxesIncludedInTCAAmounts:
+          type:
+          - string
+          - 'null'
+        timekeeperAuditState:
+          type:
+          - string
+          - 'null'
+        trialDateSendNoticeEmail:
+          type:
+          - string
+          - 'null'
+        customDropdownField1:
+          type:
+          - string
+          - 'null'
+        customDropdownField2:
+          type:
+          - string
+          - 'null'
+        customDropdownField3:
+          type:
+          - string
+          - 'null'
+        customDropdownField4:
+          type:
+          - string
+          - 'null'
+        customDropdownField5:
+          type:
+          - string
+          - 'null'
+        customDropdownField6:
+          type:
+          - string
+          - 'null'
+        customDropdownField7:
+          type:
+          - string
+          - 'null'
+        customDropdownField8:
+          type:
+          - string
+          - 'null'
+        customDropdownField9:
+          type:
+          - string
+          - 'null'
+        customDropdownField10:
+          type:
+          - string
+          - 'null'
+        customDropdownField11:
+          type:
+          - string
+          - 'null'
+        customDropdownField12:
+          type:
+          - string
+          - 'null'
+        customDropdownField13:
+          type:
+          - string
+          - 'null'
+        customDropdownField14:
+          type:
+          - string
+          - 'null'
+        customDropdownField15:
+          type:
+          - string
+          - 'null'
+        customDropdownField16:
+          type:
+          - string
+          - 'null'
+        customDropdownField17:
+          type:
+          - string
+          - 'null'
+        customDropdownField18:
+          type:
+          - string
+          - 'null'
+        customDropdownField19:
+          type:
+          - string
+          - 'null'
+        customDropdownField20:
+          type:
+          - string
+          - 'null'
+        customDropdownField21:
+          type:
+          - string
+          - 'null'
+        customDropdownField22:
+          type:
+          - string
+          - 'null'
+        customDropdownField23:
+          type:
+          - string
+          - 'null'
+        customDropdownField24:
+          type:
+          - string
+          - 'null'
+        customDropdownField25:
+          type:
+          - string
+          - 'null'
+        customDropdownField26:
+          type:
+          - string
+          - 'null'
+        customDropdownField27:
+          type:
+          - string
+          - 'null'
+        customDropdownField28:
+          type:
+          - string
+          - 'null'
+        customDropdownField29:
+          type:
+          - string
+          - 'null'
+        customDropdownField30:
+          type:
+          - string
+          - 'null'
+        customDropdownField31:
+          type:
+          - string
+          - 'null'
+        customDropdownField32:
+          type:
+          - string
+          - 'null'
+        customDropdownField33:
+          type:
+          - string
+          - 'null'
+        customDropdownField34:
+          type:
+          - string
+          - 'null'
+        customDropdownField35:
+          type:
+          - string
+          - 'null'
+        customDropdownField36:
+          type:
+          - string
+          - 'null'
+        customDropdownField37:
+          type:
+          - string
+          - 'null'
+        customDropdownField38:
+          type:
+          - string
+          - 'null'
+        customDropdownField39:
+          type:
+          - string
+          - 'null'
+        customDropdownField40:
+          type:
+          - string
+          - 'null'
+        customDropdownField41:
+          type:
+          - string
+          - 'null'
+        customCurrencyField1:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField2:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField3:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField4:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField5:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField6:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField7:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField8:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField9:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField10:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField11:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField12:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField13:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField14:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField15:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField16:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField17:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField18:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField19:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField20:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField21:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField22:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField23:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField24:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField25:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField26:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField27:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField28:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField29:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField30:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField31:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField32:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField33:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField34:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField35:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField36:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField37:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField38:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField39:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField40:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customCurrencyField41:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        customDateField1:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField2:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField3:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField4:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField5:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField6:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField7:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField8:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField9:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField10:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField11:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField12:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField13:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField14:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField15:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField16:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField17:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField18:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField19:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField20:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customDateField21:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customTextField1:
+          type:
+          - string
+          - 'null'
+        customTextField2:
+          type:
+          - string
+          - 'null'
+        customTextField3:
+          type:
+          - string
+          - 'null'
+        customTextField4:
+          type:
+          - string
+          - 'null'
+        customTextField5:
+          type:
+          - string
+          - 'null'
+        customTextField6:
+          type:
+          - string
+          - 'null'
+        customTextField7:
+          type:
+          - string
+          - 'null'
+        customTextField8:
+          type:
+          - string
+          - 'null'
+        customTextField9:
+          type:
+          - string
+          - 'null'
+        customTextField10:
+          type:
+          - string
+          - 'null'
+        customTextField11:
+          type:
+          - string
+          - 'null'
+        customTextField12:
+          type:
+          - string
+          - 'null'
+        customTextField13:
+          type:
+          - string
+          - 'null'
+        customTextField14:
+          type:
+          - string
+          - 'null'
+        customTextField15:
+          type:
+          - string
+          - 'null'
+        customTextField16:
+          type:
+          - string
+          - 'null'
+        customTextField17:
+          type:
+          - string
+          - 'null'
+        customTextField18:
+          type:
+          - string
+          - 'null'
+        customTextField19:
+          type:
+          - string
+          - 'null'
+        customTextField20:
+          type:
+          - string
+          - 'null'
+        customTextField21:
+          type:
+          - string
+          - 'null'
+        customTextAreaField1:
+          type:
+          - string
+          - 'null'
+        customTextAreaField2:
+          type:
+          - string
+          - 'null'
+        customTextAreaField3:
+          type:
+          - string
+          - 'null'
+        customTextAreaField4:
+          type:
+          - string
+          - 'null'
+        customTextAreaField5:
+          type:
+          - string
+          - 'null'
+        customTextAreaField6:
+          type:
+          - string
+          - 'null'
+        customTextAreaField7:
+          type:
+          - string
+          - 'null'
+        customTextAreaField8:
+          type:
+          - string
+          - 'null'
+        customTextAreaField9:
+          type:
+          - string
+          - 'null'
+        customTextAreaField10:
+          type:
+          - string
+          - 'null'
+        customTextAreaField11:
+          type:
+          - string
+          - 'null'
+        customTextAreaField12:
+          type:
+          - string
+          - 'null'
+        customTextAreaField13:
+          type:
+          - string
+          - 'null'
+        customRichTextAreaField1:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField2:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField3:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField4:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField5:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField6:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField7:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField8:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField9:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField10:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customRichTextAreaField11:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        customNumberField1:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField2:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField3:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField4:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField5:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField6:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField7:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField8:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField9:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField10:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customNumberField11:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        customMultiPickList1:
+          type:
+          - string
+          - 'null'
+        customMultiPickList2:
+          type:
+          - string
+          - 'null'
+        customMultiPickList3:
+          type:
+          - string
+          - 'null'
+        customMultiPickList4:
+          type:
+          - string
+          - 'null'
+        customMultiPickList5:
+          type:
+          - string
+          - 'null'
+        customMultiPickList6:
+          type:
+          - string
+          - 'null'
+        customMultiPickList7:
+          type:
+          - string
+          - 'null'
+        customMultiPickList8:
+          type:
+          - string
+          - 'null'
+        customMultiPickList9:
+          type:
+          - string
+          - 'null'
+        customMultiPickList10:
+          type:
+          - string
+          - 'null'
+        customMultiPickList11:
+          type:
+          - string
+          - 'null'
+        customMultiPickList12:
+          type:
+          - string
+          - 'null'
+        customMultiPickList13:
+          type:
+          - string
+          - 'null'
+        customMultiPickList14:
+          type:
+          - string
+          - 'null'
+        customMultiPickList15:
+          type:
+          - string
+          - 'null'
+        customMultiPickList16:
+          type:
+          - string
+          - 'null'
+        customMultiPickList17:
+          type:
+          - string
+          - 'null'
+        customMultiPickList18:
+          type:
+          - string
+          - 'null'
+        customMultiPickList19:
+          type:
+          - string
+          - 'null'
+        customMultiPickList20:
+          type:
+          - string
+          - 'null'
+        customMultiPickList21:
+          type:
+          - string
+          - 'null'
+        customTieredPickList1:
+          type:
+          - string
+          - 'null'
+        customTieredPickList2:
+          type:
+          - string
+          - 'null'
+        customTieredPickList3:
+          type:
+          - string
+          - 'null'
+        customTieredPickList4:
+          type:
+          - string
+          - 'null'
+        customTieredPickList5:
+          type:
+          - string
+          - 'null'
+        notes:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        amountClaimed:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        companyExposure:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        companyMaximumExposure:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        likelihoodOfLiability:
+          type:
+          - string
+          - 'null'
+        liabilityIsEstimable:
+          type:
+          - string
+          - 'null'
+        descriptionOfAssetExposure:
+          type:
+          - string
+          - 'null'
+          maxLength: 500
+        exposureSettlementAuthority:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        reserveAmount:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        insurerReinsurer:
+          type:
+          - string
+          - 'null'
+        amountCounterClaimed:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        companyRecoveryEstimate:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        companyMaximumRecovery:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        descriptionOfAssetRecovery:
+          type:
+          - string
+          - 'null'
+          maxLength: 500
+        recoverySettlementAuthority:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        estimateTimingOfResolution:
+          type:
+          - string
+          - 'null'
+        estimatedResolutionDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        resolutionDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        amountPaid:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        amountReceived:
+          type:
+          - number
+          - 'null'
+          format: decimal
+        daysToEditMatter:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        daysToPostFinalInvoice:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        formOfResolution:
+          type:
+          - string
+          - 'null'
+        lessonsLearned:
+          type:
+          - string
+          - 'null'
+        matterComplexity:
+          type:
+          - string
+          - 'null'
+        otherAssetsLost:
+          type:
+          - string
+          - 'null'
+        otherAssetsReceived:
+          type:
+          - string
+          - 'null'
+        paperFileLocation:
+          type:
+          - string
+          - 'null'
+        timingOfResolution:
+          type:
+          - string
+          - 'null'
+        resolutionDescription:
+          type:
+          - string
+          - 'null'
+        lawFirmBudgetsRequired:
+          type:
+          - string
+          - 'null'
+        lawFirmBudgetFiscalType:
+          $ref: '#/components/schemas/BudgetPeriodType'
+        lawFirmBudgetPhasedType:
+          $ref: '#/components/schemas/BudgetPhasedType'
+        deptBudgetsRequired:
+          type:
+          - string
+          - 'null'
+        deptBudgetSource:
+          $ref: '#/components/schemas/BudgetSourceType'
+        coBudgetCurrencyIdSource:
+          $ref: '#/components/schemas/CompanyBudgetCurrency'
+        requiredTaskCodeIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        matterType:
+          type:
+          - string
+          - 'null'
+        substantiveLaw:
+          type:
+          - string
+          - 'null'
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific.
+    MatterAllocationModel:
+      type: object
+      additionalProperties: false
+      properties:
+        comment:
+          type:
+          - string
+          - 'null'
+        allocationPercent:
+          type: number
+          format: double
+        accountingCode1:
+          type:
+          - string
+          - 'null'
+        accountingCode2:
+          type:
+          - string
+          - 'null'
+        accountingCode3:
+          type:
+          - string
+          - 'null'
+        accountingCode4:
+          type:
+          - string
+          - 'null'
+        accountingCode5:
+          type:
+          - string
+          - 'null'
+        accountingCode6:
+          type:
+          - string
+          - 'null'
+        accountingCode7:
+          type:
+          - string
+          - 'null'
+        accountingCode8:
+          type:
+          - string
+          - 'null'
+        accountingCode9:
+          type:
+          - string
+          - 'null'
+        accountingCode10:
+          type:
+          - string
+          - 'null'
+    BudgetPeriodType:
+      type: string
+      description: The periodicity of the budget. Read-only, required for validation.
+      x-enumNames:
+      - 'Null'
+      - Monthly
+      - Phased
+      - Quarterly
+      - Annually
+      enum:
+      - 'null'
+      - monthly
+      - phased
+      - quarterly
+      - annually
+    MatterIntakeStatus:
+      type: string
+      description: ''
+      x-enumNames:
+      - Pending
+      - Approved
+      - Rejected
+      enum:
+      - pending
+      - approved
+      - rejected
+    CompanyBudgetCurrency:
+      type: string
+      description: The currency of the budget.
+      x-enumNames:
+      - 'Null'
+      - CompanyBase
+      - Matter
+      enum:
+      - 'null'
+      - company base currency
+      - matter currency
+    DocumentManagementSystemIntegration:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        primaryLinkId:
+          type:
+          - string
+          - 'null'
+        secondaryLinkId:
+          type:
+          - string
+          - 'null'
+    MatterIntake:
+      type: object
+      description: Definition of MatterIntake model.
+      additionalProperties: false
+      required:
+      - matter
+      - sourceId
+      - recordId
+      - sourceUrl
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: Id of matter intake request.
+          format: int32
+        matter:
+          description: Definition of matter.
+          $ref: '#/components/schemas/InnerMatterUploadModel'
+        sourceId:
+          type: string
+          description: ID of source where this request was created.
+          maxLength: 100
+          minLength: 1
+        recordId:
+          type: string
+          description: Record ID of source where this request was created.
+          maxLength: 512
+          minLength: 1
+        sourceUrl:
+          type: string
+          description: URL to page where this request was created.
+          maxLength: 2048
+          minLength: 1
+        requestor:
+          description: A short information about requestor.
+          $ref: '#/components/schemas/MatterIntakeParticipantModel'
+        approver:
+          description: A short information about approver.
+          $ref: '#/components/schemas/MatterIntakeParticipantModel'
+        submitDateTime:
+          type:
+          - string
+          - 'null'
+          description: Date and time of request submission.
+          format: date-time
+        approveDateTime:
+          type:
+          - string
+          - 'null'
+          description: Date and time when this request was approved.
+          format: date-time
+        auditDateTime:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: Date and time when request was created.
+          format: date-time
+        status:
+          readOnly: true
+          description: Status of matter intake request.
+          $ref: '#/components/schemas/MatterIntakeStatus'
+        keepRequesterUpdated:
+          type: boolean
+          description: true/ false if requestor needs to be updated
+    BudgetSourceType:
+      type: string
+      description: The source of the budget, either company or firm.
+      x-enumNames:
+      - 'Null'
+      - Firm
+      - Company
+      enum:
+      - 'null'
+      - firm
+      - company
+    BudgetPhasedType:
+      type: string
+      description: The phased of the budget.
+      x-enumNames:
+      - 'Null'
+      - Litigation
+      - Patent
+      enum:
+      - 'null'
+      - phased - litigation
+      - phased - patent
+    MatterIntakeParticipantModel:
+      type: object
+      description: A short information about person who is assigned to MatterIntake.
+      additionalProperties: false
+      required:
+      - email
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          maxLength: 150
+          minLength: 1
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-matters-api-1-9-openapi.json
+- thomson-reuters-matters-api-1-9-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

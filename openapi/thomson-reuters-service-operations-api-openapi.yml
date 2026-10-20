@@ -1,0 +1,132 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Service Operations API
+  version: '1.2'
+  description: 'Operations tagged Service Operations across 3 of this provider''s published API definitions: thomson-reuters-datawarehouse-api-odata-1-2-openapi.json, thomson-reuters-datawarehouse-api-odata-1-2-openapi.yml, thomson-reuters-datawarehouse-api-odata-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+- url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+tags:
+- name: Service Operations
+paths:
+  /DateLastRefreshed():
+    get:
+      summary: Invoke function DateLastRefreshed
+      tags:
+      - Service Operations
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: date
+                example: '2017-04-13'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getDateLastRefreshed()
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+  /DateTimeLastRefreshed():
+    get:
+      summary: Invoke function DateTimeLastRefreshed
+      tags:
+      - Service Operations
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: date-time
+                example: '2017-04-13T15:51:04Z'
+        4XX:
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - OAuth2: []
+      operationId: getDateTimeLastRefreshed()
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.com.au/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.co.uk/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ca/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.de/legal-tracker/datawarehouse-api/odata/v1
+    - url: https://api.thomsonreuters.ae/legal-tracker/datawarehouse-api/odata/v1
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            target:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  target:
+                    type: string
+            innererror:
+              type: object
+              description: The structure of this object is service-specific
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.thomsonreuters.com/onepass/oauth2/token?grant_type=client_credentials
+          scopes:
+            access: Grants access to Tracker APIs
+    Token:
+      type: http
+      description: Access token (TR Account)
+      scheme: bearer
+x-refined-from:
+- thomson-reuters-datawarehouse-api-odata-1-2-openapi.json
+- thomson-reuters-datawarehouse-api-odata-1-2-openapi.yml
+- thomson-reuters-datawarehouse-api-odata-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

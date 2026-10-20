@@ -1,0 +1,3647 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Document Resource APIs API
+  version: monumentuat 5.3.1.1 uatapp2a.sg2 t335 uatdb2I1
+  description: 'Operations tagged Document Resource APIs across 2 of this provider''s published API definitions: thomson-reuters-monument-collaborate-uat-openapi.json, thomson-reuters-monument-collaborate-uat-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /monumentuat/api
+tags:
+- name: Document Resource APIs
+paths:
+  /{version}/files/{fileid}/parent:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Copy file
+      description: 'Copy a file from one location to another. In case of a copy operation the target folder can be a folder in another site.
+
+        While copying the file, the version history and permissions will not be copied over, but the permissions for the new folder to which the file is being moved is going to be applied to the copied file.'
+      operationId: copyFile
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: The id of the file which needs to be copied
+        required: true
+        schema:
+          type: string
+      - name: targetfolder
+        in: query
+        description: The target folder id of the folder under which the file will be copied
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Your content is copied successfull...
+        '400':
+          description: Request resource or xml is not valid
+        '403':
+          description: Access denied
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Document Resource APIs
+      summary: Move file
+      description: Move a single file from one location to another. A file can only be moved within a site.
+      operationId: moveFile
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: The id of the file which is to be moved
+        required: true
+        schema:
+          type: string
+      - name: targetfolder
+        in: query
+        description: The target folder id of the folder under which the folder is to be moved
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully moved
+        '400':
+          description: Request resource or xml is not valid
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/files/{fileid}:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the file info
+      description: API method to get a single file info from Collaborate.
+      operationId: getDocumentInfo
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: The ID of file to get Info
+        required: true
+        schema:
+          type: string
+      - name: lastdmsinfo
+        in: query
+        description: Last DMS info (true/false)
+        required: false
+        schema:
+          type: boolean
+      - name: foldertype
+        in: query
+        description: Folder type
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Document Resource APIs
+      summary: Update file
+      description: This api is used for update file.
+      operationId: updateDocument
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: file ID
+        required: true
+        schema:
+          type: string
+      - name: rootfolderid
+        in: query
+        description: Root folder ID
+        required: false
+        schema:
+          type: string
+      - name: batchid
+        in: query
+        description: Batch ID
+        required: false
+        schema:
+          type: string
+      - name: foldertype
+        in: query
+        description: Folder type
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Document updated successfully.
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while updating document
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/DocumentDBO'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/DocumentDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentDBO'
+    delete:
+      tags:
+      - Document Resource APIs
+      summary: Delete file
+      description: This API deletes a file from a Collaborate Site and places it in the recycle bin. The documents being deleted should be an active document in a site.
+      operationId: deleteDocument
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: The {fileid} is the Id of the file which is to be deleted.
+        required: true
+        schema:
+          type: string
+      - name: foldertype
+        in: query
+        description: Folder type
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: File/Document deleted successfully.
+        '204':
+          description: File/Document deleted successfully.
+        '401':
+          description: Unauthorized
+        '405':
+          description: Method not allowed (calling api with wrong method)
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/batchid:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the batch id
+      description: This API is used to get batchId for the specified site.
+      operationId: getBatchID
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: siteID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/files/{fileid}/activity:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Register view activity for a file
+      description: This API is used to add 'view' activity on file
+      operationId: addActivity
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: The id of the file in which activity to be added
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: The type of activity which is always 'view'
+        required: true
+        schema:
+          type: string
+      - name: foldertype
+        in: query
+        description: Folder type
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/shares/link:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Share via link
+      description: 'This api used to share content from my files or shared items
+
+
+        Note :
+
+
+        - resourcetype tag : {folder/file}.
+
+        - resourceid tag : (the folder/file id can be any from my files or shared items).
+
+        - Integer value for the shareoption tag : {1(anyone) / 2(my organisation user) / 3(system users)/ 4(Can be accessed by anyone who has the password) this 4th option is introduced from api version 6 onwards for sharing
+
+        password protected files}.
+
+        - password tag option is only used from api version 6 onwards when shareoption value is 4.
+
+        - expiry tag format is ''UTC date and time(dd MMM yyyy HH:mm)''.'
+      operationId: shareViaLink
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: Response successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Share'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Share'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Share'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Share'
+    servers:
+    - url: /monumentuat/api
+  /{version}/changes/{sourceclient}/folder/{folderid}:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Register folder
+      description: To register a given folder for Changes API based on source Client.
+      operationId: registerFolder
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: Folder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '404':
+          description: Document doesn't exists in the system
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occurred while getting document content
+      security:
+      - OAuth: []
+    delete:
+      tags:
+      - Document Resource APIs
+      summary: Removes the registered folder
+      description: To Remove registered folder for Changes API based on sourceclient.
+      operationId: removeRegisteredFolder
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: Folder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '404':
+          description: Document doesn't exists in the system
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occurred while getting document content
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/folders/{folderid}:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the folder info
+      description: The method provides folder detail of given folder id.
+      operationId: getFolderInfo
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: folderID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/FolderDBOV2'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderDBOV2'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Document Resource APIs
+      summary: Update folder
+      description: This api will allow you to update folder.
+      operationId: updateFolder
+      parameters:
+      - name: version
+        in: path
+        description: Version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: batchid
+        in: query
+        description: Batch ID
+        required: false
+        schema:
+          type: string
+      - name: rootfolderid
+        in: query
+        description: Root folder ID
+        required: false
+        schema:
+          type: string
+      - name: folderid
+        in: path
+        description: folderID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Folder updated successfully
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while updating folder
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/FolderDBO'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/FolderDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FolderDBO'
+    delete:
+      tags:
+      - Document Resource APIs
+      summary: Delete folder
+      description: This api going to delete active folder from to the site, one's folder deleted it goes to recycle bin (Deleted items folder).
+      operationId: deleteFolder
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: Folder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Folder deleted successfully.
+        '204':
+          description: Folder deleted successfully.
+        '401':
+          description: Unauthorized
+        '405':
+          description: Method not allowed (calling api with wrong method)
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/shares/{shareid}:
+    delete:
+      tags:
+      - Document Resource APIs
+      summary: Delete share/Remove share
+      description: 'The "Remove a share" API endpoint deletes only single share link.
+
+
+        Note :
+
+
+        - The share link being deleted should be an active share link.
+
+        - This API will remove only single share link.
+
+        - If provided {shareid} not exists in system, then ''Access denied'' response will be produced.'
+      operationId: deleteShare
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: shareid
+        in: path
+        description: The {shareid} is the Id of the share which is to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Share link deleted successfully.
+        '401':
+          description: Unauthorized
+        '405':
+          description: Method not allowed (calling api with wrong method)
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/shares/email:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Share via email
+      description: 'This api used to share content of my files and shared items
+
+
+        Note :
+
+
+        - resourcetype tag : {folder/file}.
+
+        - resourceid tag : (the folder/file id can be any from my files or shared items).
+
+        - Integer value for the shareoption tag : {1(Can be accessed by anyone who has the link) / 2(Restrict access to specified system users below) / 3(Recipients must be registered to access the link)/ 4(Can be accessed by
+
+        anyone who has the password) this 4th option is introduced from api version 6 onwards for sharing password protected files}
+
+        - password tag option is only used from api version 6 onwards when shareoption value is 4
+
+        - expiry tag format is ''UTC date and time(dd MMM yyyy HH:mm)''
+
+        - Integer value for the permission tag : {1(download_view_print) / 2(view_only)}'
+      operationId: shareViaEmail
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: Response successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Share'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Share'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Share'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Share'
+    servers:
+    - url: /monumentuat/api
+  /{version}/files:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the file list
+      description: 'API method to get a list of files from Collaborate.
+
+
+        The representation of q parameter works as under
+
+
+        q = "folderid=1"'
+      operationId: getFileList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: q
+        in: query
+        description: query to filter out results
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: No of items to returned
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Starting point of the returned items. This should be the item ID.
+        required: false
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: This is the order of the items returned. Possible values are "Asc" , "desc" , Default is Desc, which means that the latest items are returned first.
+        required: false
+        schema:
+          type: string
+      - name: ordertype
+        in: query
+        description: can be one of name, size, author, lastModified, filetype
+        required: false
+        schema:
+          type: string
+      - name: filelist
+        in: query
+        description: fileID CSV
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get File List successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occurred
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/folders/{folderid}/parent:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Copy folder
+      description: The method allows a given folder to be copied from one folder location to another folder location. The target folder location can be in a different site.
+      operationId: copyFolder
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: The id of the folder which needs to be copied
+        required: true
+        schema:
+          type: string
+      - name: targetfolder
+        in: query
+        description: "\tThe target folder id of the folder under which the folder will be copied"
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Your content is copied successfull...
+        '400':
+          description: Request resource or xml is not valid
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Document Resource APIs
+      summary: Move folder
+      description: The method allows a given folder to be moved from one folder location to another folder location within a site.
+      operationId: moveFolder
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: 'The id of the folder which is to be moved  '
+        required: true
+        schema:
+          type: string
+      - name: targetfolder
+        in: query
+        description: The target folder id of the folder under which the folder is to be moved
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully moved
+        '400':
+          description: Request resource or xml is not valid
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/folders/{folderid}/foldersize:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the folder size
+      description: Get a folder size by folder ID.
+      operationId: getFolderSize
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: folderID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/FolderDBOV2'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderDBOV2'
+        '401':
+          description: Unauthorized
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '403':
+          description: Validation failed/ Forbidden
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '500':
+          description: Internal error
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/folders/{folderid}/items:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the folder list
+      description: 'This API method provides a list of folders under a given folder.
+
+
+        Note :
+
+
+        The value of limit parameter behaves as following
+
+        - limit =100 is the default value
+
+        - if limit>0 then (number of items returned is equal to limit)
+
+        - if limit=-1 then return all records
+
+        - if limit 0 then the records are returned from the offset value
+
+        - if offset < 0 then offset value of 0 is set
+
+
+        Defalut value for orderby parameter is asc and for ordertype is creation date.'
+      operationId: getFolderList
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: Folder ID
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The no of items to return for this request
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The starting point for each item returned
+        required: false
+        schema:
+          type: string
+      - name: orderby
+        in: query
+        description: The items can be organised by either asc/desc order
+        required: false
+        schema:
+          type: string
+      - name: ordertype
+        in: query
+        description: In addition to the order we can organise items by name/author and last modified date.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get Folder List successfully
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occurred
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/shares/content:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Add file for quick share
+      description: This api used for Upload the shared file
+      operationId: quickFileUpload
+      parameters:
+      - name: progressiveoperkey
+        in: query
+        description: Progressiveoperkey
+        required: false
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '201':
+          description: document uploaded successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while uploading document
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: Choose file
+                  format: binary
+                filename:
+                  type: string
+                  description: Document name
+              required:
+              - file
+              - filename
+    servers:
+    - url: /monumentuat/api
+  /{version}/folders:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Add folder
+      description: This api will allow you to create folder into site.
+      operationId: addFolder
+      parameters:
+      - name: version
+        in: path
+        description: Version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: batchid
+        in: query
+        description: Batch ID
+        required: false
+        schema:
+          type: string
+      - name: rootfolderid
+        in: query
+        description: Root folder ID
+        required: false
+        schema:
+          type: string
+      - name: parentfolderid
+        in: query
+        description: ID of the parent folder in which want to add folder
+        required: true
+        schema:
+          type: string
+      - name: allowduplicatefolder
+        in: query
+        description: Allow/Disallow duplicate folder in given parent folder
+        required: false
+        schema:
+          type: boolean
+          enum:
+          - 'true'
+          - 'false'
+          default: true
+      responses:
+        '201':
+          description: Folder created successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/FolderDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderDBO'
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '409':
+          description: Folder already exists
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/FolderDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderDBO'
+        '500':
+          description: Internal error occured while creating folder
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/FolderDBO'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/FolderDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FolderDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/folders/{folderid}/dmsaddrequest:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the collab folders and documents structure
+      description: An API method that provides a list of files and folders has been added to the synced folder in Collaborate and can be synced from Collaborate to Worksite. An API client can call this method at regular intervals to find out if there are any changes at the Collaborate end, and then based on that, can sync the changes back to DMS.
+      operationId: getCollabFoldersAndDocumentsStructure
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: Folderid is the ID of the synced folder
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DMSAddRequestDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DMSAddRequestDBO'
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Document Resource APIs
+      summary: Update details of job by dms add request info
+      description: An API method which helps update a Collaborate document's sync status when uploading the content to external DMS system. This method helps to toggle the Collaborate document or folder status from inSync to synced or error, depending on the success or failure of the operation. This status change will change the icon colour from blue to green or red, depending on the final status.
+      operationId: updateDetailsOfJobByDMSAddRequestInfo
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: folderid is the ID of the synced folder
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/DMSAddRequestDBO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DMSAddRequestDBO'
+    servers:
+    - url: /monumentuat/api
+  /{version}/folders/{folderid}/permissions:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: To get folder permissions for groups
+      description: 'Use this method to return a list of the groups/users that have permissions to the folder and their permission details.
+
+        In the response for inherited'
+      operationId: getFolderUserGroupsPermission
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: folderid
+        in: path
+        description: folderid is the ID of the folder for which the permissions are required.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Document Resource APIs
+      summary: Add/update group/user folder permissions
+      description: 'This API method adds or updates folder permissions for a group/user. This can only be used when the inheritance has been broken for the specific folder. Please use the change inheritance method for a folder to break the inheritance.
+
+        usergrouptype In request xml are 1 for user based site and 2 for group based site.'
+      operationId: addUpdateUserGroupFolderPermission
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: folderid
+        in: path
+        description: The ID for the folder. To get the folder id use get folder id API
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserGroupPermissions'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserGroupPermissions'
+    servers:
+    - url: /monumentuat/api
+  /{version}/files/{fileid}/content:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Download file
+      description: 'API method to download a single document ( document content not its metadata) from Collaborate. The method supports download by a specific document version.
+
+
+        Note :
+
+
+        - original=true parameter is only applicable for users, who have rights to download original version from UI.
+
+        - If workflow is enabled & document is in pending state then the document should only download file to file owner & content admin.
+
+        - getconvertedfile=true parameter is used to get encrypted document.
+
+        - Users, who have rights to download original version from the Collaborate interface will receive the original document others will get encrypted document.
+
+        - thumbnail=true allows the user to obtain the thumbnail of the specified document.
+
+        - imagewidth should in range of ''2048,1024,800,512,256,128,64''. If thumbnail is true then ''imagewidth'' will be mandatory.'
+      operationId: downloadDocumentAPI
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: file ID
+        required: true
+        schema:
+          type: string
+      - name: foldertype
+        in: query
+        description: Folder type
+        required: false
+        schema:
+          type: string
+      - name: imagewidth
+        in: query
+        description: Image width
+        required: false
+        schema:
+          type: string
+      - name: thumbnail
+        in: query
+        description: Thumbnail
+        required: false
+        schema:
+          type: boolean
+      - name: getconvertedfile
+        in: query
+        description: To get encrypted document (true/false)
+        required: false
+        schema:
+          type: string
+      - name: original
+        in: query
+        description: download original version of document (true/false)
+        required: false
+        schema:
+          type: string
+      - name: version
+        in: query
+        description: Document version number
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Document found
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '404':
+          description: Document doesn't exists in the system
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while gettting document content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Add file version
+      description: 'This api is used for add new file version.
+
+
+        Note :
+
+
+        - Optional form data param called "notification" which is used for "notification" preference.
+
+        - 1= Respect user preference.
+
+        - 2= Force email notification.
+
+        - 3= Suppress all notifications.
+
+        This notification form data param is not mandatory and when user does not provide it then default value = 3 = Suppress all notifications.'
+      operationId: insertDocumentVersion
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: Document ID
+        required: true
+        schema:
+          type: string
+      - name: foldertype
+        in: query
+        description: Folder type
+        required: false
+        schema:
+          type: string
+      - name: batchid
+        in: query
+        description: batchID
+        required: false
+        schema:
+          type: string
+      - name: rootfolderid
+        in: query
+        description: Root folder ID
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Document's version uploaded successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while uploading document's version
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: Choose file
+                  format: binary
+                filename:
+                  type: string
+                  description: Document name
+                progressiveoperkey:
+                  type: string
+                  description: Progressiveoperkey
+                dmsdatabasename:
+                  type: string
+                  description: DMS database name
+                dmseditdate:
+                  type: string
+                  description: DMS edit date
+                dmsparentfolderid:
+                  type: string
+                  description: DMS parent folder ID
+                dmsdocid:
+                  type: string
+                  description: DMS doc ID
+                dmsversion:
+                  type: string
+                  description: DMS version
+                notification:
+                  type: string
+                  description: Notification
+              required:
+              - file
+              - filename
+    servers:
+    - url: /monumentuat/api
+  /{version}/shares/microblog:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Share via micro blog
+      description: 'This api used to share content from my files or shared items via microblog.
+
+
+        Note :
+
+
+        - resourcetype tag : {folder/file}.
+
+        - resourceid tag : (the folder/file id can be any from my files or shared items).
+
+        - Integer value for the permission tag : {1(download_view_print) / 2(view_only)}
+
+        - sharegroup tag : List of sites to share with.
+
+        - microblogmessage tag : {The microblog can accept # and @ mention}.
+
+        - expiry tag format is ''UTC date and time(dd MMM yyyy HH:mm)''.'
+      operationId: shareViaMicroBlog
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: groupsupport
+        in: query
+        description: groupsupport flag for mention group
+        required: false
+        schema:
+          type: string
+          default: '0'
+      responses:
+        '200':
+          description: Share via microblog successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Share'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Share'
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Share'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Share'
+    servers:
+    - url: /monumentuat/api
+  /{version}/folders/{folderid}/recycle:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Restore folder from recycle
+      description: Restore a deleted folder from Recycle bin. The restore location is a folderid of the target folder where the specific folder is to be restored.
+      operationId: restoreFolderFromRecycle
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: The id of the folder which is to be restored
+        required: true
+        schema:
+          type: string
+      - name: targetfolder
+        in: query
+        description: The folder to which this folder is to be restored too
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully restored
+        '400':
+          description: Request resource or xml is not valid
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    delete:
+      tags:
+      - Document Resource APIs
+      summary: Delete folder from recycle
+      description: This api help to delete specific folder from to the recycle/deleted items.Its allow you to delete folder permanently.
+      operationId: deleteFolderFromRecycle
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: folder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Folder deleted successfully.
+        '204':
+          description: Folder deleted successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+        '405':
+          description: Method not allowed (calling api with wrong method)
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/folders/{folderid}/path:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the folder path
+      description: API method to get folder details along with its parent folder hierarchy and the information from Collaborate.
+      operationId: getFolderLocation
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: folderid
+        in: path
+        description: folderID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/FolderLocationDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderLocationDBO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/shares/message:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Share via private message
+      description: 'This api used to share content from my files or shared items via private message.
+
+
+        Note :
+
+
+        - resourcetype tag : {folder/file}.
+
+        - resourceid tag : (the folder/file id can be any from my files or shared items).
+
+        - share_with tag : list of email addresses to share with {these should be valid existing Collaborate users, please see he response to see how error messages are going to be returned}.
+
+        - private_message tag : {The message can accept # and @ mention}.
+
+        - expiry tag format is ''UTC date and time(dd MMM yyyy HH:mm)''.
+
+        - Integer value for the permission tag : {1(download_view_print) / 2(view_only)}.'
+      operationId: shareViaPrivateMessage
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: Share via private message successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Share'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Share'
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Share'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Share'
+    servers:
+    - url: /monumentuat/api
+  /{version}/changes:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the changes for sync
+      description: 'The purpose of this API is to provide changes to the system. This will get the sync changes detail.
+
+
+        Note :
+
+
+        - In the response nextsyncposition means the next sync position the client should use to obtain changes.
+
+        - syncpositionid : If the next sync position id is provided, then changes following that sync position will be returned. Otherwise a response with a current sync position ID is given (without activities).If syncpositionid=0 then first 500 top activities will be given in response.
+
+        - limit : This parameter can be used to limit the number of changes returned otherwise 500 changes are returned.
+
+        - contenttype : To filter the result set by a specific content type like ''Files''. If this parameter is set then it will return specific type of changes, otherwise all types of content will be returned. "contenttype=files" will return both file and folder contents.
+
+        - siteid : to get changes by sourceclient basis. If provided, then it will give site specific sync changes otherwise not.'
+      operationId: getChangesForSync
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: syncpositionid
+        in: query
+        description: 'The start location for the content sync. All items from the syncpositionid will be returned. '
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The no of items to return for this request
+        required: false
+        schema:
+          type: string
+      - name: contenttype
+        in: query
+        description: The type of content for which the changes are required, the default is all but you can save the changes by the following content types Files
+        required: false
+        schema:
+          type: string
+      - name: siteid
+        in: query
+        description: User can filter by site
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get Changes List successfully
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorised
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling API with wrong method)
+        '500':
+          description: Internal error occurred
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/files/{fileid}/recycle:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Restore file from recycle
+      description: Restore a deleted file from Recycle bin. The restore location is a folderid of the target folder where the specific file is to be restored.
+      operationId: restoreFileFromRecycle
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: The id of the file to restore
+        required: true
+        schema:
+          type: string
+      - name: targetfolder
+        in: query
+        description: The folder to which this file is to be restored too
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully restored
+        '400':
+          description: Request resource or xml is not valid
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    delete:
+      tags:
+      - Document Resource APIs
+      summary: Delete file from recycle
+      description: This api help to delete specific file from to the recycle/deleted items.Its allow you to delete file permanently.
+      operationId: deleteDocumentFromRecycle
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: fileid
+        in: path
+        description: file ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: File deleted successfully.
+        '204':
+          description: File deleted successfully.
+        '401':
+          description: Unauthorized
+        '405':
+          description: Method not allowed (calling api with wrong method)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/changes/{sourceclient}/folders:
+    delete:
+      tags:
+      - Document Resource APIs
+      summary: Removes the all registered folder
+      description: To Remove all registered folders for Changes API based on sourceclient.
+      operationId: removeAllRegisteredFolder
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Problem with parsing XML or JSON object (Bad Request)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '404':
+          description: Document doesn't exists in the system
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occurred while getting document content
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/files/{fileid}/permissions:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: To get file permission for user and group
+      description: Use this method to return a list of the groups/users that have permissions to the file and their permission details.
+      operationId: getFileUserGroupPermission
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: fileid
+        in: path
+        description: fileid is the ID of the file for which the permissions are required. The fileid can be obtained by calling the get files list API
+        required: true
+        schema:
+          type: string
+      - name: foldertype
+        in: query
+        description: the foldertype=qa for Q&A file support from version 5
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    put:
+      tags:
+      - Document Resource APIs
+      summary: Add/update group/user file permissions
+      description: 'This API method adds or updates file permissions for a group/user.
+
+        Please note the permissions can only be added to the existing permissions inherited from the parent folder and does not allow the removal of the inherited permissions from the parent folder in which the file exists.
+
+        usergrouptype In request xml are 1 for user based site and 2 for group based site.'
+      operationId: updateFileGroupPermission
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '3'
+      - name: fileid
+        in: path
+        description: The ID for the file. To get the file id, use get files list API
+        required: true
+        schema:
+          type: string
+      - name: foldertype
+        in: query
+        description: the foldertype=qa for Q&A file support from version 5
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserGroupPermissions'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserGroupPermissions'
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/batchid/{batchid}:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Close batch process
+      description: This API is used to close batchId for the specified site.
+      operationId: closeBatchProcess
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: Site ID
+        required: true
+        schema:
+          type: string
+      - name: batchid
+        in: path
+        description: Batch ID
+        required: true
+        schema:
+          type: string
+      - name: rootfolderid
+        in: query
+        description: Root folder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Validation failed/ Forbidden
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/sites/{siteid}/documentprogresskey:
+    get:
+      tags:
+      - Document Resource APIs
+      summary: Gets the document progressive key
+      description: To get the docuemnt progressive key value for to upload large size file process.
+      operationId: getDocumentProgressiveKey
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: siteid
+        in: path
+        description: siteID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+      security:
+      - OAuth: []
+    servers:
+    - url: /monumentuat/api
+  /{version}/files/placeholder:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Add Placeholder file
+      description: 'This api used for to add placeholder file.
+
+
+        Note :
+
+
+        - Optional form data param called "notification" which is used for "notification" preference.
+
+        - 1= Respect user preference.
+
+        - 2= Force email notification.
+
+        - 3= Suppress all notifications.
+
+        This notification form data param is not mandatory and when user does not provide it then default value = 3 = Suppress all notifications.'
+      operationId: insertPlaceHolder
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: parentfolderid
+        in: query
+        description: Parent folder ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: placeholder created successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while uploading document
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDBO'
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  description: Document name
+                notification:
+                  type: string
+                  description: Notification
+              required:
+              - filename
+    servers:
+    - url: /monumentuat/api
+  /{version}/files/content:
+    post:
+      tags:
+      - Document Resource APIs
+      summary: Add file
+      description: 'This api used for insert file in specified folder in site.
+
+
+        Note :
+
+
+        Optional form data param called "notification" which is used for "notification" preference.
+
+        - 1= Respect user preference.
+
+        - 2= Force email notification.
+
+        - 3= Suppress all notifications.
+
+        This notification form data param is not mandatory and when user does not provide it then default value = 3 = Suppress all notifications.'
+      operationId: insertDocument
+      parameters:
+      - name: version
+        in: path
+        description: version of api
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: parentfolderid
+        in: query
+        description: Parent folder ID
+        required: true
+        schema:
+          type: string
+      - name: batchid
+        in: query
+        description: batchID
+        required: false
+        schema:
+          type: string
+      - name: rootfolderid
+        in: query
+        description: Root folder ID
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: document uploaded  successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDBO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Validation failed/ Forbidden
+        '405':
+          description: Method not allowed (calling api with wrong method)
+        '500':
+          description: Internal error occured while uploading document
+      security:
+      - OAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: Choose file
+                  format: binary
+                filename:
+                  type: string
+                  description: Document name
+                progressiveoperkey:
+                  type: string
+                  description: Progressiveoperkey
+                dmsdatabasename:
+                  type: string
+                  description: DMS database name
+                dmseditdate:
+                  type: string
+                  description: DMS edit date
+                dmsparentfolderid:
+                  type: string
+                  description: DMS parent folder ID
+                dmsdocid:
+                  type: string
+                  description: DMS doc ID
+                dmsversion:
+                  type: string
+                  description: DMS version
+                notification:
+                  type: string
+                  description: Notification
+              required:
+              - file
+              - filename
+    servers:
+    - url: /monumentuat/api
+components:
+  schemas:
+    TagsDBO:
+      type: object
+      properties:
+        tag:
+          type: array
+          items:
+            type: string
+    SiteRestrictionType:
+      type: object
+      properties:
+        passwordprotected:
+          type: integer
+          format: int32
+        twoFactorAuthentication:
+          type: integer
+          format: int32
+        termsandconditions:
+          type: integer
+          format: int32
+        iprestrictedsite:
+          type: integer
+          format: int32
+        drm:
+          type: integer
+          format: int32
+        checkout:
+          type: integer
+          format: int32
+        documentworkflow:
+          type: integer
+          format: int32
+        visiableonhighqdrive:
+          type: integer
+          format: int32
+    QaDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    DmsDBO:
+      type: object
+      properties:
+        dmsfolderid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmslink:
+          type: boolean
+        dmslinkby:
+          type: string
+      xml:
+        name: dms
+    FolderLocationDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        parentFolderID:
+          type: integer
+          format: int32
+        accessInherited:
+          type: integer
+          format: int32
+        batchID:
+          type: string
+        dms:
+          $ref: '#/components/schemas/DmsDBO'
+        id:
+          type: integer
+          format: int32
+        link:
+          type: string
+        createddate:
+          type: string
+        createddateUtil:
+          type: string
+          format: date-time
+        modifieddate:
+          type: string
+        modifieddateUtil:
+          type: string
+          format: date-time
+        child:
+          type: integer
+          format: int32
+        filecount:
+          type: integer
+          format: int32
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        folderid:
+          type: integer
+          format: int32
+        dmsfolderid:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+        location:
+          type: string
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        author:
+          type: string
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        foldersize:
+          type: string
+        parentFolder:
+          $ref: '#/components/schemas/ParentFolder'
+      xml:
+        name: folderlocation
+    category:
+      type: object
+      properties:
+        csvCategory:
+          type: string
+        siteid:
+          type: string
+        sitename:
+          type: string
+        categoryname:
+          type: array
+          items:
+            type: string
+        blogExternalId:
+          type: string
+        eventExternalId:
+          type: string
+        processtype:
+          type: string
+        siteCategoryName:
+          type: string
+        siteCategoryID:
+          type: string
+        translations:
+          xml:
+            name: sitecategorynametranslations
+          $ref: '#/components/schemas/translations'
+      xml:
+        name: category
+    MetadataListDBO:
+      type: object
+      properties:
+        metadataname:
+          type: array
+          items:
+            type: string
+        metadatavalue:
+          type: array
+          items:
+            type: string
+    user:
+      type: object
+      properties:
+        userid:
+          type: integer
+          format: int32
+        following:
+          type: boolean
+        email:
+          type: string
+        name:
+          $ref: '#/components/schemas/UserName'
+        userlink:
+          type: string
+        httplink:
+          type: string
+        httpavatar:
+          type: string
+        avatar:
+          type: string
+        externalid:
+          type: string
+        dateofbirth:
+          type: string
+        phone:
+          type: string
+        jobtitle:
+          type: string
+        mobile:
+          type: string
+        department:
+          type: string
+        status:
+          type: string
+        org:
+          type: string
+        location:
+          $ref: '#/components/schemas/LocationDBO'
+        img:
+          type: string
+        experiences:
+          $ref: '#/components/schemas/ExperiencesDBO'
+        sociallinks:
+          $ref: '#/components/schemas/Link'
+        customlink:
+          $ref: '#/components/schemas/Link'
+        messaginglink:
+          $ref: '#/components/schemas/Link'
+        secretaryname:
+          type: string
+        secretarymail:
+          type: string
+        bio:
+          type: string
+        sourcetype:
+          type: string
+        specialities:
+          type: string
+        reportsto:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataListDBO'
+        groups:
+          $ref: '#/components/schemas/GroupsDBO'
+        suffix:
+          type: string
+        atomlink:
+          type: string
+        link:
+          type: string
+        loggeduserlike:
+          type: integer
+          format: int32
+        userName:
+          type: string
+    BidderSiteDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+        advancedqapermission:
+          type: string
+    WikiDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    NameValueLink:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    groups:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+      xml:
+        name: groups
+    site:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        sitename:
+          type: string
+        sitetemplateID:
+          type: integer
+          format: int32
+          xml:
+            name: sitetemplateid
+        role:
+          type: string
+        sitedescription:
+          type: string
+        enabledmodules:
+          type: string
+        sitefolderID:
+          type: string
+        folder:
+          $ref: '#/components/schemas/Folder'
+        sitefolderpermission:
+          type: string
+        module:
+          $ref: '#/components/schemas/ModuleDBO'
+        adminnote:
+          type: string
+        startdate:
+          type: string
+        enddate:
+          type: string
+        createddate:
+          type: string
+        archiveddate:
+          type: string
+        clientno:
+          type: string
+        matterno:
+          type: string
+        landingpage:
+          type: string
+        link:
+          type: string
+        status:
+          type: string
+        size:
+          type: string
+        rawsitesize:
+          $ref: '#/components/schemas/RawSiteSize'
+        billingnotes:
+          type: string
+        billingnextinvoicedate:
+          type: string
+        billinglastinvoicedate:
+          type: string
+        filepagecount:
+          type: string
+        maxpagecount:
+          type: string
+        siteowner:
+          $ref: '#/components/schemas/UserDBO'
+        sitehttplink:
+          type: string
+        isSyncable:
+          type: integer
+          format: int32
+        file:
+          $ref: '#/components/schemas/FileModule'
+        categories:
+          $ref: '#/components/schemas/Categories'
+        contactus:
+          $ref: '#/components/schemas/ContactUS'
+        enforceusergroups:
+          type: string
+        csvSiteCategory:
+          type: string
+        biddersite:
+          $ref: '#/components/schemas/BidderSiteDBO'
+        sitenametranslations:
+          $ref: '#/components/schemas/translations'
+        siteNameInDefaultLanguage:
+          type: string
+        visible:
+          type: integer
+          format: int32
+        siteLogoName:
+          type: string
+        siteLogoFileSize:
+          type: integer
+          format: int64
+        siteLogoHeight:
+          type: integer
+          format: int32
+        siteLogoWidth:
+          type: integer
+          format: int32
+        siteStatus:
+          type: integer
+          format: int32
+        applySiteTerms:
+          type: integer
+          format: int32
+        siteTerm:
+          type: string
+        termType:
+          type: integer
+          format: int32
+        nextLoginSiteTerms:
+          type: integer
+          format: int32
+        defaultSiteTermsEnable:
+          type: integer
+          format: int32
+        advancedQAPermission:
+          type: integer
+          format: int32
+        isInternal:
+          type: integer
+          format: int32
+        psm:
+          type: integer
+          format: int32
+        siteLabelDisplay:
+          type: string
+        allowSiteAdministration:
+          type: integer
+          format: int32
+        siteLevelPasswordEnable:
+          type: integer
+          format: int32
+        siteLevelPasscodeEnable:
+          type: integer
+          format: int32
+        passcodeUsingAuthApp:
+          type: integer
+          format: int32
+        sitePassword:
+          type: string
+        ipRestrictionEnable:
+          type: integer
+          format: int32
+        availableIP:
+          type: string
+        highqDrive:
+          type: integer
+          format: int32
+        applySiteHomePage:
+          type: integer
+          format: int32
+        siteHomePage:
+          type: string
+        siteHomePageType:
+          type: integer
+          format: int32
+        nextLoginSiteHomePage:
+          type: integer
+          format: int32
+        applyDisplayContent:
+          type: integer
+          format: int32
+        displayContent:
+          type: string
+        siteCategories:
+          $ref: '#/components/schemas/categories'
+        rssSecurity:
+          type: integer
+          format: int32
+        encryptedPassword:
+          type: integer
+          format: int32
+        availableIPRangeCSV:
+          type: string
+        siteModuleID:
+          type: integer
+          format: int32
+        icalSecurity:
+          type: integer
+          format: int32
+        defaultDisplayContent:
+          type: string
+        defaultEmailAlert:
+          type: integer
+          format: int32
+        excelReportFooter:
+          type: integer
+          format: int32
+        excelReportFooterText:
+          type: string
+        announcementMLJSON:
+          type: string
+        siteRestrictionType:
+          $ref: '#/components/schemas/SiteRestrictionType'
+        enableDocumentRedaction:
+          type: boolean
+          xml:
+            name: enabledocumentredaction
+        mysite:
+          type: boolean
+    Recipient:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        category:
+          type: string
+        categorytext:
+          type: string
+        sitename:
+          type: string
+        grouptypetext:
+          type: string
+      xml:
+        name: recipient
+    Inbox:
+      type: object
+      properties:
+        enable:
+          type: string
+        accountname:
+          type: string
+    ContactUS:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactUSDBO'
+        type:
+          type: string
+      xml:
+        name: contactus
+    ActivityDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        microblog:
+          type: string
+    RequestDBO:
+      type: object
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        type:
+          type: string
+          xml:
+            attribute: true
+        user:
+          $ref: '#/components/schemas/UserDBO'
+        folder:
+          type: array
+          items:
+            $ref: '#/components/schemas/FolderDBO'
+        file:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDBO'
+      xml:
+        name: request
+    EventDBO:
+      type: object
+      properties:
+        eventTitle:
+          type: string
+        eventContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        contact:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        location:
+          type: string
+        author:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ISheetDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    ParentFolder:
+      type: object
+      properties:
+        folderId:
+          type: integer
+          format: int32
+        folderName:
+          type: string
+        noOfFiles:
+          type: integer
+          format: int32
+        childFolder:
+          $ref: '#/components/schemas/ParentFolder'
+      xml:
+        name: folder
+    UserDBO:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        userid:
+          type: integer
+          format: int32
+    Categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDBO'
+    Group:
+      type: object
+      properties:
+        groupId:
+          type: integer
+          format: int32
+        groupName:
+          type: string
+        groupDescription:
+          type: string
+        siteName:
+          type: string
+        siteId:
+          type: integer
+          format: int32
+        groupType:
+          type: string
+        defaultSiteGroup:
+          type: integer
+          format: int32
+        associateSystemGroupId:
+          type: integer
+          format: int32
+        sourceTypeId:
+          type: integer
+          format: int32
+        hyperlink:
+          type: string
+    FileModule:
+      type: object
+      properties:
+        permissionlevel:
+          type: string
+        approvaldocumentworkflow:
+          type: string
+        allowbulkdownload:
+          type: string
+        emailnotification:
+          type: string
+        showsitemap:
+          type: string
+        inbox:
+          $ref: '#/components/schemas/Inbox'
+        emailmetadata:
+          $ref: '#/components/schemas/Emailmetadata'
+    BlogDBO:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+        blogContent:
+          type: string
+        showComment:
+          type: integer
+          format: int32
+        tagList:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+          format: int32
+        siteID:
+          type: integer
+          format: int32
+        author:
+          type: string
+        categoryList:
+          type: array
+          items:
+            type: string
+        notificationTypeID:
+          type: integer
+          format: int32
+        message:
+          type: string
+        messageCode:
+          type: integer
+          format: int32
+        externalID:
+          type: string
+        publishDate:
+          type: string
+        processtype:
+          type: string
+        enable:
+          type: string
+          xml:
+            attribute: true
+    users:
+      type: object
+      properties:
+        total:
+          type: string
+        totalcount:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+      xml:
+        name: users
+    DocumentDBO:
+      type: object
+      properties:
+        documentname:
+          type: string
+          xml:
+            name: filename
+        dmsVersion:
+          type: string
+        notification:
+          type: string
+          example: E.g. 1/2/3
+        folderID:
+          type: string
+        documentID:
+          type: string
+          xml:
+            name: fileid
+        batchID:
+          type: string
+        status:
+          type: string
+        documentKey:
+          type: string
+        dmsDocumentDBO:
+          xml:
+            name: dms
+          $ref: '#/components/schemas/DMSDocumentDBO'
+        enable:
+          type: string
+          xml:
+            attribute: true
+        name:
+          type: string
+        id:
+          type: integer
+          format: int32
+        versionid:
+          type: integer
+          format: int32
+        versionnote:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        type:
+          type: string
+        originaltype:
+          type: string
+        icon:
+          type: string
+        commentscount:
+          type: integer
+          format: int32
+        likescount:
+          type: integer
+          format: int32
+        tags:
+          $ref: '#/components/schemas/TagsDBO'
+        location:
+          type: string
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        siteid:
+          type: integer
+          format: int32
+        parentfolderid:
+          type: integer
+          format: int32
+        error:
+          type: string
+        size:
+          type: integer
+          format: int64
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        redactionStatus:
+          type: boolean
+          xml:
+            name: redactionstatus
+      xml:
+        name: file
+    UserName:
+      type: object
+      properties:
+        title:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        goesby:
+          type: string
+      xml:
+        name: username
+    Folder:
+      type: object
+      required:
+      - foldername
+      properties:
+        id:
+          type: string
+          xml:
+            attribute: true
+        dmsfolderid:
+          type: string
+          xml:
+            attribute: true
+        permission:
+          type: string
+          xml:
+            attribute: true
+        foldername:
+          type: string
+        folder:
+          type: array
+          items:
+            xml:
+              name: folder
+            $ref: '#/components/schemas/Folder'
+        child:
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: folder
+    ContactUSDBO:
+      type: object
+      properties:
+        value:
+          type: string
+      xml:
+        name: values
+    EmailList:
+      type: object
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+      xml:
+        name: emaillist
+    Folderpermissions:
+      type: object
+      properties:
+        viewfolder:
+          type: string
+        viewfiles:
+          type: string
+        addfiles:
+          type: string
+        admin:
+          type: string
+        disableprint:
+          type: string
+        disablesave:
+          type: string
+        watermark:
+          type: string
+      xml:
+        name: folderpermissions
+    ErrorDBO:
+      type: object
+      properties:
+        summary:
+          type: string
+        ref:
+          type: string
+        link:
+          type: string
+      xml:
+        name: error
+    PermissionDBO:
+      type: object
+      properties:
+        view:
+          type: integer
+          format: int32
+        edit:
+          type: integer
+          format: int32
+        delete:
+          type: integer
+          format: int32
+        addEditAllFiles:
+          type: integer
+          format: int32
+        admin:
+          type: integer
+          format: int32
+        viewAllFiles:
+          type: integer
+          format: int32
+    Emailmetadata:
+      type: object
+      properties:
+        enable:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailmetadataallfolder:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailfrom:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailto:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailcc:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailsent:
+          type: string
+          enum:
+          - TRUE/FALSE
+        emailreceived:
+          type: string
+          enum:
+          - TRUE/FALSE
+    ExperiencesDBO:
+      type: object
+      properties:
+        experience:
+          type: array
+          items:
+            type: string
+    GroupsDBO:
+      type: object
+      properties:
+        group:
+          type: array
+          items:
+            type: string
+    FolderDBOV2:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        parentFolderID:
+          type: integer
+          format: int32
+        accessInherited:
+          type: integer
+          format: int32
+        batchID:
+          type: string
+        dms:
+          $ref: '#/components/schemas/DmsDBO'
+        id:
+          type: integer
+          format: int32
+        link:
+          type: string
+        createddate:
+          type: string
+        modifieddate:
+          type: string
+        child:
+          type: integer
+          format: int32
+        filecount:
+          type: integer
+          format: int32
+        createdby:
+          $ref: '#/components/schemas/UserDBO'
+        modifiedby:
+          $ref: '#/components/schemas/UserDBO'
+        folderid:
+          type: integer
+          format: int32
+        dmsfolderid:
+          type: string
+        siteid:
+          type: integer
+          format: int32
+        location:
+          type: string
+        permission:
+          $ref: '#/components/schemas/PermissionDBO'
+        contentstatus:
+          type: integer
+          format: int32
+        autonumbering:
+          type: string
+          xml:
+            name: auto-numbering
+        foldersize:
+          type: string
+      xml:
+        name: folder
+    FolderDBO:
+      type: object
+      properties:
+        folderid:
+          type: string
+      xml:
+        name: folder
+    PeopleDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    translations:
+      type: object
+      properties:
+        translation:
+          type: array
+          items:
+            $ref: '#/components/schemas/translation'
+      xml:
+        name: translations
+    HomeDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+    translation:
+      type: object
+      properties:
+        languageCode:
+          type: string
+          xml:
+            name: languagecode
+        value:
+          type: string
+      xml:
+        name: translation
+    ModuleDBO:
+      type: object
+      properties:
+        home:
+          $ref: '#/components/schemas/HomeDBO'
+        activity:
+          $ref: '#/components/schemas/ActivityDBO'
+        document:
+          $ref: '#/components/schemas/DocumentDBO'
+        blog:
+          $ref: '#/components/schemas/BlogDBO'
+        wiki:
+          $ref: '#/components/schemas/WikiDBO'
+        task:
+          $ref: '#/components/schemas/TaskDBO'
+        event:
+          $ref: '#/components/schemas/EventDBO'
+        isheet:
+          $ref: '#/components/schemas/ISheetDBO'
+        qa:
+          $ref: '#/components/schemas/QaDBO'
+        people:
+          $ref: '#/components/schemas/PeopleDBO'
+    LocationDBO:
+      type: object
+      properties:
+        addressline1:
+          type: string
+        addressline2:
+          type: string
+        addressline3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        postcode:
+          type: string
+    TaskDBO:
+      type: object
+      properties:
+        enable:
+          type: string
+          xml:
+            attribute: true
+        timelineview:
+          type: string
+    Recipients:
+      type: object
+      properties:
+        internalorganisation:
+          type: string
+        sites:
+          $ref: '#/components/schemas/sites'
+        users:
+          $ref: '#/components/schemas/users'
+        recipient:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recipient'
+      xml:
+        name: recipients
+    Link:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValueLink'
+    ShareWith:
+      type: object
+      properties:
+        emaillist:
+          $ref: '#/components/schemas/EmailList'
+        sites:
+          $ref: '#/components/schemas/sites'
+        groups:
+          $ref: '#/components/schemas/groups'
+      xml:
+        name: sharewith
+    sites:
+      type: object
+      properties:
+        site:
+          type: array
+          items:
+            $ref: '#/components/schemas/site'
+    RawSiteSize:
+      type: object
+      properties:
+        activedocumentsize:
+          type: integer
+          format: int64
+        deleteddocumentsize:
+          type: integer
+          format: int64
+        totalsize:
+          type: integer
+          format: int64
+    DMSDocumentDBO:
+      type: object
+      properties:
+        dmsdocid:
+          type: string
+        dmsParentFolderID:
+          type: string
+        dmseditdate:
+          type: string
+        dmscreateddate:
+          type: string
+          format: date-time
+        dmsmodifiedBy:
+          type: string
+        dmsdatabasename:
+          type: string
+        dmsversion:
+          type: string
+      xml:
+        name: dms
+    UserGroupPermissions:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        folderpermissions:
+          $ref: '#/components/schemas/Folderpermissions'
+        filepermissions:
+          $ref: '#/components/schemas/Filepermissions'
+        usergrouptype:
+          type: string
+          xml:
+            attribute: true
+          enum:
+          - 1/2
+      xml:
+        name: usergrouppermissions
+    Share:
+      type: object
+      properties:
+        resourcetype:
+          type: string
+          enum:
+          - folder/file
+        resourceid:
+          type: integer
+          format: int32
+        permissions:
+          type: integer
+          format: int32
+        shareoption:
+          type: integer
+          format: int32
+        sharegroup:
+          $ref: '#/components/schemas/ShareGroup'
+        microblogmessage:
+          type: string
+        expiry:
+          type: string
+          example: Eg. 09 Dec 2014 13:54
+        shareid:
+          type: integer
+          format: int32
+        microblogid:
+          type: integer
+          format: int32
+        resourcename:
+          type: string
+        link:
+          type: string
+        sharewith:
+          $ref: '#/components/schemas/ShareWith'
+        privatemessage:
+          type: string
+        messageid:
+          type: integer
+          format: int32
+        emailsubject:
+          type: string
+        emailmessage:
+          type: string
+        sharedwithemail:
+          type: string
+        password:
+          type: string
+        recipients:
+          $ref: '#/components/schemas/Recipients'
+      xml:
+        name: share
+    categories:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+      xml:
+        name: categories
+    DMSAddRequestDBO:
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/RequestDBO'
+      xml:
+        name: addrequest
+    CategoryDBO:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        httplink:
+          type: string
+      xml:
+        name: CategoryDBO
+    ShareGroup:
+      type: object
+      properties:
+        internalorganisation:
+          type: string
+        sites:
+          $ref: '#/components/schemas/sites'
+      xml:
+        name: sharegroup
+    Filepermissions:
+      type: object
+      properties:
+        view:
+          type: string
+        update:
+          type: string
+        disableprint:
+          type: string
+        disablesave:
+          type: string
+        watermark:
+          type: string
+      xml:
+        name: filepermissions
+  securitySchemes:
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          scopes: {}
+          authorizationUrl: https://monumentuat.highq.com/monumentuat/authorize.action
+          tokenUrl: https://monumentuat.highq.com/monumentuat/api/oauth2/token
+x-refined-from:
+- thomson-reuters-monument-collaborate-uat-openapi.json
+- thomson-reuters-monument-collaborate-uat-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

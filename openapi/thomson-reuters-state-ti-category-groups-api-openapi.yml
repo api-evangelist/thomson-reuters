@@ -1,0 +1,488 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts State Ti Category Groups API
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: State Ti Category Groups
+paths:
+  /v1/state-ti-category-groups/{year}:
+    get:
+      tags:
+      - State Ti Category Groups
+      summary: Returns the list of State Ti Category Groups based on year.
+      operationId: RetrievesStateTiCategoryGroups
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: categoryType
+        in: query
+        description: State Ti Category Type
+        required: false
+        schema:
+          enum:
+          - Additions
+          - Subtractions
+          - Adjustments
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiCategoryGroupsRepresentation'
+              examples:
+                State-Ti-CategoryGroups-Get-Response:
+                  $ref: '#/components/examples/State-Ti-CategoryGroups-Get-Response'
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves State Ti Category Groups
+    patch:
+      tags:
+      - State Ti Category Groups
+      summary: Adds or replaces multiple State Ti Categories for a year.
+      operationId: AddsOrRemovesMultipleSubCategories
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. Currently, application/json is the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocumentStateTiCategoryRepresentation'
+            examples:
+              State-Ti-CategoryGroups-Add_Category_Code:
+                $ref: '#/components/examples/State-Ti-CategoryGroups-Add_Category_Code'
+              State-Ti-CategoryGroups-Replace_Category_Code:
+                $ref: '#/components/examples/State-Ti-CategoryGroups-Replace_Category_Code'
+              State-Ti-CategoryGroups-Remove_Category_Code:
+                $ref: '#/components/examples/State-Ti-CategoryGroups-Remove_Category_Code'
+              State-Ti-CategoryGroups-Multiple_Category_Code:
+                $ref: '#/components/examples/State-Ti-CategoryGroups-Multiple_Category_Code'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiCategoryGroupMultipleResponseRepresentations'
+              examples:
+                state-ti-category-group-multiple-responses:
+                  $ref: '#/components/examples/state-ti-category-group-success-responses'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateTiCategoryGroupMultipleResponseRepresentations'
+              examples:
+                state-ti-category-group-multiple-responses:
+                  $ref: '#/components/examples/state-ti-category-group-multiple-responses'
+        '400':
+          description: Request failed. This is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not found.
+          content: {}
+        '500':
+          description: Unexpected error encountered. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: stateTiCategoriesPatchDocument
+      x-operation-id-source: normalized
+      x-operation-id-original: Adds or Removes Multiple Sub Categories
+components:
+  schemas:
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    StateTiCategoryRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        id:
+          type: integer
+          description: System-generated ID for State TI category group.
+          format: int32
+        type:
+          type: string
+          description: State TI category type.
+          enum:
+          - Additions
+          - Subtractions
+          - Adjustments
+        code:
+          type: string
+          description: Code.
+        description:
+          type: string
+          description: Description.
+        isUsedByBinders:
+          type: boolean
+          description: Indicates whether this is used by binders.
+        isAvailable:
+          type: boolean
+          description: Indicates whether this is available.
+        parent:
+          $ref: '#/components/schemas/StateTiCategoryRepresentation'
+        parentCategoryCode:
+          type: string
+          description: Parent category code.
+        subCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateTiCategoryRepresentation'
+        rowNumber:
+          type: integer
+          description: Row number.
+          format: int32
+    StateTiCategoryGroupRepresentation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: State TI category type.
+          enum:
+          - Additions
+          - Subtractions
+          - Adjustments
+        description:
+          type: string
+          description: State TI category type description.
+        StateTiCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateTiCategoryRepresentation'
+    StateTiFormsLineMappingRepresentation:
+      type: object
+      properties:
+        chartId:
+          type: string
+          description: 16-character chart ID.
+        chartName:
+          type: string
+          description: Chart name.
+        subCategoryCode:
+          type: string
+          description: Subcategory type.
+        subCategoryDescription:
+          type: string
+          description: Subcategory description.
+        parentTaxReturnLineCode:
+          type: string
+          description: Parent tax return line code.
+        parentTaxReturnLineDesc:
+          type: string
+          description: Parent tax return line description.
+        childTaxReturnLineCode:
+          type: string
+          description: Child tax return line code.
+        childTaxReturnLineDesc:
+          type: string
+          description: Child tax return line description.
+    StateTiCategoryGroupsRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateTiCategoryGroupRepresentation'
+    StateTiCategoryGroupMultipleResponseRepresentation:
+      type: object
+      properties:
+        op:
+          type: string
+        path:
+          type: string
+        value:
+          $ref: '#/components/schemas/StateTiFormsLineMappingRepresentation'
+        statuCode:
+          type: integer
+        detail:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    OperationStateTiCategoryRepresentation:
+      type: object
+      properties:
+        path:
+          type: string
+        op:
+          type: string
+          description: Specifies a CRUD operation.
+        from:
+          type: string
+        value:
+          $ref: '#/components/schemas/StateTiCategoryRepresentation'
+    StateTiCategoryGroupMultipleResponseRepresentations:
+      type: array
+      items:
+        $ref: '#/components/schemas/StateTiCategoryGroupMultipleResponseRepresentation'
+    JsonPatchDocumentStateTiCategoryRepresentation:
+      type: array
+      items:
+        $ref: '#/components/schemas/OperationStateTiCategoryRepresentation'
+  examples:
+    State-Ti-CategoryGroups-Get-Response:
+      value:
+        resourceList:
+        - id: Additions
+          description: Additions
+          stateTiCategories:
+          - year: 2019
+            id: null
+            type: Additions
+            code: '10'
+            description: Contributions
+            isUsedByBinders: false
+            isAvailable: true
+            parent: null
+            parentCategoryCode: '10'
+            stateTiCategories:
+            - year: 2019
+              id: 2319
+              type: Additions
+              code: '100'
+              description: Federal Charitable Contribution change
+              isUsedByBinders: false
+              isAvailable: true
+              parent: null
+              parentCategoryCode: '10'
+              subCategories: []
+              rowNumber: null
+              _links: []
+              _embedded: null
+        - id: Subtractions
+          description: Subtractions
+          stateTiCategories:
+          - year: 2019
+            id: null
+            type: Subtractions
+            code: '50'
+            description: Contributions
+            isUsedByBinders: false
+            isAvailable: true
+            parent: null
+            parentCategoryCode: '50'
+            stateTiCategories:
+            - year: 2019
+              id: 2319
+              type: Subtractions
+              code: '100'
+              description: Federal Charitable Contribution change
+              isUsedByBinders: false
+              isAvailable: true
+              parent: null
+              parentCategoryCode: '50'
+              subCategories: []
+              rowNumber: null
+              _links: []
+              _embedded: null
+        - id: ApportionedIncomeAdjustments
+          description: Adjustments
+          stateTiCategories:
+          - year: 2019
+            id: null
+            type: Adjustments
+            code: '90'
+            description: Contributions
+            isUsedByBinders: false
+            isAvailable: true
+            parent: null
+            parentCategoryCode: '90'
+            stateTiCategories:
+            - year: 2019
+              id: 2319
+              type: Adjustments
+              code: '100'
+              description: Federal Charitable Contribution change
+              isUsedByBinders: false
+              isAvailable: true
+              parent: null
+              parentCategoryCode: '90'
+              subCategories: []
+              rowNumber: null
+              _links: []
+              _embedded: null
+    state-ti-category-group-multiple-responses:
+      value:
+      - op: Remove
+        path: /stateticategory
+        value:
+          year: 2020
+          id: null
+          type: Additions
+          code: '10101'
+          description: Test 101
+          isUsedByBinders: false
+          isAvailable: false
+          parentCategoryCode: '10'
+          rowNumber: 2
+          _embedded: null
+        statusCode: 400
+        detail: null
+        fieldErrors:
+        - fieldName: Id
+          messages:
+          - Id cannot be blank.
+          errorCode: 2001
+      - op: Add
+        path: /stateticategory
+        value:
+          year: 2020
+          id: 2376
+          type: Additions
+          code: '10101111'
+          description: Test 101
+          isUsedByBinders: false
+          isAvailable: false
+          parentCategoryCode: '10'
+          rowNumber: 2
+          _embedded: null
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    State-Ti-CategoryGroups-Replace_Category_Code:
+      value:
+      - path: /stateticategory
+        op: replace
+        value:
+          id: 2348
+          code: '10012'
+          description: test2
+    State-Ti-CategoryGroups-Multiple_Category_Code:
+      value:
+      - path: /stateticategory
+        op: replace
+        value:
+          id: 2348
+          code: '10012'
+          description: test2
+      - path: /stateticategory
+        op: add
+        value:
+          code: '10011'
+          description: test1
+      - path: /stateticategory
+        op: remove
+        value:
+          id: 2348
+          code: '10012'
+          description: test2
+    State-Ti-CategoryGroups-Add_Category_Code:
+      value:
+      - path: /stateticategory
+        op: add
+        value:
+          code: '10011'
+          description: test1
+    state-ti-category-group-success-responses:
+      value:
+      - op: Add
+        path: /stateticategory
+        value:
+          year: 2020
+          id: 2376
+          type: Additions
+          code: '10101111'
+          description: Test 101
+          isUsedByBinders: false
+          isAvailable: false
+          parentCategoryCode: '10'
+          rowNumber: 2
+          _embedded: null
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    State-Ti-CategoryGroups-Remove_Category_Code:
+      value:
+      - path: /stateticategory
+        op: remove
+        value:
+          id: 2348
+          code: '10012'
+          description: test2
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

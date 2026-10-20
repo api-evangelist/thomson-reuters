@@ -1,0 +1,224 @@
+# x-archived-from: thomson-reuters-api-documentation-for-currencies-services-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  version: '2.0'
+  title: API documentation for Currencies services
+servers:
+- url: https://api.onesourcetax.com/administration/v1
+paths:
+  /currencies:
+    get:
+      tags:
+      - Currencies
+      summary: Retrieve the currencies from core ontology
+      description: Use this operation to retrieve a list of currencies from core ontology
+      operationId: Retrieve the currencies from core ontology
+      parameters:
+      - name: Accept-Language
+        in: header
+        description: Accept Language
+        schema:
+          type: string
+      - name: X-LoneStar-AccountId
+        in: header
+        description: AccountId you want to access if you are a support user
+        schema:
+          type: string
+      - name: clientId
+        in: header
+        description: Client Id of the tenant
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        '404':
+          description: Not Found
+        '500':
+          description: Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+      security:
+      - Authorization: []
+components:
+  schemas:
+    Meta:
+      type: object
+      properties:
+        data_type:
+          type: string
+          description: data_type
+        total_results:
+          type: integer
+          format: int32
+          description: total_results
+        items_count:
+          type: integer
+          format: int32
+          description: items_count
+    FailureV1_object:
+      type: object
+      properties:
+        detail_count:
+          type: integer
+          format: int32
+          description: The number of failures that were encountered.
+        details:
+          type: array
+          description: The collection of failures that were encountered.
+          items:
+            $ref: '#/components/schemas/FailureDetailV1'
+        item:
+          type: object
+          description: The item associated with a failure. Typically this will be the POJO that encountered a failure such as a validation error.
+      description: Contains information about a failure.
+    ErrorV1_Currency:
+      type: object
+      properties:
+        code:
+          type: string
+          description: code
+        message:
+          type: string
+          description: message
+        error_count:
+          type: integer
+          format: int32
+          description: error_count
+        failures:
+          type: array
+          description: failures
+          items:
+            $ref: '#/components/schemas/FailureV1_Currency'
+    ErrorV1:
+      type: object
+      properties:
+        code:
+          type: string
+          description: code
+        message:
+          type: string
+          description: message
+        error_count:
+          type: integer
+          format: int32
+          description: error_count
+        failures:
+          type: array
+          description: failures
+          items:
+            $ref: '#/components/schemas/FailureV1_object'
+    FailureDetailV1:
+      type: object
+      properties:
+        cause:
+          type: string
+          description: The cause of a failure. This is used to identify what POJO field may be in error or what DB could not be reached.
+        description:
+          type: string
+          description: A description of the failure. This is used to provide some meaningful description of the failure. The message should be considered internal and not customer facing.
+        error_id:
+          type: string
+          description: The error identifier
+        error_parameters:
+          type: object
+          description: The error parameter keys and values
+          additionalProperties:
+            type: string
+        failure_type:
+          type: string
+          description: The general category of the type of failure.
+          enum:
+          - ERROR
+          - WARNING
+          - VALIDATION
+        message:
+          type: string
+          description: The default message category
+      description: Provides detail information about a failure.
+    Currency:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the Currency instance.
+        jurisdiction:
+          type: string
+          description: The jurisdiction of the Currency instance.
+        label:
+          type: string
+          description: The label of the Currency instance.
+        three_digit_code:
+          type: string
+          description: The three digit code of the Currency instance.
+      description: The details about a Currency instance in ontology.
+    FailureV1_Currency:
+      type: object
+      properties:
+        detail_count:
+          type: integer
+          format: int32
+          description: The number of failures that were encountered.
+        details:
+          type: array
+          description: The collection of failures that were encountered.
+          items:
+            $ref: '#/components/schemas/FailureDetailV1'
+        item:
+          description: The item associated with a failure. Typically this will be the POJO that encountered a failure such as a validation error.
+          $ref: '#/components/schemas/Currency'
+      description: Contains information about a failure.
+    QueryResponseV1DTO_Currency:
+      type: object
+      properties:
+        _meta:
+          description: _meta
+          $ref: '#/components/schemas/Meta'
+        items:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/Currency'
+        error:
+          description: error
+          $ref: '#/components/schemas/ErrorV1_Currency'
+    CurrencyResponse:
+      type: object
+      properties:
+        _meta:
+          description: _meta
+          $ref: '#/components/schemas/Meta'
+        items:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/Currency'
+        error:
+          description: error
+          $ref: '#/components/schemas/ErrorV1_Currency'
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      in: header
+      name: Authorization

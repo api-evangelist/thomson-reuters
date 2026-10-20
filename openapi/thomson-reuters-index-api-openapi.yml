@@ -1,0 +1,716 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Index API
+  version: v1
+  description: 'Operations tagged Index across 3 of this provider''s published API definitions: thomson-reuters-gofileroom-web-api-v1-v1-openapi.json, thomson-reuters-gofileroom-web-api-v1-openapi.yml, thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: Index
+  description: Index
+paths:
+  /api/v1/drawers/{drawerId}/indexes:
+    get:
+      tags:
+      - Index
+      summary: Get drawer indexes
+      description: An endpoint used that can be used to retrieve a list of document indexes that are set up for the drawer.
+      operationId: Index_GetDocumentIndexesForDrawerV1
+      parameters:
+      - name: drawerId
+        in: path
+        description: The drawer ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentIndexV1'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentIndexV1'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentIndexV1'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentIndexV1'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/indexes/{indexId}/values:
+    get:
+      tags:
+      - Index
+      summary: Get a list for an index
+      description: An endpoint that provides all the entries for a list type index.
+      operationId: Index_GetAllListTypeIndexData
+      parameters:
+      - name: indexId
+        in: path
+        description: The index identifier.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: listId
+        in: query
+        description: The list to use for this index. If not specified, the default list is used for the index.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MultivalueListItem'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MultivalueListItem'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MultivalueListItem'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MultivalueListItem'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/indexes/{indexId}/values/childindexlist/{childListId}:
+    get:
+      tags:
+      - Index
+      summary: Get the child values of an index
+      description: An endpoint that returns a list of child index values based on the list ID, which is provided when the parent list value is selected.
+      operationId: Index_GetDocumentChildIndexesForDrawer
+      parameters:
+      - name: indexId
+        in: path
+        description: The index we're searching on.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: childListId
+        in: path
+        description: The list identifier of the specific list we want to load.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MultivalueListItem'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MultivalueListItem'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MultivalueListItem'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MultivalueListItem'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/indexes/validate:
+    post:
+      tags:
+      - Index
+      summary: Check index validity
+      description: An endpoint used to check whether the indexes provided are valid.
+      operationId: Index_ValidateIndexesV1
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndexAddRequestV1'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/IndexAddRequestV1'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/IndexAddRequestV1'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/IndexAddRequestV1'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IndexAddRequestV1'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexValidationResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IndexValidationResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IndexValidationResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/IndexValidationResponse'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: request
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/indexes/{indexId}/dynamicrules:
+    get:
+      tags:
+      - Index
+      summary: Get dynamic rules
+      description: Gets the list of dynamic rules configured for the specified index.
+      operationId: Index_GetDynamicRulesForIndex
+      parameters:
+      - name: indexId
+        in: path
+        description: The index identifier.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DynamicRule'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DynamicRule'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DynamicRule'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DynamicRule'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+  /api/v1/indexes/{indexId}/lookuplist:
+    post:
+      tags:
+      - Index
+      summary: Loads a list of values for a lookup list index, filtered by the specified index…
+      description: This method is designed for use with autocomplete fields. A separate method should be created for getting a full, paginated list for the document index.
+      operationId: Index_LookupListFind
+      parameters:
+      - name: indexId
+        in: path
+        description: The index identifier.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-TR-API-APP-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The request object for search for lookup list values.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookupListSearchV1'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LookupListSearchV1'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/LookupListSearchV1'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/LookupListSearchV1'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LookupListSearchV1'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LookupListItemV1'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LookupListItemV1'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LookupListItemV1'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LookupListItemV1'
+      security:
+      - ApiKeyAuth: []
+      x-codegen-request-body-name: lookuplistSearch
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  schemas:
+    LookupListItemV1:
+      type: object
+      properties:
+        Index:
+          $ref: '#/components/schemas/DocumentIndexValueV1'
+        LinkedIndexes:
+          type: array
+          description: The indexes that are linked to the parent index. Provides their index IDs, values, and lookup link ID.
+          items:
+            $ref: '#/components/schemas/DocumentIndexValueV1'
+      description: Represents an item in a lookup list. Represents the value in the list that's being searched on along with a list of linked lookup list values.
+    DocumentIndexValueV1:
+      type: object
+      properties:
+        IndexId:
+          type: string
+          description: Gets or sets the index identifier. This is a required field for document filtering.
+        IndexValue:
+          type: string
+          description: Gets or sets the index value. This is a required field for document filtering.
+      description: Represents an index to add to a document.
+    IndexValidationError:
+      type: object
+      properties:
+        IndexId:
+          type: string
+          description: Gets or sets the index identifier.
+        IndexItemException:
+          type: string
+          description: Gets or sets the index item exception.
+      description: Represents an error during the index validation process. Contains information about the index the error occurred on and details about the error to be relayed to the user.
+    DynamicRule:
+      type: object
+      properties:
+        DynamicRuleId:
+          type: string
+          description: Gets or sets the dynamic rule identifier.
+        Value:
+          type: string
+          description: The value being compared to for the dynamic rule.
+        DependentIndexId:
+          type: string
+          description: The index ID that becomes required based on this dynamic rule.
+        Condition:
+          type: string
+          description: The comparison condition to evaluate this rule on.
+          enum:
+          - EqualTo
+          - NotEqualTo
+          - GreaterThan
+          - LessThan
+          - GreaterThanOrEqualTo
+          - LessThanOrEqualTo
+          - Empty
+          - NotEmpty
+      description: A class representing a dynamic rule.
+    DocumentIndexV1:
+      type: object
+      properties:
+        IndexId:
+          type: string
+          description: Gets or sets the index identifier. This is a required field for document filtering.
+        IndexName:
+          type: string
+          description: Gets or sets the name of the index.
+        IndexType:
+          type: string
+          description: Gets or sets the index type identifier. This is a required field for document filtering.
+          enum:
+          - String
+          - Integer
+          - Date
+          - Currency
+          - Float
+          - DateTime
+          - List
+        Length:
+          type: integer
+          description: Gets or sets the length of the field.
+          format: int32
+        Required:
+          type: boolean
+          description: Gets or sets a value indicating whether this index is required. All required indexes must be specified to index a document.
+        ListId:
+          type: integer
+          description: Gets of sets list ID value.
+          format: int32
+        LookupAutoUpdate:
+          type: boolean
+        ChildIndexId:
+          type: string
+      description: Represents an index on a document.
+    IndexAddRequestV1:
+      type: object
+      properties:
+        DrawerId:
+          type: string
+          description: Gets or sets the drawer identifier.
+        Indexes:
+          type: array
+          description: Gets or sets the list of indexes.
+          items:
+            $ref: '#/components/schemas/DocumentIndexValueV1'
+      description: Represents a request to validate a set of indexes.
+    MultivalueListItem:
+      type: object
+      properties:
+        ListId:
+          type: integer
+          description: The list that this item belongs to.
+          format: int32
+        HasChildren:
+          type: boolean
+          description: Whether this list item has children.
+        ChildListId:
+          type: integer
+          description: If the list item has children, the list ID of its child list.
+          format: int32
+        ListEntryId:
+          type: integer
+          description: The list entry ID of this item.
+          format: int32
+        Value:
+          type: string
+          description: The contents of this list item.
+        ChildIndexId:
+          type: string
+          description: The index ID whose list is a child of this list. The full contents of the child list can be accessed using a combination of this and the ChildListId.
+      description: Represents an item in a multivalue list.
+    IndexValidationResponse:
+      type: object
+      properties:
+        IsValid:
+          type: boolean
+          description: Whether the validation was successful.
+        Errors:
+          type: array
+          description: The list of errors as associated with their index.
+          items:
+            $ref: '#/components/schemas/IndexValidationError'
+        ErrorMessage:
+          type: string
+          description: An overall error message, not associated with a particular index. More general information for the user.
+      description: A class containing information about the index validation attempt. Returns if valid and, if invalid, returns a list of errors associated with indexes and a general error message.
+    LookupListSearchV1:
+      type: object
+      properties:
+        IndexValue:
+          type: string
+          description: The index value string that you wish to search on.
+        Count:
+          type: integer
+          description: The number of results returned.
+          format: int32
+        SearchType:
+          type: string
+          description: How you want to search for the string provided.
+          enum:
+          - Exact
+          - Pre
+          - Post
+          - Contain
+          - All
+        ActionType:
+          type: string
+          description: What type of action you're performing when searching for lookup list values (for example, Adding documents, searching for documents).
+          enum:
+          - Search
+          - Add
+          - DocumentTracking
+          - TaxflowSearch
+          - GroupDocumentSecurity
+          - LookupContactManagement
+      description: The request object used for searching lookup list values.
+    LookupListItemV1_2:
+      type: object
+      properties:
+        Index:
+          $ref: '#/components/schemas/DocumentIndexValueV1_2'
+        LinkedIndexes:
+          type: array
+          description: The indexes that are linked to the parent index.  Provides their index ids, values, and lookup link id.
+          items:
+            $ref: '#/components/schemas/DocumentIndexValueV1_2'
+      description: Represents an item in a lookup list.  Represents the value in the list that is being searched on along with a list of linked lookup list values.
+    DocumentIndexValueV1_2:
+      type: object
+      properties:
+        IndexId:
+          type: string
+          description: 'Gets or sets the index identifier.
+
+            This is a required field for document filtering.'
+        IndexValue:
+          type: string
+          description: 'Gets or sets the index value.
+
+            This is a required field for document filtering'
+      description: Represents an index to add to a document.
+    IndexValidationError_2:
+      type: object
+      properties:
+        IndexId:
+          type: string
+          description: Gets or sets the index identifier.
+        IndexItemException:
+          type: string
+          description: Gets or sets the index item exception.
+      description: Represents an error during the index validation process.  Contains information about the index the error occurred on and details about the error to be relayed to the user.
+    DynamicRule_2:
+      type: object
+      properties:
+        DynamicRuleId:
+          type: string
+          description: Gets or sets the dynamic rule identifier.
+        Value:
+          type: string
+          description: The value being compared to for the dynamic rule.
+        DependentIndexId:
+          type: string
+          description: The index ID that becomes required based on this dynamic rule
+        Condition:
+          type: string
+          description: The comparison condition to evaluate this rule on.
+          enum:
+          - EqualTo
+          - NotEqualTo
+          - GreaterThan
+          - LessThan
+          - GreaterThanOrEqualTo
+          - LessThanOrEqualTo
+          - Empty
+          - NotEmpty
+      description: A class representing a dynamic rule.
+    DocumentIndexV1_2:
+      type: object
+      properties:
+        IndexId:
+          type: string
+          description: 'Gets or sets the index identifier.
+
+            This is a required field for document filtering.'
+        IndexName:
+          type: string
+          description: Gets or sets the name of the index.
+        IndexType:
+          type: string
+          description: 'Gets or sets the index type identifier.
+
+            This is a required field for document filtering.'
+          enum:
+          - String
+          - Integer
+          - Date
+          - Currency
+          - Float
+          - DateTime
+          - List
+        Length:
+          type: integer
+          description: Gets or sets the length of the field.
+          format: int32
+        Required:
+          type: boolean
+          description: Gets or sets a value indicating whether this index is required. All required indexes must be specified to index a document.
+        ListId:
+          type: integer
+          description: Gets of sets list id value
+          format: int32
+        LookupAutoUpdate:
+          type: boolean
+        ChildIndexId:
+          type: string
+      description: Represents an index on a document.
+    MultivalueListItem_2:
+      type: object
+      properties:
+        ListId:
+          type: integer
+          description: The list that this item belongs to.
+          format: int32
+        HasChildren:
+          type: boolean
+          description: Whether this list item has children.
+        ChildListId:
+          type: integer
+          description: If the list item has children, the list ID of its child list.
+          format: int32
+        ListEntryId:
+          type: integer
+          description: The list entry ID of this item.
+          format: int32
+        Value:
+          type: string
+          description: The contents of this list item.
+        ChildIndexId:
+          type: string
+          description: 'The index ID whose list is a child of this list.  The full contents of the child list
+
+            can be accessed using a combination of this and the ChildListId.'
+      description: Represents an item in a multivalue list
+    IndexValidationResponse_2:
+      type: object
+      properties:
+        IsValid:
+          type: boolean
+          description: Whether or not the validation was successful.
+        Errors:
+          type: array
+          description: The list of errors as associated with their index.
+          items:
+            $ref: '#/components/schemas/IndexValidationError_2'
+        ErrorMessage:
+          type: string
+          description: An overall error message, not associated with a particular index. More general information for the user.
+      description: A class containing information about the index validation attempt.  Will return if valid and, if invalid, returns a list of errors associated with indexes and a general error message.
+    LookupListSearchV1_2:
+      type: object
+      properties:
+        IndexValue:
+          type: string
+          description: The index value string that you wish to search on.
+        Count:
+          type: integer
+          description: The number of results returned.
+          format: int32
+        SearchType:
+          type: string
+          description: How you want to search for the string provided.
+          enum:
+          - Exact
+          - Pre
+          - Post
+          - Contain
+          - All
+        ActionType:
+          type: string
+          description: What type of action are you performing when searching for lookup list values. (e.g. Adding documents, searching for documents)
+          enum:
+          - Search
+          - Add
+          - DocumentTracking
+          - TaxflowSearch
+          - GroupDocumentSecurity
+          - LookupContactManagement
+      description: The request object used for searching lookup list values.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+x-refined-from:
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.json
+- thomson-reuters-gofileroom-web-api-v1-openapi.yml
+- thomson-reuters-gofileroom-web-api-v1-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

@@ -1,0 +1,2188 @@
+# x-archived-from: thomson-reuters-indirect-tax-determination-rest-tax-service-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  version: v1.7.7
+  title: Indirect Tax Determination - REST Tax Service.
+  description: 'This service enables you to determine, calculate, commit and reverse indirect taxes for <B>Order to Cash</B> and <B>Procure to Pay</B> business transactions. <B>Important: Currently only supports United States of America, Canada and European Union (VAT) Region.</B>'
+servers:
+- url: https://api-uat.onesourcetax.com/indirect-tax-determination/taxes/
+  description: Base UAT URLs for Indirect Tax Determination REST API.
+security:
+- bearerAuth: []
+tags:
+- name: tax-service
+  description: Thomson Reuters Tax REST API
+paths:
+  /v1/calculate:
+    post:
+      summary: Determines and calculates indirect taxes.
+      description: You can use this resource to determine which tax types are relevant and to calculate the amount of tax due on a business transaction. Tax results data is <B>NOT persisted</B> in the Determination Audit database.
+      tags:
+      - tax-service
+      parameters:
+      - name: Correlation-Id
+        in: header
+        required: true
+        description: An ID that uniquely identifies an HTTP request and can have a maximum of 50 characters.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/vnd.tri.onesource.idt+json:
+            schema:
+              $ref: '#/components/schemas/CalculateRequest'
+        description: The request payload as per the model schema provided.
+        required: true
+      responses:
+        '200':
+          description: A successful response from the API, was able to calculate tax for one or more documents.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/CalculateResponse'
+        '400':
+          description: Bad Request.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not Found.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '405':
+          description: Method Not Allowed.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Server Exception.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        default:
+          description: Server Exception.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v1/commit:
+    post:
+      summary: Determines and calculates indirect taxes and also commits to audit entity.
+      description: You can use this resource to determine which tax types are relevant and to calculate the amount of tax due on a business transaction. Tax results are also persisted in the Determination/'s Audit database for reporting purposes.
+      tags:
+      - tax-service
+      parameters:
+      - name: Correlation-Id
+        in: header
+        required: true
+        description: An ID that uniquely identifies an HTTP request and can have a maximum of 50 characters.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/vnd.tri.onesource.idt+json:
+            schema:
+              $ref: '#/components/schemas/CommitRequest'
+        description: The request payload as per the model schema provided.
+        required: true
+      responses:
+        '200':
+          description: A successful response from the API, was able to calculate tax for one or more documents, Tax results are also persisted in the Determination/'s Audit database for reporting purposes.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/CommitResponse'
+        '400':
+          description: Bad Request.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not Found.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '405':
+          description: Method Not Allowed.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Server Exception.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        default:
+          description: Server Exception.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v1/reverse:
+    post:
+      summary: Reverse or void an existing the tax audit entry.
+      description: You can use this resource to reverse an document that had been saved, via commit endpoint, in Determination Audit database.
+      tags:
+      - tax-service
+      parameters:
+      - name: Correlation-Id
+        in: header
+        required: true
+        description: An ID that uniquely identifies an HTTP request and can have a maximum of 50 characters.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/vnd.tri.onesource.idt+json:
+            schema:
+              $ref: '#/components/schemas/ReverseRequest'
+        description: The request payload as per the model schema provided.
+        required: true
+      responses:
+        '200':
+          description: A successful response from the API, was able to reverse an existing Audited transaction.
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ReverseResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not Found
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Server Exception
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        default:
+          description: Server Exception
+          content:
+            application/vnd.tri.onesource.idt+json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ApiError:
+      type: object
+      properties:
+        code:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+    TaxRequest:
+      type: object
+      properties:
+        companyRole:
+          type: string
+          maxLength: 20
+          description: 'The role the company plays in a given transaction: Buyer(<B>B</B>), Middleman (<B>M</B>), or Seller (<B>S</B>). Each role results in different transaction tax and reporting requirement.'
+        externalCompanyId:
+          type: string
+          maxLength: 100
+          description: The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the request level or with each document, and is passed through to the Determination response, and to the Audit database.
+        hostRequestLogId:
+          type: string
+          maxLength: 100
+          description: A pass-through element used to identify the originating request from the Source System in log files.
+        processingOptions:
+          $ref: '#/components/schemas/ProcessingOption'
+    DocumentRequest:
+      type: object
+      required:
+      - currencyCode
+      - documentDate
+      properties:
+        basisPercent:
+          type: number
+          description: A percentage amount that is used to adjust the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on. If this element is provided, it overrides any data found on an authority rule or exemption certificate applied to the transaction.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+          description: List of address type
+        companyRole:
+          type: string
+          maxLength: 20
+          description: 'The role the company plays in a given transaction: Buyer (<B>B</B>), Middleman (<B>M</B>) or Seller (<B>S</B>). Each role results in different transaction tax and reporting requirements. Currently only Seller(<B>S</B>) role is supported by the API.'
+        countryOfOrigin:
+          type: string
+          maxLength: 100
+          description: The country where the goods were manufactured. Used in Intrastat reporting.
+        currencyCode:
+          type: string
+          maxLength: 3
+          description: The currency associated with this transaction.
+        customerName:
+          type: string
+          maxLength: 100
+          description: The customer's name as passed in from the Source System. Used in the calculation of US Sales Tax when Exemption Certificates are evaluted for applicability to the transaction. Customer Name is also used in evaluating VAT Registration Group member, and in the case where Licenses are defined to match based on a customerName. For Exemption Certificate and License customer lookups, this element is no longer used by default; use customerNumber instead. To use customerName as well, set the Company Configuration parameter STRICT_CUSTOMER_LOOKUP to N. See Configuration for more information. For VAT Registration Group member evaluation, this element is used as a fall-back if a match cannot be made using externalCompanyId or customerNumber.
+        customerNumber:
+          type: string
+          maxLength: 100
+          description: The customer number as passed in by the Source System. This element's value is used by Determination when searching for US Sales Tax Exemption Certificates or with the lookup of a License that are relevant to a transaction. Optionally, Determination may use the value in this element to auto-create a customer or an associated certificate. This element's value can also be used to match VAT Registration Group members if no match is found using externalCompanyId.
+        deliveryTerm:
+          $ref: '#/components/schemas/DeliveryTerm'
+          description: 'Indicates how goods were shipped and where title was transferred. if using Incoterms, Valid values include Incoterms 2000 codes and any other customer-defined codes. If using The Point of Title Transfer (POTT) location. Valid values are:D: Destination.O: Origin.I: In transit.If deliveryTerm element is passed in at either the document or line level, the default for the document is set to In Transit.'
+        deptOfConsign:
+          type: string
+          maxLength: 100
+          description: Department of consignment. Used in Intrastat reporting.
+        documentType:
+          type: string
+          maxLength: 50
+          description: Document Type references a virtual or a physical document created and managed by the Source System. Examples include document, order, or credit memo. The document type represents the type of transaction to be processed, including defining the types of entities in the transaction. For example, a sales quote will have different attributes than a document for purchased goods.
+        endUserName:
+          type: string
+          maxLength: 100
+          description: Identifier of the user who made a change to the document in the calling Source system.
+        externalCompanyId:
+          type: string
+          maxLength: 100
+          description: The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the batch level or with each document, and is passed through to the Determination response, and to the Audit database.
+        inclusiveTaxIndicator:
+          $ref: '#/components/schemas/InclusiveTaxIndicator'
+          description: Contains information on whether to treat some or all authority taxes for this invoice as inclusive, regardless of the selected rule.
+        documentDate:
+          type: string
+          format: date
+          description: The date as stored on this document. This is used for comparison to configurations throughout Determination and is also used to query transaction data in reporting. Required.
+        isBusinessSupply:
+          type: boolean
+          description: Indicates whether a supply is being used for business. In Brazilian ICMS and IPI transactions, whether a supply is being used for business or not impacts the tax and reporting requirements of the buyer and the seller. Valid values are true and false.
+        isCredit:
+          type: boolean
+          description: Indicates whether the current document is a credit as identified by your Source System. A true value in this elements indicates a credit for both auditing and reporting purposes. When set to true, any amount on the document should be passed in as a negative value. Valid values are <B>true</B> and <B>false</B>.
+          enum:
+          - true
+          - false
+        isExempt:
+          $ref: '#/components/schemas/AddressFlagForExempt'
+        isSimplification:
+          type: boolean
+          description: Indicates an override to any triangulation simplification determinations. Valid values are true and false. If set to true, you must pass registrations in for the Buyer, Seller, and Middleman in the transaction or a warning message will be returned.
+        modeOfTransport:
+          type: string
+          maxLength: 100
+          description: The method of transport. Used for Intrastat reporting in the EU.
+        movementDate:
+          type: string
+          format: date
+          description: Indicates the date of a movement of goods, such as via a pipeline, or the data of issue. Used in rule qualifiers and in date determination rules.
+        movementType:
+          type: string
+          maxLength: 100
+          description: Indicates the type of movement, such as a pipeline. Used in rule qualifiers and in date determination rules.
+        natureOfTransactionCode:
+          type: string
+          maxLength: 2
+          description: Used in Intrastat reports in all countries in the EU.
+        originalDocumentDate:
+          type: string
+          format: date
+          description: The date of the original document. Can be used in Date Determination Rules.
+        portOfEntry:
+          type: string
+          maxLength: 100
+          description: The Port of Entry, used for Intrastat reporting in the EU.
+        portOfLoading:
+          type: string
+          maxLength: 5
+          description: The Port or Airport of Departure; used for Intrastat reporting in the EU.
+        regime:
+          type: string
+          maxLength: 100
+          description: The Regime, used for French Intrastat reports.
+        registrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Registrations'
+          description: List of registrations for role.
+        statisticalProcedure:
+          type: string
+          maxLength: 6
+          description: A statistical indicator used for large shipments. Used for Intrastat filing purposes in the EU.
+        titleTransferLocation:
+          type: string
+          maxLength: 100
+          description: A pass-through element indicating where the location where title transferred for the associated delivery term.
+        taxCode:
+          type: string
+          maxLength: 50
+          description: An optional value which can be specified in the transaction to be compared to a Tax Code specified on a Rule.
+        taxDeterminationDate:
+          type: string
+          format: date
+          description: The date used in selecting all applicable system configuration including tax rates and rules. Overrides any system-determined date.
+        charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charge'
+          description: List of charges associated with the line. The Charge functionality is limited to the CompanyRole=Seller only. Seller-type roles are allowed to use the Charges structure, buyer type transactions cannot due to vendor charge and accrual logic.
+        userAttributes:
+          type: array
+          maxItems: 50
+          description: The userAttributes block enables companies to submit, and have returned, user-defined elements that are not directly supported in Determination. These elements can be used in conjunction with TransEditors to enable tax calculations, and may be stored in the Audit database for reporting purposes. Each userAttribute block contains a single name/value pair. <B>TR reserves ATTRIBUTE41 to ATTRIBUTE50 for internal PS use</B>.
+          items:
+            $ref: '#/components/schemas/UserAttribute'
+        vatGroupRegistration:
+          type: string
+          maxLength: 25
+          description: The value of the VAT Group registration number for the invoice. Used as the primary way of looking up VAT Registration Groups during calculation.
+        vendorName:
+          type: string
+          maxLength: 100
+          description: The vendor's name. If this is a B2B transaction and the Company is the buyer, the Company becomes the Customer and the Vendor becomes the Company for the transaction.
+        vendorNumber:
+          type: string
+          maxLength: 100
+          description: The vendor's number. If this is a B2B transaction and the Company is the buyer, the Company becomes the Customer and the Vendor becomes the Company for the transaction.
+        billOfLading:
+          $ref: '#/components/schemas/BillOfLanding'
+        isExchange:
+          type: boolean
+          description: ''
+        licenses:
+          $ref: '#/components/schemas/LicenseType'
+        operatingLicenses:
+          $ref: '#/components/schemas/OperatingLicenses'
+        vendorGroupName:
+          type: string
+          maxLength: 100
+          description: ''
+        vendorGroupOwner:
+          type: string
+          maxLength: 100
+          description: ''
+        userAmountAttributes:
+          type: array
+          description: ''
+          maxItems: 5
+          items:
+            $ref: '#/components/schemas/UserAttributeAmount'
+        userDateAttributes:
+          type: array
+          description: ''
+          maxItems: 5
+          items:
+            $ref: '#/components/schemas/UserAttributeDate'
+        processingOptions:
+          $ref: '#/components/schemas/ProcessingOption'
+        allocationGroupName:
+          type: string
+          maxLength: 100
+          description: Name of the Allocation Group to use for this transaction. Named Allocations will be looked up in this group.
+        allocationGroupOwner:
+          type: string
+          maxLength: 100
+          description: Name of the Company owning the Allocation Group to use for this transaction. The named Allocation Group will be looked up in this company's data.
+        allocationName:
+          type: string
+          maxLength: 100
+          description: Name of the Allocation to use for this transaction. Named Allocations will be looked up in the specified group owned by the specified company (see above). Company default owner and group will be used if not specified in the transaction. Allocations are dated, so the named version active as of the <INVOICE_DATE> will be used. If none match, a message will be added to output indicating an active named Allocation was not found. Allocation processing can be overridden at the line level. See LINE.IS_ALLOCATABLE.
+        vendorChargeTax:
+          $ref: '#/components/schemas/VendorChargeTaxDocumentRequest'
+        businessLocation:
+          type: string
+          maxLength: 500
+          description: The business location.
+        relatedLineAmounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatedLineAmount'
+          description: The related line amounts
+    LineRequest:
+      type: object
+      required:
+      - lineNumber
+      - quantities
+      - amount
+      properties:
+        accountingCode:
+          type: string
+          maxLength: 100
+          description: The Accounting Code (or GL Code) passed in by the Source System.
+        basisPercent:
+          type: number
+          description: A percentage amount that is used to adjust the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on. If this element is provided, it overrides any data found on an authority rule or exemption certificate applied to the transaction.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+          description: List of addresses
+        commodityCode:
+          type: string
+          maxLength: 50
+          description: A code that defines the a product (good or service) that is passed in from the Source System/ERP. A government subscribes to a specific product assoication such as the UNSPSC in the United States, or the Harmonized System which is used in many countries around the world that defines the classification of traded goods or services. When a value is passed in from the ERP, Determination evaluates this code against the standard and custom products in search of a match to an existing commodity code assigned to a specific product in Determination. If a match occurs, Determination uses the product to ensure the accuracy of the tax result in the jurisdiction for where the tax result occurs.
+        countryOfOrigin:
+          type: string
+          maxLength: 100
+          description: The country where the goods were manufactured. Used in Intrastat reporting.
+        customerName:
+          type: string
+          maxLength: 100
+          description: The customer's name as passed in from the Source System. Used in the calculation of US Sales Tax when Exemption Certificates are evaluted for applicability to the transaction. Customer Name is also used in evaluating VAT Registration Group member, and in the case where Licenses are defined to match based on a customerName. For Exemption Certificate and License customer lookups, this element is no longer used by default; use customerNumber instead. To use customerName as well, set the Company Configuration parameter STRICT_CUSTOMER_LOOKUP to N. See Configuration for more information. For VAT Registration Group member evaluation, this element is used as a fall-back if a match cannot be made using externalCompanyId or customerNumber.
+        customerNumber:
+          type: string
+          maxLength: 100
+          description: The customer number as passed in by the Source System. This element's value is used by Determination when searching for US Sales Tax Exemption Certificates or with the lookup of a License that are relevant to a transaction. Optionally, Determination may use the value in this element to auto-create a customer or an associated certificate. This element's value can also be used to match VAT Registration Group members if no match is found using externalCompanyId.
+        deliveryTerm:
+          $ref: '#/components/schemas/DeliveryTerm'
+          description: 'Indicates how goods were shipped and where title was transferred. if using Incoterms, Valid values include Incoterms 2000 codes and any other customer-defined codes. If using The Point of Title Transfer (POTT) location. Valid values are:D: Destination.O: Origin.I: In transit.If deliveryTerm element is passed in at either the document or line level, the default for the document is set to In Transit.'
+        deptOfConsign:
+          type: string
+          maxLength: 100
+          description: Department of consignment. Used in Intrastat reporting.
+        description:
+          type: string
+          maxLength: 200
+          description: A description of a particular product. This data is primarily used to reference records from the audit data and when reconciling tax results to the financial transaction.
+        discountAmount:
+          type: number
+          description: In some situations volume or other discounts must be taken into account when calculating tax. For these situations, DiscountAmount is used to indicate that amount. When DiscountAmount is provided, Determination will reduce the Taxable Basis by that amount. For example, if the Gross Amount is $100 and a Discount Amount of $20 is provided, Determination adjusts the Taxable Basis to $80.
+        endUse:
+          type: string
+          maxLength: 100
+          description: End use of the product. Intended for use by Rule Qualifiers to govern the applicability of a rule.
+        inclusiveTaxIndicator:
+          $ref: '#/components/schemas/InclusiveTaxIndicator'
+          description: Contains information on whether to treat some or all authority taxes for this invoice as inclusive, regardless of the selected rule.
+        inputRecoveryAmount:
+          type: number
+          description: Overrides any Input Recovery Amount specified by the transaction's rule.
+        inputRecoveryPercent:
+          type: number
+          description: Overrides the Input Recovery Percentage specified by the transaction's rule.
+        inputRecoveryType:
+          type: string
+          maxLength: 50
+          description: A pass-through element which has been deprecated in favor of enhanced VAT calculation logic. See <INPUT_RECOVERY_AMOUNT/PERCENT> and VAT Recoverability and Rules for more information.
+        documentDate:
+          type: string
+          format: date
+          description: The date of the document as stored on this line. This is used for comparison to configurations throughout Determination and is also used to query transaction data in reporting.
+        isBusinessSupply:
+          type: boolean
+          description: Indicates whether a supply is being used for business. For some transaction types, whether a supply is being used for business or not impacts the tax and reporting requirements of the buyer and the seller. Valid values are true and false.
+        isCredit:
+          type: boolean
+          description: Indicates whether the current line is a credit as identified by your Source System. A true value in this elements indicates a credit for both auditing and reporting purposes. When set to true, any amount on the document should be passed in as a negative value. Valid values are <B>true</B> and <B>false</B>.
+          enum:
+          - true
+          - false
+        isExempt:
+          $ref: '#/components/schemas/AddressFlagForExempt'
+        isManufacturing:
+          type: boolean
+          description: Indicates that the goods or services are for manufacturing purposes.
+        isSimplification:
+          type: boolean
+          description: Indicates an override to any triangulation simplification determinations. Valid values are true and false. If set to true, you must pass registrations in for the Buyer, Seller, and Middleman in the transaction or a warning message will be returned.
+        itemValue:
+          type: number
+          description: The total value of all items on this line. This is distinct from the gross amount because it does not contain costs such as landed costs, insurance, freight and other associated costs that gross amount does contain. If an item value is present in a transaction, it is used instead of taxable basis. Item value is used in many VAT and EU Intrastat reports.
+        licenses:
+          $ref: '#/components/schemas/LicenseType'
+          description: Contains data for one or more licenses applying to the document.
+        lineNumber:
+          type: string
+          maxLength: 50
+          description: lineNumber is a required element for each line. Used in combination with documentNumber, it is used to specify and reference a particular line on a specific document.
+        mass:
+          type: number
+          description: The Mass of a supply. Used for Intrastat reporting purposes in the EU.
+        modeOfTransport:
+          type: string
+          maxLength: 50
+          description: The method of transport. Used for Intrastat reporting in the EU.
+        movementDate:
+          type: string
+          format: date
+          description: Indicates the date of a movement of goods, such as via a pipeline, or the data of issue. Used in rule qualifiers and in date determination rules.
+        movementType:
+          type: string
+          maxLength: 100
+          description: Indicates the type of movement, such as a pipeline. Used in rule qualifiers and in date determination rules.
+        originalDocumentDate:
+          type: string
+          format: date
+          description: The date of the original document. Can be used in Date Determination Rules.
+        partNumber:
+          type: string
+          maxLength: 100
+          description: The part number used by your Source System. This element is stored in the audit tables and does not affect calculation.
+        portOfEntry:
+          type: string
+          maxLength: 100
+          description: The Port of Entry, used for Intrastat reporting in the EU.
+        portOfLoading:
+          type: string
+          maxLength: 5
+          description: The Port or Airport of Departure; used for Intrastat reporting in the EU.
+        productCode:
+          type: string
+          maxLength: 100
+          description: Your Source System's product code for the product on this line. Product Codes are mapped to a Product using Product Mappings.
+        quantities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quantity'
+          description: The quantities block contains a list of analogous quantity elements that may differ in their units of measure.
+        regime:
+          type: string
+          maxLength: 100
+          description: The Regime, used for French Intrastat reports.
+        registrations:
+          type: array
+          description: List of registrations for role.
+          items:
+            $ref: '#/components/schemas/Registrations'
+        charges:
+          type: array
+          description: List of charges associated with the line. The Charge functionality is limited to the CompanyRole=<B>S</B>eller only. Seller-type roles are allowed to use the Charges structure, buyer type transactions cannot due to vendor charge and accrual logic.
+          items:
+            $ref: '#/components/schemas/Charge'
+        supplementaryUnit:
+          type: string
+          maxLength: 5
+          description: The size of a supply. For Intrastat reports in the EU, some commodities require an additional measuring unit other than or in addition to mass for reporting purposes. EU rules determine the unit to be used for various supplies.
+        taxCode:
+          type: string
+          maxLength: 50
+          description: An optional value which can be specified in the transaction to be compared to a Tax Code specified on a Rule.
+        taxDeterminationDate:
+          type: string
+          format: date
+          description: The date used in selecting all applicable system configuration including tax rates and rules. Overrides any Determination-calculated date.
+        taxPointDate:
+          type: string
+          format: date
+          description: The date the signifies when the liability for tax arises. Overrides any Determination-calculated date.
+        taxTreatment:
+          type: string
+          maxLength: 100
+          description: 'The flag that indicates alternative tax treatment after Determination performs its calculation:D: Deferred.DI: Deferred Invoice. DP: Deferred Payment.'
+        titleTransferLocation:
+          type: string
+          maxLength: 1
+          description: A pass-through element used in conjunction with the deliveryTerms element to enable meeting the 'named place' requirement for the point of title transfer as defined by ICC Incoterms.
+        unitOfMeasure:
+          type: string
+          maxLength: 25
+          description: A description of the unit of measure used to match a Rule's specified Unit of Measure. The ampersand character (&) cannot be used in a unit of measure.
+        amount:
+          type: number
+          description: The amount for the line. This amount can be gross, gross plus tax, or tax amount. This configuration is setup via the processingOptions.
+        userAttributes:
+          type: array
+          maxItems: 50
+          description: The userAttributes block enables companies to submit, and have returned, user-defined elements that are not directly supported in Determination. These elements can be used in conjunction with TransEditors to enable tax calculations, and may be stored in the Audit database for reporting purposes. Each userAttribute block contains a single name/value pair. <B>TR reserves ATTRIBUTE41 to ATTRIBUTE50 for internal PS use</B>.
+          items:
+            $ref: '#/components/schemas/UserAttribute'
+        vatGroupRegistration:
+          type: string
+          maxLength: 25
+          description: The value of the VAT Group registration number for the line. Used as the primary way of looking up VAT Registration Groups during calculation.
+        vendorName:
+          type: string
+          maxLength: 100
+          description: The vendor's name. If this is a B2B transaction and the Company is the buyer, the Company becomes the Customer and the Vendor becomes the Company for the transaction.
+        vendorNumber:
+          type: string
+          maxLength: 20
+          description: The vendor's number. If this is a B2B transaction and the Company is the buyer, the Company becomes the Customer and the Vendor becomes the Company for the transaction.
+        billOfLading:
+          $ref: '#/components/schemas/BillOfLanding'
+          description: ''
+        isExchange:
+          type: boolean
+          description: ''
+        isBlended:
+          type: boolean
+          description: ''
+        operatingLicenses:
+          $ref: '#/components/schemas/OperatingLicenses'
+        vendorGroupName:
+          type: string
+          maxLength: 100
+          description: ''
+        vendorGroupOwner:
+          type: string
+          maxLength: 100
+          description: ''
+        userAmountAttributes:
+          type: array
+          description: ''
+          maxItems: 5
+          items:
+            $ref: '#/components/schemas/UserAttributeAmount'
+        userDateAttributes:
+          type: array
+          description: ''
+          maxItems: 5
+          items:
+            $ref: '#/components/schemas/UserAttributeDate'
+        productCodeType:
+          type: string
+          maxLength: 100
+          description: ''
+        prices:
+          type: array
+          description: ''
+          items:
+            $ref: '#/components/schemas/Price'
+        classificationCodes:
+          type: array
+          description: ''
+          items:
+            $ref: '#/components/schemas/ClassificationCode'
+        allocationGroupName:
+          type: string
+          maxLength: 100
+          description: Name of the Allocation Group to use for this line. Named Allocations will be looked up in this group.
+        allocationGroupOwner:
+          type: string
+          maxLength: 100
+          description: Name of the company owning the Allocation Group to use for this line. The named Allocation Group will be looked up in this company's data.
+        allocationName:
+          type: string
+          maxLength: 100
+          description: Name of the Allocation to use for this line. Named Allocations will be looked up in the specified group owned by the specified company (see above). Company default owner and group will be used if not specified in the transaction. Allocations are dated, so the named version active as of the <INVOICE_DATE> will be used. If none match, a message will be added to output indicating an active named Allocation was not found. Allocation processing can be overridden at the line level. See <LINE>.<IS_ALLOCATABLE>.
+        isAllocatable:
+          type: boolean
+          description: If set to false, no allocation will be applied to the line, even if one is specified by name for the Line or at the Invoice level. The default behavior (null) is true.
+          enum:
+          - true
+          - false
+        businessLocation:
+          type: string
+          maxLength: 500
+          description: The business location.
+        relatedLineAmounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatedLineAmount'
+          description: The related line amounts
+    TaxResponse:
+      type: object
+      properties:
+        companyName:
+          type: string
+          maximum: 100
+          description: The name of the company running the transaction. ONESOURCE Indirect Tax Determination uses this element to apply the correct company-specific settings for the transaction. Returned if EXTERNAL_COMPANY_ID is not populated..
+        companyRole:
+          type: string
+          maximum: 1
+          description: The company's role as a buyer, seller, or middleman for this transaction. Each have different tax and reporting requirements for any transaction.
+        externalCompanyId:
+          type: string
+          maximum: 100
+          description: The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the batch level or with each document, and is passed through to the Determination response, and to the Audit database.
+        hostRequestLogId:
+          type: string
+          description: The Contains pass-through elements used to identify the originating request from the Source System.
+        messages:
+          type: array
+          description: A message related to this batch. There can be multiple MESSAGE elements returned with each batch.
+          items:
+            $ref: '#/components/schemas/Message'
+        status:
+          $ref: '#/components/schemas/Status'
+    DocumentResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        basisPercent:
+          type: number
+          description: A percentage multiplied with the gross amount that is used to define the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on.
+        calculationDirection:
+          type: string
+          description: 'There are three calculation directions, of which each is based on the documentAmountType, in the request processingOption: Forward (F): This calculation uses grossAmount to determine tax. Reverse-from-tax (R): This calculation uses taxAmount (and optionally grossAmount) to determine how the tax amount should be distributed across authorities. Determination also computes a calculated gross amount. Reverse-from-total (T): This uses grossPlusTax to determine the tax amount and how it should be distributed across authorities. Determination also computes a calculated gross amount. (For more information, see the line-level output element amount.'
+          enum:
+          - F
+          - R
+          - T
+        companyName:
+          type: string
+          description: The name of the company performing the transaction. ONESOURCE Indirect Tax Determination uses this element to apply the correct company-specific settings for the transaction. This element is returned if externalCompanyId is not populated.
+        companyRole:
+          type: string
+          maximum: 1
+          description: The company's role as either a buyer, seller, or middleman for this transaction. Each have different tax and reporting requirements for any transaction.
+        currencyCode:
+          type: string
+          maximum: 3
+          description: The currency used for this document. Passed through from the request.
+        customerName:
+          type: string
+          maximum: 100
+          description: The customer/'s name as passed in from the Source System. This element's value is used by Determination to search for exemption certificates that are relevant to a transaction, or to auto-create customers or certificates if the system is so configured.
+        customerNumber:
+          type: string
+          maximum: 100
+          description: The customer/'s number. This data is used by Determination to search for exemption certificates that are relevant to a transaction, or to auto-create customers or certificates if the system is so configured.
+        externalCompanyId:
+          type: string
+          maximum: 100
+          description: The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the batch level or with each document, and is passed through to the Determination response, and to the Audit database.
+        messages:
+          type: array
+          description: A message related to this document. There can be multiple message elements returned with each Document.
+          items:
+            $ref: '#/components/schemas/Message'
+        transactionDate:
+          type: string
+          format: date
+          description: The system date at the time the transaction was processed, UTC.
+        totalTaxAmount:
+          type: number
+          description: The total tax amount for the invoice.
+        userAttributes:
+          type: array
+          description: The userAttributes block enables companies to submit, and have returned, user-defined elements that are not directly supported in Determination. These elements can be used in conjunction with TransEditors to enable tax calculations, and may be stored in the Audit database for reporting purposes. Each userAttribute block contains a single name/value pair. <B>TR reserves ATTRIBUTE41 to ATTRIBUTE50 for internal PS use</B>.
+          items:
+            $ref: '#/components/schemas/UserAttribute'
+        charges:
+          type: array
+          description: They serve as the container for an individual charge line. Each invoice can have multiple charge lines.
+          items:
+            $ref: '#/components/schemas/ChargeLineResponse'
+        isCredit:
+          type: boolean
+          description: Indicates whether the returned transaction is a credit transaction as identified by your source system. true indicates a credit transaction which includes negative amounts; false (default) indicates that this is not a credit transaction.
+          enum:
+          - true
+          - false
+        userElementAmount:
+          type: array
+          description: ''
+          items:
+            $ref: '#/components/schemas/UserAttributeAmount'
+        userElementDate:
+          type: array
+          description: ''
+          items:
+            $ref: '#/components/schemas/UserAttributeDate'
+        vendorChargeTax:
+          $ref: '#/components/schemas/VendorChargeTaxResponse'
+    LineResponse:
+      type: object
+      properties:
+        chargeType:
+          type: string
+        basisPercent:
+          type: number
+          description: A percentage of the gross amount of the line used in tax calculation. .5 is equal to 50%, .6 is equal to 60%, and so on.
+        commodityCode:
+          type: string
+          maxLength: 50
+          description: A code that defines the a product (good or service) that is passed in from the Source System/ERP. A government subscribes to a specific product assoication such as the UNSPSC in the United States, or the Harmonized System which is used in many countries around the world that defines the classification of traded goods or services.
+        countryOfOrigin:
+          type: string
+          maxLength: 100
+          description: The country where the goods were manufactured. Used in Intrastat reporting.
+        customerName:
+          type: string
+          maxLength: 100
+          description: The customer name associated with this line.
+        customerNumber:
+          type: string
+          maxLength: 100
+          description: The customer number associated with this line.
+        deliveryTerms:
+          type: string
+          maxLength: 100
+          description: Indicates how goods were shipped and where title was transferred. For more information, see Point of Title Transfer.
+        description:
+          type: string
+          maxLength: 200
+          description: A description of a particular product. This data is primarily used to reference records from the audit data and when reconciling tax results to the financial transaction.
+        discountAmount:
+          type: number
+          description: In some situations volume or other discounts must be taken into account when calculating tax. For these situations, discountAmount can be used to indicate that amount. When discountAmount is provided, Determination will reduce the Taxable Basis by that amount. For example, if the Gross Amount is $100 and a Discount Amount of $20 is provided, Determination adjusts the Taxable Basis to $80.
+        grossAmount:
+          type: number
+          description: The amount value passed in the request, or calculated by determination based on the documentAmountType in the processingOptions sent in the request.
+        lineNumber:
+          type: string
+          description: The actual line number for the current line in the response. It correlates to a line number that was passed into ONESOURCE Determination.
+        partNumber:
+          type: string
+          maxLength: 100
+          description: The part number used by the calling business application. This element is stored in the audit tables and does not affect calculation.
+        pointOfTitleTransfer:
+          type: string
+          maxLength: 3
+          description: The Point of Title Transfer location passed via the request or derived value based on Delivery Terms.
+        messages:
+          type: array
+          description: A message related to this line. There can be one or multiple messages blocks returned with each line.
+          items:
+            $ref: '#/components/schemas/Message'
+        taxCode:
+          type: string
+          maxLength: 50
+          description: The tax code is optionally passed in the request or may have been set by a TransEditor or another configuration in Determination.
+        taxSummary:
+          $ref: '#/components/schemas/LineTaxSummary'
+        transactionType:
+          type: string
+          description: 'The transaction type, which is required to apply the correct type of taxes to the transaction. Expected values GS: Goods, WG: Work on Goods, PP: Physical Performance, DS: Default Services, CL: Customer Location Services, TS: Transport Services, SI: Supplied and Installed, IN: Installation Services, MV: Movement, BG: IndiaSEZBuyerGoods, BS: IndiaSEZBuyerServices, SG: IndiaSEZSellerGoods, SS: IndiaSEZSellerServices, MF: Motor Fuels, ES: Electronic Services, PC: Prime Contracting, RR: Rental, AT: Ancillary Transport Services, T1: Chain Transaction 1, T2: Chain Transaction 2, TG: Telecommunication Services - General, TP: Telecommunication Services - Private'
+          maxLength: 2
+        userAttributes:
+          type: array
+          description: A block that enables users to submit, and have returned, user-defined elements in the case where Determination does not provide a defined element. These user-defined elements can be used in conjunction with TransEditors (input filters) and other configurations to enable custom tax calculations.
+          items:
+            $ref: '#/components/schemas/UserAttribute'
+        totalTaxAmount:
+          type: number
+          description: The total tax amount for this line item.
+        taxes:
+          type: array
+          description: A tax block that is associated to this line item. There can be one or more tax blocks for each line. Tax blocks are only returned for a given Authority if a Tax Rule for that Authority was used when tax was calculated.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/Tax'
+            - $ref: '#/components/schemas/TaxSummary'
+            discriminator:
+              propertyName: responseSummary
+              mapping:
+                FullDetails: '#/components/schemas/Tax'
+                SummaryByErpCode: '#/components/schemas/TaxSummary'
+                SummaryByAuthorityAndZone: '#/components/schemas/TaxSummary'
+        charges:
+          type: array
+          description: 'ChargeInfo: When using chargeResponse with the CombineWithLine option, along with one of the summarization processingOption, this block provides basic breakdown of the various charges that were combined with line tax details. This information is for reference purpose only. All tax details are part of line tax data.'
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ChargeInfo'
+            - $ref: '#/components/schemas/ChargeLineResponse'
+            discriminator:
+              propertyName: chargeResponse
+              mapping:
+                CombineWithLine: '#/components/schemas/ChargeInfo'
+                SeparateAuthority: '#/components/schemas/ChargeLineResponse'
+        userElementAmount:
+          type: array
+          description: ''
+          items:
+            $ref: '#/components/schemas/UserAttributeAmount'
+        userElementDate:
+          type: array
+          description: ''
+          items:
+            $ref: '#/components/schemas/UserAttributeDate'
+        classificationCodes:
+          type: array
+          description: ''
+          items:
+            $ref: '#/components/schemas/ClassificationCode'
+        quantities:
+          type: array
+          description: Contains a list of analogous quantities differing in their units of measure.
+          items:
+            $ref: '#/components/schemas/Quantity'
+        vendorChargeTax:
+          $ref: '#/components/schemas/VendorChargeTaxResponse'
+    ChargeLineResponse:
+      type: object
+      required:
+      - chargeResponse
+      properties:
+        chargeResponse:
+          type: string
+          description: The chargeResponse block serves as the container for each charge block, this setting is sent in the request.
+        chargeType:
+          type: string
+          maxLength: 100
+          description: This element is only visible when there are one or more header or line level charges are included with the request.
+        basisPercent:
+          type: number
+          description: A percentage multiplied with the gross amount that is used to define the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on.
+        commodityCode:
+          type: string
+          maxLength: 50
+          description: A code that defines the a product (good or service) that is passed in from the calling business application. A government subscribes to a specific product assoication such as the UNSPSC in the United States, or the Harmonized System which is used in many countries around the world that defines the classification of traded goods or services.
+        description:
+          type: string
+          maxLength: 200
+          description: A description of a particular product. This data is primarily used to reference records from the audit data and when reconciling tax results to the financial transaction.
+        grossAmount:
+          type: number
+          description: The amount value passed in the request, or calculated by determination based on the documentAmountType in the processingOptions sent in the request.
+        messages:
+          type: array
+          description: A message related to this line. There can be one or multiple messages blocks returned with each line.
+          items:
+            $ref: '#/components/schemas/Message'
+        taxCode:
+          type: string
+          maxLength: 50
+          description: The tax code is optionally passed in the request or may have been set by a TransEditor.
+        taxSummary:
+          $ref: '#/components/schemas/LineTaxSummary'
+        totalTaxAmount:
+          type: number
+          description: The total tax amount for this line item.
+        taxes:
+          type: array
+          description: A tax block that is associated to this charge. There can be one or more tax blocks for each charge. Tax blocks are only returned for a given Authority if a Tax Rule for that Authority was used when tax was calculated.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/Tax'
+            - $ref: '#/components/schemas/TaxSummary'
+            discriminator:
+              propertyName: responseSummary
+              mapping:
+                FullDetails: '#/components/schemas/Tax'
+                SummaryByErpCode: '#/components/schemas/TaxSummary'
+                SummaryByAuthorityAndZone: '#/components/schemas/TaxSummary'
+    LineTaxSummary:
+      type: object
+      description: A summary of tax amounts for the line.
+      properties:
+        taxableBasis:
+          type: string
+          description: Contains the maximum taxable basis from the amount on the authority tax lines. If an authority tax line is a tier, all tiers for the authority have their tax basis summed and treated like a single tax line for purposes of determining the maximum taxable basis. If the total exceeds gross amount, the taxable basis is set to the gross amount. If no tax results, the value is zero.
+        nonTaxableBasis:
+          type: string
+          description: Contains the maximum non-taxable basis from the tax results. No special process occurs for tiered results. If no tax results, the value is zero.
+        exemptAmount:
+          type: string
+          description: Contains the maximum exempt amount from the tax results. If no tax, the value is zero.
+        taxRate:
+          type: string
+          description: Sum of all taxes. No distinction is made for rates from tiers. If all taxes are fees, the value is zero.
+        effectiveTaxRate:
+          type: string
+          description: Total taxes on the line divided by the maximum taxable basis.
+        netGrossAmount:
+          type: string
+          description: Net Gross Amount
+        netTaxAmount:
+          type: string
+          description: Net Tax Amount
+    CalculateRequest:
+      description: The request entity for Tax Calculation.
+      allOf:
+      - $ref: '#/components/schemas/TaxRequest'
+      - type: object
+        required:
+        - documents
+        properties:
+          documents:
+            type: array
+            items:
+              $ref: '#/components/schemas/CalculateDocumentRequest'
+            minItems: 1
+            description: The documents block serves as the container for an individual document. Each payload can have one or more documents.
+    CommitRequest:
+      description: The request entity for Tax Calculation and commit.
+      allOf:
+      - $ref: '#/components/schemas/TaxRequest'
+      - type: object
+        required:
+        - documents
+        properties:
+          callingSystemNumber:
+            type: string
+            maxLength: 100
+            description: A pass-through element that contains a descriptor of the calling system sending the transaction. Determination uses as cobmination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database.
+          hostSystem:
+            type: string
+            maxLength: 100
+            description: The name of the Source System instance sending the transaction. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database.
+          documents:
+            type: array
+            items:
+              $ref: '#/components/schemas/CommitDocumentRequest'
+            minItems: 1
+            description: The documents block serves as the container for an individual document. Each payload can have one or more documents.
+    CalculateDocumentRequest:
+      description: A calculate document request is used to determine which tax types are relevant and to calculate the amount of tax due on a business transaction document.
+      allOf:
+      - $ref: '#/components/schemas/DocumentRequest'
+      - type: object
+        required:
+        - lines
+        properties:
+          lines:
+            type: array
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/CalculateLineRequest'
+            description: The line block serves as the container for an individual line. Each document can have 1 or more lines.
+    CommitDocumentRequest:
+      description: A commit document request is used to determine which tax types are relevant and to calculate the amount of tax due on a business transaction document. Tax results are also persisted in the Determination/'s Audit database for reporting purposes.
+      allOf:
+      - $ref: '#/components/schemas/DocumentRequest'
+      - type: object
+        required:
+        - documentNumber
+        - lines
+        properties:
+          callingSystemNumber:
+            type: string
+            maxLength: 100
+            description: A pass-through element that contains a descriptor of the calling system sending the transaction. Determination uses as cobmination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database.
+          fiscalDate:
+            type: string
+            format: date
+            description: Stores a transaction by a fiscal date in addition to the invoice date. For example, you can use fiscalDate to indicate when revenue was recognized.
+          hostSystem:
+            type: string
+            maxLength: 100
+            description: The name of the Source System instance sending the transaction. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database.
+          documentNumber:
+            type: string
+            maxLength: 200
+            description: This number is passed through to the Audit database and acts as a reference for all document types. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database. Required for Commit.
+          isAuditUpdate:
+            type: boolean
+            description: Indicates whether or not to permit Audit database update instead of overwrite. Updates provide for 'Line at a Time' document submissions. The effect is that a duplicate document submission updates the document level record and replaces any matching line and tax level as determined by the lineNumber. Any new line numbers that are submitted will be added to the existing document in the audit tables. Valid values are <B>true</B> and <B>false</B>.
+          originalDocumentId:
+            type: string
+            maxLength: 100
+            description: The original document id as shown on the document in the Source system. Not used in calculations.
+          originalDocumentNumber:
+            type: string
+            maxLength: 200
+            description: This number enables an adjustment to an existing document to be associated with an original document in the Audit database for reporting purposes.
+          uniqueDocumentNumber:
+            type: string
+            maxLength: 200
+            description: The unique identifier for this document, as assigned by the Source System. ONESOURCE Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed. If Source system does not provide this value (both for commit and reverse endpoints), ONESOURCE determination will auto generate this value based on concatenated value of externalCompanyID|documentNumber|companyRole. If Source system provided a value for the document in the commit call, same value must be passed when reversing the document, otherwise, reversal will fail.
+          lines:
+            type: array
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/CommitLineRequest'
+            description: The line block serves as the container for an individual line. Each document can have 1 or more lines.
+    CalculateLineRequest:
+      description: A calculate line request is used to determine which tax types are relevant and to calculate the amount of tax due on one or more lines in the business transaction document.
+      allOf:
+      - $ref: '#/components/schemas/LineRequest'
+    CommitLineRequest:
+      description: A commit line request is used to determine which tax types are relevant and to calculate the amount of tax due on one or more lines in the business transaction document. Tax results are also persisted in the Determination's Audit database for reporting purposes.
+      allOf:
+      - $ref: '#/components/schemas/LineRequest'
+      - type: object
+        properties:
+          uniqueLineNumber:
+            type: string
+            maxLength: 100
+            description: The Source System's primary key for this line number.
+          originalDocumentLine:
+            type: string
+            maxLength: 100
+            description: The original document item as shown on the document in the Source System. Not used in calculations.
+    CalculateResponse:
+      description: Tax response from the ONESOURCE Determination Engine.
+      allOf:
+      - $ref: '#/components/schemas/TaxResponse'
+      - type: object
+        properties:
+          documents:
+            type: array
+            items:
+              $ref: '#/components/schemas/CalculateDocumentResponse'
+            minItems: 1
+            description: The documents block serves as the container for an individual document. Each payload can have one or more documents.
+    CommitResponse:
+      description: Response from the ONESOURCE Determination engine.
+      allOf:
+      - $ref: '#/components/schemas/TaxResponse'
+      - type: object
+        properties:
+          documents:
+            type: array
+            items:
+              $ref: '#/components/schemas/CommitDocumentResponse'
+            minItems: 1
+            description: The documents block serves as the container for an individual document. Each payload can have one or more documents.
+    CalculateDocumentResponse:
+      description: Document level response from ONESOURCE Determination engine.
+      allOf:
+      - $ref: '#/components/schemas/DocumentResponse'
+      - type: object
+      properties:
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/CalculateLineResponse'
+          description: The line block serves as the container for an individual line. Each document can have 1 or more lines.
+    CommitDocumentResponse:
+      description: Document level response from ONESOURCE Determination engine.
+      allOf:
+      - $ref: '#/components/schemas/DocumentResponse'
+      - type: object
+        properties:
+          callingSystemNumber:
+            type: string
+            maxLength: 100
+            description: A descriptor of the calling system sending the transaction. A document uses hostSystem, callingSystemNumber and uniqueDocumentNumber to define the unique identifier if these elements contain values.
+          fiscalDate:
+            type: string
+            format: date
+            description: Identifies the fiscal date in addition to the Document date of a transaction. For example, you can use fiscalDate to indicate when revenue was recognized.
+          hostSystem:
+            type: string
+            maxLength: 100
+            description: The name of the source system instance sending the transaction. A document uses hostSystem, callingSystemNumber and uniqueDocumentNumber to define its unique identifier if the elements contain values.
+          documentNumber:
+            type: string
+            maxLength: 200
+            description: The Document number passed from the calling business application, then returned by ONESOURCE Determination with the tax results.
+          uniqueDocumentNumber:
+            type: string
+            maxLength: 500
+            description: The unique identifier for this document, as assigned by the Source System. If value is not provided for commit or reverse, ONESOURCE determination will auto generate this value based on concatenated value of externalCompanyID|documentNumber|companyRole.
+          lines:
+            type: array
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/CommitLineResponse'
+            description: The line block serves as the container for an individual line. Each document can have 1 or more lines.
+    CalculateLineResponse:
+      description: Line level response from ONESOURCE Determination engine.
+      allOf:
+      - $ref: '#/components/schemas/LineResponse'
+    CommitLineResponse:
+      description: Line level response from ONESOURCE Determination engine.
+      allOf:
+      - $ref: '#/components/schemas/LineResponse'
+      - type: object
+        properties:
+          uniqueLineNumber:
+            type: string
+            maxLength: 100
+            description: The Source System's primary key for this line number.
+    ReverseRequest:
+      description: A reverse request is used to reverse or void an existing the tax audit entry. Reversing Tax results are also persisted in the Determination's Audit database for reporting purposes.
+      type: object
+      required:
+      - callingSystemNumber
+      - companyRole
+      - documentNumber
+      - externalCompanyId
+      - hostSystem
+      - documentDate
+      properties:
+        callingSystemNumber:
+          type: string
+          maxLength: 100
+          description: A pass-through element that contains a descriptor of the calling system sending the transaction. Determination uses as cobmination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database.
+        companyRole:
+          type: string
+          maxLength: 100
+          description: 'The role the company plays in a given transaction: Buyer (<B>B</B>), Middleman (<B>M</B>) or Seller (<B>S</B>). Each role results in different transaction tax and reporting requirements. Currently only Seller (S) role is supported by the API.'
+        documentNumber:
+          type: string
+          maxLength: 200
+          description: This number is passed through to the Audit database and acts as a reference for all document types. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in audit database, the existing document is reversed, and new document is added to the audit database.
+        externalCompanyId:
+          type: string
+          maxLength: 100
+          description: The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the batch level or with each document, and is passed through to the Determination response, and to the Audit database.
+        hostSystem:
+          type: string
+          maxLength: 100
+          description: The name of the Souce System instance sending the transaction. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in audit database, the existing document is reversed, and new document is added to the Audit database.
+        documentDate:
+          type: string
+          format: date
+          description: The date as stored on this document. This is used for comparison to configurations throughout Determination and is also used to query transaction data in reporting.
+        uniqueDocumentNumber:
+          type: string
+          maxLength: 200
+          description: The unique identifier for this document, as assigned by the Source System. ONESOURCE Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed. If Source system does not provide this value (both for commit and reverse endpoints), ONESOURCE determination will auto generate this value based on concatenated value of externalCompanyID|documentNumber|companyRole. If Source system provided a value for the document in the commit call, same value must be passed when reversing the document, otherwise, reversal will fail.
+    ReverseResponse:
+      type: object
+      properties:
+        callingSystemNumber:
+          type: string
+          maxLength: 100
+          description: A pass-through element that contains a descriptor of the calling system sending the transaction. Determination uses as cobmination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database.
+        hostSystem:
+          type: string
+          maxLength: 100
+          description: The name of the Source System instance sending the transaction. Determination uses as combination of hostSystem, callingSystemNumber and uniqueDocumentNumber to lookup of audit records. If a existing record is found in Audit database, the existing document is reversed, and new document is added to the Audit database.
+        documentDate:
+          type: string
+          format: date
+          description: The date of the invoice as stored on this document. This is used for comparison to configurations throughout Determination and is also used to query transaction data in reporting.
+        documentNumber:
+          type: string
+          maxLength: 200
+          description: This number is passed through to the audit tables and acts as a reference in the audit tables as well as for credit transactions. ONESOURCE Indirect Tax Determination supports two audit keys to enable the lookup of audit records.
+        uniqueDocumentNumber:
+          type: string
+          maxLength: 200
+          description: The unique identifier for this document, as assigned by the Source System. If value is not provided for commit or reverse, ONESOURCE determination will auto generate this value based on concatenated value of externalCompanyID|documentNumber|companyRole.
+        externalCompanyId:
+          type: string
+          maxLength: 100
+          description: The unique identifier used by your business application to indicate which company to use in Determination. This identifier also distinguishes between different calling applications that may be used by your company. This element may be passed at the batch level or with each document, and is passed through to the Determination response, and to the Audit database.
+        requestStatus:
+          type: boolean
+          description: Result of the reversal, True or False
+        message:
+          type: string
+          maxLength: 200
+          description: Text message of the result of the reversal operation.
+    Tax:
+      allOf:
+      - $ref: '#/components/schemas/TaxSummary'
+      - type: object
+      required:
+      - responseSummary
+      properties:
+        responseSummary:
+          type: string
+          description: The Tax block serves as the container for an individual tax blocks for each authority, this setting is sent in the request.
+        addressType:
+          type: string
+          description: Indicates the address type, for example, 'shipFrom', 'shipTo' which resulted in this tax.
+          enum:
+          - SF
+          - ST
+          - OO
+          - OA
+          - BT
+          - SU
+          - MM
+          - SC
+          - BC
+        authorityName:
+          type: string
+          description: The name of the current authority for which data is being returned.
+        authorityOfficialName:
+          type: string
+          description: The official name of the current authority for which data is being returned, if it differs from the Determination-provided authority name.
+        authorityCategory:
+          type: string
+          description: The category of the current authority for which data is being returned. From the Authorities Edit page.
+        authorityUuid:
+          type: string
+          description: Unique identifier of the current authority being returned. Determined by Determination default data.
+        basisPercent:
+          type: number
+          description: A percentage amount that is used to adjust the Taxable Basis of a tax calculation. The default is 100%. .5 is equal to 50%, .6 is equal to 60%, and so on. If this element is provided, it overrides any data found on an authority rule or exemption certificate applied to the transaction.
+        buyerRegistration:
+          type: string
+          description: Buyer registration number used by this tax calculation. Derived from registration found in input XML or from value in database.
+        euTransaction:
+          type: string
+          description: Indicates whether this tax result was generated by an EU authority or not. Valid values are true and false.
+        chargeType:
+          type: string
+          description: The charge type. Visible only when there are 1 or more header/Line level charges.
+        exemptCertificate:
+          type: string
+          description: The exempt certificate number applied to this tax result.
+        exemptCertificateExpireDate:
+          type: string
+          format: date
+          description: The expiration date of the exemption certificate applied to this tax result.
+        exemptReason:
+          type: string
+          description: The exempt reason code that was used to select the tax rule resulting in this tax.
+        inputRecoveryAmount:
+          type: number
+          description: The amount of tax eligible for VAT recovery.
+        inputRecoveryPercent:
+          type: number
+          description: The percentage of tax eligible for VAT recovery.
+        isIntrastatReported:
+          type: boolean
+          description: Indicates whether this transaction applies for Intrastat reporting. Based on Jurisdiction logic.
+        isTriangulation:
+          type: boolean
+          description: Indicates whether triangulation simplification was used on this transaction. If the tag is not generated, simplification was not used.
+        isVatReported:
+          type: boolean
+          description: Indicates whether this transaction applies for VAT reporting. Based on Jurisdiction logic.
+        messages:
+          type: array
+          description: A message related to this tax block. There can be multiple messages elements returned with each Document/Line/Tax blocks.
+          items:
+            $ref: '#/components/schemas/Message'
+        middlemanRegistration:
+          type: string
+          description: Middleman registration number used by this tax calculation. Derived from registration found in input XML or from value in database.
+        natureOfTax:
+          type: string
+          description: Indicates whether the value stored in <TAX_AMOUNT> represents a (P)ercentage, (F)ee, or is (E)xempt (no tax).
+        revisedGrossAmount:
+          type: number
+          description: The revised amount used by certain tax authorities, primarily in Brazil. These authorities revise the gross amount as part of the process of tax calculation and base the tax on this amount.
+        ruleOrder:
+          type: string
+          description: The order of the rule applied to calculate this tax. This rule order is stored in the Audit database.
+        sellerRegistration:
+          type: string
+          description: Seller registration number used by this tax calculation. Derived from registration found in input XML or from value in database.
+        supplyExemptPercent:
+          type: number
+          description: A pass-through element which has been deprecated in favor of enhanced VAT calculation logic. See <INPUT_RECOVERY_AMOUNT/PERCENT> and VAT Recoverability and Rules for more information.
+        taxDeterminationDate:
+          type: string
+          format: date
+          description: The date used in selecting all applicable system configuration including tax rates and rules. Overrides any system-determined date.
+        taxDirection:
+          type: string
+          description: The tax direction specifies Input/Output values for VAT recovery identification.
+        taxPointDate:
+          type: string
+          format: date
+          description: The date at which a tax liability to an authority has been established.
+        taxTreatment:
+          type: string
+          description: 'The flag that indicates alternative tax treatment after Determination performs its calculation: D: Deferred.  DI: Deferred Invoice.  DP: Deferred Payment.'
+        taxType:
+          type: string
+          description: 'The type of tax applied to a tax result. For example: sales, consumer use, or zero rate. By default, the tax type is determined automatically. You can override it with configuration or in the input request. Some tax types are specific to US or International transactions.'
+        taxableRegion:
+          type: string
+          description: State or Province from the address that triggered this tax.
+        taxableDistrict:
+          type: string
+          description: District from the address that triggered this tax.
+        taxableCounty:
+          type: string
+          description: County from the address that triggered this tax.
+        taxableCity:
+          type: string
+          description: City from the address that triggered this tax.
+        taxableGeocode:
+          type: string
+          description: Geocode from the address that triggered this tax.
+        taxablePostcode:
+          type: string
+          description: Postcode from the address that triggered this tax.
+        uomConversion:
+          $ref: '#/components/schemas/UomConversion'
+        vatGroupRegistration:
+          type: string
+          description: The registration number used to trigger VAT Registration Group functionality for this calculation.
+        zoneName:
+          type: string
+          description: The name of the zone for which authority level information is being supplied.
+        zoneLevel:
+          type: string
+          description: The zone level of the zone where this tax applies.
+        zoneIsoCode:
+          type: string
+          description: ''
+        ZoneFipsCode:
+          type: string
+          description: ''
+    TaxSummary:
+      type: object
+      description: The TaxSummary block serves as the container for an individual tax blocks as summarized or sent individually for each authority, this setting is sent in the request.
+      required:
+      - responseSummary
+      properties:
+        responseSummary:
+          type: string
+          description: Response tax summary level, as indicated in the responseSummary element in the processingOptions section in the request.
+        adminZoneLevel:
+          type: string
+          description: The zone level in which the tax is actually administered. For example, many US states administer both state and county taxes.
+        authorityType:
+          type: string
+          description: The type of authority. Returned value is one of City Rental, City Sales/Use, County Rental, County Sales/Use, District Rental, District Sales/Use, EXC, State Rental, State Sales/Use (US). CST, DPH, EXC, FCP, FCP-ST, GCT, GIT, GST, HST, ICMS, IGIC, IGV, IMI, IPI, IPSI, ISS, IST, ISV, ITBIS, ITBM, IVA, KDV, MOT, MVA, MWST, PIS, PST, PVM, QST, ST, TVA, VAT (INTL).
+        authorityCurrencyCode:
+          type: string
+          description: The currency code used by the authority.
+        effectiveZoneLevel:
+          type: string
+          description: The zone level in which the tax logically applies. If a US state administers both state and county taxes, the effective tax level defines who the tax is being collected for regardless of who is administering it.
+        erpTaxCode:
+          type: string
+          description: A default tax code to be used by the Source System.
+        exemptAmount:
+          $ref: '#/components/schemas/ExemptAmount'
+        fee:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+        grossAmount:
+          $ref: '#/components/schemas/GrossAmount'
+        documentDescription:
+          type: array
+          description: A text description of the tax which you may choose to print on customer invoices. This value comes from the Authority or Rule used to generate the tax.
+          items:
+            type: string
+        isExempt:
+          type: string
+          description: Indicates that this line was exempt from tax. Exemption is different from zero tax. In VAT regimes, exemption excludes the transaction from the VAT system. In the case of a sale, VAT paid to make the supply cannot be recovered if the supply is exempt. In Sales Tax countries such as the US, the exempt indicator prevents tax from being charged. If (N)o is explicitly passed the exemption certificate lookup is bypassed; tax will be charged even though an apparently valid certificate may exist in ONESOURCE Indirect Tax Determination. If isExempt is used in the request or in configuration of Determination, the ruleOrder value will be zero.
+        jurisdictionText:
+          type: array
+          description: The text returned by this authority's jurisdiction determination logic. This may be text explaining why the authority was selected to tax this address or it may be a situation-specific warning message related to the tax scenario such as 'May require proof of export'.
+          items:
+            type: string
+        nonTaxableBasis:
+          $ref: '#/components/schemas/NonTaxableBasis'
+        revisedGrossAmount:
+          type: number
+          description: The revised amount used by certain tax authorities, primarily in Brazil. These authorities revise the gross amount as part of the process of tax calculation and base the tax on this amount.
+        taxAmount:
+          $ref: '#/components/schemas/TaxAmount'
+        taxDirection:
+          type: string
+          description: The tax direction specifies Input/Output values for VAT recovery identification.
+        taxRate:
+          type: string
+          description: The rate of taxation for the authority.
+        taxRateCode:
+          type: string
+          description: The tax rate code associated with the applied rate.
+        taxableBasis:
+          $ref: '#/components/schemas/TaxableBasis'
+        taxableCountry:
+          type: string
+          description: Country code from address that triggered this tax.
+        accrualAmount:
+          $ref: '#/components/schemas/AccrualAmount'
+        vendorTax:
+          $ref: '#/components/schemas/VendorTax'
+        vctEffectiveTaxableBasis:
+          $ref: '#/components/schemas/VctEffectiveTaxableBasis'
+    Fee:
+      type: object
+      description: This structural element contains the fee-related elements for tax authorities.
+      properties:
+        amount:
+          type: number
+          description: The fee amount.
+        currencyCode:
+          type: string
+          description: The currency code for the fee.
+        unitOfMeasure:
+          type: string
+          description: The unit of measure for the fee. The default is Each.
+    TaxableBasis:
+      type: object
+      description: 'The amount actually taxed by this authority: gross less basis percentage and other exempt amounts. Rounded and unrounded amounts in authority and document currencies.'
+      properties:
+        authorityAmount:
+          type: number
+          description: The taxable basis, rounded, in the authority currency.
+        unroundedAuthorityAmount:
+          type: number
+          description: The taxable basis, un-rounded, in the authority currency.
+        documentAmount:
+          type: number
+          description: The taxable basis, rounded, in the document currency.
+        unroundedDocumentAmount:
+          type: number
+          description: The taxable basis, un-rounded, in the document currency.
+    TaxAmount:
+      type: object
+      description: The amount of tax owed to the authority, in authority and document currencies, in rounded and unrounded amounts.
+      properties:
+        authorityAmount:
+          type: number
+          description: The amount of tax, rounded, in the authority currency.
+        unroundedAuthorityAmount:
+          type: number
+          description: The amount of tax, un-rounded, in the authority currency.
+        documentAmount:
+          type: number
+          description: The amount of tax, rounded, in the document currency.
+        unroundedDocumentAmount:
+          type: number
+          description: The amount of tax, un-rounded, in the document currency.
+    NonTaxableBasis:
+      type: object
+      description: Identifies the portion of a line's taxable basis not used for calculating tax. Some authorities may consider the non-taxable basis a deduction from the gross sales or gross receipts, thus reducing the aggregated taxable basis to be reported on a return.
+      properties:
+        documentAmount:
+          type: string
+          description: The non-taxable basis, rounded, in the document currency.
+        unroundedDocumentAmount:
+          type: string
+          description: The non-taxable basis, un-rounded, in the document currency.
+        authorityAmount:
+          type: string
+          description: The non-taxable basis, rounded, in the authority currency.
+        unroundedAuthorityAmount:
+          type: string
+          description: The non-taxable basis, un-rounded, in the authority currency.
+    GrossAmount:
+      type: object
+      description: The amount value passed in the request, or calculated by determination based on the documentAmountType in the processingOptions sent in the request.
+      properties:
+        authorityAmount:
+          type: number
+          description: The gross amount, rounded, in the authority currency.
+        unroundedAuthorityAmount:
+          type: number
+          description: The gross amount, un-rounded, in the authority currency.
+    ExemptAmount:
+      type: object
+      description: The amount of gross not liable for this tax, in authority and document currencies, in rounded and unrounded amounts. When set to false, all amounts in this structure are unrounded. When set to true or null (default), amounts are rounded/unrounded as described.
+      properties:
+        authorityAmount:
+          type: number
+          description: The amount of gross not liable for this tax, rounded, in the authority currency.
+        unroundedAuthorityAmount:
+          type: number
+          description: The amount of gross not liable for this tax, un-rounded, in the authority currency.
+        documentAmount:
+          type: number
+          description: The amount of gross not liable for this tax, rounded, in the document currency.
+        unroundedDocumentAmount:
+          type: number
+          description: The amount of gross not liable for this tax, un-rounded, in the document currency.
+    AccrualAmount:
+      type: object
+      description: This is the amount of tax that needs to be accrued by the buyer based on the accrual method.
+      properties:
+        authorityAmount:
+          type: number
+          description: Accrued tax amount rounded in authority currency.
+        unroundedAuthorityAmount:
+          type: number
+          description: Accrued tax amount un-rounded in authority currency.
+        documentAmount:
+          type: number
+          description: Accrued tax amount rounded in document currency.
+        unroundedDocumentAmount:
+          type: number
+          description: Accrued tax amount un-rounded in document currency.
+    VendorTax:
+      type: object
+      description: The amount of tax charged by Vendor and split by authorities.
+      properties:
+        authorityAmount:
+          type: number
+          description: Vendor tax amount rounded in authority currency.
+        unroundedAuthorityAmount:
+          type: number
+          description: Vendor tax amount un-rounded in authority currency.
+        documentAmount:
+          type: number
+          description: Vendor tax amount rounded in document currency.
+        unroundedDocumentAmount:
+          type: number
+          description: Vendor tax amount un-rounded in document currency.
+    VctEffectiveTaxableBasis:
+      type: object
+      description: The taxable basis determined using the accrual amount for every line. This amount is calculated by dividing the accrual amount at the jurisdiction level by the jurisdiction tax rate.
+      properties:
+        authorityAmount:
+          type: number
+          description: The VCT effective taxable basis amount rounded in authority currency.
+        unroundedAuthorityAmount:
+          type: number
+          description: The VCT effective taxable basis amount un-rounded in authority currency.
+        documentAmount:
+          type: number
+          description: The VCT effective taxable basis amount rounded in document currency.
+        unroundedDocumentAmount:
+          type: number
+          description: The VCT effective taxable basis amount un-rounded in document currency.
+    ChargeInfo:
+      type: object
+      description: When using chargeResponse with CombineWithLine option along with one of the summarization processingOption, this block provides basic breakdown of the various charges that we combined with line tax details. This information is for reference purpose only, all tax details are already part of line tax data.
+      required:
+      - chargeResponse
+      properties:
+        chargeResponse:
+          type: string
+          description: If chargeIncludedInAmounts in processingOptions in the request was set to true, value will be CombineWithLine.
+        type:
+          type: string
+          description: Type of Charge. For example, Freight, Insurance, Handling, etc.
+        taxAmount:
+          type: number
+          description: Total tax amount for the charge line.
+        taxRate:
+          type: number
+          description: Effective tax rate for the charge line.
+    ProcessingOption:
+      type: object
+      description: Configurable options available for request and response.
+      properties:
+        chargeIncludedInAmounts:
+          type: boolean
+          description: For charges defined at Line Item Level:<BR><B>true:</B> Charge amount is included in the item amount and needs to be negated to get correct tax amount for a line vs a charge.<BR><B>false (Default):</B>Charge amount is independent of the item amount.
+          enum:
+          - true
+          - false
+        chargeResponse:
+          type: string
+          description: When using Charges, use one of the following:<BR><B>SeparateAuthority (Default):</B> Returns a separate line for the product and each charge entry.<BR><B>CombineWithLine:</B> Combines all tax blocks and charge details into the item line.
+          enum:
+          - SeparateAuthority
+          - CombineWithLine
+        responseSummary:
+          type: string
+          description: Tax Results setting for summarization, use one of the following:<BR><B>SummaryByErpCode:</B> Tax results are summarized based on ERP Tax Codes configured in Determination.<BR><B>SummaryByAuthorityAndZone:</B> The results are summarized based on Tax Authority and Effective Zone Level.<BR><B>FullDetails (Default):</B> No summarization is performed, Integration or Source system must summarize tax results as per customer requirements.
+          enum:
+          - SummaryByErpCode
+          - SummaryByAuthorityAndZone
+          - FullDetails
+        documentAmountType:
+          type: string
+          description: 'If the Calculation Direction of Forward, Reverse from Tax, or Reverse from Total are used, then use the following:<BR><B>GrossAmount (Default):</B> Engine calculates tax based on the provided amount for each line item. (Forward)<BR><B>TaxAmount: If you are providing the precalculated tax amount, the engine calculates grossAmount. (Reverse from Tax)<BR><B>GrossPlusTaxAmount:</B> If you are providing amount that is inclusive of tax, the engine will calculate the appropriate tax and grossAmount.(Reverse from Total)'
+          enum:
+          - GrossAmount
+          - TaxAmount
+          - GrossPlusTaxAmount
+    VendorChargeTaxDocumentRequest:
+      type: object
+      properties:
+        isVendorTrusted:
+          type: boolean
+          description: An indicator if the specified vendor is a trusted vendor. This can be overridden through request.
+        accrualMethod:
+          type: string
+          description: An option to override the configured accrual method in request.
+        vendorTax:
+          type: number
+          description: The amount of tax charged by Vendor.
+        useTaxConfig:
+          type: boolean
+          description: Determines whether the tax is calculated as buyer or seller – "Yes" means the transaction was run as buyer.
+        isVctEnabled:
+          type: boolean
+          description: An indicator if VCT should be applied to the tax calculation
+        vctToleranceAmount:
+          type: string
+          description: VCT Tolerance Amount
+        vctTolerancePercentage:
+          type: string
+          description: VCT Tolerance Percentage
+    VendorChargeTaxResponse:
+      type: object
+      properties:
+        accrualAmount:
+          type: number
+          description: This is the amount of tax that needs to be accrued by the buyer based on accrual method.
+        accrualMethod:
+          type: string
+          description: Accrual Method used for VCT calculations for the request.
+        toleranceIndicator:
+          type: boolean
+          description: Indicates whether the VCT is within the tolerance limits.
+        isDppApplied:
+          type: boolean
+          description: Indicates whether Direct Pay Permit Flag was applied for the request.
+        isVctApplied:
+          type: boolean
+          description: Indicates whether the VCT calculations were applied or not for the request.
+        payToVendorAmount:
+          type: number
+          description: Total amount to be paid to the vendor.
+        shortPayVendor:
+          type: string
+          description: Indicates whether the vendor was short paid or not.
+        taxVariance:
+          type: number
+          description: Tax difference between calculated and vendor charged tax.
+        vctResponseCode:
+          type: string
+          description: VCT codes from 00 to 07 per VCT table sheet.
+        vctStatus:
+          type: string
+          description: 'The overcharge or undercharge indicator. Possible Values: ND - no difference, OC - overcharged, UC - overcharged.'
+        useTaxConfig:
+          type: boolean
+          description: Determines whether the tax is calculated as buyer or seller – "Yes" means the transaction was run as buyer.
+        allocationMethod:
+          type: string
+          description: Allocation method applied for the accrued amount in case of US undercharge.
+        vctEffectiveTaxableBasis:
+          type: string
+          description: The taxable basis determined using the accrual amount for every line. This amount is calculated by dividing the accrual amount at the jurisdiction level by the jurisdiction tax rate.
+        isTrustedVendor:
+          type: boolean
+          description: Indicates whether the vendor is trusted or not.
+    Address:
+      type: object
+      description: Address for the document for line. Address at Document are required for document level charges.
+      required:
+      - type
+      - country
+      properties:
+        type:
+          type: string
+          description: The type of address.
+          enum:
+          - billTo
+          - shipTo
+          - shipFrom
+          - orderAcceptance
+          - orderOrigin
+          - supply
+          - sellerPrimary
+          - buyerPrimary
+          - middleMan
+        country:
+          type: string
+          maxLength: 50
+          description: Country.
+        region:
+          type: string
+          maxLength: 50
+          description: Province, or non-US state.
+        county:
+          type: string
+          maxLength: 50
+          description: County
+        city:
+          type: string
+          maxLength: 50
+          description: City
+        district:
+          type: string
+          maxLength: 50
+          description: District
+        postcode:
+          type: string
+          maxLength: 50
+          description: The Postal or Zip Code For US ZIP Codes, the first five digits.
+        geocode:
+          type: string
+          maxLength: 50
+          description: Geocode (the most granular geographic division) For US ZIP Codes, the +4 portion of the code.
+        isBonded:
+          type: string
+          description: If set to (Y)es, indicates that this is a Bonded Warehouse. This status can then be used as a rule qualifier during rule selection.
+        locationTaxCategory:
+          type: string
+          description: Indicates the type of location for this address, for example, Refinery. This value can then be used as a rule qualifier during rule selection.
+        companyBranchId:
+          type: string
+          maxLength: 50
+          description: The branch ID of a company, passed with registration numbers for VAT Returns in several countries. For example, in the UK, companies must file their VAT Returns with Branch ID information included.
+        address1:
+          type: string
+          maxLength: 50
+          description: Street Address 1, not used in calculation.
+        address2:
+          type: string
+          maxLength: 50
+          description: Street Address 2, not used in calculation.
+        address3:
+          type: string
+          maxLength: 50
+          description: Street Address 3, not used in calculation.
+        bulkStorageFacility:
+          type: boolean
+          description: ''
+        facilityId:
+          type: string
+          description: ''
+        irsRegisteredFacility:
+          type: boolean
+          description: ''
+        latitude:
+          type: string
+          pattern: ^-?[0-9]{1,3}(?:\.[0-9]{1,10})?$
+          description: Latitude of the location based on type, value range -90 to 90
+        longitude:
+          type: string
+          pattern: ^-?[0-9]{1,3}(?:\.[0-9]{1,10})?$
+          description: Longitude of the location based on type, value range -180 to 180
+        localTaxCategory:
+          type: string
+          description: ''
+        addressValidationMode:
+          type: string
+          description: ''
+        defaultAddressValidationMode:
+          type: string
+          description: ''
+    AddressFlagForExempt:
+      type: object
+      description: Forces exemption from tax for a line in the specified jurisdictions. Exemption is different from zero tax for VAT authorities, as exemption completely excludes the transaction from VAT accounting. In the case of a sale, VAT paid to make the supply cannot be recovered if the supply is exempt. In Sales Tax countries such as the US, the exempt indicator prevents tax from being charged. If false is explicitly passed the exemption certificate lookup is suppressed; tax will be charged even though an apparently valid certificate may exist in Determination.
+      properties:
+        all:
+          type: boolean
+          description: Forces exemption override from tax for all jurisdictions.
+          enum:
+          - false
+        country:
+          type: boolean
+          description: Exemption override status at Country zone level.
+          enum:
+          - false
+        region:
+          type: boolean
+          description: Exemption override status at Province or State zone level.
+          enum:
+          - false
+        county:
+          type: boolean
+          description: Exemption override status at County zone level.
+          enum:
+          - false
+        city:
+          type: boolean
+          description: Exemption override status at City zone level.
+          enum:
+          - false
+        postcode:
+          type: boolean
+          description: Exemption override status at Postcode zone level.
+          enum:
+          - false
+        geocode:
+          type: boolean
+          description: Exemption override status at Geocode zone level.
+          enum:
+          - false
+    Charge:
+      type: object
+      required:
+      - type
+      - amount
+      properties:
+        type:
+          type: string
+          maxLength: 50
+          description: Must be unique (each charge type can only exist once in the structure for a given line). For example, the structure could contain charge types of Freight, Insurance, and Handling, but not two instances of Freight. If there is a desire or need to use multiple freights then they must be sent uniquely, for example, Freight 1, Freight 2, etc. or Freight UPS, Freight FedEx, etc.
+        amount:
+          type: number
+          description: Amount of the specific charge
+        productCode:
+          type: string
+          maxLength: 100
+          description: Product Code for the charge, required if chargeCommodityCode is null. See productCode at line level for details.
+        commodityCode:
+          type: string
+          maxLength: 50
+          description: Commodity Code for the charge, required if chargeProductCode is null. See commodityCode at line level for details.
+    UserAttribute:
+      type: object
+      description: The userAttribute block enables companies to submit, and have returned, user-defined elements that are not directly supported in Determination. These elements can be used in conjunction with TransEditors to enable tax calculations, and may be stored in the Audit database for reporting purposes. Each userAttribute block contains a single name/value pair. <B>TR reserves ATTRIBUTE41 to ATTRIBUTE50 for internal PS use.</B>
+      properties:
+        name:
+          type: string
+          pattern: ^(ATTRIBUTE([1-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|(200)))$
+          description: The name of the user attribute. Currently restricted to the case-sensitive values ATTRIBUTE1 through ATTRIBUTE50.
+        value:
+          type: string
+          description: The value to be passed into Determination's audit tables and returned to your business application.
+    UserAttributeDate:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          pattern: ^(DATE_ATTRIBUTE[1-5])$
+          description: The name of the user date attribute. Currently restricted to the case-sensitive values DATE_ATTRIBUTE1 through DATE_ATTRIBUTE5.
+        value:
+          type: string
+          format: date
+          description: The value to be passed into Determination's audit tables and returned to your business application.
+    UserAttributeAmount:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          pattern: ^(AMOUNT_ATTRIBUTE[1-5])$
+          description: The name of the user amount attribute. Currently restricted to the case-sensitive values AMOUNT_ATTRIBUTE1 through AMOUNT_ATTRIBUTE5.
+        value:
+          type: number
+          description: The value to be passed into Determination's audit tables and returned to your business application.
+    Quantity:
+      type: object
+      description: The quantity block contains a analogous quantity elements that may differ in their units of measure.
+      required:
+      - amount
+      properties:
+        amount:
+          type: number
+          description: The number of the quantity (for example, 50 for 50 L).
+        isDefault:
+          type: boolean
+          description: Indicates that this quantity should be used as the default quantity in the transaction when multiple quantities are specified.
+        type:
+          type: string
+          description: ''
+          maxLength: 50
+        uom:
+          type: string
+          maxLength: 25
+          description: The unit of measure for the quantity (for example, EA, Each, KG or 50L).
+    Status:
+      type: object
+      description: A block which contains a summary of the status of the entire request, included aggregation of severe errors.
+      properties:
+        isSuccess:
+          type: boolean
+          description: Indicates whether the request was successful. All documents must process successfully for this tag to be set to true.
+          enum:
+          - true
+          - false
+        isPartialSuccess:
+          type: boolean
+          description: Indicates whether the request was partially successful. At least one document, but not all, must process successfully for this tag to be set to true.
+          enum:
+          - true
+          - false
+        errors:
+          type: array
+          description: A block containing one or more severe errors associated with the request. If no severe errors are encountered, this block will not be returned.
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      description: A block containing one or more severe errors associated with the request. If no severe errors are encountered, this block will not be returned.
+      properties:
+        code:
+          type: string
+          description: The severe error's code.
+        description:
+          type: string
+          description: The severe error's description.
+        location:
+          type: string
+          description: An path to the element containing the severe error.
+    Message:
+      type: object
+      description: A message related to this Request/Document/line/Tax. There can be one or multiple messages blocks returned with each Batch/Document/line/Tax.
+      properties:
+        location:
+          type: string
+          description: Returns information about the location at which the message occurred. Used for debugging only.
+        category:
+          type: string
+          description: Specifies the category of the message.
+        code:
+          type: string
+          description: The message's code. Generally the message code is used by business applications to identify the event that occurred.
+        messageText:
+          type: string
+          description: The actual message, containing detailed information about the event that occurred.
+        messageLevel:
+          type: string
+          description: 'The message''s level: INFO for informational messages (such as successful processing), WARN for warnings (errors that do not terminate processing), and ERROR for fatal errors that terminate processing. Determination lets you set the severity of different errors and display either only level 2, level 1 and 2, or level 0, 1, and 2 errors.'
+          enum:
+          - INFO
+          - WARN
+          - ERROR
+    DeliveryTerm:
+      type: object
+      description: 'Indicates how goods were shipped and where title was transferred. if using Incoterms, Valid values include Incoterms 2000 codes and any other customer-defined codes. If using The Point of Title Transfer (POTT) location. Valid values are: D: Destination.O: Origin.I: In transit. If deliveryTerm element is passed in at either the document or line level, the default for the document is set to In Transit.'
+      properties:
+        type:
+          type: string
+          maxLength: 10
+          description: 'Type of delivery term, Possible value:  ''Incoterms'', ''POTT'' or null'
+          enum:
+          - Incoterms
+          - POTT
+          - 'null'
+        term:
+          type: string
+          maxLength: 10
+          description: Delivery Term or Point of Title Transfer
+    InclusiveTaxIndicator:
+      type: object
+      description: Contains information on whether to treat some or all authority taxes for this invoice as inclusive, regardless of the selected rule.
+      properties:
+        fullyInclusive:
+          type: boolean
+          description: If set to true, indicates that all authorities that Determination will select for taxing will be considered as Inclusive Tax. This element overrides the calculation method set for the selected rule by forcing inclusive tax.
+        authorityType:
+          type: array
+          description: If the authority selected for a transaction matches the type indicated here, all taxes for that authority are considered as inclusive. You can have multiple authorityType.
+          items:
+            type: string
+            maxLength: 100
+    ClassificationCode:
+      type: object
+      description: ''
+      properties:
+        classificationCodeId:
+          type: string
+          description: ''
+        classificationCodeType:
+          type: string
+          description: ''
+          enum:
+          - INDUSTRY PRODUCT CODE
+          - INDUSTRY CODE
+          - CNAE CODE
+    Price:
+      type: object
+      description: ''
+      properties:
+        amount:
+          type: number
+          description: ''
+        priceType:
+          type: string
+          maxLength: 50
+          description: ''
+          enum:
+          - PF
+          - PMC
+          - PMVG
+    Registrations:
+      type: object
+      description: List of registrations for role.
+      properties:
+        type:
+          type: string
+          description: Type of registration number.
+          enum:
+          - BuyerRole
+          - SellerRole
+          - MiddleManRole
+        registrationNumber:
+          type: array
+          description: One or more registration numbers for the role
+          items:
+            type: string
+            description: Registration number.
+            maxLength: 25
+    BillOfLanding:
+      type: object
+      description: ''
+      properties:
+        number:
+          type: number
+          description: Bill of lading number.
+        dateTime:
+          type: string
+          format: date-time
+          description: Bill of lading date
+    OperatingLicenses:
+      type: object
+      description: ''
+      properties:
+        assumeBuyerFullyLicensed:
+          type: boolean
+          description: True of False, assume buyer is fully licensed
+        buyer:
+          $ref: '#/components/schemas/License'
+        assumeSellerFullyLicensed:
+          type: boolean
+          description: 'True or False, assume seller is fully licensed '
+        seller:
+          $ref: '#/components/schemas/License'
+    License:
+      type: object
+      description: Contains data pertaining to a single license, consisting of a number-type pair.
+      properties:
+        type:
+          type: string
+          maxLength: 100
+          description: Type of license.
+        number:
+          type: string
+          maxLength: 100
+          description: License number.
+    LicenseType:
+      type: object
+      description: One or more licenses applicable for the transaction.
+      properties:
+        customerLicense:
+          $ref: '#/components/schemas/License'
+    UomConversion:
+      type: object
+      description: ''
+      properties:
+        factor:
+          type: number
+          description: The conversion factor (i.e. 0.0001, 10, 0.01, etc.) applied to the FROM amount to yield the TO amount.
+        operator:
+          type: string
+          maxLength: 1
+          description: The operator to be applied to the conversion factor. The operator can be multiply (*) or divide (/).
+        from:
+          $ref: '#/components/schemas/Quantity'
+        toRounded:
+          $ref: '#/components/schemas/Quantity'
+        toUnrounded:
+          $ref: '#/components/schemas/Quantity'
+    RelatedLineAmount:
+      type: object
+      description: The related line amount
+      required:
+      - lineNumber
+      - splitAmount
+      properties:
+        lineNumber:
+          type: string
+          description: lineNumber is a required element for each line. Used in combination with documentNumber, it is used to specify and reference a particular line on a specific document.
+        splitAmount:
+          type: number
+          description: Amount splitted

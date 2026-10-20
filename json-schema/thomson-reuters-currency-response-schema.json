@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-currency-response-schema.json",
+  "title": "CurrencyResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-api-documentation-for-currencies-services-openapi.yml#/components/schemas/CurrencyResponse",
+  "type": "object",
+  "properties": {
+    "_meta": {
+      "description": "_meta",
+      "$ref": "#/$defs/Meta"
+    },
+    "items": {
+      "type": "array",
+      "description": "items",
+      "items": {
+        "$ref": "#/$defs/Currency"
+      }
+    },
+    "error": {
+      "description": "error",
+      "$ref": "#/$defs/ErrorV1_Currency"
+    }
+  },
+  "$defs": {
+    "Currency": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of the Currency instance."
+        },
+        "jurisdiction": {
+          "type": "string",
+          "description": "The jurisdiction of the Currency instance."
+        },
+        "label": {
+          "type": "string",
+          "description": "The label of the Currency instance."
+        },
+        "three_digit_code": {
+          "type": "string",
+          "description": "The three digit code of the Currency instance."
+        }
+      },
+      "description": "The details about a Currency instance in ontology."
+    },
+    "ErrorV1_Currency": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "code"
+        },
+        "message": {
+          "type": "string",
+          "description": "message"
+        },
+        "error_count": {
+          "type": "integer",
+          "format": "int32",
+          "description": "error_count"
+        },
+        "failures": {
+          "type": "array",
+          "description": "failures",
+          "items": {
+            "$ref": "#/$defs/FailureV1_Currency"
+          }
+        }
+      }
+    },
+    "FailureDetailV1": {
+      "type": "object",
+      "properties": {
+        "cause": {
+          "type": "string",
+          "description": "The cause of a failure. This is used to identify what POJO field may be in error or what DB could not be reached."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the failure. This is used to provide some meaningful description of the failure. The message should be considered internal and not customer facing."
+        },
+        "error_id": {
+          "type": "string",
+          "description": "The error identifier"
+        },
+        "error_parameters": {
+          "type": "object",
+          "description": "The error parameter keys and values",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "failure_type": {
+          "type": "string",
+          "description": "The general category of the type of failure.",
+          "enum": [
+            "ERROR",
+            "WARNING",
+            "VALIDATION"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "description": "The default message category"
+        }
+      },
+      "description": "Provides detail information about a failure."
+    },
+    "FailureV1_Currency": {
+      "type": "object",
+      "properties": {
+        "detail_count": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of failures that were encountered."
+        },
+        "details": {
+          "type": "array",
+          "description": "The collection of failures that were encountered.",
+          "items": {
+            "$ref": "#/$defs/FailureDetailV1"
+          }
+        },
+        "item": {
+          "description": "The item associated with a failure. Typically this will be the POJO that encountered a failure such as a validation error.",
+          "$ref": "#/$defs/Currency"
+        }
+      },
+      "description": "Contains information about a failure."
+    },
+    "Meta": {
+      "type": "object",
+      "properties": {
+        "data_type": {
+          "type": "string",
+          "description": "data_type"
+        },
+        "total_results": {
+          "type": "integer",
+          "format": "int32",
+          "description": "total_results"
+        },
+        "items_count": {
+          "type": "integer",
+          "format": "int32",
+          "description": "items_count"
+        }
+      }
+    }
+  }
+}

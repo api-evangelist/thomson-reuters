@@ -1,0 +1,345 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts International 5471 Schedule C…
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: International 5471 Schedule C (2018+)
+paths:
+  /v1/fcoa/{chartId}/form5471-schedule-c/mapped-accounts:
+    get:
+      tags:
+      - International 5471 Schedule C (2018+)
+      summary: Returns the list of accounts mapped to Form 5471 Schedule C OCI lines for the…
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntlScheduleCMappedAccountsResponse'
+              examples:
+                mapped-accounts:
+                  $ref: '#/components/examples/international-schedule-c-mapped-accounts'
+        '400':
+          description: Request failed due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1FcoaByChartIdForm5471ScheduleCMappedAccounts
+      x-operation-id-source: derived
+    patch:
+      tags:
+      - International 5471 Schedule C (2018+)
+      summary: Adds and removes accounts mapped to Form 5471 Schedule C OCI lines for the…
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: Indicates the response content media type to return
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntlSchCPatchDocument'
+            examples:
+              international-schedule-c-patch-request:
+                $ref: '#/components/examples/international-schedule-c-patch-request'
+      responses:
+        '200':
+          description: All operations executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntlSchCPatchResponseDocument'
+              examples:
+                internatioanl-schedule-c-patch-success-response:
+                  $ref: '#/components/examples/international-schedule-c-patch-sucess-response'
+        '207':
+          description: One or more operations failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntlSchCPatchResponseDocument'
+              examples:
+                internatioanl-schedule-c-patch-multiple-response:
+                  $ref: '#/components/examples/international-schedule-c-patch-multiple-response'
+        '400':
+          description: Request failed due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: patchV1FcoaByChartIdForm5471ScheduleCMappedAccounts
+      x-operation-id-source: derived
+  /v1/fcoa/{chartId}/form5471-schedule-c/unmapped-accounts:
+    get:
+      tags:
+      - International 5471 Schedule C (2018+)
+      summary: Returns the list of accounts NOT mapped to Form 5471 Schedule C OCI lines for…
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID, system-generated unique identifier for a chart
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicates the response content media type to return. application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntlScheduleCUnmappedAccountsResponse'
+              examples:
+                unmapped-accounts:
+                  $ref: '#/components/examples/international-schedule-c-unmapped-accounts'
+        '400':
+          description: Request failed due to validation errors.
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      operationId: getV1FcoaByChartIdForm5471ScheduleCUnmappedAccounts
+      x-operation-id-source: derived
+components:
+  schemas:
+    IntlScheC:
+      type: object
+      properties:
+        form5471SchCLineNumber:
+          type: string
+        accountNumber:
+          type: string
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    IntlScheduleCMappedAccountsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/IntlScheduleCMappedModel'
+    IntlSchCPatchResponseDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/IntlSchCPatchResponse'
+    IntlScheduleCMappedModel:
+      type: object
+      properties:
+        form5471SchCLineNumber:
+          type: string
+        form5471SchCLineDescription:
+          type: string
+        form5471SchCFederalAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntlScheduleCUnmappedModel'
+    IntlSchCPatchResponse:
+      type: object
+      properties:
+        op:
+          type: string
+        path:
+          type: string
+        value:
+          type: object
+          $ref: '#/components/schemas/IntlScheC'
+        statusCode:
+          type: integer
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+        detail:
+          type: string
+    IntlSchCPatchModel:
+      type: object
+      properties:
+        value:
+          type: object
+          $ref: '#/components/schemas/IntlScheC'
+        path:
+          type: string
+        op:
+          type: string
+    IntlScheduleCUnmappedModel:
+      type: object
+      properties:
+        accountId:
+          type: number
+        accountNumber:
+          type: string
+        accountDescription:
+          type: string
+        trcNumber:
+          type: string
+        trcDescription:
+          type: string
+        tccNumber:
+          type: string
+        tccDescription:
+          type: string
+    IntlScheduleCUnmappedAccountsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/IntlScheduleCUnmappedModel'
+    IntlSchCPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/IntlSchCPatchModel'
+  examples:
+    international-schedule-c-patch-multiple-response:
+      value:
+      - op: Add
+        path: null
+        value:
+          form5471SchCLineNumber: 23b
+          accountNumber: '10150'
+        statusCode: 400
+        detail: Validation Error
+        fieldErrors:
+        - fieldName: AccountCode
+          messages:
+          - Invalid Federal Account Number [10150].
+          errorCode: 0
+      - op: Remove
+        path: null
+        value:
+          form5471SchCLineNumber: 23b
+          accountNumber: '1015000'
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    international-schedule-c-patch-sucess-response:
+      value:
+      - op: Add
+        path: null
+        value:
+          form5471SchCLineNumber: 23a
+          accountNumber: '10140000'
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+      - op: Remove
+        path: null
+        value:
+          form5471SchCLineNumber: 23a
+          accountNumber: '10140000'
+        statusCode: 200
+        detail: null
+        fieldErrors: []
+    international-schedule-c-unmapped-accounts:
+      value:
+      - accountId: 1811348
+        accountNumber: '1017000'
+        accountDescription: UBS / Checking
+        trcNumber: 10-100
+        trcDescription: Cash
+        tccNumber: 100
+        tccDescription: Cash
+      - accountId: 1811349
+        accountNumber: '1018000'
+        accountDescription: Micronesia & Pohnpei Bank Group
+        trcNumber: 10-100
+        trcDescription: Cash
+        tccNumber: 100
+        tccDescription: Cash
+    international-schedule-c-mapped-accounts:
+      value:
+      - form5471SchCLineNumber: 23a
+        form5471SchCLineDescription: Foreign currency translation adjustments
+        form5471SchCFederalAccounts: []
+      - form5471SchCLineNumber: 23b
+        form5471SchCLineDescription: Other
+        form5471SchCFederalAccounts:
+        - accountId: 1811346
+          accountNumber: '1015000'
+          accountDescription: MTB Cash Accounts
+          trcNumber: 10-100
+          trcDescription: Cash
+          tccNumber: 100
+          tccDescription: Cash
+    international-schedule-c-patch-request:
+      value:
+      - op: add
+        path: /form5471SchCFederalAccounts
+        value:
+          form5471SchCLineNumber: 23b
+          accountNumber: '1015000'
+      - op: remove
+        path: /form5471SchCFederalAccounts
+        value:
+          form5471SchCLineNumber: 23a
+          accountNumber: '10140000'
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

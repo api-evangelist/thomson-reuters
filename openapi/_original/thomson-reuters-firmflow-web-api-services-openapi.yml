@@ -1,0 +1,2579 @@
+# x-archived-from: thomson-reuters-firmflow-web-api-services-openapi.yml
+# x-archived-on: 2026-10-20
+openapi: 3.0.1
+info:
+  title: Firmflow Web API Services
+  version: v1
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+paths:
+  /api/v1/user/login:
+    post:
+      tags:
+      - User
+      summary: Logs a user into the application.
+      operationId: User_LoginAsyncV1
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Authentication of a user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+      x-codegen-request-body-name: userAuthentication
+  /api/v1/user/validate:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+      summary: Validate the Security Token
+      operationId: User_ValidateTokenV1
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+  /api/v1/user/logout:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+      summary: Logs out the currently authenticated user.
+      description: Logs out the currently authenticated user and invalidates their session.
+      operationId: User_LogoutV1
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IsLogoutSuccessful'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IsLogoutSuccessful'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IsLogoutSuccessful'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/IsLogoutSuccessful'
+  /firmflow/api/v1/Deliverable/GetDeliverableList:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Deliverable
+      summary: Get a list of deliverables based on the provided criteria.
+      description: Retrieves a list of deliverables matching the specified criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliverableListCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeliverableListCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeliverableListCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeliverableListResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableListResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableListResponse'
+  /firmflow/api/v1/Deliverable/SaveDeliverableList:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Deliverable
+      summary: Save a list of deliverables.
+      description: Saves a list of deliverables based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveDeliverableListCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SaveDeliverableListCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SaveDeliverableListCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeliverableSaveResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableSaveResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableSaveResponse'
+  /firmflow/api/v1/Deliverable/UpdateDeliverableList:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Deliverable
+      summary: Update a list of deliverables.
+      description: Updates a list of deliverables based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeliverableListCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeliverableListCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeliverableListCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeliverableUpdateResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableUpdateResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableUpdateResponse'
+  /firmflow/api/v1/Deliverable/DeleteDeliverableList:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Deliverable
+      summary: Delete a list of deliverables.
+      description: Deletes a list of deliverables based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteDeliverableListCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeleteDeliverableListCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeleteDeliverableListCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliverableDeleteResponse'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliverableDeleteResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliverableDeleteResponse'
+  /firmflow/api/Filing/ResetChecklists:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Filing
+      summary: Reset checklists for a workflow.
+      description: Resets the checklists associated with a specific workflow.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: uid
+        in: query
+        schema:
+          type: string
+          nullable: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              nullable: true
+          text/json:
+            schema:
+              type: array
+              items:
+                type: string
+              nullable: true
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: string
+              nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+  /firmflow/api/V1/Workflow/GetNotes:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Note
+      summary: Get notes for a workflow.
+      description: Retrieves the notes associated with a specific workflow.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: filingId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetNoteResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNoteResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetNoteResponse'
+  /firmflow/api/V2/Route:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Route
+      summary: Route a workflow based on the provided criteria.
+      description: Routes a workflow to the specified destination based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteCriteriaV2'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RouteCriteriaV2'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RouteCriteriaV2'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+  /firmflow/api/v1/FirmFlow/RollForward:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - FirmFlow
+      summary: Perform a roll forward operation on a workflow folder.
+      description: Rolls forward a folder to create a new folder based on the provided criteria.
+      operationId: Post_RollForward
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkFlowRollForwardData'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WorkFlowRollForwardData'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WorkFlowRollForwardData'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkFlowRollForwardResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkFlowRollForwardResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkFlowRollForwardResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/V1/Workflow/CreateWorkflow:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Create a new workflow.
+      description: Creates a new workflow based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflow'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflow'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflow'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+  /firmflow/api/V1/Workflow/DeleteWorkflow:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Delete a workflow.
+      description: Deletes a workflow based on the provided filing ID.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: filingId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+  /firmflow/api/V1/Workflow/DeleteWorkflows:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Delete multiple workflows.
+      description: Deletes multiple workflows based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteWorkflowCritria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeleteWorkflowCritria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeleteWorkflowCritria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkflowResponse'
+  /firmflow/api/V1/Workflow/EditWorkflow:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Edit a workflow.
+      description: Updates a workflow based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: You can either use the entire request body or only include parts of the request body which you want to update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowData'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowData'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WorkflowData'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+  /firmflow/api/V2/Workflow/EditWorkflow:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Edit a workflow (version 2).
+      description: Updates a workflow based on the provided criteria (version 2).
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: You can either use the entire request body or only include parts of the request body which you want to update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowDataV2'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowDataV2'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WorkflowDataV2'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+  /firmflow/api/V1/Workflow/DeliveryAndDestinations:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get delivery instructions and destinations for a workflow.
+      description: Retrieves the delivery instructions and destinations associated with a specific workflow.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryInstructionCriteria'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryInstructionCriteria'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeliveryInstructionCriteria'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeliveryInstructionResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryInstructionResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryInstructionResponse'
+  /firmflow/api/V1/Workflow/RoutingHistory:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get routing history for a workflow.
+      description: Retrieves the routing history associated with a specific workflow.
+      operationId: Get_RoutingHistory
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: filingId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RoutingHistoryResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingHistoryResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RoutingHistoryResponse'
+  /firmflow/api/V1/Workflow/RoutingHistoryByFilingIds:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get routing history based on filing Ids.
+      description: Retrieves a list of routing history based on the provided filing ids.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingHistoryByFilingIdsRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingHistoryByFilingIdsRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingHistoryByFilingIdsRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoutingHistoryByFilingIdsResponse'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoutingHistoryByFilingIdsResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoutingHistoryByFilingIdsResponse'
+  /firmflow/api/V1/Workflow/GetDeletedWorkflows:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get deleted workflows.
+      description: Retrieves a list of deleted workflows based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeletedWorkFlowsResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletedWorkFlowsResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeletedWorkFlowsResult'
+  /firmflow/api/V1/Workflow/GetDeletedDeliverableWorkflows:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Get deleted deliverable workflows.
+      description: Retrieves a list of deleted deliverable workflows based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeletedWorkflowsRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DeletedDeliverableWorkFlowsResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletedDeliverableWorkFlowsResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeletedDeliverableWorkFlowsResult'
+  /firmflow/api/V2/Workflow/CreateWorkflow:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Create a new workflow (version 2).
+      description: Creates a new workflow based on the provided criteria (version 2).
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflowV2'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflowV2'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AddWorkflowV2'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+  /firmflow/api/V1/Workflow/ControlSheetPDF:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Workflow
+      summary: Generate a control sheet PDF.
+      description: Generates a control sheet PDF based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ControlSheetRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ControlSheetRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ControlSheetRequest'
+      responses:
+        '200':
+          description: Success
+  /firmflow/api/LargeDocument/GetDocumentInfo:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Get document details.
+      description: Retrieves the details of a document based on the provided criteria.
+      operationId: Get_DocumentInfo
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: Version
+        in: query
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+      - name: DocumentId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DocumentInfoDetailedProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentInfoDetailedProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DocumentInfoDetailedProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/LargeDocument/Hash:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Get document hash.
+      description: Retrieves the hash of a document based on the provided criteria.
+      operationId: Get_Hash
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: DrawerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: CabinetId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentName
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: Version
+        in: query
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+      - name: Extension
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/LargeDocument/Upload/Part:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Upload a part of a large document.
+      description: Uploads a part of a large document based on the provided criteria.
+      operationId: Upload_Part
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                File:
+                  type: string
+                  format: binary
+                  nullable: true
+                DrawerId:
+                  type: string
+                  nullable: true
+                CabinetId:
+                  type: string
+                  nullable: true
+                DocumentName:
+                  type: string
+                  nullable: true
+                Part:
+                  type: integer
+                  format: int32
+            encoding:
+              File:
+                style: form
+              DrawerId:
+                style: form
+              CabinetId:
+                style: form
+              DocumentName:
+                style: form
+              Part:
+                style: form
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/LargeDocument/Upload/Part/Hash:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Get the hash of an uploaded part of a large document.
+      description: Retrieves the hash of an uploaded part of a large document based on the provided criteria.
+      operationId: Get_Part_Hash
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: DrawerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: CabinetId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentName
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: Part
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/LargeDocument/Upload/Complete:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Complete the upload of a large document.
+      description: Completes the upload of a large document based on the provided criteria.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLargeDocumentUploadRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLargeDocumentUploadRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateLargeDocumentUploadRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/LargeDocument/Upload/Abort:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Abort the upload of a large document.
+      description: Aborts the upload of a large document based on the provided criteria.
+      operationId: Delete_Upload_Abort
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/LargeDocument/Download/Start:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Start the download of a large document.
+      description: Starts the download process of a large document based on the provided criteria.
+      operationId: Post_Download_Start
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartDownloadProcessRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/StartDownloadProcessRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/StartDownloadProcessRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StartDownloadProcessResponseProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartDownloadProcessResponseProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StartDownloadProcessResponseProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/LargeDocument/Download/Part:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Download a part of a large document.
+      description: Downloads a part of a large document based on the provided criteria.
+      operationId: Get_Download_Part
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: DrawerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: CabinetId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentName
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: Part
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/LargeDocument/Download/Part/Hash:
+    get:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Get the hash of a downloaded part of a large document.
+      description: Retrieves the hash of a downloaded part of a large document based on the provided criteria.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: DrawerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: CabinetId
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: DocumentName
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: Part
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StringProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+  /firmflow/api/LargeDocument/Download/Finish:
+    delete:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - LargeDocument
+      summary: Finish the download of a large document.
+      description: Finishes the download process of a large document based on the provided criteria.
+      operationId: Delete_Document_Finish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DocumentPartInfoDetailed'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            applicat"ion/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResult'
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  schemas:
+    DeliveryInstructionResponse:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        firmFlowResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryInstructions'
+          nullable: true
+      additionalProperties: false
+    DeliveryInstructionCriteria:
+      required:
+      - drawerName
+      - pageNumber
+      - pageSize
+      - serviceType
+      type: object
+      properties:
+        drawerName:
+          type: string
+          default: clients
+        serviceType:
+          type: string
+          default: Tax
+        pageNumber:
+          type: integer
+          format: int32
+          default: 1
+        pageSize:
+          type: integer
+          format: int32
+          default: 10
+      additionalProperties: false
+    WorkflowResponse:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+        errorComment:
+          type: string
+          nullable: true
+        status:
+          type: boolean
+        errorMessage:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorMessage'
+          nullable: true
+      additionalProperties: false
+    WorkflowData:
+      required:
+      - filingId
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+          default: 0
+        headers:
+          $ref: '#/components/schemas/Header'
+        deliverable:
+          $ref: '#/components/schemas/Deliverable'
+        notes:
+          $ref: '#/components/schemas/NoteRequest'
+        filing:
+          $ref: '#/components/schemas/Filing'
+        informationFields:
+          $ref: '#/components/schemas/InformationFields'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction'
+        routingSummary:
+          $ref: '#/components/schemas/RoutingSummary'
+        reIndexDocs:
+          type: boolean
+          default: false
+          nullable: true
+      additionalProperties: false
+    WorkflowDataV2:
+      required:
+      - filingId
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+          default: 0
+        headers:
+          $ref: '#/components/schemas/Header'
+        deliverable:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deliverable'
+        notes:
+          $ref: '#/components/schemas/NoteRequest'
+        filing:
+          $ref: '#/components/schemas/Filing'
+        informationFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/InformationFields'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction'
+        routingSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingSummary'
+        reIndexDocs:
+          type: boolean
+          default: false
+          nullable: true
+      additionalProperties: false
+    DeleteWorkflowResponse:
+      type: object
+      properties:
+        isDeleted:
+          type: boolean
+        filingId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeleteWorkflowCritria:
+      required:
+      - filingId
+      type: object
+      properties:
+        filingId:
+          minLength: 1
+          type: array
+          items:
+            type: integer
+            format: int32
+      additionalProperties: false
+    RouteCriteriaV2:
+      required:
+      - assignedDate
+      - assignedTo
+      - complete
+      - completedDate
+      - filingId
+      - nextstep
+      - priority
+      - status
+      type: object
+      properties:
+        filingId:
+          minLength: 1
+          type: array
+          default:
+          - '73078'
+          items:
+            type: integer
+            format: int32
+        currentStep:
+          type: array
+          items:
+            type: string
+          nullable: true
+          default:
+          - PROJECT SETUP
+          - PREPARATION
+        complete:
+          type: boolean
+          default: true
+        nextstep:
+          type: string
+          default: DELIVERY
+        priority:
+          type: string
+          default: HIGH
+        status:
+          type: string
+          default: RECURRING
+        routingNote:
+          type: string
+          nullable: true
+          default: testing route v2
+        assignedDate:
+          type: string
+          default: 06/22/2021 04:51:51 PM
+        completedDate:
+          type: string
+          default: 06/22/2021 04:51:51 PM
+        assignedTo:
+          type: string
+          default: U-0000000057
+        emailNotify:
+          type: boolean
+          default: false
+      additionalProperties: false
+    RoutingHistoryResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/RoutingDTO'
+      nullable: true
+      additionalProperties: false
+    GetNoteResponse:
+      type: object
+      properties:
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotesDTO'
+          nullable: true
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeliverableListCriteria:
+      required:
+      - drawerName
+      - pageNumber
+      - pageSize
+      - serviceType
+      type: object
+      properties:
+        pageNumber:
+          maximum: 2147483647
+          minimum: 1
+          type: integer
+          format: int32
+        pageSize:
+          maximum: 2147483647
+          minimum: 1
+          type: integer
+          format: int32
+        serviceType:
+          type: string
+        drawerName:
+          type: string
+      additionalProperties: false
+    DeliverableListDTO:
+      type: object
+      properties:
+        deliverableName:
+          type: string
+          nullable: true
+        extensionType:
+          type: string
+          nullable: true
+        dueDate:
+          type: string
+          nullable: true
+        firstExtension:
+          type: string
+          nullable: true
+        secondExtension:
+          type: string
+          nullable: true
+        thirdExtension:
+          type: string
+          nullable: true
+        extension:
+          type: string
+          nullable: true
+        action:
+          type: string
+          nullable: true
+        obligationId:
+          type: string
+          nullable: true
+        firmManagedOption:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeliverableListResponse:
+      type: object
+      properties:
+        deliverableList:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliverableListDTO'
+          nullable: true
+        totalRecords:
+          type: string
+          nullable: true
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SaveDeliverableListCriteria:
+      required:
+      - calenderOrFiscal
+      - deliverableName
+      - drawerName
+      - dueDate
+      - extension
+      - firstExtension
+      - secondExtension
+      - serviceType
+      - thirdExtension
+      type: object
+      properties:
+        deliverableName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        dueDate:
+          maxLength: 10
+          minLength: 0
+          type: string
+        firstExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        secondExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        thirdExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        calenderOrFiscal:
+          maxLength: 1
+          minLength: 0
+          type: string
+        extension:
+          type: integer
+          format: int32
+        serviceType:
+          type: string
+        drawerName:
+          type: string
+      additionalProperties: false
+    DeliverableSaveResponse:
+      type: object
+      properties:
+        isSaved:
+          type: boolean
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UpdateDeliverableListCriteria:
+      required:
+      - calenderOrFiscal
+      - currentdeliverableName
+      - drawerName
+      - dueDate
+      - extension
+      - firstExtension
+      - secondExtension
+      - serviceType
+      - thirdExtension
+      type: object
+      properties:
+        currentdeliverableName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        updatedeliverableName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          nullable: true
+        dueDate:
+          maxLength: 10
+          minLength: 0
+          type: string
+        firstExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        secondExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        thirdExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+        calenderOrFiscal:
+          maxLength: 1
+          minLength: 0
+          type: string
+        extension:
+          type: integer
+          format: int32
+        serviceType:
+          type: string
+        drawerName:
+          type: string
+      additionalProperties: false
+    DeliverableUpdateResponse:
+      type: object
+      properties:
+        isUpdated:
+          type: boolean
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeleteDeliverableListCriteria:
+      required:
+      - deliverableNames
+      - drawerName
+      - serviceType
+      type: object
+      properties:
+        deliverableNames:
+          type: array
+          items:
+            type: string
+        serviceType:
+          type: string
+        drawerName:
+          type: string
+      additionalProperties: false
+    DeliverableDeleteResponse:
+      type: object
+      properties:
+        isDeleted:
+          type: boolean
+        responseMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RoutingDTO:
+      type: object
+      properties:
+        workFlowName:
+          type: string
+          nullable: true
+        step:
+          type: string
+          nullable: true
+        assignedTo:
+          type: string
+          nullable: true
+        assignedBy:
+          type: string
+          nullable: true
+        assignedDateTime:
+          type: string
+          nullable: true
+        completedDateTime:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NotesDTO:
+      type: object
+      properties:
+        note_id:
+          type: integer
+          format: int32
+        note_type:
+          type: string
+          nullable: true
+        ref_no:
+          type: integer
+          format: int64
+        sub_ref_no:
+          type: integer
+          format: int64
+        notes:
+          type: string
+          nullable: true
+        notes_author:
+          type: string
+          nullable: true
+        notes_updated_date:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        status_author:
+          type: string
+          nullable: true
+        status_updated_date:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RouteResponse:
+      type: object
+      properties:
+        filingId:
+          type: string
+          nullable: true
+        isRouted:
+          type: boolean
+      additionalProperties: false
+    UserAuthentication:
+      type: object
+      properties:
+        LoginName:
+          type: string
+          description: Gets or sets the login name of a user
+        Password:
+          type: string
+          description: Gets or sets the password of a user
+        Language:
+          type: string
+          description: Gets or Sets the user Interface Language
+        LSValidated:
+          type: boolean
+          description: Gets or Sets the user validated against lonestar
+        SessionId:
+          type: integer
+          description: Gets or Sets the classic asp session id
+          format: int32
+        Captcha:
+          type: string
+          description: ''
+        CaptchaType:
+          type: integer
+          description: ''
+          format: int32
+      description: Properties related to user authentication
+    Header:
+      type: object
+      properties:
+        clientName:
+          default: ''
+          type: string
+          nullable: true
+        clientNumber:
+          type: string
+          nullable: true
+          default: ''
+        engagementType:
+          type: string
+          nullable: true
+          default: ''
+        pic:
+          type: string
+          nullable: true
+          default: ''
+        year:
+          type: string
+          nullable: true
+          default: ''
+        periodEnd:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    Filing:
+      type: object
+      properties:
+        workflowName:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        statusName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Deliverable:
+      type: object
+      properties:
+        action:
+          type: string
+          nullable: true
+          default: ''
+        currentDueDate:
+          type: string
+          nullable: true
+          default: ''
+        originalDueDate:
+          type: string
+          nullable: true
+          default: ''
+        form:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    InformationFields:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          default: ''
+        value:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    NoteRequest:
+      type: object
+      properties:
+        action:
+          type: string
+          nullable: true
+          default: add new note
+        noteType:
+          type: string
+          nullable: true
+          default: ''
+        noteId:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          default: []
+        note:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    DeliveryInstruction:
+      type: object
+      properties:
+        delivery:
+          type: string
+          nullable: true
+          default: ''
+        destination:
+          type: string
+          nullable: true
+          default: ''
+        sourceDocument:
+          type: string
+          nullable: true
+          default: 'true'
+      additionalProperties: false
+    RoutingSummary:
+      type: object
+      properties:
+        responsibleField:
+          type: string
+          nullable: true
+          default: ''
+        value:
+          type: string
+          nullable: true
+          default: ''
+      additionalProperties: false
+    AuthResponse:
+      type: object
+      properties:
+        Token:
+          type: string
+          description: Gets or sets the authorisation token
+        AuthSuccess:
+          type: boolean
+          description: True if authorisation was a success, false otherwise
+        AuthenticationResponse:
+          type: string
+          description: Provides an error message if the authentication did not succeed.
+        UserName:
+          type: string
+          description: The full name of the authorized user.
+        UserId:
+          type: string
+          description: Gets or sets the UserId of a user
+        CustomerId:
+          type: string
+          description: Gets or sets the FirmId of a user
+        IdleSessionTimeoutMinutes:
+          type: integer
+          description: The number of idle minutes before the user session will expire.
+          format: int32
+        LoneStarFirmId:
+          type: string
+        LoneStarValidated:
+          type: boolean
+        ErrorCode:
+          type: string
+      description: The response to an authorization attempt.
+    IsLogoutSuccessful:
+      type: object
+      properties:
+        IsLogoutSuccess:
+          type: boolean
+          default: false
+          description: Indicates whether the logout was successful.
+    DeliveryInstructions:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+        delivery:
+          type: string
+          nullable: true
+        destination:
+          type: string
+          nullable: true
+        sourceDocument:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    ErrorMessage:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        status:
+          type: boolean
+          nullable: true
+        errorComment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AddWorkflow:
+      required:
+      - drawer
+      - serviceType
+      type: object
+      properties:
+        drawer:
+          type: string
+        serviceType:
+          type: string
+        folderId:
+          type: string
+          nullable: true
+        headers:
+          $ref: '#/components/schemas/Header'
+        filing:
+          $ref: '#/components/schemas/Filing'
+        deliverable:
+          $ref: '#/components/schemas/Deliverable'
+        informationFields:
+          $ref: '#/components/schemas/InformationFields'
+        notes:
+          $ref: '#/components/schemas/NoteRequest'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction'
+        routingSummary:
+          $ref: '#/components/schemas/RoutingSummary'
+      additionalProperties: false
+    AddWorkflowV2:
+      required:
+      - drawer
+      - serviceType
+      type: object
+      properties:
+        drawer:
+          type: string
+        serviceType:
+          type: string
+        folderId:
+          type: string
+          nullable: true
+        headers:
+          $ref: '#/components/schemas/Header'
+        filing:
+          $ref: '#/components/schemas/Filing'
+        deliverable:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deliverable'
+        informationFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/InformationFields'
+        notes:
+          $ref: '#/components/schemas/NoteRequest'
+        deliveryInstructions:
+          $ref: '#/components/schemas/DeliveryInstruction'
+        routingSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingSummary'
+      additionalProperties: false
+    DocumentInfoDetailed:
+      type: object
+      properties:
+        drawerId:
+          type: string
+          nullable: true
+        cabinetId:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+        version:
+          type: integer
+          format: int32
+          nullable: true
+        extension:
+          type: string
+          nullable: true
+        documentId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DocumentInfoDetailedProcessResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DocumentInfoDetailed'
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+        warningMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+      additionalProperties: false
+    StringProcessResult:
+      type: object
+      properties:
+        data:
+          type: string
+          nullable: true
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+        warningMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+      additionalProperties: false
+    ProcessResult:
+      type: object
+      properties:
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+        warningMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+      additionalProperties: false
+    UpdateLargeDocumentUploadRequest:
+      type: object
+      properties:
+        saveAsNewVersion:
+          type: boolean
+          nullable: true
+        drawerId:
+          type: string
+          nullable: true
+        cabinetId:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+        version:
+          type: integer
+          format: int32
+          nullable: true
+        extension:
+          type: string
+          nullable: true
+        documentId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DocumentPartInfoDetailed:
+      type: object
+      properties:
+        drawerId:
+          type: string
+          nullable: true
+        cabinetId:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StartDownloadProcessRequest:
+      type: object
+      properties:
+        filePartSizeInMB:
+          type: integer
+          format: int32
+        version:
+          type: integer
+          format: int32
+          nullable: true
+        documentId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StartDownloadProcessResponseProcessResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/StartDownloadProcessResponse'
+        isSuccess:
+          type: boolean
+        errorMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+        warningMessages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+      additionalProperties: false
+    DocumentResouceInfo:
+      type: object
+      properties:
+        resourceLocation:
+          type: string
+          nullable: true
+        checkSum:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StartDownloadProcessResponse:
+      type: object
+      properties:
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResouceInfo'
+          nullable: true
+        drawerId:
+          type: string
+          nullable: true
+        cabinetId:
+          type: string
+          nullable: true
+        documentName:
+          type: string
+          nullable: true
+        version:
+          type: integer
+          format: int32
+          nullable: true
+        extension:
+          type: string
+          nullable: true
+        documentId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    WorkFlowRollForwardData:
+      type: object
+      properties:
+        currentFolder:
+          $ref: '#/components/schemas/CurrentFolder'
+        newFolder:
+          $ref: '#/components/schemas/NewFolder'
+    CurrentFolder:
+      type: object
+      properties:
+        serviceTypeName:
+          type: string
+          nullable: true
+        filingID:
+          type: integer
+          nullable: true
+      additionalProperties: false
+    NewFolder:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          nullable: true
+        assignedToId:
+          type: string
+          nullable: true
+        workflowName:
+          type: string
+          nullable: true
+        statusName:
+          type: string
+          nullable: true
+        rollForwardOptions:
+          $ref: '#/components/schemas/RollForwardOptions'
+      additionalProperties: false
+    RollForwardOptions:
+      type: object
+      properties:
+        deliverables:
+          type: boolean
+        deliveryInstructions:
+          type: boolean
+        informationFields:
+          type: boolean
+        notes:
+          $ref: '#/components/schemas/Notes'
+      additionalProperties: false
+    Notes:
+      type: object
+      properties:
+        noteTypeNames:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    WorkFlowRollForwardResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        newWorkFlowName:
+          type: string
+          nullable: true
+        newFilingID:
+          type: string
+          nullable: true
+        errorComment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RoutingHistoryByFilingIdsRequest:
+      type: object
+      properties:
+        filingIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+          default: []
+      additionalProperties: false
+    RoutingHistoryByFilingIdsResponse:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          format: int32
+        routingHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingDTO'
+          nullable: true
+          additionalProperties: false
+        responseMessage:
+          type: string
+      additionalProperties: false
+    DeletedWorkflowsRequest:
+      type: object
+      properties:
+        drawerId:
+          type: string
+        deletedDates:
+          type: string
+        pageNumber:
+          type: string
+        pageSize:
+          type: string
+      additionalProperties: false
+    DeletedWorkFlowsResult:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        deletedWorkFlows:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeletedWorkFlow'
+          nullable: true
+      additionalProperties: false
+    DeletedWorkFlow:
+      type: object
+      properties:
+        serviceTypeName:
+          type: string
+          nullable: true
+        clientName:
+          type: string
+          nullable: true
+        clientNumber:
+          type: string
+          nullable: true
+        engagement:
+          type: string
+          nullable: true
+        year:
+          type: string
+          nullable: true
+        periodEnd:
+          type: string
+          nullable: true
+        filingId:
+          type: string
+          nullable: true
+        workFlow:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        deletedDate:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeletedDeliverableWorkFlowsResult:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        deletedDeliverableWorkFlows:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeletedDeliverableWorkFlow'
+          nullable: true
+      additionalProperties: false
+    DeletedDeliverableWorkFlow:
+      type: object
+      properties:
+        filingId:
+          type: string
+          nullable: true
+        deliverableName:
+          type: string
+          nullable: true
+        serviceTypeName:
+          type: string
+          nullable: true
+        clientName:
+          type: string
+          nullable: true
+        clientNumber:
+          type: string
+          nullable: true
+        engagement:
+          type: string
+          nullable: true
+        year:
+          type: string
+          nullable: true
+        periodEnd:
+          type: string
+          nullable: true
+        workFlow:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        deletedDate:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ControlSheetRequest:
+      type: object
+      properties:
+        filingId:
+          type: integer
+          nullable: true
+        routingSummary:
+          type: boolean
+          nullable: true
+        deliverables:
+          type: integer
+          nullable: true
+        checklist:
+          type: integer
+          nullable: true
+        deliveryInstructions:
+          type: integer
+          nullable: true
+        additionalInformation:
+          type: integer
+          nullable: true
+        noteTypeNames:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false

@@ -1,0 +1,563 @@
+openapi: 3.2.0
+info:
+  version: v1
+  title: Tax Return Import/Export Tax Returns (Import/Export) API
+  description: 'This endpoint assigns groups, preparers, reviewers, managers, partners, and time tracking information to tax returns.
+
+
+    When using the /locator/v2/assignment endpoint to assign an existing locator to a group without updating time tracking dates, the timeTracking object must still be included in the request as an empty object ("timeTracking": {}); omitting it or passing null values will result in a 400 Bad Request.
+
+
+    The flag field accepts the following values:
+
+
+    Users:
+
+    - N: does nothing
+
+    - U: removes the assigned user
+
+    - C: assigns the user
+
+
+    Groups:
+
+    - N: does nothing
+
+    - U: removes the assigned groups
+
+    - C: assigns the groups
+
+
+    ## Status codes for TRT Import/Export API:
+
+
+    ### Import status:
+
+
+    | Status Code | Meaning |
+
+    |-------------|----------|
+
+    | 1 | Queued for Import |
+
+    | 2 | Generating Import file |
+
+    | 3 | File Import complete |
+
+    | 4 | File in use |
+
+    | 5 | Failed to create locator |
+
+    | 6 | Unable to Import |
+
+    | 7 | Import in progress |
+
+    | 8 | Import check-in in progress |
+
+    | 9 | Import aborted due to insufficient rights |
+
+    | 11 | Import aborted as No Locators available and no Charge record for locator |
+
+    | 20 | Invalid Import File |
+
+    | 22 | Validation error on import file |
+
+    | 23 | Validation warning on import file |
+
+    | 25 | Successful import with Validation Error |
+
+
+    ### Export status:
+
+
+    | Status Code | Meaning |
+
+    |-------------|----------|
+
+    | 1 | Queued for export |
+
+    | 2 | File export complete |
+
+    | 3 | Locator in use |
+
+    | 4 | Return CheckedOut For Export |
+
+    | 5 | Unable to export |
+
+    | 6 | Export in progress |
+
+    | 7 | Staging export file |
+
+    | 8 | Unable to export |'
+servers:
+- url: https://api.thomsonreuters.com/gosystem/tax-returns
+security:
+- BearerAuth: []
+tags:
+- name: Tax Returns (Import/Export)
+paths:
+  /v1/years/{year}/tax-return-types/{taxReturnType}/tax-returns/{taxReturnId}/tax-returns-events/{eventType}:
+    post:
+      tags:
+      - Tax Returns (Import/Export)
+      summary: Triggers import or export for a tax return
+      operationId: ImportExport
+      parameters:
+      - name: year
+        in: path
+        description: 4-digit year
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: taxReturnType
+        in: path
+        description: Uses values e.g. :1120, 1065, 1040, 990, 5500
+        required: true
+        schema:
+          type: string
+      - name: taxReturnId
+        in: path
+        description: 6-character locator Id
+        required: true
+        schema:
+          type: string
+      - name: eventType
+        in: path
+        description: <b>This key is used to specify the import/Export type:Following are valid export event types</b><br><br>IEXEXPORT - Used for 1040, 1041, 1120, 1065, 990. Data connection XML<br>DCEXPORT - Used for 1040, 1041, 1120, 1065, 990 - Data connection<br>NPBEXPORT - Used only for 1040 - Partner of firm<br>DK1EXPORT - Used only for 1065 - Direct K-1<br>BNAEXPORT - Used for 1040 and 1120 - Bloomberg Tax Planner<br>CSIEXPORT - Used only for 1040 - Planner CS<br>CPREXPORT - Used for 1120 and 1065 - Columnar K-1<br>CCEXPORT - Used for 1041, 1120, 1065, 990 - Competitive Conversions<br>TRTCSVEXPORT - Used for 1120,1065,1040,1041,990,706,709,5500-Tax Return Transfer CSV format (Exported data is in CSV format)<br>TRTJSONEXPORT - USED for 1120,1065,1040,1041,990,706,709,5500-Tax return Transfer JSON format (Exported Data is in JSON format)<br><br><b>Following are valid import event types</b><br><br>IEXIMPORT - Used for 1040, 1041, 1120, 1065, 990 - Data connection XML<br>DCIMPORT - Used for 1040, 1041, 1120, 1065, 990 - Data connection<br>NPBIMPORT - Used only for 1040 - Partner of firm<br>DK1IMPORT - Used only for 1065 - Direct K-1<br>DK1CSVIMPORTFORMS - Used only for 1065 - Direct K-1 CSV format<br>CCIMPORT - Used for 1041, 1120, 1065, 990 - Competitive Conversions<br>TRTCSVIMPORT - Used for 1120,1065,1040,1041,990,706,709,5500 - Tax Return Transfer CSV format<br>TRTJSONIMPORT - USED for 1120,1065,1040,1041,990,706,709,5500 - Tax return Transfer JSON format
+        required: true
+        schema:
+          type: string
+          default: ' '
+      - name: entityName
+        in: query
+        description: ''
+        required: false
+        schema:
+          type: string
+      - name: Account
+        in: header
+        description: A 4- digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        required: true
+        schema:
+          type: string
+      - name: Password
+        in: header
+        description: Insert the Tax Return password
+        required: false
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept Header Media Type
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: The import file to validate
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                ImportFile:
+                  type: string
+                  format: binary
+                  description: The file to validate
+      responses:
+        '200':
+          description: '
+
+            - Import/export triggered successfully.
+
+            - Invalid Password (When locator password is incorrect).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+        '400':
+          description: '
+
+            - Please Provide valid TaxReturnId.
+
+            - Please specify account information in header.
+
+            - Account does not belong to firm.
+
+            - Please pass {ContentTypeHeader} header with value {ContentTypeOctetStreamHeader} or {ContentTypeMultiPartFormDataHeader}.
+
+            - Zip file contains more than one file.
+
+            - Import data missing.
+
+            - Invalid Input {exp message} (when catch block is called).'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact GoSystem Technical Support.
+      security:
+      - BearerAuth: []
+  /v1/years/{year}/tax-return-types/{taxReturnType}/tax-returns-events/{eventType}/validate-import:
+    post:
+      tags:
+      - Tax Returns (Import/Export)
+      summary: Triggers Import Validation
+      operationId: ValidateImport
+      parameters:
+      - name: year
+        in: path
+        description: 4-digit year. <b>Following are valid years for event types</b><br><br>DK1IMPORT - Valid taxyear >= 2024.<br>TRTCSVIMPORT - Valid taxyear >= 2023.<br>TRTJSONIMPORT - Valid for taxyear >= 2023.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: taxReturnType
+        in: path
+        description: Uses values e.g. :1120, 1065, 1040, 990, 5500
+        required: true
+        schema:
+          type: string
+      - name: eventType
+        in: path
+        description: <b>Following are valid import event types</b><br><br>DK1IMPORT - Used only for 1065 - Direct K-1. <br>TRTCSVIMPORT - Used for 1120,1065,1040,1041,990,706,709,5500 - Tax Return Transfer CSV format. <br>TRTJSONIMPORT - USED for 1120,1065,1040,1041,990,706,709,5500 - Tax return Transfer JSON format.
+        required: true
+        schema:
+          type: string
+          default: ' '
+      - name: Account
+        in: header
+        description: A 4- digit alphanumeric identifier representing the client account. This must match the Account value provided in the request headers.
+        required: true
+        schema:
+          type: string
+      - name: Password
+        in: header
+        description: Insert the Tax Return password
+        required: false
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Accept Header Media Type
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: The import file to validate
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                ImportFile:
+                  type: string
+                  format: binary
+                  description: The file to validate
+      responses:
+        '200':
+          description: Validation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+              examples:
+                1065 DK1IMPORT Success:
+                  $ref: '#/components/examples/Validate-1065-DK1Import-Success'
+                1040 TRTJSON Success:
+                  $ref: '#/components/examples/Validate-1040-TRTJSON-Success'
+                1040 TRTJSON Failure:
+                  $ref: '#/components/examples/Validate-1040-TRTJSON-Failure'
+        '400':
+          description: '
+
+            - Validation failed due to invalid file format or missing fieldsPlease specify account information in header.
+
+            - Account does not belong to firm.
+
+            - Please pass {ContentTypeHeader} header with value {ContentTypeOctetStreamHeader} or {ContentTypeMultiPartFormDataHeader}.
+
+            - Zip file contains more than one file.
+
+            - Import data missing.
+
+            - Invalid Input {exp message} (when catch block is called).'
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Unexpected error encountered
+      security:
+      - BearerAuth: []
+  /v1/events/{eventName}/tax-return-statuses:
+    get:
+      tags:
+      - Tax Returns (Import/Export)
+      summary: Retrieves Import/ImportValidation or Export Tax return status
+      operationId: ListTheImport/exportStatus
+      parameters:
+      - name: jobId
+        in: query
+        description: The jobId should be passed which is returned after import/export event is triggered
+        required: true
+        schema:
+          type: string
+      - name: eventName
+        in: path
+        description: Uses Import/ImportValidation/Export
+        required: true
+        schema:
+          type: string
+          enum:
+          - Import
+          - Export
+          - ImportValidation
+      - name: Accept
+        in: header
+        description: Accept Header Media Type
+        schema:
+          type: string
+          default: application/json
+      - name: Account
+        in: header
+        description: Add Account information
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+              examples:
+                Import Validation InProgress:
+                  $ref: '#/components/examples/ImportValidation-InProgress'
+                Import Validation Success:
+                  $ref: '#/components/examples/ImportValidation-Success'
+                Import Validation Warning:
+                  $ref: '#/components/examples/ImportValidation-Warning'
+                Import Validation Error:
+                  $ref: '#/components/examples/ImportValidation-Error'
+        '400':
+          description: '
+
+            - Please specify account information in header.
+
+            - Account does not belong to firm.
+
+            - Invalid Input {exp message} (when catch block is called).'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact GoSystem Technical Support.
+      security:
+      - BearerAuth: []
+      x-operation-id-source: normalized
+      x-operation-id-original: List the import/export status
+  /v1/files:
+    get:
+      tags:
+      - Tax Returns (Import/Export)
+      summary: Download the exported tax return
+      operationId: RetrievesLocatorData
+      parameters:
+      - name: fileId
+        in: query
+        description: The fileId is passed from tax-document-statuses
+        required: true
+        schema:
+          type: string
+      - name: accept
+        in: header
+        description: Accept Header Media Type
+        required: true
+        schema:
+          type: string
+          default: text/csv
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: 'Invalid File ID format.
+
+            - File ID does not have extension.
+
+            - Accept header should be text/xml for XML file.
+
+            - Accept header should be application/pdf for PDF file.
+
+            - Accept header should be application/zip for ZIP file.
+
+            - Accept header should be text/csv.
+
+            - Error - {exp message} (when catch block is called).'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact GoSystem Technical Support.
+      security:
+      - BearerAuth: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves locator data
+  /v1/downloadfiles:
+    get:
+      tags:
+      - Tax Returns (Import/Export)
+      summary: This is used to get the error and warning file upon validation
+      description: Error/warning file only exists, when we get status code as 22, 23 or 25 from the import status endpoint. The files gets downloaded in a zip format.
+      operationId: RetrievesTheErrorFiles
+      parameters:
+      - name: jobId
+        in: query
+        description: The jobID is passed form the tax document statuses
+        schema:
+          type: string
+      - name: accept
+        in: header
+        description: Accept Header Media Type
+        required: true
+        schema:
+          type: string
+          default: text/csv
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: '
+
+            - Indicates a request error. Verify that the JobId corresponds to a batch of your own with status 22, 23 or 25.
+
+            - Error -{exp message}(When Catch block is called).'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected Error Encountered. Contact GoSystem Technical Support.
+      security:
+      - BearerAuth: []
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves the error files
+components:
+  examples:
+    ImportValidation-Success:
+      summary: Successful validation of file
+      value:
+        Status:
+          Error: false
+          Code: 3
+          Info: Import validation completed
+          Description: Finished
+          JobId: 20250527\01\12\{A1B2C3D4-E5F6-G7H8-I9J0-K1L2M3N4O5P6}
+    ImportValidation-Warning:
+      summary: Validation Warning On Import File
+      value:
+        Status:
+          Error: true
+          Code: 23
+          Info: Validation Warning On Import File
+          Description: Finished
+          JobId: 20250527\01\12\{A1B2C3D4-E5F6-G7H8-I9J0-K1L2M3N4O5P6}
+    ImportValidation-Error:
+      summary: Validation Error On Import File
+      value:
+        Status:
+          Error: true
+          Code: 22
+          Info: Validation Error On Import File
+          Description: Finished
+          JobId: 20250527\01\12\{A1B2C3D4-E5F6-G7H8-I9J0-K1L2M3N4O5P6}
+    Validate-1040-TRTJSON-Success:
+      summary: Successful validation of 1040 TRTJSON import file
+      value:
+        Status:
+          Error: false
+          Code: 0
+          Info: File validation successful
+          Description: Import Validation queued
+          JobId: 20250527\01\16\{E5F6G7H8-I9J0-K1L2-M3N4-O5P6Q7R8S9T0}
+          FileName: TRTJSON_Import_1040.json
+    ImportValidation-InProgress:
+      summary: Validation of import file In Progress
+      value:
+        Status:
+          Error: false
+          Code: 7
+          Info: Import Validation In Progress
+          Description: Running
+          JobId: 20250527\01\12\{A1B2C3D4-E5F6-G7H8-I9J0-K1L2M3N4O5P6}
+    Validate-1065-DK1Import-Success:
+      summary: Successful validation of 1065 DK1 import file
+      value:
+        Status:
+          Error: false
+          Code: 0
+          Info: Validation warnings found
+          Description: Import Validation queued
+          JobId: 20250527\01\12\{A1B2C3D4-E5F6-G7H8-I9J0-K1L2M3N4O5P6}
+          FileName: DK1_Import_1065.csv
+    Validate-1040-TRTJSON-Failure:
+      summary: Failed validation of 1040 TRTJSON import file
+      value:
+        Status:
+          Error: true
+          Code: 0
+          Info: Invalid JSON structure
+          Description: Import Validation queued
+          JobId: 20250527\01\17\{F6G7H8I9-J0K1-L2M3-N4O5-P6Q7R8S9T0U1}
+          FileName: Invalid_TRTJSON_1040.json
+  schemas:
+    StatusResponse:
+      type: object
+      properties:
+        Error:
+          format: int32
+          type: integer
+          default: 0
+        Code:
+          format: int32
+          type: integer
+          default: 0
+        Info:
+          type: string
+        Ident:
+          type: string
+        Description:
+          type: string
+        JobId:
+          type: string
+        FileName:
+          type: string
+        FileIds:
+          type: string
+    ValidationResponse:
+      type: object
+      properties:
+        isValid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

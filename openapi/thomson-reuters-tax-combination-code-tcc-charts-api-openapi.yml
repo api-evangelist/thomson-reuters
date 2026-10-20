@@ -1,0 +1,693 @@
+openapi: 3.2.0
+info:
+  title: ONESOURCE Income Tax Charts Tax Combination Code (TCC)…
+  description: 'Charts are used to identify Tax Return Code (TRC) and Tax Combination Code (TCC) accounts and adjustments for multiple entities and binders. Use REST APIs to automatically manipulate basic chart functions.
+
+
+    The charts are related by using elements from other charts to create a set of charts. Each set of charts is then assigned to an entity to use for TRC/TCCs, accounts, and adjustments. Chart assignments are either Common or Separate.'
+  termsOfService: ''
+  version: v1
+servers:
+- url: https://api.onesourcetax.com/income-tax/charts
+security:
+- Authorization: []
+tags:
+- name: Tax Combination Code (TCC) Charts
+paths:
+  /v1/tcc-charts:
+    get:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Returns a list of TCC Charts
+      operationId: RetrievesTCCChartsList
+      parameters:
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TccChartsRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves TCC Charts List
+    post:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Creates a new TCC Chart
+      operationId: CreatesNewTCCChart
+      parameters:
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicate the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: TCC Chart Object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TccChartRepresentation'
+        required: false
+      responses:
+        '201':
+          description: Created
+          content: {}
+        '400':
+          description: Request failed. This error is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: tccChartRepresentation
+      x-operation-id-source: normalized
+      x-operation-id-original: Creates New TCC Chart
+  /v1/tcc-charts/{chartId}:
+    get:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Returns a specific TCC Chart. Enter the chartId in the URL
+      operationId: RetrievesTCCChart
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character TCC chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves TCC Chart
+    put:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Updates a specific TCC Chart. Enter the chartId in the URL
+      operationId: UpdatesATCCChart
+      parameters:
+      - name: chartId
+        in: path
+        description: TCC chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicate the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: 16-character TCC chart ID.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TccChartRepresentation'
+        required: false
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '400':
+          description: Request failed. This error is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: tccChartRepresentation
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates a TCC Chart
+    delete:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Deletes a TCC Chart. Enter the chartId in the URL
+      operationId: DeletesTCCChart
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character TCC chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicate the response content media type to return.
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Deletes TCC Chart
+  /v1/years/{year}/tax-return-codes:
+    get:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Returns Tax Return Codes for a specific year and tax return type.
+      operationId: RetrievesTaxReturnCodes
+      parameters:
+      - name: year
+        in: path
+        description: 4-digit year.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: taxReturnType
+        in: query
+        description: Tax return type of TRC. Leave blank, or use GENERIC.
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrcItemsRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves Tax Return Codes
+  /v1/tcc-charts/{chartId}/tax-combination-codes:
+    get:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Returns all Tax Combination Codes for a TCC Chart. Enter the chartId in the URL
+      operationId: RetrievesAllTaxCombinationCodes
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: taxReturnType
+        in: query
+        description: Tax return type of TRC. Leave blank, or use GENERIC.
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TccItemsRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves all Tax Combination Codes
+  /v2/tcc-charts/{chartId}/tax-combination-codes:
+    post:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Adds a new Tax Combination Code to a TCC Chart. Enter the chartId in the URL
+      operationId: AddsANewTaxCombinationCode
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicate the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: A list of TCC objects.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TccItemRepresentation'
+        required: false
+      responses:
+        '201':
+          description: Created
+          content: {}
+        '207':
+          description: Multiple statuses returned. Evaluate the response for a status per item.
+          content: {}
+        '400':
+          description: Request failed. This error is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: tccItemResources
+      x-operation-id-source: normalized
+      x-operation-id-original: Adds a New Tax Combination Code
+  /v1/tcc-charts/{chartId}/tax-combination-codes/{tccId}:
+    get:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Returns a specific Tax Combination Code from a TCC Chart.
+      operationId: RetrievesASpecificTaxCombinationCode
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: tccId
+        in: path
+        description: TCC ID.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieves a Specific Tax Combination Code
+    put:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Updates one Tax Combination Code item in a TCC Chart.
+      operationId: UpdatesOneTaxCombinationCodeItem
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: tccId
+        in: path
+        description: TCC ID.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicate the response content media type to return.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      requestBody:
+        description: TCC object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TccItemRepresentation'
+        required: false
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '400':
+          description: Request failed. This error is usually due to validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: tccItemResource
+      x-operation-id-source: normalized
+      x-operation-id-original: Updates One Tax Combination Code Item
+    delete:
+      tags:
+      - Tax Combination Code (TCC) Charts
+      summary: Deletes one TCC Code from a TCC Chart. Enter the chartId and tccId in the URL
+      operationId: DeletesOneTaxCombinationCodeFromATCCChart
+      parameters:
+      - name: chartId
+        in: path
+        description: 16-character chart ID.
+        required: true
+        schema:
+          type: string
+      - name: tccId
+        in: path
+        description: TCC ID.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: Indicate the response content media type to return - application/json is currently the only option.
+        required: true
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      - name: Content-Type
+        in: header
+        description: Indicate the response content media type to return.
+        schema:
+          type: string
+          default: application/json
+          enum:
+          - application/json
+      responses:
+        '200':
+          description: Success
+          content: {}
+        '401':
+          description: Indicates a lack of authorization to perform this action on this resource. Check credentials and rights.
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '500':
+          description: Unexpected error occurred. Contact ONESOURCE Technical Support.
+          content: {}
+      deprecated: false
+      x-operation-id-source: normalized
+      x-operation-id-original: Deletes One Tax Combination Code from a TCC Chart
+components:
+  schemas:
+    TccChartRepresentation:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Tax year.
+          format: int32
+        chartId:
+          type: string
+          description: System-generated unique identifier for a chart.
+        chartName:
+          type: string
+          description: User-defined unique chart name.
+        isReadOnly:
+          type: boolean
+          description: Indicates whether the chart can be edited.
+        isDefault:
+          type: boolean
+        taxReturnType:
+          type: string
+          description: IRS-defined type of tax return.
+        priorYearChartId:
+          type: string
+          description: Chart ID that the existing chart was rolled from.
+        priorYearChartName:
+          type: string
+          description: Chart name from the prior year.
+        taxReturnTypeDescription:
+          type: string
+        isAvailableForRollover:
+          type: boolean
+          description: Indicates whether the chart is available for rollover.
+        trcs:
+          $ref: '#/components/schemas/TrcItemsRepresentation'
+    ProblemRepresentation:
+      type: object
+      properties:
+        type:
+          type: object
+          format: string
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+        errorCode:
+          type: integer
+          format: int32
+    TccItemRepresentation:
+      type: object
+      properties:
+        tccId:
+          type: string
+          description: System-generated ID code used to combine accounts into subcategories within a single TRC.
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        tccNumber:
+          type: string
+          description: User-defined code used to combine accounts into subcategories within a single TRC.
+        tccDescription:
+          type: string
+          description: System-defined description for a TRC.
+    TccChartsRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TccChartRepresentation'
+    TrcItemsRepresentation:
+      type: object
+      properties:
+        trcs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrcItem'
+    TccItemsRepresentation:
+      type: object
+      properties:
+        resourceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TccItemRepresentation'
+    TrcItem:
+      type: object
+      properties:
+        trcCategoryId:
+          type: integer
+          description: System-generated ID for TRC.
+          format: int32
+        trcNumber:
+          type: integer
+          description: System-defined number for a TRC.
+          format: int32
+        trcFormattedNumber:
+          type: string
+          description: System-defined number for a TRC.
+        trcDescription:
+          type: string
+          description: System-defined description for a TRC.
+        applicableTaxReturnTypes:
+          type: string
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer

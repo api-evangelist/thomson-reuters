@@ -1,0 +1,77 @@
+openapi: 3.2.0
+info:
+  title: Thomson Reuters Filing API
+  version: v1
+  description: 'Operations tagged Filing across 3 of this provider''s published API definitions: thomson-reuters-firmflow-web-api-services-v1-openapi.json, thomson-reuters-firmflow-web-api-services-openapi.yml, thomson-reuters-firmflow-web-api-services-v1-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.thomsonreuters.com/gofileroom
+tags:
+- name: Filing
+paths:
+  /firmflow/api/Filing/ResetChecklists:
+    post:
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Filing
+      summary: Reset checklists for a workflow
+      description: Resets the checklists associated with a specific workflow.
+      parameters:
+      - name: X-TR-API-APP-ID
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: uid
+        in: query
+        schema:
+          type: string
+          nullable: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              nullable: true
+          text/json:
+            schema:
+              type: array
+              items:
+                type: string
+              nullable: true
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: string
+              nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+      operationId: postFirmflowApiFilingResetChecklists
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.thomsonreuters.com/gofileroom
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+x-refined-from:
+- thomson-reuters-firmflow-web-api-services-v1-openapi.json
+- thomson-reuters-firmflow-web-api-services-openapi.yml
+- thomson-reuters-firmflow-web-api-services-v1-openapi.yml
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))

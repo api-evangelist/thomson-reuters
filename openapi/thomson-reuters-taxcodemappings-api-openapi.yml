@@ -1,0 +1,453 @@
+openapi: 3.2.0
+info:
+  version: v2
+  title: ONESOURCE Indirect Tax Compliance - Configuration Tax Code…
+servers:
+- url: https://api-emea.onesourcetax.com/indirect-tax-compliance/v2
+tags:
+- name: TaxCodeMappings
+paths:
+  ? /master-data/allocations/{allocationId}/jurisdictions/{jurisdictionId}/transaction-types/{transactionType}/target-tax-codes
+  : get:
+      tags:
+      - TaxCodeMappings
+      summary: The endpoint returns a list of all existing target tax codes
+      operationId: TaxCodeMappings_GetTargetTaxCodes
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: jurisdictionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: transactionType
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - AP
+          - AR
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeListResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeListResponse'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+  /master-data/allocations/{allocationId}/jurisdictions/{jurisdictionId}/transaction-types/{transactionType}/tax-code-maps:
+    get:
+      tags:
+      - TaxCodeMappings
+      summary: The endpoint returns a list of exisitng Taxcode Mappings
+      operationId: TaxCodeMappings_GetTaxCodeMappings
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: jurisdictionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: transactionType
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - AP
+          - AR
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+    post:
+      tags:
+      - TaxCodeMappings
+      summary: This endpoint creates a new Taxcode Mapping in the system
+      operationId: TaxCodeMappings_AddTaxCodeMapping
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: jurisdictionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: transactionType
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - AP
+          - AR
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequest'
+        required: true
+  /master-data/allocations/{allocationId}/tax-code-maps/{taxCodeMapId}:
+    put:
+      tags:
+      - TaxCodeMappings
+      summary: This endpoint update existing Taxcode Mappings in the system
+      operationId: TaxCodeMappings_UpdateTaxCodeMapping
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: taxCodeMapId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequestModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequestModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequestModel'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequestModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequestModel'
+        required: true
+    delete:
+      tags:
+      - TaxCodeMappings
+      summary: This endpoint delete Taxcode Mapping from the system
+      operationId: TaxCodeMappings_DeleteTaxCodeMapping
+      parameters:
+      - name: allocationId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: taxCodeMapId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: Authorization
+        in: header
+        description: The authorization token
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+components:
+  schemas:
+    TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingResponseModel:
+      description: Tax code mapping response model
+      required:
+      - sourceTaxCode
+      - targetTaxCode
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Id
+          type: integer
+        description:
+          description: TaxCodeDescription
+          type: string
+        sourceTaxCode:
+          description: SourceTaxCode
+          type: string
+        targetTaxCode:
+          description: TargetTaxCode
+          type: string
+        adjustInvoices:
+          description: AdjustInvoices
+          type: boolean
+        adjustCreditNotes:
+          description: AdjustCreditNotes
+          type: boolean
+        reverseSign:
+          description: ReverseSign
+          type: boolean
+    TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeModel:
+      description: Target Tax Code
+      type: object
+      properties:
+        id:
+          description: id
+          type: string
+        description:
+          description: Description
+          type: string
+        taxCodeKey:
+          description: Tax code key
+          type: string
+        taxCodeValue:
+          description: Tax code value
+          type: string
+        createdDate:
+          format: date-time
+          description: Created Date
+          type: string
+        updatedDate:
+          format: date-time
+          description: Last Updated Date
+          type: string
+        childTaxCodes:
+          description: List of child tax codes
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeModel'
+    TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequestModel:
+      required:
+      - sourceTaxCode
+      - targetTaxCode
+      type: object
+      properties:
+        sourceTaxCode:
+          description: SourceTaxCode
+          type: string
+        targetTaxCode:
+          description: TargetTaxCode
+          type: string
+        adjustInvoices:
+          description: AdjustInvoices
+          type: boolean
+        adjustCreditNotes:
+          description: AdjustCreditNotes
+          type: boolean
+        reverseSign:
+          description: ReverseSign
+          type: boolean
+    TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingListResponse:
+      description: Tax code mapping list response
+      type: object
+      properties:
+        items:
+          description: TaxCodeMappings
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingResponseModel'
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeListResponse:
+      type: object
+      properties:
+        items:
+          description: List of target tax codes
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TargetTaxCodeModel'
+          readOnly: true
+    TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequest:
+      description: Tax code mapping request
+      type: object
+      properties:
+        items:
+          description: TaxCodeMappings
+          type: array
+          items:
+            $ref: '#/components/schemas/TRTA.Athena.Models.Api.V4.TaxClassification.TaxCodeMappingRequestModel'

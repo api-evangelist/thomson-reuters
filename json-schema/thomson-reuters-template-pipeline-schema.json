@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/thomson-reuters/main/json-schema/thomson-reuters-template-pipeline-schema.json",
+  "title": "TemplatePipeline",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/thomson-reuters-schematic-service-openapi.yml#/components/schemas/TemplatePipeline",
+  "required": [
+    "name"
+  ],
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Label of the Template"
+    },
+    "blueprint": {
+      "$ref": "#/$defs/BlueprintId"
+    },
+    "pipeline": {
+      "type": "array",
+      "description": "A pipeline is a list of operators that will be executed in sequential order against each record in the ingested record set",
+      "items": {
+        "type": "object"
+      }
+    },
+    "source": {
+      "$ref": "#/$defs/Source"
+    }
+  },
+  "$defs": {
+    "BlueprintId": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier of the Blueprint",
+          "format": "int32"
+        },
+        "version": {
+          "type": "integer",
+          "description": "Version of the Blueprint",
+          "format": "int32"
+        },
+        "type_id": {
+          "type": "integer",
+          "description": "Unique identifier of the Blueprint type",
+          "format": "int32"
+        }
+      }
+    },
+    "Source": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of the file"
+        },
+        "delimiter": {
+          "type": "string",
+          "description": "delimiter of the file"
+        },
+        "named_range": {
+          "type": "string",
+          "description": "Range in the Worksheet"
+        },
+        "worksheet_name": {
+          "type": "string",
+          "description": "Name of the Worksheet"
+        },
+        "worksheet_index": {
+          "type": "integer",
+          "description": "Work Sheet index in the Excel file",
+          "format": "int32"
+        },
+        "cell_range": {
+          "type": "string",
+          "description": "cell Range in the Excel file"
+        }
+      }
+    }
+  }
+}
